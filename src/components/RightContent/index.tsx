@@ -3,7 +3,6 @@ import { useModel } from 'umi';
 import AvatarDropdown from './AvatarDropdown';
 import styles from './index.less';
 import LocaleSwitch from './LocaleSwitch';
-import ModuleSwitch from './ModuleSwitch';
 import NoticeIconView from './NoticeIcon';
 
 const GlobalHeaderRight: React.FC = () => {
@@ -21,7 +20,7 @@ const GlobalHeaderRight: React.FC = () => {
 		<>
 			<div style={{ height: '100%', width: '100%', display: 'flex', alignItems: 'center' }}>
 				<div className={styles.menu_right}>
-					<ModuleSwitch />
+					{/* <ModuleSwitch /> */}
 
 					<NoticeIconView />
 

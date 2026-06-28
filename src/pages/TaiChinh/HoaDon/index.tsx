@@ -97,7 +97,7 @@ const HoaDonPage = () => {
 		// 	),
 		// },
 		{
-			title: 'Hạn thanh toán',
+			title: intl.formatMessage({ id: 'taichinh.hoadon.column.hanthanhtoan' }),
 			dataIndex: 'ngayHetHanThanhToan',
 			width: 150,
 			render: (val, rec) => {
@@ -108,12 +108,22 @@ const HoaDonPage = () => {
 				let extraText = null;
 
 				if (dayjs().isAfter(dayjs(rec.ngayHetHanThanhToan), 'day')) {
-					extraText = <div style={{ color: '#cf1322', fontWeight: 500, fontSize: 12 }}>Đã hết hạn</div>;
+					extraText = (
+						<div style={{ color: '#cf1322', fontWeight: 500, fontSize: 12 }}>
+							{intl.formatMessage({ id: 'taichinh.hoadon.hanthanhtoan.hethan' })}
+						</div>
+					);
 				} else if (soNgayConLai >= 0 && soNgayConLai <= 1) {
-					extraText = <div style={{ color: '#d48806', fontWeight: 500, fontSize: 12 }}>Còn 1 ngày</div>;
+					extraText = (
+						<div style={{ color: '#d48806', fontWeight: 500, fontSize: 12 }}>
+							{intl.formatMessage({ id: 'taichinh.hoadon.hanthanhtoan.con1ngay' })}
+						</div>
+					);
 				} else if (soNgayConLai > 1 && soNgayConLai <= 10) {
 					extraText = (
-						<div style={{ color: '#52c41a', fontWeight: 500, fontSize: 12 }}>Còn {Math.ceil(soNgayConLai)} ngày</div>
+						<div style={{ color: '#52c41a', fontWeight: 500, fontSize: 12 }}>
+							{intl.formatMessage({ id: 'taichinh.hoadon.hanthanhtoan.conngay' }, { soNgay: Math.ceil(soNgayConLai) })}
+						</div>
 					);
 				}
 
@@ -128,7 +138,7 @@ const HoaDonPage = () => {
 		},
 
 		{
-			title: 'Phí phải nộp',
+			title: intl.formatMessage({ id: 'taichinh.hoadon.column.phiphainop' }),
 			width: 200,
 			// hide: releaseFilter === 'RELEASED',
 			render: (val, rec) => {
@@ -149,12 +159,10 @@ const HoaDonPage = () => {
 					</div>
 				);
 			},
-
-
 		},
 
 		{
-			title: 'Phí giảm trừ',
+			title: intl.formatMessage({ id: 'taichinh.hoadon.column.phigiamtru' }),
 			width: 200,
 			// hide: releaseFilter === 'RELEASED',
 			render: (val, rec) => {
@@ -175,8 +183,6 @@ const HoaDonPage = () => {
 					</div>
 				);
 			},
-
-
 		},
 
 		// {
@@ -187,21 +193,21 @@ const HoaDonPage = () => {
 		// 	render: (val) => <span className='text-primary fw500'>{inputFormat(0)} VND</span>,
 		// },
 		{
-			title: 'Tổng phí phải nộp (1)',
+			title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongphiphainop' }),
 			dataIndex: 'soTienPhaiThu',
 			width: 180,
 			sortable: true,
 			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
 		},
 		{
-			title: 'Tổng phí giảm trừ (2)',
+			title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongphigiamtru' }),
 			dataIndex: 'soTienKhuyenMai',
 			width: 180,
 			sortable: true,
 			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
 		},
 		{
-			title: 'Tổng tiền đã thanh toán (3)',
+			title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongdathanhtoan' }),
 			dataIndex: 'soTienDaThu',
 			width: 180,
 			align: 'right',
@@ -209,7 +215,7 @@ const HoaDonPage = () => {
 			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
 		},
 		{
-			title: 'Tổng tiền cần thanh toán (1-2-3)',
+			title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongcanthanhtoan' }),
 			dataIndex: 'soTienConLai',
 			width: 180,
 			align: 'right',
@@ -241,7 +247,11 @@ const HoaDonPage = () => {
 			render: (val, rec: HoaDon.IRecord) => (
 				<div onClick={(e) => e.stopPropagation()}>
 					<ButtonExtend
-						tooltip={disableThanhToan(rec) ? 'Ngoài thời hạn thanh toán' : 'Thanh toán ngay'}
+						tooltip={
+							disableThanhToan(rec)
+								? intl.formatMessage({ id: 'taichinh.hoadon.tooltip.ngoaithoihan' })
+								: intl.formatMessage({ id: 'taichinh.hoadon.tooltip.thanhtoanngay' })
+						}
 						disabled={disableThanhToan(rec)}
 						onClick={() => {
 							setRecord(rec);
@@ -252,14 +262,14 @@ const HoaDonPage = () => {
 						icon={<UnorderedListOutlined />}
 					/>
 					<ButtonExtend
-						tooltip={'Xem chi tiết phiếu thu'}
+						tooltip={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemchitiet' })}
 						icon={<EyeOutlined />}
 						onClick={() => handleDetail(rec)}
 						type='link'
 					/>
 
 					<ButtonExtend
-						tooltip={'Xem hướng dẫn thanh toán'}
+						tooltip={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemhuongdan' })}
 						danger
 						loading={loadingPdfMap[rec._id]}
 						onClick={async () => {
@@ -324,7 +334,7 @@ const HoaDonPage = () => {
 				onCancel={() => setVisibleModalPDF(false)}
 				footer={null}
 				width={900}
-				title='Xem hướng dẫn thanh toán'
+				title={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemhuongdan' })}
 			>
 				{/* <PreviewFile file={pdfUrl ?? ''} /> */}
 				{pdfUrl ? <PDFViewerV2 url={pdfUrl} height='80vh' /> : <Empty />}
