@@ -34,11 +34,3 @@ export const logActionDktc: Record<ELogActionDktc, string> = {
 	[ELogActionDktc.ADM_SWAP_SV_LTC]: 'dangkytinchi.lichsuthaotac.action.staffRegister',
 	[ELogActionDktc.ADM_DEL_PHIEU_DK_LTC]: 'dangkytinchi.lichsuthaotac.action.staffDelete',
 };
-
-export const colorLogActionDktc: Record<ELogActionDktc, string> = {
-	[ELogActionDktc.SV_DK_LTC]: '#389e0d',
-	[ELogActionDktc.SV_DEL_DK_LTC]: 'red',
-	[ELogActionDktc.ADM_DEL_SV_LTC]: 'red',
-	[ELogActionDktc.ADM_SWAP_SV_LTC]: 'yellow',
-	[ELogActionDktc.ADM_DEL_PHIEU_DK_LTC]: 'red',
-};

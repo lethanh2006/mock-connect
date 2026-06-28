@@ -129,12 +129,12 @@ export enum ELoaiSuKienSinhVien {
 }
 
 export const locationPathMappingToESuKienType: Partial<Record<string, ELoaiSuKien | ELoaiSuKienKhac>> = {
-	// 'cac-hoat-dong-cho-sinh-vien': ELoaiSuKienKhac.CAC_HOAT_DONG,
-	// 'dao-tao-boi-duong': ELoaiSuKienKhac.DAO_TAO_BOI_DUONG,
-	// 'hop-tac-nghien-cuu-chuyen-giao': ELoaiSuKienKhac.HOP_TAC_NGUYEN_CUU_CHUYEN_GAO,
-	// 'thuc-thi-chinh-sach': ELoaiSuKienKhac.THUC_THI_CHINH_SACH,
-	// 'hoat-dong-xa-hoi': ELoaiSuKienKhac.HOAT_DONG_XA_HOI,
-	// khac: ELoaiSuKienKhac.KHAC,
+	'cac-hoat-dong-cho-sinh-vien': ELoaiSuKienKhac.CAC_HOAT_DONG,
+	'dao-tao-boi-duong': ELoaiSuKienKhac.DAO_TAO_BOI_DUONG,
+	'hop-tac-nghien-cuu-chuyen-giao': ELoaiSuKienKhac.HOP_TAC_NGUYEN_CUU_CHUYEN_GAO,
+	'thuc-thi-chinh-sach': ELoaiSuKienKhac.THUC_THI_CHINH_SACH,
+	'hoat-dong-xa-hoi': ELoaiSuKienKhac.HOAT_DONG_XA_HOI,
+	khac: ELoaiSuKienKhac.KHAC,
 };
 
 export const THU_TRONG_TUAN = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];

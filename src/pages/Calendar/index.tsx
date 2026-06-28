@@ -142,7 +142,9 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		}).then((data) => {
 			const temp = data.map((item) => ({
 				...item,
-				title: item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || '',
+				title: `${item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || ''} - ${
+					item.phongHoc ?? ''
+				}`,
 				location: item.phongHoc,
 				loaiSuKien: ELoaiSuKien.LICH_HOC,
 				start: dayjs(item?.thoiGianBatDau).toDate(),
@@ -158,9 +160,9 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		}).then((data) => {
 			const temp = data.map((item) => ({
 				...item,
-				title: item.danhSachHocPhan?.map((i) => i.ten)?.join(', ') || '',
-				location: item.phong?.ma,
-				loaiSuKien: ELoaiSuKien.CHUNG,
+				title: `${item.danhSachHocPhan?.map((i) => i.ten)?.join(', ') || ''} - ${item.phong?.ma ?? ''}`,
+				loaiSuKien: ELoaiSuKien.LICH_THI,
+				location: item.phong?.ma ?? '',
 				start: dayjs(item?.thoiGianBatDau).toDate(),
 				end: dayjs(item?.thoiGianKetThuc).toDate(),
 			}));
@@ -187,11 +189,11 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		return thongKeBaiTapModel(dateRange[0].toISOString(), dateRange[1].toISOString()).then((data) => {
 			const temp = data.map((item) => ({
 				...item,
-				title: item?.assignment?.noiDung ?? '',
+				title: `${item?.assignment?.noiDung} - ${item?.assignment?.tenLopHocPhan}`,
 				location: item?.assignment?.tenLopHocPhan,
 				start: dayjs(item?.assignment?.thoiGianGiao ?? item.assignment.thoiGianBatDau).toDate(),
 				end: dayjs(item?.assignment?.thoiGianKetThuc).toDate(),
-				loaiSuKien: ELoaiSuKien.CHUNG,
+				loaiSuKien: ELoaiSuKien.BAI_TAP,
 			}));
 			return temp;
 		});

@@ -1,6 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { exportLyLich } from '@/services/DaoTao/SinhVien';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { EditOutlined, LeftOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Space, Spin } from 'antd';
 import fileDownload from 'js-file-download';
@@ -11,7 +12,6 @@ import FormSinhVien from './components/Form';
 import PreviewHoSo from './components/PreviewHoSo';
 import './components/style.less';
 import ModalHocBaSinhVien from './HocBa/components/Modal';
-import { formatDate } from '@/utils/formatDate';
 
 const ThongTinSinhVienPage = () => {
 	const intl = useIntl();
@@ -105,8 +105,8 @@ const ThongTinSinhVienPage = () => {
 								{/* <Button icon={<PrinterOutlined />} onClick={onExport} loading={loading}>
 									{intl.formatMessage({ id: 'thongtincanhan.inhoso' })}
 								</Button> */}
-						</Space>
-					) : null}
+							</Space>
+						) : null}
 
 						<PreviewHoSo />
 					</>
