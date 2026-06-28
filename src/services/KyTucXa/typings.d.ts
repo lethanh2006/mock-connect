@@ -1,4 +1,4 @@
-import { ETrangThaiMinhChung, EGioiTinh, ELoaiKhoanThu, ETrangThaiThanhToan } from './constant';
+import { ETrangThaiMinhChung, EGioiTinh, ELoaiKhoanThu, ETrangThaiThanhToan, ETrangThaiHangCho } from './constant';
 
 declare module KyTucXa {
     export interface IToa {
@@ -133,7 +133,7 @@ declare module KyTucXa {
         ssoId: string;
         hoTen: string;
         soThuTu: number;
-        trangThai: 'CHO_XU_LY' | 'DA_XU_LY' | 'HUY';
+        trangThai: ETrangThaiHangCho;
         createdAt: string;
         updatedAt: string;
     }
@@ -203,7 +203,7 @@ declare module KyTucXa {
 		soDienThoai: string;
 		email: string;
 		urlMinhChung: string;
-		trangThaiMinhChung: string;
+		trangThaiMinhChung: ETrangThaiMinhChung;
 		ngayDuyet: Date;
 		nguoiDuyet: string;
 		ghiChuDuyet: string;

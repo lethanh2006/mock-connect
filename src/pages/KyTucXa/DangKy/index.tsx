@@ -12,7 +12,7 @@ import SelectToaNhaKTX from './components/Select/SelectBuilding';
 import SelectFloorKTX from './components/Select/SelectFloor';
 import './style.less';
 import { FilterIconCustom } from './components/IconsRoom';
-import { ETrangThaiThanhToan } from '@/services/KyTucXa/constant';
+import { ETrangThaiThanhToan, ETrangThaiHangCho, ETrangThaiMinhChung } from '@/services/KyTucXa/constant';
 import SelectCapacityKTX from './components/Select/SelectCapacity';
 import SelectRoomTypeKTX from './components/Select/SelectRoomType';
 import PageCard from '@/components/PageCard';
@@ -25,7 +25,7 @@ const DangKyKyTucXaPage = () => {
 	const intl = useIntl();
 	const { danhSach: danhSachToa } = useModel('kytucxa.toanha');
 	const { danhSach: danhSachDotDangKy, getModel: getDotDangKy, loading: loadingDotDangKy, setRecord: setDotDangKyRecord, record: recordDot } = useModel('kytucxa.dotdangky');
-	const { danhSach: danhSachMien, getModel: getDanhSachMien } = useModel('kytucxa.danhsachmien');
+	const { danhSach: danhSachMien, getModel: getDanhSachMien, nopMinhChung } = useModel('kytucxa.danhsachmien');
 	const { record: thongTinSinhVien } = useModel('kytucxa.thongtinsinhvien');
 	const { danhSach: danhSachPhong, getModel: getPhongModel, loading: loadingPhong, setRecord: setPhongRecord, setVisibleForm, setIsView } = useModel('kytucxa.phong');
 	const { danhSach: danhSachLichSu, getModel: getLichSu } = useModel('kytucxa.dangky');
@@ -54,7 +54,7 @@ const DangKyKyTucXaPage = () => {
 			const res = await axios.get(`${ipCsvc}/dang-ky-ky-tuc-xa/waiting-request/me`);
 			if (res?.data?.data) {
 				const list = Array.isArray(res.data.data) ? res.data.data : [res.data.data];
-				const active = list.find((item: any) => item.trangThai === 'CHO_XU_LY') || list[0] || null;
+				const active = list.find((item: any) => item.trangThai === ETrangThaiHangCho.CHO_XU_LY) || list[0] || null;
 				setHangCho(active);
 			} else {
 				setHangCho(null);
@@ -68,7 +68,7 @@ const DangKyKyTucXaPage = () => {
 
 	useEffect(() => {
 		getDotDangKy();
-		getDanhSachMien(undefined, undefined, undefined, undefined, undefined, '');
+		getDanhSachMien();
 		getLichSu();
 		getAllDanhTienIch();
 		fetchHangCho();
@@ -265,15 +265,15 @@ const DangKyKyTucXaPage = () => {
 		);
 	}, [danhSachMien, cacDotDangKyHienTai, thongTinSinhVien?.ma]);
 
-	const getExemptionStatusTag = (status: string) => {
+	const getExemptionStatusTag = (status: ETrangThaiMinhChung) => {
 		switch (status) {
-			case 'CHO_NOP_MINH_CHUNG':
+			case ETrangThaiMinhChung.CHO_NOP_MINH_CHUNG:
 				return <Tag color="warning">Chờ nộp minh chứng</Tag>;
-			case 'CHO_DUYET':
+			case ETrangThaiMinhChung.CHO_DUYET:
 				return <Tag color="processing">Chờ duyệt</Tag>;
-			case 'DA_DUYET':
+			case ETrangThaiMinhChung.DA_DUYET:
 				return <Tag color="success">Đã duyệt</Tag>;
-			case 'TU_CHOI':
+			case ETrangThaiMinhChung.TU_CHOI:
 				return <Tag color="error">Từ chối (Cần nộp lại)</Tag>;
 			default:
 				return <Tag>{status}</Tag>;
@@ -291,9 +291,9 @@ const DangKyKyTucXaPage = () => {
 				setSubmittingExempt(false);
 				return;
 			}
-			await axios.post(`${ipCsvc}/dang-ky-ky-tuc-xa/me/mien-dang-ky/${activeExemption._id}/minh-chung`, { urlMinhChung: fileUrl });
+			await nopMinhChung(activeExemption._id, fileUrl);
 			message.success('Nộp minh chứng thành công');
-			getDanhSachMien(undefined, undefined, undefined, undefined, undefined, '');
+			getDanhSachMien();
 		} catch (err) {
 			console.error(err);
 			message.error('Có lỗi xảy ra, vui lòng thử lại');
@@ -322,7 +322,7 @@ const DangKyKyTucXaPage = () => {
 			{hangCho && (
 				<Spin spinning={loadingHangCho}>
 					<Card title="Yêu cầu hàng chờ phòng" style={{ marginBottom: 16, borderRadius: 12 }} extra={
-						hangCho.trangThai === 'CHO_XU_LY' && (
+						hangCho.trangThai === ETrangThaiHangCho.CHO_XU_LY && (
 							<Button type="primary" danger onClick={handleCancelHangCho}>
 								Hủy yêu cầu hàng chờ
 							</Button>
@@ -343,8 +343,8 @@ const DangKyKyTucXaPage = () => {
 							</Col>
 							<Col xs={24} sm={6}>
 								<Typography.Text type="secondary">Trạng thái: </Typography.Text>
-								<Tag color={hangCho.trangThai === 'CHO_XU_LY' ? 'processing' : hangCho.trangThai === 'DA_XU_LY' ? 'success' : 'default'}>
-									{hangCho.trangThai === 'CHO_XU_LY' ? 'Chờ xử lý' : hangCho.trangThai === 'DA_XU_LY' ? 'Đã xử lý' : 'Đã hủy'}
+								<Tag color={hangCho.trangThai === ETrangThaiHangCho.CHO_XU_LY ? 'processing' : hangCho.trangThai === ETrangThaiHangCho.DA_XU_LY ? 'success' : 'default'}>
+									{hangCho.trangThai === ETrangThaiHangCho.CHO_XU_LY ? 'Chờ xử lý' : hangCho.trangThai === ETrangThaiHangCho.DA_XU_LY ? 'Đã xử lý' : 'Đã hủy'}
 								</Tag>
 							</Col>
 						</Row>
@@ -460,7 +460,7 @@ const DangKyKyTucXaPage = () => {
 											</div>
 										)}
 										
-										{(activeExemption.trangThaiMinhChung === 'CHO_NOP_MINH_CHUNG' || activeExemption.trangThaiMinhChung === 'TU_CHOI') && (
+										{(activeExemption.trangThaiMinhChung === ETrangThaiMinhChung.CHO_NOP_MINH_CHUNG || activeExemption.trangThaiMinhChung === ETrangThaiMinhChung.TU_CHOI) && (
 											<Form form={formExempt} layout="vertical" style={{ marginTop: 24, borderTop: '1px solid #f0f0f0', paddingTop: 16 }}>
 												<Form.Item
 													name="urlMinhChung"

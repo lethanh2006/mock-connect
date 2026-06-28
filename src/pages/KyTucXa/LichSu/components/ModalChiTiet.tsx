@@ -9,6 +9,7 @@ import CheckinPrepContent from '../../DangKy/components/CheckinPrepContent';
 import NoiDungThanhToan from '../ThanhToan/NoiDungThanhToan';
 import axios from '@/utils/axios';
 import { ipCsvc } from '@/utils/ip';
+import fileDownload from 'js-file-download';
 import '../../DangKy/components/style.less';
 
 interface ModalChiTietLichSuKTXProps {
@@ -81,14 +82,9 @@ const ModalChiTietLichSuKTX: React.FC<ModalChiTietLichSuKTXProps> = ({ open, onC
         setExporting(true);
         try {
             const response = await axios.get(`${ipCsvc}/dang-ky-ky-tuc-xa/${record._id}/export`, {
-                responseType: 'blob',
+                responseType: 'arraybuffer',
             });
-            const blob = new Blob([response.data], { type: 'application/pdf' });
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = `Don_Dang_Ky_KTX_${record._id}.pdf`;
-            link.click();
-            window.URL.revokeObjectURL(link.href);
+            fileDownload(response.data, `Don_Dang_Ky_KTX_${record._id}.pdf`, 'application/pdf');
             message.success('Tải tệp PDF thành công');
         } catch (err) {
             console.error('Lỗi khi xuất PDF:', err);
