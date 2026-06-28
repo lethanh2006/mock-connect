@@ -57,7 +57,8 @@ const CardTienTrinh = () => {
 		return [
 			{
 				title: intl.formatMessage({ id: 'trangchu.v2.academicProgress.cgpa' }),
-				value: gpa ?? '--',
+				// value: gpa ?? '--',
+				value: '--',
 				periodText: intl.formatMessage({ id: 'trangchu.v2.academicProgress.lastSemester' }),
 				disabled: gpa === null || gpa === undefined,
 			},

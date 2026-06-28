@@ -8,7 +8,7 @@ import React, { JSX } from 'react';
  */
 export interface StatisticsItem {
 	/** Tiêu đề hiển thị của item thống kê */
-	title?: string | React.ReactNode;
+	title?: React.ReactNode;
 
 	/** Giá trị hiển thị, có thể là số hoặc chuỗi (đã format)
 	 * @example 100, '1,234 VNĐ', '50%'
