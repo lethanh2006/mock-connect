@@ -867,13 +867,13 @@ export default [
 		access: 'manyAccessFilter',
 		permissions: ['tc.bill:read', 'tc.transaction:read', 'tc.discount:read'],
 		routes: [
-			{
-				name: 'CongNo',
-				path: 'cong-no',
-				component: 'TaiChinh/HoaDon',
-				access: 'accessFilter',
-				permission: 'tc.bill:read',
-			},
+			// {
+			// 	name: 'CongNo',
+			// 	path: 'cong-no',
+			// 	component: 'TaiChinh/HoaDon',
+			// 	access: 'accessFilter',
+			// 	permission: 'tc.bill:read',
+			// },
 			// {
 			// 	name: 'GiaoDich',
 			// 	path: 'giao-dich',
