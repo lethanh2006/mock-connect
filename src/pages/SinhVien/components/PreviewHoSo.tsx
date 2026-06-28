@@ -245,7 +245,7 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 			<div className='sv-profile-field-list'>
 				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.college' })}:`,
-					record?.nganh?.donVi?.ten ?? record?.csdt?.ten,
+					record?.nganh?.donVi?.ten ?? record?.nganh?.tenDonViPhuTrach ?? record?.nganh?.maDonVi,
 				)}
 				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.trainingProgram' })}:`,
