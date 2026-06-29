@@ -1,4 +1,4 @@
-import { colorTrangThaiHocSv } from '@/services/DaoTao/constant';
+import { colorTrangThaiHocSv, ETrangThaiHocSv } from '@/services/DaoTao/constant';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import {
 	EMaTrangThaiThanhToan,
@@ -173,7 +173,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 								</span>
 								{statusText && <Tag color={statusColor}>{statusText}</Tag>}
 								{trangThaiSinhVien && (
-									<Tag color={colorTrangThaiHocSv?.[trangThaiSinhVien as ETrangThaiHocSv]}>{trangThaiSinhVien}</Tag>
+									<Tag color={colorTrangThaiHocSv[trangThaiSinhVien as ETrangThaiHocSv]}>{trangThaiSinhVien}</Tag>
 								)}
 							</Space>
 						</div>
