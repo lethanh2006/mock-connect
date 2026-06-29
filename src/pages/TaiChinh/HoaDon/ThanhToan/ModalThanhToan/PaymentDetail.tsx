@@ -1,10 +1,19 @@
 ﻿import { postTransactionMePayment } from '@/services/TaiChinh/KenhThanhToan';
+import rules from '@/utils/rules';
 import { inputFormat } from '@/utils/utils';
-import { Button, Descriptions, InputNumber, message } from 'antd';
+import { Button, Checkbox, Col, Descriptions, Form, Input, InputNumber, message, Row } from 'antd';
 import { useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import './style.less';
 import type { PaymentDetailProps } from './typing';
+
+type ThongTinHoaDon = {
+	tenToChuc?: string;
+	maSoThue?: string;
+	diaChi?: string;
+	emailNhanHoaDonDienTu?: string;
+	userSoDienThoai?: string;
+};
 
 const PaymentDetail: React.FC<PaymentDetailProps> = ({
 	bill,
@@ -18,8 +27,9 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
 	const [loadingOnePay, setLoadingOnePay] = useState(false);
-	const [soTienMuonThanhToan, setSoTienMuonThanhToan] = useState<number | null>(null);
-
+	const [soTienMuonThanhToan, setSoTienMuonThanhToan] = useState<number | null>(bill?.soTienConLai ?? null);
+	const [guiThongTinHoaDon, setGuiThongTinHoaDon] = useState(false);
+	const [invoiceForm] = Form.useForm<ThongTinHoaDon>();
 	const userFullname =
 		bill?.userFullname ??
 		(initialState?.currentUser?.family_name
@@ -48,20 +58,29 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 	}, [soTienThanhToan, method]);
 
 	const finalAmount = soTienThanhToan > 0 ? soTienThanhToan + phiThanhToan : 0;
+	const thongTinHoaDon = Form.useWatch([], invoiceForm) ?? {};
 	const isAmountValid =
 		soTienMuonThanhToan !== null && soTienMuonThanhToan > 0 && soTienMuonThanhToan <= totalThanhToan;
+	const isInvoiceValid =
+		!guiThongTinHoaDon ||
+		Boolean(thongTinHoaDon.tenToChuc?.trim() && thongTinHoaDon.maSoThue?.trim() && thongTinHoaDon.diaChi?.trim());
 	const handlePayment = async () => {
 		setLoadingOnePay(true);
 		const currentUrl = window.location.href;
 		try {
-			const res = await postTransactionMePayment({
+			const body: Parameters<typeof postTransactionMePayment>[0] = {
 				againLink: window.location.href,
 				billIdentityCode: invoiceCode,
 				kenhThanhToanId: method._id,
 				soTienThanhToan: soTienThanhToan,
-
 				webUrlCallBack: currentUrl,
-			});
+			};
+			if (guiThongTinHoaDon) {
+				const invoiceValues = await invoiceForm.validateFields();
+				body.guiThongTinHoaDon = true;
+				body.thongTinHoaDon = invoiceValues;
+			}
+			const res = await postTransactionMePayment(body);
 
 			const paymentUrl = res?.data?.data?.payUrl;
 
@@ -107,7 +126,6 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 				</div>
 				<InputNumber
 					style={{ width: '100%' }}
-					size='large'
 					placeholder={intl.formatMessage({ id: 'taichinh.thanhtoan.modal.nhapsotienthanhtoan' })}
 					value={soTienMuonThanhToan}
 					onChange={(value) => setSoTienMuonThanhToan(value)}
@@ -139,6 +157,75 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 				)}
 			</div>
 
+			<div className='payment-detail__invoice-toggle'>
+				<Checkbox checked={guiThongTinHoaDon} onChange={(event) => setGuiThongTinHoaDon(event.target.checked)}>
+					Xuất hóa đơn
+				</Checkbox>
+			</div>
+
+			{guiThongTinHoaDon && (
+				<Form form={invoiceForm} layout='vertical' className='payment-detail__invoice-form' requiredMark={false}>
+					<div className='payment-detail__invoice-form-title'>Thông tin hóa đơn</div>
+					<Row gutter={[12, 12]}>
+						<Col xs={24} md={12}>
+							<Form.Item label={<span className='payment-detail__invoice-form-label'>Họ tên sinh viên</span>}>
+								<Input value={userFullname} disabled />
+							</Form.Item>
+						</Col>
+						<Col xs={24} md={12}>
+							<Form.Item label={<span className='payment-detail__invoice-form-label'>Mã sinh viên</span>}>
+								<Input value={userCode} disabled />
+							</Form.Item>
+						</Col>
+						<Col xs={24} md={12}>
+							<Form.Item
+								name='tenToChuc'
+								label={<span className='payment-detail__invoice-form-label'>Tên của tổ chức</span>}
+								rules={[...rules.required]}
+							>
+								<Input placeholder='Nhập tên của tổ chức' />
+							</Form.Item>
+						</Col>
+						<Col xs={24} md={12}>
+							<Form.Item
+								name='maSoThue'
+								label={<span className='payment-detail__invoice-form-label'>Mã số thuế của tổ chức</span>}
+								rules={[...rules.required]}
+							>
+								<Input placeholder='Nhập mã số thuế của tổ chức' />
+							</Form.Item>
+						</Col>
+						<Col xs={24}>
+							<Form.Item
+								name='diaChi'
+								label={<span className='payment-detail__invoice-form-label'>Địa chỉ tổ chức</span>}
+								rules={[...rules.required]}
+							>
+								<Input placeholder='Nhập địa chỉ' />
+							</Form.Item>
+						</Col>
+						<Col xs={24} md={12}>
+							<Form.Item
+								name='emailNhanHoaDonDienTu'
+								label={<span className='payment-detail__invoice-form-label'>Email nhận hóa đơn điện tử</span>}
+								rules={[{ type: 'email', message: 'Email không hợp lệ' }]}
+							>
+								<Input placeholder='Nhập email' />
+							</Form.Item>
+						</Col>
+						<Col xs={24} md={12}>
+							<Form.Item
+								name='userSoDienThoai'
+								rules={[...rules.soDienThoai]}
+								label={<span className='payment-detail__invoice-form-label'>Số điện thoại liên hệ</span>}
+							>
+								<Input placeholder='Nhập số điện thoại' />
+							</Form.Item>
+						</Col>
+					</Row>
+				</Form>
+			)}
+
 			<div className='payment-detail__summary'>
 				<div className='payment-detail__summary-row'>
 					<span>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.tamtinh' })}</span>
@@ -165,7 +252,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 					size='large'
 					onClick={handlePayment}
 					loading={loading || loadingOnePay}
-					disabled={!isAmountValid}
+					disabled={!isAmountValid || !isInvoiceValid}
 				>
 					{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.thanhtoanngay' })}
 				</Button>

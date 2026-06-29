@@ -1,6 +1,6 @@
 export default {
 	'taichinh.hoadon.title': 'Outstanding Balance',
-	'taichinh.hoadon.column.identityCode': '',
+	'taichinh.hoadon.column.identityCode': 'Invoice code',
 	'taichinh.hoadon.column.dotthu': 'Collection Period',
 	'taichinh.hoadon.column.khoanthu': 'Payment Details',
 	'taichinh.hoadon.column.trangthai': 'Status',
