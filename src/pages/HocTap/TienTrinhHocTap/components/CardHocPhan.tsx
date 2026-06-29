@@ -38,6 +38,9 @@ const CardHocPhan = (props: {
 					{/* Course name */}
 					{label && <span className='card-label'>{label}</span>}
 
+					{hocPhan?.ma && (
+						<div className={`card-course-code ${isNotStudied ? 'not-studied' : 'default'}`}>{hocPhan.ma}</div>
+					)}
 					<h4 className={`card-title ${isNotStudied ? 'not-studied' : 'default'}`} title={hocPhan?.ten}>
 						{hocPhan?.ten}
 					</h4>
@@ -58,16 +61,6 @@ const CardHocPhan = (props: {
 							)}
 						</div>
 					</div>
-					{/* Credits & Status */}
-					{/* <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
-						<Tag className='credits-tag'>
-							{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
-						</Tag>
-						{isCurrentlyStudying && isVinUni && (
-							<div className='studying-text'>
-							</div>
-						)}
-					</div> */}
 				</div>
 			</Card>
 		</div>

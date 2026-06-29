@@ -82,10 +82,10 @@ export const tinhChatDangKyTC: Record<ETinhChatDangKyTC, string> = {
 };
 
 export enum ELoaiDangKyTheoLop {
-	LOP_HANH_CHINH = 'lop-hanh-chinh',
-	KHOA_NGANH = 'khoa-nganh',
-	KHOA_NGANH_2 = 'khoa-nganh-2',
 	TAT_CA = 'tat-ca',
+	KHOA_NGANH = 'khoa-nganh',
+	LOP_HANH_CHINH = 'lop-hanh-chinh',
+	KHOA_NGANH_2 = 'khoa-nganh-2',
 }
 
 export const loaiDangKyTheoLop: Record<ELoaiDangKyTheoLop, string> = {

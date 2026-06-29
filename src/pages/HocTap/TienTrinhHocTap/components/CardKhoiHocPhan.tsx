@@ -4,7 +4,7 @@ import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typi
 import { Card, Modal } from 'antd';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
-import { useIntl } from 'umi';
+import { useAccess, useIntl } from 'umi';
 import CardHocPhan from './CardHocPhan';
 import './CardStyles.less';
 
@@ -16,6 +16,7 @@ const CardKhoiHocPhan = (props: {
 }) => {
 	const intl = useIntl();
 	const { khoi, onClickHocPhan, label } = props;
+	const { vinuniAccessFilter } = useAccess();
 	const soTinChi = khoi?.soTinChiTuChonPhaiHoc ?? 0;
 	const [visible, setVisible] = useState<boolean>(false);
 	const hasDanhSachHocPhan = !!khoi?.hocPhanCtdtList?.length;
@@ -28,7 +29,7 @@ const CardKhoiHocPhan = (props: {
 		}
 
 		Modal.confirm({
-			className: 'khoi-confirm-modal',
+			className: vinuniAccessFilter() ? 'khoi-confirm-modal' : undefined,
 			title,
 			content: intl.formatMessage({ id: 'tientrinhhoctap.ctdt.noti.ngoaiChuongTrinh' }, { soTinChi }),
 			okText: intl.formatMessage({ id: 'global.button.dong' }),

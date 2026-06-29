@@ -126,7 +126,7 @@ export default {
 	'tientrinhhoctap.ctdt.ngonngudaotao': 'Language of Instruction',
 	'tientrinhhoctap.ctdt.thoigian': 'Training Duration',
 	'tientrinhhoctap.ctdt.thoigiantoida': 'Maximum Training Duration',
-	'tientrinhhoctap.ctdt.tongsotinchi': 'Total number of credits to be earned',
+	'tientrinhhoctap.ctdt.tongsotinchi': 'Total credits required',
 	'tientrinhhoctap.ctdt.file': 'File',
 	'tientrinhhoctap.ctdt.muctieu': 'Training Objectives',
 	'tientrinhhoctap.ctdt.thongtinhocphi': 'Tuition Information',

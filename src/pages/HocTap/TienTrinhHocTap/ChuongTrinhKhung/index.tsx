@@ -143,11 +143,19 @@ const TienTrinhChuongTrinhKhung = () => {
 			const sortedEntries = Object.entries(gData).sort(([a], [b]) => Number(a) - Number(b));
 
 			return sortedEntries.map(([key, group]) => {
-				const khoiHocPhan = sortByCourseName(group.filter((item) => !item.maChuyenNganh));
-				const soTinChiPhaiHoc = _.sumBy(group, (item) => item.hocPhan?.soTinChi ?? item.soTinChiTuChonPhaiHoc ?? 0);
-				const soTinChiTuChon = _.sumBy(group, (item) => item.soTinChiTuChonPhaiHoc || 0);
+				const uniqchuyenNganh = _.uniq(group.filter((item) => !!item.maChuyenNganh).map((item) => item.maChuyenNganh));
 
-				const chuyenNganh = group.filter((item) => !!item.maChuyenNganh);
+				const khoiHocPhan = sortByCourseName(group.filter((item) => !item.maChuyenNganh || uniqchuyenNganh.length < 2));
+				const da1 = group.filter(
+					(item) =>
+						!item.maChuyenNganh ||
+						item.maChuyenNganh === maChuyenNganhHienTai ||
+						item.maChuyenNganh === uniqchuyenNganh?.[0],
+				);
+				const soTinChiPhaiHoc = _.sumBy(da1, (item) => item.hocPhan?.soTinChi ?? item.soTinChiTuChonPhaiHoc ?? 0);
+				const soTinChiTuChon = _.sumBy(da1, (item) => item.soTinChiTuChonPhaiHoc || 0);
+
+				const chuyenNganh = group.filter((item) => !!item.maChuyenNganh && uniqchuyenNganh.length >= 2);
 				const chuyenNganhList = Object.values(_.groupBy(chuyenNganh, (item) => item.maChuyenNganh)).map((item) => ({
 					khoiHocPhan: sortByCourseName(item),
 					tenChuyenNganh: undefined as string | undefined,
@@ -184,10 +192,11 @@ const TienTrinhChuongTrinhKhung = () => {
 				group.find((it) => it.khoiKienThuc?.khoiCha?.ten)?.khoiKienThuc?.khoiCha?.ten ||
 				group[0].khoiKienThuc?.ten;
 
-			const khoiHocPhan = sortBySemester(group.filter((item) => !item.maChuyenNganh));
+			const uniqchuyenNganh = _.uniq(group.filter((item) => !!item.maChuyenNganh).map((item) => item.maChuyenNganh));
+			const khoiHocPhan = sortBySemester(group.filter((item) => !item.maChuyenNganh || uniqchuyenNganh.length < 2));
 			const chuyenNganhList = Object.values(
 				_.groupBy(
-					group.filter((item) => !!item.maChuyenNganh),
+					group.filter((item) => !!item.maChuyenNganh && uniqchuyenNganh.length >= 2),
 					(item) => item.maChuyenNganh,
 				),
 			).map((item) => ({
