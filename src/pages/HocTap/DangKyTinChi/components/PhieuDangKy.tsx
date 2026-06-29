@@ -94,7 +94,7 @@ const PhieuDangKy = (props: {
 	};
 
 	const handleXemDeCuong = (rec: DangKyTinChi.ILopDangKy) => {
-		const deCuongId = rec.hocPhan?.deCuongHienTaiId ?? rec.deCuong?.deCuongId ?? rec.hocPhan?.ma ?? rec.maHocPhan;
+		const deCuongId = rec.hocPhan?.ma ?? rec.maHocPhan;
 		if (!deCuongId) return;
 
 		setDeCuongModal({
