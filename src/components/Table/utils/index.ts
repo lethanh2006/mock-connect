@@ -3,11 +3,20 @@ import type { IColumn } from '../typing';
 
 export { normalizeExternalConditions } from './conditions';
 export {
+	applyColumnStringSearch,
+	buildGlobalSearchFilter,
 	findFiltersInColumns,
+	findGlobalSearchFilter,
+	getGlobalSearchKeyword,
+	getStandaloneSearchableFields,
+	isGlobalSearchFilter,
 	markExternalFilters,
 	normalizeFilters,
+	reAddMetadata,
+	sanitizeFilterValues,
 	splitFiltersBySource,
 	stripFilterSource,
+	stripMetadata,
 } from './filters';
 
 export const updateSearchStorage = (dataIndex: string, value: string) => {

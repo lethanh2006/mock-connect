@@ -1,375 +1,542 @@
-@primary-blue: #003366;
-@primary-red: #a31f34;
-@text-black: #000;
-@text-gray: #444;
-@light-gray: #f2f2f2;
-@border-color: #ddd;
-
-.vin-triangle-indicator(@color: ~'var(--vin-color-primary)' ; @w: 14px; @h: 10px; @side: right; @rotate: 180deg) {
-	content: '' !important;
-	position: absolute !important;
-	width: 0 !important;
-	height: 0 !important;
-	border-top: @h solid transparent !important;
-	border-bottom: @h solid transparent !important;
-	display: block !important;
-	visibility: visible !important;
-	opacity: 1 !important;
-	z-index: 999 !important;
-	pointer-events: none !important;
-	rotate: @rotate !important;
-
-	& when (@side =right) {
-		border-right: @w solid @color !important;
-	}
-
-	& when (@side =left) {
-		border-left: @w solid @color !important;
-	}
+@font-face {
+	font-family: 'Lora';
+	src: url('/font/Lora.ttf') format('truetype');
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
 }
 
-@container-padding: 20px;
-@block-gap: 20px;
+@navy-blue: #1f4174;
+@gold: #d4b27e;
+@text-gray: #333;
+@border-gray: #e0e0e0;
 
 .cct-container {
-	display: flex;
-	padding: @container-padding;
-	gap: 30px;
-	background: white;
 	color: @text-gray;
-	max-width: '100%';
-	margin: auto;
+	max-width: 100%;
+	margin: 0 auto;
+	background-color: #fff;
 	line-height: 1.4;
-	margin-bottom: 30px;
 
-	.cct-column {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		gap: @block-gap;
-	}
-}
+	.cct-header {
+		background-color: @navy-blue;
+		color: white;
+		padding: 15px 40px;
 
-header {
-	.logo {
-		font-weight: bold;
-		color: @primary-red;
-		font-size: 16px;
-		margin-bottom: 5px;
-	}
-	h1 {
-		font-size: 22px;
-		font-weight: bold;
-		color: @primary-blue;
-		margin: 5px 0 10px;
-		padding-bottom: 5px;
-		display: inline-block;
-	}
-}
+		.header-content-cct {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
 
-.description {
-	font-size: 11px;
-	color: @primary-blue;
-	max-width: 90%;
-	font-weight: 600;
-}
-
-.student-meta {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	font-size: 11.5px;
-	color: @primary-red;
-	row-gap: 5px;
-	column-gap: 15px;
-	margin-left: 15px;
-
-	.meta-item {
-		span {
-			font-weight: bold;
-			margin-right: 5px;
-		}
-	}
-}
-
-.info-footer {
-	margin-top: -12px;
-	display: flex;
-	font-size: 11.5px;
-	color: @primary-red;
-	gap: 30px;
-}
-
-.skills-section {
-	h3 {
-		position: relative;
-		color: @primary-blue;
-		font-size: 13px;
-		margin: 0 0 10px 0;
-		font-weight: bold;
-		padding-left: 16px;
-
-		&::before {
-			position: absolute;
-
-			.vin-triangle-indicator(@w: 10px; @h: 6px; @side: right);
-
-			left: 0px !important;
-			top: -3px !important;
-
-			transform: translateY(-50%) !important;
-
-			@media (max-width: 768px) {
-				top: 32% !important;
+			.header-title {
+				font-family: 'Lora', serif !important;
+				font-weight: bold;
+				font-size: 20px;
+				line-height: 1.1;
+				background: linear-gradient(180deg, #f4dab2 0%, #ffffff 50%, #ddbd8b 100%);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+				color: transparent;
+				-webkit-font-smoothing: antialiased;
+				display: inline-block;
 			}
 		}
 	}
-}
 
-.skills-grid {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	font-size: 11px;
-	gap: 10px 15px;
-
-	.skill-item {
-		color: @primary-blue;
+	.cct-body {
 		display: flex;
-		align-items: center;
+		padding: 20px 40px;
+		gap: 80px;
+	}
+
+	.column {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.left-column {
+		flex: 1;
+	}
+
+	.right-column {
+		flex: 1;
+	}
+
+	.gold-text {
+		font-family: 'Lora', serif !important;
+		color: @gold;
+		font-size: 20px;
+		margin-bottom: 5px;
+		border-bottom: none;
+		font-weight: normal;
+	}
+
+	.italic-text {
+		font-size: 9px;
+		color: @navy-blue;
+		text-align: justify;
+	}
+
+	section {
+		margin-bottom: 15px;
+	}
+
+	.intro-text {
+		font-size: 9px;
+		color: @navy-blue;
+		text-align: justify;
+	}
+
+	.student-info {
+		display: flex;
+		font-size: 9px;
+		font-weight: bold;
+		gap: 12px;
+
+		.info-group {
+			width: 50%;
+			flex: 0 0 50%;
+
+			p {
+				margin: 4px 0;
+				color: @navy-blue;
+				word-break: break-word;
+				overflow-wrap: break-word;
+				white-space: normal;
+			}
+		}
+	}
+
+	.skills-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 8px 16px;
+
+		.skill-item {
+			color: @navy-blue;
+			font-size: 9px;
+			font-weight: bold;
+		}
+	}
+
+	.project-row {
+		display: flex;
+		align-items: flex-start;
 		gap: 8px;
-		.checkbox-icon {
-			width: 14px;
-			height: 14px;
-			border-radius: 50%;
-			background-color: @primary-blue;
-			color: white;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 10px;
-			font-weight: bold;
-		}
-	}
-}
-
-.featured-projects h3 {
-	color: @primary-blue;
-	font-size: 13px;
-	margin: 0px 0 10px;
-	font-weight: bold;
-}
-
-.competency-block {
-	border: 1px solid @border-color;
-	border-radius: 3px;
-	overflow: hidden;
-
-	.block-header {
-		display: flex;
-		padding: 5px 15px;
-		color: white;
-		align-items: center;
-		position: relative;
-
-		.title {
-			font-weight: bold;
-			font-size: 13px;
-			text-transform: uppercase;
-		}
-		.desc {
-			font-size: 10px;
-			flex: 1;
-			opacity: 0.9;
-			padding-left: 15px;
-			padding-right: 15px;
-		}
-	}
-
-	&.blue .block-header {
-		background-color: @primary-blue;
-	}
-	&.red .block-header {
-		background-color: @primary-red;
-	}
-	&.blue-dark .block-header {
-		background-color: #002244;
-	}
-	&.red-dark .block-header {
-		background-color: #881122;
-	}
-
-	.content-table {
 		width: 100%;
-		border-collapse: collapse;
-		font-size: 10px;
 
-		table-layout: fixed;
-		th,
-		td {
-			color: @primary-blue;
-			padding: 10px 12px;
-			text-align: left;
-			border-bottom: 1px solid #eee;
-
-			white-space: normal;
-			word-break: break-word;
-		}
-
-		th {
-			background: @light-gray;
-			color: @primary-red;
-			font-weight: bold;
-		}
-	}
-}
-
-.competency-block.leadership-mindset .block-header {
-	background-color: @primary-blue;
-}
-
-.awards {
-	margin-top: -24px;
-	h3 {
-		color: @primary-blue;
-		font-size: 13px;
-		margin: 25px 0 10px;
-		font-weight: bold;
-	}
-	ul {
-		font-size: 11px;
-		list-style: none;
-		padding-left: 16px;
-		li {
-			color: @primary-blue;
-		}
-	}
-}
-
-.transcript-footer {
-	font-size: 11px;
-	color: @primary-blue;
-
-	.section-title {
-		color: @primary-blue;
-		font-size: 16px;
-		font-weight: 600;
-		margin: 10px 0 20px;
-	}
-
-	.divider {
-		position: relative;
-		text-align: center;
-		font-weight: bold;
-		margin-bottom: 20px;
-
-		&::before,
-		&::after {
-			content: '';
-			position: absolute;
-			left: 0;
-			right: 0;
-			height: 2px;
-			background: @primary-blue;
-		}
-
-		&::before {
-			top: -8px;
-		}
-
-		&::after {
-			bottom: -8px;
-		}
-
-		span {
-			padding: 0 12px;
-			background: white;
-			font-style: italic;
-			letter-spacing: 1px;
+		.ant-checkbox {
+			margin-top: 4px;
 		}
 	}
 
-	.gauge-row {
+	.project-content {
+		flex: 1;
+	}
+
+	.project-item {
 		display: flex;
-		justify-content: space-around;
-		align-items: flex-end;
+		width: 100%;
+	}
 
-		.gauge-item {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
+	.project-year {
+		min-width: 60px;
+		display: flex;
+		flex-direction: column;
+
+		span:first-child {
+			font-weight: bold;
+			font-size: 18px;
+			color: @navy-blue;
 		}
 
-		.gauge-container {
-			position: relative;
-			width: 90px;
-			height: 45px;
-			display: flex;
-			justify-content: center;
-			align-items: flex-end;
-		}
-
-		.gauge-svg {
-			width: 100%;
-			height: auto;
-		}
-
-		.gauge-value {
-			position: absolute;
-			bottom: 5px;
-			font-size: 12px;
-			font-weight: 600;
-			color: @primary-blue;
-		}
-
-		.label {
-			margin-top: 10px;
-			font-size: 11px;
-			font-weight: 800;
-			color: @primary-blue;
-			letter-spacing: 0.5px;
-			text-align: center;
+		.role-indicator {
+			color: @gold;
+			font-size: 16px;
+			margin-top: -10px;
+			margin-right: 15px;
+			text-align: right;
+			padding-bottom: 12px;
 		}
 	}
 
-	.role-desc {
-		margin-top: 10px;
-		line-height: 1.5;
+	.project-detail {
+		padding-left: 12px;
+		border-left: 1px solid @gold;
+
+		h3 {
+			font-size: 9px;
+			color: @navy-blue;
+			font-weight: bold;
+			margin: 0;
+		}
 
 		p {
-			margin: 4px 0;
+			font-size: 9px;
+			color: @navy-blue;
+			margin: 0;
+			text-align: justify;
+		}
+	}
+
+	.award-item {
+		margin-bottom: 8px;
+
+		h3 {
+			font-size: 9px;
+			color: @navy-blue;
+			display: flex;
+			align-items: flex-start;
+			font-weight: bold;
+
+			.star {
+				margin-top: -3px;
+				font-size: 15px;
+				color: @navy-blue;
+				margin-right: 6px;
+				font-weight: bold;
+			}
 		}
 
-		b {
-			color: @primary-blue;
+		p {
+			margin: -8px 0 0 19px;
+			font-size: 9px;
+			color: @navy-blue;
 		}
+	}
+
+	.footer-legend {
+		margin-top: auto;
+		bottom: 0px;
+
+		.end-transcript-divider {
+			border-top: 1px solid @gold;
+			text-align: left;
+			margin-bottom: 6px;
+			padding-top: 8px;
+
+			span {
+				font-family: 'Lora', serif !important;
+				color: @gold;
+				font-size: 16px;
+				font-weight: bold;
+			}
+		}
+
+		.legend-table {
+			.legend-row {
+				display: grid;
+				grid-template-columns: 60px 100px 1fr;
+				border-bottom: 1px solid @gold;
+				font-size: 7px;
+
+				.symbol {
+					font-size: 18px;
+					font-weight: bold;
+					color: @gold;
+					margin-bottom: -5px;
+				}
+				.label {
+					margin-top: 6px;
+					font-weight: bold;
+					color: @navy-blue;
+				}
+				.desc {
+					margin-top: 6px;
+					color: @navy-blue;
+				}
+			}
+		}
+
+		.signatures {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 50px;
+			font-size: 9px;
+			color: @navy-blue;
+
+			.issue-info {
+				p {
+					margin: 4px 0;
+				}
+			}
+
+			.provost-sig {
+				font-weight: bold;
+
+				.sig-name {
+					margin-top: 60px;
+					text-align: center;
+				}
+			}
+		}
+	}
+
+	.title-bottom {
+		font-size: 9px;
+		color: @navy-blue;
+		padding-left: 12px;
+		padding-bottom: 6px;
 	}
 }
 
-.icon-white {
-	filter: brightness(0) invert(1);
-}
-
-.award-list {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-
-.award-item {
-	padding: 8px 12px;
-	border-radius: 6px;
-	margin-bottom: 8px;
+.cct-export-area {
+	max-width: 100%;
+	margin: 0 auto;
 	background: #fff;
-	border: 1px solid #eee;
-	position: relative;
-	cursor: grab;
 
-	&:active {
-		cursor: grabbing;
+	&.exporting-pdf {
+		width: 1587px !important;
+		height: 1123px !important;
+		max-width: none !important;
+		margin: 0 !important;
+		overflow: hidden !important;
+
+		.ant-spin-nested-loading,
+		.ant-spin-container {
+			height: 100% !important;
+		}
+
+		.cct-container {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			width: 100% !important;
+			height: 100% !important;
+			max-width: none !important;
+			margin: 0 !important;
+			padding-bottom: 34px;
+			overflow: hidden;
+			box-sizing: border-box;
+		}
+
+		.cct-header {
+			flex: 0 0 auto;
+			padding: 26px 60px;
+		}
+
+		.cct-body {
+			flex: 1 1 auto;
+			min-height: 0;
+			padding: 34px 60px 0;
+			gap: 90px;
+		}
+
+		.header-title {
+			font-size: 24px !important;
+
+			.pdf-title-break {
+				display: block;
+			}
+		}
+
+		.gold-text {
+			font-size: 24px !important;
+		}
+
+		.intro-text,
+		.student-info,
+		.italic-text,
+		.skills-grid .skill-item,
+		.project-detail h3,
+		.project-detail p,
+		.award-item h3,
+		.award-item p,
+		.signatures,
+		.title-bottom {
+			font-size: 10.8px !important;
+		}
+
+		.project-year span:first-child {
+			font-size: 22px !important;
+		}
+
+		.project-year .role-indicator,
+		.legend-table .legend-row .symbol {
+			font-size: 19px !important;
+		}
+
+		.footer-legend .end-transcript-divider span {
+			font-size: 19px !important;
+		}
+
+		.legend-table .legend-row {
+			font-size: 8.4px !important;
+		}
+
+		section {
+			margin-bottom: 14px;
+		}
+
+		.intro-section {
+			margin-bottom: 22px;
+		}
+
+		.column {
+			min-height: 0;
+		}
+
+		.left-column,
+		.right-column {
+			height: 100%;
+		}
+
+		.profile-section {
+			flex: 0 0 auto;
+			margin-bottom: 22px;
+
+			.italic-text {
+				display: -webkit-box;
+				margin: 6px 0 0;
+				min-height: calc(10.8px * 1.4 * 6);
+				max-height: calc(10.8px * 1.4 * 6);
+				overflow: hidden;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 6;
+			}
+		}
+
+		.skills-section {
+			flex: 0 0 auto;
+			margin-bottom: 18px;
+
+			.italic-text {
+				margin: 0 0 10px;
+			}
+
+			.skills-grid {
+				min-height: calc(10.8px * 1.4 * 3 + 16px);
+				grid-template-rows: repeat(3, minmax(calc(10.8px * 1.4), auto));
+				align-content: start;
+			}
+		}
+
+		.projects-section,
+		.awards-section {
+			flex: 1 1 auto;
+			min-height: 0;
+			overflow: hidden;
+		}
+
+		.awards-section {
+			flex: 0 0 615px;
+			overflow: visible;
+
+			.section-title {
+				overflow: visible;
+			}
+		}
+
+		.footer-legend {
+			flex: 0 0 auto;
+			margin-top: 0;
+
+			.legend-table .legend-row {
+				align-items: center;
+
+				.symbol,
+				.label,
+				.desc {
+					display: flex;
+					align-items: center;
+					margin-top: 0;
+					margin-bottom: 0;
+					line-height: 1;
+				}
+			}
+		}
+
+		.projects-section {
+			.project-row {
+				margin-bottom: 10px;
+			}
+
+			.project-row:last-child {
+				margin-bottom: 0;
+			}
+
+			.project-item {
+				align-items: flex-start;
+			}
+
+			.project-year {
+				min-width: 70px;
+				padding-top: 0;
+				padding-right: 10px;
+				align-items: flex-end;
+
+				span:first-child {
+					line-height: 1;
+				}
+
+				.role-indicator {
+					width: auto;
+					line-height: 1;
+					margin-top: 0px;
+					margin-right: 0;
+					padding-bottom: 0;
+					text-align: right;
+				}
+			}
+
+			.project-detail {
+				padding-top: 0;
+				padding-left: 12px;
+
+				h3 {
+					line-height: 1.15;
+					margin-bottom: 2px;
+				}
+
+				p {
+					line-height: 1.2;
+				}
+			}
+		}
+
+		.title-bottom {
+			position: absolute;
+			bottom: 14px;
+			left: 60px;
+			padding: 0;
+		}
 	}
 }
 
-.highlight-top {
-	background: #fffbe6;
+@media print {
+	@page {
+		size: A3 landscape;
+		margin: 0;
+	}
+
+	html,
+	body {
+		margin: 0 !important;
+		background: #fff !important;
+		-webkit-print-color-adjust: exact !important;
+		print-color-adjust: exact !important;
+	}
+
+	.cct-export-area {
+		width: 420mm !important;
+		min-height: 297mm !important;
+		margin: 0 !important;
+		overflow: hidden !important;
+		background: #fff !important;
+		-webkit-print-color-adjust: exact !important;
+		print-color-adjust: exact !important;
+
+		.cct-container {
+			width: 420mm !important;
+			min-height: 297mm !important;
+			max-width: none !important;
+			margin: 0 !important;
+			box-sizing: border-box !important;
+			-webkit-print-color-adjust: exact !important;
+			print-color-adjust: exact !important;
+		}
+	}
 }
 
 @keyframes pulseSmooth {

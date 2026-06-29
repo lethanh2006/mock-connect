@@ -1,9 +1,15 @@
+import CCTCover from '@/assets/cct/CCT_Bia.png';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EStatusMyCCT } from '@/services/CCT/constant';
-import { handleSingleFile } from '@/services/uploadFile';
-import { ipCCT } from '@/utils/ip';
-import { CloseCircleOutlined, FilePdfOutlined, ReloadOutlined, SaveOutlined, SendOutlined } from '@ant-design/icons';
-import { Badge, Button, Form, Space, Spin, Tag, Tooltip } from 'antd';
+import {
+	CloseCircleOutlined,
+	FilePdfOutlined,
+	LoadingOutlined,
+	ReloadOutlined,
+	SaveOutlined,
+	SendOutlined,
+} from '@ant-design/icons';
+import { Badge, Button, Form, Space, Tag, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -15,58 +21,51 @@ import ModalPeding from './components/ModalPeding';
 import PreviewCCTModal from './components/PreviewCCTModal';
 import './style.less';
 
-const uploadFilesOfCompetency = async (files: any[] = []) => {
-	if (!files.length) return [];
-	const urls = await Promise.all(files.map((f) => handleSingleFile(f, undefined, ipCCT).catch(() => null)));
-	return urls.filter(Boolean) as string[];
-};
+const loadImage = (src: string) =>
+	new Promise<HTMLImageElement>((resolve, reject) => {
+		const image = new Image();
+		image.crossOrigin = 'anonymous';
+		image.onload = () => resolve(image);
+		image.onerror = reject;
+		image.src = src;
+	});
 
-const MyCCTv3 = () => {
+const MyCCT = () => {
 	const intl = useIntl();
 	const [form] = Form.useForm();
 	const { getByIdModel, updateMyCCTModel, formSubmiting, edit, setEdit } = useModel('cct.mycct');
 	const { getByIdModel: getDot, record: recDot } = useModel('cct.submissionround');
 	const { getAllModel, danhSach } = useModel('cct.activityoutcome');
-	const [selectedActivities, setSelectedActivities] = useState<{ attributeId: string; activityIds: string[] }[]>([]);
 	const [record, setRecord] = useState<{
+		activities: MyCCT.IActivityMyCCT[];
 		allCompetencies: string[];
 		attributes: MyCCT.IAttributeMyCCT[];
 		levelOfEngagement: MyCCT.ILevelOfEngagement[];
 		myCCT: MyCCT.IRecord;
 		awardsAndRecognition: ActivityOutCome.IRecord;
 	}>();
+	const [previewData, setPreviewData] = useState<any>();
 	const [isSubmit, setIsSubmit] = useState<boolean>(false);
 	const printRef = useRef<HTMLDivElement>(null);
 	const [previewVisible, setPreviewVisible] = useState<boolean>(false);
-	const [listAwardRecognition, setListAwardRecognition] = useState<string[]>([]);
-	const [exporting, setExporting] = useState(false);
+	const [loadingExport, setLoadingExport] = useState<boolean>(false);
 	const [visiblePending, setVisiblePending] = useState<boolean>(false);
+
+	const getExportFilename = () => {
+		const name = record?.myCCT?.code || record?.myCCT?.name || dayjs().format('YYYYMMDD_HHmm');
+
+		return `My_CCT_${name}`.replace(/[\\/:*?"<>|]/g, '_');
+	};
 
 	const getData = () => {
 		getByIdModel('me', false).then((res: any) => {
-			if (res?.myCCT?.selectedActivities?.length) {
-				res.attributes = res?.attributes?.map((attr: any) => {
-					const found = res?.myCCT?.selectedActivities?.find((i: any) => i?.attributeId === attr?.attribute?._id);
+			// if (res?.myCCT?.listAwardRecognition?.length) {
+			// 	const mapOrder = new Map(res.myCCT.listAwardRecognition.map((id: string, index: number) => [id, index]));
 
-					if (!found) return attr;
-
-					const mapOrder = new Map(found?.activityIds?.map((id: string, index: number) => [id, index]));
-
-					attr.activitiesOutCome = [...(attr?.activitiesOutCome || [])].sort(
-						(a, b) => (mapOrder.get(a.id) ?? (999 as any)) - (mapOrder.get(b.id) ?? (999 as any)),
-					);
-
-					return attr;
-				});
-			}
-
-			if (res?.myCCT?.listAwardRecognition?.length) {
-				const mapOrder = new Map(res.myCCT.listAwardRecognition.map((id: string, index: number) => [id, index]));
-
-				res.awardsAndRecognition = [...(res.awardsAndRecognition || [])].sort(
-					(a, b) => (mapOrder.get(a.id) ?? (999 as any)) - (mapOrder.get(b.id) ?? (999 as any)),
-				);
-			}
+			// 	res.awardsAndRecognition = [...(res.awardsAndRecognition || [])].sort(
+			// 		(a, b) => (mapOrder.get(a.id) ?? (999 as any)) - (mapOrder.get(b.id) ?? (999 as any)),
+			// 	);
+			// }
 
 			setRecord(res);
 		});
@@ -87,36 +86,12 @@ const MyCCTv3 = () => {
 			form.resetFields();
 		} else {
 			form.setFieldsValue(record?.myCCT);
-
-			if (record?.myCCT?.listAwardRecognition?.length) {
-				setListAwardRecognition(record.myCCT.listAwardRecognition);
-			}
 		}
 	}, [edit, record?.myCCT?._id]);
 
 	const onFinish = async (values: MyCCT.IRecord, submitted: boolean) => {
-		const awardsAndRecognition = await Promise.all(
-			(values?.awardsAndRecognition || []).map(async (award: any) => ({
-				...award,
-				evidenceFile: await Promise.all(
-					(award.evidenceFile || [])?.map(async (file: any) => ({
-						name: file.name,
-						file: await uploadFilesOfCompetency(file?.file?.fileList),
-					})),
-				),
-			})),
-		);
-
-		const fallbackSelected = record?.attributes?.map((attr) => ({
-			attributeId: attr?.attribute?._id,
-			activityIds: (attr?.activitiesOutCome || []).map((i) => i.id),
-		}));
-
 		const data = {
 			...values,
-			awardsAndRecognition,
-			selectedActivities: selectedActivities.length ? selectedActivities : fallbackSelected,
-			listAwardRecognition,
 			submitted,
 		};
 
@@ -135,177 +110,65 @@ const MyCCTv3 = () => {
 			.catch(() => {});
 	};
 
-	const handleExportPDF = async () => {
-		const element = printRef.current;
-		if (!element) return;
+	const hanldeExport = async () => {
+		if (!printRef.current) {
+			return;
+		}
 
-		const loadImage = (src: string): Promise<string> => {
-			return new Promise((resolve) => {
-				const img = new Image();
-				img.crossOrigin = 'anonymous';
-				img.src = src;
-
-				img.onload = () => {
-					const canvas = document.createElement('canvas');
-					canvas.width = img.width;
-					canvas.height = img.height;
-					const ctx = canvas.getContext('2d');
-					if (!ctx) return resolve('');
-
-					ctx.drawImage(img, 0, 0);
-					resolve(canvas.toDataURL('image/jpeg', 0.8));
-				};
-
-				img.onerror = () => resolve('');
-			});
-		};
+		setLoadingExport(true);
 
 		try {
-			setExporting(true);
+			const exportNode = printRef.current;
+			const exportWidth = 1587;
+			const exportHeight = 1123;
 
-			const clone = element.cloneNode(true) as HTMLElement;
-			clone.classList.add('export-mode');
+			await document.fonts.ready;
 
-			const style = document.createElement('style');
-			style.innerHTML = `
-            .export-mode .skills-section h3::before {
-                left: 0px !important;
-                top: 10px !important;
-                transform: translateY(-50%) !important;
-            }
-        `;
-			document.head.appendChild(style);
-
-			clone.style.width = '2200px';
-			clone.style.position = 'fixed';
-			clone.style.top = '-9999px';
-			clone.style.left = '0';
-			clone.style.zIndex = '-1';
-			clone.style.background = '#fff';
-
-			document.body.appendChild(clone);
-
-			const convertImageToWhite = (img: HTMLImageElement) => {
-				return new Promise<void>((resolve) => {
-					const image = new Image();
-					image.crossOrigin = 'anonymous';
-					image.src = img.src;
-
-					image.onload = () => {
-						const canvas = document.createElement('canvas');
-						const ctx = canvas.getContext('2d');
-						if (!ctx) return resolve();
-
-						canvas.width = image.width;
-						canvas.height = image.height;
-						ctx.drawImage(image, 0, 0);
-
-						const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-						const data = imageData.data;
-
-						for (let i = 0; i < data.length; i += 4) {
-							data[i] = 255;
-							data[i + 1] = 255;
-							data[i + 2] = 255;
-						}
-
-						ctx.putImageData(imageData, 0, 0);
-						img.src = canvas.toDataURL('image/png');
-						resolve();
-					};
-					image.onerror = () => resolve();
-				});
-			};
-
-			const imgs = clone.querySelectorAll('.icon-white');
-			await Promise.all(Array.from(imgs).map((img: any) => convertImageToWhite(img)));
-
-			const waitForImages = (container: HTMLElement) => {
-				const images = container.querySelectorAll('img');
-				return Promise.all(
-					Array.from(images).map((img: any) => {
-						if (img.complete) return Promise.resolve();
-						return new Promise((res) => {
-							img.onload = res;
-							img.onerror = res;
-						});
-					}),
-				);
-			};
-
-			await waitForImages(clone);
-
-			const canvas = await html2canvas(clone, {
-				scale: 2,
-				useCORS: true,
+			const canvas = await html2canvas(exportNode, {
 				backgroundColor: '#ffffff',
-				logging: false,
+				scale: 3,
+				useCORS: true,
+				width: exportWidth,
+				height: exportHeight,
+				windowWidth: exportWidth,
+				windowHeight: exportHeight,
+				onclone: (clonedDocument) => {
+					const clonedExportArea = clonedDocument.querySelector<HTMLElement>('.cct-export-area');
+					const clonedTitle = clonedDocument.querySelector<HTMLElement>('.header-title');
+
+					clonedExportArea?.classList.add('exporting-pdf');
+
+					if (clonedTitle) {
+						clonedTitle.style.background = 'none';
+						clonedTitle.style.color = '#f4dab2';
+						clonedTitle.style.webkitTextFillColor = '#f4dab2';
+					}
+				},
 			});
-
-			document.body.removeChild(clone);
-			document.head.removeChild(style);
-
-			const mainImgData = canvas.toDataURL('image/jpeg', 0.85);
-
-			const headerImg = await loadImage('/images/cct/headerCCT.jpg');
-			const footerImg = await loadImage('/images/cct/footerCCT.jpg');
-
 			const pdf = new jsPDF({
-				orientation: headerImg ? 'portrait' : 'landscape',
-				unit: 'px',
-				format: headerImg ? 'a4' : 'a3',
-				compress: true,
+				orientation: 'landscape',
+				unit: 'mm',
+				format: 'a3',
 			});
+			const pageWidth = 420;
+			const pageHeight = 297;
+			const coverImage = await loadImage(CCTCover);
 
-			const addImageCentered = (
-				data: string,
-				isNewPage = false,
-				format?: string,
-				orientation?: 'portrait' | 'landscape',
-			) => {
-				if (isNewPage) pdf.addPage(format as any, orientation);
-
-				const pageWidth = pdf.internal.pageSize.getWidth();
-				const pageHeight = pdf.internal.pageSize.getHeight();
-
-				const props = pdf.getImageProperties(data);
-				const ratio = Math.min(pageWidth / props.width, pageHeight / props.height);
-				const w = props.width * ratio;
-				const h = props.height * ratio;
-				const x = (pageWidth - w) / 2;
-				const y = (pageHeight - h) / 2;
-
-				pdf.addImage(data, 'JPEG', x, y, w, h, undefined, 'FAST');
-			};
-
-			if (headerImg) {
-				addImageCentered(headerImg, false);
-				addImageCentered(mainImgData, true, 'a3', 'landscape');
-			} else {
-				addImageCentered(mainImgData, false);
-			}
-
-			if (footerImg) {
-				addImageCentered(footerImg, true, 'a4', 'portrait');
-			}
-
-			pdf.save(`CCT_Transcript_${dayjs().format('YYYYMMDD')}.pdf`);
-		} catch (error) {
-			console.error('Export PDF error:', error);
+			pdf.addImage(coverImage, 'PNG', 0, 0, pageWidth, pageHeight, undefined, 'FAST');
+			pdf.addPage('a3', 'landscape');
+			pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, pageWidth, pageHeight, undefined, 'FAST');
+			pdf.save(`${getExportFilename()}.pdf`);
+		} catch (er) {
+			console.log(er);
 		} finally {
-			setExporting(false);
+			setLoadingExport(false);
 		}
 	};
 
 	return (
 		<>
 			<Form form={form} layout='vertical' onFinish={(values) => onFinish(values, isSubmit)}>
-				<div
-					style={{
-						maxWidth: '100%',
-						margin: 'auto',
-					}}
-				>
+				<div style={{ maxWidth: '100%', margin: 'auto' }}>
 					<div
 						style={{
 							display: 'flex',
@@ -377,24 +240,27 @@ const MyCCTv3 = () => {
 													/>
 												</Tooltip>
 
-												<Tooltip title='EXPORT PDF'>
-													<Spin spinning={exporting} size='small'>
-														<Tag
-															icon={<FilePdfOutlined style={{ fontSize: 14 }} />}
-															style={{
-																...tagStyle,
-																cursor: 'pointer',
-																display: 'inline-flex',
-																alignItems: 'center',
-																justifyContent: 'center',
-																width: 32,
-																height: 32,
-																padding: 0,
-															}}
-															onClick={handleExportPDF}
-														/>
-													</Spin>
-												</Tooltip>
+												<Tag
+													icon={
+														loadingExport ? (
+															<LoadingOutlined spin style={{ fontSize: 14 }} />
+														) : (
+															<FilePdfOutlined style={{ fontSize: 14 }} />
+														)
+													}
+													style={{
+														...tagStyle,
+														cursor: 'pointer',
+														display: 'inline-flex',
+														alignItems: 'center',
+														justifyContent: 'center',
+														width: 32,
+														height: 32,
+														padding: 0,
+														opacity: loadingExport ? 0.7 : 1,
+													}}
+													onClick={!loadingExport ? hanldeExport : undefined}
+												/>
 
 												{danhSach?.length ? (
 													<Badge count={danhSach?.length} offset={[-3, 7]}>
@@ -444,7 +310,13 @@ const MyCCTv3 = () => {
 														}}
 														onClick={() => {
 															if (!isSubmitDisabled) {
-																setPreviewVisible(true);
+																form
+																	.validateFields()
+																	.then((values) => {
+																		setPreviewData(values);
+																		setPreviewVisible(true);
+																	})
+																	.catch(() => {});
 															}
 														}}
 													>
@@ -461,14 +333,8 @@ const MyCCTv3 = () => {
 					{!!record?.myCCT?.status && <CardNoteMyCCT myCCT={record?.myCCT ?? ({} as MyCCT.IRecord)} />}
 				</div>
 
-				<div className='cct-container' ref={printRef}>
-					<CCTContent
-						record={record as any}
-						form={form}
-						setSelectedActivities={setSelectedActivities}
-						setListAwardRecognition={setListAwardRecognition}
-						edit={edit}
-					/>
+				<div className='cct-export-area' ref={printRef}>
+					<CCTContent record={record as any} form={form} edit={edit} />
 				</div>
 
 				{edit && (
@@ -490,9 +356,6 @@ const MyCCTv3 = () => {
 							<Button
 								onClick={() => {
 									setEdit(false);
-
-									setListAwardRecognition(record?.myCCT?.listAwardRecognition || []);
-									setSelectedActivities([]);
 								}}
 								icon={<CloseCircleOutlined />}
 							>
@@ -509,7 +372,15 @@ const MyCCTv3 = () => {
 							<Button
 								type='primary'
 								icon={<SendOutlined />}
-								onClick={() => setPreviewVisible(true)}
+								onClick={() => {
+									form
+										.validateFields()
+										.then((values) => {
+											setPreviewData(values);
+											setPreviewVisible(true);
+										})
+										.catch(() => {});
+								}}
 								disabled={
 									!recDot?._id ||
 									record?.myCCT?.status === EStatusMyCCT.APPROVED ||
@@ -525,17 +396,29 @@ const MyCCTv3 = () => {
 
 			<PreviewCCTModal open={previewVisible} onCancel={() => setPreviewVisible(false)} onConfirm={handleRealSubmit}>
 				<CCTContent
-					record={record as any}
+					record={
+						previewData
+							? {
+									...record,
+									myCCT: {
+										...record?.myCCT,
+										...previewData,
+									},
+								}
+							: (record as any)
+					}
 					form={form}
-					setSelectedActivities={setSelectedActivities}
-					setListAwardRecognition={setListAwardRecognition}
 					edit={false}
 				/>
 			</PreviewCCTModal>
 
-			<ModalPeding visible={visiblePending} setVisible={setVisiblePending} />
+			<ModalPeding
+				visible={visiblePending}
+				setVisible={setVisiblePending}
+				getData={() => getAllModel(undefined, undefined, undefined, undefined, 'pending-for-approval/many')}
+			/>
 		</>
 	);
 };
 
-export default MyCCTv3;
+export default MyCCT;

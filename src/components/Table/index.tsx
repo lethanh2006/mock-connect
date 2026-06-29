@@ -1,5 +1,5 @@
-import { useModel } from 'umi';
 import { useCallback, useMemo } from 'react';
+import { useModel } from 'umi';
 import { TableBaseContent } from './components/TableBaseContent';
 import { TableProvider } from './components/TableContext';
 import './style.less';
@@ -8,8 +8,10 @@ import {
 	markExternalFilters,
 	normalizeExternalConditions,
 	normalizeFilters,
+	reAddMetadata,
 	splitFiltersBySource,
 	stripFilterSource,
+	stripMetadata,
 } from './utils';
 
 const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
@@ -30,28 +32,48 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 
 	const { tableFilters } = useMemo(() => splitFiltersBySource(modelFilters), [modelFilters]);
 
-	const filters = useMemo<TFilter<T>[]>(
-		() => normalizeFilters([...(externalFilters ?? []), ...(tableFilters ?? [])]),
-		[externalFilters, tableFilters],
+	const searchableColumns = useMemo(() => {
+		const flatColumns =
+			props.columns?.map((item) => (item.children?.length ? [item, ...item.children] : [item])).flat() ?? [];
+		const seen = new Set<string>();
+		return flatColumns
+			.filter((item) => {
+				const isDefaultSearchable = item?.filterType === 'string';
+				const enableGlobalSearch = item?.enableGlobalSearch ?? isDefaultSearchable;
+				return enableGlobalSearch && item?.dataIndex && item.dataIndex !== 'index';
+			})
+			.reduce((result, item) => {
+				const fieldKey = JSON.stringify(item.dataIndex);
+				if (seen.has(fieldKey)) return result;
+				seen.add(fieldKey);
+				result.push(item.dataIndex);
+				return result;
+			}, [] as any[]);
+	}, [props.columns]);
+
+	const searchableFieldKeys = useMemo(
+		() => new Set(searchableColumns.map((k) => JSON.stringify(k))),
+		[searchableColumns],
 	);
 
-	const { externalFilters: activeExternalFilters } = useMemo(
-		() => splitFiltersBySource(filters),
-		[filters],
-	);
+	const filters = useMemo<TFilter<T>[]>(() => {
+		const normalized = normalizeFilters([...(externalFilters ?? []), ...(tableFilters ?? [])]);
+		return reAddMetadata(normalized, props.columns ?? [], searchableFieldKeys, searchableColumns.length);
+	}, [externalFilters, tableFilters, props.columns, searchableFieldKeys, searchableColumns]);
+
+	const { externalFilters: activeExternalFilters } = useMemo(() => splitFiltersBySource(filters), [filters]);
 
 	const handleSetFilters = useCallback(
 		(nextFilters: TFilter<T>[] = []) => {
 			const normalizedNextFilters = normalizeFilters(nextFilters);
-			const {
-				tableFilters: nextTableFilters,
-				externalFilters: nextExternalFilters,
-			} = splitFiltersBySource(normalizedNextFilters);
+			const { tableFilters: nextTableFilters, externalFilters: nextExternalFilters } =
+				splitFiltersBySource(normalizedNextFilters);
 
-			model?.setFilters?.(nextTableFilters);
+			// Strip metadata before syncing to model (URL)
+			model?.setFilters?.(stripMetadata(nextTableFilters));
 
 			if (props.onExternalFiltersChange) {
-				props.onExternalFiltersChange(stripFilterSource(nextExternalFilters));
+				props.onExternalFiltersChange(stripFilterSource(stripMetadata(nextExternalFilters)));
 			}
 		},
 		[model, props.onExternalFiltersChange],
@@ -61,8 +83,7 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 		(params: any) => {
 			if (!externalRawConditions || Object.keys(externalRawConditions).length === 0) return params;
 
-			const normalizedParams =
-				params && typeof params === 'object' && !Array.isArray(params) ? params : {};
+			const normalizedParams = params && typeof params === 'object' && !Array.isArray(params) ? params : {};
 
 			return {
 				...externalRawConditions,
@@ -75,7 +96,7 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 	const getData = useCallback(
 		(params: any) => {
 			if (props.getData) return props.getData(params);
-			return model?.getModel?.(mergeExternalConditions(params), activeExternalFilters);
+			return model?.getModel?.(mergeExternalConditions(params), stripMetadata(activeExternalFilters));
 		},
 		[props.getData, model, mergeExternalConditions, activeExternalFilters],
 	);
@@ -123,6 +144,8 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 	return (
 		<TableProvider<T>
 			value={{
+				...props,
+				size: props.size ?? props.otherProps?.size,
 				selectedIds,
 				setSelectedIds,
 				loading,
@@ -132,37 +155,12 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 				handleDeleteMany,
 				onCreate,
 				onReload,
-				buttons: props.buttons,
-				otherButtons: props.otherButtons,
-				rowSelection: props.rowSelection,
-				deleteMany: props.deleteMany,
-				hideTotal: props.hideTotal,
-				hideFilterColumn: props.hideFilterColumn,
-				size: props.otherProps?.size,
 				visibleForm,
 				setVisibleForm,
 				isView,
 				edit,
-				Form: props.Form,
-				title: props.title,
-				widthDrawer: props.widthDrawer,
-				maskCloseableForm: props.maskCloseableForm,
-				destroyModal: props.destroyModal,
-				formType: props.formType,
-				modalTitle: props.modalTitle,
-				showModalTitle: props.showModalTitle,
-				formProps: props.formProps,
-				modelName: props.modelName,
-				configKey: props.configKey,
-				modelImportName: props.modelImportName,
-				modelExportName: props.modelExportName,
-				params: props.params,
 				getData,
 				setFilters: handleSetFilters,
-				columns: props.columns || [],
-				disableFilterModal: props.disableFilterModal,
-				syncExternalToColumnFilter: props.syncExternalToColumnFilter,
-				externalConditions: props.externalConditions,
 			}}
 		>
 			<TableBaseContent {...props} />

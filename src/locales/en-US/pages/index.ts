@@ -5,9 +5,9 @@ import donvihanhchinh from './donvihanhchinh';
 import baithicuoiky from './hoctap/baithicuoiky';
 import chungchitotnghiep from './hoctap/chungchi';
 import dangkynhucau from './hoctap/dangkynhucau';
-import hocphannhucau from './hoctap/hocphannhucau';
 import dangkytinchi from './hoctap/dangkytinchi';
 import dieukientotnghiep from './hoctap/dieukientotnghiep';
+import hocphannhucau from './hoctap/hocphannhucau';
 import ketquahoctap from './hoctap/ketquahoctap';
 import hoctapkhac from './hoctap/khac';
 import lichthi from './hoctap/lichthi';
@@ -15,11 +15,14 @@ import lophocphan from './hoctap/lophocphan';
 import pathway from './hoctap/pathway';
 import tientrinhhoctap from './hoctap/tientrinhhoctap';
 import khaosat from './khaosat';
+import dangkyktx from './kytucxa/dangky';
+import lichsudangkyktx from './kytucxa/lichsu';
 import lichsukien from './lichsukien';
 import login from './login';
 import lophanhchinh from './lophanhchinh';
 import minor from './minor';
 import phanhoi from './phanhoi';
+import syllabus from './syllabus';
 import congno from './taichinh/congno';
 import lichsugiaodich from './taichinh/lichsugiaodich';
 import uudaithanhtoan from './taichinh/uudaithanhtoan';
@@ -30,9 +33,6 @@ import vanbanhuongdan from './tienichkhac/vanbanhuongdan';
 import xemsau from './tienichkhac/xemsau';
 import tintuc from './tintuc';
 import trangchu from './trangchu';
-import syllabus from './syllabus';
-import dangkyktx from './kytucxa/dangky';
-import lichsudangkyktx from './kytucxa/lichsu';
 
 export default {
 	...login,
@@ -64,12 +64,12 @@ export default {
 	...tintuc,
 	...lichthi,
 	...baithicuoiky,
-	...activity,
 	...pathway,
 	...minor,
 	...syllabus,
 	...dangkyktx,
 	...lichsudangkyktx,
+	...activity,
 
 	'pages.trangchu.title': 'TRAINING MANAGEMENT SUBSYSTEM',
 	'pages.trangchu.subtitle': 'DIGITAL UNIVERSITY SYSTEM',

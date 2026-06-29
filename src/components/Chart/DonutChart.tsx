@@ -2,6 +2,7 @@ import { tienVietNam } from '@/utils/utils';
 import { getLocale } from '@umijs/max';
 import en from 'apexcharts/dist/locales/en.json';
 import vi from 'apexcharts/dist/locales/vi.json';
+import { useMemo } from 'react';
 import Chart from 'react-apexcharts';
 import { type DataChartType } from '.';
 import './style.less';
@@ -59,11 +60,13 @@ const DonutChart = (props: DataChartType) => {
 		},
 	};
 
-	const series = yAxis?.[0] || [];
+	const series = useMemo(() => yAxis?.[0] || [], [yAxis]);
+
+	const chartOptions = useMemo(() => ({ ...options, ...otherOptions }), [options, otherOptions]);
 
 	return (
 		<Chart
-			options={{ ...options, ...otherOptions }}
+			options={chartOptions}
 			series={series}
 			type={type === 'radian' ? 'radialBar' : 'donut'}
 			height={height ?? 350}

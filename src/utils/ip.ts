@@ -19,6 +19,7 @@ const ipThuVien = ipRoot + 'thu-vien'; // ip dev
 const ipChatbot = ipRoot + 'chatbot-api';
 const ipCCT = ipRoot + 'co-curriculum'; // ip dev
 const ipCsvc = ipRoot + 'csvc'; // ip dev
+const ipFile = ipRoot + 'file';
 // const ipCCT = 'http://192.168.1.38:3010'; // ip dev
 
 const ipNewsWP = APP_CONFIG_URL_LANDING;
@@ -44,9 +45,10 @@ export {
 	ipCCT,
 	ipChatbot,
 	ipCore,
-	ipDaoTao,
-	ipKhaoThi,
 	ipCsvc,
+	ipDaoTao,
+	ipFile,
+	ipKhaoThi,
 	ipNewsWP,
 	ipNhanSu,
 	ipNotif,

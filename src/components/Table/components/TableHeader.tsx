@@ -16,9 +16,16 @@ import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useIntl } from 'umi';
-import { EOperatorType } from '../constant';
 import type { TFilter } from '../typing';
-import { findFiltersInColumns, getSearchStorage, updateSearchStorage } from '../utils';
+import {
+	buildGlobalSearchFilter,
+	findFiltersInColumns,
+	getGlobalSearchKeyword,
+	getSearchStorage,
+	getStandaloneSearchableFields,
+	isGlobalSearchFilter,
+	updateSearchStorage,
+} from '../utils';
 import { ColumnSettings } from './ColumnSettings';
 import { useTableContext } from './TableContext';
 
@@ -27,6 +34,8 @@ export const TableHeader: React.FC = () => {
 	const {
 		buttons,
 		otherButtons,
+		otherTextButtons,
+		otherExtra,
 		rowSelection,
 		deleteMany,
 		selectedIds,
@@ -93,63 +102,30 @@ export const TableHeader: React.FC = () => {
 		[searchableColumns],
 	);
 
-	const isGlobalSearchFilterGroup = useCallback(
-		(filter?: TFilter<any>) => {
-			if (!filter?.filters?.length) return false;
-			if (filter.operator !== EOperatorType.OR) return false;
-
-			const hasGlobalMarker = filter.readOnly === true || filter.filters.every((item) => item?.readOnly === true);
-			if (!hasGlobalMarker) return false;
-
-			let keyword: string | undefined;
-			return filter.filters.every((child) => {
-				const fieldKey = JSON.stringify(child?.field);
-				if (!searchableFieldKeys.has(fieldKey)) return false;
-				if (child?.operator !== EOperatorType.CONTAIN) return false;
-				const firstValue = child?.values?.[0];
-				if (firstValue === undefined || firstValue === null) return false;
-
-				const normalizedValue = `${firstValue}`.trim();
-				if (!normalizedValue) return false;
-
-				if (keyword === undefined) keyword = normalizedValue;
-				return keyword === normalizedValue;
-			});
-		},
-		[searchableFieldKeys],
-	);
-
 	const currentGlobalSearchText = useMemo(() => {
-		const globalFilter = (filters || []).find((item) => isGlobalSearchFilterGroup(item));
-		if (!globalFilter?.filters?.length) return '';
-
-		const value = globalFilter.filters?.[0]?.values?.[0];
-		if (value === undefined || value === null) return '';
-		return `${value}`.trim();
-	}, [filters, isGlobalSearchFilterGroup]);
+		const globalFilter = (filters || []).find((item) => isGlobalSearchFilter(item, searchableFieldKeys));
+		return getGlobalSearchKeyword(globalFilter, searchableFieldKeys) ?? '';
+	}, [filters, searchableFieldKeys]);
 
 	useEffect(() => {
 		setGlobalSearchText(currentGlobalSearchText);
 	}, [currentGlobalSearchText]);
 
 	const createGlobalSearchFilter = useCallback(
-		(keyword: string): TFilter<any> => ({
-			operator: EOperatorType.OR,
-			readOnly: true,
-			filters: searchableColumns.map((item) => ({
-				field: item.field,
-				operator: EOperatorType.CONTAIN,
-				values: [keyword],
-				readOnly: true,
-			})),
-		}),
+		(keyword: string, excludedFields: any[] = []): TFilter<any> | undefined =>
+			buildGlobalSearchFilter(
+				keyword,
+				searchableColumns.map((item) => item.field),
+				excludedFields,
+			),
 		[searchableColumns],
 	);
 
 	const applyGlobalSearch = useCallback(
 		(rawValue: string) => {
 			const keyword = rawValue?.trim() ?? '';
-			const remainFilters = (filters || []).filter((item) => !isGlobalSearchFilterGroup(item));
+			const remainFilters = (filters || []).filter((item) => !isGlobalSearchFilter(item, searchableFieldKeys));
+			const excludedFields = getStandaloneSearchableFields(remainFilters, searchableFieldKeys);
 
 			if (!keyword || !searchableColumns.length) {
 				setFilters?.(remainFilters);
@@ -162,9 +138,10 @@ export const TableHeader: React.FC = () => {
 				if (fieldName) updateSearchStorage(fieldName, keyword);
 			});
 
-			setFilters?.([createGlobalSearchFilter(keyword), ...remainFilters]);
+			const nextGlobalSearch = createGlobalSearchFilter(keyword, excludedFields);
+			setFilters?.(nextGlobalSearch ? [nextGlobalSearch, ...remainFilters] : remainFilters);
 		},
-		[filters, isGlobalSearchFilterGroup, searchableColumns, setFilters, createGlobalSearchFilter],
+		[filters, searchableColumns, searchableFieldKeys, setFilters, createGlobalSearchFilter],
 	);
 
 	const debounceSearch = useMemo(() => debounce(applyGlobalSearch, 500), [applyGlobalSearch]);
@@ -272,16 +249,14 @@ export const TableHeader: React.FC = () => {
 							: undefined
 				}
 				enterButton={
-					!minimized ? (
-						<Button
-							loading={loading}
-							icon={
-								<Tooltip title={globalSearchTooltip}>
-									<SearchOutlined />
-								</Tooltip>
-							}
-						/>
-					) : null
+					<Button
+						loading={loading}
+						icon={
+							<Tooltip title={globalSearchTooltip}>
+								<SearchOutlined />
+							</Tooltip>
+						}
+					/>
 				}
 				onSearch={handleGlobalSearchTrigger}
 				onChange={(e) => {
@@ -315,7 +290,6 @@ export const TableHeader: React.FC = () => {
 						icon={<PlusCircleOutlined />}
 						className='btn-add'
 						type='primary'
-						notHideText
 						tooltip={intl.formatMessage({ id: 'global.table.index.button.themmoi.tooltip' })}
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.themmoi' })}
@@ -358,6 +332,8 @@ export const TableHeader: React.FC = () => {
 						{intl.formatMessage({ id: 'global.table.index.button.tailai' })}
 					</ButtonExtend>
 				)}
+
+				{otherTextButtons}
 
 				{/* {rowSelection && deleteMany && selectedIds?.length ? (
 					<Popconfirm
@@ -417,6 +393,8 @@ export const TableHeader: React.FC = () => {
 						</div>
 					</Tooltip>
 				)}
+
+				{otherExtra}
 			</div>
 		</div>
 	);

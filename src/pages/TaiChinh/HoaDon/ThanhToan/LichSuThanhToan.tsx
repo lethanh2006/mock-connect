@@ -1,22 +1,17 @@
 import TableBase from '@/components/Table';
-import ButtonExtend from '@/components/Table/ButtonExtend';
+import { EOperatorType } from '@/components/Table/constant';
 import { type IColumn } from '@/components/Table/typing';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import {
-	ETransactionSourceType,
 	ETransactionStatus,
 	colorTransactionStatus,
-	colorTransactionType,
 	transactionPaymentLabel,
 	transactionStatus,
-	transactionType,
 	type ETransactionPaymentType,
-	type ETransactionType,
 } from '@/services/TaiChinh/constant';
 import { formatDateTime } from '@/utils/formatDate';
 import { inputFormat } from '@/utils/utils';
-import { CloseOutlined, DollarOutlined } from '@ant-design/icons';
-import { Popconfirm, Tag } from 'antd';
+import { Tag } from 'antd';
 import { useIntl, useModel } from 'umi';
 
 const LichSuThanhToan = (props: {
@@ -35,7 +30,13 @@ const LichSuThanhToan = (props: {
 				{
 					billIdentityCode: record?.identityCode,
 				},
-				undefined,
+				[
+					{
+						field: 'status',
+						operator: EOperatorType.NOT_INCLUDE,
+						values: [ETransactionStatus?.CANCEL],
+					},
+				],
 				undefined,
 				undefined,
 				undefined,
@@ -51,13 +52,13 @@ const LichSuThanhToan = (props: {
 			align: 'center',
 			filterType: 'string',
 		},
-		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.phanloai' }),
-			dataIndex: 'type',
-			align: 'center',
-			width: 100,
-			render: (val: ETransactionType) => val && <Tag color={colorTransactionType[val]}>{transactionType[val]}</Tag>,
-		},
+		// {
+		// 	title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.phanloai' }),
+		// 	dataIndex: 'type',
+		// 	align: 'center',
+		// 	width: 100,
+		// 	render: (val: ETransactionType) => val && <Tag color={colorTransactionType[val]}>{transactionType[val]}</Tag>,
+		// },
 		{
 			title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.sotien' }),
 			dataIndex: 'amount',
@@ -102,48 +103,48 @@ const LichSuThanhToan = (props: {
 			sortable: true,
 			render: (val) => val && formatDateTime(val),
 		},
-		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.thaotac' }),
-			width: 90,
-			align: 'center',
-			fixed: 'right',
-			render: (val, rec) => (
-				<>
-					<ButtonExtend
-						disabled={
-							rec.status !== ETransactionStatus.PENDING ||
-							rec.fromAccount !== ETransactionSourceType.EXTERNAL ||
-							ngoaiThoiGianThanhToan
-						}
-						icon={<DollarOutlined />}
-						tooltip={intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.thanhtoan' })}
-						onClick={() => onPay && onPay(rec)}
-						type='link'
-					/>
-					<Popconfirm
-						title={intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.huy.xacnhan' })}
-						onConfirm={() => {
-							if (onCancel)
-								onCancel(rec).then(() => {
-									getData();
-								});
-						}}
-						disabled={rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL}
-						placement='topRight'
-					>
-						<ButtonExtend
-							disabled={
-								rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL
-							}
-							icon={<CloseOutlined />}
-							tooltip={intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.huy' })}
-							type='link'
-							danger
-						/>
-					</Popconfirm>
-				</>
-			),
-		},
+		// {
+		// 	title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.thaotac' }),
+		// 	width: 90,
+		// 	align: 'center',
+		// 	fixed: 'right',
+		// 	render: (val, rec) => (
+		// 		<>
+		// 			<ButtonExtend
+		// 				disabled={
+		// 					rec.status !== ETransactionStatus.PENDING ||
+		// 					rec.fromAccount !== ETransactionSourceType.EXTERNAL ||
+		// 					ngoaiThoiGianThanhToan
+		// 				}
+		// 				icon={<DollarOutlined />}
+		// 				tooltip={intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.thanhtoan' })}
+		// 				onClick={() => onPay && onPay(rec)}
+		// 				type='link'
+		// 			/>
+		// 			<Popconfirm
+		// 				title={intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.huy.xacnhan' })}
+		// 				onConfirm={() => {
+		// 					if (onCancel)
+		// 						onCancel(rec).then(() => {
+		// 							getData();
+		// 						});
+		// 				}}
+		// 				disabled={rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL}
+		// 				placement='topRight'
+		// 			>
+		// 				<ButtonExtend
+		// 					disabled={
+		// 						rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL
+		// 					}
+		// 					icon={<CloseOutlined />}
+		// 					tooltip={intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.huy' })}
+		// 					type='link'
+		// 					danger
+		// 				/>
+		// 			</Popconfirm>
+		// 		</>
+		// 	),
+		// },
 	];
 
 	return (

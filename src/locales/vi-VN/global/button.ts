@@ -16,5 +16,9 @@ export default {
 	'global.button.quaylai': 'Quay lại',
 	'global.button.ok': 'OK',
 	'global.button.xemthem': 'Xem thêm',
-	'global.button.thugon': 'Thu gọn'
+	'global.button.thugon': 'Thu gọn',
+	'global.button.chitiet': 'Chi tiết',
+	'global.button.teptin': 'Xem tệp tin',
+	'global.button.xacNhan': 'Xác nhận',
+	'global.button.xoa': 'Xóa',
 };

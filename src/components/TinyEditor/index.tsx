@@ -1,6 +1,25 @@
 import { EFileScope, uploadFile } from '@/services/uploadFile';
 import { Editor } from '@tinymce/tinymce-react';
+import { useAccess } from 'umi';
+import { getTinyEditorDefaultFontFamily, getTinyEditorFontFamilyFormats } from './config';
 import './style.less';
+
+export { getTinyEditorDefaultFontFamily, TINY_EDITOR_DEFAULT_FONT_LABEL } from './config';
+
+const buildContentStyle = (fontFamily: string) => `
+body {
+	background: #fff;
+	line-height: 1.5715;
+	color: rgba(0, 0, 0, .85);
+	font-family: ${fontFamily};
+	font-size: 14px;
+	margin: 8px;
+}
+
+strong, b {
+	font-weight: bold;
+}
+	`;
 
 const TinyEditor = (props: {
 	value?: string;
@@ -19,6 +38,8 @@ const TinyEditor = (props: {
 	/** Cố định toolbar nếu nội dung soạn thảo quá dài, phải dùng thanh cuộn.
 	 * Khi dùng nhiều editor trên 1 màn bắt buộc phải tắt option này đi */
 	stickyToolbar?: boolean;
+	/** CSS bổ sung trong iframe editor */
+	contentStyleAppend?: string;
 }) => {
 	const {
 		value,
@@ -30,7 +51,13 @@ const TinyEditor = (props: {
 		minHeight = 150,
 		tinyToolbar,
 		stickyToolbar = true,
+		contentStyleAppend,
 	} = props;
+
+	const { vinuniAccessFilter } = useAccess();
+	const isVinUni = vinuniAccessFilter?.() ?? false;
+	const resolvedDefaultFont = getTinyEditorDefaultFontFamily(isVinUni);
+	const fontFamilyFormats = getTinyEditorFontFamilyFormats(resolvedDefaultFont, isVinUni);
 
 	const triggerChange = (changedValue: string) => {
 		if (onChange) {
@@ -40,7 +67,6 @@ const TinyEditor = (props: {
 
 	const imageHandler = (callback: any) => {
 		const input = document.createElement('input');
-		// Tạo input file và click luôn
 		input.setAttribute('type', 'file');
 		input.setAttribute('accept', 'image/*');
 		input.click();
@@ -63,6 +89,15 @@ const TinyEditor = (props: {
 			});
 		};
 	};
+
+	const toolbar = (() => {
+		if (disabled) return '';
+		if (tinyToolbar) return 'undo redo | bold italic | forecolor backcolor | emoticons';
+		if (miniToolbar) {
+			return 'undo redo | fontfamily fontsize | bold italic underline | forecolor backcolor removeformat | alignleft aligncenter alignright alignjustify | numlist bullist | emoticons';
+		}
+		return 'undo redo | styles fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor removeformat | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | table image media link | charmap emoticons | fullscreen preview print';
+	})();
 
 	return (
 		<>
@@ -118,14 +153,7 @@ const TinyEditor = (props: {
 						// "editimage",
 						'autoresize',
 					],
-					toolbar: disabled
-						? ''
-						: tinyToolbar
-							? 'undo redo | bold italic | forecolor backcolor | emoticons'
-							: miniToolbar
-								? 'undo redo | fontfamily fontsize | bold italic underline | forecolor backcolor removeformat | alignleft aligncenter alignright alignjustify | numlist bullist | emoticons'
-								: // Full toolbar
-									'undo redo | styles fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor removeformat | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | table image media link | charmap emoticons | fullscreen preview print',
+					toolbar,
 					toolbar_sticky: stickyToolbar,
 					autosave_ask_before_unload: true,
 					image_advtab: true,
@@ -140,42 +168,17 @@ const TinyEditor = (props: {
 					file_picker_callback: imageHandler,
 					paste_data_images: !tinyToolbar,
 					smart_paste: true,
-					content_style: `
-            body {
-              background: #fff;
-							line-height: 1.5715;
-							color: rgba(0, 0, 0, .85);
-							font-size: 14px;
-							padding: 0;
-							margin: 8px
-            }
-          `,
-					default_font_stack: [
-						'-apple-system',
-						'BlinkMacSystemFont',
-						'Segoe UI',
-						'Roboto',
-						'Helvetica Neue',
-						'Arial',
-						'Noto Sans',
-						'sans-serif',
-						'Apple Color Emoji',
-						'Segoe UI Emoji',
-						'Segoe UI Symbol',
-						'Noto Color Emoji',
-					],
-					font_family_formats: `Mặc định=-apple-system,segoe ui,roboto,arial; 
-						Arial=arial,helvetica,sans-serif; 
-						Arial Black=arial black,avant garde; 
-						Times New Roman=times new roman,times; 
-						Comic Sans MS=comic sans ms,sans-serif; 
-						Noto Sans=noto sans; 
-						Monospace=monospace;
-						Courier New=courier new,courier; 
-						Helvetica=helvetica; 
-						Tahoma=tahoma,arial,helvetica,sans-serif; 
-						Verdana=verdana,geneva;`,
+					content_style: `${buildContentStyle(resolvedDefaultFont)}${contentStyleAppend ?? ''}`,
+					font_family_formats: fontFamilyFormats,
 					font_size_formats: '8px 10px 12px 14px 18px 24px',
+					...(isVinUni
+						? {
+							forced_root_block: 'p',
+							forced_root_block_attrs: {
+								style: `font-family: ${resolvedDefaultFont};`,
+							},
+						}
+						: {}),
 				}}
 				onEditorChange={triggerChange}
 			/>

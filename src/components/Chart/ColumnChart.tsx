@@ -1,12 +1,13 @@
 import { primaryColor } from '@/services/base/constant';
 import { tienVietNam } from '@/utils/utils';
+import { getLocale } from '@umijs/max';
 import { type ApexOptions } from 'apexcharts';
-import vi from 'apexcharts/dist/locales/vi.json';
 import en from 'apexcharts/dist/locales/en.json';
+import vi from 'apexcharts/dist/locales/vi.json';
+import { useMemo } from 'react';
 import Chart from 'react-apexcharts';
 import { type DataChartType } from '.';
 import './style.less';
-import { getLocale } from '@umijs/max';
 
 const ColumnChart = (props: DataChartType) => {
 	const { title, xAxis, yAxis, yLabel, height, type, formatY, colors, otherOptions } = props;
@@ -86,15 +87,19 @@ const ColumnChart = (props: DataChartType) => {
 		},
 	};
 
-	const series = yLabel.map((y, index) => ({
-		name: y,
-		data: yAxis?.[index] || [],
-		color: colors?.[index] ?? primaryColor,
-	}));
-
-	return (
-		<Chart options={{ ...options, ...otherOptions }} series={series} type={type ?? 'bar'} height={height ?? 350} />
+	const series = useMemo(
+		() =>
+			yLabel.map((y, index) => ({
+				name: y,
+				data: yAxis?.[index] || [],
+				color: colors?.[index] ?? primaryColor,
+			})),
+		[yLabel, yAxis, colors],
 	);
+
+	const chartOptions = useMemo(() => ({ ...options, ...otherOptions }), [options, otherOptions]);
+
+	return <Chart options={chartOptions} series={series} type={type as any} height={height ?? 350} />;
 };
 
 export default ColumnChart;

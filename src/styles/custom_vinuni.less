@@ -1,7 +1,7 @@
 @font-face {
 	font-family: 'Montserrat';
-	src: url('../assets/font/Montserrat.ttf') format('truetype');
-	font-weight: 100 900;
+	src: url('/font/Montserrat.ttf') format('truetype');
+	font-weight: 100 400 600 900;
 	font-style: normal;
 	font-display: swap;
 }
@@ -213,9 +213,12 @@ body {
 		margin-bottom: 0 !important;
 	}
 
+	.ant-btn-sm {
+		height: 28px !important;
+	}
+
 	.ant-btn {
-		height: 28px;
-		width: 28px;
+		height: 36px;
 	}
 }
 
@@ -244,7 +247,7 @@ body {
 .ant-table-tbody .ant-table-row .ant-table-cell-fix-right:last-child {
 	gap: 6px !important;
 
-	.ant-btn {
+	> .ant-btn {
 		padding: 4px !important;
 		margin-right: 6px !important;
 		margin-bottom: 6px !important;
@@ -808,17 +811,24 @@ body {
 	&::before {
 		.indicator(@color: ~'var(--color-official-100)'; @w: 10px; @h: 6px; @side: right);
 		left: -16px !important;
-		top: 4px !important;
 		transform: translateY(-50%) !important;
 
 		@media (max-width: 768px) {
 			top: 32% !important;
 		}
 	}
+
+	&:has(> h1)::before {
+		top: 14px !important;
+	}
+
+	&:has(> h2)::before {
+		top: 6px !important;
+	}
 }
 
 .highlight {
-	// background-color: var(--color-official-500) !important;
+	background-color: var(--color-official-500) !important;
 }
 
 .loading-content {
@@ -843,4 +853,13 @@ body {
 			}
 		}
 	}
+}
+
+.ant-anchor-ink,
+.ant-anchor-ink.ant-anchor-ink-visible {
+	height: 35px !important;
+}
+
+.ant-pro-global-footer {
+	margin-block-start: 24;
 }
