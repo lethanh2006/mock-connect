@@ -4,7 +4,8 @@ import { ipTaiChinh } from '@/utils/ip';
 
 export async function postTransactionMePayment(body: {
 	againLink?: string;
-	billIdentityCode: string;
+	billIdentityCode?: string;
+	billIdentityCodes?: string[];
 	kenhThanhToanId: string;
 	loaiLePhiThanhToan?: 'PHAN_TRAM' | 'TIEN';
 	phanTramLePhiThanhToan?: number;
