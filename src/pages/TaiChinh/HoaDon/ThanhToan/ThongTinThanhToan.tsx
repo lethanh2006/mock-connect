@@ -1,3 +1,4 @@
+import { colorTrangThaiHocSv } from '@/services/DaoTao/constant';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import {
 	EMaTrangThaiThanhToan,
@@ -95,7 +96,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 
 	// Trạng thái sinh viên
 	const trangThaiSinhVien: string | undefined =
-		recHoaDon?.userTrangThaiSv ||
+		recHoaDon?.userTrangThaiSV ||
 		recHoaDon?.userTrangThaiHoc ||
 		recHoaDon?.userMetadata?.trangThaiHoc ||
 		recHoaDon?.userMetadata?.trangThaiSv;
@@ -171,6 +172,9 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 									{fullname || intl.formatMessage({ id: 'taichinh.thanhtoan.info.sinhvien' })}
 								</span>
 								{statusText && <Tag color={statusColor}>{statusText}</Tag>}
+								{trangThaiSinhVien && (
+									<Tag color={colorTrangThaiHocSv?.[trangThaiSinhVien as ETrangThaiHocSv]}>{trangThaiSinhVien}</Tag>
+								)}
 							</Space>
 						</div>
 					</div>

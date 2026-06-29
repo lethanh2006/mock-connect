@@ -53,7 +53,7 @@ declare module HoaDon {
 
 		userTenTinhChat?: string;
 		userMaTinhChat?: string;
-		userTrangThaiSv?: string;
+		userTrangThaiSV?: string;
 		userTrangThaiHoc?: string;
 	}
 

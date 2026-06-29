@@ -33,13 +33,25 @@ export const disableThanhToan = (rec?: HoaDon.IRecord): boolean => {
 
 const HoaDonPage = () => {
 	const intl = useIntl();
-	const { getModel, page, limit, setRecord, record, visibleModalThanhToan, setVisibleModalThanhToan } =
-		useModel('taichinh.hoadon');
+	const {
+		getModel,
+		page,
+		limit,
+		setRecord,
+		record,
+		visibleModalThanhToan,
+		setVisibleModalThanhToan,
+		selectedIds,
+		danhSach,
+	} = useModel('taichinh.hoadon');
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
 	const [visibleModalPDF, setVisibleModalPDF] = useState<boolean>(false);
 	const [pdfUrl, setPdfUrl] = useState<string | undefined>(undefined);
 	const [loadingPdfMap, setLoadingPdfMap] = useState<Record<string, boolean>>({});
 	const [activeKey, setActiveKey] = useState<'chua_thanh_toan' | 'da_thanh_toan'>('chua_thanh_toan');
+	// Multi payment state
+	const [selectedBills, setSelectedBills] = useState<HoaDon.IRecord[]>([]);
+	const [paymentMode, setPaymentMode] = useState<'single' | 'multi'>('single');
 
 	// Callback from MOMO
 	useEffect(() => {
@@ -297,6 +309,7 @@ const HoaDonPage = () => {
 			),
 		},
 	];
+	console.log('selectedIds', selectedIds);
 
 	return (
 		<PageCard title={intl.formatMessage({ id: 'taichinh.hoadon.title' })}>
@@ -313,12 +326,30 @@ const HoaDonPage = () => {
 			</Tabs>
 
 			<TableBase
+				rowSelection={activeKey === 'chua_thanh_toan'}
 				columns={columns}
 				getData={() => getData(activeKey)}
 				buttons={{ create: false }}
 				dependencies={[page, limit, activeKey]}
 				modelName='taichinh.hoadon'
 				widthDrawer={1000}
+				otherButtons={[
+					...(selectedIds && selectedIds?.length > 0
+						? [
+								<ButtonExtend
+									key={'thanh-toan'}
+									icon={<UnorderedListOutlined />}
+									onClick={() => {
+										const bills = danhSach.filter((item) => selectedIds.includes(item._id));
+										setSelectedBills(bills);
+										setPaymentMode('multi');
+										setVisibleModalThanhToan(true);
+									}}
+									type='primary'
+								>{`Thanh toán cho (${selectedIds?.length}) hóa đơn`}</ButtonExtend>,
+							]
+						: []),
+				]}
 				otherProps={{
 					rowClassName: (rec: HoaDon.IRecord) => {
 						// Check hạn thanh toán từ hóa đơn
@@ -331,7 +362,7 @@ const HoaDonPage = () => {
 						style: { cursor: 'pointer' },
 					}),
 				}}
-			/>
+			></TableBase>
 
 			<Modal
 				open={visibleModal}
@@ -356,11 +387,19 @@ const HoaDonPage = () => {
 
 			<ModalThanhToan
 				visible={visibleModalThanhToan}
-				onClose={() => setVisibleModalThanhToan(false)}
+				onClose={() => {
+					setVisibleModalThanhToan(false);
+					setSelectedBills([]);
+					setPaymentMode('single');
+				}}
 				onSuccess={() => {
 					getData(activeKey);
 					setVisibleModalThanhToan(false);
+					setSelectedBills([]);
+					setPaymentMode('single');
 				}}
+				mode={paymentMode}
+				bills={selectedBills}
 			/>
 		</PageCard>
 	);

@@ -7,7 +7,7 @@ import PaymentMethodList from './PaymentMethodList';
 import './style.less';
 import type { ModalThanhToanProps } from './typing';
 
-const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuccess }) => {
+const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuccess, mode = 'single', bills = [] }) => {
 	const { record: recHoaDon } = useModel('taichinh.hoadon');
 	const {
 		danhSach: danhSachKenh,
@@ -64,8 +64,11 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuc
 
 	// Tính tổng tiền từ transactions
 	const totalAmount = useMemo(() => {
+		if (mode === 'multi' && bills?.length) {
+			return bills.reduce((sum, b) => sum + (b.soTienConLai ?? 0), 0);
+		}
 		return recHoaDon?.transactions?.reduce((sum, t) => sum + (t.amount ?? 0), 0) ?? 0;
-	}, [recHoaDon?.transactions]);
+	}, [mode, bills, recHoaDon?.transactions]);
 
 	return (
 		<Modal
@@ -95,6 +98,8 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuc
 							invoiceCode={recHoaDon?.identityCode ?? ''}
 							totalAmount={totalAmount}
 							loading={loadingKenh || loadingPayment}
+							mode={mode}
+							bills={bills}
 						/>
 					)}
 				</Col>
