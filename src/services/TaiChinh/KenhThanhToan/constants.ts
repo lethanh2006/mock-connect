@@ -3,6 +3,12 @@ export enum ELoaiPhuongThucThanhToan {
     ONEPAY = 'ONEPAY',
 }
 
+export const titleLoaiPhuongThucThanhToan = {
+    [ELoaiPhuongThucThanhToan.ONEPAY]: 'OnePay',
+    [ELoaiPhuongThucThanhToan.NGAN_HANG]: 'Ngân hàng',
+}
+
+
 export enum EOnepayCard {
     INTERCARD = 'INTERCARD',
     GOOGLEPAY = 'GOOGLEPAY',

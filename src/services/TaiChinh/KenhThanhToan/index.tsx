@@ -11,6 +11,14 @@ export async function postTransactionMePayment(body: {
 	soTienLePhiThanhToan?: number;
 	soTienThanhToan?: number;
 	webUrlCallBack?: string;
+	guiThongTinHoaDon?: boolean;
+	thongTinHoaDon?: {
+		tenToChuc?: string;
+		maSoThue?: string;
+		diaChi?: string;
+		emailNhanHoaDonDienTu?: string;
+		userSoDienThoai?: string;
+	};
 }) {
 	return axios.post(`${ipTaiChinh}/transaction/me/payment`, body);
 }
