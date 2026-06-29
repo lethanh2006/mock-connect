@@ -4,9 +4,10 @@ export enum EGioiTinh {
 }
 
 export enum ETrangThaiMinhChung {
-	CHO_DUYET = 'Chờ duyệt',
-	DA_DUYET = 'Đã duyệt',
-	TU_CHOI = 'Từ chối',
+	CHO_NOP_MINH_CHUNG = 'CHO_NOP_MINH_CHUNG',
+	CHO_DUYET = 'CHO_DUYET',
+	DA_DUYET = 'DA_DUYET',
+	TU_CHOI = 'TU_CHOI',
 }
 
 export enum ETrangThaiThanhToan {
@@ -18,4 +19,10 @@ export enum ETrangThaiThanhToan {
 
 export enum ELoaiKhoanThu {
 	KTX = 'KTX',
+}
+
+export enum ETrangThaiHangCho {
+	CHO_XU_LY = 'CHO_XU_LY',
+	DA_XU_LY = 'DA_XU_LY',
+	HUY = 'HUY',
 }

@@ -1,4 +1,4 @@
-import { ETrangThaiMinhChung, EGioiTinh, ELoaiKhoanThu, ETrangThaiThanhToan } from './constant';
+import { ETrangThaiMinhChung, EGioiTinh, ELoaiKhoanThu, ETrangThaiThanhToan, ETrangThaiHangCho } from './constant';
 
 declare module KyTucXa {
     export interface IToa {
@@ -112,6 +112,30 @@ declare module KyTucXa {
         nationality: string;
         permanentHomeAddress: string;
         emergencyContacts: IEmergencyContacts[];
+        identityCardFrontUrl?: string;
+        identityCardBackUrl?: string;
+        passportUrl?: string;
+        agreedToPolicy: boolean;
+        signatureUrl: string;
+        hasSpecialCondition: boolean;
+        conditionDetails?: string;
+        haveHealthInsurance: boolean;
+        healthInsuranceFile?: string;
+        signedAt?: string;
+    }
+
+    export interface IYeuCauChoPhong {
+        _id: string;
+        maDotId: string;
+        maToaNha: string;
+        maLoaiPhong: string;
+        maSinhVien: string;
+        ssoId: string;
+        hoTen: string;
+        soThuTu: number;
+        trangThai: ETrangThaiHangCho;
+        createdAt: string;
+        updatedAt: string;
     }
 
     export interface INganhHoc {
@@ -179,7 +203,7 @@ declare module KyTucXa {
 		soDienThoai: string;
 		email: string;
 		urlMinhChung: string;
-		trangThaiMinhChung: string;
+		trangThaiMinhChung: ETrangThaiMinhChung;
 		ngayDuyet: Date;
 		nguoiDuyet: string;
 		ghiChuDuyet: string;

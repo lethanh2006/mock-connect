@@ -191,6 +191,7 @@ export default {
 	'kytucxa.dangky.status.Chờ thanh toán': 'Unpaid',
 	'kytucxa.dangky.status.Đã thanh toán': 'Paid',
 	'kytucxa.dangky.status.Đã nhận phòng': 'Checked-in',
+	'kytucxa.payment.history.noteLabel': 'Note:',
 };
 
 

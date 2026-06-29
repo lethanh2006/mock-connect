@@ -8,6 +8,9 @@ import { KyTucXa } from '@/services/KyTucXa/typings';
 import FormStep1Content from './FormStep1Content';
 import FormStep2Content from './FormStep2Content';
 import ModalSuccessRegistration from '../Modal/ModalSuccessRegistration';
+import axios from '@/utils/axios';
+import { ipCsvc } from '@/utils/ip';
+import { EFileScope, uploadFile, buildUpLoadFile } from '@/services/uploadFile';
 
 const FormDangKyKTX = () => {
 	const intl = useIntl();
@@ -19,6 +22,7 @@ const FormDangKyKTX = () => {
 
 	const [currentStep, setCurrentStep] = useState(0);
 	const [visibleSuccess, setVisibleSuccess] = useState(false);
+	const [policyText, setPolicyText] = useState<string>('');
 
 	useEffect(() => {
 		if (visibleForm) {
@@ -27,6 +31,27 @@ const FormDangKyKTX = () => {
 			getThongTinSinhVienModel().catch((err) => {
 				console.error('Lỗi khi tải thông tin sinh viên:', err);
 			});
+
+			const loadPolicy = async () => {
+				try {
+					const res = await axios.get(`${ipCsvc}/setting/DANG_KY_KY_TUC_XA_POLICY/value`);
+					if (res?.data?.data) {
+						setPolicyText(res.data.data);
+						return;
+					}
+				} catch (e) {
+					console.log('Failed to fetch DANG_KY_KY_TUC_XA_POLICY, trying SettingDangKyKyTucXa.policy...');
+				}
+				try {
+					const res = await axios.get(`${ipCsvc}/setting/SettingDangKyKyTucXa.policy/value`);
+					if (res?.data?.data) {
+						setPolicyText(res.data.data);
+					}
+				} catch (e) {
+					console.log('Failed to fetch SettingDangKyKyTucXa.policy');
+				}
+			};
+			loadPolicy();
 		} else {
 			resetFieldsForm(form);
 		}
@@ -71,7 +96,12 @@ const FormDangKyKTX = () => {
 
 	const handleNext = async () => {
 		try {
-			await form.validateFields(['fullName', 'studentId', 'dateOfBirth', 'email', 'phoneNumber', 'apid', 'college', 'identityNumber', 'dateOfIssue', 'placeOfIssue', 'nationality', 'emergencyContacts', 'confirmInfo']);
+			await form.validateFields([
+				'fullName', 'studentId', 'dateOfBirth', 'email', 'phoneNumber', 'college', 
+				'identityNumber', 'dateOfIssue', 'placeOfIssue', 'nationality', 'emergencyContacts', 'confirmInfo',
+				'identityCardFrontUrl', 'identityCardBackUrl', 'passportUrl',
+				'haveHealthInsurance', 'healthInsuranceFile', 'hasSpecialCondition', 'conditionDetails'
+			]);
 			setCurrentStep(1);
 			setTimeout(() => {
 				const scrollContainer = document.querySelector('.ant-modal-wrap');
@@ -121,11 +151,42 @@ const FormDangKyKTX = () => {
 				return;
 			}
 
-			const { confirmTerms, ...rest } = values as { confirmTerms: boolean } & KyTucXa.IFormDangKy;
+			const { confirmTerms, ...rest } = values as { confirmTerms: boolean } & KyTucXa.IFormDangKy & { signatureBase64?: string };
 
 			const dateOfBirthISO = rest.dateOfBirth
 				? dayjs(rest.dateOfBirth, 'DD/MM/YYYY').toISOString()
 				: '';
+
+			// 1. Upload files
+			const identityCardFrontUrl = await buildUpLoadFile(values, 'identityCardFrontUrl').catch(console.log);
+			const identityCardBackUrl = await buildUpLoadFile(values, 'identityCardBackUrl').catch(console.log);
+			const passportUrl = await buildUpLoadFile(values, 'passportUrl').catch(console.log);
+			const healthInsuranceFile = await buildUpLoadFile(values, 'healthInsuranceFile').catch(console.log);
+
+			// 2. Convert base64 signature to Blob and upload
+			let signatureUrl = '';
+			if (values.signatureBase64) {
+				try {
+					const dataURLtoBlob = (dataurl: string) => {
+						const arr = dataurl.split(',');
+						const mime = arr[0].match(/:(.*?);/)?.[1];
+						const bstr = atob(arr[1]);
+						let n = bstr.length;
+						const u8arr = new Uint8Array(n);
+						while (n--) {
+							u8arr[n] = bstr.charCodeAt(n);
+						}
+						return new Blob([u8arr], { type: mime });
+					};
+					const signatureBlob = dataURLtoBlob(values.signatureBase64);
+					const signatureRes = await uploadFile({ file: signatureBlob, scope: EFileScope.PUBLIC });
+					signatureUrl = signatureRes?.data?.data?.url || '';
+				} catch (err) {
+					console.error('Lỗi khi tải lên chữ ký:', err);
+					message.error('Lỗi khi lưu chữ ký, vui lòng thử lại');
+					return;
+				}
+			}
 
 			const payload = {
 				maDotId: dotDangKyRecord?._id,
@@ -145,6 +206,15 @@ const FormDangKyKTX = () => {
 					nationality: rest.nationality,
 					permanentHomeAddress: rest.permanentHomeAddress,
 					emergencyContacts: rest.emergencyContacts,
+					identityCardFrontUrl: identityCardFrontUrl || undefined,
+					identityCardBackUrl: identityCardBackUrl || undefined,
+					passportUrl: passportUrl || undefined,
+					agreedToPolicy: true,
+					signatureUrl: signatureUrl || undefined,
+					hasSpecialCondition: !!rest.hasSpecialCondition,
+					conditionDetails: rest.conditionDetails || undefined,
+					haveHealthInsurance: !!rest.haveHealthInsurance,
+					healthInsuranceFile: healthInsuranceFile || undefined,
 				},
 			};
 
@@ -193,12 +263,13 @@ const FormDangKyKTX = () => {
 								showCheckbox={true} 
 								disabled={false} 
 								onReload={handleReloadEmergencyContacts} 
+								policyText={policyText}
 							/>
 						</div>
 
 
 						<div style={{ display: currentStep === 1 ? 'block' : 'none' }}>
-							<FormStep2Content showCheckbox={true} />
+							<FormStep2Content showCheckbox={true} policyText={policyText} />
 						</div>
 					</Form>
 

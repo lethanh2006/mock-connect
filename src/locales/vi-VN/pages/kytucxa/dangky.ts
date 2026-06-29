@@ -191,4 +191,5 @@ export default {
     'kytucxa.dangky.status.Chờ thanh toán': 'Chờ thanh toán',
     'kytucxa.dangky.status.Đã thanh toán': 'Đã thanh toán',
     'kytucxa.dangky.status.Đã nhận phòng': 'Đã nhận phòng',
+    'kytucxa.payment.history.noteLabel': 'Lưu ý:',
 };

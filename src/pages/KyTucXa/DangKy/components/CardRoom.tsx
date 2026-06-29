@@ -9,6 +9,7 @@ interface RoomCardProps {
 	phong: KyTucXa.IPhong;
 	onXemChiTiet: (phong: KyTucXa.IPhong) => void;
 	onDangKy: (phong: KyTucXa.IPhong) => void;
+	onDangKyHangCho?: (phong: KyTucXa.IPhong) => void;
 	maPhongDaDangKy?: string;
 	activeRegistrationStatus?: string;
 }
@@ -29,7 +30,7 @@ const getStatusColor = (status?: string) => {
 	}
 };
 
-const CardRoomKTX: React.FC<RoomCardProps> = ({ phong, onXemChiTiet, onDangKy, maPhongDaDangKy, activeRegistrationStatus }) => {
+const CardRoomKTX: React.FC<RoomCardProps> = ({ phong, onXemChiTiet, onDangKy, onDangKyHangCho, maPhongDaDangKy, activeRegistrationStatus }) => {
 	const intl = useIntl();
 	const { danhSach: danhSachKhoanThu } = useModel('kytucxa.khoanthu');
 	const { tienIchMap } = useModel('kytucxa.tienich');
@@ -155,12 +156,14 @@ const CardRoomKTX: React.FC<RoomCardProps> = ({ phong, onXemChiTiet, onDangKy, m
 					</div>
 					<Button
 						type='primary'
-						disabled={phong.ma !== maPhongDaDangKy && (slotLeft === 0 || phong.coTheDangKy === false || !!maPhongDaDangKy)}
+						disabled={phong.ma !== maPhongDaDangKy && (phong.coTheDangKy === false || !!maPhongDaDangKy)}
 						className={`ktx-room-card__btn`}
 						onClick={(e) => {
 							e.stopPropagation();
 							if (phong.ma === maPhongDaDangKy) {
 								history.push('/ky-tuc-xa/lich-su');
+							} else if (slotLeft === 0) {
+								if (onDangKyHangCho) onDangKyHangCho(phong);
 							} else {
 								onDangKy(phong);
 							}
@@ -169,7 +172,7 @@ const CardRoomKTX: React.FC<RoomCardProps> = ({ phong, onXemChiTiet, onDangKy, m
 						{phong.ma === maPhongDaDangKy 
 							? intl.formatMessage({ id: 'kytucxa.dangky.success.paymentNow' }) 
 							: slotLeft === 0 
-								? intl.formatMessage({ id: 'kytucxa.dangky.card.fullSlot' }) 
+								? intl.formatMessage({ id: 'kytucxa.dangky.card.registerWaiting' }, { defaultMessage: 'Đăng ký hàng chờ' })
 								: intl.formatMessage({ id: 'kytucxa.dangky.card.register' })}
 					</Button>
 				</div>

@@ -19,6 +19,7 @@ const LichSuDangKyKTX = () => {
     const { danhSach: danhSachToa, getAllModel: getAllToa } = useModel('kytucxa.toanha');
 	const { record, setRecord, deleteModel } = useModel('kytucxa.dangky');
 	const { danhSach: danhSachDot } = useModel('kytucxa.dotdangky');
+	const { danhSach: danhSachKhoanThu } = useModel('kytucxa.khoanthu');
 
 	const dotMap = useMemo(() => {
 		return new Map((danhSachDot as KyTucXa.IDotDangKy[]).map((d) => [d._id, d]));
@@ -82,6 +83,15 @@ const LichSuDangKyKTX = () => {
 			align: 'center',
 			filterType: 'number',
 			sortable: true,
+			render: (val: string, record: KyTucXa.IThongTinDangKy) => {
+				const khoanThu = (danhSachKhoanThu as KyTucXa.IKhoanThu[])?.find(
+					(kt) => kt.maMucThu === val
+				);
+				const amount = khoanThu?.unitAmount ?? record?.phong?.giaPhong;
+				const currency = khoanThu?.currency ?? 'VND';
+				if (!amount) return '---';
+				return amount.toLocaleString('vi-VN') + ' ' + currency;
+			},
 		},		
         {
             title: intl.formatMessage({ id: 'kytucxa.lichsu.table.moveInDate' }),
