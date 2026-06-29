@@ -110,6 +110,9 @@ export default {
 	// On-campus / Off-campus Housing
 	'menu.NoiNgoaiTru': 'Dormitory & Off-campus Residence',
 	'menu.NoiNgoaiTru.KhaiBao': 'Declaration',
+	'menu.KyTucXa': 'Student Housing',
+	'menu.KyTucXa.DangKy': 'Registration',
+	'menu.KyTucXa.LichSu': 'History',
 
 	'menu.KeHoachNCKH': 'Scientific Research Plan',
 

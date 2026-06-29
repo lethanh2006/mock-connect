@@ -781,6 +781,25 @@ export default [
 	// 	disabled: true,
 	// },
 
+	//CAMPUS LIFE
+	{
+		name: 'KyTucXa',
+		icon: 'HddOutlined',
+		path: 'ky-tuc-xa',
+		routes: [
+			{
+				name: 'DangKy',
+				path: 'dang-ky',
+				component: 'KyTucXa/DangKy',
+			},
+			{
+				name: 'LichSu',
+				path: 'lich-su',
+				component: 'KyTucXa/LichSu',
+			},
+		],
+	},
+
 	// {
 	// 	name: 'NoiNgoaiTru',
 	// 	icon: 'DeploymentUnitOutlined',

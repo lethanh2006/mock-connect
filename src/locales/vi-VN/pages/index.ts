@@ -16,6 +16,8 @@ import lophocphan from './hoctap/lophocphan';
 import pathway from './hoctap/pathway';
 import tientrinhhoctap from './hoctap/tientrinhhoctap';
 import khaosat from './khaosat';
+import dangkyktx from './kytucxa/dangky';
+import lichsudangkyktx from './kytucxa/lichsu';
 import lichsukien from './lichsukien';
 import login from './login';
 import lophanhchinh from './lophanhchinh';
@@ -69,6 +71,8 @@ export default {
 	...pathway,
 	...minor,
 	...syllabus,
+	...dangkyktx,
+	...lichsudangkyktx,
 	...activity,
 
 	'pages.trangchu.title': 'PHÂN HỆ QUẢN LÝ ĐÀO TẠO',
