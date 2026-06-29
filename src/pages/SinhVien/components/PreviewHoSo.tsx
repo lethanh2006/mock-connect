@@ -4,8 +4,8 @@ import { formatDate } from '@/utils/formatDate';
 import { formatPhoneNumber } from '@/utils/utils';
 import { Card, Col, Divider, Flex, Image, Row, Spin, Tag, Typography } from 'antd';
 // import { Card, Descriptions, Divider, Flex, Image, Spin, Splitter, Typography } from 'antd';
-import type { ReactNode } from 'react';
-import { useIntl, useModel } from 'umi';
+import { useEffect, type ReactNode } from 'react';
+import { getLocale, useIntl, useModel } from 'umi';
 // import { useMediaQuery } from 'react-responsive';
 
 const { Text, Title } = Typography;
@@ -40,14 +40,23 @@ type ExtraStudentProfile = Partial<{
 
 const PreviewHoSo = (_props: { header?: ReactNode }) => {
 	const intl = useIntl();
+	const locale = getLocale();
+
 	const { record, loading } = useModel('sinhvien.sinhvien');
 	// const { danhSach: danhSachQuocTich, getAllModel } = useModel('core.quoctich');
 	const extraRecord = record as ExtraStudentProfile | undefined;
+	const { getChuongTrinhHienTaiModel, chuongTrinhHienTai } = useModel('daotao.chuongtrinhdaotao');
 	// const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 
 	// useEffect(() => {
 	// 	if (!danhSachQuocTich.length) getAllModel();
 	// }, []);
+
+	useEffect(() => {
+		if (record?.khoaNganh?.ma) {
+			getChuongTrinhHienTaiModel(record?.khoaNganh?.ma);
+		}
+	}, [record?.khoaNganh?.ma]);
 
 	const renderValue = (value?: ReactNode, highlight = false) => {
 		if (value === undefined || value === null || value === '') return '--';
@@ -72,6 +81,8 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 	const postalCode = extraRecord?.postalCode;
 	const formatEnumMessage = <T extends string>(messageIds: Partial<Record<T, string>>, value?: T) =>
 		value && messageIds[value] ? intl.formatMessage({ id: messageIds[value] }) : value;
+	const getLocalizedName = (value: any) =>
+		locale === 'vi-VN' ? (value?.ten ?? value?.tenTiengAnh) : (value?.tenTiengAnh ?? value?.ten);
 
 	const leftPanel = (
 		<Card variant='borderless'>
@@ -249,19 +260,18 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 				)}
 				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.trainingProgram' })}:`,
-					record?.khoaNganh?.chuongTrinh?.ten ?? record?.nganh?.ten,
+					getLocalizedName(chuongTrinhHienTai ?? '--'),
 				)}
 				{renderProfileField(
-					`${intl.formatMessage({ id: 'thongtincanhan.hoso.cohortMajor' })}:`,
-					<>
-						{record?.khoaNganh?.ten ?? '--'}
-						{record?.nganh?.ten ? ` - ${record.nganh.ten}` : ''}
-					</>,
+					`${intl.formatMessage({ id: 'thongtincanhan.hoso.major' })}:`,
+					getLocalizedName(record?.nganh) ?? record?.maNganh,
 				)}
-				{renderProfileField(
-					`${intl.formatMessage({ id: 'thongtincanhan.hoso.concentration' })}:`,
-					record?.chuyenNganh?.ten ?? record?.maChuyenNganh ?? '--',
-				)}
+				{record?.chuyenNganh?.ten || record?.maChuyenNganh
+					? renderProfileField(
+							`${intl.formatMessage({ id: 'thongtincanhan.hoso.concentration' })}:`,
+							record?.chuyenNganh?.ten ?? record?.maChuyenNganh ?? '--',
+						)
+					: null}
 				{record?.chuyenNganh2?.ten || record?.khoaNganh2?.ten
 					? renderProfileField(
 							`${intl.formatMessage({ id: 'thongtincanhan.hoso.minor' })}:`,
