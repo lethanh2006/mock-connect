@@ -27,6 +27,7 @@ declare module NganhDaoTao {
 		nganhGoc?: IRecordCoSo;
 
 		maDonVi?: string;
+		tenDonViPhuTrach?: string;
 		donVi?: ToChucNhanSu.IDonVi;
 
 		createdAt?: string;
