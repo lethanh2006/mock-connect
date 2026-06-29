@@ -1,17 +1,39 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import { getSearchStorage, updateSearchStorage } from '@/components/Table/utils';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { Divider, Empty, Spin, Typography } from 'antd';
+import { primaryColor } from '@/services/base/constant';
+import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import type { InputRef } from 'antd';
+import { AutoComplete, Button, Divider, Empty, Input, Select, Space, Spin, Tag, Tooltip, Typography } from 'antd';
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
+import '../ChuongTrinhKhung/style.less';
 import CardHocPhanV2 from '../components/CardHocPhan';
+
 const { Title } = Typography;
+
+const GLOBAL_SEARCH_KEY = 'TIEN_TRINH_THUC_TE_SEARCH';
+
+const matchTienTrinhItem = (item: ChuongTrinhDaoTao.TTienTrinhThucTe, keyword: string): boolean => {
+	const normalizedKeyword = keyword.trim().toLowerCase();
+	if (!normalizedKeyword) return true;
+
+	const searchableValues = [item.hocPhan?.ma, item.hocPhan?.ten, item.kyHoc?.ten, item.lopHocPhan?.ten];
+
+	return searchableValues.some((value) => value?.toLowerCase().includes(normalizedKeyword));
+};
 
 const TienTrinhThucTeV2 = () => {
 	const intl = useIntl();
 	const { loading, sinhVienGetTienTrinhThucTeModel } = useModel('daotao.chuongtrinhdaotao');
 	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
 	const [tienTrinhHocKy, setTienTrinhHocKy] = useState<ChuongTrinhDaoTao.TTienTrinhThucTe[][]>();
+	const [maHocKyFilter, setMaHocKyFilter] = useState<string>();
+	const [searchText, setSearchText] = useState('');
+	const [searchOptions, setSearchOptions] = useState<{ value: string }[]>([]);
+	const searchInputRef = useRef<InputRef>(null);
 	const [recTienTrinh, setRecTienTrinh] = useState<ChuongTrinhDaoTao.TTienTrinhThucTe>();
 	const [visibleDiem, setVisibleDiem] = useState(false);
 
@@ -19,77 +41,188 @@ const TienTrinhThucTeV2 = () => {
 		if (maKhoaNganh)
 			sinhVienGetTienTrinhThucTeModel(maKhoaNganh).then((data) => {
 				const gHocKy = Object.entries(_.groupBy(data, (item) => item.kyHoc?.ma));
-				const dataHocKy = _.sortBy(gHocKy, ([ma, ds]) => ma);
-				setTienTrinhHocKy(dataHocKy.map(([ma, ds]) => ds));
+				const dataHocKy = _.sortBy(gHocKy, ([ma]) => ma).reverse();
+				setTienTrinhHocKy(dataHocKy.map(([, ds]) => ds));
 			});
 	};
 
 	useEffect(() => {
+		setMaHocKyFilter(undefined);
 		fetch();
 	}, [maKhoaNganh]);
 
+	const hocKyOptions = useMemo(
+		() =>
+			(tienTrinhHocKy ?? [])
+				.map((data) => ({
+					label: data[0]?.kyHoc?.ten || data[0]?.kyHoc?.ma || '',
+					value: data[0]?.kyHoc?.ma || '',
+				}))
+				.filter((item) => item.value),
+		[tienTrinhHocKy],
+	);
+
+	const filteredTienTrinhHocKy = useMemo(() => {
+		if (!maHocKyFilter) return tienTrinhHocKy;
+		return tienTrinhHocKy?.filter((data) => data[0]?.kyHoc?.ma === maHocKyFilter);
+	}, [tienTrinhHocKy, maHocKyFilter]);
+
+	const displayedTienTrinhHocKy = useMemo(() => {
+		if (!searchText.trim()) return filteredTienTrinhHocKy;
+
+		return filteredTienTrinhHocKy
+			?.map((data) => data.filter((item) => matchTienTrinhItem(item, searchText)))
+			.filter((data) => data.length > 0);
+	}, [filteredTienTrinhHocKy, searchText]);
+
+	useEffect(() => {
+		const history = getSearchStorage(GLOBAL_SEARCH_KEY);
+		setSearchOptions(history.map((value: string) => ({ value })));
+	}, []);
+
+	const handleSearchTrigger = useCallback((value: string) => {
+		const keyword = value?.trim() || '';
+		setSearchText(keyword);
+
+		if (keyword) updateSearchStorage(GLOBAL_SEARCH_KEY, keyword);
+
+		const history = getSearchStorage(GLOBAL_SEARCH_KEY);
+		setSearchOptions(history.map((val: string) => ({ value: val })));
+
+		setTimeout(() => {
+			searchInputRef.current?.blur();
+		}, 0);
+	}, []);
+
+	const renderKhoiKienThucLabel = (item: ChuongTrinhDaoTao.TTienTrinhThucTe) => {
+		const isNgoaiCtdt = item.isNgoaiCtdt;
+		const name = isNgoaiCtdt
+			? intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.notApplied' })
+			: item.khoiKienThuc?.ten;
+		if (!name) return undefined;
+
+		return (
+			<>
+				<span
+					className='card-label-dot'
+					style={{
+						backgroundColor: isNgoaiCtdt ? '#ff4d4f' : `var(--color-primary)`,
+					}}
+				/>
+				<span className='card-label-text' style={isNgoaiCtdt ? { color: '#ff4d4f' } : undefined}>
+					{name}
+				</span>
+			</>
+		);
+	};
+
 	return (
 		<div>
+			<div className='view-switch-container' style={{ marginBottom: 16 }}>
+				<AutoComplete
+					className='view-switch-search'
+					options={searchOptions}
+					value={searchText}
+					onSelect={handleSearchTrigger}
+					onChange={(value: string) => setSearchText(value)}
+				>
+					<Input.Search
+						ref={searchInputRef}
+						className='global-search'
+						allowClear
+						value={searchText}
+						placeholder={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.search.placeholder' })}
+						style={
+							searchText
+								? {
+										width: 320,
+										borderColor: primaryColor,
+										outline: `1px solid ${primaryColor}`,
+										borderRadius: 4,
+									}
+								: { width: 320 }
+						}
+						enterButton={
+							<Button
+								loading={loading}
+								icon={
+									<Tooltip title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.search.tooltip' })}>
+										<SearchOutlined />
+									</Tooltip>
+								}
+							/>
+						}
+						onSearch={handleSearchTrigger}
+						onChange={(e) => {
+							if (e.type === 'click') {
+								handleSearchTrigger('');
+								return;
+							}
+
+							const value = e.target.value;
+							setSearchText(value);
+							if (!value.trim()) handleSearchTrigger('');
+						}}
+					/>
+				</AutoComplete>
+				<Space>
+					<ButtonExtend
+						icon={<ReloadOutlined />}
+						onClick={fetch}
+						loading={loading}
+						className='btn-reload'
+						tooltip={intl.formatMessage({ id: 'global.table.index.button.tailai.tooltip' })}
+					/>
+					<Select
+						allowClear
+						showSearch
+						optionFilterProp='label'
+						style={{ minWidth: 220, fontWeight: 600 }}
+						placeholder={intl.formatMessage({ id: 'tientrinhhoctap.filter.hocKy' })}
+						value={maHocKyFilter ?? ''}
+						onChange={(val) => setMaHocKyFilter(val || undefined)}
+						options={[
+							{
+								label: intl.formatMessage({ id: 'tientrinhhoctap.filter.allHocKy' }),
+								value: '',
+							},
+							...hocKyOptions,
+						]}
+					/>
+				</Space>
+			</div>
+
 			<Spin spinning={loading}>
-				{tienTrinhHocKy?.length ? (
-					tienTrinhHocKy.map((data, index) => (
-						<div key={index} style={{ marginBottom: '16px' }}>
-							{/* Header học kỳ */}
-							<div
-								style={{
-									display: 'flex',
-									alignItems: 'center',
-									marginBottom: '16px',
-								}}
-							>
-								<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+				{displayedTienTrinhHocKy?.length ? (
+					displayedTienTrinhHocKy.map((data) => (
+						<Fragment key={data[0]?.kyHoc?.ma ?? data[0]?.diemHpSvHk?._id}>
+							<Divider orientation='left' className='divider-big-title' dashed>
+								<div className='header-content'>
 									<Title level={5} style={{ margin: 0, color: '#262626' }}>
 										{data[0].kyHoc?.ten}
 									</Title>
-									<div
-										style={{
-											width: '8px',
-											height: '8px',
-											backgroundColor: '#ff4d4f',
-											borderRadius: '50%',
-										}}
-									/>
-									<div
-										style={{
-											color: 'red',
-											padding: '2px',
-											fontWeight: 500,
-										}}
-									>
-										{_.sumBy(data, (i) => i.soTinChi ?? 0)} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
-									</div>
+									<Tag color='blue'>
+										{_.sumBy(data, (i) => i.soTinChi ?? 0)} {intl.formatMessage({ id: 'tientrinhhoctap.ctdt.tinchi' })}
+									</Tag>
 								</div>
-							</div>
+							</Divider>
 
-							{/* Grid các môn học */}
-							<div
-								style={{
-									display: 'grid',
-									gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))',
-									gap: '12px',
-								}}
-							>
-								{data.map((sv, idx) => (
+							<div className='grid-container'>
+								{data.map((sv, index) => (
 									<CardHocPhanV2
-										key={sv.diemHpSvHk?._id || sv.hocPhan?.ma || idx}
+										key={sv.lichSuDiem?.[0]?._id}
 										hocPhan={sv.hocPhan}
 										onClick={() => {
 											setRecTienTrinh(sv);
 											setVisibleDiem(true);
 										}}
-										listDiem={sv.diemHpSvHk ? [sv.diemHpSvHk] : []}
+										trangThaiHoc={sv.hoc}
+										listDiem={sv.lichSuDiem}
+										label={renderKhoiKienThucLabel(sv)}
 									/>
 								))}
 							</div>
-
-							{/* Divider giữa các học kỳ */}
-							{index < tienTrinhHocKy.length - 1 && <Divider />}
-						</div>
+						</Fragment>
 					))
 				) : (
 					<Empty
@@ -110,9 +243,18 @@ const TienTrinhThucTeV2 = () => {
 				setVisible={setVisibleDiem}
 				visible={visibleDiem}
 				hocPhan={recTienTrinh?.hocPhan}
-				listDiem={recTienTrinh?.diemHpSvHk ? [recTienTrinh.diemHpSvHk] : []}
+				trangThaiHoc={recTienTrinh?.hoc}
+				listDiem={recTienTrinh?.lichSuDiem ?? []}
 				deCuongId={recTienTrinh?.lopHocPhan?.deCuong?.deCuongId}
 				maKhoaNganh={maKhoaNganh}
+				khoiChuongTrinh={
+					recTienTrinh?.khoiKienThuc
+						? {
+								maKhoiKienThuc: recTienTrinh.maKhoiKienThuc ?? recTienTrinh.khoiKienThuc.ma,
+								khoiKienThuc: recTienTrinh.khoiKienThuc,
+							}
+						: undefined
+				}
 			/>
 		</div>
 	);
