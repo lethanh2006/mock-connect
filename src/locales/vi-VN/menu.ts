@@ -111,9 +111,6 @@ export default {
 	//Nội trú, ngoại trú
 	'menu.NoiNgoaiTru': 'Nội - Ngoại trú',
 	'menu.NoiNgoaiTru.KhaiBao': 'Khai báo',
-	'menu.KyTucXa': 'Ký túc xá',
-	'menu.KyTucXa.DangKy': 'Đăng ký',
-	'menu.KyTucXa.LichSu': 'Lịch sử',
 
 	'menu.KeHoachNCKH': 'Kế hoạch NCKH',
 
