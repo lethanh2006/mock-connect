@@ -1,4 +1,4 @@
-import { Carousel, Empty, Spin } from 'antd';
+import { Carousel, Divider, Empty, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChartDiemTrungBinh from './ChartDiemTrungBinh';
@@ -22,11 +22,11 @@ const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string; loadData?: boolea
 		<Spin spinning={loading}>
 			{danhSach.length ? (
 				<>
-					<div style={{ marginBottom: 12 }}>
-						<StatKetQuaTichLuySinhVien />
-					</div>
-
-					<Carousel autoplay pauseOnDotsHover>
+					<StatKetQuaTichLuySinhVien maKhoaNganh={maKhoaNganh} />
+					<Divider orientation='left' dashed className='divider-big-title'>
+						{intl.formatMessage({ id: 'ketquahoctap.chart.creditStatistics' })}
+					</Divider>
+					<Carousel pauseOnDotsHover style={{ marginTop: 12 }} autoplay>
 						<div>
 							<div style={{ marginBottom: 8 }}>
 								<ChartSoTinChi />

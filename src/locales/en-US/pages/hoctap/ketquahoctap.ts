@@ -65,6 +65,7 @@ export default {
 	'ketquahoctap.diemtp.col.diemThanhPhan': 'Component Scores',
 	'ketquahoctap.diemtp.notInProgram': 'Not Applied',
 	'ketquahoctap.diemtp.convertedScore': 'Converted Score',
+	'ketquahoctap.diemtp.deCuong.notFound': 'Course outline not found',
 	'ketquahoctap.diemtp.semester.default': 'Semester {maHocKy}',
 	'ketquahoctap.diemtp.semester.summary':
 		' (Semester GPA: {gpa}, Credits earned: {earned}, Cumulative credits: {cumulative})',
