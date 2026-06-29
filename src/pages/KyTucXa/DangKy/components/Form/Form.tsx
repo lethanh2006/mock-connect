@@ -1,21 +1,21 @@
-import { Button,  Form, Modal, Steps, message } from 'antd';
-import { useEffect, useState } from 'react';
-import { useIntl, useModel } from 'umi';
-import '../style.less';
-import dayjs from 'dayjs';
-import { resetFieldsForm } from '@/utils/utils';
 import { KyTucXa } from '@/services/KyTucXa/typings';
-import FormStep1Content from './FormStep1Content';
-import FormStep2Content from './FormStep2Content';
-import ModalSuccessRegistration from '../Modal/ModalSuccessRegistration';
+import { EFileScope, buildUpLoadFile, uploadFile } from '@/services/uploadFile';
 import axios from '@/utils/axios';
 import { ipCsvc } from '@/utils/ip';
-import { EFileScope, uploadFile, buildUpLoadFile } from '@/services/uploadFile';
+import { resetFieldsForm } from '@/utils/utils';
+import { Button, Form, Modal, Steps, message } from 'antd';
+import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
+import { useIntl, useModel } from 'umi';
+import ModalSuccessRegistration from '../Modal/ModalSuccessRegistration';
+import '../style.less';
+import FormStep1Content from './FormStep1Content';
+import FormStep2Content from './FormStep2Content';
 
 const FormDangKyKTX = () => {
 	const intl = useIntl();
 	const [form] = Form.useForm();
-	const { record: thongTinSinhVien, getThongTinSinhVienModel } = useModel('kytucxa.thongtinsinhvien');
+	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { record: phong, visibleForm, setVisibleForm } = useModel('kytucxa.phong');
 	const { record: dotDangKyRecord } = useModel('kytucxa.dotdangky');
 	const { postModel, getModel: getLichSu, formSubmiting } = useModel('kytucxa.dangky');
@@ -28,9 +28,6 @@ const FormDangKyKTX = () => {
 		if (visibleForm) {
 			setCurrentStep(0);
 			form.resetFields();
-			getThongTinSinhVienModel().catch((err) => {
-				console.error('Lỗi khi tải thông tin sinh viên:', err);
-			});
 
 			const loadPolicy = async () => {
 				try {
@@ -58,49 +55,66 @@ const FormDangKyKTX = () => {
 	}, [visibleForm, form]);
 
 	useEffect(() => {
-		if (visibleForm && thongTinSinhVien) {
+		if (visibleForm && recSinhVien?.ssoId) {
 			form.setFieldsValue({
-				fullName: thongTinSinhVien.ten,
-				studentId: thongTinSinhVien.ma,
-				email: thongTinSinhVien.email,
-				dateOfBirth: thongTinSinhVien.ngaySinh ? dayjs(thongTinSinhVien.ngaySinh).format('DD/MM/YYYY') : '-',
-				gender: thongTinSinhVien.gioiTinh,
-				program: thongTinSinhVien.nganh?.ten || '-',
-				college: thongTinSinhVien.khoaSinhVien?.ten || '-',
-				identityNumber: thongTinSinhVien.cccd || '-',
-				dateOfIssue: thongTinSinhVien.ngayCapCccd ? dayjs(thongTinSinhVien.ngayCapCccd).format('DD/MM/YYYY') : '-',
-				placeOfIssue: thongTinSinhVien.noiCapCccd || '-',
-				phoneNumber: thongTinSinhVien.soDienThoai || '-',
-				nationality: thongTinSinhVien.quocTich || '-',
-				permanentHomeAddress: thongTinSinhVien.hoKhauThuongTru || '-',
-				emergencyContacts: (() => {
-					const validMembers = thongTinSinhVien.thanhVienGiaDinh?.filter(
-						(m: KyTucXa.IThanhVienGiaDinh) => m.ten || m.hoDem || m.soDienThoai || m.loaiThanhVien
-					) || [];
-					
-					return validMembers.length > 0
-						? validMembers.map((member: KyTucXa.IThanhVienGiaDinh, index: number) => ({
-							id: Date.now().toString() + index,
-							emergencyContactName: `${member.hoDem || ''} ${member.ten || ''}`.trim() || '',
-							emergencyContactNumber: member.soDienThoai || '',
-							emergencyRelationship: member.loaiThanhVien || '',
-							secondaryContactNumber: member.soDienThoai || '',
-							emergencyEmail: member.email || '',
-							address: member.diaChiHienNay?.diaChi || member.hoKhauThuongTru?.diaChi || thongTinSinhVien.hoKhauThuongTru || '',
-						}))
-						: [];
-				})(),
+				fullName: recSinhVien.ten,
+				studentId: recSinhVien.ma,
+				email: recSinhVien.email,
+				dateOfBirth: recSinhVien.ngaySinh ? dayjs(recSinhVien.ngaySinh).format('DD/MM/YYYY') : '-',
+				gender: recSinhVien.gioiTinh,
+				program: recSinhVien.nganh?.ten || '-',
+				college: recSinhVien.khoaSinhVien?.ten || '-',
+				identityNumber: recSinhVien.cccd || '-',
+				dateOfIssue: recSinhVien.ngayCapCccd ? dayjs(recSinhVien.ngayCapCccd).format('DD/MM/YYYY') : '-',
+				placeOfIssue: recSinhVien.noiCapCccd || '-',
+				phoneNumber: recSinhVien.soDienThoai || '-',
+				nationality: recSinhVien.quocTich || '-',
+				permanentHomeAddress: recSinhVien.hoKhauThuongTru || '-',
+				// emergencyContacts: (() => {
+				// 	const validMembers =
+				// 		recSinhVien.thanhVienGiaDinh?.filter(
+				// 			(m: KyTucXa.IThanhVienGiaDinh) => m.ten || m.hoDem || m.soDienThoai || m.loaiThanhVien,
+				// 		) || [];
+
+				// 	return validMembers.length > 0
+				// 		? validMembers.map((member: KyTucXa.IThanhVienGiaDinh, index: number) => ({
+				// 				id: Date.now().toString() + index,
+				// 				emergencyContactName: `${member.hoDem || ''} ${member.ten || ''}`.trim() || '',
+				// 				emergencyContactNumber: member.soDienThoai || '',
+				// 				emergencyRelationship: member.loaiThanhVien || '',
+				// 				secondaryContactNumber: member.soDienThoai || '',
+				// 				emergencyEmail: member.email || '',
+				// 				address:
+				// 					member.diaChiHienNay?.diaChi || member.hoKhauThuongTru?.diaChi || recSinhVien.hoKhauThuongTru || '',
+				// 			}))
+				// 		: [];
+				// })(),
 			});
 		}
-	}, [thongTinSinhVien, visibleForm, form]);
+	}, [recSinhVien, visibleForm, form]);
 
 	const handleNext = async () => {
 		try {
 			await form.validateFields([
-				'fullName', 'studentId', 'dateOfBirth', 'email', 'phoneNumber', 'college', 
-				'identityNumber', 'dateOfIssue', 'placeOfIssue', 'nationality', 'emergencyContacts', 'confirmInfo',
-				'identityCardFrontUrl', 'identityCardBackUrl', 'passportUrl',
-				'haveHealthInsurance', 'healthInsuranceFile', 'hasSpecialCondition', 'conditionDetails'
+				'fullName',
+				'studentId',
+				'dateOfBirth',
+				'email',
+				'phoneNumber',
+				'college',
+				'identityNumber',
+				'dateOfIssue',
+				'placeOfIssue',
+				'nationality',
+				'emergencyContacts',
+				'confirmInfo',
+				'identityCardFrontUrl',
+				'identityCardBackUrl',
+				'passportUrl',
+				'haveHealthInsurance',
+				'healthInsuranceFile',
+				'hasSpecialCondition',
+				'conditionDetails',
 			]);
 			setCurrentStep(1);
 			setTimeout(() => {
@@ -115,28 +129,28 @@ const FormDangKyKTX = () => {
 	};
 
 	const handleReloadEmergencyContacts = async () => {
-		try {
-			const newData = await getThongTinSinhVienModel();
-			const familyMembers = newData?.thanhVienGiaDinh?.filter(
-				(m: KyTucXa.IThanhVienGiaDinh) => m.ten || m.hoDem || m.soDienThoai || m.loaiThanhVien
-			) || [];
-			
-			form.setFieldsValue({
-				emergencyContacts: familyMembers.length > 0 
-					? familyMembers.map((member: KyTucXa.IThanhVienGiaDinh, index: number) => ({
-						id: Date.now().toString() + index,
-						emergencyContactName: `${member.hoDem || ''} ${member.ten || ''}`.trim() || '',
-						emergencyContactNumber: member.soDienThoai || '',
-						emergencyRelationship: member.loaiThanhVien || '',
-						secondaryContactNumber:  member.soDienThoai || '',
-						emergencyEmail: member.email || '',
-						address: member.diaChiHienNay?.diaChi || member.hoKhauThuongTru?.diaChi || '',
-					}))
-					: []
-			});
-		} catch (error) {
-			console.error('Lỗi khi tải lại thông tin sinh viên:', error);
-		}
+		// try {
+		// 	const familyMembers =
+		// 		recSinhVien?.thanhVienGiaDinh?.filter(
+		// 			(m: KyTucXa.IThanhVienGiaDinh) => m.ten || m.hoDem || m.soDienThoai || m.loaiThanhVien,
+		// 		) || [];
+		// 	form.setFieldsValue({
+		// 		emergencyContacts:
+		// 			familyMembers.length > 0
+		// 				? familyMembers.map((member: KyTucXa.IThanhVienGiaDinh, index: number) => ({
+		// 						id: Date.now().toString() + index,
+		// 						emergencyContactName: `${member.hoDem || ''} ${member.ten || ''}`.trim() || '',
+		// 						emergencyContactNumber: member.soDienThoai || '',
+		// 						emergencyRelationship: member.loaiThanhVien || '',
+		// 						secondaryContactNumber: member.soDienThoai || '',
+		// 						emergencyEmail: member.email || '',
+		// 						address: member.diaChiHienNay?.diaChi || member.hoKhauThuongTru?.diaChi || '',
+		// 					}))
+		// 				: [],
+		// 	});
+		// } catch (error) {
+		// 	console.error('Lỗi khi tải lại thông tin sinh viên:', error);
+		// }
 	};
 
 	const handlePrevious = () => {
@@ -151,11 +165,11 @@ const FormDangKyKTX = () => {
 				return;
 			}
 
-			const { confirmTerms, ...rest } = values as { confirmTerms: boolean } & KyTucXa.IFormDangKy & { signatureBase64?: string };
+			const { confirmTerms, ...rest } = values as { confirmTerms: boolean } & KyTucXa.IFormDangKy & {
+					signatureBase64?: string;
+				};
 
-			const dateOfBirthISO = rest.dateOfBirth
-				? dayjs(rest.dateOfBirth, 'DD/MM/YYYY').toISOString()
-				: '';
+			const dateOfBirthISO = rest.dateOfBirth ? dayjs(rest.dateOfBirth, 'DD/MM/YYYY').toISOString() : '';
 
 			// 1. Upload files
 			const identityCardFrontUrl = await buildUpLoadFile(values, 'identityCardFrontUrl').catch(console.log);
@@ -218,7 +232,12 @@ const FormDangKyKTX = () => {
 				},
 			};
 
-			await postModel(payload, getLichSu, undefined, intl.formatMessage({ id: 'kytucxa.dangky.form.msg.registerSuccess' }));
+			await postModel(
+				payload,
+				getLichSu,
+				undefined,
+				intl.formatMessage({ id: 'kytucxa.dangky.form.msg.registerSuccess' }),
+			);
 			setVisibleForm(false);
 			setVisibleSuccess(true);
 		} catch (error: any) {
@@ -240,50 +259,63 @@ const FormDangKyKTX = () => {
 				className='ktx-register-modal'
 				title={intl.formatMessage({ id: 'kytucxa.dangky.form.title' })}
 			>
-				<div className="ktx-modal__content">
+				<div className='ktx-modal__content'>
 					<Steps
 						current={currentStep}
 						className={`ktx-register-steps ${currentStep === 1 ? 'step2-active' : ''}`}
-						size="small"
+						size='small'
 						items={[
 							{
 								title: intl.formatMessage({ id: 'kytucxa.dangky.form.step.generalInfo' }),
-								status: 'finish'
+								status: 'finish',
 							},
 							{
 								title: intl.formatMessage({ id: 'kytucxa.dangky.form.step.waiver' }),
-								status: currentStep === 1 ? 'finish' : 'wait'
+								status: currentStep === 1 ? 'finish' : 'wait',
 							},
 						]}
 					/>
 
-					<Form form={form} layout="vertical" preserve={true} className="ktx-register-form">
+					<Form form={form} layout='vertical' preserve={true} className='ktx-register-form'>
 						<div style={{ display: currentStep === 0 ? 'block' : 'none' }}>
-							<FormStep1Content 
-								showCheckbox={true} 
-								disabled={false} 
-								onReload={handleReloadEmergencyContacts} 
+							<FormStep1Content
+								showCheckbox={true}
+								disabled={false}
+								onReload={handleReloadEmergencyContacts}
 								policyText={policyText}
 							/>
 						</div>
-
 
 						<div style={{ display: currentStep === 1 ? 'block' : 'none' }}>
 							<FormStep2Content showCheckbox={true} policyText={policyText} />
 						</div>
 					</Form>
 
-					<div className="ktx-modal__footer ktx-register-footer">
+					<div className='ktx-modal__footer ktx-register-footer'>
 						{currentStep === 0 && (
 							<>
-								<Button size="large" onClick={() => setVisibleForm(false)} className="ktx-register-btn-outline">{intl.formatMessage({ id: 'kytucxa.dangky.form.close' })}</Button>
-								<Button type="primary" size="large" onClick={handleNext} className="ktx-register-btn-primary">{intl.formatMessage({ id: 'kytucxa.dangky.form.next' })}</Button>
+								<Button size='large' onClick={() => setVisibleForm(false)} className='ktx-register-btn-outline'>
+									{intl.formatMessage({ id: 'kytucxa.dangky.form.close' })}
+								</Button>
+								<Button type='primary' size='large' onClick={handleNext} className='ktx-register-btn-primary'>
+									{intl.formatMessage({ id: 'kytucxa.dangky.form.next' })}
+								</Button>
 							</>
 						)}
 						{currentStep === 1 && (
 							<>
-								<Button size="large" onClick={handlePrevious} className="ktx-register-btn-outline">{intl.formatMessage({ id: 'kytucxa.dangky.form.previous' })}</Button>
-								<Button type="primary" size="large" onClick={handleSubmit} loading={formSubmiting} className="ktx-register-btn-primary">{intl.formatMessage({ id: 'kytucxa.dangky.form.submit' })}</Button>
+								<Button size='large' onClick={handlePrevious} className='ktx-register-btn-outline'>
+									{intl.formatMessage({ id: 'kytucxa.dangky.form.previous' })}
+								</Button>
+								<Button
+									type='primary'
+									size='large'
+									onClick={handleSubmit}
+									loading={formSubmiting}
+									className='ktx-register-btn-primary'
+								>
+									{intl.formatMessage({ id: 'kytucxa.dangky.form.submit' })}
+								</Button>
 							</>
 						)}
 					</div>

@@ -1,33 +1,46 @@
+import PageCard from '@/components/PageCard';
+import UploadFile from '@/components/Upload/UploadFile';
+import { ETrangThaiHangCho, ETrangThaiMinhChung, ETrangThaiThanhToan } from '@/services/KyTucXa/constant';
 import { KyTucXa } from '@/services/KyTucXa/typings';
+import { buildUpLoadFile } from '@/services/uploadFile';
+import axios from '@/utils/axios';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
-import { ReloadOutlined, InfoCircleOutlined, FileDoneOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Empty, Row, Skeleton, Typography, Modal, message, Tag, Form, Spin } from 'antd';
+import { ipCsvc } from '@/utils/ip';
+import { FileDoneOutlined, InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Empty, Form, message, Modal, Row, Skeleton, Spin, Tag, Typography } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import RoomCard from './components/CardRoom';
 import FormDangKy from './components/Form/Form';
+import { FilterIconCustom } from './components/IconsRoom';
 import RoomDetailModal from './components/Modal/ModalDetailRoom';
 import SelectToaNhaKTX from './components/Select/SelectBuilding';
-import SelectFloorKTX from './components/Select/SelectFloor';
-import './style.less';
-import { FilterIconCustom } from './components/IconsRoom';
-import { ETrangThaiThanhToan, ETrangThaiHangCho, ETrangThaiMinhChung } from '@/services/KyTucXa/constant';
 import SelectCapacityKTX from './components/Select/SelectCapacity';
+import SelectFloorKTX from './components/Select/SelectFloor';
 import SelectRoomTypeKTX from './components/Select/SelectRoomType';
-import PageCard from '@/components/PageCard';
-import axios from '@/utils/axios';
-import { ipCsvc } from '@/utils/ip';
-import UploadFile from '@/components/Upload/UploadFile';
-import { buildUpLoadFile } from '@/services/uploadFile';
+import './style.less';
 
 const DangKyKyTucXaPage = () => {
 	const intl = useIntl();
 	const { danhSach: danhSachToa } = useModel('kytucxa.toanha');
-	const { danhSach: danhSachDotDangKy, getModel: getDotDangKy, loading: loadingDotDangKy, setRecord: setDotDangKyRecord, record: recordDot } = useModel('kytucxa.dotdangky');
+	const {
+		danhSach: danhSachDotDangKy,
+		getModel: getDotDangKy,
+		loading: loadingDotDangKy,
+		setRecord: setDotDangKyRecord,
+		record: recordDot,
+	} = useModel('kytucxa.dotdangky');
 	const { danhSach: danhSachMien, getModel: getDanhSachMien, nopMinhChung } = useModel('kytucxa.danhsachmien');
-	const { record: thongTinSinhVien } = useModel('kytucxa.thongtinsinhvien');
-	const { danhSach: danhSachPhong, getModel: getPhongModel, loading: loadingPhong, setRecord: setPhongRecord, setVisibleForm, setIsView } = useModel('kytucxa.phong');
+	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
+	const {
+		danhSach: danhSachPhong,
+		getModel: getPhongModel,
+		loading: loadingPhong,
+		setRecord: setPhongRecord,
+		setVisibleForm,
+		setIsView,
+	} = useModel('kytucxa.phong');
 	const { danhSach: danhSachLichSu, getModel: getLichSu } = useModel('kytucxa.dangky');
 	const { getAllModel: getAllDanhTienIch } = useModel('kytucxa.tienich');
 	const { loaiPhongMap } = useModel('kytucxa.loaiphong');
@@ -43,9 +56,7 @@ const DangKyKyTucXaPage = () => {
 	const [submittingExempt, setSubmittingExempt] = useState(false);
 
 	const activeRegistration = useMemo(() => {
-		return danhSachLichSu.find(
-			(item) => item.trangThaiThanhToan !== ETrangThaiThanhToan.HUY,
-		);
+		return danhSachLichSu.find((item) => item.trangThaiThanhToan !== ETrangThaiThanhToan.HUY);
 	}, [danhSachLichSu]);
 
 	const fetchHangCho = async () => {
@@ -94,10 +105,7 @@ const DangKyKyTucXaPage = () => {
 		setSelectedFloor(floor);
 	};
 
-	const listToa = useMemo(
-		() => (Array.isArray(danhSachToa) ? (danhSachToa as KyTucXa.IToa[]) : []),
-		[danhSachToa],
-	);
+	const listToa = useMemo(() => (Array.isArray(danhSachToa) ? (danhSachToa as KyTucXa.IToa[]) : []), [danhSachToa]);
 
 	const listPhong = useMemo(
 		() => (Array.isArray(danhSachPhong) ? (danhSachPhong as KyTucXa.IPhong[]) : []),
@@ -119,9 +127,9 @@ const DangKyKyTucXaPage = () => {
 	const danhSachMaPhongHienTai = useMemo(() => {
 		if (cacDotDangKyHienTai.length === 0) return [];
 		const maPhongs = new Set<string>();
-		cacDotDangKyHienTai.forEach(dot => {
+		cacDotDangKyHienTai.forEach((dot) => {
 			if (dot.danhSachPhong) {
-				dot.danhSachPhong.forEach(ma => maPhongs.add(ma));
+				dot.danhSachPhong.forEach((ma) => maPhongs.add(ma));
 			}
 		});
 		return Array.from(maPhongs);
@@ -175,59 +183,67 @@ const DangKyKyTucXaPage = () => {
 		setIsView(true);
 	}, []);
 
-	const handleDangKy = useCallback((phong: KyTucXa.IPhong) => {
-		if (cacDotDangKyHienTai.length === 0) return;
+	const handleDangKy = useCallback(
+		(phong: KyTucXa.IPhong) => {
+			if (cacDotDangKyHienTai.length === 0) return;
 
-		const dotChuaPhong = cacDotDangKyHienTai.find(dot => {
-			if (dot.danhSachPhong && dot.danhSachPhong.length > 0) {
-				return dot.danhSachPhong.includes(phong.ma);
-			}
-			if (dot.danhSachToaNha && dot.danhSachToaNha.length > 0) {
-				return dot.danhSachToaNha.includes(phong.maToaNha);
-			}
-			return true;
-		}) || cacDotDangKyHienTai[0];
+			const dotChuaPhong =
+				cacDotDangKyHienTai.find((dot) => {
+					if (dot.danhSachPhong && dot.danhSachPhong.length > 0) {
+						return dot.danhSachPhong.includes(phong.ma);
+					}
+					if (dot.danhSachToaNha && dot.danhSachToaNha.length > 0) {
+						return dot.danhSachToaNha.includes(phong.maToaNha);
+					}
+					return true;
+				}) || cacDotDangKyHienTai[0];
 
-		setDotDangKyRecord(dotChuaPhong);
-		setPhongRecord(phong);
-		setIsView(false);
-		setVisibleForm(true);
-	}, [cacDotDangKyHienTai]);
+			setDotDangKyRecord(dotChuaPhong);
+			setPhongRecord(phong);
+			setIsView(false);
+			setVisibleForm(true);
+		},
+		[cacDotDangKyHienTai],
+	);
 
-	const handleDangKyHangCho = useCallback(async (phong: KyTucXa.IPhong) => {
-		if (cacDotDangKyHienTai.length === 0) return;
+	const handleDangKyHangCho = useCallback(
+		async (phong: KyTucXa.IPhong) => {
+			if (cacDotDangKyHienTai.length === 0) return;
 
-		const dotChuaPhong = cacDotDangKyHienTai.find(dot => {
-			if (dot.danhSachPhong && dot.danhSachPhong.length > 0) {
-				return dot.danhSachPhong.includes(phong.ma);
-			}
-			if (dot.danhSachToaNha && dot.danhSachToaNha.length > 0) {
-				return dot.danhSachToaNha.includes(phong.maToaNha);
-			}
-			return true;
-		}) || cacDotDangKyHienTai[0];
+			const dotChuaPhong =
+				cacDotDangKyHienTai.find((dot) => {
+					if (dot.danhSachPhong && dot.danhSachPhong.length > 0) {
+						return dot.danhSachPhong.includes(phong.ma);
+					}
+					if (dot.danhSachToaNha && dot.danhSachToaNha.length > 0) {
+						return dot.danhSachToaNha.includes(phong.maToaNha);
+					}
+					return true;
+				}) || cacDotDangKyHienTai[0];
 
-		Modal.confirm({
-			title: 'Xác nhận đăng ký hàng chờ',
-			content: `Bạn có chắc chắn muốn đăng ký vào hàng chờ cho phòng thuộc tòa ${phong.toaNha?.ten || phong.maToaNha} không?`,
-			okText: 'Đăng ký',
-			cancelText: 'Hủy',
-			onOk: async () => {
-				try {
-					await axios.post(`${ipCsvc}/dang-ky-ky-tuc-xa/waiting-request`, {
-						maDotId: dotChuaPhong._id,
-						maToaNha: phong.maToaNha,
-						maLoaiPhong: phong.maLoaiPhongKtx,
-					});
-					message.success('Đăng ký hàng chờ thành công');
-					fetchHangCho();
-				} catch (err: any) {
-					console.error(err);
-					message.error(err?.response?.data?.message || 'Không thể đăng ký hàng chờ, vui lòng thử lại');
-				}
-			}
-		});
-	}, [cacDotDangKyHienTai]);
+			Modal.confirm({
+				title: 'Xác nhận đăng ký hàng chờ',
+				content: `Bạn có chắc chắn muốn đăng ký vào hàng chờ cho phòng thuộc tòa ${phong.toaNha?.ten || phong.maToaNha} không?`,
+				okText: 'Đăng ký',
+				cancelText: 'Hủy',
+				onOk: async () => {
+					try {
+						await axios.post(`${ipCsvc}/dang-ky-ky-tuc-xa/waiting-request`, {
+							maDotId: dotChuaPhong._id,
+							maToaNha: phong.maToaNha,
+							maLoaiPhong: phong.maLoaiPhongKtx,
+						});
+						message.success('Đăng ký hàng chờ thành công');
+						fetchHangCho();
+					} catch (err: any) {
+						console.error(err);
+						message.error(err?.response?.data?.message || 'Không thể đăng ký hàng chờ, vui lòng thử lại');
+					}
+				},
+			});
+		},
+		[cacDotDangKyHienTai],
+	);
 
 	const handleCancelHangCho = async () => {
 		if (!hangCho?._id) return;
@@ -243,38 +259,39 @@ const DangKyKyTucXaPage = () => {
 					console.error('Lỗi khi hủy hàng chờ:', err);
 					message.error('Không thể hủy hàng chờ, vui lòng thử lại sau');
 				}
-			}
+			},
 		});
 	};
 
 	const isExempted = useMemo(() => {
-		if (!danhSachMien || danhSachMien.length === 0 || cacDotDangKyHienTai.length === 0 || !thongTinSinhVien?.ma) return false;
+		if (!danhSachMien || danhSachMien.length === 0 || cacDotDangKyHienTai.length === 0 || !recSinhVien?.ma)
+			return false;
 
 		const maHocKy = cacDotDangKyHienTai.map((dot) => dot.maHocKy);
 		return danhSachMien.some(
-			(item: KyTucXa.IDanhSachMien) => item.maSinhVien === thongTinSinhVien.ma && maHocKy.includes(item.maHocKy)
+			(item: KyTucXa.IDanhSachMien) => item.maSinhVien === recSinhVien.ma && maHocKy.includes(item.maHocKy),
 		);
-	}, [danhSachMien, cacDotDangKyHienTai, thongTinSinhVien?.ma]);
+	}, [danhSachMien, cacDotDangKyHienTai, recSinhVien?.ma]);
 
 	const activeExemption = useMemo(() => {
-		if (!danhSachMien || danhSachMien.length === 0 || cacDotDangKyHienTai.length === 0 || !thongTinSinhVien?.ma) return null;
+		if (!danhSachMien || danhSachMien.length === 0 || cacDotDangKyHienTai.length === 0 || !recSinhVien?.ma) return null;
 
 		const maHocKy = cacDotDangKyHienTai.map((dot) => dot.maHocKy);
 		return danhSachMien.find(
-			(item: KyTucXa.IDanhSachMien) => item.maSinhVien === thongTinSinhVien.ma && maHocKy.includes(item.maHocKy)
+			(item: KyTucXa.IDanhSachMien) => item.maSinhVien === recSinhVien.ma && maHocKy.includes(item.maHocKy),
 		);
-	}, [danhSachMien, cacDotDangKyHienTai, thongTinSinhVien?.ma]);
+	}, [danhSachMien, cacDotDangKyHienTai, recSinhVien?.ma]);
 
 	const getExemptionStatusTag = (status: ETrangThaiMinhChung) => {
 		switch (status) {
 			case ETrangThaiMinhChung.CHO_NOP_MINH_CHUNG:
-				return <Tag color="warning">Chờ nộp minh chứng</Tag>;
+				return <Tag color='warning'>Chờ nộp minh chứng</Tag>;
 			case ETrangThaiMinhChung.CHO_DUYET:
-				return <Tag color="processing">Chờ duyệt</Tag>;
+				return <Tag color='processing'>Chờ duyệt</Tag>;
 			case ETrangThaiMinhChung.DA_DUYET:
-				return <Tag color="success">Đã duyệt</Tag>;
+				return <Tag color='success'>Đã duyệt</Tag>;
 			case ETrangThaiMinhChung.TU_CHOI:
-				return <Tag color="error">Từ chối (Cần nộp lại)</Tag>;
+				return <Tag color='error'>Từ chối (Cần nộp lại)</Tag>;
 			default:
 				return <Tag>{status}</Tag>;
 		}
@@ -316,35 +333,51 @@ const DangKyKyTucXaPage = () => {
 	}, [hangCho?.maLoaiPhong, loaiPhongMap]);
 
 	return (
-		<PageCard
-			title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}
-		>
+		<PageCard title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}>
 			{hangCho && (
 				<Spin spinning={loadingHangCho}>
-					<Card title="Yêu cầu hàng chờ phòng" style={{ marginBottom: 16, borderRadius: 12 }} extra={
-						hangCho.trangThai === ETrangThaiHangCho.CHO_XU_LY && (
-							<Button type="primary" danger onClick={handleCancelHangCho}>
-								Hủy yêu cầu hàng chờ
-							</Button>
-						)
-					}>
+					<Card
+						title='Yêu cầu hàng chờ phòng'
+						style={{ marginBottom: 16, borderRadius: 12 }}
+						extra={
+							hangCho.trangThai === ETrangThaiHangCho.CHO_XU_LY && (
+								<Button type='primary' danger onClick={handleCancelHangCho}>
+									Hủy yêu cầu hàng chờ
+								</Button>
+							)
+						}
+					>
 						<Row gutter={[16, 16]}>
 							<Col xs={24} sm={6}>
-								<Typography.Text type="secondary">Tòa nhà: </Typography.Text>
+								<Typography.Text type='secondary'>Tòa nhà: </Typography.Text>
 								<Typography.Text strong>{toaNhaName}</Typography.Text>
 							</Col>
 							<Col xs={24} sm={6}>
-								<Typography.Text type="secondary">Loại phòng: </Typography.Text>
+								<Typography.Text type='secondary'>Loại phòng: </Typography.Text>
 								<Typography.Text strong>{loaiPhongName}</Typography.Text>
 							</Col>
 							<Col xs={24} sm={6}>
-								<Typography.Text type="secondary">Số thứ tự xếp hàng: </Typography.Text>
-								<Typography.Text strong style={{ fontSize: 16, color: '#1890ff' }}>{hangCho.soThuTu}</Typography.Text>
+								<Typography.Text type='secondary'>Số thứ tự xếp hàng: </Typography.Text>
+								<Typography.Text strong style={{ fontSize: 16, color: '#1890ff' }}>
+									{hangCho.soThuTu}
+								</Typography.Text>
 							</Col>
 							<Col xs={24} sm={6}>
-								<Typography.Text type="secondary">Trạng thái: </Typography.Text>
-								<Tag color={hangCho.trangThai === ETrangThaiHangCho.CHO_XU_LY ? 'processing' : hangCho.trangThai === ETrangThaiHangCho.DA_XU_LY ? 'success' : 'default'}>
-									{hangCho.trangThai === ETrangThaiHangCho.CHO_XU_LY ? 'Chờ xử lý' : hangCho.trangThai === ETrangThaiHangCho.DA_XU_LY ? 'Đã xử lý' : 'Đã hủy'}
+								<Typography.Text type='secondary'>Trạng thái: </Typography.Text>
+								<Tag
+									color={
+										hangCho.trangThai === ETrangThaiHangCho.CHO_XU_LY
+											? 'processing'
+											: hangCho.trangThai === ETrangThaiHangCho.DA_XU_LY
+												? 'success'
+												: 'default'
+									}
+								>
+									{hangCho.trangThai === ETrangThaiHangCho.CHO_XU_LY
+										? 'Chờ xử lý'
+										: hangCho.trangThai === ETrangThaiHangCho.DA_XU_LY
+											? 'Đã xử lý'
+											: 'Đã hủy'}
 								</Tag>
 							</Col>
 						</Row>
@@ -383,7 +416,13 @@ const DangKyKyTucXaPage = () => {
 										</Col>
 
 										<Col flex='220px'>
-											<SelectFloorKTX value={selectedFloor} onChange={handleChangeFloor} allowClear={true} condition={{ maDotId: recordDot?._id }} disableFetch={true} />
+											<SelectFloorKTX
+												value={selectedFloor}
+												onChange={handleChangeFloor}
+												allowClear={true}
+												condition={{ maDotId: recordDot?._id }}
+												disableFetch={true}
+											/>
 										</Col>
 
 										<Col flex='220px'>
@@ -391,7 +430,13 @@ const DangKyKyTucXaPage = () => {
 										</Col>
 
 										<Col flex='220px'>
-											<SelectCapacityKTX value={selectedCapacity} onChange={handleChangeCapacity} allowClear={true} condition={{ maDotId: recordDot?._id }} disableFetch={true} />
+											<SelectCapacityKTX
+												value={selectedCapacity}
+												onChange={handleChangeCapacity}
+												allowClear={true}
+												condition={{ maDotId: recordDot?._id }}
+												disableFetch={true}
+											/>
 										</Col>
 
 										<Col flex='none'>
@@ -400,8 +445,11 @@ const DangKyKyTucXaPage = () => {
 									</Row>
 								</div>
 
-								{cacDotDangKyHienTai.map(dot => (
-									<div key={dot._id} style={{ padding: '16px 20px', borderBottom: '1px solid #e8edf5', background: '#fafcff' }}>
+								{cacDotDangKyHienTai.map((dot) => (
+									<div
+										key={dot._id}
+										style={{ padding: '16px 20px', borderBottom: '1px solid #e8edf5', background: '#fafcff' }}
+									>
 										<Typography.Title level={5} style={{ marginBottom: 4, color: '#1d3a6b' }}>
 											{dot.tenDot}
 										</Typography.Title>
@@ -419,11 +467,14 @@ const DangKyKyTucXaPage = () => {
 										>
 											<InfoCircleOutlined style={{ color: '#1d3a6b', marginTop: 3, fontSize: '15px' }} />
 											<Typography.Text style={{ fontSize: '14px', color: '#2E2E2E' }}>
-												{intl.formatMessage({ id: 'kytucxa.dangky.registerTime' })} <strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianBatDau)}</strong> {intl.formatMessage({ id: 'kytucxa.dangky.to' })}{' '}
+												{intl.formatMessage({ id: 'kytucxa.dangky.registerTime' })}{' '}
+												<strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianBatDau)}</strong>{' '}
+												{intl.formatMessage({ id: 'kytucxa.dangky.to' })}{' '}
 												<strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianKetThuc)}</strong>.
 												{activeRegistration && (
 													<>
-														{' '}{intl.formatMessage({ id: 'kytucxa.dangky.paymentBefore' })}{' '}
+														{' '}
+														{intl.formatMessage({ id: 'kytucxa.dangky.paymentBefore' })}{' '}
 														<strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianKetThuc)}</strong>.
 													</>
 												)}
@@ -442,34 +493,47 @@ const DangKyKyTucXaPage = () => {
 										{intl.formatMessage({ id: 'kytucxa.dangky.exemptedMsg' })}
 									</Typography.Title>
 								</div>
-								
+
 								{activeExemption && (
-									<Card title="Chi tiết miễn giảm Ký túc xá" style={{ maxWidth: 600, margin: '0 auto', borderRadius: 8 }}>
+									<Card
+										title='Chi tiết miễn giảm Ký túc xá'
+										style={{ maxWidth: 600, margin: '0 auto', borderRadius: 8 }}
+									>
 										<div style={{ marginBottom: 16 }}>
-											<Typography.Text type="secondary">Học kỳ: </Typography.Text>
+											<Typography.Text type='secondary'>Học kỳ: </Typography.Text>
 											<Typography.Text strong>{activeExemption.maHocKy}</Typography.Text>
 										</div>
 										<div style={{ marginBottom: 16 }}>
-											<Typography.Text type="secondary">Trạng thái minh chứng: </Typography.Text>
+											<Typography.Text type='secondary'>Trạng thái minh chứng: </Typography.Text>
 											{getExemptionStatusTag(activeExemption.trangThaiMinhChung)}
 										</div>
 										{activeExemption.ghiChuDuyet && (
 											<div style={{ marginBottom: 16, padding: 8, background: '#f5f5f5', borderRadius: 4 }}>
-												<Typography.Text type="secondary">Ghi chú duyệt: </Typography.Text>
+												<Typography.Text type='secondary'>Ghi chú duyệt: </Typography.Text>
 												<Typography.Text>{activeExemption.ghiChuDuyet}</Typography.Text>
 											</div>
 										)}
-										
-										{(activeExemption.trangThaiMinhChung === ETrangThaiMinhChung.CHO_NOP_MINH_CHUNG || activeExemption.trangThaiMinhChung === ETrangThaiMinhChung.TU_CHOI) && (
-											<Form form={formExempt} layout="vertical" style={{ marginTop: 24, borderTop: '1px solid #f0f0f0', paddingTop: 16 }}>
+
+										{(activeExemption.trangThaiMinhChung === ETrangThaiMinhChung.CHO_NOP_MINH_CHUNG ||
+											activeExemption.trangThaiMinhChung === ETrangThaiMinhChung.TU_CHOI) && (
+											<Form
+												form={formExempt}
+												layout='vertical'
+												style={{ marginTop: 24, borderTop: '1px solid #f0f0f0', paddingTop: 16 }}
+											>
 												<Form.Item
-													name="urlMinhChung"
-													label="Tải lên minh chứng miễn giảm (PDF, PNG, JPG, JPEG, tối đa 5MB)"
+													name='urlMinhChung'
+													label='Tải lên minh chứng miễn giảm (PDF, PNG, JPG, JPEG, tối đa 5MB)'
 													rules={[{ required: true, message: 'Vui lòng chọn file minh chứng' }]}
 												>
-													<UploadFile maxCount={1} accept=".pdf,.png,.jpg,.jpeg" maxFileSize={5} />
+													<UploadFile maxCount={1} accept='.pdf,.png,.jpg,.jpeg' maxFileSize={5} />
 												</Form.Item>
-												<Button type="primary" loading={submittingExempt} onClick={handleNopMinhChung} style={{ width: '100%' }}>
+												<Button
+													type='primary'
+													loading={submittingExempt}
+													onClick={handleNopMinhChung}
+													style={{ width: '100%' }}
+												>
 													Nộp minh chứng
 												</Button>
 											</Form>
@@ -499,12 +563,12 @@ const DangKyKyTucXaPage = () => {
 									<Row gutter={[12, 12]}>
 										{filteredPhong.map((phong) => (
 											<Col key={phong._id} xs={24} sm={12} md={8}>
-												<RoomCard 
-													phong={phong} 
-													onXemChiTiet={handleXemChiTiet} 
-													onDangKy={handleDangKy} 
+												<RoomCard
+													phong={phong}
+													onXemChiTiet={handleXemChiTiet}
+													onDangKy={handleDangKy}
 													onDangKyHangCho={handleDangKyHangCho}
-													maPhongDaDangKy={maPhongDaDangKy} 
+													maPhongDaDangKy={maPhongDaDangKy}
 												/>
 											</Col>
 										))}
@@ -524,7 +588,7 @@ const DangKyKyTucXaPage = () => {
 
 					<FormDangKy />
 				</>
-			)} 
+			)}
 		</PageCard>
 	);
 };
