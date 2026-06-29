@@ -51,6 +51,9 @@ const CardHocPhan = (props: {
 							{label}
 						</span>
 					)} */}
+					{hocPhan?.ma && (
+						<div className={`card-course-code ${isNotStudied ? 'not-studied' : 'default'}`}>{hocPhan.ma}</div>
+					)}
 					<h4 className={`card-title ${isNotStudied ? 'not-studied' : 'default'}`} title={hocPhan?.ten}>
 						{hocPhan?.ten}
 					</h4>
