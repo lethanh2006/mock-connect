@@ -19,6 +19,7 @@ const ThongTinChungPage = (props: { khoiChuongTrinh?: any }) => {
 		? thongTinCtdt[0]
 		: (khoiChuongTrinh ?? {});
 	const soTinChi = record?.hocPhan?.soTinChi ?? recLopHocPhan?.hocPhan?.soTinChi ?? chiTietHocPhan?.soTinChi;
+	const tenKhoiTuChon = thongTinCtdtHienThi.tenKhoi ?? thongTinCtdtHienThi.ten;
 
 	const renderHocPhanCt = (dsHocPhan?: ChuongTrinhDaoTao.THocPhanTuongQuan[] | null, label?: string) => {
 		const danhSachHienThi = Array.isArray(dsHocPhan) && dsHocPhan[0]?.ten ? dsHocPhan : [];
@@ -83,12 +84,11 @@ const ThongTinChungPage = (props: { khoiChuongTrinh?: any }) => {
 							'--'}
 					</span>
 				</Descriptions.Item>
-				{thongTinCtdtHienThi.ten ||
-					(thongTinCtdtHienThi.tenKhoi && (
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tuchon' })} span={3}>
-							{thongTinCtdtHienThi.tenKhoi ?? thongTinCtdtHienThi.ten ?? '--'}
-						</Descriptions.Item>
-					))}
+				{tenKhoiTuChon ? (
+					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tuchon' })} span={3}>
+						{tenKhoiTuChon}
+					</Descriptions.Item>
+				) : null}
 				{renderHocPhanCt(
 					thongTinCtdtHienThi.dsHocPhanTienQuyet,
 					intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tienquyet' }),

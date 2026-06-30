@@ -192,10 +192,11 @@ const TienTrinhChuongTrinhKhung = () => {
 				group.find((it) => it.khoiKienThuc?.khoiCha?.ten)?.khoiKienThuc?.khoiCha?.ten ||
 				group[0].khoiKienThuc?.ten;
 
-			const khoiHocPhan = sortBySemester(group.filter((item) => !item.maChuyenNganh));
+			const uniqchuyenNganh = _.uniq(group.filter((item) => !!item.maChuyenNganh).map((item) => item.maChuyenNganh));
+			const khoiHocPhan = sortBySemester(group.filter((item) => !item.maChuyenNganh || uniqchuyenNganh.length < 2));
 			const chuyenNganhList = Object.values(
 				_.groupBy(
-					group.filter((item) => !!item.maChuyenNganh),
+					group.filter((item) => !!item.maChuyenNganh && uniqchuyenNganh.length >= 2),
 					(item) => item.maChuyenNganh,
 				),
 			).map((item) => ({
