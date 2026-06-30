@@ -166,4 +166,20 @@ declare module HoaDon {
 		unitLabel?: string;
 		unitAmount?: number;
 	}
+
+	export interface IThongTinHoaDon {
+		_id: string;
+		userSsoId: string;
+		userFullName: string;
+		userCode: string;
+		tenToChuc: string;
+		maSoThue: string;
+		diaChi: string;
+		emailNhanHoaDonDienTu: string;
+		userSoDienThoai: string;
+		userMaKhoa: string;
+		userTenKhoa: string;
+		userMaNganh: string;
+		userTenNganh: string;
+	}
 }

@@ -43,10 +43,12 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ userFullname, userCode, visib
 				<Col xs={24}>
 					<Form.Item
 						name='diaChi'
-						label={<span className='payment-detail__invoice-form-label'>Địa chỉ tổ chức</span>}
+						label={
+							<span className='payment-detail__invoice-form-label'>Địa chỉ của công ty, tổ chức, doanh nghiệp</span>
+						}
 						rules={[...rules.required]}
 					>
-						<Input placeholder='Nhập địa chỉ' />
+						<Input placeholder='Nhập địa chỉ của công ty, tổ chức, doanh nghiệp' />
 					</Form.Item>
 				</Col>
 				<Col xs={24} md={12}>

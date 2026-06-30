@@ -1,10 +1,11 @@
 ﻿import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
+import { getThongTinHoaDonMe } from '@/services/TaiChinh/HoaDon';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { postTransactionMePayment } from '@/services/TaiChinh/KenhThanhToan';
 import { inputFormat } from '@/utils/utils';
 import { Button, Checkbox, Descriptions, Form, InputNumber, message } from 'antd';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import InvoiceForm from './InvoiceForm';
 import './style.less';
@@ -32,6 +33,27 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
 	const [loadingOnePay, setLoadingOnePay] = useState(false);
+
+	useEffect(() => {
+		const fetchThongTinHoaDon = async () => {
+			try {
+				const res = await getThongTinHoaDonMe();
+				if (res?.data?.data) {
+					const data = res.data.data;
+					invoiceForm.setFieldsValue({
+						tenToChuc: data.tenToChuc,
+						maSoThue: data.maSoThue,
+						diaChi: data.diaChi,
+						emailNhanHoaDonDienTu: data.emailNhanHoaDonDienTu,
+						userSoDienThoai: data.userSoDienThoai,
+					});
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		fetchThongTinHoaDon();
+	}, [invoiceCode]);
 	const [soTienMuonThanhToan, setSoTienMuonThanhToan] = useState<number | null>(bill?.soTienConLai ?? null);
 	const [guiThongTinHoaDon, setGuiThongTinHoaDon] = useState(false);
 	const [invoiceForm] = Form.useForm<ThongTinHoaDon>();
@@ -237,7 +259,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 
 			<div className='payment-detail__invoice-toggle'>
 				<Checkbox checked={guiThongTinHoaDon} onChange={(event) => setGuiThongTinHoaDon(event.target.checked)}>
-					Xuất hóa đơn
+					Thông tin hóa đơn
 				</Checkbox>
 			</div>
 
