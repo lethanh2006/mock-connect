@@ -8,6 +8,7 @@ import React from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useModel } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
+import '../ModuleSwitch/style.less';
 import styles from './index.less';
 
 export type NoticeIconProps = {
