@@ -16,10 +16,19 @@ const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord; showAll?: boolea
 	if (!maHoaLichHoc?.length)
 		return <i style={{ color: '#999' }}>{intl.formatMessage({ id: 'dangkytinchi.renderlichhoc.khongcothongtin' })}</i>;
 
-	const getThuLabel = (thu: number) =>
-		intl.formatMessage({ id: thu < 7 ? `dangkytinchi.thu.${thu + 1}` : 'dangkytinchi.thu.cn' });
+	const getThuLabel = (thu: number) => {
+		if (thu === 0 || thu === 7) {
+			return intl.formatMessage({ id: 'dangkytinchi.thu.cn' });
+		}
+		return intl.formatMessage({ id: `dangkytinchi.thu.${thu + 1}` });
+	};
 
-	const maHoaLichs = maHoaLichHoc?.sort((a, b) => a.thu - b.thu);
+	const getSortValue = (thu: number) => {
+		if (thu === 0 || thu === 7) return 7;
+		return thu;
+	};
+
+	const maHoaLichs = maHoaLichHoc?.sort((a, b) => getSortValue(a.thu) - getSortValue(b.thu));
 	const content = maHoaLichs?.map((item, index) => {
 		const thu = getThuLabel(item.thu);
 		const tietKetThuc = item.tietBatDau + item.soTiet - 1;
