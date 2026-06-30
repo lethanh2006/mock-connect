@@ -13,7 +13,7 @@ const NotFoundContent = () => {
 			subTitle={intl.formatMessage({ id: 'pages.exception.404.subtitle' })}
 			extra={
 				<Button type='primary' onClick={() => history.push('/')} icon={<HomeOutlined />}>
-					{intl.formatMessage({ id: 'pages.exception.404.backhome' })}
+					{intl.formatMessage({ id: 'pages.exception.backhome' })}
 				</Button>
 			}
 		/>
