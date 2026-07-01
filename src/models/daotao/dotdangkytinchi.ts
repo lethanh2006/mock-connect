@@ -158,8 +158,18 @@ export default () => {
 
 			const result = [...lopDangKy, ...lopWaitList];
 
-			setDanhSachLopDangKy(result);
-			tinhDataLichHoc(result);
+			setDanhSachLopDangKy((prev) => {
+				const maHocPhanDaDangKy = new Set(result.map((item) => item.maHocPhan).filter(Boolean));
+				const lopChuaDangKy = prev.filter(
+					(item) =>
+						item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY &&
+						item.maHocPhan &&
+						!maHocPhanDaDangKy.has(item.maHocPhan),
+				);
+				const merged = [...lopChuaDangKy, ...result];
+				tinhDataLichHoc(merged);
+				return merged;
+			});
 
 			return result;
 		} catch (er) {

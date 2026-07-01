@@ -265,7 +265,7 @@ export default {
 	'dangkytinchi.duongdan.theochuongtrinhdaotao': 'By Curriculum',
 	'dangkytinchi.duongdan.theochuongtrinhdaotao.mota':
 		'Displays the courses belonging to the standard training program that have available classes',
-	'dangkytinchi.duongdan.theochuongtrinhnganh2': 'By Double Major Curriculum',
+	'dangkytinchi.duongdan.theochuongtrinhnganh2': 'By Secondary Major Curriculum',
 	'dangkytinchi.duongdan.theochuongtrinhnganh2.mota':
 		'Displays the courses belonging to the double major program that have available classes',
 	'dangkytinchi.duongdan.tatcahocphan': 'All Courses',
@@ -276,6 +276,12 @@ export default {
 	'dangkytinchi.duongdan.buoc2': 'Step 2',
 	'dangkytinchi.duongdan.buoc2.mota':
 		'Click {dangky} at the desired credit class (You can only select classes belonging to unregistered courses, with no timetable clashes, and with remaining capacity.)',
+	'dangkytinchi.duongdan.buoc2.multiple.mota':
+		'Select the sections you want to register for (You can only select sections belonging to unregistered courses, with no timetable clashes, and with remaining capacity.)',
+	'dangkytinchi.duongdan.buoc3': 'Step 3',
+	'dangkytinchi.duongdan.buoc3.mota':
+		'Click {dangky}, the system will show the selected sections above for students to confirm and complete registration.',
+	'dangkytinchi.duongdan.chon': 'SELECT',
 	'dangkytinchi.duongdan.dangky': 'REGISTER',
 
 	'dangkytinchi.thongbao.dangky': 'Registered successfully',

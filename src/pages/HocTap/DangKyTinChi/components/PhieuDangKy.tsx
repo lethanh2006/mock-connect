@@ -2,17 +2,18 @@ import ExpandText from '@/components/ExpandText';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
+import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
 import {
 	ColorTrangThaiDangKyTinChi,
 	ETinhChatDangKyTC,
 	ETrangThaiDangKyTinChi,
-	ETrangThaiSinhVienDKTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
+import { formatTimeRange } from '@/utils/formatDate';
 import { inputFormat } from '@/utils/utils';
-import { CalendarOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
+import { CalendarOutlined, DeleteOutlined, HistoryOutlined, SendOutlined } from '@ant-design/icons';
 import { Col, Popconfirm, Row, Space, Tag } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
@@ -26,7 +27,21 @@ import RenderLichHoc from './RenderLichHoc';
 /** Hiển thị danh sách các lớp đã đăng ký và đã chọn
  * Học phí dự kiến, số tín chỉ được phép đăng ký, lịch học dự kiến
  */
-const PhieuDangKy = () => {
+type PhieuDangKyProps = {
+	danhSachLopHienThi: DangKyTinChi.ILopDangKy[];
+	tongTinChi: number;
+	soTinChiToiDa: number;
+	soTinChiToiThieu: number;
+	onReload: () => void | Promise<unknown>;
+};
+
+const PhieuDangKy = ({
+	danhSachLopHienThi,
+	tongTinChi,
+	soTinChiToiDa,
+	soTinChiToiThieu,
+	onReload,
+}: PhieuDangKyProps) => {
 	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const {
@@ -39,41 +54,16 @@ const PhieuDangKy = () => {
 		tinhDataLichHoc,
 		setVisibleModal,
 		setVisibleRegister,
-		getPhieuDangKyModel,
-		getLopDangKyModel,
-		sinhVienDot,
 	} = useModel('daotao.dotdangkytinchi');
+	const { settings } = useModel('tienich.caidat');
 	const { getMucThuHocPhiTheoNamModel, tinhHocPhi } = useModel('taichinh.mucthuhocphi');
 	const [visibleHuyLop, setVisibleHuyLop] = useState<boolean>(false);
 	const [visibleLopDaHuy, setVisibleLopDaHuy] = useState(false);
-	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
+	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
+	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
 	const [recLopDangKy, setRecLopDangKy] = useState<DangKyTinChi.ILopDangKy>();
-	// Danh sách học phần có cả lớp Chính và lớp thực hành
-	const hocPhanCoLopThucHanh = danhSachLopDangKy.filter((item) => !!item.tenCha).map((item) => item.maHocPhan);
-	// Nếu có cả lớp chính và lớp thực hành thì chỉ hiện lớp thực hành
-	const danhSachLopHienThi = danhSachLopDangKy
-		.filter((item) => !hocPhanCoLopThucHanh.includes(item.maHocPhan) || !!item.tenCha)
-		.map((item) =>
-			hocPhanCoLopThucHanh.includes(item.maHocPhan)
-				? {
-						...item,
-						// Gộp lịch học lớp Chính với lớp hiển thị
-						maHoaLichHoc:
-							danhSachLopDangKy
-								?.filter((j) => j.maHocPhan === item.maHocPhan)
-								?.map((j) => j.maHoaLichHoc ?? [])
-								?.flat() ?? [],
-					}
-				: item,
-		);
-	const tongTinChi = _.sumBy(
-		danhSachLopHienThi.filter((item) => item.hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy !== false),
-		(item) => item.soTinChi,
-	);
-	const tongTinChiChuaDk = _.sumBy(
-		danhSachLopDangKy.filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY),
-		(item) => item.soTinChi,
-	);
+	const dangKyNgay: boolean = !!settings?.SINH_VIEN?.dktcMultiple;
+
 	// Đang trong thời gian đăng ký tín chỉ => Được phép đăng ký, xóa đăng ký
 	const dangTrongThoiGian =
 		dotDangKyHienTai?.thoiGianBatDau &&
@@ -82,27 +72,10 @@ const PhieuDangKy = () => {
 		dayjs().isBefore(dayjs(dotDangKyHienTai?.thoiGianKetThuc).add(1, 'second'));
 	// Tổng học phí dự kiến
 	const tongHocPhi = _.sumBy(danhSachLopHienThi, (lop) => tinhHocPhi(lop.soTinChi, lop.loai, lop.maNganh));
-	// Số tín chỉ tối đa
-	const soTinChiToiDa =
-		khoaNganhMe?.khoaNganhPhu && phieuDangKy?.soTinChiToiDaSongNganh
-			? phieuDangKy.soTinChiToiDaSongNganh
-			: (phieuDangKy?.soTinChiToiDa ?? 0);
-	const soTinChiToiThieu = phieuDangKy?.soTinChiToiThieu ?? 0;
-
-	const getData = () => recHocKy?.ma && getLopDangKyModel(recHocKy.ma);
-
-	useEffect(() => {
-		if (dotDangKyHienTai?._id && sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK)
-			getPhieuDangKyModel(dotDangKyHienTai._id);
-	}, [sinhVienDot?._id]);
-
-	useEffect(() => {
-		getData();
-	}, [recHocKy?.ma]);
 
 	useEffect(() => {
 		// Get mức thu học phí của tôi theo năm học
-		if (recHocKy?.namBatDau) getMucThuHocPhiTheoNamModel(recHocKy.namBatDau.toString());
+		if (recHocKy?.namBatDau) getMucThuHocPhiTheoNamModel(recHocKy.namBatDau.toString(), true);
 	}, [recHocKy?.namBatDau]);
 
 	const onDeleteLop = async (rec: DangKyTinChi.ILopDangKy) => {
@@ -123,12 +96,44 @@ const PhieuDangKy = () => {
 		}
 	};
 
+	const renderKhoangThoiGian = (rec: DangKyTinChi.ILopDangKy) => {
+		const thoiKhoaBieuList = rec.thoiKhoaBieuList ?? [];
+		if (!thoiKhoaBieuList.length) return null;
+
+		const start = _.minBy(thoiKhoaBieuList, (item) => dayjs(item.ngay).valueOf())?.ngay;
+		const end = _.maxBy(thoiKhoaBieuList, (item) => dayjs(item.ngay).valueOf())?.ngay;
+		if (!start || !end) return null;
+
+		return formatTimeRange(start, end, 'DD/MM');
+	};
+
+	const handleXemDeCuong = (rec: DangKyTinChi.ILopDangKy) => {
+		const deCuongId = rec.hocPhan?.deCuongHienTaiId ?? rec.deCuong?.deCuongId;
+		if (!deCuongId) return;
+
+		setDeCuongModal({
+			deCuongId,
+			title: `${intl.formatMessage({ id: 'lophocphan.id.decuong.title' })} - ${rec.hocPhan?.ten || rec.maHocPhan || ''}`,
+		});
+		setVisibleDeCuong(true);
+	};
+
 	const columns: IColumn<DangKyTinChi.ILopDangKy>[] = [
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.mahocphan' }),
 			dataIndex: 'maHocPhan',
 			align: 'center',
 			width: 100,
+			render: (val, rec) => (
+				<a
+					onClick={(e) => {
+						e.stopPropagation();
+						handleXemDeCuong(rec);
+					}}
+				>
+					{val ?? rec.hocPhan?.ma}
+				</a>
+			),
 			filterType: 'string',
 		},
 		{
@@ -168,6 +173,12 @@ const PhieuDangKy = () => {
 						.join(', ')}
 				</ExpandText>
 			),
+		},
+		{
+			title: intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.columntable.date' }),
+			width: 110,
+			align: 'center',
+			render: (val, rec) => renderKhoangThoiGian(rec),
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.thongtinchitiet' }),
@@ -281,13 +292,13 @@ const PhieuDangKy = () => {
 	return (
 		<>
 			<Row gutter={[8, 12]} style={{ marginBottom: 12 }}>
-				<Col span={24} md={10}>
+				{/* <Col span={24} md={10}>
 					{intl.formatMessage({ id: 'dangkytinchi.phieudangky.tongtinchi.title' })}:{' '}
 					<b className={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'text-error' : 'text-success'}>
 						{tongTinChi} {intl.formatMessage({ id: 'dangkytinchi.phieudangky.tinchi.title' })}
 					</b>
-				</Col>
-				<Col span={24} md={7}>
+				</Col> */}
+				<Col span={24} md={17}>
 					{intl.formatMessage({ id: 'dangkytinchi.phieudangky.hocphidukien.title' })}:{' '}
 					<b>{tongHocPhi ? inputFormat(tongHocPhi) : '--'} VND</b>
 				</Col>
@@ -300,7 +311,8 @@ const PhieuDangKy = () => {
 							style={{ textAlign: 'right' }}
 						>
 							{intl.formatMessage({ id: 'dangkytinchi.phieudangky.alert.khoangtinchi' })}:{' '}
-							{[soTinChiToiThieu, soTinChiToiDa].join(' - ')}
+							{[soTinChiToiThieu, soTinChiToiDa].join(' - ')}{' '}
+							{intl.formatMessage({ id: 'dangkytinchi.phieudangky.tinchi.title' })}
 						</div>
 					</Col>
 				) : null}
@@ -313,16 +325,22 @@ const PhieuDangKy = () => {
 				loading={loading}
 				hasTotal
 				otherProps={{ pagination: false, scroll: { y: 600 } }}
-				onReload={getData}
-			>
-				<Space wrap style={{ margin: '0 16px' }}>
-					{danhSachLopDangKy.length ? (
-						<ButtonExtend icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
-							{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
+				onReload={onReload}
+				otherButtons={[
+					<Space wrap>
+						<ButtonExtend
+							icon={<HistoryOutlined />}
+							onClick={() => setVisibleLopDaHuy(true)}
+							tooltip={intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.title' })}
+						>
+							{intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.title' })}
 						</ButtonExtend>
-					) : null}
-
-					{dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
+						{danhSachLopDangKy.length ? (
+							<ButtonExtend icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
+								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
+							</ButtonExtend>
+						) : null}
+						{/* {dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 						<>
 							<ButtonExtend icon={<DeleteOutlined />} onClick={() => setVisibleLopDaHuy(true)}>
 								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.caclopdahuy' })}
@@ -330,12 +348,11 @@ const PhieuDangKy = () => {
 
 							<ModalLopDaHuy visible={visibleLopDaHuy} setVisible={setVisibleLopDaHuy} />
 						</>
-					) : null}
-
-					{tongTinChiChuaDk &&
-					dotDangKyHienTai?.tinhChatDangKy !== ETinhChatDangKyTC.XOA &&
-					sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
+					) : null} */}
+						{/* {tongTinChiChuaDk ? ( */}
+						{/* // dotDangKyHienTai?.tinhChatDangKy !== ETinhChatDangKyTC.XOA && */}
 						<ButtonExtend
+							hidden={dangKyNgay}
 							tooltip={
 								tongTinChi > soTinChiToiDa
 									? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin' })
@@ -352,23 +369,38 @@ const PhieuDangKy = () => {
 							type='primary'
 							icon={<SendOutlined />}
 							onClick={() => setVisibleRegister(true)}
-							disabled={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu || !dangTrongThoiGian}
+							// disabled={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu || !dangTrongThoiGian}
 						>
 							{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.dangky' })}
 						</ButtonExtend>
-					) : null}
+						{/* ) : null} */}
+						{tongTinChi < soTinChiToiThieu ? (
+							<i className='text-error'>{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.alert.luuy' })}</i>
+						) : null}
+					</Space>,
+				]}
+				otherExtra={[
+					<span>
+						{intl.formatMessage({ id: 'dangkytinchi.tcdangky' })}:{' '}
+						<b style={{ color: '#c80f1f', fontSize: 15 }}>{tongTinChi ?? 0}</b>
+					</span>,
+				]}
+			></TableStaticData>
 
-					{tongTinChi < soTinChiToiThieu ? (
-						<i className='text-error'>{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.alert.luuy' })}</i>
-					) : null}
-				</Space>
-			</TableStaticData>
+			<ModalLopDaHuy visible={visibleLopDaHuy} setVisible={setVisibleLopDaHuy} />
 
 			<ModalLichHoc soLopHienThi={danhSachLopHienThi.length} />
 
 			<ModalDangKy tongTinChi={tongTinChi} danhSachDangKy={danhSachLopHienThi} />
 
 			<ConfirmKetHuyLopDKTC visible={visibleHuyLop} setVisible={setVisibleHuyLop} recLopDangKy={recLopDangKy} />
+
+			<ModalHocPhan
+				visible={visibleDeCuong}
+				setVisible={setVisibleDeCuong}
+				deCuongId={deCuongModal?.deCuongId}
+				title={deCuongModal?.title}
+			/>
 		</>
 	);
 };
