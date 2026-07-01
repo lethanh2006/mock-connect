@@ -95,7 +95,7 @@ const ThongTinSinhVienPage = () => {
 
 	return (
 		<Card
-			title={intl.formatMessage({ id: 'thongtincanhan.title' })}
+			title={intl.formatMessage({ id: 'menu.MyProfile' })}
 			variant='borderless'
 			className='card-borderless card-big-title has-indicator'
 		>
