@@ -1,6 +1,5 @@
-import { EOperatorType } from '@/components/Table/constant';
 import { KenhThanhToan } from '@/services/TaiChinh/KenhThanhToan/typing';
-import { Col, Modal, Row, Spin } from 'antd';
+import { Col, Modal, Row } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useModel } from 'umi';
 import PaymentDetail from './PaymentDetail';
@@ -8,7 +7,7 @@ import PaymentMethodList from './PaymentMethodList';
 import './style.less';
 import type { ModalThanhToanProps } from './typing';
 
-const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuccess }) => {
+const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuccess, mode = 'single', bills = [] }) => {
 	const { record: recHoaDon } = useModel('taichinh.hoadon');
 	const {
 		danhSach: danhSachKenh,
@@ -26,23 +25,21 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuc
 		setLoadingKenhThanhToan(true);
 
 		// Step 1: Tìm kênh thanh toán mặc định (isMacDinh: true)
-		getKenhThanhToan(undefined, undefined, { active: true }, [
-			{ field: 'isMacDinh', operator: EOperatorType.EQUAL, values: ['true'] },
-		])
+		getKenhThanhToan(true, undefined, { active: true })
 			.then((res: any) => {
-				if (!res?.data?.length) {
-					// Step 2: Không có kênh mặc định →  dùng kenhThanhToanIds từ đợt thu
-					const kenhThanhToanIds = recHoaDon?.dotThu?.kenhThanhToanIds;
-					if (kenhThanhToanIds?.length) {
-						return getKenhThanhToan(undefined, undefined, { active: true }, [
-							{ field: '_id', operator: EOperatorType.INCLUDE, values: kenhThanhToanIds },
-						]);
-					}
-					return;
-				}
-				if (!selectedMethod) {
-					setSelectedMethod(res.data.find((k: any) => k.isMacDinh) ?? res?.data?.[0]);
-				}
+				// if (!res?.data?.length) {
+				// 	// Step 2: Không có kênh mặc định →  dùng kenhThanhToanIds từ đợt thu
+				// 	const kenhThanhToanIds = recHoaDon?.dotThu?.kenhThanhToanIds;
+				// 	if (kenhThanhToanIds?.length) {
+				// 		return getKenhThanhToan(undefined, undefined, { active: true }, [
+				// 			{ field: '_id', operator: EOperatorType.INCLUDE, values: kenhThanhToanIds },
+				// 		]);
+				// 	}
+				// 	return;
+				// }
+				// if (!selectedMethod) {
+				// 	setSelectedMethod(res.data.find((k: any) => k.isMacDinh) ?? res?.data?.[0]);
+				// }
 			})
 			.then((resFallback: any) => {
 				if (resFallback?.data?.length && !selectedMethod) {
@@ -55,6 +52,8 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuc
 			});
 	}, [visible]);
 
+	console.log('danhSachKenh', danhSachKenh);
+
 	// Auto-select kênh thanh toán đầu tiên khi danhSachKenh có data mà chưa có selectedMethod
 	useEffect(() => {
 		if (!selectedMethod && danhSachKenh?.length) {
@@ -65,15 +64,18 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuc
 
 	// Tính tổng tiền từ transactions
 	const totalAmount = useMemo(() => {
+		if (mode === 'multi' && bills?.length) {
+			return bills.reduce((sum, b) => sum + (b.soTienConLai ?? 0), 0);
+		}
 		return recHoaDon?.transactions?.reduce((sum, t) => sum + (t.amount ?? 0), 0) ?? 0;
-	}, [recHoaDon?.transactions]);
+	}, [mode, bills, recHoaDon?.transactions]);
 
 	return (
 		<Modal
 			open={visible}
 			onCancel={onClose}
 			footer={null}
-			width={800}
+			width={1000}
 			closable
 			destroyOnClose
 			className='modal-thanh-toan'
@@ -96,6 +98,8 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuc
 							invoiceCode={recHoaDon?.identityCode ?? ''}
 							totalAmount={totalAmount}
 							loading={loadingKenh || loadingPayment}
+							mode={mode}
+							bills={bills}
 						/>
 					)}
 				</Col>

@@ -53,7 +53,7 @@ declare module HoaDon {
 
 		userTenTinhChat?: string;
 		userMaTinhChat?: string;
-		userTrangThaiSv?: string;
+		userTrangThaiSV?: string;
 		userTrangThaiHoc?: string;
 	}
 
@@ -165,5 +165,21 @@ declare module HoaDon {
 		ten?: string;
 		unitLabel?: string;
 		unitAmount?: number;
+	}
+
+	export interface IThongTinHoaDon {
+		_id: string;
+		userSsoId: string;
+		userFullName: string;
+		userCode: string;
+		tenToChuc: string;
+		maSoThue: string;
+		diaChi: string;
+		emailNhanHoaDonDienTu: string;
+		userSoDienThoai: string;
+		userMaKhoa: string;
+		userTenKhoa: string;
+		userMaNganh: string;
+		userTenNganh: string;
 	}
 }
