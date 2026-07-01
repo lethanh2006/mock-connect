@@ -1,7 +1,7 @@
 @font-face {
 	font-family: 'Montserrat';
-	src: url('/font/Montserrat.ttf') format('truetype');
-	font-weight: 100 400 600 900;
+	src: url('@{base-path}font/Montserrat.ttf') format('truetype');
+	font-weight: 100 900;
 	font-style: normal;
 	font-display: swap;
 }
@@ -113,6 +113,19 @@ body {
 	}
 }
 
+.ant-pro-layout {
+	--layout-sider-width: 260px;
+	--layout-sider-collapsed-width: 64px;
+
+	&:has(.ant-layout-sider-collapsed) {
+		--layout-sider-width: var(--layout-sider-collapsed-width);
+	}
+
+	@media (max-width: 767px) {
+		--layout-sider-width: 0px;
+	}
+}
+
 // Sider
 .ant-layout-sider {
 	background-color: var(--color-accent-800) !important;
@@ -218,7 +231,12 @@ body {
 	}
 
 	.ant-btn {
-		height: 36px;
+		height: 32px;
+	}
+
+	.ant-btn-icon-only {
+		height: 32px;
+		width: 32px;
 	}
 }
 
@@ -397,10 +415,10 @@ body {
 		content: '';
 		position: fixed;
 		top: 0;
-		left: 0;
+		left: var(--layout-sider-width, 260px);
 		right: 0;
 		height: 172px;
-		background-image: url('/header_page_vinuni.png') !important;
+		background-image: url('@{base-path}header_page_vinuni.png') !important;
 		background-size: 100% 172px !important;
 		background-position: top center !important;
 		background-repeat: no-repeat !important;
@@ -428,6 +446,62 @@ body {
 		}
 	}
 
+	&.page-dashboard-no-header-bg {
+		&::before {
+			display: none !important;
+		}
+
+		.ant-page-header {
+			background-image: none !important;
+			background-color: #fff !important;
+			border-bottom: none !important;
+			box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.06) !important;
+
+			.ant-page-header-heading {
+				.ant-page-header-heading-extra {
+					.ant-space {
+						.ant-space-item {
+							[class*='menu_right'],
+							.menu_right {
+								color: var(--color-text-100) !important;
+
+								[class*='account'],
+								.account {
+									color: var(--color-text-100) !important;
+									font-weight: 700 !important;
+
+									[class*='name'],
+									.name {
+										color: var(--color-text-100) !important;
+										font-weight: 700 !important;
+									}
+								}
+
+								[class*='action']:not([class*='account']),
+								.action:not(.account) {
+									height: 36px !important;
+									width: 36px !important;
+									display: flex !important;
+									align-items: center !important;
+									justify-content: center !important;
+									background-color: var(--color-info-bg) !important;
+									border-radius: 4px !important;
+									box-shadow: none !important;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		[class*='menu_right'] .header-menu-item,
+		.menu_right .header-menu-item {
+			background-color: var(--color-info-bg) !important;
+			box-shadow: none !important;
+		}
+	}
+
 	.ant-page-header {
 		border-bottom: 1px solid var(--color-official-200) !important;
 		padding: 16px !important;
@@ -438,12 +512,11 @@ body {
 		justify-content: end;
 		position: fixed !important;
 		top: 0 !important;
-		left: 0 !important;
+		left: var(--layout-sider-width, 260px) !important;
 		right: 0 !important;
-		width: 100vw !important;
 		z-index: 10 !important;
 		background-color: transparent !important;
-		background-image: url('/header_page_vinuni.png') !important;
+		background-image: url('@{base-path}header_page_vinuni.png') !important;
 		background-size: 100% 172px !important;
 		background-position: top center !important;
 		background-repeat: no-repeat !important;
@@ -516,7 +589,7 @@ body {
 
 			&::before {
 				content: '' !important;
-				position: s !important;
+				position: absolute !important;
 				left: -32px !important;
 				top: 50% !important;
 				transform: translateY(-50%) !important;
@@ -647,9 +720,16 @@ body {
 .ant-modal-close,
 .ant-drawer-close,
 .ant-table-expand-icon,
-.ant-table-row-expand-icon,
+.ant-table-row-expand-icon {
+	color: var(--color-text-100) !important;
+}
+
 .ant-card-extra .anticon {
 	color: var(--color-text-100) !important;
+}
+
+.ant-card-extra .ant-btn-primary .anticon {
+	color: currentColor !important;
 }
 
 // Kích thước và hình ảnh của menu item ở header - VinUni
@@ -797,11 +877,25 @@ body {
 	}
 }
 
+.collapse-big-title .ant-collapse-item .ant-collapse-header {
+	padding: 16px 2px !important;
+}
+
+.collapse-big-title .ant-collapse-item .ant-collapse-header .ant-collapse-header-text {
+	font-weight: 600 !important;
+	font-size: 16px !important;
+}
+
 .collapse-big-title .ant-collapse-item .ant-collapse-header .ant-collapse-header-text::after {
 	.indicator(@color: ~'var(--color-highlight)'; @w: 10px; @h: 6px; @side: right);
 	left: -16px !important;
-	top: 14px !important;
+	top: 17px !important;
 	transform: translateY(-50%) !important;
+}
+
+.ant-tabs-tab-btn {
+	font-size: 15px !important;
+	font-weight: 600 !important;
 }
 
 .divider-big-title .ant-divider-inner-text {
@@ -824,6 +918,10 @@ body {
 
 	&:has(> h2)::before {
 		top: 6px !important;
+	}
+
+	&:has(h5)::before {
+		top: 4px !important;
 	}
 }
 
