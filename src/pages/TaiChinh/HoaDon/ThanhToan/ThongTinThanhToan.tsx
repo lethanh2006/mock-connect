@@ -1,4 +1,5 @@
 import { usePermissionCheck } from '@/hooks/usePermissionCheck';
+import { colorTrangThaiHocSv, ETrangThaiHocSv } from '@/services/DaoTao/constant';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import {
 	EMaTrangThaiThanhToan,
@@ -97,7 +98,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 
 	// Trạng thái sinh viên
 	const trangThaiSinhVien: string | undefined =
-		recHoaDon?.userTrangThaiSv ||
+		recHoaDon?.userTrangThaiSV ||
 		recHoaDon?.userTrangThaiHoc ||
 		recHoaDon?.userMetadata?.trangThaiHoc ||
 		recHoaDon?.userMetadata?.trangThaiSv;
@@ -191,6 +192,9 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 								{fullname || intl.formatMessage({ id: 'taichinh.thanhtoan.info.sinhvien' })}
 							</span>
 							{statusText && <Tag color={statusColor}>{statusText}</Tag>}
+							{trangThaiSinhVien && (
+								<Tag color={colorTrangThaiHocSv[trangThaiSinhVien as ETrangThaiHocSv]}>{trangThaiSinhVien}</Tag>
+							)}
 						</Space>
 					</div>
 				</div>
@@ -330,7 +334,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 							}
 						/>
 					</Col>
-					{daRelease && recHoaDon?.dotThu?.tenNguoiRelease && (
+					{/* {daRelease && recHoaDon?.dotThu?.tenNguoiRelease && (
 						<Col xs={12} md={8}>
 							<InfoItem
 								label={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.nguoirelease' })}
@@ -345,7 +349,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 								value={dayjs(recHoaDon?.dotThu?.thoiGianRelease).format('HH:mm DD/MM/YYYY')}
 							/>
 						</Col>
-					)}
+					)} */}
 					<Col xs={24}>
 						<InfoItem
 							icon={<FileTextOutlined />}
@@ -354,71 +358,27 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 						/>
 					</Col>
 				</Row>
+			</Card>
 
-				{/* Thông tin phiếu thu */}
-				<Card size='small' title='Thông tin phiếu thu' style={{ marginBottom: 16 }}>
-					<Row gutter={[16, 8]}>
-						<Col xs={12} md={12}>
-							<InfoItem
-								icon={<CalendarOutlined />}
-								label='Hạn thanh toán'
-								value={
-									recHoaDon?.ngayHetHanThanhToan ? (
-										<span style={{ color: '#ff4d4f', fontWeight: 700 }}>
-											{dayjs(recHoaDon.ngayHetHanThanhToan).format('DD/MM/YYYY')}
-										</span>
-									) : (
-										'-'
-									)
-								}
-							/>
-						</Col>
-						<Col xs={12} md={12}>
-							<InfoItem
-								icon={<FileOutlined />}
-								label='Trạng thái phiếu thu'
-								value={<Tag color={daRelease ? 'success' : 'warning'}>{daRelease ? 'Đã release' : 'Chưa release'}</Tag>}
-							/>
-						</Col>
-						{daRelease && recHoaDon?.dotThu?.tenNguoiRelease && (
-							<Col xs={12} md={8}>
-								<InfoItem label='Người release' value={recHoaDon?.dotThu?.tenNguoiRelease} />
-							</Col>
-						)}
-						{daRelease && recHoaDon?.dotThu?.thoiGianRelease && (
-							<Col xs={12} md={8}>
-								<InfoItem
-									label='Thời gian release'
-									value={dayjs(recHoaDon?.dotThu?.thoiGianRelease).format('HH:mm DD/MM/YYYY')}
-								/>
-							</Col>
-						)}
-						<Col xs={24}>
-							<InfoItem icon={<FileTextOutlined />} label='Ghi chú' value={recHoaDon?.ghiChu} />
-						</Col>
-					</Row>
-				</Card>
-
-				<Card size='small' title={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.chitietgiaodich' })}>
-					<Tabs
-						activeKey={activeTab}
-						onChange={onChangeTab}
-						items={[
-							{
-								key: '1',
-								label: intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.tab.chitiet' }),
-								children: <FormItemHoaDonChiTiet />,
-							},
-							{
-								key: '2',
-								label: intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.tab.lichsu' }),
-								children: (
-									<LichSuThanhToan onPay={onPay} onCancel={onCancel} ngoaiThoiGianThanhToan={ngoaiThoiGianThanhToan} />
-								),
-							},
-						]}
-					/>
-				</Card>
+			<Card size='small' title={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.chitietgiaodich' })}>
+				<Tabs
+					activeKey={activeTab}
+					onChange={onChangeTab}
+					items={[
+						{
+							key: '1',
+							label: intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.tab.chitiet' }),
+							children: <FormItemHoaDonChiTiet />,
+						},
+						{
+							key: '2',
+							label: intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.tab.lichsu' }),
+							children: (
+								<LichSuThanhToan onPay={onPay} onCancel={onCancel} ngoaiThoiGianThanhToan={ngoaiThoiGianThanhToan} />
+							),
+						},
+					]}
+				/>
 			</Card>
 
 			<div style={{ marginTop: 18 }} className='form-footer'>

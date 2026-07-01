@@ -1,18 +1,15 @@
 import PDFViewerV2 from '@/components/PDFViewerV2';
+import PageCard from '@/components/PageCard';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import { EOperatorType } from '@/components/Table/constant';
 import { type IColumn } from '@/components/Table/typing';
 import { getExportBillUrl } from '@/services/TaiChinh/HoaDon';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import {
-	EMaTrangThaiThanhToan,
-	EMauTrangThaiThanhToanTable,
-	ETrangThaiThanhToan,
-	ETransactionType,
-} from '@/services/TaiChinh/constant';
-import { currencyFormat, inputFormat } from '@/utils/utils';
+import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
+import { inputFormat } from '@/utils/utils';
 import { EyeOutlined, FilePdfOutlined, UnorderedListOutlined } from '@ant-design/icons';
-import { Empty, Modal, Tag, notification } from 'antd';
+import { Empty, Modal, Tabs, Tag, notification } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -30,18 +27,31 @@ export const disableThanhToan = (rec?: HoaDon.IRecord): boolean => {
 	// 		return true;
 	// }
 
-	if (rec?.status === EMaTrangThaiThanhToan.DONG) return true;
+	if (rec?.status === EMaTrangThaiThanhToan.DONG || rec?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU) return true;
 	return false;
 };
 
 const HoaDonPage = () => {
 	const intl = useIntl();
-	const { getModel, page, limit, setRecord, record, visibleModalThanhToan, setVisibleModalThanhToan } =
-		useModel('taichinh.hoadon');
+	const {
+		getModel,
+		page,
+		limit,
+		setRecord,
+		record,
+		visibleModalThanhToan,
+		setVisibleModalThanhToan,
+		selectedIds,
+		danhSach,
+	} = useModel('taichinh.hoadon');
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
 	const [visibleModalPDF, setVisibleModalPDF] = useState<boolean>(false);
 	const [pdfUrl, setPdfUrl] = useState<string | undefined>(undefined);
 	const [loadingPdfMap, setLoadingPdfMap] = useState<Record<string, boolean>>({});
+	const [activeKey, setActiveKey] = useState<'chua_thanh_toan' | 'da_thanh_toan'>('chua_thanh_toan');
+	// Multi payment state
+	const [selectedBills, setSelectedBills] = useState<HoaDon.IRecord[]>([]);
+	const [paymentMode, setPaymentMode] = useState<'single' | 'multi'>('single');
 
 	// Callback from MOMO
 	useEffect(() => {
@@ -58,8 +68,14 @@ const HoaDonPage = () => {
 				});
 	}, []);
 
-	const getData = () =>
-		getModel().then((res) => {
+	const getData = (activeKey: 'chua_thanh_toan' | 'da_thanh_toan') =>
+		getModel(undefined, [
+			{
+				field: 'status',
+				operator: activeKey === 'da_thanh_toan' ? EOperatorType.INCLUDE : EOperatorType.NOT_INCLUDE,
+				values: [`${EMaTrangThaiThanhToan.DA_THANH_TOAN_DU}`],
+			},
+		]).then((res) => {
 			// Sau khi thanh toán => Get lại danh sách và set lại record hóa đơn hiện tại
 			if (record?._id) setRecord(res.find((item) => item._id === record._id));
 		});
@@ -137,53 +153,53 @@ const HoaDonPage = () => {
 			filterType: 'date',
 		},
 
-		{
-			title: intl.formatMessage({ id: 'taichinh.hoadon.column.phiphainop' }),
-			width: 200,
-			// hide: releaseFilter === 'RELEASED',
-			render: (val, rec) => {
-				return (
-					<div>
-						{rec?.transactions
-							?.filter((item) => item.type === ETransactionType.CHARGE)
-							?.map((item, index) => (
-								<div style={{ marginBottom: 8 }} key={index}>
-									<div>
-										[{item.maKhoanThu}] {item.tenKhoanThu}
-									</div>
-									<div className='text-primary fw500'>
-										{item.loaiTienTe} {currencyFormat(item.amount)}
-									</div>
-								</div>
-							))}
-					</div>
-				);
-			},
-		},
+		// {
+		// 	title: intl.formatMessage({ id: 'taichinh.hoadon.column.phiphainop' }),
+		// 	width: 200,
+		// 	// hide: releaseFilter === 'RELEASED',
+		// 	render: (val, rec) => {
+		// 		return (
+		// 			<div>
+		// 				{rec?.transactions
+		// 					?.filter((item) => item.type === ETransactionType.CHARGE)
+		// 					?.map((item, index) => (
+		// 						<div style={{ marginBottom: 8 }} key={index}>
+		// 							<div>
+		// 								[{item.maKhoanThu}] {item.tenKhoanThu}
+		// 							</div>
+		// 							<div className='text-primary fw500'>
+		// 								{item.loaiTienTe} {currencyFormat(item.amount)}
+		// 							</div>
+		// 						</div>
+		// 					))}
+		// 			</div>
+		// 		);
+		// 	},
+		// },
 
-		{
-			title: intl.formatMessage({ id: 'taichinh.hoadon.column.phigiamtru' }),
-			width: 200,
-			// hide: releaseFilter === 'RELEASED',
-			render: (val, rec) => {
-				return (
-					<div>
-						{rec?.transactions
-							?.filter((item) => item.type === ETransactionType.DISCOUNT)
-							?.map((item, index) => (
-								<div style={{ marginBottom: 8 }} key={index}>
-									<div>
-										[{item.maKhoanThu}] {item.tenKhoanThu}
-									</div>
-									<div className='text-primary fw500'>
-										{item.loaiTienTe} {currencyFormat(item.amount)}
-									</div>
-								</div>
-							))}
-					</div>
-				);
-			},
-		},
+		// {
+		// 	title: intl.formatMessage({ id: 'taichinh.hoadon.column.phigiamtru' }),
+		// 	width: 200,
+		// 	// hide: releaseFilter === 'RELEASED',
+		// 	render: (val, rec) => {
+		// 		return (
+		// 			<div>
+		// 				{rec?.transactions
+		// 					?.filter((item) => item.type === ETransactionType.DISCOUNT)
+		// 					?.map((item, index) => (
+		// 						<div style={{ marginBottom: 8 }} key={index}>
+		// 							<div>
+		// 								[{item.maKhoanThu}] {item.tenKhoanThu}
+		// 							</div>
+		// 							<div className='text-primary fw500'>
+		// 								{item.loaiTienTe} {currencyFormat(item.amount)}
+		// 							</div>
+		// 						</div>
+		// 					))}
+		// 			</div>
+		// 		);
+		// 	},
+		// },
 
 		// {
 		// 	title: 'Số dư có thể cấn trừ',
@@ -192,20 +208,20 @@ const HoaDonPage = () => {
 		// 	sortable: true,
 		// 	render: (val) => <span className='text-primary fw500'>{inputFormat(0)} VND</span>,
 		// },
-		{
-			title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongphiphainop' }),
-			dataIndex: 'soTienPhaiThu',
-			width: 180,
-			sortable: true,
-			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
-		},
-		{
-			title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongphigiamtru' }),
-			dataIndex: 'soTienKhuyenMai',
-			width: 180,
-			sortable: true,
-			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
-		},
+		// {
+		// 	title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongphiphainop' }),
+		// 	dataIndex: 'soTienPhaiThu',
+		// 	width: 180,
+		// 	sortable: true,
+		// 	render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
+		// },
+		// {
+		// 	title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongphigiamtru' }),
+		// 	dataIndex: 'soTienKhuyenMai',
+		// 	width: 180,
+		// 	sortable: true,
+		// 	render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
+		// },
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongdathanhtoan' }),
 			dataIndex: 'soTienDaThu',
@@ -258,7 +274,7 @@ const HoaDonPage = () => {
 							setVisibleModalThanhToan(true);
 						}}
 						type='link'
-						className='text-success'
+						className={disableThanhToan(rec) ? undefined : 'text-success'}
 						icon={<UnorderedListOutlined />}
 					/>
 					<ButtonExtend
@@ -293,18 +309,47 @@ const HoaDonPage = () => {
 			),
 		},
 	];
+	console.log('selectedIds', selectedIds);
 
 	return (
-		<>
+		<PageCard title={intl.formatMessage({ id: 'taichinh.hoadon.title' })}>
 			<style>{`.row-qua-han { background-color: #fff1f0 !important; }`}</style>
+
+			<Tabs
+				activeKey={activeKey}
+				onChange={(tab) => {
+					setActiveKey(tab as 'chua_thanh_toan' | 'da_thanh_toan');
+				}}
+			>
+				<Tabs.TabPane key='chua_thanh_toan' tab='Chưa thanh toán' />
+				<Tabs.TabPane key='da_thanh_toan' tab='Đã thanh toán' />
+			</Tabs>
+
 			<TableBase
+				rowSelection={activeKey === 'chua_thanh_toan'}
 				columns={columns}
-				getData={getData}
+				getData={() => getData(activeKey)}
 				buttons={{ create: false }}
-				dependencies={[page, limit]}
+				dependencies={[page, limit, activeKey]}
 				modelName='taichinh.hoadon'
-				title={intl.formatMessage({ id: 'taichinh.hoadon.title' })}
 				widthDrawer={1000}
+				otherButtons={[
+					...(selectedIds && selectedIds?.length > 0
+						? [
+								<ButtonExtend
+									key={'thanh-toan'}
+									icon={<UnorderedListOutlined />}
+									onClick={() => {
+										const bills = danhSach.filter((item) => selectedIds.includes(item._id));
+										setSelectedBills(bills);
+										setPaymentMode('multi');
+										setVisibleModalThanhToan(true);
+									}}
+									type='primary'
+								>{`Thanh toán cho (${selectedIds?.length}) hóa đơn`}</ButtonExtend>,
+							]
+						: []),
+				]}
 				otherProps={{
 					rowClassName: (rec: HoaDon.IRecord) => {
 						// Check hạn thanh toán từ hóa đơn
@@ -317,7 +362,7 @@ const HoaDonPage = () => {
 						style: { cursor: 'pointer' },
 					}),
 				}}
-			/>
+			></TableBase>
 
 			<Modal
 				open={visibleModal}
@@ -326,7 +371,7 @@ const HoaDonPage = () => {
 				styles={{ body: { padding: 0 } }}
 				width={1000}
 			>
-				<ThongTinThanhToan setVisible={setVisibleModal} getData={getData} />
+				<ThongTinThanhToan setVisible={setVisibleModal} getData={() => getData(activeKey)} />
 			</Modal>
 
 			<Modal
@@ -342,13 +387,21 @@ const HoaDonPage = () => {
 
 			<ModalThanhToan
 				visible={visibleModalThanhToan}
-				onClose={() => setVisibleModalThanhToan(false)}
-				onSuccess={() => {
-					getData();
+				onClose={() => {
 					setVisibleModalThanhToan(false);
+					setSelectedBills([]);
+					setPaymentMode('single');
 				}}
+				onSuccess={() => {
+					getData(activeKey);
+					setVisibleModalThanhToan(false);
+					setSelectedBills([]);
+					setPaymentMode('single');
+				}}
+				mode={paymentMode}
+				bills={selectedBills}
 			/>
-		</>
+		</PageCard>
 	);
 };
 
