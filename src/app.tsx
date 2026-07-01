@@ -105,6 +105,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 		),
 
 		childrenRender: (dom) => {
+			const isDashboard = /\/dashboard\/?$/.test(window.location.pathname);
 			const content = (
 				<OIDCBounder>
 					<ErrorBoundary>
@@ -117,7 +118,14 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 
 			if (initialState?.settings?.layout === 'side') {
 				return (
-					<PageContainer ghost breadcrumbRender={false} title={false} extra={<GlobalHeaderRight />} header={{}}>
+					<PageContainer
+						ghost
+						breadcrumbRender={false}
+						title={false}
+						extra={<GlobalHeaderRight />}
+						header={{}}
+						className={isDashboard ? 'page-dashboard-no-header-bg' : undefined}
+					>
 						{content}
 					</PageContainer>
 				);
