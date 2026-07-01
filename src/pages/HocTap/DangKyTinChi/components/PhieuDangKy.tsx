@@ -13,11 +13,12 @@ import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
 import { formatTimeRange } from '@/utils/formatDate';
 import { inputFormat } from '@/utils/utils';
-import { CalendarOutlined, DeleteOutlined, HistoryOutlined, SendOutlined } from '@ant-design/icons';
+import { CalendarOutlined, DeleteOutlined, HistoryOutlined } from '@ant-design/icons';
 import { Col, Popconfirm, Row, Space, Tag } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import BtnDangKyTinChi from './BtnDangKyTinChi';
 import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
@@ -53,16 +54,13 @@ const PhieuDangKy = ({
 		deleteDangKyTinChiModel,
 		tinhDataLichHoc,
 		setVisibleModal,
-		setVisibleRegister,
 	} = useModel('daotao.dotdangkytinchi');
-	const { settings } = useModel('tienich.caidat');
 	const { getMucThuHocPhiTheoNamModel, tinhHocPhi } = useModel('taichinh.mucthuhocphi');
 	const [visibleHuyLop, setVisibleHuyLop] = useState<boolean>(false);
 	const [visibleLopDaHuy, setVisibleLopDaHuy] = useState(false);
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
 	const [recLopDangKy, setRecLopDangKy] = useState<DangKyTinChi.ILopDangKy>();
-	const dangKyNgay: boolean = !!settings?.SINH_VIEN?.dktcMultiple;
 
 	// Đang trong thời gian đăng ký tín chỉ => Được phép đăng ký, xóa đăng ký
 	const dangTrongThoiGian =
@@ -123,7 +121,7 @@ const PhieuDangKy = ({
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.mahocphan' }),
 			dataIndex: 'maHocPhan',
 			align: 'center',
-			width: 100,
+			width: 140,
 			render: (val, rec) => (
 				<a
 					onClick={(e) => {
@@ -139,20 +137,13 @@ const PhieuDangKy = ({
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.tenhocphan' }),
 			dataIndex: ['hocPhan', 'ten'],
-			width: 170,
+			width: 280,
 			filterType: 'string',
-		},
-		{
-			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.malop' }),
-			dataIndex: 'maLop',
-			width: 150,
-			align: 'center',
-			render: (val, rec) => `${val ?? rec?.ten}${rec.soThuTuNhom ? ` (nhóm TH ${rec.soThuTuNhom})` : ''}`,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.sotinchi' }),
 			dataIndex: 'soTinChi',
-			width: 80,
+			width: 70,
 			align: 'center',
 			sortable: true,
 			render: (val, rec) => (
@@ -160,6 +151,13 @@ const PhieuDangKy = ({
 					{val} {rec.hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy === false ? <i>(không tính)</i> : null}
 				</>
 			),
+		},
+		{
+			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.malop' }),
+			dataIndex: 'maLop',
+			width: 150,
+			align: 'center',
+			render: (val, rec) => `${val ?? rec?.ten}${rec.soThuTuNhom ? ` (nhóm TH ${rec.soThuTuNhom})` : ''}`,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.giangvien' }),
@@ -351,28 +349,12 @@ const PhieuDangKy = ({
 					) : null} */}
 						{/* {tongTinChiChuaDk ? ( */}
 						{/* // dotDangKyHienTai?.tinhChatDangKy !== ETinhChatDangKyTC.XOA && */}
-						<ButtonExtend
-							hidden={dangKyNgay}
-							tooltip={
-								tongTinChi > soTinChiToiDa
-									? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin' })
-									: tongTinChi < soTinChiToiThieu
-										? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.chuadangkydusotin' })
-										: !dangTrongThoiGian
-											? intl.formatMessage({
-													id: 'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi',
-												})
-											: intl.formatMessage({
-													id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkytc',
-												})
-							}
-							type='primary'
-							icon={<SendOutlined />}
-							onClick={() => setVisibleRegister(true)}
-							// disabled={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu || !dangTrongThoiGian}
-						>
-							{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.dangky' })}
-						</ButtonExtend>
+						<BtnDangKyTinChi
+							danhSachLopHienThi={danhSachLopHienThi}
+							tongTinChi={tongTinChi}
+							soTinChiToiDa={soTinChiToiDa}
+							soTinChiToiThieu={soTinChiToiThieu}
+						/>
 						{/* ) : null} */}
 						{tongTinChi < soTinChiToiThieu ? (
 							<i className='text-error'>{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.alert.luuy' })}</i>

@@ -58,6 +58,7 @@ export default {
 
 	'dangkytinchi.dankylophocphan.action.dadangky': 'Đã đăng ký',
 	'dangkytinchi.dankylophocphan.action.dachon': 'Đã chọn',
+	'dangkytinchi.dankylophocphan.action.bochon': 'Bỏ chọn',
 	'dangkytinchi.dankylophocphan.action.dangky': 'Đăng ký',
 	'dangkytinchi.dankylophocphan.action.chon': 'Chọn',
 	'dangkytinchi.dankylophocphan.filter.lopcontrong': 'Lớp còn trống',
@@ -107,6 +108,7 @@ export default {
 	'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc': 'Xem trước lịch học',
 	'dangkytinchi.phieudangky.table.btn.caclopdahuy': 'Các lớp đã hủy đăng ký',
 	'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin': 'Bạn đã đăng ký quá số tín chỉ tối đa',
+	'dangkytinchi.phieudangky.table.tooltip.alert.khongcolopchuadangky': 'Bạn chưa chọn đăng ký lớp',
 	'dangkytinchi.phieudangky.table.tooltip.alert.chuadangkydusotin': 'Bạn chưa đăng ký đủ số tín chỉ tối thiểu',
 	'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi': 'Ngoài thời gian đăng ký tín chỉ',
 	'dangkytinchi.phieudangky.table.tooltip.alert.dangkytc': 'Đăng ký tín chỉ',
@@ -284,7 +286,7 @@ export default {
 	'dangkytinchi.duongdan.buoc2.mota':
 		'Click {dangky} tại lớp tín chỉ mong muốn (chỉ có thể chọn những lớp thuộc học phần chưa được đăng ký, không trùng lịch học và còn trống).',
 	'dangkytinchi.duongdan.buoc2.multiple.mota':
-		'Chọn các lớp tín chỉ muốn đăng ký (chỉ có thể chọn những lớp thuộc học phần chưa được đăng ký, không trùng lịch học và còn trống).',
+		'Ấn {chon} tại các lớp tín chỉ muốn đăng ký (chỉ có thể chọn những lớp thuộc học phần chưa được đăng ký, không trùng lịch học và còn trống).',
 	'dangkytinchi.duongdan.buoc3': 'Bước 3',
 	'dangkytinchi.duongdan.buoc3.mota':
 		'Ấn {dangky}, hệ thống sẽ hiển thị các lớp đã chọn ở trên để sinh viên xác nhận và hoàn tất đăng ký.',
