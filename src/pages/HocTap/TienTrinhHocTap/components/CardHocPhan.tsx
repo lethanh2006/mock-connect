@@ -38,9 +38,9 @@ const CardHocPhan = (props: {
 					{/* Course name */}
 					{label && <span className='card-label'>{label}</span>}
 
-					{hocPhan?.ma && (
+					{/* {hocPhan?.ma && (
 						<div className={`card-course-code ${isNotStudied ? 'not-studied' : 'default'}`}>{hocPhan.ma}</div>
-					)}
+					)} */}
 					<h4 className={`card-title ${isNotStudied ? 'not-studied' : 'default'}`} title={hocPhan?.ten}>
 						{hocPhan?.ten}
 					</h4>
