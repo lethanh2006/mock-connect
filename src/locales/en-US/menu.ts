@@ -13,14 +13,14 @@ export default {
 	'menu.OtherGroup': 'Others',
 
 	// DEFAULT
-	'menu.Lich': 'Calendar',
+	'menu.Lich': 'My Calendar',
 	'menu.ThongTinCaNhan': 'Personal Information',
 
 	'menu.LopHanhChinh': 'Administrative Class',
 
 	// STUDENT
 	'menu.HocTap': 'Study',
-	'menu.HocTap.TienTrinhHocTap': 'Study Progress',
+	'menu.HocTap.TienTrinhHocTap': 'Degree Audit',
 	'menu.HocTap.DangKyNhuCau': 'Register for on-demand learning',
 	'menu.HocTap.DangKyTinChi': 'Course Registration',
 	'menu.HocTap.NhuCauHocPhan': 'Course Enrollment Request',
@@ -29,7 +29,7 @@ export default {
 	'menu.ChiTietLopHocPhan': 'Section',
 	'menu.HocTap.LichThi': 'Exam Schedule',
 	'menu.HocTap.BaiThiCuoiKy': 'Final Exam Submission',
-	'menu.HocTap.KetQuaHocTap': 'Study Results',
+	'menu.HocTap.KetQuaHocTap': 'Academic Results',
 	'menu.HocTap.HocTapKhac': 'Other Study Activities',
 	'menu.HocTap.HocTapKhac.DangKyChuyenNganh': 'Concentration Registration',
 	'menu.HocTap.HocTapKhac.XetHocVu': 'Academic Review',

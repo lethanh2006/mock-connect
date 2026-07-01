@@ -27,15 +27,15 @@ import RenderLichHoc from './RenderLichHoc';
 /** Hiển thị danh sách các lớp đã đăng ký và đã chọn
  * Học phí dự kiến, số tín chỉ được phép đăng ký, lịch học dự kiến
  */
-const PhieuDangKy = (props: {
-	getData?: () => void;
-
+type PhieuDangKyProps = {
 	danhSachLopHienThi: DangKyTinChi.ILopDangKy[];
 	tongTinChi: number;
 	soTinChiToiDa: number;
 	soTinChiToiThieu: number;
-}) => {
-	const { getData, danhSachLopHienThi, tongTinChi, soTinChiToiThieu } = props;
+	onReload: () => void | Promise<unknown>;
+};
+
+const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReload }: PhieuDangKyProps) => {
 	const intl = useIntl();
 	const {
 		dotDangKyHienTai,
@@ -298,7 +298,7 @@ const PhieuDangKy = (props: {
 				addStt
 				loading={loading}
 				hasTotal
-				onReload={getData}
+				onReload={onReload}
 				header={{
 					total: {
 						prefix: intl.formatMessage({ id: 'dangkytinchi.filter.lop.total.prefix' }),

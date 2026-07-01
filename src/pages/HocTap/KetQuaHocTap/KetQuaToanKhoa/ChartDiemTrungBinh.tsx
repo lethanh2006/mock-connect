@@ -32,7 +32,6 @@ const ChartDiemTrungBinh = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 			]}
 			colors={CHART_COLORS}
 			type='line'
-			// title='Điểm trung bình'
 			formatY={formatY}
 			height={300}
 			otherOptions={{

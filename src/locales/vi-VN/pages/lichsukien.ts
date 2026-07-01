@@ -5,6 +5,7 @@ export default {
 	'lichsukien.xemthem': 'Xem thêm',
 	'lichsukien.themmoi': 'Thêm sự kiện cá nhân',
 	'lichsukien.empty': 'Không có sự kiện',
+	'lichsukien.caidat': 'Cài đặt lịch',
 	'lichsukien.cauhinh': 'Cấu hình màu lịch',
 	'lichsukien.cauhinh.macdinh': 'Đặt về mặc định',
 	'lichsukien.form.themmoi': 'Thêm mới sự kiện',

@@ -534,7 +534,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 
 					<Pane initialSize='300px' minSize='250px' maxSize='40%'>
 						<Card
-							title='Calendar Settings'
+							title={intl.formatMessage({ id: 'lichsukien.caidat' })}
 							extra={
 								<Space wrap>
 									{/* <ButtonExtend

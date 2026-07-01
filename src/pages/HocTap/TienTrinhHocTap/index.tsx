@@ -3,6 +3,7 @@ import { TabViewPage } from '@/components/TabViewPage';
 import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { formatDate } from '@/utils/formatDate';
+import { getPublicAssetPath } from '@/utils/path';
 import { BookOutlined, ScheduleOutlined } from '@ant-design/icons';
 import { Alert, Col, Descriptions, Divider, Row, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
@@ -137,7 +138,7 @@ const TienTrinhHocTap = () => {
 									/>
 								</div>
 								<div className='progress-logo'>
-									<img src='/student/logo.png' alt='' width={30} height={30} />
+									<img src={getPublicAssetPath('logo.png')} alt='' width={30} height={30} />
 								</div>
 							</div>
 							<div className='progress-meta'>

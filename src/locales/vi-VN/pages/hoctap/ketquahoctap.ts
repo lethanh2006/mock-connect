@@ -64,6 +64,7 @@ export default {
 	'ketquahoctap.diemtp.col.diemThanhPhan': 'Điểm thành phần',
 	'ketquahoctap.diemtp.notInProgram': 'Không trong chương trình đào tạo',
 	'ketquahoctap.diemtp.convertedScore': 'Điểm quy đổi',
+	'ketquahoctap.diemtp.deCuong.notFound': 'Không tìm thấy đề cương học phần',
 	'ketquahoctap.diemtp.semester.default': 'Học kỳ {maHocKy}',
 	'ketquahoctap.diemtp.semester.summary':
 		' (TB học kỳ: {gpa}, Số tín chỉ đạt: {earned}, Số tín chỉ tích lũy: {cumulative})',

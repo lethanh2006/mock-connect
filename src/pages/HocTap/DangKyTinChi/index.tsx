@@ -9,10 +9,8 @@ import _ from 'lodash';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useAccess, useIntl, useModel } from 'umi';
-import AlertVuotTin from './components/AlertVuotTin';
 import DangKyLopHocPhan from './components/DangKyLopHocPhan';
 import FilterDotDangKy from './components/FilterDotDangKy';
-import ModalLichHoc from './components/ModalLichHoc';
 import ModalLichSuVuotTin from './components/ModalLichSuVuotTin';
 import PhieuDangKy from './components/PhieuDangKy';
 import './components/style.less';
@@ -52,7 +50,12 @@ const DangKyTinChiPage = () => {
 		}
 	};
 
-	const getData = () => {
+	// useEffect(() => {
+	// 	getKhoaNganhMeModel();
+	// 	getByKeyModel(ESettingKey.SINH_VIEN, ipDaoTao);
+	// }, []);
+
+	const getData = async () => {
 		getModel(undefined, undefined, undefined, undefined, undefined, 'me/page');
 	};
 
@@ -75,7 +78,9 @@ const DangKyTinChiPage = () => {
 			getPhieuDangKyModel(dotDangKyHienTai._id);
 	}, [recHocKy?.ma, dotDangKyHienTai?._id, sinhVienDot?.trangThaiSvDangKyTinChi]);
 
-	const getLopDangKy = () => recHocKy?.ma && getLopDangKyModel(recHocKy.ma);
+	const getLopDangKy = async () => {
+		if (recHocKy?.ma) await getLopDangKyModel(recHocKy.ma);
+	};
 
 	useEffect(() => {
 		getLopDangKy();
@@ -182,7 +187,18 @@ const DangKyTinChiPage = () => {
 	return (
 		<>
 			<div ref={dangKyCardRef}>
-				<PageCard title={intl.formatMessage({ id: 'dangkytinchi.title' })} extra={<FilterDotDangKy />}>
+				<PageCard
+					// title={<FilterDotDangKy />}
+					// extra={
+					// 	cctFilter?.() && (
+					// 		<Button type='primary' onClick={() => setVisibleLichSu(true)}>
+					// 			{intl.formatMessage({ id: 'dangkytinchi.vuottin.button.dangkyvuottin' })}
+					// 		</Button>
+					// 	)
+					// }
+					title={intl.formatMessage({ id: 'dangkytinchi.title' })}
+					extra={<FilterDotDangKy />}
+				>
 					{!!phieuDangKy?.soTinChiToiDa &&
 					dotDangKyHienTai &&
 					sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
@@ -231,11 +247,15 @@ const DangKyTinChiPage = () => {
 						</>
 					) : null}
 
-					{cctFilter?.() && <AlertVuotTin onViewLichSu={() => setVisibleLichSu(true)} />}
+					{/* {cctFilter?.() && <AlertVuotTin onViewLichSu={() => setVisibleLichSu(true)} />} */}
 
 					<Spin spinning={loading}>
 						{/* Tạm comment/bypass block điều kiện cũ: dotDangKyHienTai, sinhVienDot, trạng thái được đăng ký và số tín chỉ tối đa. */}
-						<DangKyLopHocPhan />
+						<DangKyLopHocPhan
+							tongTinChi={tongTinChi}
+							soTinChiToiDa={soTinChiToiDa}
+							danhSachLopHienThi={danhSachLopHienThi}
+						/>
 					</Spin>
 				</PageCard>
 			</div>
@@ -245,11 +265,11 @@ const DangKyTinChiPage = () => {
 					style={{ marginTop: 12, marginBottom: 84 }}
 				>
 					<PhieuDangKy
-						getData={getLopDangKy}
 						danhSachLopHienThi={danhSachLopHienThi}
 						tongTinChi={tongTinChi}
 						soTinChiToiDa={soTinChiToiDa}
 						soTinChiToiThieu={soTinChiToiThieu}
+						onReload={getLopDangKy}
 					/>
 				</Card>
 			</div>
@@ -303,8 +323,6 @@ const DangKyTinChiPage = () => {
 			</div> */}
 
 			<ModalLichSuVuotTin visible={visibleLichSu} onClose={() => setVisibleLichSu(false)} />
-			<ModalLichHoc soLopHienThi={danhSachLopHienThi.length} />
-
 			<ViewGhiChuDangKyTinChi visible={visibleThongTin} setVisible={setVisibleThongTin} />
 		</>
 	);

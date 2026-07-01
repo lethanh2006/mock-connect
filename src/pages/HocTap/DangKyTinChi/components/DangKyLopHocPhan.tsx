@@ -23,7 +23,13 @@ import { useAccess, useIntl, useModel } from 'umi';
 import ModalDangKyNgay from './ModalDangKyNgay';
 import RenderLichHoc from './RenderLichHoc';
 
-const DangKyLopHocPhan = () => {
+type DangKyLopHocPhanProps = {
+	tongTinChi: number;
+	soTinChiToiDa: number;
+	danhSachLopHienThi: DangKyTinChi.ILopDangKy[];
+};
+
+const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: DangKyLopHocPhanProps) => {
 	const intl = useIntl();
 	const { cctFilter } = useAccess();
 	const { record: recHocKy } = useModel('daotao.hocky');
@@ -189,6 +195,31 @@ const DangKyLopHocPhan = () => {
 		return hetCho || lopCha.siSoToiDa - (lopCha.siSo ?? 0) <= 0;
 	};
 
+	const getSoTinChiLop = (record: LopHocPhan.IRecord) => {
+		const hocPhan = record.hocPhan ?? recHocPhan;
+		if (hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy === false) return 0;
+
+		let soTinChi = record.hocPhan?.soTinChi ?? recHocPhan?.soTinChi ?? 0;
+		if (record.tenCha && !soTinChi) {
+			const lopCha = danhSachLopDktc.find((item) => item.ten === record.tenCha);
+			soTinChi = lopCha?.hocPhan?.soTinChi ?? 0;
+		}
+		return soTinChi;
+	};
+
+	const isVuotSoTinChiToiDa = (record: LopHocPhan.IRecord) => {
+		if (!soTinChiToiDa) return false;
+
+		const stcHienTaiCuaHp = _.sumBy(
+			danhSachLopHienThi.filter(
+				(item) => item.maHocPhan === record.maHocPhan && item.hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy !== false,
+			),
+			(item) => item.soTinChi ?? 0,
+		);
+
+		return tongTinChi - stcHienTaiCuaHp + getSoTinChiLop(record) > soTinChiToiDa;
+	};
+
 	const getDisabledDangKy = (record: LopHocPhan.IRecord) => {
 		if (record.children?.length) return true;
 
@@ -207,7 +238,9 @@ const DangKyLopHocPhan = () => {
 			? [...(record.thoiKhoaBieuList ?? []), ...(lopCha?.thoiKhoaBieuList ?? [])]
 			: (record.thoiKhoaBieuList ?? []);
 
-		return checkTrungLich(allThoiKhoaBieu);
+		if (checkTrungLich(allThoiKhoaBieu)) return true;
+
+		return isVuotSoTinChiToiDa(record);
 	};
 
 	const buildLopDangKy = (lopVuaChon: LopHocPhan.IRecord, isWaitlist = false) => {
@@ -298,7 +331,7 @@ const DangKyLopHocPhan = () => {
 	};
 
 	const handleXemDeCuong = (rec: LopHocPhan.IRecord) => {
-		const deCuongId = rec.hocPhan?.deCuongHienTaiId ?? rec.deCuong?.deCuongId ?? rec.hocPhan?.ma ?? rec.maHocPhan;
+		const deCuongId = rec.hocPhan?.ma ?? rec.maHocPhan;
 		if (!deCuongId) return;
 
 		setDeCuongModal({
@@ -483,7 +516,10 @@ const DangKyLopHocPhan = () => {
 			render: (val, rec) => {
 				const daChon = isDaChonLop(rec);
 				const lopDangKy = danhSachLopDangKy.find((item) => item._id === rec._id || item.ten === rec.ten);
+				const vuotSoTinChi = isVuotSoTinChiToiDa(rec);
 				const disabled = getDisabledDangKy(rec) || !coDotDangKyTinChi;
+				const canhBao = renderTrangThaiCanhBao(rec);
+				const isChuaDangKy = lopDangKy?.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY;
 
 				if (daChon && dangKyNgay) {
 					const disabledDelete =
@@ -533,7 +569,7 @@ const DangKyLopHocPhan = () => {
 					);
 				}
 
-				if (daChon) {
+				if (daChon && isChuaDangKy) {
 					return (
 						<div>
 							<ButtonExtend
@@ -552,7 +588,16 @@ const DangKyLopHocPhan = () => {
 					);
 				}
 
-				const canhBao = renderTrangThaiCanhBao(rec);
+				if (daChon) {
+					return (
+						<Tag color='green'>
+							{intl.formatMessage({
+								id: 'dangkytinchi.dankylophocphan.action.dadangky',
+							})}
+						</Tag>
+					);
+				}
+
 				if (canhBao && disabled) return canhBao;
 
 				return (
@@ -560,6 +605,11 @@ const DangKyLopHocPhan = () => {
 						<ButtonExtend
 							type='primary'
 							disabled={disabled}
+							tooltip={
+								vuotSoTinChi
+									? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin' })
+									: undefined
+							}
 							onClick={(e) => {
 								e.stopPropagation();
 

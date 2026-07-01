@@ -1,15 +1,6 @@
 import axios from '@/utils/axios';
 import { ipDaoTao } from '@/utils/ip';
-
-type TLopHocPhanDangKyTheoHocPhanPayload = {
-	page?: number;
-	limit?: number;
-	select?: string;
-	sort?: Record<string, 1 | -1> | string;
-	population?: string[];
-	condition?: Record<string, any> | string;
-	filters?: any[];
-};
+import { ELoaiDangKyTheoLop } from './constant';
 
 export async function getDotAvailable(maHocKy: string) {
 	return axios.get(`${ipDaoTao}/dang-ky-tin-chi/validate/hoc-ky/${maHocKy}`);
@@ -47,11 +38,7 @@ export async function getLichDangKyTinChiTrongKhoang(payload: { fromDate: string
 	return axios.get(`${ipDaoTao}/dang-ky-tin-chi/dot/lich/sinh-vien/from/${payload.fromDate}/to/${payload.toDate}`);
 }
 
-export async function getLopHocPhanDangKyTheoHocPhan(
-	payload: TLopHocPhanDangKyTheoHocPhanPayload,
-	maHocKy: string,
-	loai: 'lop-hanh-chinh' | 'khoa-nganh' | 'tat-ca',
-) {
+export async function getLopHocPhanDangKyTheoHocPhan(payload: any, maHocKy: string, loai: ELoaiDangKyTheoLop) {
 	return axios.get(
 		`${ipDaoTao}/dang-ky-tin-chi/sinh-vien/lop-hoc-phan/by-hoc-phan/hoc-ky/${maHocKy}/loai/${loai}/page`,
 		{

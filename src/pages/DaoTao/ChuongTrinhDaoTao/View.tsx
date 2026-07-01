@@ -20,8 +20,8 @@ const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) =
 	const updatingHtml = intl.formatMessage({ id: 'tientrinhhoctap.ctdt.updating' });
 	const tenNganhHienThi =
 		locale === 'vi-VN'
-			? recTienTrinh?.ctdtKeHoach?.nganh?.ten ?? recTienTrinh?.ctdtKeHoach?.nganh?.tenTiengAnh
-			: recTienTrinh?.ctdtKeHoach?.nganh?.tenTiengAnh ?? recTienTrinh?.ctdtKeHoach?.nganh?.ten;
+			? (recTienTrinh?.ctdtKeHoach?.nganh?.ten ?? recTienTrinh?.ctdtKeHoach?.nganh?.tenTiengAnh)
+			: (recTienTrinh?.ctdtKeHoach?.nganh?.tenTiengAnh ?? recTienTrinh?.ctdtKeHoach?.nganh?.ten);
 
 	return (
 		<>
