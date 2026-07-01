@@ -283,6 +283,12 @@ export default {
 	'dangkytinchi.duongdan.buoc2': 'Bước 2',
 	'dangkytinchi.duongdan.buoc2.mota':
 		'Click {dangky} tại lớp tín chỉ mong muốn (chỉ có thể chọn những lớp thuộc học phần chưa được đăng ký, không trùng lịch học và còn trống).',
+	'dangkytinchi.duongdan.buoc2.multiple.mota':
+		'Chọn các lớp tín chỉ muốn đăng ký (chỉ có thể chọn những lớp thuộc học phần chưa được đăng ký, không trùng lịch học và còn trống).',
+	'dangkytinchi.duongdan.buoc3': 'Bước 3',
+	'dangkytinchi.duongdan.buoc3.mota':
+		'Ấn {dangky}, hệ thống sẽ hiển thị các lớp đã chọn ở trên để sinh viên xác nhận và hoàn tất đăng ký.',
+	'dangkytinchi.duongdan.chon': 'CHỌN',
 	'dangkytinchi.duongdan.dangky': 'ĐĂNG KÝ',
 
 	'dangkytinchi.thongbao.dangky': 'Đăng ký thành công',
