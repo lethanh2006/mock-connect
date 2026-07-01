@@ -1,6 +1,7 @@
 import { colorTrangThaiHocSv, genderMessageIds, trangThaiHocSv } from '@/services/DaoTao/constant';
 import { placeOfBirthTypeMessageIds } from '@/services/DaoTao/SinhVien/constants';
 import { formatDate } from '@/utils/formatDate';
+import { getPublicAssetPath } from '@/utils/path';
 import { formatPhoneNumber } from '@/utils/utils';
 import { Card, Col, Divider, Flex, Image, Row, Spin, Tag, Typography } from 'antd';
 // import { Card, Descriptions, Divider, Flex, Image, Spin, Splitter, Typography } from 'antd';
@@ -78,7 +79,7 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 			<div className='sv-profile-summary'>
 				<Flex vertical align='center' gap={8}>
 					<div className='avatar-container'>
-						<Image src={record?.anhDaiDienUrl ?? '/student/metadata.png'} />
+						<Image src={record?.anhDaiDienUrl ?? getPublicAssetPath('/metadata.png')} />
 					</div>
 					<Title level={4} className='sv-profile-name'>
 						{record?.ten ?? '--'}

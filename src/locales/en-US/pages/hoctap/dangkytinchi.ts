@@ -56,6 +56,7 @@ export default {
 
 	'dangkytinchi.dankylophocphan.action.dadangky': 'Registered',
 	'dangkytinchi.dankylophocphan.action.dachon': 'Selected',
+	'dangkytinchi.dankylophocphan.action.bochon': 'Deselect',
 	'dangkytinchi.dankylophocphan.action.dangky': 'Register',
 	'dangkytinchi.dankylophocphan.action.chon': 'Select',
 	'dangkytinchi.dankylophocphan.filter.lopcontrong': 'Available Classes',
@@ -105,6 +106,7 @@ export default {
 	'dangkytinchi.phieudangky.table.btn.caclopdahuy': 'Unregistered classes',
 	'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin':
 		'You have registered for more than the maximum number of credits',
+	'dangkytinchi.phieudangky.table.tooltip.alert.khongcolopchuadangky': 'No classes selected to register',
 	'dangkytinchi.phieudangky.table.tooltip.alert.chuadangkydusotin':
 		'You have not registered for the minimum required number of credits',
 	'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi': 'Outside the credit registration period',
@@ -277,7 +279,7 @@ export default {
 	'dangkytinchi.duongdan.buoc2.mota':
 		'Click {dangky} at the desired credit class (You can only select classes belonging to unregistered courses, with no timetable clashes, and with remaining capacity.)',
 	'dangkytinchi.duongdan.buoc2.multiple.mota':
-		'Select the sections you want to register for (You can only select sections belonging to unregistered courses, with no timetable clashes, and with remaining capacity.)',
+		'Click {chon} on the credit classes you want to register for (You can only select classes belonging to unregistered courses, with no timetable clashes, and with remaining capacity.)',
 	'dangkytinchi.duongdan.buoc3': 'Step 3',
 	'dangkytinchi.duongdan.buoc3.mota':
 		'Click {dangky}, the system will show the selected sections above for students to confirm and complete registration.',

@@ -247,10 +247,10 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 	const buildLopDangKy = (lopVuaChon: LopHocPhan.IRecord, isWaitlist = false) => {
 		const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác cùng học phần
 		let soTinChi = lopVuaChon.hocPhan?.soTinChi ?? recHocPhan?.soTinChi ?? 0;
-		const khoaNganh = khoaNganhMe?.khoaNganhChinh;
-		// loaiDangKy === ELoaiDangKyTheoLop.KHOA_NGANH_2 ? khoaNganhMe?.khoaNganhPhu :
+		const khoaNganh =
+			loaiDangKy === ELoaiDangKyTheoLop.KHOA_NGANH_2 ? khoaNganhMe?.khoaNganhPhu : khoaNganhMe?.khoaNganhChinh;
 		const lopDangKy = {
-			hocPhan: recHocPhan,
+			hocPhan: lopVuaChon.hocPhan,
 			maNganh: khoaNganh?.maNganh,
 			maKhoaNganh: khoaNganh?.ma,
 			// TODO: Update loại đăng ký
@@ -386,7 +386,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.mahp' }),
 			dataIndex: 'maHocPhan',
-			width: 150,
+			width: 140,
 			align: 'center',
 			filterType: 'string',
 			sortable: true,
@@ -574,7 +574,9 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 					return (
 						<div>
 							<ButtonExtend
-								type='primary'
+								type='default'
+								danger
+								size='small'
 								onClick={(e) => {
 									e.stopPropagation();
 									onClickBoChon(rec);
@@ -582,7 +584,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 								disabled={!coDotDangKyTinChi}
 							>
 								{intl.formatMessage({
-									id: 'dangkytinchi.dankylophocphan.action.dachon',
+									id: 'dangkytinchi.dankylophocphan.action.bochon',
 								})}
 							</ButtonExtend>
 						</div>
@@ -642,8 +644,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 					dataState='danhSachLopDktc'
 					modelName='lophocphan.lophocphan'
 					hideCard
-					buttons={{ create: false, filter: false }}
-					addStt={false}
+					buttons={{ create: false }}
 					scroll={{ y: 600 }}
 					otherProps={{
 						rowKey: 'ten',
