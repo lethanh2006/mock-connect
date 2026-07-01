@@ -121,7 +121,7 @@ const PhieuDangKy = ({
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.mahocphan' }),
 			dataIndex: 'maHocPhan',
 			align: 'center',
-			width: 140,
+			width: 120,
 			render: (val, rec) => (
 				<a
 					onClick={(e) => {
@@ -137,15 +137,14 @@ const PhieuDangKy = ({
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.tenhocphan' }),
 			dataIndex: ['hocPhan', 'ten'],
-			width: 280,
+			width: 220,
 			filterType: 'string',
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.sotinchi' }),
 			dataIndex: 'soTinChi',
-			width: 70,
+			width: 50,
 			align: 'center',
-			sortable: true,
 			render: (val, rec) => (
 				<>
 					{val} {rec.hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy === false ? <i>(không tính)</i> : null}
@@ -161,7 +160,7 @@ const PhieuDangKy = ({
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.giangvien' }),
-			width: 160,
+			width: 140,
 			render: (val, rec) => (
 				<ExpandText>
 					{rec.nhanSuList
@@ -180,7 +179,7 @@ const PhieuDangKy = ({
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.thongtinchitiet' }),
-			width: 250,
+			width: 220,
 			render: (val, rec) => <RenderLichHoc lopHocPhan={{ ...rec, loai: ELoaiLopHocPhan.CHINH }} />, // Fake loại để ko lỗi
 		},
 		// {
@@ -326,6 +325,22 @@ const PhieuDangKy = ({
 				onReload={onReload}
 				otherButtons={[
 					<Space wrap>
+						{dotDangKyHienTai?.tinhChatDangKy !== ETinhChatDangKyTC.XOA && (
+							<BtnDangKyTinChi
+								danhSachLopHienThi={danhSachLopHienThi}
+								tongTinChi={tongTinChi}
+								soTinChiToiDa={soTinChiToiDa}
+								soTinChiToiThieu={soTinChiToiThieu}
+							/>
+						)}
+
+						<ButtonExtend
+							icon={<CalendarOutlined />}
+							onClick={() => setVisibleModal(true)}
+							disabled={!danhSachLopHienThi.length}
+						>
+							{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
+						</ButtonExtend>
 						<ButtonExtend
 							icon={<HistoryOutlined />}
 							onClick={() => setVisibleLopDaHuy(true)}
@@ -333,11 +348,7 @@ const PhieuDangKy = ({
 						>
 							{intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.title' })}
 						</ButtonExtend>
-						{danhSachLopDangKy.length ? (
-							<ButtonExtend icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
-								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
-							</ButtonExtend>
-						) : null}
+
 						{/* {dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 						<>
 							<ButtonExtend icon={<DeleteOutlined />} onClick={() => setVisibleLopDaHuy(true)}>
@@ -347,15 +358,7 @@ const PhieuDangKy = ({
 							<ModalLopDaHuy visible={visibleLopDaHuy} setVisible={setVisibleLopDaHuy} />
 						</>
 					) : null} */}
-						{/* {tongTinChiChuaDk ? ( */}
-						{/* // dotDangKyHienTai?.tinhChatDangKy !== ETinhChatDangKyTC.XOA && */}
-						<BtnDangKyTinChi
-							danhSachLopHienThi={danhSachLopHienThi}
-							tongTinChi={tongTinChi}
-							soTinChiToiDa={soTinChiToiDa}
-							soTinChiToiThieu={soTinChiToiThieu}
-						/>
-						{/* ) : null} */}
+
 						{tongTinChi < soTinChiToiThieu ? (
 							<i className='text-error'>{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.alert.luuy' })}</i>
 						) : null}
@@ -367,7 +370,7 @@ const PhieuDangKy = ({
 						<b style={{ color: '#c80f1f', fontSize: 15 }}>{tongTinChi ?? 0}</b>
 					</span>,
 				]}
-			></TableStaticData>
+			/>
 
 			<ModalLopDaHuy visible={visibleLopDaHuy} setVisible={setVisibleLopDaHuy} />
 

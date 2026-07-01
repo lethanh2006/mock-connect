@@ -250,7 +250,9 @@ const DangKyTinChiPage = () => {
 							{/* <Divider style={{ margin: '8px 0' }} /> */}
 						</>
 					) : null}
+
 					{cctFilter?.() && <AlertVuotTin onViewLichSu={() => setVisibleLichSu(true)} />}
+
 					<Spin spinning={loading}>
 						{dotDangKyHienTai && sinhVienDot ? (
 							sinhVienDot.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.KHONG_DUOC_DK ? (
@@ -350,6 +352,7 @@ const DangKyTinChiPage = () => {
 					</Spin>
 				</PageCard>
 			</div>
+
 			<div ref={phieuDangKyRef}>
 				<Card
 					title={intl.formatMessage({ id: 'dangkytinchi.phieudangky.danhsachdadangky.title' })}

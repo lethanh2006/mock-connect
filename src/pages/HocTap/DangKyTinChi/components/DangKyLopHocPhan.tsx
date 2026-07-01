@@ -18,7 +18,7 @@ import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Modal, Popconfirm, Popover, Select, Space, Tag, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAccess, useIntl, useModel } from 'umi';
 import ModalDangKyNgay from './ModalDangKyNgay';
 import RenderLichHoc from './RenderLichHoc';
@@ -51,7 +51,11 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 	const [coDangKyMoi, setCoDangKyMoi] = useState<boolean>();
 	const [expandedLopHocPhan, setExpandedLopHocPhan] = useState<string[]>([]);
 	const [typeLop, setTypeLop] = useState<string>('Lớp gợi ý');
-	const allLoaiDangKy = Object.values(ELoaiDangKyTheoLop);
+	const allLoaiDangKy = useMemo(() => {
+		const all = Object.values(ELoaiDangKyTheoLop);
+		if (!khoaNganhMe?.khoaNganhPhu?.ma) return all.filter((item) => item !== ELoaiDangKyTheoLop.KHOA_NGANH_2);
+		return all;
+	}, [khoaNganhMe?.khoaNganhPhu?.ma]);
 
 	// Học phần đang chọn đã được đăng ký 1 lớp nào đó rồi
 	const dangKyRoiMap: Partial<Record<ELoaiLopHocPhan, DangKyTinChi.ILopDangKy>> = {};
@@ -386,7 +390,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.mahp' }),
 			dataIndex: 'maHocPhan',
-			width: 140,
+			width: 120,
 			align: 'center',
 			filterType: 'string',
 			sortable: true,
@@ -404,19 +408,19 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.tenhocphan' }),
 			dataIndex: ['hocPhan', 'ten'],
-			width: 280,
+			width: 220,
 			filterType: 'string',
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.sotinchi' }),
 			dataIndex: ['hocPhan', 'soTinChi'],
-			width: 70,
+			width: 50,
 			align: 'center',
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.malop' }),
 			dataIndex: 'ten',
-			width: 140,
+			width: 150,
 			align: 'center',
 			filterType: 'string',
 			render: (val, rec) => val ?? rec?.ten,
@@ -435,7 +439,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.giangvien' }),
-			width: 160,
+			width: 140,
 			render: (val, rec) => (
 				<ExpandText>
 					{rec.nhanSuList
@@ -454,19 +458,19 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.thongtinchitiet' }),
-			width: 250,
+			width: 220,
 			render: (val, rec) => <RenderLichHoc lopHocPhan={rec} />,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.sisotoida' }),
 			dataIndex: 'siSoToiDa',
 			align: 'center',
-			width: 100,
+			width: 60,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.controng' }),
 			align: 'center',
-			width: 100,
+			width: 60,
 			render: (val, rec) => (rec.siSo !== undefined && rec.siSoToiDa >= rec.siSo ? rec.siSoToiDa - rec.siSo : 0),
 		},
 		// {
@@ -667,7 +671,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 							}))}
 							value={loaiDangKy}
 							onChange={(val) => setLoaiDangKy(val)}
-							style={{ width: 300 }}
+							style={{ width: 260 }}
 						/>,
 					]}
 					// otherButtons={
@@ -688,7 +692,9 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 					emptyText={intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.table.empty.khongcolop' })}
 				/>
 			</div>
+
 			<ModalDangKyNgay visible={visibleDangKyNgay} setVisible={setVisibleDangKyNgay} />
+
 			<ModalHocPhan
 				visible={visibleDeCuong}
 				setVisible={setVisibleDeCuong}
