@@ -16,7 +16,7 @@ const BtnDangKyTinChi = ({ danhSachLopHienThi, tongTinChi, soTinChiToiDa, soTinC
 	const intl = useIntl();
 	const { dotDangKyHienTai, setVisibleRegister } = useModel('daotao.dotdangkytinchi');
 	const { settings } = useModel('tienich.caidat');
-	const dangKyNgay = !!settings?.SINH_VIEN?.dktcMultiple;
+	const dangKyNgay = true;
 	const dangTrongThoiGian =
 		dotDangKyHienTai?.thoiGianBatDau &&
 		dotDangKyHienTai?.thoiGianKetThuc &&
@@ -45,9 +45,7 @@ const BtnDangKyTinChi = ({ danhSachLopHienThi, tongTinChi, soTinChiToiDa, soTinC
 			type='primary'
 			icon={<SendOutlined />}
 			onClick={() => setVisibleRegister(true)}
-			disabled={
-				!coLopChuaDangKy || tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu || !dangTrongThoiGian
-			}
+			disabled={!coLopChuaDangKy || tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu || !dangTrongThoiGian}
 		>
 			{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.dangky' })}
 		</ButtonExtend>

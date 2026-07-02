@@ -65,7 +65,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 	const [visibleDangKyNgay, setVisibleDangKyNgay] = useState<boolean>(false);
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
-	const dangKyNgay: boolean = !!settings?.SINH_VIEN?.dktcMultiple;
+	const dangKyNgay: boolean = true;
 	const coDotDangKyTinChi = !!dotDangKyHienTai?._id && dotDangKyHienTai.maHocKy === recHocKy?.ma;
 
 	const getData = () =>
