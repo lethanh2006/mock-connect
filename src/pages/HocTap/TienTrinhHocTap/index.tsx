@@ -3,10 +3,11 @@ import { TabViewPage } from '@/components/TabViewPage';
 import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { formatDate } from '@/utils/formatDate';
+import { getPublicAssetPath } from '@/utils/path';
 import { BookOutlined, ScheduleOutlined } from '@ant-design/icons';
 import { Alert, Col, Descriptions, Divider, Row, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
-import { useAccess, useIntl, useModel } from 'umi';
+import { getLocale, useAccess, useIntl, useModel } from 'umi';
 import TienTrinhChuongTrinhKhung from './ChuongTrinhKhung';
 import './components/style.less';
 import TienTrinhThucTe from './TienTrinhThucTe';
@@ -14,6 +15,7 @@ import { tinhThongKeMinor } from './utils';
 
 const TienTrinhHocTap = () => {
 	const intl = useIntl();
+	const locale = getLocale();
 	const { getAllModel, record: recDotQuyDoi, setRecord } = useModel('daotao.quydoidiem.dotquydoidiem');
 	const { maKhoaNganh, setMaKhoaNganh, record: recSinhVien, khoaNganhMe } = useModel('sinhvien.sinhvien');
 	const { record: recTienTrinh, getTienTrinhTotNghiepModel, loading } = useModel('sinhvien.tientrinhtotnghiep');
@@ -35,6 +37,10 @@ const TienTrinhHocTap = () => {
 	const tongTinChiDaDat = (tongTinChiCtdtDaDat ?? 0) + thongKeMinor.daDat;
 	const tongTinChiTatCa = (tongTinChiCtdt ?? 0) + thongKeMinor.tong;
 	const phanTramTinChi = tongTinChiTatCa ? Math.min(100, (tongTinChiDaDat * 100) / tongTinChiTatCa) : 0;
+	const tenNganhHienThi =
+		locale === 'vi-VN'
+			? recTienTrinh?.ctdtKeHoach?.ten
+			: (recTienTrinh?.ctdtKeHoach?.tenTiengAnh ?? recTienTrinh?.ctdtKeHoach?.ma);
 
 	useEffect(() => {
 		//Get đợt me
@@ -64,10 +70,8 @@ const TienTrinhHocTap = () => {
 					colon={false}
 					style={{ marginBottom: 16 }}
 				>
-					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.cohortMajor' })}>
-						<a onClick={() => setVisibleChuongTrinh(true)}>
-							{chuongTrinhHienTai?.khoaNganh?.nganh?.ten || khoaNganhMe?.khoaNganhChinh?.ten || '-'}
-						</a>
+					<Descriptions.Item label={intl.formatMessage({ id: 'thongtincanhan.hoso.trainingProgram' })}>
+						<a onClick={() => setVisibleChuongTrinh(true)}>{tenNganhHienThi || '-'}</a>
 					</Descriptions.Item>
 
 					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.college' })}>
@@ -134,7 +138,7 @@ const TienTrinhHocTap = () => {
 									/>
 								</div>
 								<div className='progress-logo'>
-									<img src='/student/logo.png' alt='' width={30} height={30} />
+									<img src={getPublicAssetPath('logo.png')} alt='' width={30} height={30} />
 								</div>
 							</div>
 							<div className='progress-meta'>

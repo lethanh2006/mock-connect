@@ -7,6 +7,7 @@ import { useModel } from 'umi';
 
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
+import { getPublicAssetPath } from '@/utils/path';
 import { Collapse } from 'antd';
 import ReactMarkdown from 'react-markdown';
 
@@ -51,7 +52,7 @@ const ContentBoxChatV2 = () => {
 		return (
 			<>
 				<div className='avatar'>
-					<Avatar src='/student/images/chatbot_ava.png' />
+					<Avatar src={getPublicAssetPath('images/chatbot_ava.png')} />
 				</div>
 
 				<div className='content-text'>
@@ -133,7 +134,7 @@ const ContentBoxChatV2 = () => {
 			{formSubmiting ? (
 				<div className='message bot' id='tidot_loading'>
 					<div className='avatar'>
-						<Avatar src='/student/images/chatbot_ava.png' />
+						<Avatar src={getPublicAssetPath('images/chatbot_ava.png')} />
 					</div>
 					<div className='text'>
 						<div className='ticontainer'>

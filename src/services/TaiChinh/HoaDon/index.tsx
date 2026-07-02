@@ -8,3 +8,7 @@ export async function getExportBillUrl(identityCode: string) {
 	const blob = new Blob([res?.data], { type: 'application/pdf' });
 	return URL.createObjectURL(blob);
 }
+
+export async function getThongTinHoaDonMe() {
+	return await axios.get(`${ipTaiChinh}/thong-tin-hoa-don/me`);
+}

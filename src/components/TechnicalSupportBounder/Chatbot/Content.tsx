@@ -1,4 +1,5 @@
 import dayjs from '@/utils/dayjs';
+import { getPublicAssetPath } from '@/utils/path';
 import { PlayCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar } from 'antd';
 import classNames from 'classnames';
@@ -54,7 +55,7 @@ const ContentBoxChat = () => {
 		return (
 			<>
 				<div className='avatar'>
-					<Avatar src='/student/images/chatbot_ava.png' />
+					<Avatar src={getPublicAssetPath('images/chatbot_ava.png')} />
 				</div>
 
 				<div className='content-text'>
@@ -114,7 +115,7 @@ const ContentBoxChat = () => {
 			{formSubmiting ? (
 				<div className='message bot' id='tidot_loading'>
 					<div className='avatar'>
-						<Avatar src='/student/images/chatbot_ava.png' />
+						<Avatar src={getPublicAssetPath('images/chatbot_ava.png')} />
 					</div>
 					<div className='text'>
 						<div className='ticontainer'>

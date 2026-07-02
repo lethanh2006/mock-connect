@@ -101,9 +101,9 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 		});
 	}, [buildSemesterTitle, maKhoaNganh]);
 
-	useEffect(() => {
-		if (!danhSachDauDiem.length) getDauDiem();
-	}, []);
+	// useEffect(() => {
+	// 	if (!danhSachDauDiem.length) getDauDiem();
+	// }, []);
 
 	useEffect(() => {
 		setMaHocKyFilter('all');
@@ -287,7 +287,27 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			},
 		];
 
-		const colCount = cols.length;
+		const dauDiemCols: IColumn<DataType>[] = danhSachDauDiem.map((item) => ({
+			title: item.ma ?? item.ten,
+			width: 80,
+			dataIndex: `diemThanhPhan${item.field}` as keyof DataType,
+			align: 'center',
+			// sortable: true,
+			onCell,
+		}));
+		if (dauDiemCols.length) {
+			cols.splice(6, 0, {
+				title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.diemThanhPhan' }),
+				width: dauDiemCols.length * 80,
+				children: dauDiemCols,
+			});
+		}
+
+		const colCount = cols.reduce((total, col) => {
+			if (col.hide) return total;
+
+			return total + (col.children?.filter((child) => child.hide !== true).length || 1);
+		}, 0);
 		cols[0] = {
 			...cols[0],
 			onCell: (rec) => ({
@@ -296,22 +316,8 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			}),
 		};
 
-		// const dauDiemCols: IColumn<LopHocPhan.IDiemHpSvHk>[] = danhSachDauDiem.map((item) => ({
-		// 	title: item.ma ?? item.ten,
-		// 	width: 80,
-		// 	dataIndex: `diemThanhPhan${item.field}` as keyof LopHocPhan.IDiemHpSvHk,
-		// 	align: 'center',
-		// 	// sortable: true,
-		// 	onCell,
-		// }));
-		// cols.splice(5, 0, {
-		// 	title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.diemThanhPhan' }),
-		// 	width: 80,
-		// 	children: dauDiemCols,
-		// });
-
 		return cols;
-	}, [handleShowHocPhan, intl]);
+	}, [danhSachDauDiem, handleShowHocPhan, intl]);
 
 	return (
 		<>
@@ -366,8 +372,16 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				data={tableData}
 				columns={columns}
 				globalSearch={false}
-			></TableStaticData>
-
+			>
+				{/* <Segmented
+					value={loaiHocPhan}
+					onChange={(val) => setLoaiHocPhan(val.toString())}
+					options={[
+						{ value: 'all', label: 'Tất cả học phần' },
+						// { value: 'fail', label: 'Học phần chưa đạt' },
+					]}
+				/> */}
+			</TableStaticData>
 			<ModalChiTietDiem
 				visible={visibleDiem}
 				setVisible={setVisibleDiem}

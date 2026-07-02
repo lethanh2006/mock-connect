@@ -13,7 +13,6 @@ import ketquahoctap from './hoctap/ketquahoctap';
 import hoctapkhac from './hoctap/khac';
 import lichthi from './hoctap/lichthi';
 import lophocphan from './hoctap/lophocphan';
-import pathway from './hoctap/pathway';
 import tientrinhhoctap from './hoctap/tientrinhhoctap';
 import khaosat from './khaosat';
 import lichsukien from './lichsukien';
@@ -67,7 +66,6 @@ export default {
 	...activity,
 	...diemrenluyen,
 	...sinhvien,
-	...pathway,
 	...minor,
 	...syllabus,
 

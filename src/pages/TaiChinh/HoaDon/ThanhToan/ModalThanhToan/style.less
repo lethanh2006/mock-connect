@@ -36,6 +36,25 @@
 			color: #1890ff;
 		}
 	}
+
+	&__scrollable {
+		overflow-y: auto;
+		max-height: 420px;
+	}
+
+	&__group {
+		margin-bottom: 12px;
+	}
+
+	&__group-title {
+		padding: 8px 16px;
+		font-weight: 600;
+		font-size: 12px;
+		color: #8c8c8c;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		background: #eef1f6;
+	}
 }
 
 .payment-detail {
@@ -75,6 +94,20 @@
 		font-size: 13px;
 	}
 
+	&__amount-input-hint {
+		font-size: 16px;
+		margin-top: 4px;
+		font-weight: bold;
+		color: #ff4d4f;
+	}
+
+	&__amount-error {
+		color: #ff4d4f;
+		font-weight: bold;
+		font-size: 16px;
+		margin-top: 4px;
+	}
+
 	&__summary {
 		margin-top: 16px;
 		padding-top: 12px;
@@ -98,6 +131,36 @@
 		border-top: 1px solid #f0f0f0;
 	}
 
+	&__invoice-toggle {
+		margin-top: 16px;
+		padding-top: 12px;
+		border-top: 1px solid #f0f0f0;
+	}
+
+	&__invoice-form {
+		margin-top: 12px;
+		padding: 16px;
+		background: #fafafa;
+		border: 1px solid #e8e8e8;
+		border-radius: 8px;
+
+		.ant-form-item {
+			margin-bottom: 0;
+		}
+	}
+
+	&__invoice-form-title {
+		margin-bottom: 12px;
+		font-size: 15px;
+		font-weight: 600;
+	}
+
+	&__invoice-form-label {
+		margin-bottom: 4px;
+		color: #595959;
+		font-size: 13px;
+		font-weight: 500;
+	}
 	&__footer {
 		margin-top: 20px;
 	}

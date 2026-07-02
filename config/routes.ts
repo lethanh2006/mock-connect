@@ -35,7 +35,7 @@ export default [
 	// 	hideInMenu: true,
 	// },
 	{
-		path: '/my-profile',
+		path: '/thong-tin-ca-nhan',
 		name: 'MyProfile',
 		icon: 'UserOutlined',
 		component: 'SinhVien',
@@ -47,12 +47,12 @@ export default [
 		component: 'Calendar',
 	},
 	{
-		path: '/academic',
+		path: '/hoc-tap',
 		name: 'Academic',
 		icon: 'BookOutlined',
 		routes: [
 			{
-				path: 'course-registration',
+				path: 'dang-ky-tin-chi',
 				name: 'CourseRegistration',
 				component: 'HocTap/DangKyTinChi',
 			},
@@ -62,12 +62,12 @@ export default [
 			// 	component: 'Calendar',
 			// },
 			{
-				path: 'grades-transcript',
+				path: 'ket-qua-hoc-tap',
 				name: 'GradesTranscript',
 				component: 'HocTap/KetQuaHocTap',
 			},
 			{
-				path: 'degree-audit',
+				path: 'tien-trinh-hoc-tap',
 				name: 'DegreeAudit',
 				component: 'HocTap/TienTrinhHocTap',
 			},
@@ -335,33 +335,33 @@ export default [
 	// 		},
 	// 	],
 	// },
-	// {
-	// 	path: '/finance',
-	// 	name: 'Finance',
-	// 	icon: 'DollarOutlined',
-	// 	routes: [
-	// 		{
-	// 			path: 'tuition-billing',
-	// 			name: 'TuitionBilling',
-	// 			component: 'New/TuitionBilling',
-	// 		},
-	// 		{
-	// 			path: 'payment-tracking',
-	// 			name: 'PaymentTracking',
-	// 			component: 'New/PaymentTracking',
-	// 		},
-	// 		{
-	// 			path: 'scholarship',
-	// 			name: 'Scholarship',
-	// 			component: 'New/Scholarship',
-	// 		},
-	// 		{
-	// 			path: 'financial-planning',
-	// 			name: 'FinancialPlanning',
-	// 			component: 'New/FinancialPlanning',
-	// 		},
-	// 	],
-	// },
+	{
+		path: '/finance',
+		name: 'Finance',
+		icon: 'DollarOutlined',
+		routes: [
+			{
+				path: 'tuition-billing',
+				name: 'TuitionBilling',
+				component: 'TaiChinh/HoaDon',
+			},
+			// {
+			// 	path: 'payment-tracking',
+			// 	name: 'PaymentTracking',
+			// 	component: 'New/PaymentTracking',
+			// },
+			// {
+			// 	path: 'scholarship',
+			// 	name: 'Scholarship',
+			// 	component: 'New/Scholarship',
+			// },
+			// {
+			// 	path: 'financial-planning',
+			// 	name: 'FinancialPlanning',
+			// 	component: 'New/FinancialPlanning',
+			// },
+		],
+	},
 
 	// DANH MUC HE THONG
 	// {
@@ -860,36 +860,36 @@ export default [
 	// },
 
 	// TÀI CHÍNH
-	{
-		name: 'TaiChinh',
-		icon: 'TransactionOutlined',
-		path: '/tai-chinh',
-		access: 'manyAccessFilter',
-		permissions: ['tc.bill:read', 'tc.transaction:read', 'tc.discount:read'],
-		routes: [
-			// {
-			// 	name: 'CongNo',
-			// 	path: 'cong-no',
-			// 	component: 'TaiChinh/HoaDon',
-			// 	access: 'accessFilter',
-			// 	permission: 'tc.bill:read',
-			// },
-			// {
-			// 	name: 'GiaoDich',
-			// 	path: 'giao-dich',
-			// 	component: 'TaiChinh/GiaoDich',
-			// 	access: 'accessFilter',
-			// 	permission: 'tc.transaction:read',
-			// },
-			// {
-			// 	name: 'UuDaiThanhToan',
-			// 	path: 'uu-dai-thanh-toan',
-			// 	component: 'TaiChinh/UuDaiThanhToan',
-			// 	access: 'accessFilter',
-			// 	permission: 'tc.discount:read',
-			// },
-		],
-	},
+	// {
+	// 	name: 'TaiChinh',
+	// 	icon: 'TransactionOutlined',
+	// 	path: '/tai-chinh',
+	// 	access: 'manyAccessFilter',
+	// 	permissions: ['tc.bill:read', 'tc.transaction:read', 'tc.discount:read'],
+	// 	routes: [
+	// 		{
+	// 			name: 'CongNo',
+	// 			path: 'cong-no',
+	// 			component: 'TaiChinh/HoaDon',
+	// 			access: 'accessFilter',
+	// 			permission: 'tc.bill:read',
+	// 		},
+	// 		// {
+	// 		// 	name: 'GiaoDich',
+	// 		// 	path: 'giao-dich',
+	// 		// 	component: 'TaiChinh/GiaoDich',
+	// 		// 	access: 'accessFilter',
+	// 		// 	permission: 'tc.transaction:read',
+	// 		// },
+	// 		// {
+	// 		// 	name: 'UuDaiThanhToan',
+	// 		// 	path: 'uu-dai-thanh-toan',
+	// 		// 	component: 'TaiChinh/UuDaiThanhToan',
+	// 		// 	access: 'accessFilter',
+	// 		// 	permission: 'tc.discount:read',
+	// 		// },
+	// 	],
+	// },
 
 	// TIỆN ÍCH
 	// {

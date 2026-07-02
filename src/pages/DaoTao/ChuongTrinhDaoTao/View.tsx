@@ -4,7 +4,7 @@ import { LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
 import { getNameFile } from '@/utils/utils';
 import { Button, Descriptions, Divider, Empty, Modal } from 'antd';
 import React, { useState } from 'react';
-import { useIntl, useModel } from 'umi';
+import { getLocale, useIntl, useModel } from 'umi';
 
 type TProps = {
 	visible: boolean;
@@ -12,11 +12,16 @@ type TProps = {
 };
 
 const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) => {
+	const locale = getLocale();
 	const intl = useIntl();
 	const { record: recTienTrinh } = useModel('sinhvien.tientrinhtotnghiep');
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
 	const updatingHtml = intl.formatMessage({ id: 'tientrinhhoctap.ctdt.updating' });
+	const tenNganhHienThi =
+		locale === 'vi-VN'
+			? (recTienTrinh?.ctdtKeHoach?.nganh?.ten ?? recTienTrinh?.ctdtKeHoach?.nganh?.tenTiengAnh)
+			: (recTienTrinh?.ctdtKeHoach?.nganh?.tenTiengAnh ?? recTienTrinh?.ctdtKeHoach?.nganh?.ten);
 
 	return (
 		<>
@@ -51,7 +56,7 @@ const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) =
 								</Descriptions.Item>
 							)}
 							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.nganh' })}>
-								{recTienTrinh.ctdtKeHoach.nganh?.ten ?? recTienTrinh.ctdtKeHoach.maNganh}
+								{tenNganhHienThi ?? recTienTrinh.ctdtKeHoach.maNganh}
 							</Descriptions.Item>
 							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.ngonngudaotao' })}>
 								{recTienTrinh.ctdtKeHoach.ngonNguDaoTao ?? '--'}

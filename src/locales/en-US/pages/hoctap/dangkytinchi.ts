@@ -10,7 +10,7 @@ export default {
 
 	'dangkytinchi.loaidangky.lop-hanh-chinh': 'Planned Courses',
 	'dangkytinchi.loaidangky.khoa-nganh': 'By Curriculum',
-	'dangkytinchi.loaidangky.khoa-nganh-2': 'According to the second major curriculum',
+	'dangkytinchi.loaidangky.khoa-nganh-2': 'By Secondary Major Curriculum',
 	'dangkytinchi.loaidangky.tat-ca': 'All courses',
 
 	'dangkytinchi.chitiethocky.description.tenhocky': 'Semester name',
@@ -265,7 +265,7 @@ export default {
 	'dangkytinchi.duongdan.theochuongtrinhdaotao': 'By Curriculum',
 	'dangkytinchi.duongdan.theochuongtrinhdaotao.mota':
 		'Displays the courses belonging to the standard training program that have available classes',
-	'dangkytinchi.duongdan.theochuongtrinhnganh2': 'By Double Major Curriculum',
+	'dangkytinchi.duongdan.theochuongtrinhnganh2': 'By Secondary Major Curriculum',
 	'dangkytinchi.duongdan.theochuongtrinhnganh2.mota':
 		'Displays the courses belonging to the double major program that have available classes',
 	'dangkytinchi.duongdan.tatcahocphan': 'All Courses',
