@@ -20,7 +20,7 @@ export const renderKhoangThoiGian = (rec: { thoiKhoaBieuList?: ThoiKhoaBieu.IRec
 	const end = _.maxBy(thoiKhoaBieuList, (item) => dayjs(item.ngay).valueOf())?.ngay;
 	if (!start || !end) return null;
 
-	return formatTimeRange(start, end, 'DD/MM');
+	return formatTimeRange(start, end);
 };
 
 export const buildDanhSachLopHienThi = (danhSachLopDangKy: DangKyTinChi.ILopDangKy[]): DangKyTinChi.ILopDangKy[] => {
