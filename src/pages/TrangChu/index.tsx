@@ -202,7 +202,7 @@ const TrangChu = () => {
 						<Row gutter={[16, 16]}>
 							{/* <Col span={24} className='nq57-ptit'>
 							<img
-								src='/images/nq57-ptit.png'
+								src={getPublicAssetPath('images/nq57-ptit.png')}
 								alt='Tuổi trẻ PTIT với Nghị quyết 57'
 								title='Tuổi trẻ PTIT với Nghị quyết 57'
 								onClick={() => {}}

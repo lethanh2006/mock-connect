@@ -7,6 +7,7 @@ import { useModel } from 'umi';
 
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
+import { getPublicAssetPath } from '@/utils/path';
 import { Collapse } from 'antd';
 import ReactMarkdown from 'react-markdown';
 
@@ -19,7 +20,7 @@ const ContentBoxChatV2 = () => {
 
 	const fullName = initialState?.currentUser?.family_name
 		? `${initialState?.currentUser.family_name} ${initialState?.currentUser?.given_name ?? ''}`
-		: initialState?.currentUser?.name ?? (initialState?.currentUser?.preferred_username || '');
+		: (initialState?.currentUser?.name ?? (initialState?.currentUser?.preferred_username || ''));
 	const lastNameChar = fullName.split(' ')?.at(-1)?.[0]?.toUpperCase();
 
 	useEffect(() => {
@@ -51,7 +52,7 @@ const ContentBoxChatV2 = () => {
 		return (
 			<>
 				<div className='avatar'>
-					<Avatar src='/images/chatbot_ava.png' />
+					<Avatar src={getPublicAssetPath('images/chatbot_ava.png')} />
 				</div>
 
 				<div className='content-text'>
@@ -133,7 +134,7 @@ const ContentBoxChatV2 = () => {
 			{formSubmiting ? (
 				<div className='message bot' id='tidot_loading'>
 					<div className='avatar'>
-						<Avatar src='/images/chatbot_ava.png' />
+						<Avatar src={getPublicAssetPath('images/chatbot_ava.png')} />
 					</div>
 					<div className='text'>
 						<div className='ticontainer'>

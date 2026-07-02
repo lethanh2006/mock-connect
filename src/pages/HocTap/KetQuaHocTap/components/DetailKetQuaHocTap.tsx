@@ -67,7 +67,9 @@ const DetailKetQuaHocTap = (props: {
 
 		return (
 			<>
-				<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.danhgia' })}</Divider>
+				<Divider className='divider-big-title' orientation='left'>
+					{intl.formatMessage({ id: 'lophocphan.id.ketqua.danhgia' })}
+				</Divider>
 				<Descriptions bordered>
 					{Object.keys(gClos).map((field, index) => {
 						const cdrs = gClos[field];
@@ -132,14 +134,18 @@ const DetailKetQuaHocTap = (props: {
 			<>
 				{!!Object.keys(gClosThiLan1).length && (
 					<>
-						<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.hthp' })}</Divider>
+						<Divider className='divider-big-title' orientation='left'>
+							{intl.formatMessage({ id: 'lophocphan.id.ketqua.hthp' })}
+						</Divider>
 						{render(gClosThiLan1)}
 					</>
 				)}
 
 				{!!Object.keys(gClosThiLan2).length && (
 					<>
-						<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.hthp2' })}</Divider>
+						<Divider className='divider-big-title' orientation='left'>
+							{intl.formatMessage({ id: 'lophocphan.id.ketqua.hthp2' })}
+						</Divider>
 						{render(gClosThiLan2)}
 					</>
 				)}
@@ -153,7 +159,9 @@ const DetailKetQuaHocTap = (props: {
 
 		return (
 			<>
-				<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtb' })}</Divider>
+				<Divider className='divider-big-title' orientation='left'>
+					{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtb' })}
+				</Divider>
 				<Descriptions bordered>
 					{trungBinhClos.map((cdr) => (
 						<Descriptions.Item label={cdr.maClo} key={cdr.maClo}>
@@ -190,7 +198,9 @@ const DetailKetQuaHocTap = (props: {
 							}
 							key='1'
 						>
-							<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtp' })}</Divider>
+							<Divider className='divider-big-title' orientation='left'>
+								{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtp' })}
+							</Divider>
 							{hasTrongSo ? (
 								<Descriptions bordered>
 									{dauDiemCoTrongSo?.map((item) => (
@@ -216,7 +226,9 @@ const DetailKetQuaHocTap = (props: {
 								/>
 							)}
 
-							<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemthi' })}</Divider>
+							<Divider className='divider-big-title' orientation='left'>
+								{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemthi' })}
+							</Divider>
 							<Descriptions bordered>
 								{!hasTrongSoThi ? (
 									<>
@@ -296,7 +308,9 @@ const DetailKetQuaHocTap = (props: {
 								</div>
 							)}
 
-							<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtongket' })}</Divider>
+							<Divider className='divider-big-title' orientation='left'>
+								{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtongket' })}
+							</Divider>
 							<Descriptions bordered>
 								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.diem10' })}>
 									{renderDiem(recDiem?.diemTongKet)}

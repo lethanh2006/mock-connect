@@ -1,6 +1,7 @@
 @import 'layout.less';
 @import 'split-panel.less';
 @import 'custom-antd.less';
+@import 'calendar.less';
 @import 'custom_vinuni.less';
 
 html,
@@ -83,7 +84,7 @@ a {
 		margin-top: 0;
 	}
 
-	.ant-btn+.ant-btn {
+	.ant-btn + .ant-btn {
 		margin-left: 0 !important;
 	}
 }
@@ -209,16 +210,16 @@ canvas {
 		height: 100vh;
 		overflow: hidden;
 
-		>.ant-modal-content,
-		>div .ant-modal-content,
-		.ant-modal-body>.ant-card {
+		> .ant-modal-content,
+		> div .ant-modal-content,
+		.ant-modal-body > .ant-card {
 			border-radius: 0;
 			height: 100vh;
 			display: flex;
 			flex-direction: column;
 
-			>.ant-modal-body,
-			>.ant-card-body {
+			> .ant-modal-body,
+			> .ant-card-body {
 				// height: 100vh;
 				overflow: auto;
 				flex: 1;

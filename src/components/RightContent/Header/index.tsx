@@ -14,7 +14,7 @@ const HeaderContentPage = () => {
 				{/* <div className='text-error'>{intl.formatMessage({ id: 'global.rightcontent.header.title' })}</div> */}
 				<Link to='/'>{intl.formatMessage({ id: AppModules[currentRole].title }).toLocaleUpperCase()}</Link>
 			</div>
-			{/* <img src='/images/hoa-dao.png' alt='hoa-dao' /> */}
+			{/* <img src={getPublicAssetPath('images/hoa-dao.png')} alt='hoa-dao' /> */}
 		</div>
 	);
 };

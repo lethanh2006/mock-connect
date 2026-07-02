@@ -1,12 +1,8 @@
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
-import { ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import dayjs from '@/utils/dayjs';
-import { formatDateTime } from '@/utils/formatDate';
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Button, Col, Popover, Row } from 'antd';
+import { Col, Row } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
-import ViewDetailHocKy from './ViewDetailHocKy';
 
 const FilterDotDangKy = () => {
 	const intl = useIntl();
@@ -33,7 +29,7 @@ const FilterDotDangKy = () => {
 				<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
 					<FilterHocKy isSetHocKy />
 
-					<Popover content={<ViewDetailHocKy />} placement='right'>
+					{/* <Popover content={<ViewDetailHocKy />} placement='right'>
 						<Button type='link' icon={<InfoCircleOutlined />}>
 							{intl.formatMessage({ id: 'dangkytinchi.filter.btn.xemchitiet' })}
 						</Button>
@@ -50,7 +46,7 @@ const FilterDotDangKy = () => {
 								},
 							)}
 						</span>
-					) : null}
+					) : null} */}
 				</div>
 			</Col>
 

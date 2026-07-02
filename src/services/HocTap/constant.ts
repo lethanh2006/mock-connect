@@ -16,6 +16,24 @@ export enum ELoaiHocLuc {
 	EMPTY = 'Chưa xếp loại',
 }
 
+export const mapTrinhDoKqhtHocKy: Record<ETrinhDoKqhtHocKy, string> = {
+	[ETrinhDoKqhtHocKy.NAM_THU_1]: 'ketquahoctap.ketquahocky.trinhdo.namthu1',
+	[ETrinhDoKqhtHocKy.NAM_THU_2]: 'ketquahoctap.ketquahocky.trinhdo.namthu2',
+	[ETrinhDoKqhtHocKy.NAM_THU_3]: 'ketquahoctap.ketquahocky.trinhdo.namthu3',
+	[ETrinhDoKqhtHocKy.NAM_THU_4]: 'ketquahoctap.ketquahocky.trinhdo.namthu4',
+	[ETrinhDoKqhtHocKy.NAM_THU_5]: 'ketquahoctap.ketquahocky.trinhdo.namthu5',
+};
+
+export const mapLoaiHocLuc: Record<ELoaiHocLuc, string> = {
+	[ELoaiHocLuc.XUAT_SAC]: 'ketquahoctap.ketquahocky.hocluc.xuatsac',
+	[ELoaiHocLuc.GIOI]: 'ketquahoctap.ketquahocky.hocluc.gioi',
+	[ELoaiHocLuc.KHA]: 'ketquahoctap.ketquahocky.hocluc.kha',
+	[ELoaiHocLuc.TRUNG_BINH]: 'ketquahoctap.ketquahocky.hocluc.trungbinh',
+	[ELoaiHocLuc.YEU]: 'ketquahoctap.ketquahocky.hocluc.yeu',
+	[ELoaiHocLuc.KEM]: 'ketquahoctap.ketquahocky.hocluc.kem',
+	[ELoaiHocLuc.EMPTY]: 'ketquahoctap.ketquahocky.hocluc.chuaxeploai',
+};
+
 export const colorLoaiHocLuc: Record<ELoaiHocLuc, string> = {
 	[ELoaiHocLuc.XUAT_SAC]: '#52c41a',
 	[ELoaiHocLuc.GIOI]: '#7ecb08',
@@ -175,6 +193,11 @@ export enum EHinhThucGiangDay {
 	TRUC_TIEP = 'Trực tiếp',
 	ONLINE = 'Online',
 }
+
+export const mapHinhThucGiangDayI18n: Record<EHinhThucGiangDay, string> = {
+	[EHinhThucGiangDay.TRUC_TIEP]: 'lophocphan.hinhthucgiangday.tructiep',
+	[EHinhThucGiangDay.ONLINE]: 'lophocphan.hinhthucgiangday.online',
+};
 
 export const colorHinhThucGiangDay: Record<EHinhThucGiangDay, string> = {
 	[EHinhThucGiangDay.TRUC_TIEP]: 'green',

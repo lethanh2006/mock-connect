@@ -46,9 +46,9 @@ export enum ETrangThaiHocPhanDangKyTinChi {
 }
 
 export enum EColorLopDangKy {
-	TRUNG_LICH = 'rgba(255, 223, 140, 0.3)',
-	FULL_LOP = 'rgba(255, 122, 0, 0.3)',
-	KHONG_DU_DK = 'rgba(255, 104, 104, 0.3)',
+	TRUNG_LICH = 'gold',
+	FULL_LOP = 'orange',
+	KHONG_DU_DK = 'red',
 }
 
 export enum ETrangThaiDangKyTinChi {
@@ -56,6 +56,12 @@ export enum ETrangThaiDangKyTinChi {
 	DA_DANG_KY = 'Đã đăng ký',
 	LOI = 'Lỗi',
 }
+
+export const mapTrangThaiDangKyTinChiI18n: Record<ETrangThaiDangKyTinChi, string> = {
+	[ETrangThaiDangKyTinChi.CHUA_DANG_KY]: 'dangkytinchi.trangthaidangky.chuadangky',
+	[ETrangThaiDangKyTinChi.DA_DANG_KY]: 'dangkytinchi.trangthaidangky.dadangky',
+	[ETrangThaiDangKyTinChi.LOI]: 'dangkytinchi.trangthaidangky.loi',
+};
 
 export const ColorTrangThaiDangKyTinChi = {
 	[ETrangThaiDangKyTinChi.CHUA_DANG_KY]: 'blue',
@@ -70,16 +76,16 @@ export enum ETinhChatDangKyTC {
 }
 
 export const tinhChatDangKyTC: Record<ETinhChatDangKyTC, string> = {
-	[ETinhChatDangKyTC.DANG_KY_XOA]: 'Cho đăng ký mới và xoá cũ',
-	[ETinhChatDangKyTC.DANG_KY]: 'Chỉ đăng ký mới',
-	[ETinhChatDangKyTC.XOA]: 'Chỉ cho phép xóa',
+	[ETinhChatDangKyTC.DANG_KY_XOA]: 'dangkytinchi.tinhchatdangky.dangkyxoa',
+	[ETinhChatDangKyTC.DANG_KY]: 'dangkytinchi.tinhchatdangky.dangky',
+	[ETinhChatDangKyTC.XOA]: 'dangkytinchi.tinhchatdangky.xoa',
 };
 
 export enum ELoaiDangKyTheoLop {
-	LOP_HANH_CHINH = 'lop-hanh-chinh',
-	KHOA_NGANH = 'khoa-nganh',
-	KHOA_NGANH_2 = 'khoa-nganh-2',
 	TAT_CA = 'tat-ca',
+	KHOA_NGANH = 'khoa-nganh',
+	LOP_HANH_CHINH = 'lop-hanh-chinh',
+	KHOA_NGANH_2 = 'khoa-nganh-2',
 }
 
 export const loaiDangKyTheoLop: Record<ELoaiDangKyTheoLop, string> = {

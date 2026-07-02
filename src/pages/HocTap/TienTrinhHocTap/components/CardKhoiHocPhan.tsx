@@ -1,51 +1,84 @@
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { accentColors, primaryColor } from '@/services/base/constant';
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { Card, Modal, Tag } from 'antd';
+import { Card, Modal } from 'antd';
+import type { ReactNode } from 'react';
 import { useState } from 'react';
-import { useIntl, useModel } from 'umi';
+import { useAccess, useIntl } from 'umi';
 import CardHocPhan from './CardHocPhan';
 import './CardStyles.less';
 
 const CardKhoiHocPhan = (props: {
 	khoi?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
 	colorKhoiKienThuc?: string;
-	onClickHocPhan: () => void;
+	onClickHocPhan: (record: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => void;
+	label?: ReactNode;
 }) => {
 	const intl = useIntl();
-	const { khoi, colorKhoiKienThuc, onClickHocPhan } = props;
-	const { setRecord: setChuongTrinh } = useModel('daotao.chuongtrinhdaotao');
+	const { khoi, onClickHocPhan, label } = props;
+	const { vinuniAccessFilter } = useAccess();
 	const soTinChi = khoi?.soTinChiTuChonPhaiHoc ?? 0;
 	const [visible, setVisible] = useState<boolean>(false);
+	const hasDanhSachHocPhan = !!khoi?.hocPhanCtdtList?.length;
+	const title = khoi?.ten ?? intl.formatMessage({ id: 'tientrinhhoctap.ctdt.khoihp' });
+
+	const handleClickKhoi = () => {
+		if (hasDanhSachHocPhan) {
+			setVisible(true);
+			return;
+		}
+
+		Modal.confirm({
+			className: vinuniAccessFilter() ? 'khoi-confirm-modal' : undefined,
+			title,
+			content: intl.formatMessage({ id: 'tientrinhhoctap.ctdt.noti.ngoaiChuongTrinh' }, { soTinChi }),
+			okText: intl.formatMessage({ id: 'global.button.dong' }),
+			cancelButtonProps: { hidden: true },
+		});
+	};
 
 	return (
 		<>
 			<div className='base-card'>
-				<Card hoverable onClick={() => setVisible(true)}>
-					{/* Folder icon background */}
-					<div className='card-background-image' />
-
+				<Card
+					hoverable
+					onClick={handleClickKhoi}
+					style={{
+						backgroundColor: accentColors.accent800 ?? '#f8f8f8',
+						border: `1px solid ${accentColors.accent600 ?? '#D2D3D5'}`,
+					}}
+				>
 					{/* Content */}
 					<div className='card-content'>
 						{/* Course name */}
-						<h4 className='card-title default' title={khoi?.ten}>
+						{label && <span className='card-label'>{label}</span>}
+						<h4
+							className='card-title default'
+							style={{ color: primaryColor ?? '#134D8B', textDecoration: 'underline' }}
+							title={khoi?.ten}
+						>
 							{khoi?.ten}
 						</h4>
 
-						{/* Credits */}
-						<div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
-							<Tag className='credits-tag'>
+						{/* Credits & Electives */}
+						<div className='card-footer'>
+							<span className='card-credits-text'>
 								{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
-							</Tag>
+							</span>
+							<div className='card-footer-right'>
+								<span className='card-electives-text' style={{ color: primaryColor ?? '#134D8B' }}></span>
+							</div>
 						</div>
 					</div>
 
 					{/* Color indicator */}
-					<div className='color-indicator' style={{ backgroundColor: colorKhoiKienThuc }} />
+					{/* <div className='color-indicator' style={{ backgroundColor: colorKhoiKienThuc }} /> */}
 				</Card>
 			</div>
 
-			<Modal
+			<ModalExpandable
 				open={visible}
-				title={khoi?.ten ?? intl.formatMessage({ id: 'tientrinhhoctap.ctdt.khoihp' })}
+				title={title}
 				onCancel={() => setVisible(false)}
 				width={850}
 				okButtonProps={{ hidden: true }}
@@ -53,27 +86,29 @@ const CardKhoiHocPhan = (props: {
 				className='khoi-modal'
 			>
 				<span className='modal-description'>
-					{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.noti' }, { soTinChi })}:{' '}
+					{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.noti.trongChuongTrinh' }, { soTinChi })}:{' '}
 				</span>
 
 				<div className='modal-grid'>
-					{khoi?.hocPhanCtdtList?.map((ctk) => (
+					{(khoi?.hocPhanCtdtList ?? []).map((ctk) => (
 						<CardHocPhan
 							key={ctk._id}
-							hocPhan={ctk.hocPhan}
-							colorKhoiKienThuc={colorKhoiKienThuc}
+							hocPhan={ctk.hocPhan ?? undefined}
+							// colorKhoiKienThuc={colorKhoiKienThuc}
 							onClick={() => {
+								if (!khoi) return;
 								// Truyền tên khối tự chọn vào các khối học phần chương trình
-								setChuongTrinh({ ...khoi, ...ctk, ten: khoi.ten });
+								const selectedRecord = { ...khoi, ...ctk, ten: khoi.ten } as ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
 								setVisible(false);
-								if (onClickHocPhan) onClickHocPhan();
+								onClickHocPhan(selectedRecord);
 							}}
 							trangThaiHoc={ctk.hoc}
 							listDiem={ctk.lichSuDiem}
+							label={label}
 						/>
 					))}
 				</div>
-			</Modal>
+			</ModalExpandable>
 		</>
 	);
 };

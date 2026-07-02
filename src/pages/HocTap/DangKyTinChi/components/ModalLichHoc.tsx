@@ -1,4 +1,4 @@
-import { messagesCalendar } from '@/services/Calendar/constant';
+import { useMessagesCalendar } from '@/services/Calendar/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
@@ -14,6 +14,7 @@ const localizer = dayjsLocalizer(dayjs);
 
 const ModalLichHoc = (props: { soLopHienThi: number }) => {
 	const intl = useIntl();
+	const messagesCalendar = useMessagesCalendar();
 	const { visibleModal, setVisibleModal, danhSachLopDangKy } = useModel('daotao.dotdangkytinchi');
 	const { record: recSetting, getSettingLich } = useModel('tienich.settinglich');
 	const [calendarView, setCalendarView] = useState<View>(Views.WEEK);

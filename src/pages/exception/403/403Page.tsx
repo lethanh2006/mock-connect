@@ -5,10 +5,11 @@ import { currentRole } from '@/utils/ip';
 import { GlobalOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Button, Result } from 'antd';
 import { useEffect } from 'react';
-import { history, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 
 const NotAccessible = () => {
 	const { initialState } = useModel('@@initialState');
+	const intl = useIntl();
 
 	useEffect(() => {
 		if (currentRole && initialState?.authorizedPermissions?.find((item) => item.rsname === currentRole))
@@ -30,18 +31,18 @@ const NotAccessible = () => {
 			>
 				<Result
 					status='403'
-					title='Truy cập bị từ chối'
+					title={intl.formatMessage({ id: 'pages.exception.403.title' })}
 					style={{
 						background: 'none',
 					}}
-					subTitle='Xin lỗi, bạn không có quyền truy cập trang này.'
+					subTitle={intl.formatMessage({ id: 'pages.exception.403.subtitle' })}
 					extra={
 						<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
 							<Button type='primary' onClick={() => (window.location.href = landingUrl)} icon={<GlobalOutlined />}>
-								Tới trang Cổng thông tin
+								{intl.formatMessage({ id: 'pages.exception.portal' })}
 							</Button>
 							<Button icon={<LogoutOutlined />} onClick={onLogout}>
-								Đăng xuất
+								{intl.formatMessage({ id: 'pages.exception.logout' })}
 							</Button>
 						</div>
 					}

@@ -13,6 +13,11 @@ export const TenLoaiNoiSinh: Record<ELoaiNoiSinh, string> = {
 	[ELoaiNoiSinh.NUOC_NGOAI]: 'Nước ngoài',
 };
 
+export const placeOfBirthTypeMessageIds: Partial<Record<ELoaiNoiSinh, string>> = {
+	[ELoaiNoiSinh.TRONG_NUOC]: 'thongtincanhan.hoso.enum.loainoisinh.trongNuoc',
+	[ELoaiNoiSinh.NUOC_NGOAI]: 'thongtincanhan.hoso.enum.loainoisinh.nuocNgoai',
+};
+
 export enum ETrangThaiThanhVienGiaDinh {
 	DA_MAT = 'Đã mất',
 	CO_THONG_TIN = 'Có thông tin',

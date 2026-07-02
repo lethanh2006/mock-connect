@@ -156,6 +156,22 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			],
 		},
 		{
+			type: ELoaiSuKien.CHUNG,
+			checker: (evt) => evt.isLichDktc,
+			renderer: defaultEventConfig.renderer,
+			actionButtons: () => [
+				<Button
+					key='course-registration'
+					type='primary'
+					onClick={() => {
+						history.push('/hoc-tap/dang-ky-tin-chi');
+					}}
+				>
+					{intl.formatMessage({ id: 'lichsukien.chitiet.dangky_tinchi' })}
+				</Button>,
+			],
+		},
+		{
 			type: ELoaiSuKien.LICH_THI,
 			checker: (evt) => evt.loaiSuKien === ELoaiSuKien.LICH_THI,
 			renderer: (evt) => {
@@ -201,9 +217,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 						{evt?.assignment?.createdAt ? formatDateTime(evt?.assignment?.createdAt) : '--'}
 					</Descriptions.Item>
 					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.thoihan' })}>
-						{evt?.assignment?.thoiGianKetThuc
-							? formatDateTime(evt?.assignment?.thoiGianKetThuc)
-							: '--'}
+						{evt?.assignment?.thoiGianKetThuc ? formatDateTime(evt?.assignment?.thoiGianKetThuc) : '--'}
 					</Descriptions.Item>
 					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.trangthai' })}>
 						<Tag color={colorTrangThaiNopBaiTap[evt.trangThai as ETrangThaiNopBaiTap]}>

@@ -12,7 +12,6 @@ import ketquahoctap from './hoctap/ketquahoctap';
 import hoctapkhac from './hoctap/khac';
 import lichthi from './hoctap/lichthi';
 import lophocphan from './hoctap/lophocphan';
-import pathway from './hoctap/pathway';
 import tientrinhhoctap from './hoctap/tientrinhhoctap';
 import khaosat from './khaosat';
 import lichsukien from './lichsukien';
@@ -62,12 +61,11 @@ export default {
 	...tintuc,
 	...lichthi,
 	...baithicuoiky,
-	...pathway,
 	...minor,
 	...syllabus,
 	...activity,
 
-	'pages.trangchu.title': 'TRAINING MANAGEMENT SUBSYSTEM',
+	'pages.trangchu.title': 'TRAINING STUDENT PORTAL',
 	'pages.trangchu.subtitle': 'DIGITAL UNIVERSITY SYSTEM',
 	'pages.gioithieu.title': 'ABOUT',
 	'pages.gioithieu.subtitle': 'COMMAND AND CONTROL SOFTWARE SYSTEM',
