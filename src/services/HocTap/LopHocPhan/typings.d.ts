@@ -94,6 +94,8 @@ export declare module LopHocPhan {
 		thu: number;
 		tietBatDau: number;
 		soTiet: number;
+		gioBatDau?: string;
+		gioKetThuc?: string;
 		nhanSuSsoId?: string; //SsoId
 		nhanSu?: ToChucNhanSu.INhanSu;
 		maNhanSu?: string;
@@ -171,6 +173,7 @@ export declare module LopHocPhan {
 		public: boolean;
 		/** Điểm nhập cứng, ko tính toán từ data? */
 		isStatic?: boolean;
+		ghiChuDiem?: string;
 		/** Bỏ qua HP ko tính vào điểm tích lũy */
 		skip?: boolean;
 
@@ -189,6 +192,8 @@ export declare module LopHocPhan {
 
 		// maKhoaNganh: string;
 		// khoaNganh?: KhoaNganh.IRecord;
+
+		khoiHpCt?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
 	}
 
 	export type TChiTietDiemCdr = {

@@ -30,10 +30,10 @@ export default () => {
 		return due * (heSo[loaiHocPhan as keyof typeof heSo] ?? defaultHeSo);
 	};
 
-	const getMucThuHocPhiTheoNamModel = async (maNamHoc: string): Promise<MucThuHocPhi.TMyMucThu> => {
+	const getMucThuHocPhiTheoNamModel = async (maNamHoc: string, silent?: boolean): Promise<MucThuHocPhi.TMyMucThu> => {
 		setLoading(true);
 		try {
-			const res = await getMucThuHocPhiTheoNam(maNamHoc);
+			const res = await getMucThuHocPhiTheoNam(maNamHoc, silent);
 			setMucThuMe(res.data?.data);
 			return res.data?.data;
 		} catch (error) {

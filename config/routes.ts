@@ -25,7 +25,7 @@ export default [
 	{
 		path: '/dashboard',
 		name: 'Dashboard',
-		component: 'TrangChu',
+		component: 'TrangChuV2',
 		icon: 'HomeOutlined',
 	},
 	// {
@@ -35,7 +35,7 @@ export default [
 	// 	hideInMenu: true,
 	// },
 	{
-		path: '/my-profile',
+		path: '/thong-tin-ca-nhan',
 		name: 'MyProfile',
 		icon: 'UserOutlined',
 		component: 'SinhVien',
@@ -47,12 +47,12 @@ export default [
 		component: 'Calendar',
 	},
 	{
-		path: '/academic',
+		path: '/hoc-tap',
 		name: 'Academic',
 		icon: 'BookOutlined',
 		routes: [
 			{
-				path: 'course-registration',
+				path: 'dang-ky-tin-chi',
 				name: 'CourseRegistration',
 				component: 'HocTap/DangKyTinChi',
 			},
@@ -62,12 +62,12 @@ export default [
 			// 	component: 'Calendar',
 			// },
 			{
-				path: 'grades-transcript',
+				path: 'ket-qua-hoc-tap',
 				name: 'GradesTranscript',
 				component: 'HocTap/KetQuaHocTap',
 			},
 			{
-				path: 'degree-audit',
+				path: 'tien-trinh-hoc-tap',
 				name: 'DegreeAudit',
 				component: 'HocTap/TienTrinhHocTap',
 			},

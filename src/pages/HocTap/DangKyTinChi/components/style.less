@@ -39,6 +39,61 @@ ul.lich-hoc {
 	}
 }
 
+.credit-registration-bar {
+	position: fixed;
+	bottom: 0;
+	z-index: 20;
+	margin-top: 12px;
+	padding: 12px 16px;
+	background: #fff;
+	border: 1px solid #f0f0f0;
+	border-radius: 8px 8px 0 0;
+	box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.08);
+	opacity: 0;
+	transform: translateY(110%);
+	pointer-events: none;
+	transition:
+		opacity 0.24s ease,
+		transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+	will-change: opacity, transform;
+
+	&.is-visible {
+		opacity: 1;
+		transform: translateY(0);
+		pointer-events: auto;
+	}
+
+	&__item {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+
+		span {
+			color: #595959;
+			font-size: 12px;
+		}
+
+		b {
+			color: #262626;
+		}
+	}
+
+	&__status {
+		color: #52c41a;
+		font-weight: 600;
+
+		&--warning {
+			color: #d48806;
+		}
+	}
+}
+
+@media (max-width: 576px) {
+	.credit-registration-bar {
+		padding: 10px 12px;
+	}
+}
+
 .huong-dan {
 	position: fixed;
 	right: 27px;
@@ -75,5 +130,80 @@ ul.lich-hoc {
 
 	to {
 		transform: scale(1.2);
+	}
+}
+
+@blue-light: #f0f7ff;
+@blue-mid: #e6f4ff;
+@blue-brand: #1890ff;
+@blue-icon: #0c59db;
+@blue-text: #0045b3;
+@blue-primary: #134d8b;
+
+.custom-info-btn.ant-btn-primary {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background-color: @blue-light;
+	color: @blue-brand;
+	border: none;
+	box-shadow: none;
+
+	&:hover,
+	&:focus {
+		background-color: @blue-mid;
+		color: darken(@blue-brand, 10%);
+	}
+
+	&:active {
+		background-color: darken(@blue-light, 5%);
+		color: darken(@blue-brand, 15%);
+	}
+
+	.anticon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		width: 18px;
+		height: 18px;
+		line-height: 18px;
+		font-size: 18px;
+		margin: 0;
+
+		svg {
+			width: 18px;
+			height: 18px;
+		}
+	}
+}
+
+.custom-info-box {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	background-color: @blue-mid;
+	padding: 10px 16px;
+	border-radius: 4px;
+	box-sizing: border-box;
+
+	.info-box-icon {
+		color: @blue-icon;
+		font-size: 16px;
+		margin-right: 12px;
+		display: flex;
+		align-items: center;
+	}
+
+	.info-box-content {
+		font-size: 14px;
+		font-weight: 400;
+		line-height: 1.5;
+
+		b,
+		strong {
+			color: @blue-text;
+			font-weight: 700;
+		}
 	}
 }

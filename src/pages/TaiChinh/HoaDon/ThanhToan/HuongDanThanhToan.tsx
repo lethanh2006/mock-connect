@@ -1,4 +1,5 @@
 import { ETransactionPaymentType } from '@/services/TaiChinh/constant';
+import { getPublicAssetPath } from '@/utils/path';
 import { inputFormat } from '@/utils/utils';
 import { Col, Descriptions, Radio, Row, Spin } from 'antd';
 import { useEffect, useState } from 'react';
@@ -50,11 +51,11 @@ const HuongDanThanhToan = (props: {
 						) : (
 							<>
 								<Radio value={ETransactionPaymentType.BANK}>
-									<img src='/images/vietqr.png' alt='vietqr' />
+									<img src={getPublicAssetPath('images/vietqr.png')} alt='vietqr' />
 									{intl.formatMessage({ id: 'taichinh.thanhtoan.huongdan.thenoidia' })}
 								</Radio>
 								{/* <Radio value={ETransactionPaymentType.MOMO_WALLET}>
-									<img src='/images/momo.svg' alt='momo' />
+									<img src={getPublicAssetPath('images/momo.svg')} alt='momo' />
 									Ví MOMO
 								</Radio> */}
 							</>

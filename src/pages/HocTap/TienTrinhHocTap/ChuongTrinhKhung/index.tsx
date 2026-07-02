@@ -1,9 +1,27 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import { getSearchStorage, updateSearchStorage } from '@/components/Table/utils';
 import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
-import { Collapse, Divider, Segmented, Spin, Tag, Typography } from 'antd';
+import { ELoaiHocPhanCTDT, ETrangThaiHocTap } from '@/services/DaoTao/constant';
+import { accentColors, primaryColor } from '@/services/base/constant';
+import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import type { InputRef } from 'antd';
+import {
+	AutoComplete,
+	Button,
+	Collapse,
+	Divider,
+	Empty,
+	Input,
+	Segmented,
+	Space,
+	Spin,
+	Tag,
+	Tooltip,
+	Typography,
+} from 'antd';
 import _ from 'lodash';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
 import CardHocPhanV2 from '../components/CardHocPhan';
@@ -11,6 +29,44 @@ import CardKhoiHocPhan from '../components/CardKhoiHocPhan';
 import './style.less';
 
 const { Title } = Typography;
+
+const GLOBAL_SEARCH_KEY = 'CHUONG_TRINH_KHUNG_SEARCH';
+
+const sortByCourseName = (list: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) =>
+	_.sortBy(list, [
+		(item) => item.hocPhan?.ten?.toLowerCase() || item.ten?.toLowerCase() || '',
+		(item) => (item.chuyenNganh?.ten || item.khoiKienThuc?.ten || '').toLowerCase(),
+	]);
+
+const sortBySemester = (list: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) =>
+	_.sortBy(list, [
+		(item) => item.soThuTuKy ?? Number.MAX_SAFE_INTEGER,
+		(item) => (item.chuyenNganh?.ten || item.khoiKienThuc?.ten || '').toLowerCase(),
+		(item) => item.hocPhan?.ten?.toLowerCase() || item.ten?.toLowerCase() || '',
+	]);
+
+const matchKhoiHocPhan = (item: ChuongTrinhDaoTao.IKhoiHocPhanCTDT, keyword: string): boolean => {
+	const normalizedKeyword = keyword.trim().toLowerCase();
+	if (!normalizedKeyword) return true;
+
+	const searchableValues = [
+		item.hocPhan?.ma,
+		item.hocPhan?.ten,
+		item.hocPhan?.tenTiengAnh,
+		item.ten,
+		item.khoiKienThuc?.ten,
+		item.chuyenNganh?.ten,
+	];
+
+	if (searchableValues.some((value) => value?.toLowerCase().includes(normalizedKeyword))) return true;
+
+	return (
+		item.hocPhanCtdtList?.some((child) => {
+			const childValues = [child.hocPhan?.ma, child.hocPhan?.ten, child.hocPhan?.tenTiengAnh];
+			return childValues.some((value) => value?.toLowerCase().includes(normalizedKeyword));
+		}) ?? false
+	);
+};
 
 type TChuongTrinhHocKy = {
 	khoiHocPhan: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
@@ -25,17 +81,15 @@ type TChuongTrinhHocKy = {
 
 const TienTrinhChuongTrinhKhung = () => {
 	const intl = useIntl();
-	const {
-		loading,
-		sinhVienGetTienTrinhKhungModel,
-		record: recChuongTrinh,
-		setRecord: setChuongTrinh,
-	} = useModel('daotao.chuongtrinhdaotao');
+	const { loading, sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
 	const { khoaNganhMe, maKhoaNganh, record: recSinhVien } = useModel('sinhvien.sinhvien');
-	const { record: recTienTrinh } = useModel('sinhvien.tientrinhtotnghiep');
 	const [rawData, setRawData] = useState<ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]>([]);
+	const [minorData, setMinorData] = useState<ChuongTrinhDaoTao.TTienTrinhKhungMinor[]>([]);
+	const [recChuongTrinh, setChuongTrinh] = useState<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>();
 	const [viewType, setViewType] = useState<'semester' | 'block'>('semester');
-	const { registeredPathway } = useModel('sinhvien.pathway');
+	const [searchText, setSearchText] = useState('');
+	const [searchOptions, setSearchOptions] = useState<{ value: string }[]>([]);
+	const searchInputRef = useRef<InputRef>(null);
 	const [mapColorKhoiKienThuc, setMapColorKhoiKienThuc] = useState<Record<string, string>>({});
 	const [visibleDiem, setVisibleDiem] = useState(false);
 	// const { cctFilter } = useAccess();
@@ -43,10 +97,20 @@ const TienTrinhChuongTrinhKhung = () => {
 	const isSongNganh = maKhoaNganh === khoaNganhMe?.khoaNganhPhu?.ma;
 	const chuyenNganhHienTai = isSongNganh ? recSinhVien?.chuyenNganh2 : recSinhVien?.chuyenNganh;
 
+	const normalizeTienTrinhKhung = (data: unknown): ChuongTrinhDaoTao.TTienTrinhKhung => {
+		if (Array.isArray(data)) return { tienTrinh: data, minors: [] };
+
+		const nextData = data as Partial<ChuongTrinhDaoTao.TTienTrinhKhung> | undefined;
+		return {
+			tienTrinh: Array.isArray(nextData?.tienTrinh) ? nextData.tienTrinh : [],
+			minors: Array.isArray(nextData?.minors) ? nextData.minors : [],
+		};
+	};
+
 	const getColorMap = (listKhoiHpCt: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) => {
 		const listKhoi = _.uniq(listKhoiHpCt.map((item) => item.maKhoiKienThuc));
 		const temp: Record<string, string> = {};
-		listKhoi.forEach(
+		listKhoi?.forEach(
 			(khoi) =>
 				(temp[khoi as string] =
 					`rgb(${Math.random() * 190 + 15}, ${Math.random() * 190 + 15}, ${Math.random() * 190 + 15})`),
@@ -56,8 +120,10 @@ const TienTrinhChuongTrinhKhung = () => {
 
 	const fetch = async () => {
 		await sinhVienGetTienTrinhKhungModel(isSongNganh).then((data) => {
-			setRawData(data || []);
-			getColorMap(data);
+			const nextData = normalizeTienTrinhKhung(data);
+			setRawData(nextData.tienTrinh);
+			setMinorData(nextData.minors);
+			getColorMap(nextData.tienTrinh);
 		});
 	};
 
@@ -66,54 +132,20 @@ const TienTrinhChuongTrinhKhung = () => {
 
 		const isBlockView = viewType === 'block';
 		const maChuyenNganhHienTai = isSongNganh ? recSinhVien?.maChuyenNganh2 : recSinhVien?.maChuyenNganh;
-		const selectedPathwayIds: (string | undefined)[] = registeredPathway.map((p) => p.maKhoiKienThuc);
-		if (maChuyenNganhHienTai) selectedPathwayIds.push(maChuyenNganhHienTai);
-
-		// BƯỚC 1: Lọc cứng theo Chuyên ngành chính (Major Filter)
-		// Loại bỏ các môn thuộc chuyên ngành khác ngay từ đầu
+		// Lọc cứng theo chuyên ngành hiện tại, loại bỏ các môn thuộc chuyên ngành khác.
 		const dataAfterMajorFilter = rawData.filter((item) => {
 			if (!item.maChuyenNganh || !maChuyenNganhHienTai) return true;
 			return item.maChuyenNganh === maChuyenNganhHienTai;
 		});
 
-		// BƯỚC 2: Lọc theo Lộ trình tự chọn (Elective Pathway Filter)
-		// Tìm các khối (root) mà đã có lộ trình tự chọn được đăng ký
-		const rootBlocksWithElectiveSelection = _.uniq(
-			dataAfterMajorFilter
-				.filter((item) => {
-					// Chỉ xét các pathway tự chọn (không phải chuyên ngành chính)
-					const isElectivePathway = !!item.khoiKienThuc?.maCha && !item.maChuyenNganh;
-					return isElectivePathway && selectedPathwayIds.includes(item.maKhoiKienThuc);
-				})
-				.map((item) => item.khoiKienThuc?.maCha),
-		);
-
-		const filteredData = dataAfterMajorFilter.filter((item) => {
-			const rootId = item.khoiKienThuc?.maCha;
-			const pwId = item.maKhoiKienThuc;
-
-			// Nếu đây là một pathway tự chọn trong một khối đã có lựa chọn
-			if (rootId && rootBlocksWithElectiveSelection.includes(rootId)) {
-				return selectedPathwayIds.includes(pwId);
-			}
-
-			return true;
-		});
-
 		if (!isBlockView) {
-			const gData = _.groupBy(filteredData, (item) => item.soThuTuKy);
+			const gData = _.groupBy(dataAfterMajorFilter, (item) => item.soThuTuKy);
 			const sortedEntries = Object.entries(gData).sort(([a], [b]) => Number(a) - Number(b));
 
 			return sortedEntries.map(([key, group]) => {
-				const uniqchuyenNganh = _.uniq(
-					group.filter((item) => !!item.maChuyenNganh).map((item) => item.maChuyenNganh),
-				);
-				// Nếu đã có chuyên ngành hiện tại, coi như không phân chuyên ngành ở level này để đẩy lên grid chính
-				const isFixedMajor = !!maChuyenNganhHienTai && uniqchuyenNganh.includes(maChuyenNganhHienTai);
+				const uniqchuyenNganh = _.uniq(group.filter((item) => !!item.maChuyenNganh).map((item) => item.maChuyenNganh));
 
-				const khoiHocPhan = group.filter(
-					(item) => !item.maChuyenNganh || isFixedMajor || uniqchuyenNganh.length < 2,
-				);
+				const khoiHocPhan = sortByCourseName(group.filter((item) => !item.maChuyenNganh || uniqchuyenNganh.length < 2));
 				const da1 = group.filter(
 					(item) =>
 						!item.maChuyenNganh ||
@@ -123,16 +155,12 @@ const TienTrinhChuongTrinhKhung = () => {
 				const soTinChiPhaiHoc = _.sumBy(da1, (item) => item.hocPhan?.soTinChi ?? item.soTinChiTuChonPhaiHoc ?? 0);
 				const soTinChiTuChon = _.sumBy(da1, (item) => item.soTinChiTuChonPhaiHoc || 0);
 
-				const chuyenNganh = group.filter(
-					(item) => !!item.maChuyenNganh && !isFixedMajor && uniqchuyenNganh.length >= 2,
-				);
-				const chuyenNganhList = Object.values(_.groupBy(chuyenNganh, (item) => item.maChuyenNganh)).map(
-					(item) => ({
-						khoiHocPhan: item,
-						tenPathway: undefined as string | undefined,
-						maPathway: item[0].maChuyenNganh,
-					}),
-				);
+				const chuyenNganh = group.filter((item) => !!item.maChuyenNganh && uniqchuyenNganh.length >= 2);
+				const chuyenNganhList = Object.values(_.groupBy(chuyenNganh, (item) => item.maChuyenNganh)).map((item) => ({
+					khoiHocPhan: sortByCourseName(item),
+					tenChuyenNganh: undefined as string | undefined,
+					maChuyenNganh: item[0].maChuyenNganh,
+				}));
 
 				return {
 					khoiHocPhan,
@@ -149,7 +177,7 @@ const TienTrinhChuongTrinhKhung = () => {
 		}
 
 		// VIEW BLOCK: Nhóm theo Root Block (maCha || ma)
-		const gData = _.groupBy(filteredData, (item) => item.khoiKienThuc?.maCha || item.maKhoiKienThuc);
+		const gData = _.groupBy(dataAfterMajorFilter, (item) => item.khoiKienThuc?.maCha || item.maKhoiKienThuc);
 		const sortedEntries = Object.entries(gData).sort(([keyA, groupA], [keyB, groupB]) => {
 			const orderA = groupA[0].khoiKienThuc?.soThuTu ?? (groupA[0].khoiKienThuc?.khoiCha?.soThuTu || 999);
 			const orderB = groupB[0].khoiKienThuc?.soThuTu ?? (groupB[0].khoiKienThuc?.khoiCha?.soThuTu || 999);
@@ -164,35 +192,19 @@ const TienTrinhChuongTrinhKhung = () => {
 				group.find((it) => it.khoiKienThuc?.khoiCha?.ten)?.khoiKienThuc?.khoiCha?.ten ||
 				group[0].khoiKienThuc?.ten;
 
-			// Tối ưu hóa: Tách nhóm bằng partition (Grid chính vs Lộ trình tự chọn)
-			const [khoiHocPhan, electivePathways] = _.partition(group, (item) => {
-				const isElectivePathway = !!item.khoiKienThuc?.maCha && !item.maChuyenNganh;
-				return !isElectivePathway || selectedPathwayIds.includes(item.maKhoiKienThuc);
-			});
-
-			const pathwayGroups = _.groupBy(
-				electivePathways.filter((it) => !selectedPathwayIds.includes(it.maKhoiKienThuc)),
-				(it) => it.maKhoiKienThuc,
-			);
-
-			// Tín chỉ dự kiến: Grid chính + (Pathway đầu tiên nếu có)
-			const firstPathwayId = Object.keys(pathwayGroups)?.[0];
-			const coursesForTotal = [
-				...khoiHocPhan,
-				...electivePathways.filter((it) => it.maKhoiKienThuc === firstPathwayId),
-			];
-
-			const soTinChiPhaiHoc = _.sumBy(
-				coursesForTotal,
-				(item) => item.hocPhan?.soTinChi ?? item.soTinChiTuChonPhaiHoc ?? 0,
-			);
-
-			const chuyenNganhList = Object.entries(pathwayGroups).map(([pwId, items]) => ({
-				khoiHocPhan: items,
-				// Tên pathway: Ưu tiên tên chuyên ngành, sau đó đến tên khối con
-				tenPathway: items[0].chuyenNganh?.ten || items[0].khoiKienThuc?.ten,
-				maPathway: pwId,
+			const uniqchuyenNganh = _.uniq(group.filter((item) => !!item.maChuyenNganh).map((item) => item.maChuyenNganh));
+			const khoiHocPhan = sortBySemester(group.filter((item) => !item.maChuyenNganh || uniqchuyenNganh.length < 2));
+			const chuyenNganhList = Object.values(
+				_.groupBy(
+					group.filter((item) => !!item.maChuyenNganh && uniqchuyenNganh.length >= 2),
+					(item) => item.maChuyenNganh,
+				),
+			).map((item) => ({
+				khoiHocPhan: sortBySemester(item),
+				tenChuyenNganh: undefined as string | undefined,
+				maChuyenNganh: item[0].maChuyenNganh,
 			}));
+			const soTinChiPhaiHoc = _.sumBy(group, (item) => item.hocPhan?.soTinChi ?? item.soTinChiTuChonPhaiHoc ?? 0);
 
 			return {
 				khoiHocPhan,
@@ -203,26 +215,69 @@ const TienTrinhChuongTrinhKhung = () => {
 				maKhoiKienThuc: rootId,
 				tenKhoiKienThuc,
 				// Thống kê môn học (Dùng so sánh chuỗi hoặc Enum nếu có)
-				soMonDaHoc: group.filter((item) => item.hoc === ('DA_HOC' as any) || item.hoc === ('DANG_HOC' as any)).length,
+				soMonDaHoc: group.filter(
+					(item) => item.hoc === ETrangThaiHocTap.DA_HOC || item.hoc === ETrangThaiHocTap.DANG_HOC,
+				).length,
 				tongSoMon: group.length,
 			};
 		});
-	}, [rawData, viewType]);
+	}, [rawData, viewType, isSongNganh, recSinhVien?.maChuyenNganh, recSinhVien?.maChuyenNganh2]);
+
+	const filteredDanhSachHienThi = useMemo(() => {
+		if (!searchText.trim()) return danhSachHienThi;
+
+		return danhSachHienThi
+			.map((group) => {
+				const khoiHocPhan = group.khoiHocPhan.filter((item) => matchKhoiHocPhan(item, searchText));
+				const chuyenNganhList = group.chuyenNganhList
+					?.map((chuyenNganh) => ({
+						...chuyenNganh,
+						khoiHocPhan: chuyenNganh.khoiHocPhan.filter((item) => matchKhoiHocPhan(item, searchText)),
+					}))
+					.filter((chuyenNganh) => chuyenNganh.khoiHocPhan.length > 0);
+
+				return {
+					...group,
+					khoiHocPhan,
+					chuyenNganhList,
+				};
+			})
+			.filter((group) => group.khoiHocPhan.length > 0 || (group.chuyenNganhList?.length ?? 0) > 0);
+	}, [danhSachHienThi, searchText]);
+
+	useEffect(() => {
+		const history = getSearchStorage(GLOBAL_SEARCH_KEY);
+		setSearchOptions(history.map((value: string) => ({ value })));
+	}, []);
+
+	const handleSearchTrigger = useCallback((value: string) => {
+		const keyword = value?.trim() || '';
+		setSearchText(keyword);
+
+		if (keyword) updateSearchStorage(GLOBAL_SEARCH_KEY, keyword);
+
+		const history = getSearchStorage(GLOBAL_SEARCH_KEY);
+		setSearchOptions(history.map((val: string) => ({ value: val })));
+
+		setTimeout(() => {
+			searchInputRef.current?.blur();
+		}, 0);
+	}, []);
 
 	useEffect(() => {
 		fetch();
-	}, [maKhoaNganh]);
+	}, [isSongNganh, maKhoaNganh]);
 
 	const renderHocPhan = (
 		data: TChuongTrinhHocKy | { khoiHocPhan: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[] },
-		getLabel?: (item: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => string | undefined,
+		getLabel?: (item: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => React.ReactNode,
 	) => (
 		<div className='grid-container'>
 			{data.khoiHocPhan.map((ctk) =>
-				ctk.loaiHocPhanCtdt === ELoaiHocPhanCTDT.BAT_BUOC ? (
+				ctk.loaiHocPhanCtdt === ELoaiHocPhanCTDT.BAT_BUOC || ctk.hocPhan ? (
 					<CardHocPhanV2
 						key={ctk._id}
-						hocPhan={ctk.hocPhan}
+						hocPhan={ctk.hocPhan ?? undefined}
 						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc!]}
 						onClick={() => {
 							setChuongTrinh(ctk);
@@ -237,129 +292,273 @@ const TienTrinhChuongTrinhKhung = () => {
 						khoi={ctk}
 						key={ctk._id}
 						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc!]}
-						onClickHocPhan={() => setVisibleDiem(true)}
+						onClickHocPhan={(record) => {
+							setChuongTrinh(record);
+							setVisibleDiem(true);
+						}}
+						label={getLabel?.(ctk)}
 					/>
 				),
 			)}
 		</div>
 	);
 
+	const getMinorName = (minor: ChuongTrinhDaoTao.TTienTrinhKhungMinor) =>
+		minor.nganhMinor?.tenTiengViet ??
+		minor.nganhMinor?.ten ??
+		minor.nganhMinor?.tenTiengAnh ??
+		minor.nganhMinor?.ma ??
+		intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' });
+
+	const hasMinorData = minorData.some((minor) => (minor.khoiHpCtList?.length ?? 0) > 0);
+
 	return (
 		<div>
 			<div className='view-switch-container'>
-				<Segmented
-					value={viewType}
-					onChange={(val) => setViewType(val as any)}
-					options={[
-						{
-							label: intl.formatMessage({ id: 'tientrinhhoctap.view.semester' }),
-							value: 'semester',
-						},
-						{
-							label: intl.formatMessage({ id: 'tientrinhhoctap.view.block' }),
-							value: 'block',
-						},
-					]}
-				/>
+				<AutoComplete
+					className='view-switch-search'
+					options={searchOptions}
+					value={searchText}
+					onSelect={handleSearchTrigger}
+					onChange={(value) => setSearchText(value)}
+				>
+					<Input.Search
+						ref={searchInputRef}
+						className='global-search'
+						allowClear
+						value={searchText}
+						placeholder={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.search.placeholder' })}
+						style={
+							searchText
+								? {
+										width: 320,
+										borderColor: primaryColor,
+										outline: `1px solid ${primaryColor}`,
+										borderRadius: 4,
+									}
+								: { width: 320 }
+						}
+						enterButton={
+							<Button
+								loading={loading}
+								icon={
+									<Tooltip title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.search.tooltip' })}>
+										<SearchOutlined />
+									</Tooltip>
+								}
+							/>
+						}
+						onSearch={handleSearchTrigger}
+						onChange={(e) => {
+							if (e.type === 'click') {
+								handleSearchTrigger('');
+								return;
+							}
+
+							const value = e.target.value;
+							setSearchText(value);
+							if (!value.trim()) handleSearchTrigger('');
+						}}
+					/>
+				</AutoComplete>
+				<Space>
+					<ButtonExtend
+						icon={<ReloadOutlined />}
+						onClick={fetch}
+						loading={loading}
+						className='btn-reload'
+						tooltip={intl.formatMessage({ id: 'global.table.index.button.tailai.tooltip' })}
+					/>
+					<Segmented
+						value={viewType}
+						style={{ fontWeight: 600 }}
+						onChange={(val) => setViewType(val as any)}
+						options={[
+							{
+								label: intl.formatMessage({ id: 'tientrinhhoctap.view.semester' }),
+								value: 'semester',
+							},
+							{
+								label: intl.formatMessage({ id: 'tientrinhhoctap.view.block' }),
+								value: 'block',
+							},
+						]}
+					/>
+				</Space>
 			</div>
 
 			<Spin spinning={loading}>
-				{danhSachHienThi?.map((data, index) => (
+				{!filteredDanhSachHienThi?.length && !hasMinorData ? <Empty style={{ marginBlock: 36 }} /> : null}
+				{filteredDanhSachHienThi?.map((data, index) => (
 					<React.Fragment key={viewType === 'semester' ? data.soThuTuKy : data.maKhoiKienThuc}>
-							{/* Header học kỳ/Khối */}
-						<Divider orientation='left' className='divider-big-title'>
-								<div className='header-content'>
-									<Title level={5} style={{ margin: 0, color: '#262626' }}>
-										{viewType === 'semester'
-											? `${intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hocky' })} ${data.soThuTuKy}`
-											: data.tenKhoiKienThuc || intl.formatMessage({ id: 'tientrinhhoctap.ctdt.khongten' })}
-									</Title>
-									<div className='red-dot' />
-									<div className='credits-text'>
+						{/* Header học kỳ/Khối */}
+						<Divider orientation='left' className='divider-big-title' dashed>
+							<div className='header-content'>
+								<Title level={5} style={{ margin: 0, color: '#262626' }}>
+									{viewType === 'semester'
+										? `${intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hocky' })} ${data.soThuTuKy}`
+										: data.tenKhoiKienThuc || intl.formatMessage({ id: 'tientrinhhoctap.ctdt.khongten' })}
+								</Title>
+								{viewType === 'semester' && (
+									<Tag color='blue'>
 										{data.soTinChiPhaiHoc} {intl.formatMessage({ id: 'tientrinhhoctap.ctdt.tinchi' })}
-									</div>
-									
-									{/* Nhãn thống kê số môn (chỉ hiện ở chế độ Block) */}
-									{viewType === 'block' && (
-										<Tag color='blue' className='stats-tag'>
-											{data.soMonDaHoc}/{data.tongSoMon} {intl.formatMessage({ id: 'tientrinhhoctap.ctdt.courses' })}
-										</Tag>
-									)}
+									</Tag>
+								)}
 
-								</div>
+								{/* Nhãn thống kê số môn (chỉ hiện ở chế độ Block) */}
+								{viewType === 'block' && (
+									<Tag color='blue'>
+										{data.soMonDaHoc}/{data.tongSoMon} {intl.formatMessage({ id: 'tientrinhhoctap.ctdt.courses' })}
+									</Tag>
+								)}
+							</div>
 						</Divider>
 
 						{/* Grid các môn học */}
 						{renderHocPhan(data, (item) => {
 							if (viewType === 'semester') {
-								// Chế độ học kỳ: Hiện tên lộ trình (Chuyên ngành hoặc Khối con)
 								const name = item.chuyenNganh?.ten || item.khoiKienThuc?.ten;
-								return name ? `${intl.formatMessage({ id: 'tientrinhhoctap.ctdt.pathway.label' })}: ${name}` : undefined;
+								return name ? (
+									<>
+										<span
+											className='card-label-dot'
+											style={{
+												backgroundColor: `var(--color-primary)`,
+											}}
+										/>
+										{name}
+									</>
+								) : undefined;
 							}
-							// Chế độ khối: Chỉ hiện nhãn Chuyên ngành ở Grid chính
-							const majorName = item.chuyenNganh?.ten;
-							if (!majorName) return undefined;
+							const semester = item.soThuTuKy;
+							if (!semester) return undefined;
 
-							// Kiểm tra xem có phải chuyên ngành phụ không
-							const isMinor = item.maChuyenNganh === recSinhVien?.maChuyenNganh2;
-							const labelId = isMinor ? 'tientrinhhoctap.ctdt.chuyennganhphu.label' : 'tientrinhhoctap.ctdt.chuyennganh.label';
-
-							return `${intl.formatMessage({ id: labelId })}: ${majorName}`;
+							return (
+								<>
+									<span
+										className='card-label-dot'
+										style={{
+											backgroundColor: `var(--color-primary)`,
+										}}
+									/>
+									{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hocky' })} {semester}
+								</>
+							);
 						})}
 
-						{data.chuyenNganhList?.length ? (
-							<Collapse bordered={false} defaultActiveKey={[chuyenNganhHienTai?.ma ?? '']}>
-								{data.chuyenNganhList.map((chuyenNganh, idx) => (
+						{data.chuyenNganhList?.map((chuyenNganh) => {
+							const panelKey =
+								chuyenNganh.maChuyenNganh ||
+								chuyenNganh.khoiHocPhan[0].maChuyenNganh ||
+								chuyenNganh.khoiHocPhan[0].maKhoiKienThuc ||
+								'';
+
+							return (
+								<Collapse
+									key={panelKey}
+									bordered
+									style={{ marginTop: 16 }}
+									defaultActiveKey={[chuyenNganhHienTai?.ma ?? '']}
+								>
 									<Collapse.Panel
-										key={chuyenNganh.maPathway || chuyenNganh.khoiHocPhan[0].maChuyenNganh || chuyenNganh.khoiHocPhan[0].maKhoiKienThuc || ''}
+										key={panelKey}
+										style={{ backgroundColor: accentColors.accent800 ?? '#f8f8f8' }}
 										header={
 											<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
 												<span style={{ fontWeight: 500 }}>
-													{viewType === 'semester' ? (
-														intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' }) + ': '
-													) : null}
-													{chuyenNganh.tenPathway ?? chuyenNganh.khoiHocPhan[0].chuyenNganh?.ten ?? chuyenNganh.khoiHocPhan[0].maChuyenNganh}
+													{viewType === 'semester'
+														? intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' }) + ': '
+														: null}
+													{chuyenNganh.tenChuyenNganh ??
+														chuyenNganh.khoiHocPhan[0].chuyenNganh?.ten ??
+														chuyenNganh.khoiHocPhan[0].maChuyenNganh}
 												</span>
-												{(registeredPathway.some((p) => p.maKhoiKienThuc === chuyenNganh.khoiHocPhan[0].maChuyenNganh) || 
-												  registeredPathway.some((p) => p.maKhoiKienThuc === chuyenNganh.khoiHocPhan[0].maKhoiKienThuc)) && (
-													<Tag color='success' style={{ marginLeft: 8 }}>
-														{intl.formatMessage({ id: 'pathway.card.selected' })}
-													</Tag>
-												)}
 											</div>
 										}
 									>
 										{renderHocPhan(chuyenNganh, (item) => {
-											if (viewType === 'semester') return undefined; // Trong Collapse học kỳ thì không cần label nữa vì đã có Header
-											// Chế độ khối: Hiện nhãn chuyên ngành nếu có
-											const majorName = item.chuyenNganh?.ten;
-											if (!majorName) return undefined;
+											if (viewType === 'semester') {
+												const name = item.khoiKienThuc?.ten;
+												return name ? (
+													<>
+														<span
+															className='card-label-dot'
+															style={{
+																backgroundColor: `var(--color-primary)`,
+															}}
+														/>
+														{name}
+													</>
+												) : undefined;
+											}
+											const semester = item.soThuTuKy;
+											if (!semester) return undefined;
 
-											// Kiểm tra xem có phải chuyên ngành phụ không
-											const isMinor = item.maChuyenNganh === recSinhVien?.maChuyenNganh2;
-											const labelId = isMinor ? 'tientrinhhoctap.ctdt.chuyennganhphu.label' : 'tientrinhhoctap.ctdt.chuyennganh.label';
-
-											return `${intl.formatMessage({ id: labelId })}: ${majorName}`;
+											return (
+												<>
+													<span
+														className='card-label-dot'
+														style={{
+															backgroundColor: `var(--color-primary)`,
+														}}
+													/>
+													{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hocky' })} {semester}
+												</>
+											);
 										})}
 									</Collapse.Panel>
-								))}
-							</Collapse>
-						) : null}
-
+								</Collapse>
+							);
+						})}
 					</React.Fragment>
 				))}
+
+				{hasMinorData && (
+					<>
+						<Divider orientation='left' className='divider-big-title' dashed>
+							<div className='header-content'>
+								<Title level={5} style={{ margin: 0, color: '#262626' }}>
+									{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}
+								</Title>
+								<Tag color='blue'>
+									{_.sumBy(minorData, (minor) => minor.khoiHpCtList?.length ?? 0)}{' '}
+									{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.courses' })}
+								</Tag>
+							</div>
+						</Divider>
+
+						{minorData.map((minor, index) => {
+							const minorName = getMinorName(minor);
+							const khoiHocPhan = minor.khoiHpCtList ?? [];
+							if (!khoiHocPhan.length) return null;
+
+							return (
+								<React.Fragment key={minor.idPhieu ?? minor.nganhMinor?.ma ?? index}>
+									{renderHocPhan({ khoiHocPhan }, () => (
+										<>
+											<span
+												className='card-label-dot'
+												style={{
+													backgroundColor: `var(--color-primary)`,
+												}}
+											/>
+											{minorName}
+										</>
+									))}
+								</React.Fragment>
+							);
+						})}
+					</>
+				)}
 			</Spin>
 
 			<ModalChiTietDiem
 				setVisible={setVisibleDiem}
 				visible={visibleDiem}
-				hocPhan={recChuongTrinh?.hocPhan}
+				hocPhan={recChuongTrinh?.hocPhan ?? undefined}
 				listDiem={recChuongTrinh?.lichSuDiem ?? []}
 				maKhoaNganh={maKhoaNganh}
 				khoiChuongTrinh={recChuongTrinh}
-				colorKhoiKienThuc={
-					recChuongTrinh?.maKhoiKienThuc ? mapColorKhoiKienThuc[recChuongTrinh.maKhoiKienThuc] : undefined
-				}
 				trangThaiHoc={recChuongTrinh?.hoc}
 			/>
 

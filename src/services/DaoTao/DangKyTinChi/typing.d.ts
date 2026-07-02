@@ -116,5 +116,6 @@ declare module DangKyTinChi {
 	export interface ICauHinhWaitlist {
 		_id: string;
 		extraSlots: number;
+		dktcMultiple: boolean;
 	}
 }
