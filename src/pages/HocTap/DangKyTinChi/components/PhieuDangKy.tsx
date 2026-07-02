@@ -11,13 +11,13 @@ import {
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
-import { formatTimeRange } from '@/utils/formatDate';
 import { inputFormat } from '@/utils/utils';
 import { CalendarOutlined, DeleteOutlined, HistoryOutlined } from '@ant-design/icons';
 import { Col, Popconfirm, Row, Space, Tag } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import { renderKhoangThoiGian } from '../utils';
 import BtnDangKyTinChi from './BtnDangKyTinChi';
 import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
 import ModalDangKy from './ModalDangKy';
@@ -92,17 +92,6 @@ const PhieuDangKy = ({
 		} catch (er) {
 			console.log(er);
 		}
-	};
-
-	const renderKhoangThoiGian = (rec: DangKyTinChi.ILopDangKy) => {
-		const thoiKhoaBieuList = rec.thoiKhoaBieuList ?? [];
-		if (!thoiKhoaBieuList.length) return null;
-
-		const start = _.minBy(thoiKhoaBieuList, (item) => dayjs(item.ngay).valueOf())?.ngay;
-		const end = _.maxBy(thoiKhoaBieuList, (item) => dayjs(item.ngay).valueOf())?.ngay;
-		if (!start || !end) return null;
-
-		return formatTimeRange(start, end, 'DD/MM');
 	};
 
 	const handleXemDeCuong = (rec: DangKyTinChi.ILopDangKy) => {
@@ -289,12 +278,6 @@ const PhieuDangKy = ({
 	return (
 		<>
 			<Row gutter={[8, 12]} style={{ marginBottom: 12 }}>
-				{/* <Col span={24} md={10}>
-					{intl.formatMessage({ id: 'dangkytinchi.phieudangky.tongtinchi.title' })}:{' '}
-					<b className={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'text-error' : 'text-success'}>
-						{tongTinChi} {intl.formatMessage({ id: 'dangkytinchi.phieudangky.tinchi.title' })}
-					</b>
-				</Col> */}
 				<Col span={24} md={17}>
 					{intl.formatMessage({ id: 'dangkytinchi.phieudangky.hocphidukien.title' })}:{' '}
 					<b>{tongHocPhi ? inputFormat(tongHocPhi) : '--'} VND</b>
@@ -324,45 +307,49 @@ const PhieuDangKy = ({
 				otherProps={{ pagination: false, scroll: { y: 600 } }}
 				onReload={onReload}
 				otherButtons={[
-					<Space wrap>
-						{dotDangKyHienTai?.tinhChatDangKy !== ETinhChatDangKyTC.XOA && (
-							<BtnDangKyTinChi
-								danhSachLopHienThi={danhSachLopHienThi}
-								tongTinChi={tongTinChi}
-								soTinChiToiDa={soTinChiToiDa}
-								soTinChiToiThieu={soTinChiToiThieu}
-							/>
-						)}
-
-						<ButtonExtend
-							icon={<CalendarOutlined />}
-							onClick={() => setVisibleModal(true)}
-							disabled={!danhSachLopHienThi.length}
-						>
-							{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
+					...(dotDangKyHienTai?.tinhChatDangKy !== ETinhChatDangKyTC.XOA
+						? [
+								<BtnDangKyTinChi
+									key='dang-ky'
+									danhSachLopHienThi={danhSachLopHienThi}
+									tongTinChi={tongTinChi}
+									soTinChiToiDa={soTinChiToiDa}
+									soTinChiToiThieu={soTinChiToiThieu}
+								/>,
+							]
+						: []),
+					<ButtonExtend
+						key='lich-hoc'
+						icon={<CalendarOutlined />}
+						onClick={() => setVisibleModal(true)}
+						disabled={!danhSachLopHienThi.length}
+					>
+						{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
+					</ButtonExtend>,
+					<ButtonExtend
+						key='lich-su'
+						icon={<HistoryOutlined />}
+						onClick={() => setVisibleLopDaHuy(true)}
+						tooltip={intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.title' })}
+					>
+						{intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.title' })}
+					</ButtonExtend>,
+					/* {dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
+					<>
+						<ButtonExtend icon={<DeleteOutlined />} onClick={() => setVisibleLopDaHuy(true)}>
+							{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.caclopdahuy' })}
 						</ButtonExtend>
-						<ButtonExtend
-							icon={<HistoryOutlined />}
-							onClick={() => setVisibleLopDaHuy(true)}
-							tooltip={intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.title' })}
-						>
-							{intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.title' })}
-						</ButtonExtend>
 
-						{/* {dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
-						<>
-							<ButtonExtend icon={<DeleteOutlined />} onClick={() => setVisibleLopDaHuy(true)}>
-								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.caclopdahuy' })}
-							</ButtonExtend>
-
-							<ModalLopDaHuy visible={visibleLopDaHuy} setVisible={setVisibleLopDaHuy} />
-						</>
-					) : null} */}
-
-						{tongTinChi < soTinChiToiThieu ? (
-							<i className='text-error'>{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.alert.luuy' })}</i>
-						) : null}
-					</Space>,
+						<ModalLopDaHuy visible={visibleLopDaHuy} setVisible={setVisibleLopDaHuy} />
+					</>
+					) : null} */
+					...(tongTinChi < soTinChiToiThieu
+						? [
+								<i key='luu-y' className='text-error'>
+									{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.alert.luuy' })}
+								</i>,
+							]
+						: []),
 				]}
 				otherExtra={[
 					<span>
