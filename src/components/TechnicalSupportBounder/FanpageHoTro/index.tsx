@@ -2,9 +2,10 @@ import { getPublicAssetPath } from '@/utils/path';
 import { Tooltip } from 'antd';
 import { unChatMessagerSupportPaths } from '../constant';
 
-const PanpageHoTro = (props: { path: string }) => {
-	const { path } = props;
+const PanpageHoTro = () => {
+	const path = APP_CONFIG_HO_TRO_KY_THUAT;
 
+	if (!path) return null;
 	return (
 		<>
 			{!unChatMessagerSupportPaths.includes(window.location.pathname) ? (
