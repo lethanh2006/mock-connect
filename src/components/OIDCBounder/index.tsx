@@ -5,6 +5,7 @@ import { type Login } from '@/services/base/typing';
 import axios from '@/utils/axios';
 import { currentRole, replaceRole } from '@/utils/ip';
 import { oidcConfig } from '@/utils/oidcConfig';
+import { getAppBasePath } from '@/utils/path';
 import { notification } from 'antd';
 import queryString from 'query-string';
 import { useEffect, type FC } from 'react';
@@ -149,7 +150,11 @@ export const OIDCBounder: FC<{ children: React.ReactElement }> & { getActions: (
 	return (
 		<AuthProvider
 			{...oidcConfig}
-			redirect_uri={window.location.pathname.includes('/user') ? window.location.origin : window.location.href}
+			redirect_uri={
+				window.location.pathname.includes('/user')
+					? `${window.location.origin}${getAppBasePath()}`
+					: window.location.href
+			}
 		>
 			<OIDCBounder_ {...props} />
 		</AuthProvider>
