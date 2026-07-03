@@ -51,6 +51,7 @@ const ConfigBounder = (props: { children?: any }) => {
 					},
 					Divider: {
 						orientationMargin: 0,
+						textPaddingInline: 0,
 					},
 					Table: {
 						borderColor: '#e8e8e8',

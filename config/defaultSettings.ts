@@ -11,7 +11,7 @@ const defaultSettings: LayoutSettings & {
 	fixedHeader: true,
 	fixSiderbar: true,
 	colorWeak: true,
-	logo: getPublicAssetPath('logo-text.png'),
+	logo: getPublicAssetPath('logo.png'),
 	iconfontUrl: '',
 	siderWidth: 220,
 };
