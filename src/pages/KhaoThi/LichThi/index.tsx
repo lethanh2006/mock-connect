@@ -11,11 +11,22 @@ import {
 	colorDKDTKetQuaHocTap,
 	colorTrangThaiThi,
 } from '@/services/KhaoThi/constant';
+import dayjs from '@/utils/dayjs';
 import { TeamOutlined } from '@ant-design/icons';
 import { Button, Card, Space, Tag, Tooltip } from 'antd';
-import { useEffect, useState } from 'react';
+import _ from 'lodash';
+import { useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import DanhSachSinhVienThi from './DanhSachSinhVienThi';
+
+const getNgayThiTimestamp = (value?: string) => {
+	if (!value) return Number.NEGATIVE_INFINITY;
+
+	const ngayThi = dayjs(value, ['DD/MM/YYYY', 'D/M/YYYY'], true);
+	const timestamp = ngayThi.isValid() ? ngayThi.valueOf() : dayjs(value).valueOf();
+
+	return Number.isNaN(timestamp) ? Number.NEGATIVE_INFINITY : timestamp;
+};
 
 const LichThiPage = () => {
 	const intl = useIntl();
@@ -23,8 +34,22 @@ const LichThiPage = () => {
 	const { danhSachMe, getMeByHocKyModel, loading } = useModel('khaothi.lichthi');
 	const [recLichThi, setRecLichThi] = useState<LichThi.IRecordMe>();
 	const [visibleDSSV, setVisibleDSSV] = useState<boolean>(false);
-	useEffect(() => {
+	const danhSachLichThi = useMemo(() => {
+		const homNay = dayjs().startOf('day').valueOf();
+
+		return _.sortBy(
+			danhSachMe,
+			(record) => Math.abs(getNgayThiTimestamp(record.ngayThi) - homNay),
+			(record) => (getNgayThiTimestamp(record.ngayThi) >= homNay ? 0 : 1),
+		);
+	}, [danhSachMe]);
+
+	const getData = () => {
 		if (recHocKy?.ma) getMeByHocKyModel({ maHocKy: recHocKy.ma });
+	};
+
+	useEffect(() => {
+		getData();
 	}, [recHocKy?.ma]);
 
 	const onCell = (rec: LichThi.IRecordMe) => ({
@@ -37,17 +62,11 @@ const LichThiPage = () => {
 
 	const columns: IColumn<LichThi.IRecordMe>[] = [
 		{
-			title: intl.formatMessage({ id: 'lichthi.table.dotThi' }),
-			dataIndex: 'kyThi',
-			width: 180,
-			filterType: 'string',
-			onCell,
-		},
-		{
 			title: intl.formatMessage({ id: 'lichthi.table.ngayThi' }),
 			dataIndex: 'ngayThi',
 			align: 'center',
 			width: 80,
+			sortable: true,
 			onCell,
 		},
 		{
@@ -70,6 +89,13 @@ const LichThiPage = () => {
 			title: intl.formatMessage({ id: 'lichthi.table.tenHocPhan' }),
 			dataIndex: 'tenHocPhan',
 			width: 180,
+			filterType: 'string',
+			onCell,
+		},
+		{
+			title: intl.formatMessage({ id: 'lichthi.table.hinhThucThi' }),
+			dataIndex: 'hinhThucThi',
+			width: 120,
 			filterType: 'string',
 			onCell,
 		},
@@ -125,6 +151,13 @@ const LichThiPage = () => {
 			],
 		},
 		{
+			title: intl.formatMessage({ id: 'lichthi.table.dotThi' }),
+			dataIndex: 'kyThi',
+			width: 180,
+			filterType: 'string',
+			onCell,
+		},
+		{
 			title: intl.formatMessage({ id: 'lichthi.table.thaoTac' }),
 			align: 'center',
 			width: 120,
@@ -153,7 +186,15 @@ const LichThiPage = () => {
 			}
 		>
 			<Card variant='borderless'>
-				<TableStaticData columns={columns} data={danhSachMe} addStt loading={loading}></TableStaticData>
+				<TableStaticData
+					columns={columns}
+					data={danhSachLichThi}
+					addStt
+					loading={loading}
+					onReload={getData}
+					hasTotal
+				/>
+
 				{recLichThi && (
 					<DanhSachSinhVienThi
 						recLichThi={recLichThi}
