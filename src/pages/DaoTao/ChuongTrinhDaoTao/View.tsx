@@ -1,6 +1,7 @@
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
+import { getLocalizedName } from '@/utils/localeName';
 import { getNameFile } from '@/utils/utils';
 import { Button, Descriptions, Divider, Empty, Modal } from 'antd';
 import React, { useState } from 'react';
@@ -54,7 +55,7 @@ const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) =
 								{recTienTrinh.ctdtKeHoach.khoaSinhVien?.ten ?? recTienTrinh.ctdtKeHoach.maKhoaSinhVien}
 							</Descriptions.Item>
 							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.nganh' })}>
-								{recTienTrinh.ctdtKeHoach.nganh?.ten ?? recTienTrinh.ctdtKeHoach.maNganh}
+								{getLocalizedName(recTienTrinh.ctdtKeHoach.nganh) ?? recTienTrinh.ctdtKeHoach.maNganh}
 							</Descriptions.Item>
 							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.ngonngudaotao' })}>
 								{recTienTrinh.ctdtKeHoach.ngonNguDaoTao ?? '--'}
