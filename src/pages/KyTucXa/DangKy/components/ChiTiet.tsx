@@ -1,4 +1,5 @@
 import ModalExpandable from '@/components/Table/ModalExpandable';
+import { Phong } from '@/services/KyTucXa/Phong/typing';
 import {
 	AppstoreOutlined,
 	BgColorsOutlined,
@@ -37,19 +38,19 @@ const tienIchIcons: Record<string, any> = {
 const ChiTietPhong = () => {
 	const intl = useIntl();
 	const { visibleForm, setVisibleForm, record } = useModel('kytucxa.phong');
-
+	const phong = record as Phong.IChinhSachPhongRecord | undefined;
+	const room = phong?.room;
+	const danhSachAnh = phong?.danhSachAnh?.length ? phong.danhSachAnh : room?.danhSachAnh;
 	const images =
-		(record?.danhSachAnh?.length ?? 0) > 0
-			? record?.danhSachAnh?.map((item: any) => item.url || item.fileUrl || item)
-			: defaultImages;
+		(danhSachAnh?.length ?? 0) > 0 ? danhSachAnh?.map((item: any) => item.url || item.fileUrl || item) : defaultImages;
+	const tienIch = phong?.danhSachTienIch?.length ? phong.danhSachTienIch : (room?.danhSachTienIch ?? []);
+	const sucChua = phong?.sucChua ?? room?.soLuongToiDa ?? room?.sucChua ?? 0;
 
-	const tienIch = record?.danhSachTienIch ?? [];
-
-	const tenPhong = `${record?.ma || record?.soPhong || ''} - BUILDING ${record?.maToaNha || record?.toaNha?.ma || ''} • ${
-		record?.loaiPhongKtx?.ten || record?.maLoaiPhongKtx || ''
+	const tenPhong = `${room?.ma || room?.soPhong || ''} - BUILDING ${room?.maToaNha || room?.toaNha?.ma || ''} - ${
+		phong?.loaiPhongKtx?.ten || room?.loaiPhongKtx?.ten || phong?.maLoaiPhongKtx || room?.maLoaiPhongKtx || ''
 	}`;
 
-	const soSlotConLai = Math.max((record?.soLuongToiDa || 0) - (record?.soLuongHienTai || 0), 0);
+	const soSlotConLai = Math.max(sucChua - (room?.soLuongHienTai ?? 0), 0);
 
 	return (
 		<ModalExpandable
@@ -97,10 +98,10 @@ const ChiTietPhong = () => {
 
 					<div className='room-summary'>
 						<span>
-							<HomeOutlined /> {record?.soPhongTam || 1} bathrooms
+							<HomeOutlined /> {room?.soPhongTam || 1} bathrooms
 						</span>
 						<span>
-							<ColumnWidthOutlined /> {record?.dienTich || '50.2'} m2
+							<ColumnWidthOutlined /> {room?.dienTich || '50.2'} m2
 						</span>
 					</div>
 
@@ -124,9 +125,7 @@ const ChiTietPhong = () => {
 
 				<Col span={6}>
 					<div className='room-price-box'>
-						<div className='room-price'>
-							{record?.giaPhong ? record.giaPhong.toLocaleString('vi-VN') : '3,200,000'} VND
-						</div>
+						<div className='room-price'>{room?.giaPhong ? room.giaPhong.toLocaleString('vi-VN') : '3,200,000'} VND</div>
 
 						<div className='room-available-box'>
 							<div>AVAILABLE</div>
@@ -139,9 +138,9 @@ const ChiTietPhong = () => {
 			<div className='room-card__divider' />
 
 			<div className='room-description'>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel eros non lectus egestas gravida vulputate ut
-				odio. Etiam tincidunt eget nunc facilisis elementum. Curabitur a dictum massa. Donec ipsum ex auctor molestie
-				odio quis.
+				{phong?.moTa ||
+					room?.moTa ||
+					'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel eros non lectus egestas gravida vulputate ut odio. Etiam tincidunt eget nunc facilisis elementum. Curabitur a dictum massa. Donec ipsum ex auctor molestie odio quis.'}
 			</div>
 
 			<div className='form-footer'>
