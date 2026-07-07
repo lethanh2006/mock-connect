@@ -1,5 +1,6 @@
 import dayjs from '@/utils/dayjs';
 import { getPublicAssetPath } from '@/utils/path';
+import { sanitizeObject } from '@/utils/utils';
 import { PlayCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar } from 'antd';
 import classNames from 'classnames';
@@ -59,7 +60,9 @@ const ContentBoxChat = () => {
 				</div>
 
 				<div className='content-text'>
-					{message.content ? <div className='text' dangerouslySetInnerHTML={{ __html: message.content }} /> : null}
+					{message.content ? (
+						<div className='text' dangerouslySetInnerHTML={{ __html: sanitizeObject(message.content) }} />
+					) : null}
 
 					{message.urlVideo ? (
 						<video

@@ -417,6 +417,40 @@ export const removeHtmlTags = (html: string) =>
 		?.trim();
 
 /**
+ * Escape HTML entities in a string to prevent XSS attacks
+ * @param str
+ * @returns
+ */
+export const escapeHTML = (str: string): string => {
+	// Loại bỏ tất cả thẻ script, event handler (onclick, onerror, ...)
+	// Chỉ cho phép <b>, <i>, <u>, <strong>, <em>, <br>, <p>
+	return str
+		.replace(/<script.*?>.*?<\/script>/gi, '')
+		.replace(/on\w+="[^"]*"/gi, '')
+		.replace(/<(?!\/?(b|i|u|strong|em|br|p)\b)[^>]*>/gi, '');
+};
+
+/**
+ * Sanitize an object by escaping HTML entities in all string properties recursively
+ * @param obj
+ * @returns
+ */
+export const sanitizeObject = (obj: any): any => {
+	if (typeof obj === 'string') {
+		return escapeHTML(obj);
+	} else if (Array.isArray(obj)) {
+		return obj.map(sanitizeObject);
+	} else if (typeof obj === 'object' && obj !== null) {
+		const sanitized: any = {};
+		for (const key in obj) {
+			sanitized[key] = sanitizeObject(obj[key]);
+		}
+		return sanitized;
+	}
+	return obj;
+};
+
+/**
  * Chuyển HTML Entities thành text
  * @returns {any}
  */

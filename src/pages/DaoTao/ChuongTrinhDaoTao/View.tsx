@@ -1,7 +1,8 @@
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
-import { getNameFile } from '@/utils/utils';
+import { getLocalizedName } from '@/utils/localeName';
+import { getNameFile, sanitizeObject } from '@/utils/utils';
 import { Button, Descriptions, Divider, Empty, Modal } from 'antd';
 import React, { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -14,9 +15,13 @@ type TProps = {
 const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) => {
 	const intl = useIntl();
 	const { record: recTienTrinh } = useModel('sinhvien.tientrinhtotnghiep');
+	const updatingHtml = intl.formatMessage({ id: 'tientrinhhoctap.ctdt.updating' });
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
-	const updatingHtml = intl.formatMessage({ id: 'tientrinhhoctap.ctdt.updating' });
+	const renderSafeHtml = (html?: string) => {
+		if (!html) return <div>{updatingHtml}</div>;
+		return <div dangerouslySetInnerHTML={{ __html: sanitizeObject(html) }} />;
+	};
 
 	return (
 		<>
@@ -54,7 +59,7 @@ const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) =
 								{recTienTrinh.ctdtKeHoach.khoaSinhVien?.ten ?? recTienTrinh.ctdtKeHoach.maKhoaSinhVien}
 							</Descriptions.Item>
 							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.nganh' })}>
-								{recTienTrinh.ctdtKeHoach.nganh?.ten ?? recTienTrinh.ctdtKeHoach.maNganh}
+								{getLocalizedName(recTienTrinh.ctdtKeHoach.nganh) ?? recTienTrinh.ctdtKeHoach.maNganh}
 							</Descriptions.Item>
 							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.ngonngudaotao' })}>
 								{recTienTrinh.ctdtKeHoach.ngonNguDaoTao ?? '--'}
@@ -82,47 +87,27 @@ const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) =
 						<Divider orientation='left' className='divider-big-title' dashed>
 							{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.muctieu' })}
 						</Divider>
-						<div
-							dangerouslySetInnerHTML={{
-								__html: recTienTrinh.ctdtKeHoach.mucTieuDaoTao ?? updatingHtml,
-							}}
-						/>
+						{renderSafeHtml(recTienTrinh.ctdtKeHoach.mucTieuDaoTao)}
 
 						<Divider orientation='left' className='divider-big-title' dashed>
 							{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.thongtinhocphi' })}
 						</Divider>
-						<div
-							dangerouslySetInnerHTML={{
-								__html: recTienTrinh.ctdtKeHoach.thongTinHocPhi ?? updatingHtml,
-							}}
-						/>
+						{renderSafeHtml(recTienTrinh.ctdtKeHoach.thongTinHocPhi)}
 
 						<Divider orientation='left' className='divider-big-title' dashed>
 							{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuandauvao' })}
 						</Divider>
-						<div
-							dangerouslySetInnerHTML={{
-								__html: recTienTrinh.ctdtKeHoach.chuanDauVao ?? updatingHtml,
-							}}
-						/>
+						{renderSafeHtml(recTienTrinh.ctdtKeHoach.chuanDauVao)}
 
 						<Divider orientation='left' className='divider-big-title' dashed>
 							{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuandaura' })}
 						</Divider>
-						<div
-							dangerouslySetInnerHTML={{
-								__html: recTienTrinh.ctdtKeHoach.chuanDauRa ?? updatingHtml,
-							}}
-						/>
+						{renderSafeHtml(recTienTrinh.ctdtKeHoach.chuanDauRa)}
 
 						<Divider orientation='left' className='divider-big-title' dashed>
 							{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.vitri' })}
 						</Divider>
-						<div
-							dangerouslySetInnerHTML={{
-								__html: recTienTrinh.ctdtKeHoach.viTriLamViec ?? updatingHtml,
-							}}
-						/>
+						{renderSafeHtml(recTienTrinh.ctdtKeHoach.viTriLamViec)}
 					</>
 				) : (
 					<Empty description={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.empty' })} />
