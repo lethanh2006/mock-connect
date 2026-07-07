@@ -207,38 +207,44 @@ export default [
 	// 		},
 	// 	],
 	// },
-	// {
-	// 	path: '/campus-life',
-	// 	name: 'CampusLife',
-	// 	icon: 'BankOutlined',
-	// 	routes: [
-	// 		{
-	// 			path: 'student-housing',
-	// 			name: 'StudentHousing',
-	// 			component: 'New/StudentHousing',
-	// 		},
-	// 		{
-	// 			path: 'Club',
-	// 			name: 'Club',
-	// 			component: 'New/Club',
-	// 		},
-	// 		{
-	// 			path: 'code-conduct',
-	// 			name: 'CodeConduct',
-	// 			component: 'New/CodeConduct',
-	// 		},
-	// 		{
-	// 			path: 'facility-booking',
-	// 			name: 'FacilityBooking',
-	// 			component: 'New/FacilityBooking',
-	// 		},
-	// 		{
-	// 			path: 'campus-news',
-	// 			name: 'CampusNews',
-	// 			component: 'New/CampusNews',
-	// 		},
-	// 	],
-	// },
+	{
+		path: '/campus-life',
+		name: 'CampusLife',
+		icon: 'BankOutlined',
+		routes: [
+			{
+				path: 'student-housing',
+				name: 'StudentHousing',
+				routes: [
+					{
+						path: 'dang-ky',
+						name: 'DangKy',
+						component: 'KyTucXa/DangKy',
+					},
+				],
+			},
+			// {
+			// 	path: 'Club',
+			// 	name: 'Club',
+			// 	component: 'New/Club',
+			// },
+			// {
+			// 	path: 'code-conduct',
+			// 	name: 'CodeConduct',
+			// 	component: 'New/CodeConduct',
+			// },
+			// {
+			// 	path: 'facility-booking',
+			// 	name: 'FacilityBooking',
+			// 	component: 'New/FacilityBooking',
+			// },
+			// {
+			// 	path: 'campus-news',
+			// 	name: 'CampusNews',
+			// 	component: 'New/CampusNews',
+			// },
+		],
+	},
 	// {
 	// 	path: '/career-industry',
 	// 	name: 'CareerIndustry',

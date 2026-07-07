@@ -160,6 +160,7 @@ export default {
 	'menu.StudentSupport.ITSupport': 'Hỗ trợ CNTT',
 	'menu.CampusLife': 'Đời sống học đường',
 	'menu.CampusLife.StudentHousing': 'Ký túc xá',
+	'menu.CampusLife.StudentHousing.DangKy': 'Đăng ký',
 	'menu.CampusLife.Club': 'Câu lạc bộ',
 	'menu.CampusLife.CodeConduct': 'Quy tắc ứng xử',
 	'menu.CampusLife.FacilityBooking': 'Đặt cơ sở vật chất',
