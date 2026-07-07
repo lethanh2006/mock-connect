@@ -3,6 +3,7 @@ import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Alert, Button, Col, Empty, Flex, Input, Pagination, Row, Select, Space, Spin } from 'antd';
 import _ from 'lodash';
+import moment from 'moment';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useModel, useIntl } from 'umi';
 import SelectDanhMucChungKTX from '../DanhMucChung/Select';
@@ -33,14 +34,21 @@ const DangKyKyTucXa = () => {
 		setFilters,
 		filters,
 	} = useModel('kytucxa.phong');
+	const { getByIdModel: getDotDangKy, record: recDot } = useModel('kytucxa.dotdangky')
+
+	useEffect(() => {
+		getDotDangKy('me/one')
+	}, []);
 
 	const getData = () => {
-		getModel(undefined, undefined, undefined, undefined, undefined, 'me/page');
+		if (recDot?._id) {
+			getModel(undefined, undefined, undefined, undefined, undefined, 'me/page');
+		}
 	};
 
 	useEffect(() => {
 		getData();
-	}, [page, limit, filters]);
+	}, [page, limit, filters, recDot?._id]);
 
 	const handleFilterChange = useCallback((fieldPath: string[], value: any, operator = EOperatorType.EQUAL) => {
 		setFilters((prevFilters: any) => {
@@ -155,8 +163,13 @@ const DangKyKyTucXa = () => {
 				style={{ marginBottom: 12, marginTop: 12 }}
 				message={
 					<span>
-						Registration is open from <b style={{ color: '#0E50CF' }}>31/07/2026</b> to{' '}
-						<b style={{ color: '#0E50CF' }}>10/08/2026</b>.
+						{intl.formatMessage(
+							{ id: 'kytucxa.dangky.alert.thoiGianDangKy' },
+							{
+								tuNgay: <b style={{ color: '#0E50CF' }}>{recDot?.thoiGianBatDau ? moment(recDot.thoiGianBatDau).format('HH:mm DD/MM/YYYY') : '--'}</b>,
+								denNgay: <b style={{ color: '#0E50CF' }}>{recDot?.thoiGianKetThuc ? moment(recDot.thoiGianKetThuc).format('HH:mm DD/MM/YYYY') : '--'}</b>,
+							}
+						)}
 					</span>
 				}
 			/>
