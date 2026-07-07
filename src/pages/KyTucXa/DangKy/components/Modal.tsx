@@ -51,9 +51,7 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 	const { record: recDot } = useModel('kytucxa.dotdangky');
 	const { sinhVienDangKyKTXModel, formSubmiting } = useModel('kytucxa.phieudangky');
 	const [currentStep, setCurrentStep] = useState<number>(0);
-	const onChangeStep = (step: number) => {
-		setCurrentStep(step);
-	};
+
 	const checkbox1: boolean = Form.useWatch('checkbox1', form);
 	const checkbox2: boolean = Form.useWatch('checkbox2', form);
 
@@ -73,7 +71,10 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 			maDotId: '6a4b8e6e39037d230762cb79',
 			// maDotId: recDot?._id,
 			maPhong,
-			form: values,
+			form: {
+				...values,
+				agreedToPolicy: true,
+			},
 		};
 
 		await sinhVienDangKyKTXModel(data as any, getData);
@@ -92,7 +93,7 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 			title='Dormitory Detail'
 		>
 			<Form layout='vertical' onFinish={onFinish} form={form} preserve>
-				<Steps current={currentStep} onChange={onChangeStep} style={{ marginBottom: 18 }}>
+				<Steps current={currentStep} style={{ marginBottom: 18 }}>
 					<Steps.Step title='Thông tin chung' />
 					<Steps.Step title='Student Liability Release and Waiver' />
 				</Steps>
@@ -108,11 +109,11 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 				<div className='form-footer'>
 					{currentStep === 0 ? (
 						<>
-							<Button disabled={!checkbox1} type='primary' onClick={() => setCurrentStep(1)}>
+							<Button htmlType='button' disabled={!checkbox1} type='primary' onClick={() => setCurrentStep(1)}>
 								Next
 							</Button>
 
-							<Button onClick={() => setVisibleDangKy(false)}>
+							<Button htmlType='button' onClick={() => setVisibleDangKy(false)}>
 								{intl.formatMessage({ id: 'activity.outcome.close' })}
 							</Button>
 						</>
@@ -122,7 +123,9 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 								Submit
 							</Button>
 
-							<Button onClick={() => setCurrentStep(0)}>Previous</Button>
+							<Button htmlType='button' onClick={() => setCurrentStep(0)}>
+								Previous
+							</Button>
 						</>
 					)}
 				</div>
