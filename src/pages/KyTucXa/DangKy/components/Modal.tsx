@@ -1,5 +1,6 @@
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
+import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Button, Form, Steps } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -87,8 +88,7 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 		const { checkbox1: _checkbox1, checkbox2: _checkbox2, ...formValues } = values;
 
 		const data = {
-			// maDotId: recDot?._id,
-			maDotId: '6a4b8e6e39037d230762cb79',
+			maDotId: recDot?._id,
 			maPhong,
 			form: {
 				...formValues,
