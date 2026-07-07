@@ -83,6 +83,15 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 		setVisibleDangKy(false);
 	};
 
+	const handleNext = async () => {
+		try {
+			await form.validateFields();
+			setCurrentStep(1);
+		} catch (errorInfo) {
+			console.log('Validation Failed:', errorInfo);
+		}
+	};
+
 	return (
 		<ModalExpandable
 			open={visibleDangKy}
@@ -97,6 +106,15 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 					<Steps.Step title='Student Liability Release and Waiver' />
 				</Steps>
 
+				<hr
+					style={{
+						marginTop: 16,
+						marginBottom: 16,
+						border: 'none',
+						borderTop: '2px solid #F4F4F4',
+					}}
+				/>
+
 				<div style={{ display: currentStep === 0 ? 'block' : 'none' }}>
 					<FormDangKyKTX form={form} />
 				</div>
@@ -108,7 +126,7 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 				<div className='form-footer'>
 					{currentStep === 0 ? (
 						<>
-							<Button disabled={!checkbox1} type='primary' onClick={() => setCurrentStep(1)}>
+							<Button disabled={!checkbox1} type='primary' onClick={handleNext}>
 								Next
 							</Button>
 
