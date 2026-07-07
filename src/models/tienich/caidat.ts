@@ -1,6 +1,7 @@
 import { createSetting, getByKey, getSettingByKey, putSetting, updateSetting } from '@/services/base/api';
 import type { ESettingKey } from '@/services/base/constant';
 import type { ISetting } from '@/services/base/typing';
+import { sanitizeObject } from '@/utils/utils';
 import { message } from 'antd';
 import { useState } from 'react';
 
@@ -18,10 +19,11 @@ export default () => {
 		setLoading(true);
 		try {
 			const res = await getSettingByKey(key, ip);
-			const temp = Object.assign(settings, { [key]: res.data?.data });
+			const safeData = sanitizeObject(res.data?.data);
+			const temp = Object.assign(settings, { [key]: safeData });
 			setSettings(temp);
 
-			return res.data?.data;
+			return safeData;
 		} catch (error) {
 			return Promise.reject(error);
 		} finally {

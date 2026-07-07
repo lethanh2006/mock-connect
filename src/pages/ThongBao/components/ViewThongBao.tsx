@@ -1,9 +1,9 @@
 import { EModuleKey } from '@/services/base/constant';
 import { type ESourceTypeNotification, mapModuleKey } from '@/services/ThongBao/constant';
 import { type ThongBao } from '@/services/ThongBao/typing';
-import { currentRole } from '@/utils/ip';
-import { getNameFile } from '@/utils/utils';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
+import { currentRole } from '@/utils/ip';
+import { getNameFile, sanitizeObject } from '@/utils/utils';
 import { CalendarOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Divider, Row } from 'antd';
 import { history } from 'umi';
@@ -26,6 +26,8 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 			[EModuleKey.KT]: APP_CONFIG_URL_KHAO_THI,
 			[EModuleKey.CSVC]: APP_CONFIG_URL_CSVC,
 			[EModuleKey.VBCC]: '',
+			[EModuleKey.THU_VIEN]: '',
+			[EModuleKey.QLND]: '',
 		};
 
 		const sourceType = mapModuleKey[record?.metadata?.sourceType as ESourceTypeNotification];
@@ -58,8 +60,10 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 					</>
 				}
 			/>
+
 			<br />
-			<div dangerouslySetInnerHTML={{ __html: record?.content ?? '' }} className='notif-content' />
+			<div dangerouslySetInnerHTML={{ __html: sanitizeObject(record?.content ?? '') }} className='notif-content' />
+
 			<Row style={{ marginTop: 12 }} gutter={[12, 12]}>
 				{record?.taiLieuDinhKem?.length ? (
 					<>
@@ -76,8 +80,7 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 
 				{record?.thoiGianHieuLuc ? (
 					<Col span={24}>
-						Hiệu lực thông báo:{' '}
-						<b style={{ color: 'red' }}>{formatDate(record?.thoiGianHieuLuc)}</b>{' '}
+						Hiệu lực thông báo: <b style={{ color: 'red' }}>{formatDate(record?.thoiGianHieuLuc)}</b>{' '}
 					</Col>
 				) : null}
 
