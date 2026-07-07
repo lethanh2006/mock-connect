@@ -22,21 +22,13 @@ const FormNguoiThanKTX = (props: { onOk: (val: PhieuDangKyKTX.INguoiThan) => voi
 		<Form onFinish={onFinish} form={form} layout='vertical' disabled={isView}>
 			<Row gutter={[12, 0]}>
 				<Col span={24}>
-					<Form.Item
-						name='hoTen'
-						label='Parent/Guardian Name'
-						rules={[{ required: true, message: 'Vui lòng nhập họ tên người thân' }]}
-					>
+					<Form.Item name='emergencyContactName' label='Parent/Guardian Name'>
 						<Input placeholder='Nhập họ tên người thân' />
 					</Form.Item>
 				</Col>
 
 				<Col span={24}>
-					<Form.Item
-						name='moiQuanHe'
-						label='Relationship'
-						rules={[{ required: true, message: 'Vui lòng chọn mối quan hệ' }]}
-					>
+					<Form.Item name='emergencyRelationship' label='Relationship'>
 						<Select
 							placeholder='Chọn mối quan hệ'
 							options={[
@@ -50,29 +42,25 @@ const FormNguoiThanKTX = (props: { onOk: (val: PhieuDangKyKTX.INguoiThan) => voi
 				</Col>
 
 				<Col span={24}>
-					<Form.Item
-						name='sdtChinh'
-						label='Primary Contact Number'
-						rules={[{ required: true, message: 'Vui lòng nhập số điện thoại chính' }]}
-					>
+					<Form.Item name='emergencyContactNumber' label='Primary Contact Number'>
 						<Input placeholder='Nhập số điện thoại chính' />
 					</Form.Item>
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='sdtPhu' label='Secondary Contact Number'>
+					<Form.Item name='secondaryContactNumber' label='Secondary Contact Number'>
 						<Input placeholder='Nhập số điện thoại phụ' />
 					</Form.Item>
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='email' label='Email' rules={[{ type: 'email', message: 'Email không hợp lệ' }]}>
+					<Form.Item name='emergencyEmail' label='Email'>
 						<Input placeholder='Nhập email' />
 					</Form.Item>
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='diaChi' label='Address'>
+					<Form.Item name='address' label='Address'>
 						<Input.TextArea rows={3} placeholder='Nhập địa chỉ' />
 					</Form.Item>
 				</Col>

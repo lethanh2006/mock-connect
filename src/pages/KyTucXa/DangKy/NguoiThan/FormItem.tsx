@@ -22,13 +22,13 @@ const FormItemNguoiThanKTX = (props: {
 
 	const onAdd = (rec: PhieuDangKyKTX.INguoiThan) => {
 		if (!record?.index) {
-			const data = [...value, rec];
-			if (onChange) onChange(data);
+			const data = [...value, { ...rec, index: value.length + 1 }];
+			onChange?.(data);
 			setVisibleForm(false);
 		} else {
 			const data = [...value];
-			data.splice(record?.index - 1, 1, rec);
-			if (onChange) onChange(data);
+			data.splice(record.index - 1, 1, { ...rec, index: record.index });
+			onChange?.(data);
 			setVisibleForm(false);
 		}
 	};
@@ -36,34 +36,34 @@ const FormItemNguoiThanKTX = (props: {
 	const columns: IColumn<PhieuDangKyKTX.INguoiThan>[] = [
 		{
 			title: 'Parent/Guardian Name',
-			dataIndex: 'hoTen',
+			dataIndex: 'emergencyContactName',
 			width: 190,
 		},
 		{
 			title: 'Relationship',
-			dataIndex: 'moiQuanHe',
+			dataIndex: 'emergencyRelationship',
 			width: 160,
 		},
 		{
 			title: 'Primary Contact Number',
-			dataIndex: 'sdtChinh',
+			dataIndex: 'emergencyContactNumber',
 			width: 170,
 		},
 		{
 			title: 'Secondary Contact Number',
-			dataIndex: 'sdtPhu',
+			dataIndex: 'secondaryContactNumber',
 			width: 190,
 			render: (val) => val || '--',
 		},
 		{
 			title: 'Email',
-			dataIndex: 'email',
+			dataIndex: 'emergencyEmail',
 			width: 220,
 			render: (val) => val || '--',
 		},
 		{
 			title: 'Address',
-			dataIndex: 'diaChi',
+			dataIndex: 'address',
 			width: 260,
 			render: (val) => val || '--',
 		},

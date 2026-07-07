@@ -37,7 +37,7 @@ const tienIchIcons: Record<string, any> = {
 
 const ChiTietPhong = () => {
 	const intl = useIntl();
-	const { visibleForm, setVisibleForm, record } = useModel('kytucxa.phong');
+	const { visibleForm, setVisibleForm, record, setVisibleDangKy } = useModel('kytucxa.phong');
 	const phong = record as Phong.IChinhSachPhongRecord | undefined;
 	const room = phong?.room;
 	const danhSachAnh = phong?.danhSachAnh?.length ? phong.danhSachAnh : room?.danhSachAnh;
@@ -51,6 +51,11 @@ const ChiTietPhong = () => {
 	}`;
 
 	const soSlotConLai = Math.max(sucChua - (room?.soLuongHienTai ?? 0), 0);
+
+	const handleDangKy = () => {
+		setVisibleForm(false);
+		setVisibleDangKy(true);
+	};
 
 	return (
 		<ModalExpandable
@@ -98,7 +103,7 @@ const ChiTietPhong = () => {
 
 					<div className='room-summary'>
 						<span>
-							<ColumnWidthOutlined /> <b>{record?.dienTich || '50.2'} m2</b>
+							<ColumnWidthOutlined /> <b>{record?.room?.dienTich || '50.2'} m2</b>
 						</span>
 					</div>
 
@@ -141,7 +146,9 @@ const ChiTietPhong = () => {
 			</div>
 
 			<div className='form-footer'>
-				<Button type='primary'>Đăng ký</Button>
+				<Button type='primary' onClick={handleDangKy}>
+					Đăng ký
+				</Button>
 				<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 			</div>
 		</ModalExpandable>

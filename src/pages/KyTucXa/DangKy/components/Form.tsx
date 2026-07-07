@@ -1,3 +1,4 @@
+import MyDatePicker from '@/components/MyDatePicker';
 import { Checkbox, Col, Divider, Form, FormInstance, Input, Row } from 'antd';
 import FormItemNguoiThanKTX from '../NguoiThan/FormItem';
 
@@ -32,91 +33,88 @@ const FormDangKyKTX = (props: { form: FormInstance }) => {
 			</Col>
 			<Col span={24} md={12}>
 				<Form.Item name='fullName' label='Full Name'>
-					<Input />
+					<Input placeholder='Full Name' disabled />
 				</Form.Item>
 			</Col>
 
 			<Col span={24} md={12}>
 				<Form.Item name='studentId' label='Student ID'>
-					<Input />
+					<Input placeholder='Student ID' disabled />
 				</Form.Item>
 			</Col>
 
 			<Col span={24} md={12}>
 				<Form.Item name='dateOfBirth' label='Date of Birth'>
-					<Input />
+					<MyDatePicker placeholder='Date of Birth' disabled />
 				</Form.Item>
 			</Col>
 
 			<Col span={24} md={12}>
 				<Form.Item name='gender' label='Gender'>
-					<Input />
+					<Input placeholder='Gender' disabled />
 				</Form.Item>
 			</Col>
 
 			<Col span={24} md={12}>
 				<Form.Item name='email' label='Email'>
-					<Input />
+					<Input placeholder='Enter Email' />
 				</Form.Item>
 			</Col>
 
 			<Col span={24} md={12}>
 				<Form.Item name='phoneNumber' label='Phone Number'>
-					<Input />
+					<Input placeholder='Enter Phone Number' />
 				</Form.Item>
 			</Col>
 
 			<Col span={24} md={12}>
 				<Form.Item name='program' label='Program'>
-					<Input />
+					<Input placeholder='Program' disabled />
 				</Form.Item>
 			</Col>
 
 			<Col span={24} md={12}>
 				<Form.Item name='college' label='College'>
-					<Input />
+					<Input placeholder='College' disabled />
 				</Form.Item>
 			</Col>
 
 			<Col span={24} md={12}>
 				<Form.Item name='identityNumber' label='ID or Passport No.'>
-					<Input />
+					<Input placeholder='Enter ID or Passport No.' />
 				</Form.Item>
 			</Col>
 
 			<Col span={24} md={12}>
 				<Form.Item name='dateOfIssue' label='Date of issue'>
-					<Input />
+					<MyDatePicker placeholder='Select date of issue' />
 				</Form.Item>
 			</Col>
 
 			<Col span={24}>
 				<Form.Item name='placeOfIssue' label='Place of issue'>
-					<Input />
+					<Input placeholder='Enter place of issue' />
 				</Form.Item>
 			</Col>
 
 			<Col span={24}>
 				<Form.Item name='nationality' label='Nationality'>
-					<Input />
+					<Input placeholder='Enter nationality' />
 				</Form.Item>
 			</Col>
 
 			<Col span={24}>
 				<Form.Item name='permanentHomeAddress' label='Permanent Home Address'>
-					<Input.TextArea rows={2} />
+					<Input.TextArea rows={2} placeholder='Enter permanent home address' />
 				</Form.Item>
 			</Col>
+
 			<Col span={24}>
 				<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0, marginBottom: 0 }}>
 					Emergency Contact Information
 				</Divider>
 			</Col>
-			<Col span={24}>
-				<Form.Item name='nguoiThan'>
-					<FormItemNguoiThanKTX />
-				</Form.Item>
-			</Col>
+
 			<Col span={24}>
 				<Form.Item name='emergencyContacts'>
 					<FormItemNguoiThanKTX />
