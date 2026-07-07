@@ -43,7 +43,6 @@ const ChatbotOverlayV2 = () => {
 
 		if (boxChatVisible && !recordUser?.id) {
 			createUserChatBotModel({
-				password: 'abc@1234',
 				username: fullName ?? 'admin',
 				email:
 					recSinhVien?.email ??
