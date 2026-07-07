@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import FormDangKyKTX from './Form';
 import FormChinhSachKTX from './FormChinhSach';
+import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 
 const getTenSinhVien = (sinhVien?: SinhVien.IRecord) =>
 	sinhVien?.ten || [sinhVien?.firstName, sinhVien?.lastName].filter(Boolean).join(' ');
@@ -26,7 +27,7 @@ const getDiaChiThuongTru = (sinhVien?: SinhVien.IRecord) => {
 	);
 };
 
-const getThongTinSinhVienForm = (sinhVien?: SinhVien.IRecord): Partial<PhieuDangKyKTX.IRecord> => ({
+const getThongTinSinhVienForm = (sinhVien?: SinhVien.IRecord): Partial<PhieuDangKyKTX.IDangKy> => ({
 	fullName: getTenSinhVien(sinhVien),
 	studentId: sinhVien?.ma,
 	dateOfBirth: sinhVien?.ngaySinh,
@@ -46,14 +47,14 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 	const { getData } = props;
 	const intl = useIntl();
 	const [form] = Form.useForm();
+
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { visibleDangKy, setVisibleDangKy, record: recPhong } = useModel('kytucxa.phong');
 	const { record: recDot } = useModel('kytucxa.dotdangky');
 	const { sinhVienDangKyKTXModel, formSubmiting } = useModel('kytucxa.phieudangky');
+
 	const [currentStep, setCurrentStep] = useState<number>(0);
-	const onChangeStep = (step: number) => {
-		setCurrentStep(step);
-	};
+
 	const checkbox1: boolean = Form.useWatch('checkbox1', form);
 	const checkbox2: boolean = Form.useWatch('checkbox2', form);
 
@@ -63,21 +64,7 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 		}
 	}, [visibleDangKy, recSinhVien?._id]);
 
-	const onFinish = async (values: PhieuDangKyKTX.IRecord & { checkbox1?: boolean; checkbox2?: boolean }) => {
-		const maPhong = recPhong?.room?.ma ?? recPhong?.roomId;
-
-		delete values.checkbox1;
-		delete values.checkbox2;
-
-		const data = {
-			maDotId: '6a4b8e6e39037d230762cb79',
-			// maDotId: recDot?._id,
-			maPhong,
-			form: values,
-		};
-
-		await sinhVienDangKyKTXModel(data as any, getData);
-
+	const handleClose = () => {
 		form.resetFields();
 		setCurrentStep(0);
 		setVisibleDangKy(false);
@@ -87,21 +74,37 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 		try {
 			await form.validateFields();
 			setCurrentStep(1);
-		} catch (errorInfo) {
-			console.log('Validation Failed:', errorInfo);
+		} catch (error) {
+			console.error(error);
 		}
 	};
 
+	const onFinish = async (values: PhieuDangKyKTX.IDangKy & { checkbox1?: boolean; checkbox2?: boolean }) => {
+		if (currentStep !== 1) return;
+
+		const maPhong = recPhong?.room?.ma ?? recPhong?.roomId;
+
+		const { checkbox1: _checkbox1, checkbox2: _checkbox2, ...formValues } = values;
+
+		const data = {
+			// maDotId: recDot?._id,
+			maDotId: '6a4b8e6e39037d230762cb79',
+			maPhong,
+			form: {
+				...formValues,
+				agreedToPolicy: true,
+			},
+		};
+
+		await sinhVienDangKyKTXModel(data as any, getData);
+
+		handleClose();
+	};
+
 	return (
-		<ModalExpandable
-			open={visibleDangKy}
-			onCancel={() => setVisibleDangKy(false)}
-			footer={null}
-			width={1000}
-			title='Dormitory Detail'
-		>
+		<ModalExpandable open={visibleDangKy} onCancel={handleClose} footer={null} width={1000} title='Dormitory Detail'>
 			<Form layout='vertical' onFinish={onFinish} form={form} preserve>
-				<Steps current={currentStep} onChange={onChangeStep} style={{ marginBottom: 18 }}>
+				<Steps current={currentStep} style={{ marginBottom: 18 }}>
 					<Steps.Step title='Thông tin chung' />
 					<Steps.Step title='Student Liability Release and Waiver' />
 				</Steps>
@@ -126,11 +129,11 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 				<div className='form-footer'>
 					{currentStep === 0 ? (
 						<>
-							<Button disabled={!checkbox1} type='primary' onClick={handleNext}>
+							<Button htmlType='button' disabled={!checkbox1} type='primary' onClick={handleNext}>
 								Next
 							</Button>
 
-							<Button onClick={() => setVisibleDangKy(false)}>
+							<Button htmlType='button' onClick={handleClose}>
 								{intl.formatMessage({ id: 'activity.outcome.close' })}
 							</Button>
 						</>
@@ -140,7 +143,9 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 								Submit
 							</Button>
 
-							<Button onClick={() => setCurrentStep(0)}>Previous</Button>
+							<Button htmlType='button' onClick={() => setCurrentStep(0)}>
+								Previous
+							</Button>
 						</>
 					)}
 				</div>

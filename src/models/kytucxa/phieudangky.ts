@@ -1,5 +1,6 @@
 import useInitModel from '@/hooks/useInitModel';
 import { sinhVienDangKyKTX } from '@/services/KyTucXa/PhieuDangKy';
+import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { ipCsvc } from '@/utils/ip';
 import { message } from 'antd';
 
@@ -11,7 +12,7 @@ export default () => {
 		payLoad: {
 			maDotId: string;
 			maPhong: string;
-			form: PhieuDangKyKTX.IRecord;
+			form: PhieuDangKyKTX.IDangKy;
 		},
 		getData?: () => void,
 	): Promise<PhieuDangKyKTX.IRecord> => {
