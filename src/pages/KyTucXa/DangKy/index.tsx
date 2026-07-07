@@ -4,7 +4,7 @@ import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Alert, Button, Col, Empty, Flex, Input, Pagination, Row, Select, Space, Spin } from 'antd';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo } from 'react';
-import { useModel } from 'umi';
+import { useModel, useIntl } from 'umi';
 import SelectDanhMucChungKTX from '../DanhMucChung/Select';
 import SelectToaNhaKTX from '../ToaNha/Select';
 import CardPhong from './components/CardPhong';
@@ -16,6 +16,7 @@ import { EOperatorType } from '@/components/Table/constant';
 const { Search } = Input;
 
 const DangKyKyTucXa = () => {
+	const intl = useIntl();
 	const {
 		getModel,
 		danhSach,
@@ -89,12 +90,12 @@ const DangKyKyTucXa = () => {
 
 	return (
 		<PageCard
-			title='Đăng ký ký túc xá'
+			title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}
 		>
 			<Flex justify='space-between' align='center' style={{ marginBottom: 8 }}>
 				<Space wrap>
 					<Search
-						placeholder='Tìm kiếm tên phòng'
+						placeholder={intl.formatMessage({ id: 'kytucxa.dangky.filter.searchPlaceholder' })}
 						style={{ width: 250 }}
 						allowClear
 						onChange={(e) => searchTenPhong(e.target.value)}
@@ -117,7 +118,7 @@ const DangKyKyTucXa = () => {
 					/>
 					<Select
 						style={{ width: 250 }}
-						placeholder='Chọn sức chứa'
+						placeholder={intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.placeholder' })}
 						onChange={(val) => {
 							if (val) {
 								const [min, max] = val.split('-').map(Number);
@@ -129,15 +130,15 @@ const DangKyKyTucXa = () => {
 						options={[
 							{
 								value: '3-6',
-								label: 'Từ 3 đến 6',
+								label: intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.option1' }),
 							},
 							{
 								value: '6-12',
-								label: 'Từ 6 đến 12',
+								label: intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.option2' }),
 							},
 							{
 								value: '12-50',
-								label: 'Từ 12 lên',
+								label: intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.option3' }),
 							},
 						]}
 						allowClear

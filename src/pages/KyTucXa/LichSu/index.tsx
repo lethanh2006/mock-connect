@@ -39,23 +39,23 @@ const getFloorText = (floor?: number | string | null) => {
 	}
 };
 
-const getPaymentTag = (status?: string) => {
+const getPaymentTag = (status?: string, intl?: any) => {
 	switch (status) {
 		case 'Đã thanh toán':
 		case 'Paid':
-			return <Tag color='success'>Paid</Tag>;
+			return <Tag color='success'>{intl.formatMessage({ id: 'kytucxa.lichsu.status.paid' })}</Tag>;
 
 		case 'Chưa thanh toán':
 		case 'Unpaid':
-			return <Tag color='error'>Unpaid</Tag>;
+			return <Tag color='error'>{intl.formatMessage({ id: 'kytucxa.lichsu.status.unpaid' })}</Tag>;
 
 		case 'Thanh toán thiếu':
 		case 'Underpaid':
-			return <Tag color='warning'>Underpaid</Tag>;
+			return <Tag color='warning'>{intl.formatMessage({ id: 'kytucxa.lichsu.status.underpaid' })}</Tag>;
 
 		case 'Đã đóng':
 		case 'Closed':
-			return <Tag color='purple'>Closed</Tag>;
+			return <Tag color='purple'>{intl.formatMessage({ id: 'kytucxa.lichsu.status.closed' })}</Tag>;
 
 		default:
 			return <Tag>{status || '--'}</Tag>;
@@ -83,24 +83,24 @@ const LichSuaKTX = () => {
 
 	const columns: IColumn<PhieuDangKyKTX.IRecord>[] = [
 		{
-			title: 'Floor',
+			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.floor' }),
 			width: 90,
 			sortable: true,
 			render: (_val, rec) => getFloorText(rec?.phong?.tangThu),
 		},
 		{
-			title: 'Room Code',
+			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.roomCode' }),
 			width: 120,
 			render: (_val, rec) => rec?.phong?.ma || rec?.maPhong || '--',
 		},
 		{
-			title: 'Apartment Type',
+			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.apartmentType' }),
 			width: 260,
 			sortable: true,
 			render: (_val, rec) => rec?.phong?.moTa || rec?.phong?.ten || '--',
 		},
 		{
-			title: 'Price',
+			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.price' }),
 			width: 160,
 			render: (_val, rec) => {
 				const giaPhong = (rec?.phong as any)?.giaPhong || (rec as any)?.giaPhong;
@@ -108,7 +108,7 @@ const LichSuaKTX = () => {
 			},
 		},
 		{
-			title: 'Move In Date',
+			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.moveInDate' }),
 			width: 150,
 			render: (_val, rec) => {
 				const moveInDate = (rec as any)?.ngayNhanPhong || (rec as any)?.moveInDate || rec?.createdAt;
@@ -116,7 +116,7 @@ const LichSuaKTX = () => {
 			},
 		},
 		{
-			title: 'Move Out Date',
+			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.moveOutDate' }),
 			width: 150,
 			render: (_val, rec) => {
 				const moveOutDate = (rec as any)?.ngayTraPhong || (rec as any)?.moveOutDate || rec?.thoiHanThanhToan;
@@ -124,13 +124,13 @@ const LichSuaKTX = () => {
 			},
 		},
 		{
-			title: 'Payment Status',
+			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.paymentStatus' }),
 			width: 150,
 			sortable: true,
-			render: (_val, rec) => getPaymentTag(rec?.trangThaiThanhToan),
+			render: (_val, rec) => getPaymentTag(rec?.trangThaiThanhToan, intl),
 		},
 		{
-			title: 'Action',
+			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.action' }),
 			align: 'center',
 			width: 100,
 			fixed: 'right',
@@ -142,7 +142,7 @@ const LichSuaKTX = () => {
 					<>
 						{!isPaid && !isClosed ? (
 							<ButtonExtend
-								tooltip='Thanh toán'
+								tooltip={intl.formatMessage({ id: 'kytucxa.lichsu.tooltip.thanhToan' })}
 								onClick={() => handleEdit(rec)}
 								type='primary'
 								icon={<DollarCircleOutlined />}
@@ -176,7 +176,7 @@ const LichSuaKTX = () => {
 			columns={columns}
 			dependencies={[page, limit, recDot?._id]}
 			modelName='kytucxa.phieudangky'
-			title='Phiếu đăng ký'
+			title={intl.formatMessage({ id: 'kytucxa.lichsu.title' })}
 			buttons={{ create: false }}
 		>
 			<FilterHocKy isSetHocKy style={{ marginBottom: 12 }}>

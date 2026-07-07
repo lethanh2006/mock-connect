@@ -41,7 +41,7 @@ const SelectDanhMucChungKTX = (props: {
 			options={options}
 			showSearch
 			optionFilterProp='label'
-			placeholder='Chọn loại phòng'
+			placeholder={intl.formatMessage({ id: 'kytucxa.dangky.filter.selectLoaiPhong' })}
 			style={{ width: '100%', ...style }}
 		/>
 	);
