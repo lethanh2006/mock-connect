@@ -29,8 +29,8 @@ const Login: React.FC = () => {
 	 */
 	const handleRole = async (role: { access_token: string; refresh_token: string }) => {
 		// Tobe removed
-		localStorage.setItem('token', role?.access_token);
-		localStorage.setItem('refreshToken', role?.refresh_token);
+		// localStorage setItem ('token', \\\role\\?.access_token);
+		// localStorage setItem ('refreshToken', \\\role\\?.refresh_token);
 
 		// const decoded = jwt_decode(role?.access_token) as any;
 		const info = await getUserInfo();
