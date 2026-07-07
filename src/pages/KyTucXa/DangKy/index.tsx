@@ -1,12 +1,10 @@
 import PageCard from '@/components/PageCard';
-import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Alert, Button, Col, Empty, Flex, Input, Pagination, Row, Select, Space, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import SelectDanhMucChungKTX from '../DanhMucChung/Select';
-import SelectDotDangKyKTX from '../DotDangKyKTX/Select';
 import SelectToaNhaKTX from '../ToaNha/Select';
 import CardPhong from './components/CardPhong';
 import ChiTietPhong from './components/ChiTiet';
@@ -16,7 +14,7 @@ import './style.less';
 const { Search } = Input;
 
 const DangKyKyTucXa = () => {
-	const { record: recHocKy } = useModel('daotao.hocky');
+	const { record: recDot } = useModel('kytucxa.dotdangky');
 	const {
 		getModel,
 		danhSach,
@@ -38,7 +36,7 @@ const DangKyKyTucXa = () => {
 
 	useEffect(() => {
 		getData();
-	}, [page, limit]);
+	}, [page, limit, recDot?._id]);
 
 	const handleXemChiTiet = (phong: Phong.IChinhSachPhongRecord) => {
 		handleView(phong);
@@ -65,14 +63,7 @@ const DangKyKyTucXa = () => {
 	};
 
 	return (
-		<PageCard
-			title='Đăng ký ký túc xá'
-			extra={
-				<FilterHocKy isSetHocKy>
-					<SelectDotDangKyKTX condition={{ maHocKy: recHocKy?.ma }} style={{ width: 250 }} allowClear isSetRecord />
-				</FilterHocKy>
-			}
-		>
+		<PageCard title='Đăng ký ký túc xá'>
 			<Flex justify='space-between' align='center' style={{ marginBottom: 8 }}>
 				<Space wrap>
 					<Search placeholder='Tìm kiếm tên phòng' style={{ width: 250 }} allowClear />

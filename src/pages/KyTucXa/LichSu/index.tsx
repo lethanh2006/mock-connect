@@ -65,21 +65,20 @@ const getPaymentTag = (status?: string) => {
 const LichSuaKTX = () => {
 	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const { record: recDot } = useModel('kytucxa.dotdangky');
+	const { record: recDot, setRecord: setRecDot, danhSach: dsDot } = useModel('kytucxa.dotdangky');
 	const { getModel, page, limit, deleteModel, handleEdit } = useModel('kytucxa.phieudangky');
 
 	const getData = () => {
-		if (recDot?._id)
-			getModel(
-				{
-					maDotId: recDot?._id,
-				},
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				'me/page',
-			);
+		getModel(
+			{
+				maDotId: recDot?._id,
+			},
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			'me/page',
+		);
 	};
 
 	const columns: IColumn<PhieuDangKyKTX.IRecord>[] = [
@@ -181,7 +180,15 @@ const LichSuaKTX = () => {
 			buttons={{ create: false }}
 		>
 			<FilterHocKy isSetHocKy style={{ marginBottom: 12 }}>
-				<SelectDotDangKyKTX condition={{ maHocKy: recHocKy?.ma }} style={{ width: 250 }} allowClear isSetRecord />
+				<SelectDotDangKyKTX
+					condition={{ maHocKy: recHocKy?.ma }}
+					style={{ width: 250 }}
+					allowClear
+					value={recDot?._id}
+					onChange={(val) => {
+						setRecDot(dsDot.find((item) => item._id === val));
+					}}
+				/>
 			</FilterHocKy>
 		</TableBase>
 	);
