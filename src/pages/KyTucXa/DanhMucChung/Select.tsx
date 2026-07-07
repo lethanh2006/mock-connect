@@ -25,7 +25,7 @@ const SelectDanhMucChungKTX = (props: {
 
 	const options = (danhSach || []).map((item) => ({
 		key: item._id,
-		value: item._id,
+		value: item.ma,
 		label: item.ten,
 		rawData: item,
 	}));

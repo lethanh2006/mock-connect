@@ -1,22 +1,21 @@
 import PageCard from '@/components/PageCard';
-import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Alert, Button, Col, Empty, Flex, Input, Pagination, Row, Select, Space, Spin } from 'antd';
-import { useEffect } from 'react';
+import _ from 'lodash';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useModel } from 'umi';
 import SelectDanhMucChungKTX from '../DanhMucChung/Select';
-import SelectDotDangKyKTX from '../DotDangKyKTX/Select';
 import SelectToaNhaKTX from '../ToaNha/Select';
 import CardPhong from './components/CardPhong';
 import ChiTietPhong from './components/ChiTiet';
 import ModalDanKyKTX from './components/Modal';
 import './style.less';
+import { EOperatorType } from '@/components/Table/constant';
 
 const { Search } = Input;
 
 const DangKyKyTucXa = () => {
-	const { record: recHocKy } = useModel('daotao.hocky');
 	const {
 		getModel,
 		danhSach,
@@ -30,6 +29,8 @@ const DangKyKyTucXa = () => {
 		loading,
 		setVisibleForm,
 		setRecord,
+		setFilters,
+		filters,
 	} = useModel('kytucxa.phong');
 
 	const getData = () => {
@@ -38,7 +39,29 @@ const DangKyKyTucXa = () => {
 
 	useEffect(() => {
 		getData();
-	}, [page, limit]);
+	}, [page, limit, filters]);
+
+	const handleFilterChange = useCallback((fieldPath: string[], value: any, operator = EOperatorType.EQUAL) => {
+		setFilters((prevFilters: any) => {
+			const currentFilters = prevFilters || [];
+			const newFilters = currentFilters.filter((f: any) => JSON.stringify(f.field) !== JSON.stringify(fieldPath));
+			
+			if (value) {
+				newFilters.push({
+					field: fieldPath,
+					operator: operator,
+					values: Array.isArray(value) ? value : [value],
+				});
+			}
+			return newFilters;
+		});
+		setPage(1);
+	}, [setFilters, setPage]);
+
+	const searchTenPhong = useMemo(() => _.debounce((val: string) => {
+		const keyword = val.trim();
+		handleFilterChange(['room', 'ten'], keyword, EOperatorType.CONTAIN);
+	}, 500), [handleFilterChange]);
 
 	const handleXemChiTiet = (phong: Phong.IChinhSachPhongRecord) => {
 		handleView(phong);
@@ -67,33 +90,53 @@ const DangKyKyTucXa = () => {
 	return (
 		<PageCard
 			title='Đăng ký ký túc xá'
-			extra={
-				<FilterHocKy isSetHocKy>
-					<SelectDotDangKyKTX condition={{ maHocKy: recHocKy?.ma }} style={{ width: 250 }} allowClear isSetRecord />
-				</FilterHocKy>
-			}
 		>
 			<Flex justify='space-between' align='center' style={{ marginBottom: 8 }}>
 				<Space wrap>
-					<Search placeholder='Tìm kiếm tên phòng' style={{ width: 250 }} allowClear />
-					<SelectToaNhaKTX style={{ width: 250 }} allowClear />
-					<SelectDanhMucChungKTX condition={{ maLoai: 'LOAI_PHONG_KTX' }} style={{ width: 250 }} allowClear />
+					<Search
+						placeholder='Tìm kiếm tên phòng'
+						style={{ width: 250 }}
+						allowClear
+						onChange={(e) => searchTenPhong(e.target.value)}
+						onSearch={(value) => {
+							searchTenPhong.cancel();
+							searchTenPhong(value);
+							searchTenPhong.flush();
+						}}
+					/>
+					<SelectToaNhaKTX 
+						style={{ width: 250 }} 
+						allowClear 
+						onChange={(val) => handleFilterChange(['room', 'toaNha', '_id'], val, EOperatorType.EQUAL)}
+					/>
+					<SelectDanhMucChungKTX 
+						condition={{ maLoai: 'LOAI_PHONG_KTX' }} 
+						style={{ width: 250 }} 
+						allowClear 
+						onChange={(val) => handleFilterChange(['room', 'maLoaiPhongKtx'], val, EOperatorType.EQUAL)}
+					/>
 					<Select
 						style={{ width: 250 }}
-						// showSearch={{ optionFilterProp: 'label', onSearch }}
 						placeholder='Chọn sức chứa'
-						// onChange={onChange}
+						onChange={(val) => {
+							if (val) {
+								const [min, max] = val.split('-').map(Number);
+								handleFilterChange(['room', 'soLuongToiDa'], [min, max], EOperatorType.BETWEEN);
+							} else {
+								handleFilterChange(['room', 'soLuongToiDa'], undefined, EOperatorType.BETWEEN);
+							}
+						}}
 						options={[
 							{
-								value: 'jack',
+								value: '3-6',
 								label: 'Từ 3 đến 6',
 							},
 							{
-								value: 'lucy',
+								value: '6-12',
 								label: 'Từ 6 đến 12',
 							},
 							{
-								value: 'tom',
+								value: '12-50',
 								label: 'Từ 12 lên',
 							},
 						]}
