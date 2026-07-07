@@ -66,7 +66,35 @@ declare module Phong {
 		loaiPhongKtx?: any;
 		isChoThue?: boolean;
 		cachBoTri: string | null;
+		moTa?: string | null;
 		giaPhong?: number | null;
 		donViTienTe?: string;
+	}
+
+	export interface IChinhSachPhongRecord {
+		_id: string;
+		roomId: string;
+		maNamHoc: string;
+
+		quota?: number;
+		isActive?: boolean;
+
+		sucChua?: number | null;
+		quocTich?: string | null;
+		gender?: EGioiTinh | string | null;
+		maLoaiPhongKtx?: string | null;
+		loaiPhongKtx?: any;
+		danhSachTienIch?: ITienIch[];
+		danhSachAnh?: string[];
+		moTa?: string | null;
+		isChoPhepDangKy?: boolean;
+		isPhatHanh?: boolean;
+		nguoiBanHanh?: string;
+		ngayBanHanh?: string;
+
+		room?: IRecord;
+
+		createdAt?: string;
+		updatedAt?: string;
 	}
 }

@@ -4,7 +4,7 @@ import { ipCsvc } from '@/utils/ip';
 import { useState } from 'react';
 
 export default () => {
-	const objInit = useInitModel<Phong.IRecord>('phong', undefined, undefined, ipCsvc);
+	const objInit = useInitModel<Phong.IChinhSachPhongRecord>('chinh-sach-phong', undefined, undefined, ipCsvc);
 	const [visibleDangKy, setVisibleDangKy] = useState<boolean>(false);
 
 	return {

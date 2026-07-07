@@ -12,21 +12,21 @@ const SelectDotDangKyKTX = (props: {
 	allowClear?: boolean;
 	style?: React.CSSProperties;
 	isSetRecord?: boolean;
-	condition?: Partial<DanhMucChung.IRecord>;
+	condition?: Partial<DotDangKyKTX.IRecord>;
 	disabled?: boolean;
 }) => {
 	const intl = useIntl();
 	const { value, onChange, multiple, allowClear, style, isSetRecord, condition, disabled } = props;
-	const { danhSach, getAllModel, loading } = useModel('kytucxa.danhmucchung');
+	const { danhSach, getAllModel, loading } = useModel('kytucxa.dotdangky');
 
 	useEffect(() => {
-		getAllModel(!!isSetRecord, undefined, { ...condition });
+		getAllModel(!!isSetRecord, undefined, { ...condition }, undefined, 'me/many');
 	}, [JSON.stringify(condition)]);
 
 	const options = (danhSach || []).map((item) => ({
 		key: item._id,
 		value: item._id,
-		label: item.ten,
+		label: item.tenDot,
 		rawData: item,
 	}));
 

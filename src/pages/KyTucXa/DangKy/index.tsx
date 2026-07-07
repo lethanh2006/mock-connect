@@ -1,130 +1,33 @@
 import PageCard from '@/components/PageCard';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { FilterOutlined, InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Alert, Button, Col, Flex, Row, Select, Space } from 'antd';
+import { Alert, Button, Col, Empty, Flex, Row, Select, Space } from 'antd';
 import { useModel } from 'umi';
 import SelectDanhMucChungKTX from '../DanhMucChung/Select';
 import SelectToaNhaKTX from '../ToaNha/Select';
 import CardPhong from './components/CardPhong';
 import ChiTietPhong from './components/ChiTiet';
-import FormDangKyKTX from './components/Form';
+import ModalDanKyKTX from './components/Modal';
 import './style.less';
-
-const fakeDanhSachPhong = [
-	{
-		_id: '6a02bb3600d7f13912b7xxxxx',
-		soPhong: 'J103',
-		ma: 'J103',
-		ten: 'J103',
-		maToaNha: 'J',
-		maLoaiPhongKtx: '2-BED',
-		danhSachTienIch: [
-			{ maDanhMucTienIch: 'Chair' },
-			{ maDanhMucTienIch: 'Common kitchen' },
-			{ maDanhMucTienIch: 'Bookshelf' },
-			{ maDanhMucTienIch: 'Bed' },
-			{ maDanhMucTienIch: 'Air conditioner' },
-		],
-		danhSachAnh: [],
-		soLuongToiDa: 8,
-		soLuongHienTai: 0,
-		soPhongTam: null,
-		cachBoTri: null,
-		isChoThue: true,
-		dienTich: null,
-		toaNha: {
-			ma: 'J',
-			ten: 'Tòa J',
-		},
-		loaiPhongKtx: {
-			ma: '2-BED',
-			ten: '2-BED APARTMENT',
-		},
-		danhSachTinhChatPhong: [
-			{
-				congNangChinh: true,
-				loaiPhong: {
-					loaiPhong: 'Student apartment',
-				},
-			},
-		],
-		dangKyKyTucXaRule: {
-			gioiTinh: 'Nam',
-		},
-		giaPhong: null,
-	},
-	{
-		_id: '6a02bb3600d7f13912b7xxxx',
-		soPhong: 'J101',
-		ma: 'J101',
-		ten: 'J101',
-		maToaNha: 'J',
-		maLoaiPhongKtx: null,
-		danhSachTienIch: null,
-		danhSachAnh: null,
-		soLuongToiDa: 8,
-		soLuongHienTai: 0,
-		soPhongTam: null,
-		cachBoTri: null,
-		isChoThue: true,
-		dienTich: null,
-		toaNha: {
-			ma: 'J',
-			ten: 'Tòa J',
-		},
-		loaiPhongKtx: null,
-		danhSachTinhChatPhong: [
-			{
-				congNangChinh: true,
-				loaiPhong: {
-					loaiPhong: 'Student apartment',
-				},
-			},
-		],
-		dangKyKyTucXaRule: null,
-		giaPhong: null,
-	},
-	{
-		_id: '6a02bb3600d7f13912b750axx8',
-		soPhong: 'J102',
-		ma: 'J102',
-		ten: 'J102',
-		maToaNha: 'J',
-		maLoaiPhongKtx: null,
-		danhSachTienIch: null,
-		danhSachAnh: null,
-		soLuongToiDa: 10,
-		soLuongHienTai: 0,
-		soPhongTam: null,
-		cachBoTri: null,
-		isChoThue: true,
-		dienTich: null,
-		toaNha: {
-			ma: 'J',
-			ten: 'Tòa J',
-		},
-		loaiPhongKtx: null,
-		danhSachTinhChatPhong: [
-			{
-				congNangChinh: true,
-				loaiPhong: {
-					loaiPhong: 'Student apartment',
-				},
-			},
-		],
-		dangKyKyTucXaRule: null,
-		giaPhong: null,
-	},
-];
+import { useEffect } from 'react';
 
 const DangKyKyTucXa = () => {
-	const { handleView, setVisibleDangKy } = useModel('kytucxa.phong');
+	const { getModel, danhSach, handleView, setVisibleDangKy } = useModel('kytucxa.phong');
 
-	const handleXemChiTiet = (phong: Phong.IRecord) => {
+	const getData = () => {
+		getModel();
+	};
+
+	useEffect(() => {
+		getData();
+	}, []);
+
+	const handleXemChiTiet = (phong: Phong.IChinhSachPhongRecord) => {
 		handleView(phong);
 	};
 
-	const handleDangKy = (phong: Phong.IRecord) => {
+	const handleDangKy = (phong: Phong.IChinhSachPhongRecord) => {
+		handleView(phong);
 		setVisibleDangKy(true);
 	};
 
@@ -206,15 +109,17 @@ const DangKyKyTucXa = () => {
 			/>
 
 			<Row gutter={[12, 12]}>
-				{fakeDanhSachPhong.map((phong) => (
+				{danhSach.map((phong) => (
 					<Col key={phong._id} xs={24} md={12} xl={8} className='room-list-col'>
-						<CardPhong phong={phong as any} onXemChiTiet={handleXemChiTiet} onDangKy={handleDangKy} />
+						<CardPhong phong={phong} onXemChiTiet={handleXemChiTiet} onDangKy={handleDangKy} />
 					</Col>
 				))}
 			</Row>
 
+			{!danhSach.length && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+
 			<ChiTietPhong />
-			<FormDangKyKTX />
+			<ModalDanKyKTX />
 		</PageCard>
 	);
 };

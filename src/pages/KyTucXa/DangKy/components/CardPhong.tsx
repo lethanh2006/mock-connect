@@ -3,9 +3,9 @@ import { CheckCircleFilled, ColumnWidthOutlined, LayoutOutlined } from '@ant-des
 import { Button, Card, Col, Image, Row, Tag, Typography } from 'antd';
 
 interface CardPhongProps {
-	phong: Phong.IRecord;
-	onXemChiTiet?: (phong: Phong.IRecord) => void;
-	onDangKy?: (phong: Phong.IRecord) => void;
+	phong: Phong.IChinhSachPhongRecord;
+	onXemChiTiet?: (phong: Phong.IChinhSachPhongRecord) => void;
+	onDangKy?: (phong: Phong.IChinhSachPhongRecord) => void;
 }
 
 const ANH_PHONG_MAC_DINH =
@@ -15,17 +15,21 @@ const formatGia = (gia?: number | null, donViTienTe = 'VND') =>
 	gia ? `${gia.toLocaleString('vi-VN')} ${donViTienTe}` : 'Chưa cập nhật';
 
 const CardPhong = ({ phong, onXemChiTiet, onDangKy }: CardPhongProps) => {
-	const soChoConLai = Math.max(0, (phong.soLuongToiDa || 0) - (phong.soLuongHienTai || 0));
-	const daHetCho = soChoConLai <= 0 || !phong.isChoThue;
-	const anhPhong = phong.danhSachAnh?.[0] || ANH_PHONG_MAC_DINH;
+	const room = phong.room;
+	const sucChua = phong.sucChua ?? room?.soLuongToiDa ?? room?.sucChua ?? 0;
+	const soChoConLai = Math.max(0, sucChua - (room?.soLuongHienTai ?? 0));
+	const daHetCho = soChoConLai <= 0 || !room?.isChoThue || phong.isChoPhepDangKy === false;
+	const danhSachAnh = phong.danhSachAnh?.length ? phong.danhSachAnh : room?.danhSachAnh;
+	const anhPhong = danhSachAnh?.[0] || ANH_PHONG_MAC_DINH;
 
-	const tenToaNha = phong.toaNha?.ten || phong.maToaNha;
+	const tenToaNha = room?.toaNha?.ten || room?.maToaNha;
 	const tenLoaiPhong =
 		phong.loaiPhongKtx?.ten ||
-		phong.danhSachTinhChatPhong?.find((item) => item.congNangChinh)?.loaiPhong?.loaiPhong ||
+		room?.loaiPhongKtx?.ten ||
+		room?.danhSachTinhChatPhong?.find((item) => item.congNangChinh)?.loaiPhong?.loaiPhong ||
 		'CHƯA PHÂN LOẠI';
 
-	const tienIch = phong.danhSachTienIch ?? [];
+	const tienIch = phong.danhSachTienIch?.length ? phong.danhSachTienIch : (room?.danhSachTienIch ?? []);
 	const tienIchHienThi = tienIch.slice(0, 3);
 
 	return (
@@ -35,27 +39,27 @@ const CardPhong = ({ phong, onXemChiTiet, onDangKy }: CardPhongProps) => {
 			onClick={() => onXemChiTiet?.(phong)}
 			cover={
 				<div className='room-card__image-wrap'>
-					<Image src={anhPhong} alt={`Phòng ${phong.ma}`} preview={false} className='room-card__image' />
+					<Image src={anhPhong} alt={`Phòng ${room?.ma ?? ''}`} preview={false} className='room-card__image' />
 
 					<Tag className='room-card__slot-tag'>{daHetCho ? 'No slots left' : `${soChoConLai} slots left`}</Tag>
 				</div>
 			}
 		>
 			<Typography.Title level={4} className='room-card__title'>
-				{phong.ma} · {tenToaNha} · {tenLoaiPhong}
+				{room?.ma} · {tenToaNha} · {tenLoaiPhong}
 			</Typography.Title>
 
 			<div className='room-card__specifications'>
 				<span>
 					<ColumnWidthOutlined />
-					{phong.dienTich ? `${phong.dienTich}m2` : '- m2'}
+					{room?.dienTich ? `${room.dienTich}m2` : '- m2'}
 				</span>
 
 				<i />
 
 				<span>
 					<LayoutOutlined />
-					{phong.cachBoTri || `${phong.soLuongToiDa || 0}/3/2`}
+					{room?.cachBoTri || `${sucChua}/3/2`}
 				</span>
 			</div>
 
@@ -94,7 +98,7 @@ const CardPhong = ({ phong, onXemChiTiet, onDangKy }: CardPhongProps) => {
 
 			<div className='room-card__footer'>
 				<Typography.Text className='room-card__price' strong>
-					{formatGia(phong.giaPhong, phong.donViTienTe)}
+					{formatGia(room?.giaPhong, room?.donViTienTe)}
 				</Typography.Text>
 
 				<Button

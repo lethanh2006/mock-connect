@@ -1,7 +1,7 @@
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { Select } from 'antd';
 import { useEffect } from 'react';
-import { useIntl, useModel } from 'umi';
+import { useModel } from 'umi';
 
 /**
  * Secect Căn cứ pháp lý để cho vào FormItem
@@ -13,10 +13,9 @@ const SelectPhongKTX = (props: {
 	allowClear?: boolean;
 	style?: React.CSSProperties;
 	isSetRecord?: boolean;
-	condition?: Partial<Phong.IRecord>;
+	condition?: Partial<Phong.IChinhSachPhongRecord>;
 	disabled?: boolean;
 }) => {
-	const intl = useIntl();
 	const { value, onChange, multiple, allowClear, style, isSetRecord, condition, disabled } = props;
 	const { danhSach, getAllModel, loading } = useModel('kytucxa.phong');
 
@@ -27,7 +26,7 @@ const SelectPhongKTX = (props: {
 	const options = (danhSach || []).map((item) => ({
 		key: item._id,
 		value: item._id,
-		label: item.ten,
+		label: item.room?.ten ?? item.room?.ma,
 		rawData: item,
 	}));
 
