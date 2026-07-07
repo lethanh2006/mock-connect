@@ -1,5 +1,5 @@
 import { Phong } from '@/services/KyTucXa/Phong/typing';
-import { CheckCircleFilled, ColumnWidthOutlined, HomeOutlined, LayoutOutlined } from '@ant-design/icons';
+import { CheckCircleFilled, ColumnWidthOutlined, LayoutOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Image, Row, Tag, Typography } from 'antd';
 
 interface CardPhongProps {
@@ -46,13 +46,6 @@ const CardPhong = ({ phong, onXemChiTiet, onDangKy }: CardPhongProps) => {
 			</Typography.Title>
 
 			<div className='room-card__specifications'>
-				<span>
-					<HomeOutlined />
-					<b>{phong.soPhongTam ?? '-'}</b> bathrooms
-				</span>
-
-				<i />
-
 				<span>
 					<ColumnWidthOutlined />
 					{phong.dienTich ? `${phong.dienTich}m2` : '- m2'}

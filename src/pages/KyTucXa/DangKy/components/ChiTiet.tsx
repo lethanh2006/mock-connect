@@ -60,12 +60,12 @@ const ChiTietPhong = () => {
 			title='Dormitory Detail'
 		>
 			<div className='room-gallery'>
-				<div className='room-gallery-main'>
+				<div>
 					<Image
 						src={images?.[0]}
 						alt='room-main'
 						width='100%'
-						height={240}
+						height={372}
 						style={{ objectFit: 'cover' }}
 						preview={{
 							mask: 'Xem ảnh',
@@ -75,12 +75,12 @@ const ChiTietPhong = () => {
 
 				<div className='room-gallery-side'>
 					{images?.slice(1, 5).map((src: string, index: number) => (
-						<div key={index} className='room-gallery-item'>
+						<div key={index}>
 							<Image
 								src={src}
 								alt={`room-${index}`}
 								width='100%'
-								height={116}
+								height={182}
 								style={{ objectFit: 'cover' }}
 								preview={{
 									mask: 'Xem ảnh',
@@ -97,10 +97,7 @@ const ChiTietPhong = () => {
 
 					<div className='room-summary'>
 						<span>
-							<HomeOutlined /> {record?.soPhongTam || 1} bathrooms
-						</span>
-						<span>
-							<ColumnWidthOutlined /> {record?.dienTich || '50.2'} m2
+							<ColumnWidthOutlined /> <b>{record?.dienTich || '50.2'} m2</b>
 						</span>
 					</div>
 
@@ -114,7 +111,7 @@ const ChiTietPhong = () => {
 							return (
 								<Col span={8} key={label}>
 									<span className='utility-item'>
-										<Icon /> {label}
+										<Icon /> <b>{label}</b>
 									</span>
 								</Col>
 							);
