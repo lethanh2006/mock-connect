@@ -221,6 +221,11 @@ export default [
 						name: 'DangKy',
 						component: 'KyTucXa/DangKy',
 					},
+					{
+						path: 'lich-su',
+						name: 'LichSu',
+						component: 'KyTucXa/LichSu',
+					},
 				],
 			},
 			// {

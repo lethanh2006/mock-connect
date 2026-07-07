@@ -26,7 +26,7 @@ const getDiaChiThuongTru = (sinhVien?: SinhVien.IRecord) => {
 	);
 };
 
-const getThongTinSinhVienForm = (sinhVien?: SinhVien.IRecord): Partial<PhieuDangKyKTX.IRecord> => ({
+const getThongTinSinhVienForm = (sinhVien?: SinhVien.IRecord): Partial<PhieuDangKyKTX.IDangKy> => ({
 	fullName: getTenSinhVien(sinhVien),
 	studentId: sinhVien?.ma,
 	dateOfBirth: sinhVien?.ngaySinh,
@@ -46,10 +46,12 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 	const { getData } = props;
 	const intl = useIntl();
 	const [form] = Form.useForm();
+
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { visibleDangKy, setVisibleDangKy, record: recPhong } = useModel('kytucxa.phong');
 	const { record: recDot } = useModel('kytucxa.dotdangky');
 	const { sinhVienDangKyKTXModel, formSubmiting } = useModel('kytucxa.phieudangky');
+
 	const [currentStep, setCurrentStep] = useState<number>(0);
 
 	const checkbox1: boolean = Form.useWatch('checkbox1', form);
@@ -61,37 +63,45 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 		}
 	}, [visibleDangKy, recSinhVien?._id]);
 
-	const onFinish = async (values: PhieuDangKyKTX.IRecord & { checkbox1?: boolean; checkbox2?: boolean }) => {
+	const handleClose = () => {
+		form.resetFields();
+		setCurrentStep(0);
+		setVisibleDangKy(false);
+	};
+
+	const handleNext = async () => {
+		try {
+			await form.validateFields();
+			setCurrentStep(1);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const onFinish = async (values: PhieuDangKyKTX.IDangKy & { checkbox1?: boolean; checkbox2?: boolean }) => {
+		if (currentStep !== 1) return;
+
 		const maPhong = recPhong?.room?.ma ?? recPhong?.roomId;
 
-		delete values.checkbox1;
-		delete values.checkbox2;
+		const { checkbox1: _checkbox1, checkbox2: _checkbox2, ...formValues } = values;
 
 		const data = {
-			maDotId: '6a4b8e6e39037d230762cb79',
 			// maDotId: recDot?._id,
+			maDotId: '6a4b8e6e39037d230762cb79',
 			maPhong,
 			form: {
-				...values,
+				...formValues,
 				agreedToPolicy: true,
 			},
 		};
 
 		await sinhVienDangKyKTXModel(data as any, getData);
 
-		form.resetFields();
-		setCurrentStep(0);
-		setVisibleDangKy(false);
+		handleClose();
 	};
 
 	return (
-		<ModalExpandable
-			open={visibleDangKy}
-			onCancel={() => setVisibleDangKy(false)}
-			footer={null}
-			width={1000}
-			title='Dormitory Detail'
-		>
+		<ModalExpandable open={visibleDangKy} onCancel={handleClose} footer={null} width={1000} title='Dormitory Detail'>
 			<Form layout='vertical' onFinish={onFinish} form={form} preserve>
 				<Steps current={currentStep} style={{ marginBottom: 18 }}>
 					<Steps.Step title='Thông tin chung' />
@@ -109,11 +119,11 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 				<div className='form-footer'>
 					{currentStep === 0 ? (
 						<>
-							<Button htmlType='button' disabled={!checkbox1} type='primary' onClick={() => setCurrentStep(1)}>
+							<Button htmlType='button' disabled={!checkbox1} type='primary' onClick={handleNext}>
 								Next
 							</Button>
 
-							<Button htmlType='button' onClick={() => setVisibleDangKy(false)}>
+							<Button htmlType='button' onClick={handleClose}>
 								{intl.formatMessage({ id: 'activity.outcome.close' })}
 							</Button>
 						</>

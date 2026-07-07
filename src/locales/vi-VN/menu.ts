@@ -161,6 +161,7 @@ export default {
 	'menu.CampusLife': 'Đời sống học đường',
 	'menu.CampusLife.StudentHousing': 'Ký túc xá',
 	'menu.CampusLife.StudentHousing.DangKy': 'Đăng ký',
+	'menu.CampusLife.StudentHousing.LichSu': 'Lịch sử',
 	'menu.CampusLife.Club': 'Câu lạc bộ',
 	'menu.CampusLife.CodeConduct': 'Quy tắc ứng xử',
 	'menu.CampusLife.FacilityBooking': 'Đặt cơ sở vật chất',
