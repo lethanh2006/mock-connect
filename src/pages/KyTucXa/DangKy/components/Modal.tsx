@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import FormDangKyKTX from './Form';
 import FormChinhSachKTX from './FormChinhSach';
-import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 
 const getTenSinhVien = (sinhVien?: SinhVien.IRecord) =>
 	sinhVien?.ten || [sinhVien?.firstName, sinhVien?.lastName].filter(Boolean).join(' ');
