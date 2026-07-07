@@ -226,7 +226,7 @@ const DangKyTinChiPage = () => {
 											{
 												link_tien_trinh: (chunks: any) => (
 													<a
-														href='hoc-tap/tien-trinh-hoc-tap'
+														href='/hoc-tap/tien-trinh-hoc-tap'
 														onClick={(e) => {
 															e.preventDefault();
 															history.push('/hoc-tap/tien-trinh-hoc-tap');
@@ -238,7 +238,7 @@ const DangKyTinChiPage = () => {
 
 												link_ket_qua: (chunks: any) => (
 													<a
-														href='hoc-tap/ket-qua-hoc-tap'
+														href='/hoc-tap/ket-qua-hoc-tap'
 														onClick={(e) => {
 															e.preventDefault();
 															history.push('/hoc-tap/ket-qua-hoc-tap');
