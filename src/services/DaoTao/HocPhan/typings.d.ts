@@ -163,6 +163,7 @@ declare module HocPhan {
 
 	// Setting thư viện
 	export interface ISettingThuVien {
+		_id: string;
 		enable?: boolean;
 		thuVienUrl?: string;
 	}

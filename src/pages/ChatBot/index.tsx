@@ -3,7 +3,7 @@ import type { ChatbotAmiV2 } from '@/services/TienIch/ChatbotV2/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { getPublicAssetPath } from '@/utils/path';
-import { resetFieldsForm, toCamelCase } from '@/utils/utils';
+import { resetFieldsForm, sanitizeObject, toCamelCase } from '@/utils/utils';
 import { SendOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Collapse, Form, Input, Spin } from 'antd';
 import classNames from 'classnames';
@@ -16,7 +16,6 @@ import Pane from 'react-split-pane/lib/Pane';
 import { useModel } from 'umi';
 import TheardsPage from './components/Theards';
 import './style.less';
-
 const { Panel } = Collapse;
 
 const ChatBotPage = () => {
@@ -130,7 +129,9 @@ const ChatBotPage = () => {
 				</div>
 
 				<div className='content-text'>
-					{message.content ? <div className='text' dangerouslySetInnerHTML={{ __html: message.content }} /> : null}
+					{message.content ? (
+						<div className='text' dangerouslySetInnerHTML={{ __html: sanitizeObject(message.content) }} />
+					) : null}
 
 					{(message?.recommendQuestions?.length ?? 0) > 0 && (
 						<div className='quick-replies'>
