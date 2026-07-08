@@ -1,4 +1,5 @@
 import { formatDateTime } from '@/utils/formatDate';
+import { sanitizeObject } from '@/utils/utils';
 import { CalendarOutlined } from '@ant-design/icons';
 import { Col, Divider, Row, Spin } from 'antd';
 import { history, useModel } from 'umi';
@@ -18,7 +19,7 @@ const ChiTietTinTucWpPage = () => {
 			<Row gutter={[16, 16]} justify='center'>
 				<Col lg={17} span={24}>
 					<div id='content'>
-						<h4 dangerouslySetInnerHTML={{ __html: record?.title?.rendered ?? '' }} />
+						<h4 dangerouslySetInnerHTML={{ __html: sanitizeObject(record?.title?.rendered ?? '') }} />
 						<p className='ngay-dang'>
 							<CalendarOutlined /> {record?.date && formatDateTime(record?.date)}
 							<Divider type='vertical' />{' '}
@@ -26,7 +27,7 @@ const ChiTietTinTucWpPage = () => {
 								{recChuDe?.name}
 							</a>
 						</p>
-						<div className='noi-dung' dangerouslySetInnerHTML={{ __html: record?.content?.rendered ?? '' }} />
+						<div className='noi-dung' dangerouslySetInnerHTML={{ __html: sanitizeObject(record?.content?.rendered ?? '') }} />
 					</div>
 				</Col>
 			</Row>

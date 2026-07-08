@@ -6,7 +6,7 @@ import { primaryColor } from '@/services/base/constant';
 import { EKieuDuLieu, ETextDisplay } from '@/services/FormDong/LoaiHinh/constants';
 import type { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
-import { currencyFormat } from '@/utils/utils';
+import { currencyFormat, sanitizeObject } from '@/utils/utils';
 import { Modal, Tag } from 'antd';
 import { useState } from 'react';
 import { useIntl } from 'umi';
@@ -44,7 +44,7 @@ const ViewRender = (props: {
 		case EKieuDuLieu.TEXT:
 			value =
 				cauHinh.textDisplay === ETextDisplay.TEXT_EDITOR ? (
-					<div dangerouslySetInnerHTML={{ __html: valueFinal }} />
+					<div dangerouslySetInnerHTML={{ __html: sanitizeObject(valueFinal ?? '') }} />
 				) : (
 					<div>{valueFinal}</div>
 				);
