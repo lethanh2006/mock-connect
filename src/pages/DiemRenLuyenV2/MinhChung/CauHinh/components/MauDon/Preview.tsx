@@ -6,7 +6,7 @@ import FormRender from './FormRender';
 import { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
-import { resetFieldsForm } from '@/utils/utils';
+import { resetFieldsForm, sanitizeObject } from '@/utils/utils';
 
 const PreviewForm = (props: { isView?: boolean; getData: any; mode: 'quytrinh' | 'loaihinh' }) => {
 	const [form] = Form.useForm();
@@ -64,7 +64,7 @@ const PreviewForm = (props: { isView?: boolean; getData: any; mode: 'quytrinh' |
 			>
 				<Row gutter={[12, 0]}>
 					{record?.cauHinhLoaiHinh?.map((item: LoaiHinh.TruongThongTin | LoaiHinh.Cot) => (
-						<FormRender form={form} formValues={formValues} key={item.ma} cauHinh={item} />
+						<FormRender form={form} formValues={formValues} key={item.ma} cauHinh={sanitizeObject(item)} />
 					))}
 				</Row>
 			</Form>

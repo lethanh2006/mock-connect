@@ -9,7 +9,8 @@ import { formatDate } from '@/utils/formatDate';
 import rules from '@/utils/rules';
 import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
 import { Button, Form, message, Row, Select, Spin } from 'antd';
-import { useEffect, useState } from 'react';
+import { pick } from 'lodash';
+import { useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
 const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
@@ -28,23 +29,32 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 		(item) => item?.ma === current?.ma,
 	)?.doiTuongDieuPhoi;
 
+	const allowedFieldKeys = useMemo(
+		() => currentFormKhaiBao?.cauHinhLoaiHinh?.map((item) => item.ma) ?? [],
+		[currentFormKhaiBao?.cauHinhLoaiHinh],
+	);
+
 	const onFinish = async (values: any) => {
 		try {
 			setLoadingKhaiBao(true);
-			const maBoPhanXuLy = values?.maBoPhanXuLy ?? current?.maBoPhanXuLy;
-			for (const item in values) {
-				const value = values[item];
+			const sanitizedValues = pick(values, [...allowedFieldKeys, 'maBoPhanXuLy']);
+			const maBoPhanXuLy = sanitizedValues?.maBoPhanXuLy ?? current?.maBoPhanXuLy;
+			const uploadValues = pick(sanitizedValues, allowedFieldKeys);
+
+			for (const item of allowedFieldKeys) {
+				const value = uploadValues[item];
 				if (value?.fileList?.length) {
-					values[item] = await buildUpLoadMultiFile(values, item);
+					uploadValues[item] = await buildUpLoadMultiFile(uploadValues, item);
 				}
 			}
-			delete values.maBoPhanXuLy;
 
 			const valuesFinal: any = {};
-			const valuesForm = { ...(recordQuyTrinhForm?.thongTinKhaiBao ?? {}), ...values };
+			const existingFormValues = pick(recordQuyTrinhForm?.thongTinKhaiBao ?? {}, allowedFieldKeys);
+			const valuesForm = { ...existingFormValues, ...uploadValues };
 
-			Object.keys(valuesForm).map((item) => {
+			allowedFieldKeys.forEach((item) => {
 				const cauHinh = currentFormKhaiBao?.cauHinhLoaiHinh?.find((ele) => ele.ma === item);
+				if (!cauHinh) return;
 				const isDanhMuc = cauHinh?.kieuDuLieu === EKieuDuLieu.DANHMUC;
 				const isDate = cauHinh?.kieuDuLieu === EKieuDuLieu.DATE;
 				const isMonth = cauHinh?.kieuDuLieu === EKieuDuLieu.MONTH;
@@ -97,6 +107,7 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 				};
 				Object.keys(res?.data?.data)?.map((item: string) => {
 					const cauHinh = currentFormKhaiBao?.cauHinhLoaiHinh?.find((ele) => ele.ma === item);
+					if (!cauHinh) return;
 					finalData[item] = [EKieuDuLieu.DATE, EKieuDuLieu.MONTH].includes(cauHinh.kieuDuLieu)
 						? formatDate(res?.data?.data[item])
 						: res?.data?.data[item] === 'Invalid date'
@@ -129,14 +140,9 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 
 	useEffect(() => {
 		if (editFormKhaiBao && recordFormKhaiBao) {
-			const recordFormKhaiBaoFinal: any = {};
-			Object.keys(recordFormKhaiBao).map((key) => {
-				const khaiBao = recordFormKhaiBao[key];
-				recordFormKhaiBaoFinal[key] = khaiBao;
-			});
-			form.setFieldsValue(recordFormKhaiBaoFinal);
+			form.setFieldsValue(pick(recordFormKhaiBao, allowedFieldKeys));
 		}
-	}, [editFormKhaiBao, recordFormKhaiBao]);
+	}, [editFormKhaiBao, recordFormKhaiBao, allowedFieldKeys]);
 
 	useEffect(() => {
 		if (props?.idQuyTrinh && currentFormKhaiBao?.ma) {

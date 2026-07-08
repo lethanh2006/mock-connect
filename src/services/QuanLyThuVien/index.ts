@@ -1,8 +1,21 @@
 import axios from '@/utils/axios';
 import { ip3, ipDaoTao } from '@/utils/ip';
+import { pick } from 'lodash';
 
-export async function nopTaiLieu(id: string, payLoad: any) {
-	return axios.put(`${ipDaoTao}/quan-ly-la-lv-kl/${id}/nop`, payLoad);
+const NOP_TAI_LIEU_FIELDS = [
+	'urlTaiLieu',
+	'idTaiLieu',
+	'urlTomTat',
+	'idTomTat',
+	'urlTaiLieuMinhChung',
+	'idTaiLieuMinhChung',
+	'commit',
+] as const;
+
+export type INopTaiLieuPayload = Partial<Record<(typeof NOP_TAI_LIEU_FIELDS)[number], unknown>>;
+
+export async function nopTaiLieu(id: string, payLoad: INopTaiLieuPayload) {
+	return axios.put(`${ipDaoTao}/quan-ly-la-lv-kl/${encodeURIComponent(id)}/nop`, pick(payLoad, NOP_TAI_LIEU_FIELDS));
 }
 
 export async function thongKeVaoRaThuVienMe() {
