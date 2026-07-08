@@ -44,8 +44,11 @@ const ChatBotPage = () => {
 	const lastNameChar = fullName.split(' ')?.at(-1)?.[0]?.toUpperCase();
 
 	useEffect(() => {
+		const chatbotPassword = typeof APP_CONFIG_CHATBOT_PASSWORD !== 'undefined' ? APP_CONFIG_CHATBOT_PASSWORD : '';
+		if (!chatbotPassword) return;
+
 		createUserChatBotModel({
-			password: 'abc@1234',
+			password: chatbotPassword,
 			username: fullName ?? 'admin',
 			email:
 				recSinhVien?.email ??

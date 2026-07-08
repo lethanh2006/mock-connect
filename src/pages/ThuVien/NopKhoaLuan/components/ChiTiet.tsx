@@ -4,12 +4,23 @@ import {
 	type ETrangThaiNopThuVien,
 } from '@/services/QuanLyThuVien/constant';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
+import { getSafeHref, openSafeUrl } from '@/utils/security';
 import { Button, Card, Descriptions, Tag } from 'antd';
 import { useModel } from 'umi';
 
 const ChiTietThuVien = (props: any) => {
 	const { title, loai } = props;
 	const { record, setVisibleForm } = useModel('thuvien.danhsachdot');
+
+	const fileLink = (url: unknown) => {
+		const href = getSafeHref(url);
+		if (!href) return <>--</>;
+		return (
+			<Button type='link' style={{ padding: 0, height: 'auto' }} onClick={() => openSafeUrl(href)}>
+				Xem tài liệu
+			</Button>
+		);
+	};
 
 	return (
 		<Card title={`Chi tiết ${title?.toLowerCase()}`}>
@@ -60,31 +71,13 @@ const ChiTietThuVien = (props: any) => {
 				<Descriptions.Item label='Chuyên ngành'>{record?.nganh?.ten ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Mã chuyên ngành'>{record?.maNganh ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Tài liệu toàn bộ đề tài'>
-					{record?.urlTaiLieu ? (
-						<a href={record?.urlTaiLieu} rel='noreferrer' target='_blank'>
-							Xem tài liệu
-						</a>
-					) : (
-						'--'
-					)}
+					{fileLink(record?.urlTaiLieu)}
 				</Descriptions.Item>
 				<Descriptions.Item label='Tài liệu tóm tắt đề tài'>
-					{record?.urlTomTat ? (
-						<a href={record?.urlTomTat} rel='noreferrer' target='_blank'>
-							Xem tài liệu
-						</a>
-					) : (
-						'--'
-					)}
+					{fileLink(record?.urlTomTat)}
 				</Descriptions.Item>
 				<Descriptions.Item label='Tài liệu minh chứng đề tài'>
-					{record?.urlTaiLieuMinhChung ? (
-						<a href={record?.urlTaiLieuMinhChung} rel='noreferrer' target='_blank'>
-							Xem tài liệu
-						</a>
-					) : (
-						'--'
-					)}
+					{fileLink(record?.urlTaiLieuMinhChung)}
 				</Descriptions.Item>
 			</Descriptions>
 

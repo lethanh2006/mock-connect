@@ -51,5 +51,6 @@ declare const APP_CONFIG_URL_TAP_CHI_KH: string;
 declare const APP_CONFIG_URL_KY_SO: string;
 
 declare const APP_CONFIG_MOODLE_ENDPOINT: string;
+declare const APP_CONFIG_CHATBOT_PASSWORD: string;
 declare const APP_CONFIG_URL_HUONG_DAN_DANG_KY_TIN_CHI: string;
 declare const APP_CONFIG_TIN_TUC_WP_CATEGORY: number;
