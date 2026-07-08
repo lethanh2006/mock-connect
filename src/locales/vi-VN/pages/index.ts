@@ -15,6 +15,7 @@ import lichthi from './hoctap/lichthi';
 import lophocphan from './hoctap/lophocphan';
 import tientrinhhoctap from './hoctap/tientrinhhoctap';
 import khaosat from './khaosat';
+import detaikhcn from './khoahoc/detaikhcn';
 import lichsukien from './lichsukien';
 import login from './login';
 import lophanhchinh from './lophanhchinh';
@@ -68,6 +69,7 @@ export default {
 	...minor,
 	...syllabus,
 	...activity,
+	...detaikhcn,
 
 	'pages.trangchu.title': 'PHÂN HỆ CỔNG SINH VIÊN',
 	'pages.trangchu.subtitle': 'HỆ THỐNG ĐẠI HỌC SỐ',
