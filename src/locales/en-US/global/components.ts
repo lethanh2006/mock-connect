@@ -232,6 +232,8 @@ export default {
 	'global.uploadfile.text1': 'Add Profile Picture',
 	'global.uploadfile.button.chontep': 'Select File',
 	'global.uploadfile.tepdinhkem': 'Attachment',
+	'global.uploadfile.taptin': 'File',
+	'global.uploadfile.taptin.index': 'File {index}',
 
 	'global.column.action': 'Action',
 

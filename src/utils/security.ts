@@ -75,3 +75,52 @@ export function openSafeUrl(url: unknown): boolean {
 
 	return true;
 }
+
+/** Preset màu Ant Design Tag */
+const ANT_TAG_PRESET_COLORS = new Set([
+	'pink',
+	'magenta',
+	'red',
+	'volcano',
+	'orange',
+	'yellow',
+	'gold',
+	'cyan',
+	'lime',
+	'green',
+	'blue',
+	'geekblue',
+	'purple',
+	'default',
+	'processing',
+	'success',
+	'error',
+	'warning',
+]);
+
+const HEX_COLOR_PATTERN = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
+
+/**
+ * Chỉ cho phép preset Ant Design Tag hoặc mã hex — chặn CSS injection qua prop color.
+ */
+export function getSafeTagColor(color: unknown): string | undefined {
+	if (typeof color !== 'string') {
+		return undefined;
+	}
+
+	const trimmed = color.trim();
+	if (!trimmed) {
+		return undefined;
+	}
+
+	const lower = trimmed.toLowerCase();
+	if (ANT_TAG_PRESET_COLORS.has(lower)) {
+		return lower;
+	}
+
+	if (HEX_COLOR_PATTERN.test(trimmed)) {
+		return trimmed;
+	}
+
+	return undefined;
+}
