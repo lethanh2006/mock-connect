@@ -6,6 +6,7 @@ import type dayjs from 'dayjs';
 import { Dayjs } from 'dayjs';
 import * as XLSX from 'xlsx';
 import dayjsLib from './dayjs';
+import { isSafeUrl } from './security';
 
 export const urlRegex =
 	/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.,~#?&//=]*)$/;
@@ -660,7 +661,9 @@ export const createTextLinks = (text: string, targetBlank: boolean = true, break
 		/((https?:\/\/(www\.)?)|(www\.))(\S+)/gi,
 		function (match, temp, protocol, www1, www2, url) {
 			const hyperlink = (protocol ?? 'https://') + url;
-			return `<a href="${hyperlink}"${targetBlank ? 'target="_blank" rel="noreferrer"' : ''}>${url}</a>`;
+			if (!isSafeUrl(hyperlink)) return match;
+			const escapedHref = hyperlink.replace(/"/g, '&quot;');
+			return `<a href="${escapedHref}"${targetBlank ? 'target="_blank" rel="noreferrer"' : ''}>${url}</a>`;
 		},
 	);
 	if (breakLines) html = html.replace('\n', '<br />');

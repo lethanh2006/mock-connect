@@ -3,8 +3,9 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { formatDateTime } from '@/utils/formatDate';
+import { openSafeUrl } from '@/utils/security';
 import { ApiOutlined } from '@ant-design/icons';
-import { Card, Checkbox, Col, Descriptions, Progress, Row, Spin, Tabs, Tag } from 'antd';
+import { Card, Checkbox, Col, Descriptions, message, Progress, Row, Spin, Tabs, Tag } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -163,12 +164,11 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 				icon={<ApiOutlined />}
 				onClick={() => {
 					if (idLopHocPhan) {
-						getByIdModel(`lop-hoc-phan/${idLopHocPhan}/url/sv`, false).then((res: any) => {
-							if (res) {
-								window.open(res, '_blank');
-							} else {
-								console.error('URL not found in response:', res);
-							}
+						getByIdModel(`lop-hoc-phan/${idLopHocPhan}/url/sv`, false).then((res: unknown) => {
+							const url = typeof res === 'string' ? res : (res as { url?: string })?.url;
+							if (url && openSafeUrl(url)) return;
+							if (url) message.error(intl.formatMessage({ id: 'lichsukien.chitiet.duongdan.khonghople' }));
+							else message.error(intl.formatMessage({ id: 'lichsukien.chitiet.loi' }));
 						});
 					}
 				}}
@@ -193,9 +193,7 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 								{record?.thoiGianTaoVao ? formatDateTime(record?.thoiGianTaoVao) : '--'}
 							</Descriptions.Item>
 							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lms.tgcapnhat' })}>
-								{record?.thoiGianCapNhatGanNhatVao
-									? formatDateTime(record?.thoiGianCapNhatGanNhatVao)
-									: '--'}
+								{record?.thoiGianCapNhatGanNhatVao ? formatDateTime(record?.thoiGianCapNhatGanNhatVao) : '--'}
 							</Descriptions.Item>
 						</Descriptions>
 					</Card>
