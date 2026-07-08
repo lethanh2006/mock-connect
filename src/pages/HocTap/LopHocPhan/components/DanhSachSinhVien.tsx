@@ -7,8 +7,8 @@ import { Avatar, Button, Card, Col, Descriptions, Dropdown, List, Menu, Modal, R
 import { useIntl } from 'umi';
 import './style.less';
 
-import { useEffect, useState } from 'react';
 import PageCard from '@/components/PageCard';
+import { useEffect, useState } from 'react';
 const { Text } = Typography;
 
 type TSinhVien = Partial<SinhVien.IRecord> & Partial<SinhVien.ISinhVienHocKy>;
@@ -54,6 +54,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 		<PageCard
 			loading={loading}
 			level={3}
+			hideInnerCard
 			style={{
 				borderRadius: '8px',
 			}}
