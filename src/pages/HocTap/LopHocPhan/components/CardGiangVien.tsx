@@ -1,7 +1,7 @@
 import PageCard from '@/components/PageCard';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { formatPhoneNumber } from '@/utils/utils';
-import { Avatar, Card, Empty, List } from 'antd';
+import { Avatar, Empty, List } from 'antd';
 import classNames from 'classnames';
 import { useIntl } from 'umi';
 
@@ -22,7 +22,14 @@ const CardGiangVienLop = (props: {
 	} = props;
 
 	return (
-		<PageCard level={4} title={title} size='small' loading={loading} className={classNames({ 'card-highlight': isHighlight })}>
+		<PageCard
+			level={4}
+			title={title}
+			size='small'
+			loading={loading}
+			hideInnerCard
+			className={classNames({ 'card-highlight': isHighlight })}
+		>
 			{danhSachNhanSu?.length ? (
 				<List
 					grid={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1 }}

@@ -1,10 +1,10 @@
+import PageCard from '@/components/PageCard';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
-import { Alert, Card, Spin } from 'antd';
+import { Alert, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import DieuKienChungChiSection from './ChungChi';
 import DieuKienKqhtSection from './KetQuaHocTap';
-import PageCard from '@/components/PageCard';
 
 const CardDieuKienTotNghiep = () => {
 	const intl = useIntl();
@@ -31,29 +31,27 @@ const CardDieuKienTotNghiep = () => {
 			title={intl.formatMessage({ id: 'dieukienxettotnghiep.title' })}
 			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
 		>
-			<Card variant='borderless'>
-				<Spin spinning={loading}>
-					<DieuKienKqhtSection />
+			<Spin spinning={loading}>
+				<DieuKienKqhtSection />
 
-					<DieuKienChungChiSection />
+				<DieuKienChungChiSection />
 
-					{/* <DieuKienKhacSection /> */}
-				</Spin>
+				{/* <DieuKienKhacSection /> */}
+			</Spin>
 
-				{dieuKienTotNghiep?.isDuKieuKien ? (
-					<Alert
-						type='success'
-						description={intl.formatMessage({ id: 'dieukienxettotnghiep.alert.success.dudieukien' })}
-						showIcon
-					/>
-				) : (
-					<Alert
-						type='warning'
-						description={intl.formatMessage({ id: 'dieukienxettotnghiep.alert.warning.chuadudieukien' })}
-						showIcon
-					/>
-				)}
-			</Card>
+			{dieuKienTotNghiep?.isDuKieuKien ? (
+				<Alert
+					type='success'
+					description={intl.formatMessage({ id: 'dieukienxettotnghiep.alert.success.dudieukien' })}
+					showIcon
+				/>
+			) : (
+				<Alert
+					type='warning'
+					description={intl.formatMessage({ id: 'dieukienxettotnghiep.alert.warning.chuadudieukien' })}
+					showIcon
+				/>
+			)}
 		</PageCard>
 	);
 };
