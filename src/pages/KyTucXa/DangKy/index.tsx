@@ -2,19 +2,22 @@ import PageCard from '@/components/PageCard';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Alert, Button, Col, Empty, Flex, Input, Pagination, Row, Select, Space, Spin } from 'antd';
-import { useEffect } from 'react';
-import { useModel } from 'umi';
+import _ from 'lodash';
+import moment from 'moment';
+import { useCallback, useEffect, useMemo } from 'react';
+import { useModel, useIntl } from 'umi';
 import SelectDanhMucChungKTX from '../DanhMucChung/Select';
 import SelectToaNhaKTX from '../ToaNha/Select';
 import CardPhong from './components/CardPhong';
 import ChiTietPhong from './components/ChiTiet';
 import ModalDanKyKTX from './components/Modal';
 import './style.less';
+import { EOperatorType } from '@/components/Table/constant';
 
 const { Search } = Input;
 
 const DangKyKyTucXa = () => {
-	const { record: recDot } = useModel('kytucxa.dotdangky');
+	const intl = useIntl();
 	const {
 		getModel,
 		danhSach,
@@ -28,15 +31,46 @@ const DangKyKyTucXa = () => {
 		loading,
 		setVisibleForm,
 		setRecord,
+		setFilters,
+		filters,
 	} = useModel('kytucxa.phong');
+	const { getByIdModel: getDotDangKy, record: recDot } = useModel('kytucxa.dotdangky')
+
+	useEffect(() => {
+		getDotDangKy('me/one')
+	}, []);
 
 	const getData = () => {
-		getModel(undefined, undefined, undefined, undefined, undefined, 'me/page');
+		if (recDot?._id) {
+			getModel(undefined, undefined, undefined, undefined, undefined, 'me/page');
+		}
 	};
 
 	useEffect(() => {
 		getData();
-	}, [page, limit, recDot?._id]);
+	}, [page, limit, filters, recDot?._id]);
+
+	const handleFilterChange = useCallback((fieldPath: string[], value: any, operator = EOperatorType.EQUAL) => {
+		setFilters((prevFilters: any) => {
+			const currentFilters = prevFilters || [];
+			const newFilters = currentFilters.filter((f: any) => JSON.stringify(f.field) !== JSON.stringify(fieldPath));
+			
+			if (value) {
+				newFilters.push({
+					field: fieldPath,
+					operator: operator,
+					values: Array.isArray(value) ? value : [value],
+				});
+			}
+			return newFilters;
+		});
+		setPage(1);
+	}, [setFilters, setPage]);
+
+	const searchTenPhong = useMemo(() => _.debounce((val: string) => {
+		const keyword = val.trim();
+		handleFilterChange(['room', 'ten'], keyword, EOperatorType.CONTAIN);
+	}, 500), [handleFilterChange]);
 
 	const handleXemChiTiet = (phong: Phong.IChinhSachPhongRecord) => {
 		handleView(phong);
@@ -63,29 +97,56 @@ const DangKyKyTucXa = () => {
 	};
 
 	return (
-		<PageCard title='Đăng ký ký túc xá'>
+		<PageCard
+			title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}
+		>
 			<Flex justify='space-between' align='center' style={{ marginBottom: 8 }}>
 				<Space wrap>
-					<Search placeholder='Tìm kiếm tên phòng' style={{ width: 250 }} allowClear />
-					<SelectToaNhaKTX style={{ width: 250 }} allowClear />
-					<SelectDanhMucChungKTX condition={{ maLoai: 'LOAI_PHONG_KTX' }} style={{ width: 250 }} allowClear />
+					<Search
+						placeholder={intl.formatMessage({ id: 'kytucxa.dangky.filter.searchPlaceholder' })}
+						style={{ width: 250 }}
+						allowClear
+						onChange={(e) => searchTenPhong(e.target.value)}
+						onSearch={(value) => {
+							searchTenPhong.cancel();
+							searchTenPhong(value);
+							searchTenPhong.flush();
+						}}
+					/>
+					<SelectToaNhaKTX 
+						style={{ width: 250 }} 
+						allowClear 
+						onChange={(val) => handleFilterChange(['room', 'toaNha', '_id'], val, EOperatorType.EQUAL)}
+					/>
+					<SelectDanhMucChungKTX 
+						condition={{ maLoai: 'LOAI_PHONG_KTX' }} 
+						style={{ width: 250 }} 
+						allowClear 
+						onChange={(val) => handleFilterChange(['room', 'maLoaiPhongKtx'], val, EOperatorType.EQUAL)}
+					/>
 					<Select
 						style={{ width: 250 }}
-						// showSearch={{ optionFilterProp: 'label', onSearch }}
-						placeholder='Chọn sức chứa'
-						// onChange={onChange}
+						placeholder={intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.placeholder' })}
+						onChange={(val) => {
+							if (val) {
+								const [min, max] = val.split('-').map(Number);
+								handleFilterChange(['room', 'soLuongToiDa'], [min, max], EOperatorType.BETWEEN);
+							} else {
+								handleFilterChange(['room', 'soLuongToiDa'], undefined, EOperatorType.BETWEEN);
+							}
+						}}
 						options={[
 							{
-								value: 'jack',
-								label: 'Từ 3 đến 6',
+								value: '3-6',
+								label: intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.option1' }),
 							},
 							{
-								value: 'lucy',
-								label: 'Từ 6 đến 12',
+								value: '6-12',
+								label: intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.option2' }),
 							},
 							{
-								value: 'tom',
-								label: 'Từ 12 lên',
+								value: '12-50',
+								label: intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.option3' }),
 							},
 						]}
 						allowClear
@@ -102,8 +163,13 @@ const DangKyKyTucXa = () => {
 				style={{ marginBottom: 12, marginTop: 12 }}
 				message={
 					<span>
-						Registration is open from <b style={{ color: '#0E50CF' }}>31/07/2026</b> to{' '}
-						<b style={{ color: '#0E50CF' }}>10/08/2026</b>.
+						{intl.formatMessage(
+							{ id: 'kytucxa.dangky.alert.thoiGianDangKy' },
+							{
+								tuNgay: <b style={{ color: '#0E50CF' }}>{recDot?.thoiGianBatDau ? moment(recDot.thoiGianBatDau).format('HH:mm DD/MM/YYYY') : '--'}</b>,
+								denNgay: <b style={{ color: '#0E50CF' }}>{recDot?.thoiGianKetThuc ? moment(recDot.thoiGianKetThuc).format('HH:mm DD/MM/YYYY') : '--'}</b>,
+							}
+						)}
 					</span>
 				}
 			/>

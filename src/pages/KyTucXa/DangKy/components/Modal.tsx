@@ -101,12 +101,21 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 	};
 
 	return (
-		<ModalExpandable open={visibleDangKy} onCancel={handleClose} footer={null} width={1000} title='Dormitory Detail'>
+		<ModalExpandable open={visibleDangKy} onCancel={handleClose} footer={null} width={1000} title={intl.formatMessage({ id: 'kytucxa.dangky.modal.title' })}>
 			<Form layout='vertical' onFinish={onFinish} form={form} preserve>
 				<Steps current={currentStep} style={{ marginBottom: 18 }}>
-					<Steps.Step title='Thông tin chung' />
-					<Steps.Step title='Student Liability Release and Waiver' />
+					<Steps.Step title={intl.formatMessage({ id: 'kytucxa.dangky.modal.step.thongTinChung' })} />
+					<Steps.Step title={intl.formatMessage({ id: 'kytucxa.dangky.modal.step.liabilityWaiver' })} />
 				</Steps>
+
+				<hr
+					style={{
+						marginTop: 16,
+						marginBottom: 16,
+						border: 'none',
+						borderTop: '2px solid #F4F4F4',
+					}}
+				/>
 
 				<div style={{ display: currentStep === 0 ? 'block' : 'none' }}>
 					<FormDangKyKTX form={form} />
@@ -120,7 +129,7 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 					{currentStep === 0 ? (
 						<>
 							<Button htmlType='button' disabled={!checkbox1} type='primary' onClick={handleNext}>
-								Next
+								{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.next' })}
 							</Button>
 
 							<Button htmlType='button' onClick={handleClose}>
@@ -130,11 +139,11 @@ const ModalDanKyKTX = (props: { getData?: () => void }) => {
 					) : (
 						<>
 							<Button disabled={!checkbox2} htmlType='submit' type='primary' loading={formSubmiting}>
-								Submit
+								{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.submit' })}
 							</Button>
 
 							<Button htmlType='button' onClick={() => setCurrentStep(0)}>
-								Previous
+								{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.previous' })}
 							</Button>
 						</>
 					)}

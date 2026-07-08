@@ -1,6 +1,7 @@
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { CheckCircleFilled, ColumnWidthOutlined, LayoutOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Image, Row, Tag, Typography } from 'antd';
+import { useIntl } from 'umi';
 
 interface CardPhongProps {
 	phong: Phong.IChinhSachPhongRecord;
@@ -11,10 +12,8 @@ interface CardPhongProps {
 const ANH_PHONG_MAC_DINH =
 	'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=85';
 
-const formatGia = (gia?: number | null, donViTienTe = 'VND') =>
-	gia ? `${gia.toLocaleString('vi-VN')} ${donViTienTe}` : 'Chưa cập nhật';
-
 const CardPhong = ({ phong, onXemChiTiet, onDangKy }: CardPhongProps) => {
+	const intl = useIntl();
 	const room = phong.room;
 	const sucChua = phong.sucChua ?? room?.soLuongToiDa ?? room?.sucChua ?? 0;
 	const soChoConLai = Math.max(0, sucChua - (room?.soLuongHienTai ?? 0));
@@ -27,10 +26,13 @@ const CardPhong = ({ phong, onXemChiTiet, onDangKy }: CardPhongProps) => {
 		phong.loaiPhongKtx?.ten ||
 		room?.loaiPhongKtx?.ten ||
 		room?.danhSachTinhChatPhong?.find((item) => item.congNangChinh)?.loaiPhong?.loaiPhong ||
-		'CHƯA PHÂN LOẠI';
+		intl.formatMessage({ id: 'kytucxa.dangky.card.chuaPhanLoai' });
 
 	const tienIch = phong.danhSachTienIch?.length ? phong.danhSachTienIch : (room?.danhSachTienIch ?? []);
 	const tienIchHienThi = tienIch.slice(0, 3);
+
+	const formatGia = (gia?: number | null, donViTienTe = 'VND') =>
+		gia ? `${gia.toLocaleString('vi-VN')} ${donViTienTe}` : intl.formatMessage({ id: 'kytucxa.dangky.card.chuaCapNhat' });
 
 	return (
 		<Card
@@ -41,7 +43,11 @@ const CardPhong = ({ phong, onXemChiTiet, onDangKy }: CardPhongProps) => {
 				<div className='room-card__image-wrap'>
 					<Image src={anhPhong} alt={`Phòng ${room?.ma ?? ''}`} preview={false} className='room-card__image' />
 
-					<Tag className='room-card__slot-tag'>{daHetCho ? 'No slots left' : `${soChoConLai} slots left`}</Tag>
+					<Tag className='room-card__slot-tag'>
+						{daHetCho
+							? intl.formatMessage({ id: 'kytucxa.dangky.card.hetCho' })
+							: intl.formatMessage({ id: 'kytucxa.dangky.card.slotConLai' }, { soLuong: soChoConLai })}
+					</Tag>
 				</div>
 			}
 		>
@@ -82,14 +88,14 @@ const CardPhong = ({ phong, onXemChiTiet, onDangKy }: CardPhongProps) => {
 								onXemChiTiet?.(phong);
 							}}
 						>
-							+ {tienIch.length - 3} other amenities
+							{intl.formatMessage({ id: 'kytucxa.dangky.card.tienIchKhac' }, { soLuong: tienIch.length - 3 })}
 						</Typography.Link>
 					</Col>
 				)}
 
 				{tienIch.length === 0 && (
 					<Col span={24}>
-						<Typography.Text type='secondary'>Tiện ích chưa được cập nhật</Typography.Text>
+						<Typography.Text type='secondary'>{intl.formatMessage({ id: 'kytucxa.dangky.card.tienIchChuaCapNhat' })}</Typography.Text>
 					</Col>
 				)}
 			</Row>
@@ -110,7 +116,9 @@ const CardPhong = ({ phong, onXemChiTiet, onDangKy }: CardPhongProps) => {
 						onDangKy?.(phong);
 					}}
 				>
-					{daHetCho ? 'FULL' : 'REGISTER'}
+					{daHetCho
+						? intl.formatMessage({ id: 'kytucxa.dangky.card.button.full' })
+						: intl.formatMessage({ id: 'kytucxa.dangky.card.button.dangKy' })}
 				</Button>
 			</div>
 		</Card>

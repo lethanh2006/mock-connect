@@ -1,7 +1,9 @@
+import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Col, Form, Input, Row, Select } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
+import rules from '@/utils/rules';
 
 const FormNguoiThanKTX = (props: { onOk: (val: PhieuDangKyKTX.INguoiThan) => void }) => {
 	const intl = useIntl();
@@ -22,13 +24,13 @@ const FormNguoiThanKTX = (props: { onOk: (val: PhieuDangKyKTX.INguoiThan) => voi
 		<Form onFinish={onFinish} form={form} layout='vertical' disabled={isView}>
 			<Row gutter={[12, 0]}>
 				<Col span={24}>
-					<Form.Item name='emergencyContactName' label='Parent/Guardian Name'>
+					<Form.Item name='emergencyContactName' label='Parent/Guardian Name' rules={rules.required}>
 						<Input placeholder='Nhập họ tên người thân' />
 					</Form.Item>
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='emergencyRelationship' label='Relationship'>
+					<Form.Item name='emergencyRelationship' label='Relationship' rules={rules.required}>
 						<Select
 							placeholder='Chọn mối quan hệ'
 							options={[
@@ -42,7 +44,7 @@ const FormNguoiThanKTX = (props: { onOk: (val: PhieuDangKyKTX.INguoiThan) => voi
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='emergencyContactNumber' label='Primary Contact Number'>
+					<Form.Item name='emergencyContactNumber' label='Primary Contact Number' rules={[...rules.required, ...rules.soDienThoai]}>
 						<Input placeholder='Nhập số điện thoại chính' />
 					</Form.Item>
 				</Col>
@@ -54,13 +56,13 @@ const FormNguoiThanKTX = (props: { onOk: (val: PhieuDangKyKTX.INguoiThan) => voi
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='emergencyEmail' label='Email'>
+					<Form.Item name='emergencyEmail' label='Email' rules={rules.email}>
 						<Input placeholder='Nhập email' />
 					</Form.Item>
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='address' label='Address'>
+					<Form.Item name='address' label='Address' rules={rules.required}>
 						<Input.TextArea rows={3} placeholder='Nhập địa chỉ' />
 					</Form.Item>
 				</Col>

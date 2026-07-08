@@ -63,7 +63,7 @@ const ChiTietPhong = () => {
 			onCancel={() => setVisibleForm(false)}
 			footer={null}
 			width={1000}
-			title='Dormitory Detail'
+			title={intl.formatMessage({ id: 'kytucxa.dangky.chitiet.title' })}
 		>
 			<div className='room-gallery'>
 				<div>
@@ -74,7 +74,7 @@ const ChiTietPhong = () => {
 						height={372}
 						style={{ objectFit: 'cover' }}
 						preview={{
-							mask: 'Xem ảnh',
+							mask: intl.formatMessage({ id: 'kytucxa.dangky.chitiet.xemAnh' }),
 						}}
 					/>
 				</div>
@@ -89,7 +89,7 @@ const ChiTietPhong = () => {
 								height={182}
 								style={{ objectFit: 'cover' }}
 								preview={{
-									mask: 'Xem ảnh',
+									mask: intl.formatMessage({ id: 'kytucxa.dangky.chitiet.xemAnh' }),
 								}}
 							/>
 						</div>
@@ -130,8 +130,8 @@ const ChiTietPhong = () => {
 						<div className='room-price'>{room?.giaPhong ? room.giaPhong.toLocaleString('vi-VN') : '3,200,000'} VND</div>
 
 						<div className='room-available-box'>
-							<div>AVAILABLE</div>
-							<strong>{soSlotConLai || 5} slots left</strong>
+							<div>{intl.formatMessage({ id: 'kytucxa.dangky.chitiet.available' })}</div>
+							<strong>{intl.formatMessage({ id: 'kytucxa.dangky.chitiet.slotConLai' }, { soLuong: soSlotConLai || 5 })}</strong>
 						</div>
 					</div>
 				</Col>
@@ -147,7 +147,7 @@ const ChiTietPhong = () => {
 
 			<div className='form-footer'>
 				<Button type='primary' onClick={handleDangKy}>
-					Đăng ký
+					{intl.formatMessage({ id: 'kytucxa.dangky.chitiet.button.dangKy' })}
 				</Button>
 				<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 			</div>

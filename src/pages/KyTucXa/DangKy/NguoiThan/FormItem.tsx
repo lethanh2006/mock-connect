@@ -1,24 +1,27 @@
-import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
-import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Modal, Popconfirm } from 'antd';
+import { Modal } from 'antd';
 import { useIntl, useModel } from 'umi';
 import Form from './Form';
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
+import { EditOutlined } from '@ant-design/icons';
 
 const FormItemNguoiThanKTX = (props: {
 	value?: PhieuDangKyKTX.INguoiThan[];
 	onChange?: (data: PhieuDangKyKTX.INguoiThan[]) => void;
 }) => {
-	const { handleEdit, setVisibleForm, visibleForm, setEdit, edit, record, setRecord, isView, setIsView } =
+	const { setVisibleForm, visibleForm, record, handleEdit } =
 		useModel('kytucxa.nguoithan');
 	const { value = [], onChange } = props;
 	const intl = useIntl();
-	const onDelete = (index: number) => {
-		const data = [...value];
-		data.splice(index, 1);
-		if (onChange) onChange(data);
-	};
+
+	// const onDelete = (index: number) => {
+	// 	const data = [...value];
+	// 	data.splice(index, 1);
+	// 	if (onChange) onChange(data);
+	// };
+
 
 	const onAdd = (rec: PhieuDangKyKTX.INguoiThan) => {
 		if (!record?.index) {
@@ -80,7 +83,7 @@ const FormItemNguoiThanKTX = (props: {
 						onClick={() => handleEdit(rec)}
 						icon={<EditOutlined />}
 					/>
-					<Popconfirm
+					{/* <Popconfirm
 						onConfirm={() => onDelete(rec.index - 1)}
 						title={intl.formatMessage({ id: 'quytrinhiso.hosoluu.formitem.confirm' })}
 						placement='topLeft'
@@ -91,10 +94,11 @@ const FormItemNguoiThanKTX = (props: {
 							type='link'
 							icon={<DeleteOutlined />}
 						/>
-					</Popconfirm>
+					</Popconfirm> */}
 				</>
 			),
 		},
+
 	];
 
 	return (
@@ -105,9 +109,10 @@ const FormItemNguoiThanKTX = (props: {
 				size='small'
 				hasTotal
 				addStt
+				columnSetting={false}
 				otherProps={{ pagination: false, scroll: { y: 400 } }}
 			>
-				<Button
+				{/* <Button
 					icon={<PlusCircleOutlined />}
 					onClick={() => {
 						setRecord({} as PhieuDangKyKTX.INguoiThan);
@@ -119,7 +124,7 @@ const FormItemNguoiThanKTX = (props: {
 					type='primary'
 				>
 					Thêm mới
-				</Button>
+				</Button> */}
 			</TableStaticData>
 
 			<Modal

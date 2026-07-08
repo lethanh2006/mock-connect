@@ -41,7 +41,7 @@ const SelectToaNhaKTX = (props: {
 			options={options}
 			showSearch
 			optionFilterProp='label'
-			placeholder='Chọn tòa nhà'
+			placeholder={intl.formatMessage({ id: 'kytucxa.dangky.filter.selectToaNha' })}
 			style={{ width: '100%', ...style }}
 		/>
 	);
