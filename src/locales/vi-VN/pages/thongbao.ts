@@ -5,7 +5,6 @@ export default {
 	'thongbao.column.tieude': 'Tiêu đề',
 	'thongbao.column.mota': 'Mô tả',
 	'thongbao.column.thoigian': 'Thời gian gửi',
-	'thongbaolop.title.hanhchinh': 'Thông báo lớp hành chính',
-	'thongbaolop.title.hocphan': 'Thông báo lớp học phần',
+	'thongbaolop.title': 'Thông báo',
 	'thongbao.detail.title': 'Chi tiết thông báo',
 };

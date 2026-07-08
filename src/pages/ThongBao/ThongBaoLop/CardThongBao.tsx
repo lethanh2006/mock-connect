@@ -25,11 +25,7 @@ const CardThongBao = (props: { loai: 'lop-hanh-chinh' | 'lop-hoc-phan'; idLop?: 
 			level={2}
 			hideInnerCard
 			size='small'
-			title={
-				props.loai === 'lop-hanh-chinh'
-					? intl.formatMessage({ id: 'thongbaolop.title.hanhchinh' })
-					: intl.formatMessage({ id: 'thongbaolop.title.hocphan' })
-			}
+			title={intl.formatMessage({ id: 'thongbaolop.title' })}
 			className={styles.list}
 			extra={
 				<ButtonExtend
