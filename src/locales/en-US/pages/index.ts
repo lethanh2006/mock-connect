@@ -29,6 +29,7 @@ import vanbanhuongdan from './tienichkhac/vanbanhuongdan';
 import xemsau from './tienichkhac/xemsau';
 import tintuc from './tintuc';
 import trangchu from './trangchu';
+import detaikhcn from './khoahoc/detaikhcn';
 
 export default {
 	...login,
@@ -62,6 +63,7 @@ export default {
 	...baithicuoiky,
 	...minor,
 	...syllabus,
+	...detaikhcn,
 
 	'pages.trangchu.title': 'TRAINING STUDENT PORTAL',
 	'pages.trangchu.subtitle': 'DIGITAL UNIVERSITY SYSTEM',

@@ -5,9 +5,20 @@ import { EKieuDuLieu } from '@/services/KhoaHoc/LoaiHinhNCKH/constants';
 import type { LoaiHinhNCKH } from '@/services/KhoaHoc/LoaiHinhNCKH/typings';
 import type { SanPhamNCKH } from '@/services/KhoaHoc/SanPhamNCKH/typings';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
+import { getSafeHref } from '@/utils/security';
+import { sanitizeObject } from '@/utils/utils';
 import { Tag } from 'antd';
 import { useModel } from 'umi';
 import { buildFilter } from './BuildFilter';
+
+const safeDisplayText = (val: unknown): string => {
+	if (typeof val === 'string') return sanitizeObject(val);
+	if (Array.isArray(val)) {
+		return val.map((item) => (typeof item === 'string' ? sanitizeObject(item) : String(item ?? ''))).join(', ');
+	}
+	if (val == null) return '';
+	return String(val);
+};
 
 const ViewRender = (props: {
 	cauHinh: LoaiHinhNCKH.TruongThongTin | LoaiHinhNCKH.Cot;
@@ -31,7 +42,7 @@ const ViewRender = (props: {
 
 	switch (cauHinh.kieuDuLieu) {
 		case EKieuDuLieu.TEXT:
-			value = <div>{recordSanPhamFinal?.[cauHinh.ma]}</div>;
+			value = <div>{safeDisplayText(recordSanPhamFinal?.[cauHinh.ma])}</div>;
 			break;
 
 		case EKieuDuLieu.CAN_BO:
@@ -44,28 +55,12 @@ const ViewRender = (props: {
 			break;
 
 		case EKieuDuLieu.DANHMUC:
-			value = (
-				<div>
-					{
-						(value =
-							cauHinh.laDangMang && recordSanPham?.[cauHinh.ma]?.join
-								? recordSanPhamFinal?.[cauHinh.ma]?.join(', ')
-								: recordSanPhamFinal?.[cauHinh.ma])
-					}
-				</div>
-			);
+			value = <div>{safeDisplayText(recordSanPhamFinal?.[cauHinh.ma])}</div>;
 
 			break;
 		case EKieuDuLieu.NUMBER:
 			value = recordSanPhamFinal?.[cauHinh.ma] ? (
-				<div>
-					{
-						(value =
-							cauHinh.laDangMang && recordSanPhamFinal?.[cauHinh.ma]?.map
-								? recordSanPhamFinal?.[cauHinh.ma]?.join(', ')
-								: recordSanPhamFinal?.[cauHinh.ma])
-					}
-				</div>
+				<div>{safeDisplayText(recordSanPhamFinal?.[cauHinh.ma])}</div>
 			) : (
 				<div />
 			);
@@ -73,14 +68,7 @@ const ViewRender = (props: {
 			break;
 		case EKieuDuLieu.DECIMAL:
 			value = recordSanPhamFinal?.[cauHinh.ma] ? (
-				<div>
-					{
-						(value =
-							cauHinh.laDangMang && recordSanPhamFinal?.[cauHinh.ma]?.join
-								? recordSanPhamFinal?.[cauHinh.ma]?.join(', ')
-								: recordSanPhamFinal?.[cauHinh.ma])
-					}
-				</div>
+				<div>{safeDisplayText(recordSanPhamFinal?.[cauHinh.ma])}</div>
 			) : (
 				<div />
 			);
@@ -101,13 +89,17 @@ const ViewRender = (props: {
 				<div>
 					{recordSanPhamFinal[cauHinh.ma] &&
 						recordSanPhamFinal[cauHinh.ma].map &&
-						recordSanPhamFinal?.[cauHinh.ma]?.map((item: string) => (
-							<Tag color={primaryColor} key={cauHinh.ma}>
-								<a href={item} target='_blank' rel='noreferrer'>
-									Xem tập tin
-								</a>
-							</Tag>
-						))}
+						recordSanPhamFinal?.[cauHinh.ma]?.map((item: string) => {
+							const href = getSafeHref(item);
+							if (!href) return null;
+							return (
+								<Tag color={primaryColor} key={href}>
+									<a href={href} target='_blank' rel='noreferrer'>
+										Xem tập tin
+									</a>
+								</Tag>
+							);
+						})}
 				</div>
 			);
 

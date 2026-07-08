@@ -1,4 +1,5 @@
 import { coQuanChuQuan, unitName } from '@/services/base/constant';
+import { sanitizeObject } from '@/utils/utils';
 import { useModel } from 'umi';
 
 const TieuDeBieuMau = (props: { title: string }) => {
@@ -63,7 +64,7 @@ const TieuDeBieuMau = (props: { title: string }) => {
           {/*    // recordDon?.thongTinDichVu?.thongTinThuTuc?.donViThucHien ||*/}
           {/*    'Phòng Công tác sinh viên'}*/}
           {/*</div>*/}
-          <div dangerouslySetInnerHTML={{__html:record?.thongTinThuTuc?.donViThucHien}}>
+          <div dangerouslySetInnerHTML={{ __html: sanitizeObject(record?.thongTinThuTuc?.donViThucHien ?? '') }}>
 
           </div>
         </div>

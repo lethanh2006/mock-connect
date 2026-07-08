@@ -1,7 +1,7 @@
 import { Descriptions } from 'antd';
 import { useModel } from 'umi';
 import { useEffect } from 'react';
-import { currencyFormat } from '@/utils/utils';
+import { currencyFormat, sanitizeObject } from '@/utils/utils';
 
 const DanhMuc = (props: { button: any }) => {
   const { record } = useModel('dvmc.dichvumotcuav2');
@@ -32,7 +32,7 @@ const DanhMuc = (props: { button: any }) => {
           </Descriptions.Item>
           <Descriptions.Item label="Lĩnh vực">{record?.thongTinThuTuc?.linhVuc}</Descriptions.Item>
           <Descriptions.Item label="Đơn vị thực hiện">
-            <div dangerouslySetInnerHTML={{__html:record?.thongTinThuTuc?.donViThucHien??''}}>
+            <div dangerouslySetInnerHTML={{ __html: sanitizeObject(record?.thongTinThuTuc?.donViThucHien ?? '') }}>
 
             </div>
           </Descriptions.Item>
@@ -72,17 +72,17 @@ const DanhMuc = (props: { button: any }) => {
       <b style={{ marginLeft: '18%', color: 'black' }}>2. Hồ sơ</b>
       <p
         style={{ marginLeft: '18%' }}
-        dangerouslySetInnerHTML={{ __html: record?.thongTinHoSo ?? '' }}
+        dangerouslySetInnerHTML={{ __html: sanitizeObject(record?.thongTinHoSo ?? '') }}
       />
       <b style={{ marginLeft: '18%', color: 'black' }}>3. Quy trình thực hiện</b>
       <p
         style={{ marginLeft: '18%', marginRight: '18%' }}
-        dangerouslySetInnerHTML={{ __html: record?.thongTinQuyTrinh ?? '' }}
+        dangerouslySetInnerHTML={{ __html: sanitizeObject(record?.thongTinQuyTrinh ?? '') }}
       />
       <b style={{ marginLeft: '18%', color: 'black' }}>4. Yêu cầu</b>
       <p
         style={{ marginLeft: '18%', marginRight: '18%' }}
-        dangerouslySetInnerHTML={{ __html: record?.thongTinYeuCau ?? '' }}
+        dangerouslySetInnerHTML={{ __html: sanitizeObject(record?.thongTinYeuCau ?? '') }}
       />
     </div>
   );
