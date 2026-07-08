@@ -1,14 +1,13 @@
+import PageCard from '@/components/PageCard';
 import { EVaiTroSvLhc, vaiTroSvLhc } from '@/services/DaoTao/SinhVien/constants';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EGioiTinh } from '@/services/DaoTao/constant';
 import { formatDate } from '@/utils/formatDate';
 import { EyeOutlined, MoreOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Descriptions, Dropdown, List, Menu, Modal, Row, Typography } from 'antd';
+import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
 import './style.less';
-
-import PageCard from '@/components/PageCard';
-import { useEffect, useState } from 'react';
 const { Text } = Typography;
 
 type TSinhVien = Partial<SinhVien.IRecord> & Partial<SinhVien.ISinhVienHocKy>;
