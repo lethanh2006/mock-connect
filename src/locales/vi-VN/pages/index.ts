@@ -32,6 +32,7 @@ import vanbanhuongdan from './tienichkhac/vanbanhuongdan';
 import xemsau from './tienichkhac/xemsau';
 import tintuc from './tintuc';
 import trangchu from './trangchu';
+import detaikhcn from './khoahoc/detaikhcn';
 
 export default {
 	...login,
@@ -68,6 +69,7 @@ export default {
 	...sinhvien,
 	...minor,
 	...syllabus,
+	...detaikhcn,
 
 	'pages.trangchu.title': 'PHÂN HỆ CỔNG SINH VIÊN',
 	'pages.trangchu.subtitle': 'HỆ THỐNG ĐẠI HỌC SỐ',

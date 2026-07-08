@@ -3,6 +3,7 @@ export default {
 	'lichthi.table.dotThi': 'Exam session',
 	'lichthi.table.ngayThi': 'Exam day',
 	'lichthi.table.gioThi': 'Exam time',
+	'lichthi.table.hinhThucThi': 'Exam format',
 	'lichthi.table.maHP': 'Course ID',
 	'lichthi.table.tenHocPhan': 'Course name',
 	'lichthi.table.phongThi': 'Exam room',

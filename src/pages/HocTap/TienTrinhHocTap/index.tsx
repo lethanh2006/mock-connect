@@ -138,7 +138,7 @@ const TienTrinhHocTap = () => {
 									/>
 								</div>
 								<div className='progress-logo'>
-									<img src={getPublicAssetPath('logo.png')} alt='' width={30} height={30} />
+									<img src={getPublicAssetPath('logo.png')} alt='' style={{ objectFit: 'contain' }} />
 								</div>
 							</div>
 							<div className='progress-meta'>

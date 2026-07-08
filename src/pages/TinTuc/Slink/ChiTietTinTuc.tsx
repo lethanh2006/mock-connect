@@ -1,4 +1,5 @@
 import { formatDateTime } from '@/utils/formatDate';
+import { sanitizeObject } from '@/utils/utils';
 import { CalendarOutlined, UserOutlined } from '@ant-design/icons';
 import { Col, Divider, Row, Spin } from 'antd';
 import { history, useModel } from 'umi';
@@ -29,7 +30,7 @@ const ChiTietTinTucSlink = () => {
 						</p>
 						{record?.moTa !== '' && <p className='mo-ta'>{record?.moTa}</p>}
 
-						<div className='noi-dung' dangerouslySetInnerHTML={{ __html: record?.noiDung ?? '' }} />
+						<div className='noi-dung' dangerouslySetInnerHTML={{ __html: sanitizeObject(record?.noiDung ?? '') }} />
 					</div>
 				</Col>
 			</Row>

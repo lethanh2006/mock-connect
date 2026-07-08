@@ -128,8 +128,8 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		}).then((data) => {
 			const temp = data.map((item) => ({
 				...item,
-				title: item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || '',
-				location: item.phongHoc,
+				title: `${item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || ''}`,
+				location: `${item.phongHoc ?? ''}`,
 				loaiSuKien: ELoaiSuKien.LICH_HOC,
 				start: dayjs(item?.thoiGianBatDau).toDate(),
 				end: dayjs(item?.thoiGianKetThuc).toDate(),

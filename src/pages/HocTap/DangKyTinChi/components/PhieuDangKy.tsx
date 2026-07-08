@@ -12,12 +12,12 @@ import {
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
-import { formatDateTime, formatTimeRange } from '@/utils/formatDate';
+import { formatDateTime } from '@/utils/formatDate';
 import { CalendarOutlined, DeleteOutlined, HistoryOutlined } from '@ant-design/icons';
 import { Popconfirm, Space, Tag } from 'antd';
-import _ from 'lodash';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import { renderKhoangThoiGian } from '../utils';
 import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
@@ -82,17 +82,6 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 		}
 	};
 
-	const renderKhoangThoiGian = (rec: DangKyTinChi.ILopDangKy) => {
-		const thoiKhoaBieuList = rec.thoiKhoaBieuList ?? [];
-		if (!thoiKhoaBieuList.length) return null;
-
-		const start = _.minBy(thoiKhoaBieuList, (item) => dayjs(item.ngay).valueOf())?.ngay;
-		const end = _.maxBy(thoiKhoaBieuList, (item) => dayjs(item.ngay).valueOf())?.ngay;
-		if (!start || !end) return null;
-
-		return formatTimeRange(start, end, 'DD/MM');
-	};
-
 	const handleXemDeCuong = (rec: DangKyTinChi.ILopDangKy) => {
 		const deCuongId = rec.hocPhan?.ma ?? rec.maHocPhan;
 		if (!deCuongId) return;
@@ -125,8 +114,19 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.tenhocphan' }),
 			dataIndex: ['hocPhan', 'ten'],
-			width: 170,
+			width: 220,
 			filterType: 'string',
+		},
+		{
+			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.sotinchi' }),
+			dataIndex: 'soTinChi',
+			width: 50,
+			align: 'center',
+			render: (val, rec) => (
+				<>
+					{val} {rec.hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy === false ? <i>(không tính)</i> : null}
+				</>
+			),
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.malop' }),
@@ -150,7 +150,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.giangvien' }),
-			width: 160,
+			width: 140,
 			render: (val, rec) => (
 				<ExpandText>
 					{rec.nhanSuList
@@ -169,7 +169,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.thongtinchitiet' }),
-			width: 250,
+			width: 220,
 			render: (val, rec) => <RenderLichHoc lopHocPhan={{ ...rec, loai: ELoaiLopHocPhan.CHINH }} />, // Fake loại để ko lỗi
 		},
 		{
@@ -237,6 +237,9 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 					<ButtonExtend
 						icon={<DeleteOutlined />}
 						danger
+						otherTooltipProps={{
+							placement: 'bottom',
+						}}
 						type='link'
 						disabled={rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY && !rec.dangKyTinChi}
 						tooltip={intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy.tooltip' })}

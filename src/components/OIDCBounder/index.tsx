@@ -3,10 +3,11 @@ import { getUserInfo } from '@/services/base/api';
 import { AppModules, EModuleKey } from '@/services/base/constant';
 import { type Login } from '@/services/base/typing';
 import axios from '@/utils/axios';
-import { getKeycloakRoleContext, hasModulePermission } from '@/utils/keycloakRoles';
-import type { AuthorizedRolesByClient } from '@/utils/keycloakRoles';
 import { currentRole, financeApiClientId, qldtApiClientId, replaceRole } from '@/utils/ip';
+import type { AuthorizedRolesByClient } from '@/utils/keycloakRoles';
+import { getKeycloakRoleContext, hasModulePermission } from '@/utils/keycloakRoles';
 import { oidcConfig } from '@/utils/oidcConfig';
+import { getAppBasePath } from '@/utils/path';
 import { notification } from 'antd';
 import queryString from 'query-string';
 import { useEffect, type FC } from 'react';
@@ -195,7 +196,7 @@ export const OIDCBounder: FC<{ children: React.ReactElement }> & { getActions: (
 			{...oidcConfig}
 			redirect_uri={
 				window.location.pathname.includes('/user')
-					? `${window.location.origin}${APP_CONFIG_BASE_PATH}`
+					? `${window.location.origin}${getAppBasePath()}`
 					: window.location.href
 			}
 		>

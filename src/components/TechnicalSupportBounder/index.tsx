@@ -3,6 +3,7 @@ import { useIntl } from '@umijs/max';
 import { FloatButton, Modal } from 'antd';
 import { useState } from 'react';
 import { history } from 'umi';
+import PanpageHoTro from './FanpageHoTro';
 import FormPostIssue from './Form';
 import { unChatBotSupportPaths, unTechnicalSupportPaths } from './constant';
 
@@ -24,7 +25,7 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 						icon={<ToolOutlined />}
 					/>
 
-					{/* <PanpageHoTro path={APP_CONFIG_HO_TRO_KY_THUAT} /> */}
+					<PanpageHoTro />
 
 					<Modal
 						footer={null}
@@ -44,8 +45,6 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 					{/* <ChatbotOverlay /> */}
 				</>
 			) : null}
-
-			{/* <PanpageHoTro path={APP_CONFIG_HO_TRO_KY_THUAT} /> */}
 		</>
 	);
 };

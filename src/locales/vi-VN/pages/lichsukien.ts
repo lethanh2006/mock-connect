@@ -60,6 +60,8 @@ export default {
 	'lichsukien.chitiet.xoa': 'Xóa',
 	'lichsukien.chitiet.xoa.xacnhan': 'Bạn có chắc chắn muốn xóa sự kiện này không?',
 	'lichsukien.chitiet.loai': 'Loại sự kiện',
+	'lichsukien.chitiet.duongdan.khonghople': 'Đường dẫn không hợp lệ',
+	'lichsukien.chitiet.loi': 'Có lỗi, vui lòng thử lại sau',
 
 	'lichsukien.calendar.allday': 'Cả ngày',
 	'lichsukien.calendar.previous': 'Quay lại',

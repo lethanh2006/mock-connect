@@ -58,6 +58,7 @@ export default {
 
 	'dangkytinchi.dankylophocphan.action.dadangky': 'Đã đăng ký',
 	'dangkytinchi.dankylophocphan.action.dachon': 'Đã chọn',
+	'dangkytinchi.dankylophocphan.action.bochon': 'Bỏ chọn',
 	'dangkytinchi.dankylophocphan.action.dangky': 'Đăng ký',
 	'dangkytinchi.dankylophocphan.action.chon': 'Chọn',
 	'dangkytinchi.dankylophocphan.filter.lopcontrong': 'Lớp còn trống',
@@ -107,6 +108,7 @@ export default {
 	'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc': 'Xem trước lịch học',
 	'dangkytinchi.phieudangky.table.btn.caclopdahuy': 'Các lớp đã hủy đăng ký',
 	'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin': 'Bạn đã đăng ký quá số tín chỉ tối đa',
+	'dangkytinchi.phieudangky.table.tooltip.alert.khongcolopchuadangky': 'Bạn chưa chọn đăng ký lớp',
 	'dangkytinchi.phieudangky.table.tooltip.alert.chuadangkydusotin': 'Bạn chưa đăng ký đủ số tín chỉ tối thiểu',
 	'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi': 'Ngoài thời gian đăng ký tín chỉ',
 	'dangkytinchi.phieudangky.table.tooltip.alert.dangkytc': 'Đăng ký tín chỉ',
