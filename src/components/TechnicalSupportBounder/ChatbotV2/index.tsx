@@ -42,8 +42,11 @@ const ChatbotOverlayV2 = () => {
 		}
 
 		if (boxChatVisible && !recordUser?.id) {
+			const chatbotPassword = typeof APP_CONFIG_CHATBOT_PASSWORD !== 'undefined' ? APP_CONFIG_CHATBOT_PASSWORD : '';
+			if (!chatbotPassword) return;
+
 			createUserChatBotModel({
-				password: 'abc@1234',
+				password: chatbotPassword,
 				username: fullName ?? 'admin',
 				email:
 					recSinhVien?.email ??

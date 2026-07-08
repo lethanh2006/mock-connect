@@ -2,6 +2,7 @@ import UploadFile from '@/components/Upload/UploadFile';
 import { QuyTrinh } from '@/services/FormDong/QuyTrinh/typing';
 import { buildUpLoadFile, getFileById } from '@/services/uploadFile';
 import rules from '@/utils/rules';
+import { FILE_EXTENSIONS, validateUploadFileList } from '@/utils/fileValidation';
 import { removeVietnameseTones, resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Form, Input, Select, message } from 'antd';
 import fileDownload from 'js-file-download';
@@ -36,6 +37,12 @@ const FormThemMoiMauDon = () => {
 
 		if (listMaCauHinh?.map((item) => item.ma)?.includes(values?.ma)) {
 			message.error(intl.formatMessage({ id: 'diemrenluyen.maudon.thongbao.trungma' }));
+			return;
+		}
+
+		const fileList = values.fileId?.fileList ?? [];
+		if (fileList.length && !(await validateUploadFileList(fileList, FILE_EXTENSIONS.word))) {
+			message.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
 			return;
 		}
 
@@ -124,8 +131,8 @@ const FormThemMoiMauDon = () => {
 						fileName={recordMauDon?.file?.[0]?.name}
 						handlePreview={handlePreview}
 						maxCount={1}
+						accept='.doc,.docx'
 						otherProps={{
-							accept: '.docx, .doc',
 							showUploadList: { showDownloadIcon: false },
 						}}
 					/>
