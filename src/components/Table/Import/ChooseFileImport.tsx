@@ -7,13 +7,6 @@ import {
 	validateFileBlob,
 } from '@/utils/fileValidation';
 import rules from '@/utils/rules';
-import {
-	FILE_EXTENSIONS,
-	getFileExtension,
-	isAllowedFile,
-	isValidFileBuffer,
-	validateFileBlob,
-} from '@/utils/fileValidation';
 import { ArrowRightOutlined, CloseOutlined, DownloadOutlined } from '@ant-design/icons';
 import { Button, Col, Form, InputNumber, Row, Select, Space, message } from 'antd';
 import fileDownload from 'js-file-download';
