@@ -1,4 +1,5 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import DOMPurify from 'dompurify';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi, ELoaiDot, EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
 import { handleSingleFile } from '@/services/uploadFile';
@@ -375,7 +376,7 @@ const FormTraLoiKhaoSat = (props: {
 					</Steps>
 
 					{currentStep === 0 ? (
-						<div dangerouslySetInnerHTML={{ __html: recordDot?.noiDungGioiThieu ?? '--' }} />
+						<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(recordDot?.noiDungGioiThieu ?? '--') }} />
 					) : currentStep === 1 ? (
 						mainContent
 					) : null}

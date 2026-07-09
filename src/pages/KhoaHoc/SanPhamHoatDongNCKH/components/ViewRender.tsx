@@ -6,15 +6,17 @@ import type { LoaiHinhNCKH } from '@/services/KhoaHoc/LoaiHinhNCKH/typings';
 import type { SanPhamNCKH } from '@/services/KhoaHoc/SanPhamNCKH/typings';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { getSafeHref } from '@/utils/security';
-import { sanitizeObject } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { Tag } from 'antd';
 import { useModel } from 'umi';
 import { buildFilter } from './BuildFilter';
 
 const safeDisplayText = (val: unknown): string => {
-	if (typeof val === 'string') return sanitizeObject(val);
+	if (typeof val === 'string') return DOMPurify.sanitize(val);
 	if (Array.isArray(val)) {
-		return val.map((item) => (typeof item === 'string' ? sanitizeObject(item) : String(item ?? ''))).join(', ');
+		return val
+			.map((item) => (typeof item === 'string' ? DOMPurify.sanitize(item) : String(item ?? '')))
+			.join(', ');
 	}
 	if (val == null) return '';
 	return String(val);

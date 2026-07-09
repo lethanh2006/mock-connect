@@ -1,6 +1,6 @@
 import { EDoiTuongKeHoachNCKH } from '@/services/KhoaHoc/KeHoach/constants';
 import type { KeHoachNCKH } from '@/services/KhoaHoc/KeHoach/typings';
-import { sanitizeObject } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { Card, Typography } from 'antd';
 
 const ViewDetailKeHoachNCKH = (props: { record: KeHoachNCKH.IRecord }) => {
@@ -19,7 +19,7 @@ const ViewDetailKeHoachNCKH = (props: { record: KeHoachNCKH.IRecord }) => {
 					<Typography.Title level={4}>
 						I. Căn cứ xây dựng Định hướng nghiên cứu khoa học và công nghệ Học viện Phụ nữ Việt Nam
 					</Typography.Title>
-					{canCu.noiDung && <div dangerouslySetInnerHTML={{ __html: sanitizeObject(canCu.noiDung) }} />}
+					{canCu.noiDung && <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(canCu.noiDung) }} />}
 				</div>
 			)}
 			<Typography.Title level={4}>
@@ -32,13 +32,13 @@ const ViewDetailKeHoachNCKH = (props: { record: KeHoachNCKH.IRecord }) => {
 					<Typography.Title level={5}>
 						{index + 1}. {item.tieuDe}
 					</Typography.Title>
-					{item.noiDung && <div dangerouslySetInnerHTML={{ __html: sanitizeObject(item.noiDung) }} />}
+					{item.noiDung && <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.noiDung) }} />}
 				</div>
 			))}
 			{props.record.doiTuong === EDoiTuongKeHoachNCKH.SINH_VIEN && canCu && (
 				<div key={canCu.tieuDe}>
 					<Typography.Title level={4}>II. THỜI GIAN VÀ MỨC HỖ TRỢ THỰC HIỆN</Typography.Title>
-					{canCu.noiDung && <div dangerouslySetInnerHTML={{ __html: sanitizeObject(canCu.noiDung) }} />}
+					{canCu.noiDung && <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(canCu.noiDung) }} />}
 				</div>
 			)}
 		</Card>

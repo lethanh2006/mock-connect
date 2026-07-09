@@ -9,7 +9,7 @@ import {
 	updateTitleThread,
 } from '@/services/TienIch/ChatbotV2';
 import { type ChatbotAmiV2 } from '@/services/TienIch/ChatbotV2/typing';
-import { sanitizeObject } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
 
@@ -35,7 +35,7 @@ export default () => {
 			.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
 			.replace(/\*(.*?)\*/g, '<i>$1</i>')
 			.replace(/\\n/g, '<br/>');
-		return sanitizeObject(updatedText);
+		return DOMPurify.sanitize(updatedText);
 	};
 
 	const getUserChatBotModel = async (ssoId: string) => {

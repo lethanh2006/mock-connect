@@ -7,6 +7,7 @@ import {
 	buildCloTargetsTableHtml,
 	cloMatrixHintParagraphHtml,
 } from '../constants/defaultSectionHtml';
+import DOMPurify from 'dompurify';
 
 interface Props {
 	readonly?: boolean;
@@ -89,7 +90,7 @@ const CloContent: React.FC<Props> = ({ readonly, isLopTinChi, index }) => {
 		<div
 			className='syllabus-clo-editor-body'
 			style={{ width: '100%' }}
-			dangerouslySetInnerHTML={{ __html: cloEditorBodyHtml }}
+			dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(cloEditorBodyHtml) }}
 		/>
 	);
 };

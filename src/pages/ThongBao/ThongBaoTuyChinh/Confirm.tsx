@@ -6,7 +6,7 @@ import type { NotificationType } from '@/services/ThongBao/constant';
 import type { ThongBao } from '@/services/ThongBao/typing';
 import { formatDateTime } from '@/utils/formatDate';
 import { currentRole } from '@/utils/ip';
-import { sanitizeObject } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { Button } from 'antd';
 import { useIntl, useModel } from 'umi';
 
@@ -54,7 +54,7 @@ const ConfirmThongBaoTuyChinh = (props: { getData: () => void; type: Notificatio
 			width: 280,
 			render: (val) => (
 				<ExpandText>
-					<div dangerouslySetInnerHTML={{ __html: sanitizeObject(val ?? '') }} className='notif-content' />
+					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(val ?? '') }} className='notif-content' />
 				</ExpandText>
 			),
 		},
