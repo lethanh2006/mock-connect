@@ -31,9 +31,11 @@ export default {
 	'kytucxa.dangky.card.tienIchKhac': '+ {soLuong} other amenities',
 	'kytucxa.dangky.card.tienIchChuaCapNhat': 'Amenities not yet updated',
 	'kytucxa.dangky.card.button.dangKy': 'REGISTER',
-	'kytucxa.dangky.card.button.full': 'FULL',
+	'kytucxa.dangky.card.button.full': 'FULL SLOT',
 	'kytucxa.dangky.card.button.daDangKy': 'REGISTERED',
 	'kytucxa.dangky.card.button.khongTheDangKy': 'UNAVAILABLE',
+	'kytucxa.dangky.card.button.paymentNow': 'PAYMENT NOW',
+	'kytucxa.dangky.card.button.seeMore': 'SEE MORE',
 	'kytucxa.dangky.card.imageAlt': 'Room {maPhong}',
 
 	//Chi Tiet Phong

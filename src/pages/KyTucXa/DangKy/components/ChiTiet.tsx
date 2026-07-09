@@ -12,7 +12,7 @@ import {
 	WindowsOutlined,
 } from '@ant-design/icons';
 import { Button, Col, Image, message, Row } from 'antd';
-import { useIntl, useModel } from 'umi';
+import { useIntl, useModel, history } from 'umi';
 
 const defaultImages = [
 	'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900',
@@ -35,12 +35,15 @@ const tienIchIcons: Record<string, any> = {
 	'Study desk': DesktopOutlined,
 };
 
-const ChiTietPhong = (props: { daCoLichSuDangKy?: boolean }) => {
-	const { daCoLichSuDangKy } = props;
+const ChiTietPhong = (props: { daCoLichSuDangKy?: boolean; isPhongDaDangKy?: (phong: Phong.IChinhSachPhongRecord) => boolean }) => {
+	const { daCoLichSuDangKy, isPhongDaDangKy } = props;
 	const intl = useIntl();
 	const { visibleForm, setVisibleForm, record, setVisibleDangKy } = useModel('kytucxa.phong');
+	const { record: recLichSu } = useModel('kytucxa.phieudangky');
 	const phong = record as Phong.IChinhSachPhongRecord | undefined;
 	const room = phong?.room;
+	
+	const laPhongDaDangKy = phong && isPhongDaDangKy ? isPhongDaDangKy(phong) : false;
 	const danhSachAnh = phong?.danhSachAnh?.length ? phong.danhSachAnh : room?.danhSachAnh;
 	const images =
 		(danhSachAnh?.length ?? 0) > 0 ? danhSachAnh?.map((item: any) => item.url || item.fileUrl || item) : defaultImages;
@@ -52,6 +55,11 @@ const ChiTietPhong = (props: { daCoLichSuDangKy?: boolean }) => {
 	} - ${phong?.loaiPhongKtx?.ten || room?.loaiPhongKtx?.ten || phong?.maLoaiPhongKtx || room?.maLoaiPhongKtx || ''}`;
 
 	const soSlotConLai = Math.max(sucChua - (room?.soLuongHienTai ?? 0), 0);
+	const daHetCho = soSlotConLai <= 0 || !room?.isChoThue || phong?.isChoPhepDangKy === false;
+	const khongChoDangKy = !laPhongDaDangKy && (daHetCho || daCoLichSuDangKy);
+
+	const trangThaiThanhToan = recLichSu?.trangThaiThanhToan;
+	const daThanhToanXong = trangThaiThanhToan === 'Đã thanh toán' || trangThaiThanhToan === 'Paid';
 
 	const handleDangKy = () => {
 		if (daCoLichSuDangKy) {
@@ -152,12 +160,28 @@ const ChiTietPhong = (props: { daCoLichSuDangKy?: boolean }) => {
 			</div>
 
 			<div className='form-footer'>
-				<Button type='primary' disabled={daCoLichSuDangKy} onClick={handleDangKy}>
-					{intl.formatMessage({
-						id: daCoLichSuDangKy ? 'kytucxa.dangky.card.button.khongTheDangKy' : 'kytucxa.dangky.chitiet.button.dangKy',
-					})}
-				</Button>
-				<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
+				{laPhongDaDangKy ? (
+					<>
+						{!daThanhToanXong && (
+							<Button type='primary' onClick={() => history.push('/campus-life/student-housing/lich-su')}>
+								{intl.formatMessage({ id: 'kytucxa.dangky.card.button.paymentNow' })}
+							</Button>
+						)}
+						<Button onClick={() => {/* Render modal Thông tin sv đã đăng ký với 4 step theo Figma (có chứa thông tin thanh toán) */}}> 
+							{intl.formatMessage({ id: 'kytucxa.dangky.card.button.seeMore' })}
+						</Button>
+						<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
+					</>
+				) : (
+					<>
+						<Button type='primary' disabled={khongChoDangKy} onClick={handleDangKy}>
+							{daHetCho
+								? intl.formatMessage({ id: 'kytucxa.dangky.card.button.full' })
+								: intl.formatMessage({ id: 'kytucxa.dangky.chitiet.button.dangKy' })}
+						</Button>
+						<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
+					</>
+				)}
 			</div>
 		</ModalExpandable>
 	);

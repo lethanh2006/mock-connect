@@ -312,7 +312,7 @@ const DangKyKyTucXa = () => {
 				)}
 			</Spin>
 
-			<ChiTietPhong daCoLichSuDangKy={daCoLichSuDangKy} />
+			<ChiTietPhong daCoLichSuDangKy={daCoLichSuDangKy} isPhongDaDangKy={isPhongDaDangKy} />
 			<ModalDanKyKTX getData={getData} daCoLichSuDangKy={daCoLichSuDangKy} onDangKyThanhCong={getLichSuDangKyData} />
 		</PageCard>
 	);
