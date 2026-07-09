@@ -55,7 +55,7 @@ const getPaymentTag = (status?: string, intl?: any) => {
 const LichSuaKTX = () => {
 	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const { getByIdModel: getDotDangKy, record: recDot } = useModel('kytucxa.dotdangky');
+	const { getByIdModel: getDotDangKy, record: recDot, setRecord: setRecDot } = useModel('kytucxa.dotdangky');
 	const { getModel, page, limit, deleteModel, handleEdit, setRecord } = useModel('kytucxa.phieudangky');
 	const { setVisibleDangKy } = useModel('kytucxa.phong');
 
@@ -64,7 +64,7 @@ const LichSuaKTX = () => {
 		if (recHocKy?.ma)
 			getDotDangKy('me/one', true, {
 				condition: { maHocKy: recHocKy?.ma },
-			});
+			}).then((res: any) => setRecDot(res?.data));
 	}, [recHocKy?.ma]);
 
 	const getData = () => {

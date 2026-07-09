@@ -43,7 +43,7 @@ const DangKyKyTucXa = () => {
 		setFilters,
 		filters,
 	} = useModel('kytucxa.phong');
-	const { getByIdModel: getDotDangKy, record: recDot } = useModel('kytucxa.dotdangky');
+	const { getByIdModel: getDotDangKy, record: recDot, setRecord: setRecDot } = useModel('kytucxa.dotdangky');
 	const {
 		getModel: getLichSuDangKy,
 		record: recLichSu,
@@ -53,7 +53,7 @@ const DangKyKyTucXa = () => {
 
 	//Get đợt đăng ký
 	useEffect(() => {
-		getDotDangKy('me/one', true);
+		getDotDangKy('me/one', true).then((res: any) => setRecDot(res?.data));
 	}, []);
 
 	//Get lịch sử đăng ký
