@@ -7,7 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
 import Pane from 'react-split-pane/lib/Pane';
 import { useIntl, useModel } from 'umi';
-import { sanitizeObject } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import CardNotePathWay from './components/CardNote';
 import PathwayCard from './components/PathwayCard';
 
@@ -206,7 +206,7 @@ const PathWayPage = (props: { getData?: () => void }) => {
 												{isSelected && p?.huongDanDangKy && (
 													<Descriptions className='highlight' column={1}>
 														<Descriptions.Item>
-															<div dangerouslySetInnerHTML={{ __html: sanitizeObject(p?.huongDanDangKy ?? '') }} />
+															<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(p?.huongDanDangKy ?? '') }} />
 														</Descriptions.Item>
 													</Descriptions>
 												)}

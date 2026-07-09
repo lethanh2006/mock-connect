@@ -17,14 +17,15 @@ import type { ELoaiDeTai } from '@/services/KhoaHoc/KeHoachDeTai/constants';
 import { primaryColor } from '@/services/base/constant';
 import { buildUpLoadFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
-import { resetFieldsForm, sanitizeObject } from '@/utils/utils';
+import { resetFieldsForm } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { Button, Card, Col, Form, Input, Row, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import TableThanhVien from './TableThanhVien';
 
 const sanitizeRichText = (value: unknown): string =>
-	typeof value === 'string' ? sanitizeObject(value) : '';
+	typeof value === 'string' ? DOMPurify.sanitize(value) : '';
 
 const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai; loaiDeTai: ELoaiDeTai }) => {
 	const [form] = Form.useForm();

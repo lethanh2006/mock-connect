@@ -1,5 +1,6 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
+import DOMPurify from 'dompurify';
 import ThongTinThanhToan from '@/pages/TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
 import { PhuongThucPhanCong } from '@/services/QuyTrinh/constant';
 import { MapColorTrangThaiTiepNhanDon, TrangThaiTiepNhanDon } from '@/services/QuyTrinh/KhaiBao/constants';
@@ -66,7 +67,7 @@ const ThongTinTiepNhan = (props: { data: KhaiBaoQuyTrinh.IBuocXuLy; modelName: a
 							<Descriptions.Item span={24} label='Mô tả'>
 								<div
 									dangerouslySetInnerHTML={{
-										__html: buocHienTai?.moTa ?? '',
+										__html: DOMPurify.sanitize(buocHienTai?.moTa ?? ''),
 									}}
 								/>
 								{buocHienTai?.danhSachVanBanLuuTru?.length ? (
@@ -191,7 +192,7 @@ const ThongTinTiepNhan = (props: { data: KhaiBaoQuyTrinh.IBuocXuLy; modelName: a
 								)}
 								{data?.ghiChu && (
 									<Descriptions.Item span={24} label='Ghi chú của bộ phận xử lý'>
-										<div dangerouslySetInnerHTML={{ __html: data?.ghiChu }} />
+										<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data?.ghiChu) }} />
 									</Descriptions.Item>
 								)}
 								{data?.vanBan?.url && (

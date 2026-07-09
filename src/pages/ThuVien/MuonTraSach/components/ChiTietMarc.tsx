@@ -1,12 +1,12 @@
 import ExpandText from '@/components/ExpandText';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
-import { sanitizeObject } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { Button, Modal } from 'antd';
 
 const safeMarcText = (value: unknown): string => {
 	if (typeof value !== 'string') return '';
-	return sanitizeObject(value);
+	return DOMPurify.sanitize(value);
 };
 
 const ChiTietMarc = (props: {

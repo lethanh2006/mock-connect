@@ -1,5 +1,6 @@
 import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
+import DOMPurify from 'dompurify';
 import { type IColumn } from '@/components/Table/typing';
 import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
@@ -60,7 +61,7 @@ const LichSuQuyDoiDiemPage = () => {
 									-{' '}
 									<small
 										dangerouslySetInnerHTML={{
-											__html: `(${item?.khuyenNghi?.map((items) => items).join(', ')})`,
+											__html: DOMPurify.sanitize(`(${item?.khuyenNghi?.map((items) => items).join(', ')})`),
 										}}
 									/>
 								</>
