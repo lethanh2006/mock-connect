@@ -1,6 +1,6 @@
 export default {
 	'dangkytinchi.title': 'Đăng ký tín chỉ',
-	'dangkytinchi.loading.message': 'Hệ thống đang tải dữ liệu, vui lòng không F5 để tránh mất dữ liệu',
+	'dangkytinchi.loading.message': 'Hệ thống đang tải dữ liệu, vui lòng không tải lại trang (F5) để tránh mất dữ liệu',
 
 	'dangkytinchi.filter.btn.xemchitiet': 'Xem chi tiết',
 	'dangkytinchi.filter.thoigiandangky.title':

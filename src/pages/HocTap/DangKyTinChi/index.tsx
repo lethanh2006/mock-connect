@@ -1,10 +1,11 @@
+import FormWaiting from '@/components/Loading/FormWaiting';
 import PageCard from '@/components/PageCard';
 import { ESettingKey } from '@/services/base/constant';
 import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { formatDateTime } from '@/utils/formatDate';
 import { ipDaoTao } from '@/utils/ip';
 import { FileTextOutlined, InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Alert, Button, Card, Empty, Spin } from 'antd';
+import { Alert, Button, Card, Empty, Modal } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { history, useAccess, useIntl, useModel } from 'umi';
@@ -46,6 +47,7 @@ const DangKyTinChiPage = () => {
 	const soTinChiToiThieu = phieuDangKy?.soTinChiToiThieu ?? 0;
 	const dotHocKySynced = dotDangKyHienTai?.maHocKy === recHocKy?.ma;
 	const isWaitingSinhVienDot = dotHocKySynced && !!dotDangKyHienTai?._id && sinhVienDot === undefined;
+	const isPageLoading = loading || loadingHocKy || isWaitingSinhVienDot;
 
 	const handleCaptchaChange = (token: string | null) => {
 		setIsVerified(!!token);
@@ -79,6 +81,19 @@ const DangKyTinChiPage = () => {
 		setPage(1);
 		getLopDangKy();
 	}, [recHocKy?.ma]);
+
+	useEffect(() => {
+		if (!isPageLoading) {
+			Modal.destroyAll();
+			return undefined;
+		}
+
+		FormWaiting(intl.formatMessage({ id: 'dangkytinchi.loading.message' }), intl);
+
+		return () => {
+			Modal.destroyAll();
+		};
+	}, [isPageLoading]);
 
 	useEffect(() => {
 		const node = phieuDangKyRef.current;
@@ -174,11 +189,7 @@ const DangKyTinChiPage = () => {
 
 					{cctFilter?.() && <AlertVuotTin onViewLichSu={() => setVisibleLichSu(true)} />}
 
-					{loading || loadingHocKy || isWaitingSinhVienDot ? (
-						<Spin spinning size='large' tip={intl.formatMessage({ id: 'dangkytinchi.loading.message' })}>
-							<div style={{ minHeight: 360, width: '100%' }} />
-						</Spin>
-					) : dotDangKyHienTai && sinhVienDot ? (
+					{dotDangKyHienTai && sinhVienDot ? (
 						sinhVienDot.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.KHONG_DUOC_DK ? (
 							<Empty
 								description={
@@ -259,7 +270,7 @@ const DangKyTinChiPage = () => {
 							<Empty
 								description={
 									<i style={{ color: '#999' }}>
-										{intl.formatMessage({ id: 'dangkytinchi.thongtindangky.empty.error' })}
+										{intl.formatMessage({ id: 'global.formWaiting.dangxuly' })}
 									</i>
 								}
 							/>
