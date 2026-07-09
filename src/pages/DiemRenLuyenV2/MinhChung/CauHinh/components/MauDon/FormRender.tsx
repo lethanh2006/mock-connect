@@ -16,7 +16,7 @@ import type { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
 import { LoaiDefaultValue } from '@/services/FormDong/QuyTrinh/constants';
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
-import { sanitizeObject } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import type { FormInstance } from 'antd';
 import { Button, Col, Form, Input, InputNumber, Modal, Popconfirm, Radio, Select, Space, Tooltip } from 'antd';
@@ -399,7 +399,7 @@ const FormRender = (props: {
 				{cauHinh.kieuDuLieu === EKieuDuLieu.DOAN_VAN_BAN ? (
 					<>
 						{cauHinh.customDefaultValue ? (
-							<div dangerouslySetInnerHTML={{ __html: sanitizeObject(cauHinh.customDefaultValue ?? '') }} />
+							<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(cauHinh.customDefaultValue ?? '') }} />
 						) : (
 							<div>{cauHinh.ten}</div>
 						)}

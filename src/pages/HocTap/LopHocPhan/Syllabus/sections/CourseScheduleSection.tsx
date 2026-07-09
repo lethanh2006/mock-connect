@@ -2,7 +2,7 @@ import { useModel } from '@umijs/max';
 import { Form, FormInstance } from 'antd';
 import React, { useEffect, useMemo } from 'react';
 import { buildCourseScheduleHtml } from '../constants/defaultSectionHtml';
-import { sanitizeObject } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 
 interface CourseScheduleSectionProps {
 	formMain: FormInstance;
@@ -19,7 +19,7 @@ const CourseScheduleSection: React.FC<CourseScheduleSectionProps> = ({ formMain 
 
 	const tableHtml = useMemo(() => buildCourseScheduleHtml(lichTrinhChungList), [lichTrinhChungList]);
 
-	return <div className='syllabus-course-schedule-section' dangerouslySetInnerHTML={{ __html: sanitizeObject(tableHtml) }} />;
+	return <div className='syllabus-course-schedule-section' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(tableHtml) }} />;
 };
 
 export default CourseScheduleSection;
