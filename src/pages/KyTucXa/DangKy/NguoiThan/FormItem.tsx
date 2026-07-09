@@ -42,7 +42,7 @@ const FormItemNguoiThanKTX = (props: {
 		);
 	};
 
-	//Nếu là khối trống default -> Thêm mới, nếu đã có data nhưng thiếu -> edit mode
+	//Nếu là khối trống default -> thêm mới, nếu đã có data nhưng thiếu -> edit mode
 	const onEdit = (rec: any) => {
 		if (rec.khoiLienHeDefault) {
 			setRecord({ index: rec.index } as PhieuDangKyKTX.INguoiThan);
