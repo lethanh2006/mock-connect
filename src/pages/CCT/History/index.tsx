@@ -160,11 +160,7 @@ const HistoryActivityPage = () => {
 	const isExpired = editableWorkflow && now.isAfter(endDateUpdateEvidence);
 
 	return (
-		<PageCard
-			title={intl.formatMessage({ id: 'activity.history.title' })}
-			className='table-base-card'
-			variant='borderless'
-		>
+		<PageCard title={intl.formatMessage({ id: 'activity.history.title' })}>
 			<Tabs
 				activeKey={tabActive}
 				onChange={(tab) => {

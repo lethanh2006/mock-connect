@@ -1,4 +1,5 @@
 import { Button, Card, Col, Descriptions, Divider, Row } from 'antd';
+import DOMPurify from 'dompurify';
 import { useModel } from 'umi';
 
 const ViewLichTrinhDeCuong = () => {
@@ -15,7 +16,7 @@ const ViewLichTrinhDeCuong = () => {
 				</Col>
 				<Col span={24}>
 					<div className='fw500'>Nội dung: </div>
-					<div dangerouslySetInnerHTML={{ __html: record?.ten ?? '--' }} />
+					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(record?.ten ?? '--') }} />
 				</Col>
 				<Col span={24}>
 					<span className='fw500'>Đáp ứng chuẩn đầu ra: </span> {record?.listMaChuanDauRa?.join(', ') ?? '--'}

@@ -9,7 +9,7 @@ import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import dayjs from '@/utils/dayjs';
-import { formatTimeRange } from '@/utils/formatDate';
+import { formatDateRange } from '@/utils/formatDate';
 import _ from 'lodash';
 
 export const renderKhoangThoiGian = (rec: { thoiKhoaBieuList?: ThoiKhoaBieu.IRecord[] }) => {
@@ -20,7 +20,7 @@ export const renderKhoangThoiGian = (rec: { thoiKhoaBieuList?: ThoiKhoaBieu.IRec
 	const end = _.maxBy(thoiKhoaBieuList, (item) => dayjs(item.ngay).valueOf())?.ngay;
 	if (!start || !end) return null;
 
-	return formatTimeRange(start, end);
+	return formatDateRange(start, end);
 };
 
 export const buildDanhSachLopHienThi = (danhSachLopDangKy: DangKyTinChi.ILopDangKy[]): DangKyTinChi.ILopDangKy[] => {

@@ -11,6 +11,7 @@ import {
 } from '@/services/KhoaHoc/KeHoach/constants';
 import type { KeHoachNCKH } from '@/services/KhoaHoc/KeHoach/typings';
 import { formatDate } from '@/utils/formatDate';
+import { getSafeHref } from '@/utils/security';
 import { Button, Carousel, Modal, Tag } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -21,6 +22,8 @@ const KeHoachNCKHComponent = () => {
 
 	const [visibleViewDetail, setVisibleViewDetail] = useState<boolean>(false);
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
+
+	const getSafeFileList = (list?: string[]) => (list ?? []).filter((url) => !!getSafeHref(url));
 
 	const onCell = (record: KeHoachNCKH.IRecord) => ({
 		onClick: () => {
@@ -84,9 +87,10 @@ const KeHoachNCKHComponent = () => {
 			width: 120,
 			align: 'center',
 			render: (val: string[], rec) =>
-				val?.length ? (
+				getSafeFileList(val).length ? (
 					<a
-						onClick={() => {
+						onClick={(e) => {
+							e.stopPropagation();
 							setRecord(rec);
 							setVisibleFormFile(true);
 						}}
@@ -135,10 +139,11 @@ const KeHoachNCKHComponent = () => {
 				onCancel={() => setVisibleFormFile(false)}
 			>
 				<Carousel autoplay pauseOnDotsHover>
-					{recordKeHoach?.fileDinhKem?.map((item) => (
-						// eslint-disable-next-line react/jsx-key
-						<PreviewFile file={item ?? ''} />
-					))}
+					{getSafeFileList(recordKeHoach?.fileDinhKem).map((item) => {
+						const safeUrl = getSafeHref(item);
+						if (!safeUrl) return null;
+						return <PreviewFile key={safeUrl} file={safeUrl} />;
+					})}
 				</Carousel>
 			</ModalExpandable>
 		</>

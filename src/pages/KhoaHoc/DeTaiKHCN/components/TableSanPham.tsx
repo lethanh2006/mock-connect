@@ -4,6 +4,7 @@ import UploadFile from '@/components/Upload/UploadFile';
 import { EDangSanPham } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
+import { getSafeHref } from '@/utils/security';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Divider, Form, Modal, Popconfirm, Space, Tag, Tooltip } from 'antd';
 import { useCallback, useState } from 'react';
@@ -185,11 +186,14 @@ const TableSanPham = (props: {
 			hide: !(props.showMinhChung || props.mode === 'view'),
 			render: (val: string[]) => (
 				<div>
-					{val?.map((item, index) => (
-						<a key={item} href={item} target='_blank' rel='noreferrer'>
-							<Tag color={primaryColor}>Xem tập tin {index + 1}</Tag>
-						</a>
-					))}
+					{val?.map((item, index) => {
+						const href = getSafeHref(item);
+						return href ? (
+							<a key={href} href={href} target='_blank' rel='noreferrer'>
+								<Tag color={primaryColor}>Xem tập tin {index + 1}</Tag>
+							</a>
+						) : null;
+					})}
 				</div>
 			),
 		});

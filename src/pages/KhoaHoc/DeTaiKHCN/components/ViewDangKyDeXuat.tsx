@@ -2,6 +2,7 @@ import { ELoaiDeTaiCaNhan, MapKeyColorTrangThaiDeTaiQuanLyKhoaHoc } from '@/serv
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
 import { formatDate } from '@/utils/formatDate';
+import DOMPurify from 'dompurify';
 import { Button, Descriptions, Tag } from 'antd';
 import { useModel } from 'umi';
 import TableThanhVien from './TableThanhVien';
@@ -130,13 +131,13 @@ const ViewDangKyDeXuat = (props: {
 				</Descriptions.Item>
 
 				<Descriptions.Item span={6} label='Mục tiêu thực hiện'>
-					<div dangerouslySetInnerHTML={{ __html: dangKyKhcn?.mucTieuDeTai }} />
+					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(dangKyKhcn?.mucTieuDeTai ?? '') }} />
 				</Descriptions.Item>
 				<Descriptions.Item span={6} label='Tính cấp thiết và tính mới'>
-					<div dangerouslySetInnerHTML={{ __html: dangKyKhcn?.tinhCanThietVaMoi }} />
+					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(dangKyKhcn?.tinhCanThietVaMoi ?? '') }} />
 				</Descriptions.Item>
 				{/* <Descriptions.Item span={6} label='Tóm tắt các đề xuất, giải pháp'>
-					<div dangerouslySetInnerHTML={{ __html: dangKyKhcn?.tomTatDeXuat }} />
+					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(dangKyKhcn?.tomTatDeXuat ?? '') }} />
 				</Descriptions.Item> */}
 			</Descriptions>
 			{dangKyKhcn?.loaiCaNhan === ELoaiDeTaiCaNhan.TAP_THE && (

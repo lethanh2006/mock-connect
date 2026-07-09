@@ -225,6 +225,9 @@ const PhieuDangKy = ({
 					<ButtonExtend
 						icon={<DeleteOutlined />}
 						danger
+						otherTooltipProps={{
+							placement: 'bottom',
+						}}
 						type='link'
 						disabled={rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY && !rec.dangKyTinChi}
 						tooltip={intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy.tooltip' })}

@@ -1,5 +1,6 @@
 import axios from '@/utils/axios';
 import { ip3, ipDaoTao } from '@/utils/ip';
+import { pick } from 'lodash';
 import { type ELoaiBieuMau } from '../constants';
 import { type BieuMau } from './typing';
 
@@ -38,9 +39,15 @@ export async function getDanhGiaGiangVien(lopHocPhanId: string) {
 	return axios.get(`${ip3}/danh-gia-giang-vien/lop-hoc-phan/${lopHocPhanId}`);
 }
 
+const CAU_TRA_LOI_FIELDS = ['danhSachTraLoi', 'idDot', 'idKhaoSat'] as const;
+
 // ĐÁNH GIÁ TIẾT HỌC
-export async function danhGiaTietHoc(payload: any) {
-	return axios.post(`${ipDaoTao}/lop-hoc-phan/tkb/sinh-vien/danh-gia`, payload);
+export async function danhGiaTietHoc(payload: Partial<BieuMau.TPostDanhGiaTietHoc>) {
+	const { idTkb, cauTraLoi } = payload;
+	return axios.post(`${ipDaoTao}/lop-hoc-phan/tkb/sinh-vien/danh-gia`, {
+		idTkb,
+		cauTraLoi: pick(cauTraLoi, CAU_TRA_LOI_FIELDS),
+	});
 }
 
 export async function getDanhGiaTietHoc(thoiKhoaBieuId: string) {

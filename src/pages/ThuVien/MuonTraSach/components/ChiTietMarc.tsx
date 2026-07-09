@@ -1,8 +1,13 @@
 import ExpandText from '@/components/ExpandText';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
-
+import DOMPurify from 'dompurify';
 import { Button, Modal } from 'antd';
+
+const safeMarcText = (value: unknown): string => {
+	if (typeof value !== 'string') return '';
+	return DOMPurify.sanitize(value);
+};
 
 const ChiTietMarc = (props: {
 	visible: boolean;
@@ -14,26 +19,32 @@ const ChiTietMarc = (props: {
 	const columns: IColumn<AnPham.IThongTinAnPham>[] = [
 		{
 			width: 150,
-			render: (val, rec) => <ExpandText>{rec?.tag?.noiDung}</ExpandText>,
+			render: (val, rec) => <ExpandText>{safeMarcText(rec?.tag?.noiDung)}</ExpandText>,
 		},
 		{
 			dataIndex: 'tagCode',
 			align: 'center',
 			width: 60,
+			render: (val) => safeMarcText(val),
 		},
 		{
 			dataIndex: 'ind1',
 			align: 'center',
 			width: 60,
-			render: (val, rec) => `${val ?? ''}${rec.ind2 ?? ''}`,
+			render: (val, rec) => `${safeMarcText(val)}${safeMarcText(rec.ind2)}`,
 		},
 		{
 			dataIndex: 'thuocTinhAnPham',
 			width: 220,
 			render: (val, rec) =>
 				!!val?.length
-					? val?.map((i: any) => `${i.code ?? ''}${i.value?.replace(/\u00A0/g, ' ') ?? ''}`).join(' ')
-					: rec?.value,
+					? val
+							?.map(
+								(i: any) =>
+									`${safeMarcText(i.code)}${safeMarcText(i.value?.replace(/\u00A0/g, ' '))}`,
+							)
+							.join(' ')
+					: safeMarcText(rec?.value),
 		},
 	];
 

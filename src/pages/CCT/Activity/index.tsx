@@ -158,7 +158,7 @@ const ActivityPage = () => {
 	};
 
 	return (
-		<PageCard title={intl.formatMessage({ id: 'activity.list' })} className='table-base-card' variant='borderless'>
+		<PageCard title={intl.formatMessage({ id: 'activity.list' })}>
 			<Tabs
 				activeKey={activeKey}
 				onChange={(tab) => {

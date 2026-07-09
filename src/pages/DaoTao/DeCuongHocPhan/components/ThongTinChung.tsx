@@ -1,5 +1,6 @@
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
+import DOMPurify from 'dompurify';
 import { getNameFile } from '@/utils/utils';
 import { Button, Collapse, Descriptions } from 'antd';
 import { useState } from 'react';
@@ -63,10 +64,10 @@ const ThongTinChungPage = () => {
 
 			<Collapse style={{ marginTop: 12 }}>
 				<Collapse.Panel header={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.muctieu' })} key='1'>
-					<div dangerouslySetInnerHTML={{ __html: record?.mucTieuHocPhan ?? '--' }} />
+					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(record?.mucTieuHocPhan ?? '--') }} />
 				</Collapse.Panel>
 				<Collapse.Panel header={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.cdr' })} key='2'>
-					<div dangerouslySetInnerHTML={{ __html: record?.chuanDauRa ?? '--' }} />
+					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(record?.chuanDauRa ?? '--') }} />
 				</Collapse.Panel>
 				{/* <Collapse.Panel header='Nội dung tóm tắt' key='2'>
 					<div dangerouslySetInnerHTML={{ __html: record?.noiDungTomTat ?? '--' }} />

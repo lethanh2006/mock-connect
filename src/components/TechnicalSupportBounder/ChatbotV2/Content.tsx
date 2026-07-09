@@ -1,16 +1,14 @@
 import type { ChatbotAmiV2 } from '@/services/TienIch/ChatbotV2/typing';
-import { UserOutlined } from '@ant-design/icons';
-import { Avatar } from 'antd';
-import classNames from 'classnames';
-import { useEffect } from 'react';
-import { useModel } from 'umi';
-
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { getPublicAssetPath } from '@/utils/path';
-import { Collapse } from 'antd';
+import DOMPurify from 'dompurify';
+import { UserOutlined } from '@ant-design/icons';
+import { Avatar, Collapse } from 'antd';
+import classNames from 'classnames';
+import { useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-
+import { useModel } from 'umi';
 const { Panel } = Collapse;
 
 const ContentBoxChatV2 = () => {
@@ -56,7 +54,9 @@ const ContentBoxChatV2 = () => {
 				</div>
 
 				<div className='content-text'>
-					{message.content ? <div className='text' dangerouslySetInnerHTML={{ __html: message.content }} /> : null}
+					{message.content ? (
+						<div className='text' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(message.content) }} />
+					) : null}
 
 					{(message?.recommendQuestions?.length ?? 0) > 0 && (
 						<div className='quick-replies'>
