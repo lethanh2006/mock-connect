@@ -20,6 +20,7 @@ const ipChatbot = ipRoot + 'chatbot-api';
 const ipCCT = ipRoot + 'co-curriculum'; // ip dev
 const ipFile = ipRoot + 'file';
 // const ipCCT = 'http://192.168.1.38:3010'; // ip dev
+const ipCsvc = ipRoot + 'csvc';
 
 const ipNewsWP = APP_CONFIG_URL_LANDING;
 
@@ -44,6 +45,7 @@ export {
 	ipCCT,
 	ipChatbot,
 	ipCore,
+	ipCsvc,
 	ipDaoTao,
 	ipFile,
 	ipKhaoThi,

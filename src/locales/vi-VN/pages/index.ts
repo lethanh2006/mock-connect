@@ -16,6 +16,7 @@ import lophocphan from './hoctap/lophocphan';
 import tientrinhhoctap from './hoctap/tientrinhhoctap';
 import khaosat from './khaosat';
 import detaikhcn from './khoahoc/detaikhcn';
+import kytucxa from './kytucxa';
 import lichsukien from './lichsukien';
 import login from './login';
 import lophanhchinh from './lophanhchinh';
@@ -69,6 +70,7 @@ export default {
 	...minor,
 	...syllabus,
 	...activity,
+	...kytucxa,
 	...detaikhcn,
 
 	'pages.trangchu.title': 'PHÂN HỆ CỔNG SINH VIÊN',
