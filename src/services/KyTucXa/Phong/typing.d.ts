@@ -73,6 +73,7 @@ declare module Phong {
 
 	export interface IChinhSachPhongRecord {
 		_id: string;
+		maDotId: string;
 		roomId: string;
 		maNamHoc: string;
 

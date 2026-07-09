@@ -1,19 +1,19 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
+import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
+import { EditOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
 import { useIntl, useModel } from 'umi';
 import Form from './Form';
-import ButtonExtend from '@/components/Table/ButtonExtend';
-import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
-import { EditOutlined } from '@ant-design/icons';
 
 const FormItemNguoiThanKTX = (props: {
 	value?: PhieuDangKyKTX.INguoiThan[];
 	onChange?: (data: PhieuDangKyKTX.INguoiThan[]) => void;
+	disabled?: boolean;
 }) => {
-	const { setVisibleForm, visibleForm, record, handleEdit } =
-		useModel('kytucxa.nguoithan');
-	const { value = [], onChange } = props;
+	const { setVisibleForm, visibleForm, record, handleEdit } = useModel('kytucxa.nguoithan');
+	const { value = [], onChange, disabled } = props;
 	const intl = useIntl();
 
 	// const onDelete = (index: number) => {
@@ -21,7 +21,6 @@ const FormItemNguoiThanKTX = (props: {
 	// 	data.splice(index, 1);
 	// 	if (onChange) onChange(data);
 	// };
-
 
 	const onAdd = (rec: PhieuDangKyKTX.INguoiThan) => {
 		if (!record?.index) {
@@ -38,40 +37,40 @@ const FormItemNguoiThanKTX = (props: {
 
 	const columns: IColumn<PhieuDangKyKTX.INguoiThan>[] = [
 		{
-			title: 'Parent/Guardian Name',
+			title: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.name' }),
 			dataIndex: 'emergencyContactName',
 			width: 190,
 		},
 		{
-			title: 'Relationship',
+			title: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.relationship' }),
 			dataIndex: 'emergencyRelationship',
 			width: 160,
 		},
 		{
-			title: 'Primary Contact Number',
+			title: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.primaryPhone' }),
 			dataIndex: 'emergencyContactNumber',
 			width: 170,
 		},
 		{
-			title: 'Secondary Contact Number',
+			title: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.secondaryPhone' }),
 			dataIndex: 'secondaryContactNumber',
 			width: 190,
 			render: (val) => val || '--',
 		},
 		{
-			title: 'Email',
+			title: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.email' }),
 			dataIndex: 'emergencyEmail',
 			width: 220,
 			render: (val) => val || '--',
 		},
 		{
-			title: 'Address',
+			title: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.address' }),
 			dataIndex: 'address',
 			width: 260,
 			render: (val) => val || '--',
 		},
 		{
-			title: 'Action',
+			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.action' }),
 			align: 'center',
 			width: 90,
 			fixed: 'right',
@@ -80,6 +79,7 @@ const FormItemNguoiThanKTX = (props: {
 					<ButtonExtend
 						tooltip={intl.formatMessage({ id: 'global.button.chinhsua' })}
 						type='link'
+						disabled={disabled}
 						onClick={() => handleEdit(rec)}
 						icon={<EditOutlined />}
 					/>
@@ -98,7 +98,6 @@ const FormItemNguoiThanKTX = (props: {
 				</>
 			),
 		},
-
 	];
 
 	return (
@@ -128,7 +127,7 @@ const FormItemNguoiThanKTX = (props: {
 			</TableStaticData>
 
 			<Modal
-				title='Thêm mới người thân'
+				title={intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.modal.title' })}
 				open={visibleForm}
 				width={600}
 				footer={null}

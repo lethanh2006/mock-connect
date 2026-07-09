@@ -1,10 +1,10 @@
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { Select } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 /**
- * Secect Căn cứ pháp lý để cho vào FormItem
+ * Select phong ky tuc xa.
  */
 const SelectPhongKTX = (props: {
 	value?: string;
@@ -16,6 +16,7 @@ const SelectPhongKTX = (props: {
 	condition?: Partial<Phong.IChinhSachPhongRecord>;
 	disabled?: boolean;
 }) => {
+	const intl = useIntl();
 	const { value, onChange, multiple, allowClear, style, isSetRecord, condition, disabled } = props;
 	const { danhSach, getAllModel, loading } = useModel('kytucxa.phong');
 
@@ -41,7 +42,7 @@ const SelectPhongKTX = (props: {
 			options={options}
 			showSearch
 			optionFilterProp='label'
-			placeholder='Chọn phòng'
+			placeholder={intl.formatMessage({ id: 'kytucxa.dangky.filter.selectPhong' })}
 			style={{ width: '100%', ...style }}
 		/>
 	);

@@ -1,25 +1,15 @@
+import PageCard from '@/components/PageCard';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
+import { tienVietNam } from '@/utils/utils';
 import { DeleteOutlined, DollarCircleOutlined } from '@ant-design/icons';
-import { Popconfirm, Tag } from 'antd';
-import dayjs from 'dayjs';
+import { Empty, Popconfirm, Tag } from 'antd';
+import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
-import SelectDotDangKyKTX from '../DotDangKyKTX/Select';
-
-const formatCurrency = (value?: number | string) => {
-	if (!value) return '--';
-	const numberValue = Number(value);
-	if (Number.isNaN(numberValue)) return `${value}`;
-	return `${numberValue.toLocaleString('vi-VN')} VND`;
-};
-
-const formatDate = (value?: string | Date | null) => {
-	if (!value) return '--';
-	return dayjs(value).format('HH:mm DD/MM/YYYY');
-};
+import ModalDanKyKTX from '../DangKy/components/Modal';
 
 const getFloorText = (floor?: number | string | null) => {
 	if (!floor) return '--';
@@ -65,68 +55,82 @@ const getPaymentTag = (status?: string, intl?: any) => {
 const LichSuaKTX = () => {
 	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const { record: recDot, setRecord: setRecDot, danhSach: dsDot } = useModel('kytucxa.dotdangky');
-	const { getModel, page, limit, deleteModel, handleEdit } = useModel('kytucxa.phieudangky');
+	const { getByIdModel: getDotDangKy, record: recDot } = useModel('kytucxa.dotdangky');
+	const { getModel, page, limit, deleteModel, handleEdit, setRecord } = useModel('kytucxa.phieudangky');
+	const { setVisibleDangKy } = useModel('kytucxa.phong');
+
+	//Get đợt đăng ký
+	useEffect(() => {
+		if (recHocKy?.ma)
+			getDotDangKy('me/one', true, {
+				condition: { maHocKy: recHocKy?.ma },
+			});
+	}, [recHocKy?.ma]);
 
 	const getData = () => {
-		getModel(
-			{
-				maDotId: recDot?._id,
-			},
-			undefined,
-			undefined,
-			undefined,
-			undefined,
-			'me/page',
-		);
+		if (recDot?._id)
+			getModel(
+				{
+					maDotId: recDot?._id,
+				},
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				'me/page',
+			);
 	};
+
+	const onCell = (record: PhieuDangKyKTX.IRecord) => ({
+		onClick: () => {
+			setRecord(record);
+			setVisibleDangKy(true);
+		},
+		style: { cursor: 'pointer' },
+	});
 
 	const columns: IColumn<PhieuDangKyKTX.IRecord>[] = [
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.floor' }),
 			width: 90,
 			sortable: true,
+			onCell,
 			render: (_val, rec) => getFloorText(rec?.phong?.tangThu),
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.roomCode' }),
 			width: 120,
+			onCell,
 			render: (_val, rec) => rec?.phong?.ma || rec?.maPhong || '--',
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.apartmentType' }),
 			width: 260,
 			sortable: true,
+			onCell,
 			render: (_val, rec) => rec?.phong?.moTa || rec?.phong?.ten || '--',
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.price' }),
 			width: 160,
-			render: (_val, rec) => {
-				const giaPhong = (rec?.phong as any)?.giaPhong || (rec as any)?.giaPhong;
-				return formatCurrency(giaPhong);
-			},
+			onCell,
+			render: (_val, rec) => tienVietNam(rec?.phong?.giaPhong ?? 0),
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.moveInDate' }),
 			width: 150,
-			render: (_val, rec) => {
-				const moveInDate = (rec as any)?.ngayNhanPhong || (rec as any)?.moveInDate || rec?.createdAt;
-				return formatDate(moveInDate);
-			},
+			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.moveOutDate' }),
 			width: 150,
-			render: (_val, rec) => {
-				const moveOutDate = (rec as any)?.ngayTraPhong || (rec as any)?.moveOutDate || rec?.thoiHanThanhToan;
-				return formatDate(moveOutDate);
-			},
+			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.paymentStatus' }),
 			width: 150,
 			sortable: true,
+			onCell,
 			render: (_val, rec) => getPaymentTag(rec?.trangThaiThanhToan, intl),
 		},
 		{
@@ -142,11 +146,10 @@ const LichSuaKTX = () => {
 					<>
 						{!isPaid && !isClosed ? (
 							<ButtonExtend
+								type='link'
 								tooltip={intl.formatMessage({ id: 'kytucxa.lichsu.tooltip.thanhToan' })}
 								onClick={() => handleEdit(rec)}
-								type='primary'
 								icon={<DollarCircleOutlined />}
-								style={{ marginRight: 8 }}
 							/>
 						) : null}
 
@@ -171,26 +174,24 @@ const LichSuaKTX = () => {
 	];
 
 	return (
-		<TableBase
-			getData={getData}
-			columns={columns}
-			dependencies={[page, limit, recDot?._id]}
-			modelName='kytucxa.phieudangky'
-			title={intl.formatMessage({ id: 'kytucxa.lichsu.title' })}
-			buttons={{ create: false }}
-		>
-			<FilterHocKy isSetHocKy style={{ marginBottom: 12 }}>
-				<SelectDotDangKyKTX
-					condition={{ maHocKy: recHocKy?.ma }}
-					style={{ width: 250 }}
-					allowClear
-					value={recDot?._id}
-					onChange={(val) => {
-						setRecDot(dsDot.find((item) => item._id === val));
-					}}
+		<PageCard title={intl.formatMessage({ id: 'kytucxa.lichsu.title' })}>
+			<FilterHocKy isSetHocKy style={{ marginBottom: 12 }} />
+
+			{recDot?._id ? (
+				<TableBase
+					getData={getData}
+					columns={columns}
+					dependencies={[page, limit, recDot?._id]}
+					modelName='kytucxa.phieudangky'
+					title={intl.formatMessage({ id: 'kytucxa.lichsu.title' })}
+					buttons={{ create: false }}
+					hideCard
 				/>
-			</FilterHocKy>
-		</TableBase>
+			) : (
+				<Empty description={intl.formatMessage({ id: 'kytucxa.dangky.empty.noDotDangKy' })} />
+			)}
+			<ModalDanKyKTX isView />
+		</PageCard>
 	);
 };
 

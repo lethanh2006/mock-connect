@@ -11,7 +11,7 @@ import {
 	WifiOutlined,
 	WindowsOutlined,
 } from '@ant-design/icons';
-import { Button, Col, Image, Row } from 'antd';
+import { Button, Col, Image, message, Row } from 'antd';
 import { useIntl, useModel } from 'umi';
 
 const defaultImages = [
@@ -35,7 +35,8 @@ const tienIchIcons: Record<string, any> = {
 	'Study desk': DesktopOutlined,
 };
 
-const ChiTietPhong = () => {
+const ChiTietPhong = (props: { daCoLichSuDangKy?: boolean }) => {
+	const { daCoLichSuDangKy } = props;
 	const intl = useIntl();
 	const { visibleForm, setVisibleForm, record, setVisibleDangKy } = useModel('kytucxa.phong');
 	const phong = record as Phong.IChinhSachPhongRecord | undefined;
@@ -46,13 +47,18 @@ const ChiTietPhong = () => {
 	const tienIch = phong?.danhSachTienIch?.length ? phong.danhSachTienIch : (room?.danhSachTienIch ?? []);
 	const sucChua = phong?.sucChua ?? room?.soLuongToiDa ?? room?.sucChua ?? 0;
 
-	const tenPhong = `${room?.ma || room?.soPhong || ''} - BUILDING ${room?.maToaNha || room?.toaNha?.ma || ''} - ${
-		phong?.loaiPhongKtx?.ten || room?.loaiPhongKtx?.ten || phong?.maLoaiPhongKtx || room?.maLoaiPhongKtx || ''
-	}`;
+	const tenPhong = `${room?.ma || room?.soPhong || ''} - ${intl.formatMessage({ id: 'kytucxa.dangky.room.building' })} ${
+		room?.maToaNha || room?.toaNha?.ma || ''
+	} - ${phong?.loaiPhongKtx?.ten || room?.loaiPhongKtx?.ten || phong?.maLoaiPhongKtx || room?.maLoaiPhongKtx || ''}`;
 
 	const soSlotConLai = Math.max(sucChua - (room?.soLuongHienTai ?? 0), 0);
 
 	const handleDangKy = () => {
+		if (daCoLichSuDangKy) {
+			message.warning(intl.formatMessage({ id: 'kytucxa.dangky.message.daCoLichSu' }));
+			return;
+		}
+
 		setVisibleForm(false);
 		setVisibleDangKy(true);
 	};
@@ -131,7 +137,9 @@ const ChiTietPhong = () => {
 
 						<div className='room-available-box'>
 							<div>{intl.formatMessage({ id: 'kytucxa.dangky.chitiet.available' })}</div>
-							<strong>{intl.formatMessage({ id: 'kytucxa.dangky.chitiet.slotConLai' }, { soLuong: soSlotConLai || 5 })}</strong>
+							<strong>
+								{intl.formatMessage({ id: 'kytucxa.dangky.chitiet.slotConLai' }, { soLuong: soSlotConLai || 5 })}
+							</strong>
 						</div>
 					</div>
 				</Col>
@@ -140,14 +148,14 @@ const ChiTietPhong = () => {
 			<div className='room-card__divider' />
 
 			<div className='room-description'>
-				{phong?.moTa ||
-					room?.moTa ||
-					'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel eros non lectus egestas gravida vulputate ut odio. Etiam tincidunt eget nunc facilisis elementum. Curabitur a dictum massa. Donec ipsum ex auctor molestie odio quis.'}
+				{phong?.moTa || room?.moTa || intl.formatMessage({ id: 'kytucxa.dangky.chitiet.defaultDescription' })}
 			</div>
 
 			<div className='form-footer'>
-				<Button type='primary' onClick={handleDangKy}>
-					{intl.formatMessage({ id: 'kytucxa.dangky.chitiet.button.dangKy' })}
+				<Button type='primary' disabled={daCoLichSuDangKy} onClick={handleDangKy}>
+					{intl.formatMessage({
+						id: daCoLichSuDangKy ? 'kytucxa.dangky.card.button.khongTheDangKy' : 'kytucxa.dangky.chitiet.button.dangKy',
+					})}
 				</Button>
 				<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 			</div>

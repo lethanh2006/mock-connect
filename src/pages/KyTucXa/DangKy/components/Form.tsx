@@ -1,11 +1,12 @@
 import MyDatePicker from '@/components/MyDatePicker';
-import { Checkbox, Col, Divider, Form, FormInstance, Input, Radio, Row, Space } from 'antd';
-import FormItemNguoiThanKTX from '../NguoiThan/FormItem';
 import rules from '@/utils/rules';
+import { Checkbox, Col, Divider, Form, FormInstance, Input, Radio, Row, Space } from 'antd';
 import { useIntl } from 'umi';
+import FormItemNguoiThanKTX from '../NguoiThan/FormItem';
 
-const FormDangKyKTX = (props: { form: FormInstance }) => {
+const FormDangKyKTX = (props: { form: FormInstance; disabled?: boolean }) => {
 	const intl = useIntl();
+	const { disabled } = props;
 
 	return (
 		<Row gutter={[12, 12]}>
@@ -54,61 +55,118 @@ const FormDangKyKTX = (props: { form: FormInstance }) => {
 			</Col>
 
 			<Col span={24} md={12}>
-				<Form.Item name='email' label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.email' })} rules={[...rules.required, ...rules.email]}>
-					<Input placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.field.email.placeholder' })} />
+				<Form.Item
+					name='email'
+					label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.email' })}
+					rules={[...rules.required, ...rules.email]}
+				>
+					<Input
+						placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.field.email.placeholder' })}
+						disabled={disabled}
+					/>
 				</Form.Item>
 			</Col>
 
 			<Col span={24} md={12}>
-				<Form.Item name='phoneNumber' label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.phoneNumber' })} rules={[...rules.required, ...rules.soDienThoai]}>
-					<Input placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.field.phoneNumber.placeholder' })} />
+				<Form.Item
+					name='phoneNumber'
+					label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.phoneNumber' })}
+					rules={[...rules.required, ...rules.soDienThoai]}
+				>
+					<Input
+						placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.field.phoneNumber.placeholder' })}
+						disabled={disabled}
+					/>
 				</Form.Item>
 			</Col>
 
 			<Col span={24} md={12}>
-				<Form.Item name='program' label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.program' })} rules={rules.required}>
+				<Form.Item
+					name='program'
+					label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.program' })}
+					rules={rules.required}
+				>
 					<Input placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.field.program' })} disabled />
 				</Form.Item>
 			</Col>
 
 			<Col span={24} md={12}>
-				<Form.Item name='college' label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.college' })} rules={rules.required}>
+				<Form.Item
+					name='college'
+					label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.college' })}
+					rules={rules.required}
+				>
 					<Input placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.field.college' })} disabled />
 				</Form.Item>
 			</Col>
 
 			<Col span={24} md={12}>
-				<Form.Item name='identityNumber' label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.identityNumber' })} rules={rules.required}>
-					<Input placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.field.identityNumber.placeholder' })} />
+				<Form.Item
+					name='identityNumber'
+					label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.identityNumber' })}
+					rules={rules.required}
+				>
+					<Input
+						placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.field.identityNumber.placeholder' })}
+						disabled={disabled}
+					/>
 				</Form.Item>
 			</Col>
 
 			<Col span={24} md={12}>
-				<Form.Item name='dateOfIssue' label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.dateOfIssue' })} rules={rules.required}>
-					<MyDatePicker placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.field.dateOfIssue.placeholder' })} />
+				<Form.Item
+					name='dateOfIssue'
+					label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.dateOfIssue' })}
+					rules={rules.required}
+				>
+					<MyDatePicker
+						placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.field.dateOfIssue.placeholder' })}
+						disabled={disabled}
+					/>
 				</Form.Item>
 			</Col>
 
 			<Col span={24}>
-				<Form.Item name='placeOfIssue' label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.placeOfIssue' })} rules={rules.required}>
-					<Input placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.field.placeOfIssue.placeholder' })} />
+				<Form.Item
+					name='placeOfIssue'
+					label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.placeOfIssue' })}
+					rules={rules.required}
+				>
+					<Input
+						placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.field.placeOfIssue.placeholder' })}
+						disabled={disabled}
+					/>
 				</Form.Item>
 			</Col>
 
 			<Col span={24}>
-				<Form.Item name='nationality' label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.nationality' })} rules={rules.required}>
-					<Radio.Group>
+				<Form.Item
+					name='nationality'
+					label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.nationality' })}
+					rules={rules.required}
+				>
+					<Radio.Group disabled={disabled}>
 						<Space direction='horizontal'>
 							<Radio value='Vietnam'>{intl.formatMessage({ id: 'kytucxa.dangky.form.field.nationality.vn' })}</Radio>
-							<Radio value='International'>{intl.formatMessage({ id: 'kytucxa.dangky.form.field.nationality.intl' })}</Radio>
+							<Radio value='International'>
+								{intl.formatMessage({ id: 'kytucxa.dangky.form.field.nationality.intl' })}
+							</Radio>
 						</Space>
 					</Radio.Group>
 				</Form.Item>
 			</Col>
 
 			<Col span={24}>
-				<Form.Item name='permanentHomeAddress' label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.permanentHomeAddress' })} rules={rules.required}>
-					<Input.TextArea rows={2} placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.field.permanentHomeAddress.placeholder' })} />
+				<Form.Item
+					name='permanentHomeAddress'
+					label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.permanentHomeAddress' })}
+					rules={rules.required}
+				>
+					<Input.TextArea
+						rows={2}
+						placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.field.permanentHomeAddress.placeholder' })}
+						disabled={disabled}
+					/>
 				</Form.Item>
 			</Col>
 
@@ -120,7 +178,7 @@ const FormDangKyKTX = (props: { form: FormInstance }) => {
 
 			<Col span={24}>
 				<Form.Item name='emergencyContacts'>
-					<FormItemNguoiThanKTX />
+					<FormItemNguoiThanKTX disabled={disabled} />
 				</Form.Item>
 			</Col>
 			<Col span={24}>
@@ -140,7 +198,7 @@ const FormDangKyKTX = (props: { form: FormInstance }) => {
 
 			<Col span={24}>
 				<Form.Item name='checkbox1' valuePropName='checked'>
-					<Checkbox>
+					<Checkbox disabled={disabled}>
 						<div className='text-info'>{intl.formatMessage({ id: 'kytucxa.dangky.form.checkbox1.label' })}</div>
 					</Checkbox>
 				</Form.Item>

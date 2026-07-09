@@ -1,9 +1,9 @@
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
+import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Col, Form, Input, Row, Select } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
-import rules from '@/utils/rules';
 
 const FormNguoiThanKTX = (props: { onOk: (val: PhieuDangKyKTX.INguoiThan) => void }) => {
 	const intl = useIntl();
@@ -24,46 +24,88 @@ const FormNguoiThanKTX = (props: { onOk: (val: PhieuDangKyKTX.INguoiThan) => voi
 		<Form onFinish={onFinish} form={form} layout='vertical' disabled={isView}>
 			<Row gutter={[12, 0]}>
 				<Col span={24}>
-					<Form.Item name='emergencyContactName' label='Parent/Guardian Name' rules={rules.required}>
-						<Input placeholder='Nhập họ tên người thân' />
+					<Form.Item
+						name='emergencyContactName'
+						label={intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.name' })}
+						rules={rules.required}
+					>
+						<Input placeholder={intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.name.placeholder' })} />
 					</Form.Item>
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='emergencyRelationship' label='Relationship' rules={rules.required}>
+					<Form.Item
+						name='emergencyRelationship'
+						label={intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.relationship' })}
+						rules={rules.required}
+					>
 						<Select
-							placeholder='Chọn mối quan hệ'
+							placeholder={intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.relationship.placeholder' })}
 							options={[
-								{ label: 'Father', value: 'Father' },
-								{ label: 'Mother', value: 'Mother' },
-								{ label: 'Guardian', value: 'Guardian' },
-								{ label: 'Other', value: 'Other' },
+								{
+									label: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.relationship.father' }),
+									value: 'Father',
+								},
+								{
+									label: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.relationship.mother' }),
+									value: 'Mother',
+								},
+								{
+									label: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.relationship.guardian' }),
+									value: 'Guardian',
+								},
+								{
+									label: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.relationship.other' }),
+									value: 'Other',
+								},
 							]}
 						/>
 					</Form.Item>
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='emergencyContactNumber' label='Primary Contact Number' rules={[...rules.required, ...rules.soDienThoai]}>
-						<Input placeholder='Nhập số điện thoại chính' />
+					<Form.Item
+						name='emergencyContactNumber'
+						label={intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.primaryPhone' })}
+						rules={[...rules.required, ...rules.soDienThoai]}
+					>
+						<Input
+							placeholder={intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.primaryPhone.placeholder' })}
+						/>
 					</Form.Item>
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='secondaryContactNumber' label='Secondary Contact Number'>
-						<Input placeholder='Nhập số điện thoại phụ' />
+					<Form.Item
+						name='secondaryContactNumber'
+						label={intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.secondaryPhone' })}
+					>
+						<Input
+							placeholder={intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.secondaryPhone.placeholder' })}
+						/>
 					</Form.Item>
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='emergencyEmail' label='Email' rules={rules.email}>
-						<Input placeholder='Nhập email' />
+					<Form.Item
+						name='emergencyEmail'
+						label={intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.email' })}
+						rules={rules.email}
+					>
+						<Input placeholder={intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.email.placeholder' })} />
 					</Form.Item>
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='address' label='Address' rules={rules.required}>
-						<Input.TextArea rows={3} placeholder='Nhập địa chỉ' />
+					<Form.Item
+						name='address'
+						label={intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.address' })}
+						rules={rules.required}
+					>
+						<Input.TextArea
+							rows={3}
+							placeholder={intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.address.placeholder' })}
+						/>
 					</Form.Item>
 				</Col>
 			</Row>

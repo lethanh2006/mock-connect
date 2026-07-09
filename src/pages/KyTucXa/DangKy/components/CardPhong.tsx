@@ -5,6 +5,8 @@ import { useIntl } from 'umi';
 
 interface CardPhongProps {
 	phong: Phong.IChinhSachPhongRecord;
+	daCoLichSuDangKy?: boolean;
+	laPhongDaDangKy?: boolean;
 	onXemChiTiet?: (phong: Phong.IChinhSachPhongRecord) => void;
 	onDangKy?: (phong: Phong.IChinhSachPhongRecord) => void;
 }
@@ -12,12 +14,13 @@ interface CardPhongProps {
 const ANH_PHONG_MAC_DINH =
 	'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=85';
 
-const CardPhong = ({ phong, onXemChiTiet, onDangKy }: CardPhongProps) => {
+const CardPhong = ({ phong, daCoLichSuDangKy, laPhongDaDangKy, onXemChiTiet, onDangKy }: CardPhongProps) => {
 	const intl = useIntl();
 	const room = phong.room;
 	const sucChua = phong.sucChua ?? room?.soLuongToiDa ?? room?.sucChua ?? 0;
 	const soChoConLai = Math.max(0, sucChua - (room?.soLuongHienTai ?? 0));
 	const daHetCho = soChoConLai <= 0 || !room?.isChoThue || phong.isChoPhepDangKy === false;
+	const khongChoDangKy = daHetCho || daCoLichSuDangKy;
 	const danhSachAnh = phong.danhSachAnh?.length ? phong.danhSachAnh : room?.danhSachAnh;
 	const anhPhong = danhSachAnh?.[0] || ANH_PHONG_MAC_DINH;
 
@@ -32,22 +35,35 @@ const CardPhong = ({ phong, onXemChiTiet, onDangKy }: CardPhongProps) => {
 	const tienIchHienThi = tienIch.slice(0, 3);
 
 	const formatGia = (gia?: number | null, donViTienTe = 'VND') =>
-		gia ? `${gia.toLocaleString('vi-VN')} ${donViTienTe}` : intl.formatMessage({ id: 'kytucxa.dangky.card.chuaCapNhat' });
+		gia
+			? `${gia.toLocaleString('vi-VN')} ${donViTienTe}`
+			: intl.formatMessage({ id: 'kytucxa.dangky.card.chuaCapNhat' });
 
 	return (
 		<Card
-			className='room-card'
+			className={['room-card', laPhongDaDangKy ? 'room-card--registered' : undefined].filter(Boolean).join(' ')}
 			hoverable
 			onClick={() => onXemChiTiet?.(phong)}
 			cover={
 				<div className='room-card__image-wrap'>
-					<Image src={anhPhong} alt={`Phòng ${room?.ma ?? ''}`} preview={false} className='room-card__image' />
+					<Image
+						src={anhPhong}
+						alt={intl.formatMessage({ id: 'kytucxa.dangky.card.imageAlt' }, { maPhong: room?.ma ?? '' })}
+						preview={false}
+						className='room-card__image'
+					/>
 
 					<Tag className='room-card__slot-tag'>
 						{daHetCho
 							? intl.formatMessage({ id: 'kytucxa.dangky.card.hetCho' })
 							: intl.formatMessage({ id: 'kytucxa.dangky.card.slotConLai' }, { soLuong: soChoConLai })}
 					</Tag>
+
+					{laPhongDaDangKy ? (
+						<Tag color='success' className='room-card__registered-tag'>
+							{intl.formatMessage({ id: 'kytucxa.dangky.card.daDangKy' })}
+						</Tag>
+					) : null}
 				</div>
 			}
 		>
@@ -95,7 +111,9 @@ const CardPhong = ({ phong, onXemChiTiet, onDangKy }: CardPhongProps) => {
 
 				{tienIch.length === 0 && (
 					<Col span={24}>
-						<Typography.Text type='secondary'>{intl.formatMessage({ id: 'kytucxa.dangky.card.tienIchChuaCapNhat' })}</Typography.Text>
+						<Typography.Text type='secondary'>
+							{intl.formatMessage({ id: 'kytucxa.dangky.card.tienIchChuaCapNhat' })}
+						</Typography.Text>
 					</Col>
 				)}
 			</Row>
@@ -110,15 +128,19 @@ const CardPhong = ({ phong, onXemChiTiet, onDangKy }: CardPhongProps) => {
 				<Button
 					type='primary'
 					size='large'
-					disabled={daHetCho}
+					disabled={khongChoDangKy}
 					onClick={(event) => {
 						event.stopPropagation();
 						onDangKy?.(phong);
 					}}
 				>
-					{daHetCho
-						? intl.formatMessage({ id: 'kytucxa.dangky.card.button.full' })
-						: intl.formatMessage({ id: 'kytucxa.dangky.card.button.dangKy' })}
+					{laPhongDaDangKy
+						? intl.formatMessage({ id: 'kytucxa.dangky.card.button.daDangKy' })
+						: daHetCho
+							? intl.formatMessage({ id: 'kytucxa.dangky.card.button.full' })
+							: daCoLichSuDangKy
+								? intl.formatMessage({ id: 'kytucxa.dangky.card.button.khongTheDangKy' })
+								: intl.formatMessage({ id: 'kytucxa.dangky.card.button.dangKy' })}
 				</Button>
 			</div>
 		</Card>

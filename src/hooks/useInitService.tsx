@@ -41,8 +41,8 @@ const useInitService = (url: string, ip?: string) => {
 		return axios.get(`${finalIp}/${url}/${path || 'many'}`, { params: payload, headers });
 	};
 
-	const getByIdService = (id: string | number, headers?: any) => {
-		return axios.get(`${finalIp}/${url}/${id}`, { headers });
+	const getByIdService = (id: string | number, payload?: { condition?: any; cond?: any }, headers?: any) => {
+		return axios.get(`${finalIp}/${url}/${id}`, { params: payload, headers });
 	};
 
 	const getImportHeaders = (params?: any, headers?: any) => {

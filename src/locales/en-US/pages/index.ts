@@ -13,9 +13,8 @@ import hoctapkhac from './hoctap/khac';
 import lichthi from './hoctap/lichthi';
 import lophocphan from './hoctap/lophocphan';
 import tientrinhhoctap from './hoctap/tientrinhhoctap';
-import dangkyktx from './kytucxa/dangky';
-import lichsuktx from './kytucxa/lichsu';
 import khaosat from './khaosat';
+import kytucxa from './kytucxa';
 import lichsukien from './lichsukien';
 import login from './login';
 import lophanhchinh from './lophanhchinh';
@@ -66,8 +65,7 @@ export default {
 	...minor,
 	...syllabus,
 	...activity,
-	...dangkyktx,
-	...lichsuktx,
+	...kytucxa,
 
 	'pages.trangchu.title': 'TRAINING STUDENT PORTAL',
 	'pages.trangchu.subtitle': 'DIGITAL UNIVERSITY SYSTEM',
