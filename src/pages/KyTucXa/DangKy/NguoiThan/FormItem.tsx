@@ -12,7 +12,7 @@ const FormItemNguoiThanKTX = (props: {
 	onChange?: (data: PhieuDangKyKTX.INguoiThan[]) => void;
 	disabled?: boolean;
 }) => {
-	const { setVisibleForm, visibleForm, record, handleEdit } = useModel('kytucxa.nguoithan');
+	const { setVisibleForm, visibleForm, record, handleEdit, setRecord, setEdit, setIsView } = useModel('kytucxa.nguoithan');
 	const { value = [], onChange, disabled } = props;
 	const intl = useIntl();
 
@@ -22,17 +22,47 @@ const FormItemNguoiThanKTX = (props: {
 	// 	if (onChange) onChange(data);
 	// };
 
-	const onAdd = (rec: PhieuDangKyKTX.INguoiThan) => {
-		if (!record?.index) {
-			const data = [...value, { ...rec, index: value.length + 1 }];
-			onChange?.(data);
-			setVisibleForm(false);
+	//Check: nếu ko có thông tin người thân -> push object rỗng vào table để default 2 khối liên hệ trống
+	const dataNguoiThan = [...value];
+	if (dataNguoiThan.length === 0) { 
+		dataNguoiThan.push({ khoiLienHeDefault: true, index: 1 } as any);
+		dataNguoiThan.push({ khoiLienHeDefault: true, index: 2 } as any);
+	} else if (dataNguoiThan.length === 1) {
+		dataNguoiThan.push({ khoiLienHeDefault: true, index: 2 } as any);
+	}
+
+	//Check: nếu các required field đủ data -> disable edit
+	const isFilledColumn = (rec: any) => {
+		if (rec.khoiLienHeDefault) return false;
+		return !!(
+			rec.emergencyContactName &&
+			rec.emergencyRelationship &&
+			rec.emergencyContactNumber &&
+			rec.address
+		);
+	};
+
+	//Nếu là khối trống default -> Thêm mới, nếu đã có data nhưng thiếu -> edit mode
+	const onEdit = (rec: any) => {
+		if (rec.khoiLienHeDefault) {
+			setRecord({ index: rec.index } as PhieuDangKyKTX.INguoiThan);
+			setEdit(false);
+			setIsView(false);
+			setVisibleForm(true);
 		} else {
-			const data = [...value];
-			data.splice(record.index - 1, 1, { ...rec, index: record.index });
-			onChange?.(data);
-			setVisibleForm(false);
+			handleEdit(rec);
 		}
+	};
+
+	const onAdd = (rec: PhieuDangKyKTX.INguoiThan) => {
+		const data = [...value];
+		if (!record?.index || record.index > data.length) {
+			data.push({ ...rec, index: data.length + 1 });
+		} else {
+			data.splice(record.index - 1, 1, { ...rec, index: record.index });
+		}
+		onChange?.(data);
+		setVisibleForm(false);
 	};
 
 	const columns: IColumn<PhieuDangKyKTX.INguoiThan>[] = [
@@ -79,8 +109,8 @@ const FormItemNguoiThanKTX = (props: {
 					<ButtonExtend
 						tooltip={intl.formatMessage({ id: 'global.button.chinhsua' })}
 						type='link'
-						disabled={disabled}
-						onClick={() => handleEdit(rec)}
+						disabled={disabled || isFilledColumn(rec)}
+						onClick={() => onEdit(rec)}
 						icon={<EditOutlined />}
 					/>
 					{/* <Popconfirm
@@ -103,7 +133,7 @@ const FormItemNguoiThanKTX = (props: {
 	return (
 		<>
 			<TableStaticData
-				data={value}
+				data={dataNguoiThan}
 				columns={columns}
 				size='small'
 				hasTotal
