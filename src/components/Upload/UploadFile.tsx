@@ -1,13 +1,10 @@
 import { isAllowedFile, parseAcceptString, validateFileBlob } from '@/utils/fileValidation';
 import { getSafeHref } from '@/utils/security';
 import { blobToBase64, getNameFile } from '@/utils/utils';
-import { getSafeHref } from '@/utils/security';
-import { isAllowedFile, parseAcceptString, validateFileBlob } from '@/utils/fileValidation';
 import { DeleteOutlined, EyeOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
 import { Button, Image, Upload, message } from 'antd';
 import type { RcFile } from 'antd/es/upload';
-import type { UploadProps } from 'antd';
 import { useEffect, useState } from 'react';
 import Resizer from 'react-image-file-resizer';
 import { useIntl } from 'umi';
