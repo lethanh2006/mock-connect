@@ -1,13 +1,11 @@
+import FormWaiting from '@/components/Loading/FormWaiting';
 import PageCard from '@/components/PageCard';
-import { ESettingKey } from '@/services/base/constant';
-import { ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
+import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { formatDateTime } from '@/utils/formatDate';
-import { ipDaoTao } from '@/utils/ip';
-import { FileTextOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Alert, Button, Card, Spin } from 'antd';
+import { FileTextOutlined, InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { Alert, Button, Card, Empty, Modal } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import ReCAPTCHA from 'react-google-recaptcha';
-import { useAccess, useIntl, useModel } from 'umi';
+import { history, useAccess, useIntl, useModel } from 'umi';
 import CreditRegistrationBar from './components/CreditRegistrationBar';
 import DangKyLopHocPhan from './components/DangKyLopHocPhan';
 import FilterDotDangKy from './components/FilterDotDangKy';
@@ -22,21 +20,14 @@ const DangKyTinChiPage = () => {
 	const intl = useIntl();
 	const { cctFilter } = useAccess();
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const {
-		dotDangKyHienTai,
-		loading,
-		sinhVienDot,
-		phieuDangKy,
-		getPhieuDangKyModel,
-		danhSachLopDangKy,
-		getLopDangKyModel,
-		setVisibleModal,
-	} = useModel('daotao.dotdangkytinchi');
-	const { getModel } = useModel('daotao.dkvuottinchi');
-	const { getMeModel: getLopHc } = useModel('daotao.lophanhchinh');
-	const { getByKeyModel } = useModel('tienich.caidat');
+	const { dotDangKyHienTai, loading, sinhVienDot, phieuDangKy, danhSachLopDangKy, getLopDangKyModel, setVisibleModal } =
+		useModel('daotao.dotdangkytinchi');
+	const { loading: loadingHocKy } = useModel('daotao.hocky');
+	// const { getModel } = useModel('daotao.dkvuottinchi');
+	// const { getMeModel: getLopHc } = useModel('daotao.lophanhchinh');
+	const { setPage } = useModel('lophocphan.lophocphan');
+	// const { getByKeyModel } = useModel('tienich.caidat');
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
-	const [isVerified, setIsVerified] = useState<boolean>(false);
 	const [visibleLichSu, setVisibleLichSu] = useState<boolean>(false);
 	const [visibleThongTin, setVisibleThongTin] = useState<boolean>(false);
 	const [showFixedBar, setShowFixedBar] = useState(false);
@@ -49,46 +40,44 @@ const DangKyTinChiPage = () => {
 	const tongHocPhanDangKy = useMemo(() => tinhTongHocPhanDangKy(danhSachLopHienThi), [danhSachLopHienThi]);
 	const soTinChiToiDa = getSoTinChiToiDa(phieuDangKy, khoaNganhMe);
 	const soTinChiToiThieu = phieuDangKy?.soTinChiToiThieu ?? 0;
+	const dotHocKySynced = dotDangKyHienTai?.maHocKy === recHocKy?.ma;
+	const isWaitingSinhVienDot = dotHocKySynced && !!dotDangKyHienTai?._id && sinhVienDot === undefined;
+	const isPageLoading = loading || loadingHocKy || isWaitingSinhVienDot;
 
-	const handleCaptchaChange = (token: string | null) => {
-		setIsVerified(!!token);
-	};
+	// const getData = async () => {
+	// 	getModel(undefined, undefined, undefined, undefined, undefined, 'me/page');
+	// };
 
 	// useEffect(() => {
-	// 	getKhoaNganhMeModel();
-	// 	getByKeyModel(ESettingKey.SINH_VIEN, ipDaoTao);
+	// 	getLopHc();
+	// 	if (cctFilter?.()) {
+	// 		getData();
+	// 		getByKeyModel(ESettingKey.SINH_VIEN, ipDaoTao);
+	// 	}
 	// }, []);
-
-	const getData = async () => {
-		getModel(undefined, undefined, undefined, undefined, undefined, 'me/page');
-	};
-
-	useEffect(() => {
-		if (isVerified) {
-			getLopHc();
-			if (cctFilter?.()) {
-				getData();
-				getByKeyModel(ESettingKey.SINH_VIEN, ipDaoTao);
-			}
-		}
-	}, [isVerified]);
-
-	useEffect(() => {
-		if (
-			dotDangKyHienTai?._id &&
-			dotDangKyHienTai.maHocKy === recHocKy?.ma &&
-			sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK
-		)
-			getPhieuDangKyModel(dotDangKyHienTai._id);
-	}, [recHocKy?.ma, dotDangKyHienTai?._id, sinhVienDot?.trangThaiSvDangKyTinChi]);
 
 	const getLopDangKy = async () => {
 		if (recHocKy?.ma) await getLopDangKyModel(recHocKy.ma);
 	};
 
 	useEffect(() => {
+		if (!recHocKy?.ma) return;
+		setPage(1);
 		getLopDangKy();
 	}, [recHocKy?.ma]);
+
+	useEffect(() => {
+		if (!isPageLoading) {
+			Modal.destroyAll();
+			return undefined;
+		}
+
+		FormWaiting(intl.formatMessage({ id: 'dangkytinchi.loading.message' }), intl);
+
+		return () => {
+			Modal.destroyAll();
+		};
+	}, [isPageLoading]);
 
 	useEffect(() => {
 		const node = phieuDangKyRef.current;
@@ -123,21 +112,6 @@ const DangKyTinChiPage = () => {
 			window.removeEventListener('scroll', updateFixedBarRect, true);
 		};
 	}, []);
-
-	if (isVerified)
-		return (
-			<PageCard title={intl.formatMessage({ id: 'dangkytinchi.title' })}>
-				<ReCAPTCHA
-					style={{
-						margin: '12px auto',
-						display: 'flex',
-						justifyContent: 'center',
-					}}
-					sitekey='6LelHsEeAAAAAJmsVdeC2EPNCAVEtfRBUGSKireh'
-					onChange={handleCaptchaChange}
-				/>
-			</PageCard>
-		);
 
 	return (
 		<>
@@ -184,14 +158,93 @@ const DangKyTinChiPage = () => {
 
 					{/* {cctFilter?.() && <AlertVuotTin onViewLichSu={() => setVisibleLichSu(true)} />} */}
 
-					<Spin spinning={loading}>
-						{/* Tạm comment/bypass block điều kiện cũ: dotDangKyHienTai, sinhVienDot, trạng thái được đăng ký và số tín chỉ tối đa. */}
-						<DangKyLopHocPhan
-							tongTinChi={tongTinChi}
-							soTinChiToiDa={soTinChiToiDa}
-							danhSachLopHienThi={danhSachLopHienThi}
+					{dotDangKyHienTai && sinhVienDot ? (
+						sinhVienDot.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.KHONG_DUOC_DK ? (
+							<Empty
+								description={
+									<>
+										<span className='text-error'>
+											{intl.formatMessage({ id: 'dangkytinchi.empty.khongduocphepdangky' })}
+										</span>
+										<br />
+										{intl.formatMessage({ id: 'dangkytinchi.empty.ghichu' })}: {sinhVienDot.ghiChu ?? '--'}
+									</>
+								}
+							/>
+						) : dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
+							<Empty
+								description={
+									<i style={{ color: '#999' }}>
+										{intl.formatMessage(
+											{ id: 'dangkytinchi.empty.alert' },
+											{
+												b: (chunks) => <b>{chunks}</b>,
+											},
+										)}{' '}
+									</i>
+								}
+							/>
+						) : !!phieuDangKy?.soTinChiToiDa ? (
+							<>
+								{sinhVienDot?.ghiChu && (
+									<div>
+										{<QuestionCircleOutlined />} {intl.formatMessage({ id: 'dangkytinchi.empty.ghichu' })}:{' '}
+										<i style={{ color: 'gray' }}>{sinhVienDot.ghiChu}.</i>
+									</div>
+								)}
+								<div style={{ marginBottom: 12 }}>
+									{intl.formatMessage(
+										{ id: 'dangkytinchi.thongtindangky.alert' },
+										{
+											link_tien_trinh: (chunks: any) => (
+												<a
+													href='/hoc-tap/tien-trinh-hoc-tap'
+													onClick={(e) => {
+														e.preventDefault();
+														history.push('/hoc-tap/tien-trinh-hoc-tap');
+													}}
+												>
+													{chunks}
+												</a>
+											),
+
+											link_ket_qua: (chunks: any) => (
+												<a
+													href='/hoc-tap/ket-qua-hoc-tap'
+													onClick={(e) => {
+														e.preventDefault();
+														history.push('/hoc-tap/ket-qua-hoc-tap');
+													}}
+												>
+													{chunks}
+												</a>
+											),
+										},
+									)}
+								</div>
+
+								<DangKyLopHocPhan
+									tongTinChi={tongTinChi}
+									soTinChiToiDa={soTinChiToiDa}
+									danhSachLopHienThi={danhSachLopHienThi}
+								/>
+							</>
+						) : (
+							<Empty
+								description={
+									<i style={{ color: '#999' }}>{intl.formatMessage({ id: 'global.formWaiting.dangxuly' })}</i>
+								}
+							/>
+						)
+					) : (
+						<Empty
+							description={
+								<i style={{ color: '#999' }}>
+									{intl.formatMessage({ id: 'dangkytinchi.thongtindangky.empty.khongcodotdangky' })}
+								</i>
+							}
 						/>
-					</Spin>
+					)}
 				</PageCard>
 			</div>
 

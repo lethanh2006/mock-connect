@@ -15,6 +15,7 @@ import lichthi from './hoctap/lichthi';
 import lophocphan from './hoctap/lophocphan';
 import tientrinhhoctap from './hoctap/tientrinhhoctap';
 import khaosat from './khaosat';
+import detaikhcn from './khoahoc/detaikhcn';
 import lichsukien from './lichsukien';
 import login from './login';
 import lophanhchinh from './lophanhchinh';
@@ -32,7 +33,6 @@ import vanbanhuongdan from './tienichkhac/vanbanhuongdan';
 import xemsau from './tienichkhac/xemsau';
 import tintuc from './tintuc';
 import trangchu from './trangchu';
-import detaikhcn from './khoahoc/detaikhcn';
 
 export default {
 	...login,

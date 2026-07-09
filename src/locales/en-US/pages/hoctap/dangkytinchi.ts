@@ -1,5 +1,6 @@
 export default {
 	'dangkytinchi.title': 'Course Registration',
+	'dangkytinchi.loading.message': 'The system is loading data. Please do not reload the page (F5) to avoid data loss.',
 	'dangkytinchi.filter.btn.xemchitiet': 'View details',
 	'dangkytinchi.filter.thoigiandangky.title':
 		'Course registration is open from <b>{thoigianbatdau}</b> to <b>{thoigianketthuc}</b>',

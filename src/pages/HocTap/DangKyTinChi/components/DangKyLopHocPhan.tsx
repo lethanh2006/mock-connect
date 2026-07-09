@@ -40,7 +40,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 	const intl = useIntl();
 	const { cctFilter } = useAccess();
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const { page, limit, filters, sort, danhSachLopDktc, sinhVienGetLopDangKyTheoHocPhanModel, setRecord } =
+	const { filters, sort, danhSachLopDktc, sinhVienGetLopDangKyTheoHocPhanModel, setRecord } =
 		useModel('lophocphan.lophocphan');
 	const {
 		dotDangKyHienTai,
@@ -67,13 +67,23 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
 	const dangKyNgay: boolean = true;
 	const coDotDangKyTinChi = !!dotDangKyHienTai?._id && dotDangKyHienTai.maHocKy === recHocKy?.ma;
+	const tableDependencies = useMemo(
+		() => [coDotDangKyTinChi ? dotDangKyHienTai?._id : null, loaiDangKy],
+		[coDotDangKyTinChi, dotDangKyHienTai?._id, loaiDangKy],
+	);
 
-	const getData = () =>
-		recHocKy?.ma &&
-		dotDangKyHienTai?._id &&
-		sinhVienGetLopDangKyTheoHocPhanModel(recHocKy.ma, dotDangKyHienTai?._id, loaiDangKy, undefined, filters, sort).then(
-			(data) => setExpandedLopHocPhan(data.filter((item) => !!item.children?.length).map((item) => item.ten)),
-		);
+	const getData = () => {
+		if (!coDotDangKyTinChi || !recHocKy?.ma || !dotDangKyHienTai?._id) return;
+
+		return sinhVienGetLopDangKyTheoHocPhanModel(
+			recHocKy.ma,
+			dotDangKyHienTai._id,
+			loaiDangKy,
+			undefined,
+			filters,
+			sort,
+		).then((data) => setExpandedLopHocPhan(data.filter((item) => !!item.children?.length).map((item) => item.ten)));
+	};
 
 	const renderTrangThaiCanhBao = (rec: LopHocPhan.IRecord) => {
 		if (isDaChonLop(rec, danhSachLopDangKy)) return null;
@@ -480,7 +490,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 			<div className='table-dang-ky'>
 				<TableBase
 					columns={columns}
-					dependencies={[page, limit, recHocKy?.ma, dotDangKyHienTai?._id, loaiDangKy]}
+					dependencies={tableDependencies}
 					getData={getData}
 					dataState='danhSachLopDktc'
 					modelName='lophocphan.lophocphan'

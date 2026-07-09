@@ -5233,6 +5233,11 @@ devlop@^1.0.0, devlop@^1.1.0:
   dependencies:
     dequal "^2.0.0"
 
+diff@^8.0.4:
+  version "8.0.4"
+  resolved "https://registry.yarnpkg.com/diff/-/diff-8.0.4.tgz#4f5baf3188b9b2431117b962eb20ba330fadf696"
+  integrity sha512-DPi0FmjiSU5EvQV0++GFDOJ9ASQUVFh5kD+OzOnYdi7n3Wpm9hWWGfB/O2blfHcMVTL5WkQXSnRiK9makhrcnw==
+
 diffie-hellman@^5.0.3:
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/diffie-hellman/-/diffie-hellman-5.0.3.tgz#40e8ee98f55a2149607146921c63e1ae5f3d2875"
@@ -5384,7 +5389,7 @@ domparser-win32-x64-msvc@0.0.7:
   resolved "https://registry.yarnpkg.com/domparser-win32-x64-msvc/-/domparser-win32-x64-msvc-0.0.7.tgz#2a1f520f77f2da6847b99f9914cedcb789865ff8"
   integrity sha512-69XAew+0MublYlx7Mywe/9qkc/lo6L5QYsBBgwHDK96QPy4MFv5U4WgsXWXbKoeKEbBlRMyLA0iohF0qvU+Veg==
 
-dompurify@3.4.11, dompurify@^3.3.1:
+dompurify@3.4.11, dompurify@^3.3.1, dompurify@^3.4.11:
   version "3.4.11"
   resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-3.4.11.tgz#29c8ba496475f279ef4015784068452fb14a0680"
   integrity sha512-zhlUV12GsaRzMsf9q5M254YhA4+VuF0fG+QFqu6aYpoGlKtz+w8//jBcGVYBgQkR5GHjUomejY84AV+/uPbWdw==
