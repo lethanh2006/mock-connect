@@ -181,14 +181,14 @@ export const exportBangTongHopDangKyDeTaiNhomAB = (
 	trangThaiDangKy?: ETrangThaiDeTaiQuanLyKhoaHoc | 'all',
 	donViIds?: string[],
 ) => {
-	return axios.get(
-		`${ip3}/${url}/a-b/export/excel/dot-dang-ky/${idDot}?loaiExport=${loaiExport}${
-			trangThaiDangKy ? `&trangThaiDangKy=${trangThaiDangKy}` : ''
-		}${donViIds?.length ? `&donViIds=${donViIds}` : ''}`,
-		{
-			responseType: 'arraybuffer',
+	return axios.get(`${ip3}/${url}/a-b/export/excel/dot-dang-ky/${encodeURIComponent(idDot)}`, {
+		params: {
+			loaiExport,
+			...(trangThaiDangKy && { trangThaiDangKy }),
+			...(donViIds?.length && { donViIds: donViIds.join(',') }),
 		},
-	);
+		responseType: 'arraybuffer',
+	});
 };
 
 export const giangVienNopKetQuaSauNghiemThu = (
