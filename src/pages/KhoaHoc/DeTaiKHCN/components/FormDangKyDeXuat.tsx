@@ -18,10 +18,14 @@ import { primaryColor } from '@/services/base/constant';
 import { buildUpLoadFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { Button, Card, Col, Form, Input, Row, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import TableThanhVien from './TableThanhVien';
+
+const sanitizeRichText = (value: unknown): string =>
+	typeof value === 'string' ? DOMPurify.sanitize(value) : '';
 
 const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai; loaiDeTai: ELoaiDeTai }) => {
 	const [form] = Form.useForm();
@@ -50,6 +54,8 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai; loaiDeTa
 			const rec = {
 				...record?.dangKyKhcn,
 				thoiGianDuKienThucHien: [record.dangKyKhcn.thoiGianThucHienBatDau, record.dangKyKhcn.thoiGianThucHienKetThuc],
+				mucTieuDeTai: sanitizeRichText(record?.dangKyKhcn?.mucTieuDeTai),
+				tinhCanThietVaMoi: sanitizeRichText(record?.dangKyKhcn?.tinhCanThietVaMoi),
 			};
 
 			form.setFieldsValue(rec);
@@ -89,6 +95,8 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai; loaiDeTa
 			const dangKyKhcn = {
 				...record?.dangKyKhcn,
 				...values,
+				mucTieuDeTai: sanitizeRichText(values?.mucTieuDeTai),
+				tinhCanThietVaMoi: sanitizeRichText(values?.tinhCanThietVaMoi),
 				donViChuTri: 'Học viện Phụ nữ Việt Nam',
 				urlPhieuDangKyDeXuat,
 				kinhPhi: values?.kinhPhi

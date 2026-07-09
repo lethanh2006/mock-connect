@@ -80,7 +80,7 @@ const FormCompetencyEvidence = (props: { listAchievedCompetencies?: string[]; fo
 					hideSelectAll: true,
 				},
 			}}
-			otherButtons={[<i className='text-info'>{intl.formatMessage({ id: 'activity.formCompetent.limit' })}</i>]}
+			otherExtra={[<i className='text-info'>{intl.formatMessage({ id: 'activity.formCompetent.limit' })}</i>]}
 		/>
 	);
 };

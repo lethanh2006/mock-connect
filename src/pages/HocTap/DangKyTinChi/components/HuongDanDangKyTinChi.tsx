@@ -3,6 +3,8 @@ import { useIntl } from 'umi';
 
 const HuongDanDangKyTinChi = () => {
 	const intl = useIntl();
+	const youtubeUrl =
+		typeof APP_CONFIG_URL_HUONG_DAN_DANG_KY_TIN_CHI !== 'undefined' ? APP_CONFIG_URL_HUONG_DAN_DANG_KY_TIN_CHI : '';
 
 	return (
 		<div className='huong-dan'>
@@ -10,10 +12,7 @@ const HuongDanDangKyTinChi = () => {
 				<i>{intl.formatMessage({ id: 'dangkytinchi.thongtindangky.huongdandangky.title' })}</i>
 			</div>
 
-			<YoutubeOutlined
-				className='pulse'
-				onClick={() => window.open('https://www.youtube.com/watch?v=2xghlws7tAk&t=2s')}
-			/>
+			{youtubeUrl ? <YoutubeOutlined className='pulse' onClick={() => window.open(youtubeUrl, '_blank')} /> : null}
 		</div>
 	);
 };

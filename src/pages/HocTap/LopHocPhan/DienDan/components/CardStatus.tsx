@@ -3,6 +3,7 @@ import type { BinhLuan } from '@/services/HocTap/DienDan/BinhLuan/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import { copyToClipboard } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import {
 	CheckCircleOutlined,
 	CopyOutlined,
@@ -195,7 +196,7 @@ const CardStatus = (props: IProps) => {
 
 					<div
 						className={`${detail ? '' : 'noi-dung-post'}`}
-						dangerouslySetInnerHTML={{ __html: data?.noiDung ?? '' }}
+						dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data?.noiDung ?? '') }}
 					/>
 					{!detail && (
 						<div style={{ marginTop: 8 }}>

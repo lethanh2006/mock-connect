@@ -3,6 +3,7 @@ import type { IFileInfo } from '@/services/base/typing';
 import { getFileContent, getFileInfo } from '@/services/uploadFile';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
+import { openSafeUrl } from '@/utils/security';
 import { getFileType, getNameFile } from '@/utils/utils';
 import {
 	CopyOutlined,
@@ -164,10 +165,10 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 				fileDownload(blob, getNameFile(frameData.url));
 			} catch (error) {
 				console.error('Error downloading file:', error);
-				window.open(frameData.url, '_blank');
+				openSafeUrl(frameData.url);
 			}
 		} else {
-			window.open(frameData.url, '_blank');
+			openSafeUrl(frameData.url);
 		}
 	};
 
@@ -269,7 +270,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 								type='link'
 								tooltip={intl.formatMessage({ id: 'global.previewfile.button.morong' })}
 								icon={<ExpandOutlined />}
-								onClick={() => window.open(frameData?.src, '_blank')}
+								onClick={() => openSafeUrl(frameData?.src)}
 							/>
 						)}
 

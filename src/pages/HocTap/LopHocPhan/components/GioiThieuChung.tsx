@@ -1,5 +1,6 @@
 import { DownloadOutlined } from '@ant-design/icons';
 import { Button, Col, Empty, Row, Spin, Tag } from 'antd';
+import DOMPurify from 'dompurify';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import BoxFile from '../DienDan/components/BoxFile';
@@ -44,7 +45,7 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 				<div
 					className='gioi-thieu-chung-content'
 					style={{ display: expand ? 'block' : '-webkit-box' }}
-					dangerouslySetInnerHTML={{ __html: record?.gioiThieuChung ?? '' }}
+					dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(record?.gioiThieuChung ?? '') }}
 				/>
 				{record?.gioiThieuChung ? (
 					<a onClick={() => setExpand((v) => !v)} style={{ marginTop: 8 }}>
@@ -78,7 +79,7 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 					<div
 						className='gioi-thieu-chung-content'
 						style={{ display: '-webkit-box' }}
-						dangerouslySetInnerHTML={{ __html: recDeCuong?.mucTieuHocPhan ?? '' }}
+						dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(recDeCuong?.mucTieuHocPhan ?? '') }}
 					/>
 				</div>
 			)}

@@ -1,4 +1,5 @@
 import { Form, FormInstance } from 'antd';
+import DOMPurify from 'dompurify';
 import React, { useMemo } from 'react';
 import { useModel } from 'umi';
 import { buildAssessmentHtml } from '../constants/defaultSectionHtml';
@@ -39,7 +40,7 @@ const AssessmentEditorSection: React.FC<AssessmentEditorSectionProps> = ({ field
 		[deCuong, cloData, gradingSchemeData, footerNoiDung, section.noiDung, cdrHinhThucData, assessmentDataSignature],
 	);
 
-	return <div dangerouslySetInnerHTML={{ __html: fullHtmlForReadonly }} />;
+	return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(fullHtmlForReadonly) }} />;
 };
 
 export default AssessmentEditorSection;

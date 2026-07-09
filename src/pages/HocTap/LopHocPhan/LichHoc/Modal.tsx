@@ -1,6 +1,7 @@
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import dayjs from '@/utils/dayjs';
+import DOMPurify from 'dompurify';
 import { Button, Carousel, Descriptions, Empty, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -40,7 +41,7 @@ const ModalThoiKhoaBieu = () => {
 							{recThoiKhoaBieu?.tieuDeBaiHoc ?? '--'}
 						</Descriptions.Item>
 						<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.noidung' })}>
-							<div dangerouslySetInnerHTML={{ __html: recThoiKhoaBieu?.noiDungBaiHoc ?? '--' }} />
+							<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(recThoiKhoaBieu?.noiDungBaiHoc ?? '--') }} />
 						</Descriptions.Item>
 						<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.hoclieu' })}>
 							{recThoiKhoaBieu?.hocLieuList?.filter((item) => item?.url)?.length ? (

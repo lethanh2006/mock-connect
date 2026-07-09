@@ -1,5 +1,6 @@
 import { Card, Col, Divider, Form, Row } from 'antd';
 import * as Diff from 'diff';
+import DOMPurify from 'dompurify';
 import React from 'react';
 import { useAccess } from 'umi';
 import { AVAILABLE_SECTION_TYPES } from './constants';
@@ -105,9 +106,11 @@ const SortableSection: React.FC<SortableSectionProps> = ({
 					<Form.Item name={[field.name, 'noiDung']} noStyle>
 						<div
 							dangerouslySetInnerHTML={{
-								__html: showDiff
-									? renderDiffContent(sectionCu.noiDung || '', section.noiDung || '')
-									: section.noiDung || '',
+								__html: DOMPurify.sanitize(
+									showDiff
+										? renderDiffContent(sectionCu.noiDung || '', section.noiDung || '')
+										: section.noiDung || '',
+								),
 							}}
 						/>
 					</Form.Item>

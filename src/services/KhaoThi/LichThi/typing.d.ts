@@ -20,6 +20,7 @@ declare module LichThi {
 		soLuong: number;
 		ngayThi: string;
 		gioThi: string;
+		hinhThucThi: string;
 		phong: string;
 		dieuKienKetQuaHocTap: EDKDTKetQuaHocTap;
 		dieuKienCongNo: EDKDTCongNo;

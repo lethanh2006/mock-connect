@@ -12,7 +12,7 @@ import {
 import { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Modal, Popconfirm, Popover, Select, Space, Tag, Tooltip } from 'antd';
+import { Modal, Popconfirm, Popover, Select, Space, Tag } from 'antd';
 import { useMemo, useState } from 'react';
 import { useAccess, useIntl, useModel } from 'umi';
 import {
@@ -40,7 +40,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 	const intl = useIntl();
 	const { cctFilter } = useAccess();
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const { page, limit, filters, sort, danhSachLopDktc, sinhVienGetLopDangKyTheoHocPhanModel, setRecord } =
+	const { filters, sort, danhSachLopDktc, sinhVienGetLopDangKyTheoHocPhanModel, setRecord } =
 		useModel('lophocphan.lophocphan');
 	const {
 		dotDangKyHienTai,
@@ -67,13 +67,23 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
 	const dangKyNgay: boolean = true;
 	const coDotDangKyTinChi = !!dotDangKyHienTai?._id && dotDangKyHienTai.maHocKy === recHocKy?.ma;
+	const tableDependencies = useMemo(
+		() => [coDotDangKyTinChi ? dotDangKyHienTai?._id : null, loaiDangKy],
+		[coDotDangKyTinChi, dotDangKyHienTai?._id, loaiDangKy],
+	);
 
-	const getData = () =>
-		recHocKy?.ma &&
-		dotDangKyHienTai?._id &&
-		sinhVienGetLopDangKyTheoHocPhanModel(recHocKy.ma, dotDangKyHienTai?._id, loaiDangKy, undefined, filters, sort).then(
-			(data) => setExpandedLopHocPhan(data.filter((item) => !!item.children?.length).map((item) => item.ten)),
-		);
+	const getData = () => {
+		if (!coDotDangKyTinChi || !recHocKy?.ma || !dotDangKyHienTai?._id) return;
+
+		return sinhVienGetLopDangKyTheoHocPhanModel(
+			recHocKy.ma,
+			dotDangKyHienTai._id,
+			loaiDangKy,
+			undefined,
+			filters,
+			sort,
+		).then((data) => setExpandedLopHocPhan(data.filter((item) => !!item.children?.length).map((item) => item.ten)));
+	};
 
 	const renderTrangThaiCanhBao = (rec: LopHocPhan.IRecord) => {
 		if (isDaChonLop(rec, danhSachLopDangKy)) return null;
@@ -370,7 +380,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.thaotac' }),
 			align: 'center',
-			width: 120,
+			width: 150,
 			fixed: 'right',
 			render: (val, rec) => {
 				const daChon = isDaChonLop(rec, danhSachLopDangKy);
@@ -379,54 +389,11 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 				const disabled = getDisabledDangKy(rec) || !coDotDangKyTinChi;
 				const canhBao = renderTrangThaiCanhBao(rec);
 				const isChuaDangKy = lopDangKy?.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY;
-
-				if (daChon && dangKyNgay) {
-					const disabledDelete =
-						(lopDangKy?.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
-							dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
-						!rec.dangKyTinChi ||
-						!coDotDangKyTinChi;
-
-					return (
-						<Space size={6} wrap={false}>
-							<Tag color='green'>
-								{intl.formatMessage({
-									id: 'dangkytinchi.dankylophocphan.action.dadangky',
-								})}
-							</Tag>
-
-							<Popconfirm
-								title={intl.formatMessage({
-									id: 'dangkytinchi.phieudangky.columntable.huy.confirm',
-								})}
-								placement='topRight'
-								onConfirm={() => lopDangKy?._id && onDeleteLop(lopDangKy)}
-								disabled={disabledDelete}
-							>
-								<Tooltip
-									placement='bottom'
-									title={intl.formatMessage({
-										id: 'dangkytinchi.phieudangky.columntable.huy.tooltip',
-									})}
-								>
-									<span
-										style={{
-											color: '#ff4d4f',
-											cursor: disabledDelete ? 'not-allowed' : 'pointer',
-											fontSize: 18,
-											lineHeight: 1,
-										}}
-										onClick={(e) => {
-											if (disabledDelete) e.preventDefault();
-										}}
-									>
-										<DeleteOutlined />
-									</span>
-								</Tooltip>
-							</Popconfirm>
-						</Space>
-					);
-				}
+				const disabledDelete =
+					(lopDangKy?.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
+						dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
+					!rec.dangKyTinChi ||
+					!coDotDangKyTinChi;
 
 				if (daChon && isChuaDangKy) {
 					return (
@@ -451,11 +418,36 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 
 				if (daChon) {
 					return (
-						<Tag color='green'>
-							{intl.formatMessage({
-								id: 'dangkytinchi.dankylophocphan.action.dadangky',
-							})}
-						</Tag>
+						<Space size={6} wrap={false}>
+							<Tag color='green'>
+								{intl.formatMessage({
+									id: 'dangkytinchi.dankylophocphan.action.dadangky',
+								})}
+							</Tag>
+
+							<Popconfirm
+								title={intl.formatMessage({
+									id: 'dangkytinchi.phieudangky.columntable.huy.confirm',
+								})}
+								placement='topRight'
+								onConfirm={() => lopDangKy?._id && onDeleteLop(lopDangKy)}
+								disabled={disabledDelete}
+							>
+								<ButtonExtend
+									icon={<DeleteOutlined />}
+									danger
+									otherTooltipProps={{
+										placement: 'bottom',
+									}}
+									type='link'
+									disabled={disabledDelete}
+									tooltip={intl.formatMessage({
+										id: 'dangkytinchi.phieudangky.columntable.huy.tooltip',
+									})}
+									onClick={(e) => e.stopPropagation()}
+								/>
+							</Popconfirm>
+						</Space>
 					);
 				}
 
@@ -497,7 +489,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 			<div className='table-dang-ky'>
 				<TableBase
 					columns={columns}
-					dependencies={[page, limit, recHocKy?.ma, loaiDangKy]}
+					dependencies={tableDependencies}
 					getData={getData}
 					dataState='danhSachLopDktc'
 					modelName='lophocphan.lophocphan'

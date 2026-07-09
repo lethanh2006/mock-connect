@@ -3,6 +3,7 @@ import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import { EMinhChungQuyDoiDiem, colorTrangThaiHocPhanQuyDoi } from '@/services/HocTap/constant';
 import { formatDate } from '@/utils/formatDate';
 import { resetFieldsForm } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { Button, Descriptions, Form, Modal, Row, Space, Tag } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -77,7 +78,7 @@ const FormHocPhanQuyDoiDiem = (props: { getData: () => void }) => {
 								{
 									<div
 										dangerouslySetInnerHTML={{
-											__html: `${record?.khuyenNghi?.map((items) => items).join(', ')}`,
+											__html: DOMPurify.sanitize(`${record?.khuyenNghi?.map((items) => items).join(', ')}`),
 										}}
 									/>
 								}

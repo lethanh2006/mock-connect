@@ -14,6 +14,7 @@ import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import rules from '@/utils/rules';
+import { getSafeHref, openSafeUrl } from '@/utils/security';
 import { checkFileSize, renderFileList, uploadMultiFile } from '@/utils/utils';
 import { Button, Card, Checkbox, Divider, Form, Input, InputNumber, Radio, Select } from 'antd';
 import { useEffect, useState } from 'react';
@@ -58,6 +59,21 @@ const FormBieuMau = (props: {
 	const [valuesForm, setValuesForm] = useState<any>({});
 
 	const [check, setCheck] = useState<boolean>(false);
+
+	const renderFileLink = (url: unknown, index: number) => {
+		const href = getSafeHref(url);
+		if (!href) return null;
+		return (
+			<Button
+				key={href}
+				type='link'
+				style={{ padding: 0, height: 'auto', display: 'block' }}
+				onClick={() => openSafeUrl(href)}
+			>
+				File {index + 1}
+			</Button>
+		);
+	};
 
 	const buildValuesForm = (valuesInit: any, name: string, arrCauHinh: DichVuMotCuaV2.CauHinhBieuMau[]) => {
 		arrCauHinh?.forEach((cauHinh, indexCauHinh) => {
@@ -578,14 +594,9 @@ const FormBieuMau = (props: {
 						<h3 style={{ fontWeight: 'bold' }}>Thông tin xử lý đơn</h3>
 						{recordDonThaoTac?.urlFileDinhKem?.length !== 0 && (
 							<Form.Item label='File xử lý'>
-								{recordDonThaoTac?.urlFileDinhKem?.map((item: any, index: number) => (
-									<>
-										<a href={item} target='_blank' rel='noreferrer'>
-											File {index + 1}
-										</a>
-										<br />
-									</>
-								))}
+								{recordDonThaoTac?.urlFileDinhKem?.map((item: string, index: number) =>
+									renderFileLink(item, index),
+								)}
 							</Form.Item>
 						)}
 						{recordDonThaoTac?.info?.ghiChuXuLy && (
@@ -600,14 +611,7 @@ const FormBieuMau = (props: {
 						<h3 style={{ fontWeight: 'bold' }}>Kết quả</h3>
 						{recordDon?.ketQuaDinhKem?.length !== 0 && (
 							<Form.Item label='File kết quả'>
-								{recordDon?.ketQuaDinhKem?.map((item: any, index: number) => (
-									<>
-										<a href={item} target='_blank' rel='noreferrer'>
-											File {index + 1}
-										</a>
-										<br />
-									</>
-								))}
+								{recordDon?.ketQuaDinhKem?.map((item: string, index: number) => renderFileLink(item, index))}
 							</Form.Item>
 						)}
 						{recordDon?.ketQuaText && <Form.Item label='Ghi chú kết quả'>{recordDon?.ketQuaText ?? ''}</Form.Item>}

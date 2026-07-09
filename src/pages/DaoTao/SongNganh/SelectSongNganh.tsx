@@ -1,3 +1,4 @@
+import { getLocalizedName } from '@/utils/localeName';
 import { Select } from 'antd';
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import { useEffect } from 'react';
@@ -35,17 +36,17 @@ const SelectSongNganh = (props: {
 					? [
 							{
 								value: khoaNganhMe?.khoaNganhChinh?.ma,
-								label: `${khoaNganhMe?.khoaNganhChinh?.ten}`,
+								label: getLocalizedName(khoaNganhMe?.khoaNganhChinh.nganh),
 							},
 							{
 								value: khoaNganhMe?.khoaNganhPhu?.ma,
-								label: `${khoaNganhMe?.khoaNganhPhu?.ten}`,
+								label: getLocalizedName(khoaNganhMe?.khoaNganhPhu.nganh),
 							},
 						]
 					: [
 							{
 								value: khoaNganhMe?.khoaNganhChinh?.ma,
-								label: `${khoaNganhMe?.khoaNganhChinh?.ten}`,
+								label: getLocalizedName(khoaNganhMe?.khoaNganhChinh.nganh),
 							},
 						]
 			}
