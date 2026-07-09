@@ -23,18 +23,12 @@ const DangKyTinChiPage = () => {
 	const intl = useIntl();
 	const { cctFilter } = useAccess();
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const {
-		dotDangKyHienTai,
-		loading,
-		sinhVienDot,
-		phieuDangKy,
-		getPhieuDangKyModel,
-		danhSachLopDangKy,
-		getLopDangKyModel,
-		setVisibleModal,
-	} = useModel('daotao.dotdangkytinchi');
+	const { dotDangKyHienTai, loading, sinhVienDot, phieuDangKy, danhSachLopDangKy, getLopDangKyModel, setVisibleModal } =
+		useModel('daotao.dotdangkytinchi');
+	const { loading: loadingHocKy } = useModel('daotao.hocky');
 	const { getModel } = useModel('daotao.dkvuottinchi');
 	const { getMeModel: getLopHc } = useModel('daotao.lophanhchinh');
+	const { setPage } = useModel('lophocphan.lophocphan');
 	const { getByKeyModel } = useModel('tienich.caidat');
 	const { khoaNganhMe, getKhoaNganhMeModel } = useModel('sinhvien.sinhvien');
 	const [isVerified, setIsVerified] = useState<boolean>(false);
@@ -50,6 +44,8 @@ const DangKyTinChiPage = () => {
 	const tongHocPhanDangKy = useMemo(() => tinhTongHocPhanDangKy(danhSachLopHienThi), [danhSachLopHienThi]);
 	const soTinChiToiDa = getSoTinChiToiDa(phieuDangKy, khoaNganhMe);
 	const soTinChiToiThieu = phieuDangKy?.soTinChiToiThieu ?? 0;
+	const dotHocKySynced = dotDangKyHienTai?.maHocKy === recHocKy?.ma;
+	const isWaitingSinhVienDot = dotHocKySynced && !!dotDangKyHienTai?._id && sinhVienDot === undefined;
 
 	const handleCaptchaChange = (token: string | null) => {
 		setIsVerified(!!token);
@@ -74,20 +70,13 @@ const DangKyTinChiPage = () => {
 		}
 	}, [isVerified]);
 
-	useEffect(() => {
-		if (
-			dotDangKyHienTai?._id &&
-			dotDangKyHienTai.maHocKy === recHocKy?.ma &&
-			sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK
-		)
-			getPhieuDangKyModel(dotDangKyHienTai._id);
-	}, [recHocKy?.ma, dotDangKyHienTai?._id, sinhVienDot?.trangThaiSvDangKyTinChi]);
-
 	const getLopDangKy = async () => {
 		if (recHocKy?.ma) await getLopDangKyModel(recHocKy.ma);
 	};
 
 	useEffect(() => {
+		if (!recHocKy?.ma) return;
+		setPage(1);
 		getLopDangKy();
 	}, [recHocKy?.ma]);
 
@@ -185,103 +174,105 @@ const DangKyTinChiPage = () => {
 
 					{cctFilter?.() && <AlertVuotTin onViewLichSu={() => setVisibleLichSu(true)} />}
 
-					<Spin spinning={loading}>
-						{dotDangKyHienTai && sinhVienDot ? (
-							sinhVienDot.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.KHONG_DUOC_DK ? (
-								<Empty
-									description={
-										<>
-											<span className='text-error'>
-												{intl.formatMessage({ id: 'dangkytinchi.empty.khongduocphepdangky' })}
-											</span>
-											<br />
-											{intl.formatMessage({ id: 'dangkytinchi.empty.ghichu' })}: {sinhVienDot.ghiChu ?? '--'}
-										</>
-									}
-								/>
-							) : dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
-								<Empty
-									description={
-										<i style={{ color: '#999' }}>
-											{intl.formatMessage(
-												{ id: 'dangkytinchi.empty.alert' },
-												{
-													b: (chunks) => <b>{chunks}</b>,
-												},
-											)}{' '}
-										</i>
-									}
-								/>
-							) : !!phieuDangKy?.soTinChiToiDa ? (
-								<>
-									{sinhVienDot?.ghiChu && (
-										<div>
-											{<QuestionCircleOutlined />} {intl.formatMessage({ id: 'dangkytinchi.empty.ghichu' })}:{' '}
-											<i style={{ color: 'gray' }}>{sinhVienDot.ghiChu}.</i>
-										</div>
-									)}
-									<div style={{ marginBottom: 12 }}>
+					{loading || loadingHocKy || isWaitingSinhVienDot ? (
+						<Spin spinning size='large' tip={intl.formatMessage({ id: 'dangkytinchi.loading.message' })}>
+							<div style={{ minHeight: 360, width: '100%' }} />
+						</Spin>
+					) : dotDangKyHienTai && sinhVienDot ? (
+						sinhVienDot.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.KHONG_DUOC_DK ? (
+							<Empty
+								description={
+									<>
+										<span className='text-error'>
+											{intl.formatMessage({ id: 'dangkytinchi.empty.khongduocphepdangky' })}
+										</span>
+										<br />
+										{intl.formatMessage({ id: 'dangkytinchi.empty.ghichu' })}: {sinhVienDot.ghiChu ?? '--'}
+									</>
+								}
+							/>
+						) : dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
+							<Empty
+								description={
+									<i style={{ color: '#999' }}>
 										{intl.formatMessage(
-											{ id: 'dangkytinchi.thongtindangky.alert' },
+											{ id: 'dangkytinchi.empty.alert' },
 											{
-												link_tien_trinh: (chunks: any) => (
-													<a
-														href='/hoc-tap/tien-trinh-hoc-tap'
-														onClick={(e) => {
-															e.preventDefault();
-															history.push('/hoc-tap/tien-trinh-hoc-tap');
-														}}
-													>
-														{chunks}
-													</a>
-												),
-
-												link_ket_qua: (chunks: any) => (
-													<a
-														href='/hoc-tap/ket-qua-hoc-tap'
-														onClick={(e) => {
-															e.preventDefault();
-															history.push('/hoc-tap/ket-qua-hoc-tap');
-														}}
-													>
-														{chunks}
-													</a>
-												),
+												b: (chunks) => <b>{chunks}</b>,
 											},
-										)}
+										)}{' '}
+									</i>
+								}
+							/>
+						) : !!phieuDangKy?.soTinChiToiDa ? (
+							<>
+								{sinhVienDot?.ghiChu && (
+									<div>
+										{<QuestionCircleOutlined />} {intl.formatMessage({ id: 'dangkytinchi.empty.ghichu' })}:{' '}
+										<i style={{ color: 'gray' }}>{sinhVienDot.ghiChu}.</i>
 									</div>
+								)}
+								<div style={{ marginBottom: 12 }}>
+									{intl.formatMessage(
+										{ id: 'dangkytinchi.thongtindangky.alert' },
+										{
+											link_tien_trinh: (chunks: any) => (
+												<a
+													href='/hoc-tap/tien-trinh-hoc-tap'
+													onClick={(e) => {
+														e.preventDefault();
+														history.push('/hoc-tap/tien-trinh-hoc-tap');
+													}}
+												>
+													{chunks}
+												</a>
+											),
 
-									{cctFilter?.() && (
-										<div style={{ marginBottom: 12 }}>
-											<i className='text-info'>{intl.formatMessage({ id: 'dangkytinchi.waitlist.alert' })}</i>
-										</div>
+											link_ket_qua: (chunks: any) => (
+												<a
+													href='/hoc-tap/ket-qua-hoc-tap'
+													onClick={(e) => {
+														e.preventDefault();
+														history.push('/hoc-tap/ket-qua-hoc-tap');
+													}}
+												>
+													{chunks}
+												</a>
+											),
+										},
 									)}
+								</div>
 
-									<DangKyLopHocPhan
-										tongTinChi={tongTinChi}
-										soTinChiToiDa={soTinChiToiDa}
-										danhSachLopHienThi={danhSachLopHienThi}
-									/>
-								</>
-							) : (
-								<Empty
-									description={
-										<i style={{ color: '#999' }}>
-											{intl.formatMessage({ id: 'dangkytinchi.thongtindangky.empty.error' })}
-										</i>
-									}
+								{cctFilter?.() && (
+									<div style={{ marginBottom: 12 }}>
+										<i className='text-info'>{intl.formatMessage({ id: 'dangkytinchi.waitlist.alert' })}</i>
+									</div>
+								)}
+
+								<DangKyLopHocPhan
+									tongTinChi={tongTinChi}
+									soTinChiToiDa={soTinChiToiDa}
+									danhSachLopHienThi={danhSachLopHienThi}
 								/>
-							)
+							</>
 						) : (
 							<Empty
 								description={
 									<i style={{ color: '#999' }}>
-										{intl.formatMessage({ id: 'dangkytinchi.thongtindangky.empty.khongcodotdangky' })}
+										{intl.formatMessage({ id: 'dangkytinchi.thongtindangky.empty.error' })}
 									</i>
 								}
 							/>
-						)}
-					</Spin>
+						)
+					) : (
+						<Empty
+							description={
+								<i style={{ color: '#999' }}>
+									{intl.formatMessage({ id: 'dangkytinchi.thongtindangky.empty.khongcodotdangky' })}
+								</i>
+							}
+						/>
+					)}
 				</PageCard>
 			</div>
 
