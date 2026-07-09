@@ -33,6 +33,8 @@ export default {
 	'kytucxa.dangky.card.button.full': 'HẾT CHỖ',
 	'kytucxa.dangky.card.button.daDangKy': 'ĐÃ ĐĂNG KÝ',
 	'kytucxa.dangky.card.button.khongTheDangKy': 'KHÔNG THỂ ĐĂNG KÝ',
+	'kytucxa.dangky.card.button.paymentNow': 'THANH TOÁN NGAY',
+	'kytucxa.dangky.card.button.seeMore': 'XEM THÊM',
 	'kytucxa.dangky.card.imageAlt': 'Phòng {maPhong}',
 
 	//Chi Tiet Phong
