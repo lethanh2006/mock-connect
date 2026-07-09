@@ -2,7 +2,7 @@ import type { ChatbotAmiV2 } from '@/services/TienIch/ChatbotV2/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { getPublicAssetPath } from '@/utils/path';
-import { sanitizeObject } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Collapse } from 'antd';
 import classNames from 'classnames';
@@ -55,7 +55,7 @@ const ContentBoxChatV2 = () => {
 
 				<div className='content-text'>
 					{message.content ? (
-						<div className='text' dangerouslySetInnerHTML={{ __html: sanitizeObject(message.content) }} />
+						<div className='text' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(message.content) }} />
 					) : null}
 
 					{(message?.recommendQuestions?.length ?? 0) > 0 && (

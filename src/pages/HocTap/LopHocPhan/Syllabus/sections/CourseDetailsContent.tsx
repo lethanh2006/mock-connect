@@ -1,5 +1,6 @@
 import { useModel } from '@umijs/max';
 import { Descriptions, Form, FormInstance, Space, Typography } from 'antd';
+import DOMPurify from 'dompurify';
 import React from 'react';
 
 const { Title, Text, Link } = Typography;
@@ -55,19 +56,19 @@ const CourseDetailsContent: React.FC<Props> = ({ readonly, formMain }) => {
 
 							<Descriptions.Item label={<Text>Course Goals</Text>}>
 								{deCuongFull?.mucTieuHocPhan && (
-									<div style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: deCuongFull.mucTieuHocPhan }} />
+									<div style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(deCuongFull.mucTieuHocPhan) }} />
 								)}
 							</Descriptions.Item>
 
 							<Descriptions.Item label={<Text>Methodology</Text>}>
 								{deCuongFull?.phuongPhapGiangDay && (
-									<div style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: deCuongFull.phuongPhapGiangDay }} />
+									<div style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(deCuongFull.phuongPhapGiangDay) }} />
 								)}
 							</Descriptions.Item>
 
 							<Descriptions.Item label={<Text>Course Themes</Text>}>
 								{deCuongFull?.chuanDauRa && (
-									<div style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: deCuongFull.chuanDauRa }} />
+									<div style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(deCuongFull.chuanDauRa) }} />
 								)}
 							</Descriptions.Item>
 						</Descriptions>

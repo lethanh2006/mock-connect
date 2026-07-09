@@ -2,7 +2,8 @@ import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
 import { getLocalizedName } from '@/utils/localeName';
-import { getNameFile, sanitizeObject } from '@/utils/utils';
+import { getNameFile } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { Button, Descriptions, Divider, Empty, Modal } from 'antd';
 import React, { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -20,7 +21,7 @@ const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) =
 
 	const renderSafeHtml = (html?: string) => {
 		if (!html) return <div>{updatingHtml}</div>;
-		return <div dangerouslySetInnerHTML={{ __html: sanitizeObject(html) }} />;
+		return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />;
 	};
 
 	return (

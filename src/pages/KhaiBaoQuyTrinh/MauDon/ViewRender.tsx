@@ -1,5 +1,6 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
+import DOMPurify from 'dompurify';
 import FormTable from '@/pages/KhaiBaoQuyTrinh/MauDon/FormTable';
 import SelectSinhVienDebounce from '@/pages/SinhVien/components/Select';
 import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
@@ -45,7 +46,7 @@ const ViewRender = (props: {
 		case EKieuDuLieu.TEXT:
 			value =
 				cauHinh.textDisplay === ETextDisplay.TEXT_EDITOR ? (
-					<div dangerouslySetInnerHTML={{ __html: valueFinal }} />
+					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(valueFinal) }} />
 				) : (
 					<div>{valueFinal}</div>
 				);

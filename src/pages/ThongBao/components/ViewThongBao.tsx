@@ -3,7 +3,8 @@ import { type ESourceTypeNotification, mapModuleKey } from '@/services/ThongBao/
 import { type ThongBao } from '@/services/ThongBao/typing';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { currentRole } from '@/utils/ip';
-import { getNameFile, sanitizeObject } from '@/utils/utils';
+import { getNameFile } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { CalendarOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Divider, Row } from 'antd';
 import { history, useIntl } from 'umi';
@@ -63,7 +64,7 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 			/>
 
 			<br />
-			<div dangerouslySetInnerHTML={{ __html: sanitizeObject(record?.content ?? '') }} className='notif-content' />
+			<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(record?.content ?? '') }} className='notif-content' />
 
 			<Row style={{ marginTop: 12 }} gutter={[12, 12]}>
 				{record?.taiLieuDinhKem?.length ? (

@@ -7,7 +7,8 @@ import { EKieuDuLieu, ETextDisplay } from '@/services/FormDong/LoaiHinh/constant
 import type { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { getSafeHref } from '@/utils/security';
-import { currencyFormat, sanitizeObject } from '@/utils/utils';
+import { currencyFormat } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { Modal, Tag } from 'antd';
 import { useState } from 'react';
 import { useIntl } from 'umi';
@@ -45,7 +46,7 @@ const ViewRender = (props: {
 		case EKieuDuLieu.TEXT:
 			value =
 				cauHinh.textDisplay === ETextDisplay.TEXT_EDITOR ? (
-					<div dangerouslySetInnerHTML={{ __html: sanitizeObject(valueFinal ?? '') }} />
+					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(valueFinal ?? '') }} />
 				) : (
 					<div>{valueFinal}</div>
 				);
