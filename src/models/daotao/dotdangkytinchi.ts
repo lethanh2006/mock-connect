@@ -192,11 +192,12 @@ export default () => {
 		data: {
 			dangKy: { lopHocPhanId: string; maKhoaNganh: string };
 			phieuDktcId: string;
+			recaptchaToken?: string;
 		},
 		messageText?: string,
 	): Promise<LopHocPhan.IRecordSinhVienLopHP> => {
 		try {
-			const res = await postDangKyTinChi(data);
+			const res = await postDangKyTinChi({ ...data });
 			message.success(messageText ?? intl.formatMessage({ id: 'dangkytinchi.thongbao.dangky' }));
 
 			return res.data?.data;

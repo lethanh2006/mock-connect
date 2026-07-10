@@ -14,7 +14,11 @@ export async function getLopDangKy(maHocKy: string) {
 	return axios.get(`${ipDaoTao}/dang-ky-tin-chi/lop-dang-ky/hoc-ky/${maHocKy}`);
 }
 
-export async function postDangKyTinChi(data: { dangKy: { lopHocPhanId: string }; phieuDktcId: string }) {
+export async function postDangKyTinChi(data: {
+	dangKy: { lopHocPhanId: string; maKhoaNganh?: string };
+	phieuDktcId: string;
+	recaptchaToken?: string;
+}) {
 	return axios.post(`${ipDaoTao}/dang-ky-tin-chi/dang-ky/lop-hoc-phan`, { ...data, silent: true });
 }
 

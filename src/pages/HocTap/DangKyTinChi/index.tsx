@@ -5,7 +5,8 @@ import { formatDateTime } from '@/utils/formatDate';
 import { FileTextOutlined, InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Empty, Modal } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { history, useAccess, useIntl, useModel } from 'umi';
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
+import { history, useIntl, useModel } from 'umi';
 import CreditRegistrationBar from './components/CreditRegistrationBar';
 import DangKyLopHocPhan from './components/DangKyLopHocPhan';
 import FilterDotDangKy from './components/FilterDotDangKy';
@@ -16,9 +17,10 @@ import './components/style.less';
 import ViewGhiChuDangKyTinChi from './components/ViewGhiChuDangKyTinChi';
 import { buildDanhSachLopHienThi, getSoTinChiToiDa, tinhTongHocPhanDangKy, tinhTongTinChi } from './utils';
 
+const RECAPTCHA_SITE_KEY = APP_CONFIG_RECAPTCHA_SITE_KEY;
+
 const DangKyTinChiPage = () => {
 	const intl = useIntl();
-	const { cctFilter } = useAccess();
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { dotDangKyHienTai, loading, sinhVienDot, phieuDangKy, danhSachLopDangKy, getLopDangKyModel, setVisibleModal } =
 		useModel('daotao.dotdangkytinchi');
@@ -114,7 +116,7 @@ const DangKyTinChiPage = () => {
 	}, []);
 
 	return (
-		<>
+		<GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>
 			<div ref={dangKyCardRef}>
 				<PageCard title={intl.formatMessage({ id: 'dangkytinchi.title' })} extra={<FilterDotDangKy />}>
 					{!!phieuDangKy?.soTinChiToiDa &&
@@ -279,7 +281,7 @@ const DangKyTinChiPage = () => {
 
 			<ModalLichSuVuotTin visible={visibleLichSu} onClose={() => setVisibleLichSu(false)} />
 			<ViewGhiChuDangKyTinChi visible={visibleThongTin} setVisible={setVisibleThongTin} />
-		</>
+		</GoogleReCaptchaProvider>
 	);
 };
 
