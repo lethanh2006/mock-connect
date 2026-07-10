@@ -54,12 +54,12 @@ const useInitService = (url: string, ip?: string) => {
 		});
 	};
 
-	const postValidateImport = (payload: any, headers?: any) => {
-		return axios.post(`${finalIp}/${url}/import/validate`, payload, { headers });
+	const postValidateImport = (payload: any, headers?: any, params?: any) => {
+		return axios.post(`${finalIp}/${url}/import/validate`, payload, { params, headers });
 	};
 
-	const postExecuteImport = (payload: any, headers?: any) => {
-		return axios.post(`${finalIp}/${url}/import/insert`, payload, { headers });
+	const postExecuteImport = (payload: any, headers?: any, params?: any) => {
+		return axios.post(`${finalIp}/${url}/import/insert`, payload, { params, headers });
 	};
 
 	const getExportFields = (params?: any, headers?: any) => {
