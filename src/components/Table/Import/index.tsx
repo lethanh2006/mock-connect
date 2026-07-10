@@ -109,6 +109,7 @@ const ModalImport = (props: ModalImportProps) => {
 							onBack={() => setCurrentStep(2)}
 							modelName={modelName}
 							importHeaders={importHeaders}
+							extendData={extendData}
 						/>
 					)}
 				</>
