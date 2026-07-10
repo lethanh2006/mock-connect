@@ -2,6 +2,7 @@ import { EDangSanPham, MapKeyColorTrangThaiDeTaiQuanLyKhoaHoc } from '@/services
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
 import { formatDate } from '@/utils/formatDate';
+import { getSafeHref } from '@/utils/security';
 import { Button, Descriptions, Tag } from 'antd';
 import { useModel } from 'umi';
 import TableKeHoachUngDung from './TableKeHoachUngDung';
@@ -121,11 +122,16 @@ const ViewHoSoNghiemThu = (props: {
 														props.rec?.ketQuaHoiDong?.[item._id]?.ketQuaNghiemThu?.bienBanUrl ||
 														nghiemThuKhcn?.bienBanUrl ||
 														[]),
-												].map((ele) => (
-													<a key={ele} href={ele} target='_blank' rel='noreferrer'>
-														<Tag color={primaryColor}>Xem tập tin</Tag>
-													</a>
-												))}
+												].map((ele, index) => {
+													const safeUrl = getSafeHref(ele);
+													if (!safeUrl) return null;
+
+													return (
+														<a key={`${safeUrl}-${index}`} href={safeUrl} target='_blank' rel='noopener noreferrer'>
+															<Tag color={primaryColor}>Xem tập tin</Tag>
+														</a>
+													);
+												})}
 											</>
 										</span>
 									</Descriptions.Item>
@@ -169,11 +175,16 @@ const ViewHoSoNghiemThu = (props: {
 			</Descriptions>
 			<Descriptions column={{ xs: 2, sm: 2, md: 4, lg: 6, xl: 6, xxl: 6 }}>
 				<Descriptions.Item span={6} label='Báo cáo tổng hợp kết quả nghiên cứu đề tài NCKH'>
-					{nghiemThuKhcn?.baoCaoUrl?.map((item) => (
-						<a href={item} key={item} target='_blank' rel='noreferrer'>
-							<Tag color={primaryColor}>Xem tập tin</Tag>
-						</a>
-					))}
+					{nghiemThuKhcn?.baoCaoUrl?.map((item, index) => {
+						const safeUrl = getSafeHref(item);
+						if (!safeUrl) return null;
+
+						return (
+							<a key={`${safeUrl}-${index}`} href={safeUrl} target='_blank' rel='noopener noreferrer'>
+								<Tag color={primaryColor}>Xem tập tin</Tag>
+							</a>
+						);
+					})}
 				</Descriptions.Item>
 				{nghiemThuKhcn?.banGiaiTrinhUrl?.length ? (
 					<Descriptions.Item
@@ -203,11 +214,16 @@ const ViewHoSoNghiemThu = (props: {
 								</div>
 							}
 						>
-							{item?.url?.map((ele) => (
-								<a href={ele} key={ele} target='_blank' rel='noreferrer'>
-									<Tag color={primaryColor}>Xem tập tin</Tag>
-								</a>
-							))}
+							{item?.url?.map((ele, urlIndex) => {
+								const safeUrl = getSafeHref(ele);
+								if (!safeUrl) return null;
+
+								return (
+									<a key={`${safeUrl}-${urlIndex}`} href={safeUrl} target='_blank' rel='noopener noreferrer'>
+										<Tag color={primaryColor}>Xem tập tin</Tag>
+									</a>
+								);
+							})}
 						</Descriptions.Item>
 					))}
 			</Descriptions>

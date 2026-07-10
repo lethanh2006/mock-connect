@@ -4,6 +4,7 @@ import type { ELoaiUngDungTrongHocVien } from '@/services/KhoaHoc/DeTaiKHCN/cons
 import { MapKeyNameLoaiUngDungTrongHocVien } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
+import { getSafeHref } from '@/utils/security';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Divider, Modal, Popconfirm, Space, Tag, Tooltip } from 'antd';
 import { useCallback, useState } from 'react';
@@ -43,11 +44,16 @@ const TableUngDungTrongHocVien = (props: { mode: 'view' | 'edit'; data: DeTaiKHC
 
 			render: (val: string[]) => (
 				<div>
-					{val?.map((item, index) => (
-						<a key={item} href={item} target='_blank' rel='noreferrer'>
-							<Tag color={primaryColor}>Xem tập tin {index + 1}</Tag>
-						</a>
-					))}
+					{val?.map((item, index) => {
+						const safeUrl = getSafeHref(item);
+						if (!safeUrl) return null;
+
+						return (
+							<a key={`${safeUrl}-${index}`} href={safeUrl} target='_blank' rel='noopener noreferrer'>
+								<Tag color={primaryColor}>Xem tập tin {index + 1}</Tag>
+							</a>
+						);
+					})}
 				</div>
 			),
 		},

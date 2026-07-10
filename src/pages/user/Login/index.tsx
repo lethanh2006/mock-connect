@@ -7,7 +7,6 @@ import rules from '@/utils/rules';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Tabs, message } from 'antd';
 import React, { useState } from 'react';
-// import Recaptcha from 'react-recaptcha';
 import { OIDCBounder } from '@/components/OIDCBounder';
 import { history, useIntl, useModel } from 'umi';
 import styles from './index.less';
@@ -17,10 +16,6 @@ const Login: React.FC = () => {
 	const [submitting, setSubmitting] = useState(false);
 	const [type, setType] = useState<string>('account');
 	const { initialState, setInitialState } = useModel('@@initialState');
-	const [isVerified, setIsverified] = useState<boolean>(true);
-	const [visibleCaptcha, setVisibleCaptcha] = useState<boolean>(false);
-	// const [visibleCaptcha2, setVisibleCaptcha2] = useState<boolean>(false);
-	// const recaptchaRef = useRef(null);
 	const intl = useIntl();
 	const [form] = Form.useForm();
 
@@ -50,10 +45,6 @@ const Login: React.FC = () => {
 
 	const handleSubmit = async (values: { login: string; password: string }) => {
 		try {
-			if (!isVerified) {
-				message.error('Vui lòng xác thực Captcha');
-				return;
-			}
 			setSubmitting(true);
 			const msg = await adminlogin({ ...values, username: values?.login ?? '' });
 			if (msg.status === 200 && msg?.data?.data?.accessToken) {
@@ -61,11 +52,6 @@ const Login: React.FC = () => {
 				localStorage.removeItem('failed');
 			}
 		} catch (error) {
-			if (count >= 4) {
-				setIsverified(false);
-				setVisibleCaptcha(!visibleCaptcha);
-				// setVisibleCaptcha2(true);
-			}
 			setCount(count + 1);
 			localStorage.setItem('failed', (count + 1).toString());
 			const defaultloginFailureMessage = intl.formatMessage({
@@ -76,11 +62,6 @@ const Login: React.FC = () => {
 		}
 		setSubmitting(false);
 	};
-
-	// const verifyCallback = (response: any) => {
-	// 	if (response) setIsverified(true);
-	// 	else setIsverified(false);
-	// };
 
 	return (
 		<OIDCBounder>
@@ -157,30 +138,6 @@ const Login: React.FC = () => {
 							>
 								Quên mật khẩu?
 							</Button>
-
-							{/* {type === 'accountAdmin' && visibleCaptcha && count >= 5 && (
-              <Recaptcha
-                ref={recaptchaRef}
-                size="normal"
-                sitekey="6LelHsEeAAAAAJmsVdeC2EPNCAVEtfRBUGSKireh"
-                render="explicit"
-                hl="vi"
-                // onloadCallback={callback}
-                verifyCallback={verifyCallback}
-              />
-            )}
-
-            {type === 'accountAdmin' && !visibleCaptcha && visibleCaptcha2 && count >= 5 && (
-              <Recaptcha
-                ref={recaptchaRef}
-                size="normal"
-                sitekey="6LelHsEeAAAAAJmsVdeC2EPNCAVEtfRBUGSKireh"
-                render="explicit"
-                hl="vi"
-                // onloadCallback={callback}
-                verifyCallback={verifyCallback}
-              />
-            )} */}
 						</div>
 					</div>
 				</div>

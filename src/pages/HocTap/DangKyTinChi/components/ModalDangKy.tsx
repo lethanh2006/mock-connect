@@ -5,8 +5,7 @@ import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { SyncOutlined } from '@ant-design/icons';
 import { Button, Card, message, Modal, Space, Tag } from 'antd';
 import pLimit from 'p-limit';
-import { useEffect, useRef, useState } from 'react';
-import ReCAPTCHA from 'react-google-recaptcha';
+import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
 const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.ILopDangKy[] }) => {
@@ -24,17 +23,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 	} = useModel('daotao.dotdangkytinchi');
 	const [danhSachDangKy, setDanhSachDangKy] = useState<DangKyTinChi.ILopDangKy[]>([]); // Danh sách lớp mới thêm
 	const [formSubmiting, setFormSubmiting] = useState<boolean>();
-	const [isVerified, setIsVerified] = useState<boolean>(false);
-	const captchaRef = useRef<ReCAPTCHA>(null);
 	const canRegister = danhSachDangKy.filter((item) => item.trangThai !== ETrangThaiDangKyTinChi.DA_DANG_KY).length > 0;
-
-	const handleCaptchaChange = (token: string | null) => {
-		if (token) {
-			setIsVerified(true);
-		} else {
-			setIsVerified(false);
-		}
-	};
 
 	const postDangKy = async () => {
 		setFormSubmiting(true);
@@ -78,28 +67,19 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 						);
 			}),
 		);
-		if (isVerified) {
-			Promise.all(promises)
-				.then()
-				.finally(() => {
-					setTimeout(() => {
-						// message.info(intl.formatMessage({ id: 'dangkytinchi.modaldangky.success.hoanthanhdangky' }));
-						if (dotDangKyHienTai?._id) {
-							getPhieuDangKyModel(dotDangKyHienTai._id); // Get lại thông tin phiếu đăng ký của kỳ hiện tại
-							getLopDangKyModel(dotDangKyHienTai.maHocKy);
-						}
-						setFormSubmiting(false);
-					}, 1000);
-				});
-		}
+		Promise.all(promises)
+			.then()
+			.finally(() => {
+				setTimeout(() => {
+					// message.info(intl.formatMessage({ id: 'dangkytinchi.modaldangky.success.hoanthanhdangky' }));
+					if (dotDangKyHienTai?._id) {
+						getPhieuDangKyModel(dotDangKyHienTai._id); // Get lại thông tin phiếu đăng ký của kỳ hiện tại
+						getLopDangKyModel(dotDangKyHienTai.maHocKy);
+					}
+					setFormSubmiting(false);
+				}, 1000);
+			});
 	};
-
-	useEffect(() => {
-		if (visibleRegister) {
-			setIsVerified(false);
-			captchaRef.current?.reset();
-		}
-	}, [visibleRegister]);
 
 	useEffect(() => {
 		// Lấy lại danh sách các lớp tín chỉ mới chọn
@@ -129,8 +109,6 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 			),
 			onOk: async () => {
 				await postDangKy();
-				setIsVerified(false);
-				captchaRef.current?.reset();
 			},
 		});
 	};
@@ -209,19 +187,8 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 					otherButtons={[<i className='text-info'>{intl.formatMessage({ id: 'dangkytinchi.modaldangky.info' })}</i>]}
 				/>
 
-				<ReCAPTCHA
-					ref={captchaRef}
-					style={{
-						margin: '12px auto',
-						display: 'flex',
-						justifyContent: 'center',
-					}}
-					sitekey='6LelHsEeAAAAAJmsVdeC2EPNCAVEtfRBUGSKireh'
-					onChange={handleCaptchaChange}
-				/>
-
 				<div className='form-footer'>
-					<Button onClick={onRegister} type='primary' loading={formSubmiting} disabled={!canRegister || !isVerified}>
+					<Button onClick={onRegister} type='primary' loading={formSubmiting} disabled={!canRegister}>
 						{intl.formatMessage({ id: 'dangkytinchi.action.xacnhan' })}
 					</Button>
 					<Button onClick={() => setVisibleRegister(false)} disabled={formSubmiting}>
