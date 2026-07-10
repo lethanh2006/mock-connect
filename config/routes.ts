@@ -137,11 +137,11 @@ export default [
 				name: 'StudentDevelopment',
 				component: 'New/StudentDevelopment',
 			},
-			{
-				path: 'student-awarding',
-				name: 'StudentAwarding',
-				component: 'New/StudentAwarding',
-			},
+			// {
+			// 	path: 'student-awarding',
+			// 	name: 'StudentAwarding',
+			// 	component: 'New/StudentAwarding',
+			// },
 			{
 				path: 'events',
 				name: 'Events',

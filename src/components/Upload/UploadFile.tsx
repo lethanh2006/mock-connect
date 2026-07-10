@@ -1,5 +1,8 @@
+import { isAllowedFile, parseAcceptString, validateFileBlob } from '@/utils/fileValidation';
+import { getSafeHref } from '@/utils/security';
 import { blobToBase64, getNameFile, getPreviewUrl } from '@/utils/utils';
 import { DeleteOutlined, EyeOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import type { UploadProps } from 'antd';
 import { Button, Image, Upload, message } from 'antd';
 import type { RcFile } from 'antd/es/upload';
 import { useEffect, useState } from 'react';
@@ -40,23 +43,60 @@ const UploadFile: React.FC<TUploadProps> = ({
 	const [previewImage, setPreviewImage] = useState('');
 	const resizeProps: TResizeProps | undefined = typeof resize === 'boolean' ? {} : resize;
 	const showImage = isAvatar || isAvatarSmall || isLandscapeAvatar || isWidescreen;
+	const { beforeUpload: customBeforeUpload, accept: otherAccept, ...restOtherProps } = otherProps ?? {};
+	const acceptString = accept || otherAccept || (showImage ? 'image/*' : '');
+	const allowedExtensions = acceptString ? parseAcceptString(acceptString) : [];
+
+	const showFormatError = () => message.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
+
+	const resolveBeforeUpload: UploadProps['beforeUpload'] = async (file, fileList) => {
+		if (allowedExtensions.length) {
+			if (!isAllowedFile(file, allowedExtensions)) {
+				showFormatError();
+				return Upload.LIST_IGNORE;
+			}
+			if (!(await validateFileBlob(file, file.name))) {
+				showFormatError();
+				return Upload.LIST_IGNORE;
+			}
+		}
+		if (customBeforeUpload) {
+			return customBeforeUpload(file, fileList);
+		}
+		return false;
+	};
+
+	const uploadSecurityProps: Pick<UploadProps, 'beforeUpload' | 'accept'> = {
+		beforeUpload: resolveBeforeUpload,
+		accept: acceptString || undefined,
+	};
 
 	useEffect(() => {
 		let files: any[] = [];
+		const toRemoteFile = (url: string, index?: number) => {
+			const safeUrl = getSafeHref(url);
+			if (!safeUrl) return null;
+			return {
+				url: safeUrl,
+				remote: true,
+				name: props.previewFileProps?.isFileId
+					? `Tập tin${index !== undefined ? ` ${index + 1}` : ''}`
+					: getNameFile(safeUrl),
+			};
+		};
 		// Single URL
 		if (typeof value === 'string') {
-			files = [{ url: value, remote: true, name: props.previewFileProps?.isFileId ? 'Tập tin' : getNameFile(value) }];
+			const file = toRemoteFile(value);
+			files = file ? [file] : [];
 			setFileList(files);
 			// Callback về Form để Form Item có fileList => Phục vụ check rules fileRequired
 			if (onChange) onChange({ fileList: files });
 		}
 		// Array of URLs
 		else if (Array.isArray(value)) {
-			files = value.map((url, ind) => ({
-				url,
-				remote: true,
-				name: props.previewFileProps?.isFileId ? `Tập tin ${ind + 1}` : getNameFile(url),
-			}));
+			files = value
+				.map((url, ind) => (typeof url === 'string' ? toRemoteFile(url, ind) : null))
+				.filter(Boolean) as any[];
 			setFileList(files);
 			// Callback về Form để Form Item có fileList => Phục vụ check rules fileRequired
 			if (onChange) onChange({ fileList: files });
@@ -109,11 +149,10 @@ const UploadFile: React.FC<TUploadProps> = ({
 			return;
 		}
 
-		const findWrongTypeFile = files?.some((file) => {
-			const arrFileName = file.name.split('.');
-			return file?.remote !== true && !otherProps?.accept?.includes(arrFileName?.[arrFileName.length - 1]);
-		});
-		if (findWrongTypeFile && otherProps?.accept) {
+		const findWrongTypeFile = files?.some(
+			(file) => file?.remote !== true && allowedExtensions.length > 0 && !isAllowedFile(file, allowedExtensions),
+		);
+		if (findWrongTypeFile) {
 			message.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
 			return;
 		}
@@ -136,8 +175,9 @@ const UploadFile: React.FC<TUploadProps> = ({
 
 	/** Xem trước file */
 	const handlePreviewFile = async (file: TFileProps) => {
-		if (file.url) {
-			setPreviewImage(await getPreviewUrl(file.url ?? ''));
+		const safeUrl = getSafeHref(file.url);
+		if (safeUrl) {
+			setPreviewImage(safeUrl);
 			setPreviewOpen(true);
 		}
 	};
@@ -164,8 +204,8 @@ const UploadFile: React.FC<TUploadProps> = ({
 				onChange={handleChange}
 				style={{ width: '100%' }}
 				multiple={maxCount > 1}
-				accept={accept}
-				{...otherProps}
+				{...restOtherProps}
+				{...uploadSecurityProps}
 			>
 				{!isDisabled ? (
 					<>
@@ -233,7 +273,8 @@ const UploadFile: React.FC<TUploadProps> = ({
 								}
 							: undefined
 					}
-					{...otherProps}
+					{...restOtherProps}
+					{...uploadSecurityProps}
 				>
 					{!isDisabled && !fileList?.length ? (
 						<div
@@ -288,9 +329,9 @@ const UploadFile: React.FC<TUploadProps> = ({
 				onChange={handleChange}
 				style={{ width: '100%' }}
 				multiple={maxCount > 1}
-				accept={accept}
 				onPreview={hasPreviewFile ? handlePreviewFile : undefined}
-				{...otherProps}
+				{...restOtherProps}
+				{...uploadSecurityProps}
 			>
 				{!isDisabled ? (
 					<Button size={buttonSize || 'small'} icon={<UploadOutlined />}>

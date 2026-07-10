@@ -1,4 +1,5 @@
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
+import DOMPurify from 'dompurify';
 import { useEffect, useState } from 'react';
 
 const ViewThongTinChung = (props: { dataThongTinChung: QuyTrinh.IDanhSachCauHinhThongTinChung[] }) => {
@@ -28,7 +29,7 @@ const ViewThongTinChung = (props: { dataThongTinChung: QuyTrinh.IDanhSachCauHinh
 							return (
 								<>
 									<div style={{ fontWeight: 'bold' }}>{val?.ten}</div>
-									<div dangerouslySetInnerHTML={{ __html: val?.noiDung }} />
+									<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(val?.noiDung ?? '') }} />
 								</>
 							);
 						})}

@@ -7,6 +7,7 @@ import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
 import { ELoaiPhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/constant';
 import type { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
 import { Button, Card, Popconfirm, Space, Spin, Tag, Typography } from 'antd';
+import DOMPurify from 'dompurify';
 import { TableRowSelection } from 'antd/es/table/interface';
 import { useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -139,9 +140,13 @@ const DanhSachHocPhanList = ({
 				};
 
 	const handleXemDeCuong = (record: Row) => {
+		const courseLabel = DOMPurify.sanitize(record.hocPhan?.ten || record.maHocPhan || '', {
+			ALLOWED_TAGS: [],
+			ALLOWED_ATTR: [],
+		}).trim();
 		setDeCuongModal({
 			deCuongId: record.hocPhan?.ma ?? '',
-			title: `${intl.formatMessage({ id: 'lophocphan.id.decuong.title' })} - ${record.hocPhan?.ten || record.maHocPhan || ''}`,
+			title: `${intl.formatMessage({ id: 'lophocphan.id.decuong.title' })} - ${courseLabel}`,
 		});
 		setVisibleDeCuong(true);
 	};

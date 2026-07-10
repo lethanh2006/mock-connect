@@ -14,6 +14,7 @@ import lichthi from './hoctap/lichthi';
 import lophocphan from './hoctap/lophocphan';
 import tientrinhhoctap from './hoctap/tientrinhhoctap';
 import khaosat from './khaosat';
+import detaikhcn from './khoahoc/detaikhcn';
 import lichsukien from './lichsukien';
 import login from './login';
 import lophanhchinh from './lophanhchinh';
@@ -64,6 +65,7 @@ export default {
 	...activity,
 	...minor,
 	...syllabus,
+	...detaikhcn,
 
 	'pages.trangchu.title': 'TRAINING STUDENT PORTAL',
 	'pages.trangchu.subtitle': 'DIGITAL UNIVERSITY SYSTEM',

@@ -1,5 +1,6 @@
 import { type TinTucWP } from '@/services/TinTuc/typing';
 import { Typography } from 'antd';
+import DOMPurify from 'dompurify';
 
 interface Props {
 	data?: TinTucWP.IRecord;
@@ -10,7 +11,7 @@ interface Props {
 export const Excerpt = ({ data, rows, style }: Props) => {
 	return (
 		<Typography.Paragraph ellipsis={{ rows, expandable: false }} style={style}>
-			<div dangerouslySetInnerHTML={{ __html: data?.excerpt?.rendered ?? '' }} />
+			<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data?.excerpt?.rendered ?? '') }} />
 		</Typography.Paragraph>
 	);
 };

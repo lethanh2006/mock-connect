@@ -27,6 +27,7 @@ const CardGiangVienLop = (props: {
 			title={title}
 			size='small'
 			loading={loading}
+			hideInnerCard
 			className={classNames({ 'card-highlight': isHighlight })}
 		>
 			{danhSachNhanSu?.length ? (

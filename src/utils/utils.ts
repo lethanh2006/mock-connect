@@ -7,6 +7,7 @@ import { Dayjs } from 'dayjs';
 import * as XLSX from 'xlsx';
 import dayjsLib from './dayjs';
 import { ipFile } from './ip';
+import { isSafeUrl } from './security';
 
 export const urlRegex =
 	/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.,~#?&//=]*)$/;
@@ -417,6 +418,40 @@ export const removeHtmlTags = (html: string) =>
 		?.trim();
 
 /**
+ * Escape HTML entities in a string to prevent XSS attacks
+ * @param str
+ * @returns
+ */
+export const escapeHTML = (str: string): string => {
+	// Loại bỏ tất cả thẻ script, event handler (onclick, onerror, ...)
+	// Chỉ cho phép <b>, <i>, <u>, <strong>, <em>, <br>, <p>
+	return str
+		.replace(/<script.*?>.*?<\/script>/gi, '')
+		.replace(/on\w+="[^"]*"/gi, '')
+		.replace(/<(?!\/?(b|i|u|strong|em|br|p)\b)[^>]*>/gi, '');
+};
+
+/**
+ * Sanitize an object by escaping HTML entities in all string properties recursively
+ * @param obj
+ * @returns
+ */
+export const sanitizeObject = (obj: any): any => {
+	if (typeof obj === 'string') {
+		return escapeHTML(obj);
+	} else if (Array.isArray(obj)) {
+		return obj.map(sanitizeObject);
+	} else if (typeof obj === 'object' && obj !== null) {
+		const sanitized: any = {};
+		for (const key in obj) {
+			sanitized[key] = sanitizeObject(obj[key]);
+		}
+		return sanitized;
+	}
+	return obj;
+};
+
+/**
  * Chuyển HTML Entities thành text
  * @returns {any}
  */
@@ -627,7 +662,9 @@ export const createTextLinks = (text: string, targetBlank: boolean = true, break
 		/((https?:\/\/(www\.)?)|(www\.))(\S+)/gi,
 		function (match, temp, protocol, www1, www2, url) {
 			const hyperlink = (protocol ?? 'https://') + url;
-			return `<a href="${hyperlink}"${targetBlank ? 'target="_blank" rel="noreferrer"' : ''}>${url}</a>`;
+			if (!isSafeUrl(hyperlink)) return match;
+			const escapedHref = hyperlink.replace(/"/g, '&quot;');
+			return `<a href="${escapedHref}"${targetBlank ? 'target="_blank" rel="noreferrer"' : ''}>${url}</a>`;
 		},
 	);
 	if (breakLines) html = html.replace('\n', '<br />');

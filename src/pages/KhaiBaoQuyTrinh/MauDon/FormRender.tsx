@@ -1,4 +1,5 @@
 import MyDatePicker from '@/components/MyDatePicker';
+import DOMPurify from 'dompurify';
 import MyDateRangePicker from '@/components/MyDatePicker/RangePicker';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { EOperatorType } from '@/components/Table/constant';
@@ -451,7 +452,7 @@ const FormRender = (props: {
 				{cauHinh.kieuDuLieu === EKieuDuLieu.DOAN_VAN_BAN ? (
 					<>
 						{cauHinh.customDefaultValue ? (
-							<div dangerouslySetInnerHTML={{ __html: cauHinh.customDefaultValue }} />
+							<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(cauHinh.customDefaultValue) }} />
 						) : (
 							<div>{cauHinh.ten}</div>
 						)}

@@ -1,4 +1,5 @@
 import ModalExpandable from '@/components/Table/ModalExpandable';
+import DOMPurify from 'dompurify';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import TabsDeCuongHocPhan from './components/TabsDeCuongHocPhan';
@@ -32,7 +33,7 @@ const ModalHocPhan = (props: {
 
 	return (
 		<ModalExpandable
-			title={title ?? ''}
+			title={DOMPurify.sanitize(title ?? '', { ALLOWED_TAGS: [], ALLOWED_ATTR: [] }).trim()}
 			open={visible}
 			width={1000}
 			onCancel={() => setVisible(false)}

@@ -4,6 +4,7 @@ import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { getPublicAssetPath } from '@/utils/path';
 import { resetFieldsForm, toCamelCase } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { SendOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Collapse, Form, Input, Spin } from 'antd';
 import classNames from 'classnames';
@@ -16,7 +17,6 @@ import Pane from 'react-split-pane/lib/Pane';
 import { useModel } from 'umi';
 import TheardsPage from './components/Theards';
 import './style.less';
-
 const { Panel } = Collapse;
 
 const ChatBotPage = () => {
@@ -45,8 +45,11 @@ const ChatBotPage = () => {
 	const lastNameChar = fullName.split(' ')?.at(-1)?.[0]?.toUpperCase();
 
 	useEffect(() => {
+		const chatbotPassword = typeof APP_CONFIG_CHATBOT_PASSWORD !== 'undefined' ? APP_CONFIG_CHATBOT_PASSWORD : '';
+		if (!chatbotPassword) return;
+
 		createUserChatBotModel({
-			password: 'abc@1234',
+			password: chatbotPassword,
 			username: fullName ?? 'admin',
 			email:
 				recSinhVien?.email ??
@@ -130,7 +133,9 @@ const ChatBotPage = () => {
 				</div>
 
 				<div className='content-text'>
-					{message.content ? <div className='text' dangerouslySetInnerHTML={{ __html: message.content }} /> : null}
+					{message.content ? (
+						<div className='text' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(message.content) }} />
+					) : null}
 
 					{(message?.recommendQuestions?.length ?? 0) > 0 && (
 						<div className='quick-replies'>

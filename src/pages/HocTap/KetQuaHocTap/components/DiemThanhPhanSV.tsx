@@ -2,8 +2,9 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { CheckOutlined } from '@ant-design/icons';
-import { Select, Space, Tag, Tooltip } from 'antd';
+import { primaryColor } from '@/services/base/constant';
+import { CheckOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Button, Modal, Select, Space, Tag, Tooltip, Typography } from 'antd';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -37,6 +38,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 	const [data, setData] = useState<DataType[]>([]);
 	const [diemSvList, setDiemSvList] = useState<LopHocPhan.IDiemHpSvHk[]>([]);
 	const [visibleDiem, setVisibleDiem] = useState(false);
+	const [visibleGpaInfo, setVisibleGpaInfo] = useState(false);
 	const [recDiem, setRecDiem] = useState<DataType | null>(null);
 
 	const buildSemesterTitle = useCallback(
@@ -369,6 +371,15 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 						/>
 					</Space>,
 				]}
+				otherTextButtons={[
+					<Tooltip key='gpa-info' title={intl.formatMessage({ id: 'ketquahoctap.diemtp.gpaInfo.tooltip' })}>
+						<Button
+							type='link'
+							icon={<InfoCircleOutlined style={{ color: primaryColor }} />}
+							onClick={() => setVisibleGpaInfo(true)}
+						/>
+					</Tooltip>,
+				]}
 				data={tableData}
 				columns={columns}
 				globalSearch={false}
@@ -382,6 +393,24 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 					]}
 				/> */}
 			</TableStaticData>
+			<Modal
+				open={visibleGpaInfo}
+				title={intl.formatMessage({ id: 'ketquahoctap.diemtp.gpaInfo.title' })}
+				onCancel={() => setVisibleGpaInfo(false)}
+				footer={null}
+				width={760}
+			>
+				<Typography.Paragraph style={{ marginBottom: 12 }}>
+					{intl.formatMessage({ id: 'ketquahoctap.diemtp.gpaInfo.intro' })}
+				</Typography.Paragraph>
+				<ul style={{ paddingLeft: 20, marginBottom: 12 }}>
+					<li style={{ marginBottom: 8 }}>{intl.formatMessage({ id: 'ketquahoctap.diemtp.gpaInfo.semGpa' })}</li>
+					<li>{intl.formatMessage({ id: 'ketquahoctap.diemtp.gpaInfo.cumGpa' })}</li>
+				</ul>
+				<Typography.Text italic type='secondary'>
+					{intl.formatMessage({ id: 'ketquahoctap.diemtp.gpaInfo.note' })}
+				</Typography.Text>
+			</Modal>
 			<ModalChiTietDiem
 				visible={visibleDiem}
 				setVisible={setVisibleDiem}

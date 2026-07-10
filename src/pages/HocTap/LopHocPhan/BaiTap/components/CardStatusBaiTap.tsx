@@ -1,4 +1,5 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import DOMPurify from 'dompurify';
 import {
 	colorTrangThaiNopBaiTap,
 	type ETrangThaiNopBaiTap,
@@ -103,12 +104,14 @@ const CardStatusBaiTap = (props: IProps) => {
 									<div
 										className='noi-dung-post'
 										dangerouslySetInnerHTML={{
-											__html: data?.assignment?.huongDanNop
-												? data.assignment?.huongDanNop.replace(
-														/<img/g,
-														'<img style="max-width:100%;height:auto;display:block;margin:10px 0;"',
-													)
-												: '',
+											__html: DOMPurify.sanitize(
+												data?.assignment?.huongDanNop
+													? data.assignment?.huongDanNop.replace(
+															/<img/g,
+															'<img style="max-width:100%;height:auto;display:block;margin:10px 0;"',
+														)
+													: '',
+											),
 										}}
 									/>
 								) : (

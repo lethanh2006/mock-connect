@@ -70,6 +70,15 @@ export default {
 		' (TB học kỳ: {gpa}, Số tín chỉ đạt: {earned}, Số tín chỉ tích lũy: {cumulative})',
 	'ketquahoctap.diemtp.filter.semester': 'Học kỳ',
 	'ketquahoctap.diemtp.filter.allSemesters': 'Tất cả học kỳ',
+	'ketquahoctap.diemtp.gpaInfo.tooltip': 'Hướng dẫn tính điểm trung bình học kỳ và tích lũy',
+	'ketquahoctap.diemtp.gpaInfo.title': 'Hướng dẫn tính SemGPA và CumGPA',
+	'ketquahoctap.diemtp.gpaInfo.intro':
+		'Trước khi tính điểm trung bình học kỳ và điểm trung bình tích lũy, điểm chữ sẽ được quy đổi sang thang điểm 4.',
+	'ketquahoctap.diemtp.gpaInfo.semGpa':
+		'Điểm trung bình học kỳ (SemGPA) được tính cho tất cả các môn học trong một học kỳ, bao gồm cả các môn bị điểm F (không đạt), nhưng loại trừ các môn được đánh giá bằng các điểm không phân mức. SemGPA được tính theo trọng số tín chỉ của từng môn học.',
+	'ketquahoctap.diemtp.gpaInfo.cumGpa':
+		'Điểm trung bình tích lũy (CumGPA) được tính cho tất cả các môn học mà sinh viên đã tham gia trong suốt quá trình học theo một chương trình cụ thể. CumGPA phản ánh kết quả học tập của sinh viên trong tất cả các học kỳ tính đến thời điểm gần nhất. Cách tính tương tự như SemGPA, ngoại trừ đối với các môn học được thi lại/học lại, chỉ lần học cuối cùng (lần gần nhất) mới được đưa vào tính CumGPA.',
+	'ketquahoctap.diemtp.gpaInfo.note': '*Xem chi tiết trong quy chế đào tạo.',
 
 	'ketquahoctap.maytinh.title.intro':
 		'Tại đây sinh viên có thể thực hiện "giả lập điểm", để chủ động trong việc đăng ký học lại, học cải thiện.',

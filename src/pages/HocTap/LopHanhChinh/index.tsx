@@ -1,16 +1,16 @@
+import PageCard from '@/components/PageCard';
 import { TabViewPage } from '@/components/TabViewPage';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
 import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/DienDan';
 import { InfoCircleOutlined, MessageOutlined, NotificationOutlined } from '@ant-design/icons';
-import { Card, Col, Empty, Row, Spin } from 'antd';
+import { Col, Empty, Row, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import CardGiangVienLop from '../LopHocPhan/components/CardGiangVien';
 import DienDanLopPage from '../LopHocPhan/DienDan';
 import SelectLopHanhChinhSinhVien from './components/Select';
 import ThongTinChungLopHanhChinh from './components/ThongTinChung';
-import PageCard from '@/components/PageCard';
 
 const LopHanhChinhPage = () => {
 	const intl = useIntl();
@@ -40,9 +40,9 @@ const LopHanhChinhPage = () => {
 				/>
 			}
 		>
-			<div style={{ background: '#fff', borderRadius: 8, padding: '0 16px 16px', overflow: 'hidden' }}>
-			{/* Xem lớp hành chính theo từng học kỳ khác nhau */}
-			{/* <FilterHocKy style={{ marginBottom: 8 }} isSetHocKy fromLhc>
+			<div style={{ background: '#fff', borderRadius: 8, overflow: 'hidden' }}>
+				{/* Xem lớp hành chính theo từng học kỳ khác nhau */}
+				{/* <FilterHocKy style={{ marginBottom: 8 }} isSetHocKy fromLhc>
 				<SelectLopHanhChinhSinhVien
 					value={record?._id}
 					onChange={(val) => setRecord(danhSach.find((item) => item._id === val))}
@@ -62,12 +62,7 @@ const LopHanhChinhPage = () => {
 									menuKey: 'thong-tin',
 									content: (
 										<Row gutter={[16, 16]}>
-											<Col
-												span={24}
-												order={1}
-												md={{ span: 8, order: 2 }}
-												xxl={{ span: 6, order: 2 }}
-											>
+											<Col span={24} order={1} md={{ span: 8, order: 2 }} xxl={{ span: 6, order: 2 }}>
 												<Row gutter={[16, 16]}>
 													<Col span={24}>
 														<CardGiangVienLop
@@ -94,12 +89,7 @@ const LopHanhChinhPage = () => {
 													</Col>
 												</Row>
 											</Col>
-											<Col
-												span={24}
-												order={2}
-												md={{ span: 16, order: 1 }}
-												xxl={{ span: 18, order: 1 }}
-											>
+											<Col span={24} order={2} md={{ span: 16, order: 1 }} xxl={{ span: 18, order: 1 }}>
 												<ThongTinChungLopHanhChinh />
 											</Col>
 										</Row>
