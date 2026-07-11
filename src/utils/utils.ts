@@ -3,6 +3,8 @@ import { EFileScope, uploadFile } from '@/services/uploadFile';
 import { message, type FormInstance } from 'antd';
 import { type AxiosResponse } from 'axios';
 import type dayjs from 'dayjs';
+import { Dayjs } from 'dayjs';
+import DOMPurify from 'dompurify';
 import * as XLSX from 'xlsx';
 import dayjsLib from './dayjs';
 import { isSafeUrl } from './security';
@@ -416,27 +418,11 @@ export const removeHtmlTags = (html: string) =>
 		?.trim();
 
 /**
- * Escape HTML entities in a string to prevent XSS attacks
- * @param str
- * @returns
- */
-export const escapeHTML = (str: string): string => {
-	// Loại bỏ tất cả thẻ script, event handler (onclick, onerror, ...)
-	// Chỉ cho phép <b>, <i>, <u>, <strong>, <em>, <br>, <p>
-	return str
-		.replace(/<script.*?>.*?<\/script>/gi, '')
-		.replace(/on\w+="[^"]*"/gi, '')
-		.replace(/<(?!\/?(b|i|u|strong|em|br|p)\b)[^>]*>/gi, '');
-};
-
-/**
- * Sanitize an object by escaping HTML entities in all string properties recursively
- * @param obj
- * @returns
+ * Sanitize object/string recursively — tránh XSS / CWE-79.
  */
 export const sanitizeObject = (obj: any): any => {
 	if (typeof obj === 'string') {
-		return escapeHTML(obj);
+		return DOMPurify.sanitize(obj);
 	} else if (Array.isArray(obj)) {
 		return obj.map(sanitizeObject);
 	} else if (typeof obj === 'object' && obj !== null) {
@@ -719,4 +705,77 @@ export const numberToVietnameseWords = (num: number, capitalizeFirst?: boolean):
 		? finalResult.replace(/^\w/, (c) => c.toUpperCase())
 		: finalResult.charAt(0).toUpperCase() + finalResult.slice(1);
 	return finalResult;
+};
+
+export const toCamelCase = (str: string) => {
+	return str
+		.normalize('NFD')
+		.replace(/[\u0300-\u036f]/g, '')
+		.replace(/[^a-zA-Z0-9 ]/g, ' ')
+		.trim()
+		.split(/\s+/)
+		.map((word, index) =>
+			index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+		)
+		.join('');
+};
+
+export const buildDisabledDateTime = ({ min, max }: { min?: Dayjs; max?: Dayjs }) => {
+	return {
+		disabledDate: (current: Dayjs) => {
+			if (!current) return false;
+
+			if (min && current.isBefore(min.startOf('day'))) return true;
+			if (max && current.isAfter(max.endOf('day'))) return true;
+
+			return false;
+		},
+
+		disabledTime: (current: Dayjs | null) => {
+			if (!current) return {};
+
+			const result: any = {};
+
+			// ===== MIN LOGIC =====
+			if (min && current.isSame(min, 'day')) {
+				result.disabledHours = () => Array.from({ length: min.hour() }, (_, i) => i);
+
+				result.disabledMinutes = (selectedHour: number) => {
+					if (selectedHour !== min.hour()) return [];
+					return Array.from({ length: min.minute() }, (_, i) => i);
+				};
+			}
+
+			// ===== MAX LOGIC =====
+			if (max && current.isSame(max, 'day')) {
+				const disabledHoursAfter = Array.from({ length: 23 - max.hour() }, (_, i) => max.hour() + 1 + i);
+
+				const oldDisabledHours = result.disabledHours;
+
+				result.disabledHours = () => {
+					const minHours = oldDisabledHours ? oldDisabledHours() : [];
+					return [...minHours, ...disabledHoursAfter];
+				};
+
+				result.disabledMinutes = (selectedHour: number) => {
+					let disabled: number[] = [];
+
+					// minutes from min
+					if (min && current.isSame(min, 'day') && selectedHour === min.hour()) {
+						disabled = Array.from({ length: min.minute() }, (_, i) => i);
+					}
+
+					// minutes from max
+					if (selectedHour === max.hour()) {
+						const afterMinutes = Array.from({ length: 59 - max.minute() }, (_, i) => max.minute() + 1 + i);
+						disabled = [...disabled, ...afterMinutes];
+					}
+
+					return disabled;
+				};
+			}
+
+			return result;
+		},
+	} as any;
 };
