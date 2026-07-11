@@ -8,6 +8,7 @@ import { ELoaiPhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/constant';
 import type { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
 import { Button, Card, Popconfirm, Space, Spin, Tag, Typography } from 'antd';
 import { TableRowSelection } from 'antd/es/table/interface';
+import DOMPurify from 'dompurify';
 import { useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -139,9 +140,10 @@ const DanhSachHocPhanList = ({
 				};
 
 	const handleXemDeCuong = (record: Row) => {
+		const courseLabel = DOMPurify.sanitize(record.hocPhan?.ten || record.maHocPhan || '').trim();
 		setDeCuongModal({
 			deCuongId: record.hocPhan?.ma ?? '',
-			title: `${intl.formatMessage({ id: 'lophocphan.id.decuong.title' })} - ${record.hocPhan?.ten || record.maHocPhan || ''}`,
+			title: `${intl.formatMessage({ id: 'lophocphan.id.decuong.title' })} - ${courseLabel}`,
 		});
 		setVisibleDeCuong(true);
 	};
@@ -221,7 +223,6 @@ const DanhSachHocPhanList = ({
 			key: 'dsHocPhanTienQuyet',
 		},
 	];
-
 
 	const totalTinChi = useMemo(() => {
 		const compulsoryTinChi = compulsory.reduce((acc, it) => acc + (it.hocPhan?.soTinChi ?? 0), 0);

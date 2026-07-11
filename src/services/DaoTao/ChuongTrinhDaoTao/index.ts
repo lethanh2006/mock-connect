@@ -9,7 +9,9 @@ export async function getTienTrinhKhung(isSongNhanh?: boolean, personal?: boolea
 }
 
 export async function getTienTrinhThucTe(maKhoaNganh?: string) {
-	return axios.get(`${ipDaoTao}/chuong-trinh-dao-tao/tien-trinh-thuc-te/khoa-nganh/${maKhoaNganh}`);
+	return axios.get(
+		`${ipDaoTao}/chuong-trinh-dao-tao/tien-trinh-thuc-te/khoa-nganh/${encodeURIComponent(maKhoaNganh ?? '')}`,
+	);
 }
 
 export async function getManyKhoiLuaChonKhoaNganh(maKhoaNganh: string) {
@@ -33,7 +35,7 @@ export async function choosePathway(
 }
 
 export async function getPathwayChoice(maKhoaNganh: string) {
-	return axios.get(`${ipDaoTao}/sv-khoi-kien-thuc/khoa-nganh/${maKhoaNganh}/lua-chon`);
+	return axios.get(`${ipDaoTao}/sv-khoi-kien-thuc/khoa-nganh/${encodeURIComponent(maKhoaNganh)}/lua-chon`);
 }
 
 export async function getChuongTrinhDaoTaoTheoLoai(loai: string, donviId?: string) {
