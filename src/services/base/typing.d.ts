@@ -45,6 +45,8 @@ export interface IInitialState {
 	currentUser?: Login.IUser;
 	authorizedPermissions?: Login.IPermission[];
 	permissionLoading?: boolean;
+	authorizedRoles: string[]
+	authorizedRolesByClient: Record<string, string[]>;
 }
 
 export interface ISetting {
