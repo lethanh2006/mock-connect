@@ -4,8 +4,9 @@ import { EOperatorType } from '@/components/Table/constant';
 import { type IColumn } from '@/components/Table/typing';
 import type { UuDaiThanhToan } from '@/services/TaiChinh/UuDaiThanhToan/typing';
 import dayjs from '@/utils/dayjs';
-import { inputFormat } from '@/utils/utils';
 import { formatDate } from '@/utils/formatDate';
+import { inputFormat } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { useIntl, useModel } from 'umi';
 
 const TableUuDaiHienHanh = (props: { onCellClick?: (rec: UuDaiThanhToan.IRecord) => void }) => {
@@ -36,8 +37,7 @@ const TableUuDaiHienHanh = (props: { onCellClick?: (rec: UuDaiThanhToan.IRecord)
 			title: intl.formatMessage({ id: 'uudaithanhtoan.hienhanh.tgapdung' }),
 			align: 'center',
 			width: 140,
-			render: (val, rec) =>
-				`${formatDate(rec.thoiGianBatDau)} - ${formatDate(rec.thoiGianKetThuc)}`,
+			render: (val, rec) => `${formatDate(rec.thoiGianBatDau)} - ${formatDate(rec.thoiGianKetThuc)}`,
 			onCell,
 		},
 		{
@@ -69,7 +69,7 @@ const TableUuDaiHienHanh = (props: { onCellClick?: (rec: UuDaiThanhToan.IRecord)
 			title: intl.formatMessage({ id: 'uudaithanhtoan.hienhanh.mota' }),
 			dataIndex: 'moTa',
 			width: 220,
-			render: (val) => val && <ExpandText>{val}</ExpandText>,
+			render: (val) => val && <ExpandText>{DOMPurify.sanitize(val ?? '')}</ExpandText>,
 			onCell,
 		},
 	];

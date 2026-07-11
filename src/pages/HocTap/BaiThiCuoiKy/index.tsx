@@ -8,6 +8,7 @@ import { type EDinhDangBaiThi, mapNameDinhDangBaiThi } from '@/services/KhaoThi/
 import type { SinhVienThi } from '@/services/KhaoThi/SinhVienThi/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
+import { getSafeHref } from '@/utils/security';
 import { getNameFile } from '@/utils/utils';
 import { SaveOutlined } from '@ant-design/icons';
 import { Card, Segmented, Space, Tag } from 'antd';
@@ -57,14 +58,17 @@ const BaiThiCuoiKy = () => {
 			width: 300,
 			render: (val, rec) =>
 				rec?.fileDinhKem?.length
-					? rec?.fileDinhKem?.map((item: any) => (
-							<div key={item} style={{ maxWidth: 300 }}>
-								-{' '}
-								<a href={item} target='_blank' rel='noreferrer'>
-									{getNameFile(item)}
-								</a>
-							</div>
-						))
+					? rec?.fileDinhKem?.map((item: any) => {
+							const href = getSafeHref(item);
+							return href ? (
+								<div key={item} style={{ maxWidth: 300 }}>
+									-{' '}
+									<a href={href} target='_blank' rel='noreferrer'>
+										{getNameFile(item)}
+									</a>
+								</div>
+							) : null;
+						})
 					: null,
 		},
 		{
@@ -105,7 +109,9 @@ const BaiThiCuoiKy = () => {
 			render: (val: EDinhDangBaiThi[], rec) =>
 				val?.length && (
 					<div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-						{val?.map((item) => <Tag key={item}>{mapNameDinhDangBaiThi[item]}</Tag>)}
+						{val?.map((item) => (
+							<Tag key={item}>{mapNameDinhDangBaiThi[item]}</Tag>
+						))}
 					</div>
 				),
 		},
@@ -119,14 +125,17 @@ const BaiThiCuoiKy = () => {
 						<Tag color='red'>{intl.formatMessage({ id: 'baithi.table.chuaNop' })}</Tag>
 					</div>
 				) : (
-					rec?.urlBaiNop?.map((item: any) => (
-						<div key={item} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-							-{' '}
-							<a href={item} target='_blank' rel='noreferrer'>
-								{getNameFile(item)}
-							</a>
-						</div>
-					))
+					rec?.urlBaiNop?.map((item: any) => {
+						const href = getSafeHref(item);
+						return href ? (
+							<div key={item} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+								-{' '}
+								<a href={href} target='_blank' rel='noreferrer'>
+									{getNameFile(item)}
+								</a>
+							</div>
+						) : null;
+					})
 				),
 			hide: type === 'raDe',
 		},
