@@ -1,5 +1,6 @@
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
+import { getSafeHref } from '@/utils/security';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Space } from 'antd';
 import { useState } from 'react';
@@ -11,6 +12,7 @@ const ChiTietTepTin = (props: { visible: boolean; setVisible: (val: boolean) => 
 
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const files = record?.thongTinAnPhamTrucTuyen || [];
+	const safeFileUrl = getSafeHref(files[currentIndex]?.url) ?? '';
 
 	const nextSlide = () => {
 		setCurrentIndex((prev) => (prev + 1) % files.length);
@@ -40,9 +42,7 @@ const ChiTietTepTin = (props: { visible: boolean; setVisible: (val: boolean) => 
 				</Button>
 			</Space>
 
-			<div style={{ marginTop: 12 }}>
-				<PreviewFile file={files[currentIndex]?.url ?? ''} />
-			</div>
+			<div style={{ marginTop: 12 }}>{safeFileUrl ? <PreviewFile file={safeFileUrl} /> : null}</div>
 		</ModalExpandable>
 	);
 };

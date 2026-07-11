@@ -464,6 +464,7 @@ const useInitModel = <T extends object>(
 	const postValidateModel = async (
 		payload: any[],
 		config?: { dataPartitionCode?: string | null | undefined; messageText?: string },
+		params?: any,
 	): Promise<TImportResponse> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
@@ -471,6 +472,7 @@ const useInitModel = <T extends object>(
 			const res = await postValidateImport(
 				{ rows: payload },
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
+				params,
 			);
 			message.success(config?.messageText ?? formatIntlMsg('global.message.validated'));
 			return res.data?.data ?? [];
@@ -488,6 +490,7 @@ const useInitModel = <T extends object>(
 	const postExecuteImpotModel = async (
 		payload: any[],
 		config?: { dataPartitionCode?: string | null | undefined; messageText?: string },
+		params?: any,
 	): Promise<TImportResponse> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
@@ -495,6 +498,7 @@ const useInitModel = <T extends object>(
 			const res = await postExecuteImport(
 				{ rows: payload },
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
+				params,
 			);
 			message.success(config?.messageText ?? formatIntlMsg('global.message.imported'));
 			return res.data?.data ?? [];
