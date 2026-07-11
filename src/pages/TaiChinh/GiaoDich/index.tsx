@@ -49,17 +49,20 @@ const GiaoDichPage = () => {
 
 	// Callback from MOMO
 	useEffect(() => {
-		if (window.location.href.includes('orderType=momo_wallet'))
-			if (window.location.href.includes('resultCode=0'))
-				notification.success({
-					message: intl.formatMessage({ id: 'lichsugiaodich.notify.success.title' }),
-					description: intl.formatMessage({ id: 'lichsugiaodich.notify.success.desc' }),
-				});
-			else
-				notification.warning({
-					message: intl.formatMessage({ id: 'lichsugiaodich.notify.fail.title' }),
-					description: intl.formatMessage({ id: 'lichsugiaodich.notify.fail.desc' }),
-				});
+		const params = new URLSearchParams(window.location.search);
+		if (params.get('orderType') !== 'momo_wallet') return;
+
+		if (params.get('resultCode') === '0') {
+			notification.success({
+				message: intl.formatMessage({ id: 'lichsugiaodich.notify.success.title' }),
+				description: intl.formatMessage({ id: 'lichsugiaodich.notify.success.desc' }),
+			});
+		} else {
+			notification.warning({
+				message: intl.formatMessage({ id: 'lichsugiaodich.notify.fail.title' }),
+				description: intl.formatMessage({ id: 'lichsugiaodich.notify.fail.desc' }),
+			});
+		}
 	}, []);
 
 	const getData = () => getModel({ type: kieuThanhToan }, undefined, undefined, undefined, undefined, 'me/page');

@@ -6,9 +6,10 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import { ETrangThaiDonNghiHoc, TrangThaiDonNghiHoc } from '@/services/DaoTao/constant';
 import type { YeuCauNghiHoc } from '@/services/DaoTao/YeuCauNghiHoc/typing';
+import { formatDate, formatDateTime } from '@/utils/formatDate';
+import { getSafeHref } from '@/utils/security';
 import { CloseOutlined } from '@ant-design/icons';
 import { Popconfirm, Tag } from 'antd';
-import { formatDate, formatDateTime } from '@/utils/formatDate';
 import React, { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -65,11 +66,12 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 			dataIndex: 'urlMinhChung',
 			width: 100,
 			align: 'center',
-			render: (val) =>
-				val ? (
+			render: (val) => {
+				const href = getSafeHref(val);
+				return href ? (
 					<a
-						onClick={(e) => {
-							setFile(val);
+						onClick={() => {
+							setFile(href);
 							setFilesVisible(true);
 						}}
 					>
@@ -77,7 +79,8 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 					</a>
 				) : (
 					intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.khongco' })
-				),
+				);
+			},
 		},
 		{
 			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.trangthai' }),

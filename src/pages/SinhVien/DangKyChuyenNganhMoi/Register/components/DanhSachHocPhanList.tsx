@@ -140,10 +140,7 @@ const DanhSachHocPhanList = ({
 				};
 
 	const handleXemDeCuong = (record: Row) => {
-		const courseLabel = DOMPurify.sanitize(record.hocPhan?.ten || record.maHocPhan || '', {
-			ALLOWED_TAGS: [],
-			ALLOWED_ATTR: [],
-		}).trim();
+		const courseLabel = DOMPurify.sanitize(record.hocPhan?.ten || record.maHocPhan || '').trim();
 		setDeCuongModal({
 			deCuongId: record.hocPhan?.ma ?? '',
 			title: `${intl.formatMessage({ id: 'lophocphan.id.decuong.title' })} - ${courseLabel}`,
