@@ -9,6 +9,7 @@ import type { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
 import { Button, Card, Popconfirm, Space, Spin, Tag, Typography } from 'antd';
 import DOMPurify from 'dompurify';
 import { TableRowSelection } from 'antd/es/table/interface';
+import DOMPurify from 'dompurify';
 import { useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -223,7 +224,6 @@ const DanhSachHocPhanList = ({
 			key: 'dsHocPhanTienQuyet',
 		},
 	];
-
 
 	const totalTinChi = useMemo(() => {
 		const compulsoryTinChi = compulsory.reduce((acc, it) => acc + (it.hocPhan?.soTinChi ?? 0), 0);

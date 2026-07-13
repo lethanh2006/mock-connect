@@ -42,9 +42,7 @@ const ChiTietTepTin = (props: { visible: boolean; setVisible: (val: boolean) => 
 				</Button>
 			</Space>
 
-			<div style={{ marginTop: 12 }}>
-				{safeFileUrl ? <PreviewFile file={safeFileUrl} /> : null}
-			</div>
+			<div style={{ marginTop: 12 }}>{safeFileUrl ? <PreviewFile file={safeFileUrl} /> : null}</div>
 		</ModalExpandable>
 	);
 };
