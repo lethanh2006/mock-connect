@@ -77,7 +77,7 @@ export default defineConfig({
 	fastRefresh: true,
 
 	theme: {
-		'@base-path': process.env.APP_CONFIG_BASE_PATH || '/',
+		'@base-path': process.env.APP_CONFIG_BASE_PATH || '/student/',
 	},
 
 	// plugins: ['@react-dev-inspector/umi4-plugin'],
