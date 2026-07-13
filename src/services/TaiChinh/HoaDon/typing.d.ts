@@ -1,6 +1,6 @@
 import type { DotThuTaiChinh } from '../DotThu/typing';
 import type { UuDaiThanhToan } from '../UuDaiThanhToan/typing';
-import type { EMaTrangThaiThanhToan } from '../constant';
+import type { EMaTrangThaiThanhToan, ETransactionStatus } from '../constant';
 
 declare module HoaDon {
 	export interface IRecord extends IKhachHang {
@@ -127,7 +127,7 @@ declare module HoaDon {
 		responseData?: any | null;
 		shbCreateAliasMsgId?: string | null;
 		shbDebtQrCode?: string | null;
-		status: 'success' | 'failed' | string;
+		status: ETransactionStatus
 		toAccount: string;
 		transactionDate?: string | null;
 		transactionId?: string | null;

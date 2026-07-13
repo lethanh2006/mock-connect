@@ -32,11 +32,11 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 	/** Hình thức thanh toán cuối cùng, theo thứ tự ưu tiên: Kênh từ Đợt thu => Kênh mặc định => Thông tin ở Setting */
 	const hinhThucFinal = recDotThu?.kenhThanhToan ??
 		defaultHinhThuc ?? {
-			loaiKenhThanhToan: ELoaiHinhThucThanhToan.DONG,
-			maNganHangVNPay: maNganHang,
-			tienToSTK: tienToTaiKhoan,
-			huongDanThanhToan: urlHuongDanThanhToan,
-		};
+		loaiKenhThanhToan: ELoaiHinhThucThanhToan.DONG,
+		maNganHangVNPay: maNganHang,
+		tienToSTK: tienToTaiKhoan,
+		huongDanThanhToan: urlHuongDanThanhToan,
+	};
 	/** Tên ngân hàng: Lấy từ Hình thức hoặc Tên trường */
 	const unitInfo = removeVietnameseTones(hinhThucFinal.tenNganHang ?? unitName).toUpperCase();
 
@@ -48,9 +48,9 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 	const nganHangBaoTri = dayjs().isBetween(start, end) || dayjs().isBetween(start1, end1);
 
 	useEffect(() => {
-		getByKeyModel(ESettingKey.THONG_TIN_THANH_TOAN, ipTaiChinh)
-			.then()
-			.catch((er) => console.log(er));
+		// getByKeyModel(ESettingKey.THONG_TIN_THANH_TOAN, ipTaiChinh)
+		// 	.then()
+		// 	.catch((er) => console.log(er));
 
 		// Chỉ get 1 lần
 		if (!defaultHinhThuc) getHinhThuc();
@@ -66,8 +66,8 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 						<u>{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.qrTitle' })}:</u>
 					</b>
 					{hinhThucFinal.loaiKenhThanhToan === ELoaiHinhThucThanhToan.CO_DINH &&
-					hinhThucFinal.maNganHangVNPay &&
-					hinhThucFinal.soTaiKhoanThanhToanCoDinh ? (
+						hinhThucFinal.maNganHangVNPay &&
+						hinhThucFinal.soTaiKhoanThanhToanCoDinh ? (
 						<img
 							style={{ maxWidth: '100%' }}
 							src={`https://img.vietqr.io/image/${hinhThucFinal.maNganHangVNPay}-${hinhThucFinal.soTaiKhoanThanhToanCoDinh}-compact2.png?amount=${record?.amount}&addInfo=${addInfo}&accountName=${unitInfo}`}
