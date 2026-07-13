@@ -1,50 +1,34 @@
-import TableBase from '@/components/Table';
-import { EOperatorType } from '@/components/Table/constant';
+import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
+import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import {
-	ETransactionStatus,
 	colorTransactionStatus,
+	ETransactionStatus,
 	transactionPaymentLabel,
 	transactionStatus,
-	type ETransactionPaymentType,
+	type ETransactionPaymentType
 } from '@/services/TaiChinh/constant';
 import { formatDateTime } from '@/utils/formatDate';
 import { inputFormat } from '@/utils/utils';
 import { Tag } from 'antd';
+import dayjs from 'dayjs';
 import { useIntl, useModel } from 'umi';
 
-const LichSuThanhToan = (props: {
+const LichSuThanhToan = (_props: {
 	onPay: (rec: GiaoDich.IRecord) => void;
 	onCancel: (rec: GiaoDich.IRecord) => Promise<unknown>;
 	ngoaiThoiGianThanhToan?: boolean;
 }) => {
 	const intl = useIntl();
 	const { record } = useModel('taichinh.hoadon');
-	const { getModel, page, limit } = useModel('taichinh.giaodich');
-	const { onPay, onCancel, ngoaiThoiGianThanhToan } = props;
+	const { loading } = useModel('taichinh.hoadonchitiet');
 
-	const getData = () => {
-		record?.identityCode &&
-			getModel(
-				{
-					billIdentityCode: record?.identityCode,
-				},
-				[
-					{
-						field: 'status',
-						operator: EOperatorType.NOT_INCLUDE,
-						values: [ETransactionStatus?.CANCEL],
-					},
-				],
-				undefined,
-				undefined,
-				undefined,
-				'me/page',
-			);
-	};
+	const data = [...(record?.transactions ?? [])]
+		// .filter((tran) => tran.type === ETransactionType.PAYMENT || String(tran.type).toLowerCase() === 'payment')
+		.sort((a, b) => dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf());
 
-	const columns: IColumn<GiaoDich.IRecord>[] = [
+	const columns: IColumn<HoaDon.ITransaction>[] = [
 		{
 			title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.magd' }),
 			dataIndex: 'identityCode',
@@ -148,14 +132,16 @@ const LichSuThanhToan = (props: {
 	];
 
 	return (
-		<TableBase
+		<TableStaticData
 			columns={columns}
-			getData={getData}
-			modelName='taichinh.giaodich'
-			dependencies={[page, limit, record?.identityCode]}
-			hideCard
-			buttons={{ create: false }}
-			otherProps={{ size: 'small' }}
+			data={data}
+			loading={loading}
+			hasTotal
+			otherProps={{
+				pagination: false,
+				size: 'small',
+				scroll: { x: 850 },
+			}}
 		/>
 	);
 };

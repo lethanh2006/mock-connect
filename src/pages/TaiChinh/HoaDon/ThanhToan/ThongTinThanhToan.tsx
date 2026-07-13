@@ -4,9 +4,7 @@ import {
 	EMaTrangThaiThanhToan,
 	EMauTrangThaiThanhToanTable,
 	ETrangThaiThanhToan,
-	ETransactionPaymentType,
-	ETransactionSourceType,
-	ETransactionStatus,
+	ETransactionPaymentType
 } from '@/services/TaiChinh/constant';
 import { currencyFormat } from '@/utils/utils';
 import {
@@ -104,17 +102,17 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	const daRelease: boolean = !!recHoaDon?.dotThu?.daRelease || !!recHoaDon?.dotThu?.thoiGianRelease;
 
 	/** Get giao dịch pending */
-	const getGiaoDich = () =>
-		getAllModel(true, undefined, {
-			status: ETransactionStatus.PENDING,
-			billIdentityCode: recHoaDon?.identityCode,
-			fromAccount: ETransactionSourceType.EXTERNAL,
-		});
+	// const getGiaoDich = () =>
+	// 	getAllModel(true, undefined, {
+	// 		status: ETransactionStatus.PENDING,
+	// 		billIdentityCode: recHoaDon?.identityCode,
+	// 		fromAccount: ETransactionSourceType.EXTERNAL,
+	// 	});
 
 	const onChangeTab = (tab: string) => {
 		setActiveTab(tab);
 		// Get giao dịch nộp tiền chưa hoàn tất
-		if (tab === '1' && recHoaDon?.identityCode) getGiaoDich();
+		// if (tab === '1' && recHoaDon?.identityCode) getGiaoDich();
 	};
 
 	useEffect(() => {
@@ -141,7 +139,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 		if (rec._id)
 			return huyThanhToanModel(rec._id)
 				.then(() => {
-					getGiaoDich();
+					// getGiaoDich();
 					if (getData) getData();
 				})
 				.catch((er) => console.log(er));
@@ -380,7 +378,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 			>
 				<FormThanhToan
 					getData={() => {
-						if (activeTab === '1') getGiaoDich();
+						// if (activeTab === '1') getGiaoDich();
 						if (getData) getData();
 					}}
 				/>
