@@ -2,8 +2,8 @@ import type { BaiDang } from '@/services/HocTap/DienDan/BaiDang/typing';
 import type { BinhLuan } from '@/services/HocTap/DienDan/BinhLuan/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
+import { getPublicAssetPath } from '@/utils/path';
 import { copyToClipboard } from '@/utils/utils';
-import DOMPurify from 'dompurify';
 import {
 	CheckCircleOutlined,
 	CopyOutlined,
@@ -13,6 +13,7 @@ import {
 	PushpinOutlined,
 } from '@ant-design/icons';
 import { message, Popconfirm, Popover, Tooltip } from 'antd';
+import DOMPurify from 'dompurify';
 import _ from 'lodash';
 import { useEffect, useRef } from 'react';
 import { history, Link, useModel } from 'umi';
@@ -182,7 +183,7 @@ const CardStatus = (props: IProps) => {
 								placement={'right'}
 							>
 								<div className='action-menu pointer'>
-									<img src='/student/images/menu.svg' alt='icon' />
+									<img src={getPublicAssetPath('images/menu.svg')} alt='icon' />
 								</div>
 							</Popover>
 						)}

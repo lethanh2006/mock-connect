@@ -3,6 +3,7 @@ import PageCard from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { EApprovalStatus } from '@/services/CCT/constant';
+import { getPublicAssetPath } from '@/utils/path';
 import { Button, Col, Empty, Pagination, Popconfirm, Row, Spin, Tabs } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -340,7 +341,7 @@ const ActivityPage = () => {
 					<Empty
 						style={{ marginTop: 32, marginBottom: 32 }}
 						description={intl.formatMessage({ id: 'global.table.index.empty' })}
-						image='/student/images/empty.png'
+						image={getPublicAssetPath('images/empty.png')}
 					/>
 				)}
 			</Spin>

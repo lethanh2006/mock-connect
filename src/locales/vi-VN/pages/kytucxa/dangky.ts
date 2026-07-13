@@ -115,6 +115,7 @@ export default {
 	'kytucxa.dangky.nguoithan.field.email.placeholder': 'Nhập email',
 	'kytucxa.dangky.nguoithan.field.address': 'Địa chỉ',
 	'kytucxa.dangky.nguoithan.field.address.placeholder': 'Nhập địa chỉ',
+	'kytucxa.dangky.nguoithan.validation.requiredTwo': 'Vui lòng cập nhật đủ 2 thông tin liên hệ khẩn cấp',
 	'kytucxa.dangky.nguoithan.relationship.father': 'Bố',
 	'kytucxa.dangky.nguoithan.relationship.mother': 'Mẹ',
 	'kytucxa.dangky.nguoithan.relationship.guardian': 'Người giám hộ',

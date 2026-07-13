@@ -4,6 +4,7 @@ import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Button, Form, message, Steps } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import { chuanHoaDanhSachLienHeKhanCap } from '../NguoiThan/FormItem';
 import FormDangKyKTX from './Form';
 import FormChinhSachKTX from './FormChinhSach';
 
@@ -27,6 +28,44 @@ const getDiaChiThuongTru = (sinhVien?: SinhVien.IRecord) => {
 	);
 };
 
+const getHoTenThanhVienGiaDinh = (thanhVien: SinhVien.TThongTinGiaDinh) =>
+	[thanhVien.hoDem, thanhVien.ten].filter(Boolean).join(' ').trim();
+
+const getDiaChiThanhVienGiaDinh = (diaChi?: SinhVien.TDiaChi) =>
+	[diaChi?.diaChi, diaChi?.tenXaPhuong, diaChi?.tenQH, diaChi?.tenTP].filter(Boolean).join(', ');
+
+const mapMoiQuanHeKhanCap = (loaiThanhVien?: string) => {
+	if (loaiThanhVien === 'Bố') return 'Father';
+	if (loaiThanhVien === 'Mẹ') return 'Mother';
+	if (loaiThanhVien === 'Người giám hộ') return 'Guardian';
+	return loaiThanhVien ? 'Other' : undefined;
+};
+
+const getNguoiLienHeKhanCap = (sinhVien?: SinhVien.IRecord): PhieuDangKyKTX.INguoiThan[] => {
+	const thanhVienGiaDinh = sinhVien?.thanhVienGiaDinh ?? [];
+	const danhSachLienHe = thanhVienGiaDinh
+		.map((thanhVien, index) => ({
+			index: index + 1,
+			emergencyContactName: getHoTenThanhVienGiaDinh(thanhVien),
+			emergencyRelationship: mapMoiQuanHeKhanCap(thanhVien.loaiThanhVien),
+			emergencyContactNumber: thanhVien.soDienThoai,
+			emergencyEmail: thanhVien.email,
+			address: getDiaChiThanhVienGiaDinh(thanhVien.diaChiHienNay || thanhVien.hoKhauThuongTru),
+		}))
+		.filter(
+			(thanhVien) =>
+				thanhVien.emergencyContactName ||
+				thanhVien.emergencyRelationship ||
+				thanhVien.emergencyContactNumber ||
+				thanhVien.emergencyEmail ||
+				thanhVien.address,
+		);
+
+	return chuanHoaDanhSachLienHeKhanCap(danhSachLienHe)
+		.filter((item: any) => !item.khoiLienHeDefault)
+		.map((item, index) => ({ ...item, index: index + 1 }));
+};
+
 const getThongTinSinhVienForm = (sinhVien?: SinhVien.IRecord): Partial<PhieuDangKyKTX.IDangKy> => ({
 	fullName: getTenSinhVien(sinhVien),
 	studentId: sinhVien?.ma,
@@ -41,6 +80,7 @@ const getThongTinSinhVienForm = (sinhVien?: SinhVien.IRecord): Partial<PhieuDang
 	placeOfIssue: sinhVien?.noiCapCccd,
 	nationality: sinhVien?.quocTich,
 	permanentHomeAddress: getDiaChiThuongTru(sinhVien),
+	emergencyContacts: getNguoiLienHeKhanCap(sinhVien),
 });
 
 const ModalDanKyKTX = (props: {

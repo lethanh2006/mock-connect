@@ -1,5 +1,6 @@
 import PageCard from '@/components/PageCard';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import { getPublicAssetPath } from '@/utils/path';
 import { formatPhoneNumber } from '@/utils/utils';
 import { Avatar, Empty, List } from 'antd';
 import classNames from 'classnames';
@@ -45,8 +46,8 @@ const CardGiangVienLop = (props: {
 										src={
 											item.nhanSu?.urlAnhDaiDien ||
 											(item.nhanSu?.gioiTinh === 'Nữ'
-												? '/student/images/teacher-female.svg'
-												: '/student/images/teacher-male.svg')
+												? getPublicAssetPath('images/teacher-female.svg')
+												: getPublicAssetPath('images/teacher-male.svg'))
 										}
 									/>
 								}

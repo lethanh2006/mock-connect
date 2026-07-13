@@ -1,4 +1,5 @@
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import { getPublicAssetPath } from '@/utils/path';
 import { formatPhoneNumber } from '@/utils/utils';
 import { Avatar, Image, List } from 'antd';
 import { useState } from 'react';
@@ -49,8 +50,8 @@ const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?:
 										src={
 											item.nhanSu?.urlAnhDaiDien ||
 											(item.nhanSu?.gioiTinh === 'Nữ'
-												? '/student/images/teacher-female.svg'
-												: '/student/images/teacher-male.svg')
+												? getPublicAssetPath('images/teacher-female.svg')
+												: getPublicAssetPath('images/teacher-male.svg'))
 										}
 									/>
 								</div>

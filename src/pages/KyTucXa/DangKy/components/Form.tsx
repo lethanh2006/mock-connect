@@ -2,7 +2,11 @@ import MyDatePicker from '@/components/MyDatePicker';
 import rules from '@/utils/rules';
 import { Checkbox, Col, Divider, Form, FormInstance, Input, Radio, Row, Space } from 'antd';
 import { useIntl } from 'umi';
-import FormItemNguoiThanKTX from '../NguoiThan/FormItem';
+import FormItemNguoiThanKTX, {
+	chuanHoaDanhSachLienHeKhanCap,
+	isDuThongTinLienHeKhanCap,
+	SO_LIEN_HE_KHAN_CAP_MAC_DINH,
+} from '../NguoiThan/FormItem';
 
 const FormDangKyKTX = (props: { form: FormInstance; disabled?: boolean }) => {
 	const intl = useIntl();
@@ -177,7 +181,25 @@ const FormDangKyKTX = (props: { form: FormInstance; disabled?: boolean }) => {
 			</Col>
 
 			<Col span={24}>
-				<Form.Item name='emergencyContacts'>
+				<Form.Item
+					name='emergencyContacts'
+					rules={[
+						{
+							validator: (_, value) => {
+								const danhSach = chuanHoaDanhSachLienHeKhanCap(value).filter((item: any) => !item.khoiLienHeDefault);
+								const duSoLuong = danhSach.length >= SO_LIEN_HE_KHAN_CAP_MAC_DINH;
+								const duThongTin = danhSach
+									.slice(0, SO_LIEN_HE_KHAN_CAP_MAC_DINH)
+									.every((item) => isDuThongTinLienHeKhanCap(item));
+
+								if (duSoLuong && duThongTin) return Promise.resolve();
+								return Promise.reject(
+									new Error(intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.validation.requiredTwo' })),
+								);
+							},
+						},
+					]}
+				>
 					<FormItemNguoiThanKTX disabled={disabled} />
 				</Form.Item>
 			</Col>
