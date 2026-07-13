@@ -9,6 +9,9 @@ export default function access(initialState: IInitialState) {
 	// const scopes = initialState.authorizedPermissions?.find((item) => item.rsname === currentRole)?.scopes;
 	const scopes = initialState.authorizedPermissions?.map((item) => item.scopes).flat();
 
+	const isPending = !!initialState?.permissionLoading && !scopes?.length;
+	const checkAccess = (allowed: boolean) => isPending || allowed;
+
 	return {
 		// canBoQLKH: token && vaiTro && vaiTro === 'can_bo_qlkh',
 		// lanhDao: token && vaiTro && vaiTro === 'lanh_dao',
@@ -28,8 +31,9 @@ export default function access(initialState: IInitialState) {
 		//     (vaiTro === 'Admin' || vaiTro === 'quan_tri' || vaiTro === 'nhan_vien')) ||
 		//   false,
 		// guest: (token && ((vaiTro && vaiTro === 'Guest') || !vaiTro)) || false,
-		accessFilter: (route: any) => scopes?.includes(route?.maChucNang) || false,
-		manyAccessFilter: (route: any) => route?.listChucNang?.some((role: string) => scopes?.includes(role)) || false,
+		accessFilter: (route: any) => checkAccess(scopes?.includes(route?.maChucNang) || false),
+		manyAccessFilter: (route: any) =>
+			checkAccess(route?.listChucNang?.some((role: string) => scopes?.includes(role)) || false),
 		vinuniAccessFilter: () => tenTruongVietTatTiengAnh === 'VINUNI',
 
 		// adminAccessFilter: (route: any) =>
