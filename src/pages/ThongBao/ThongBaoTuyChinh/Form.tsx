@@ -8,6 +8,7 @@ import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { DownloadOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Input, Row, Select, Space } from 'antd';
+import DOMPurify from 'dompurify';
 import fileDownload from 'js-file-download';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -46,7 +47,7 @@ const FormThongBaoTuyChinh = (props: any) => {
 			values?.file?.fileList[0],
 			type,
 			values.title,
-			values.content,
+			DOMPurify.sanitize(values.content ?? ''),
 			intl.formatMessage({ id: AppModules[currentRole].title }),
 			values.vaiTroNguoiNhan,
 			'0',

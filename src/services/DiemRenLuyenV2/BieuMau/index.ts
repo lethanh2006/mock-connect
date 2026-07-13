@@ -15,7 +15,10 @@ export async function traLoiBieuMau(payload: {
 }
 
 export async function initBieuMauTracNghiem(payload: { idKhaoSat: string; idDot: string }) {
-	return axios.post(`${ip3}/cau-tra-loi-khao-sat/trac-nghiem/initialize/answer/khao-sat/${payload.idKhaoSat}`, payload);
+	return axios.post(
+		`${ip3}/cau-tra-loi-khao-sat/trac-nghiem/initialize/answer/khao-sat/${encodeURIComponent(payload.idKhaoSat)}`,
+		payload,
+	);
 }
 
 // ĐÁNH GIÁ GIẢNG VIÊN

@@ -32,10 +32,9 @@ export default function access(initialState: IInitialState) {
 		//   false,
 		// guest: (token && ((vaiTro && vaiTro === 'Guest') || !vaiTro)) || false,
 		accessFilter: (route: any) => hasAccessCode(initialState, route?.permission ?? route?.maChucNang),
-		manyAccessFilter: (route: any) =>
-			hasAnyAccessCode(initialState, route?.permissions ?? route?.listChucNang) ||
-			route?.listChucNang?.some((role: string) => scopes?.includes(role)) ||
-			false,
+		manyAccessFilter: (route: any) => {
+			return hasAnyAccessCode(initialState, route?.permissions ?? route?.listChucNang) || false;
+		},
 
 		/** Co-curricular Activities (CCA) */
 		cctFilter: () => vinUniSchoolCodes.includes(tenTruongVietTatTiengAnh),

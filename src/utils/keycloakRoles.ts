@@ -49,17 +49,23 @@ export const getKeycloakRoleContext = (token: string | undefined, clientIds: str
 	};
 };
 
-export const getLegacyPermissionScopes = (initialState?: IInitialState) =>
-	initialState?.authorizedPermissions?.flatMap((item) => item.scopes) ?? [];
+export const getLegacyPermissionScopes = (initialState?: IInitialState) => {
+	return initialState?.authorizedPermissions?.flatMap((item) => item.scopes) ?? [];
+};
 
 export const hasAnyClientRole = (initialState: IInitialState | undefined, clientIds?: string[]) => {
 	const rolesByClient = initialState?.authorizedRolesByClient ?? {};
-	const clientRoles = clientIds?.length ? clientIds.flatMap((clientId) => rolesByClient[clientId] ?? []) : initialState?.authorizedRoles;
-
+	const clientRoles = clientIds?.length
+		? clientIds.flatMap((clientId) => rolesByClient[clientId] ?? [])
+		: initialState?.authorizedRoles;
 	return Boolean(clientRoles?.length);
 };
 
-export const hasModulePermission = (initialState: IInitialState | undefined, moduleKey?: string, clientIds?: string[]) => {
+export const hasModulePermission = (
+	initialState: IInitialState | undefined,
+	moduleKey?: string,
+	clientIds?: string[],
+) => {
 	if (!moduleKey) return true;
 	if (initialState?.authorizedPermissions?.some((item) => item.rsname === moduleKey)) return true;
 
@@ -69,29 +75,20 @@ export const hasModulePermission = (initialState: IInitialState | undefined, mod
 const mapLegacyPermissionToClientRoles = (permission?: string): string[] => {
 	if (!permission) return [];
 	if (permission.includes('.')) return [permission];
-
-	const code = permission.toLowerCase();
-	if (code.includes('cong-no') || code.includes('hoa-don')) return ['tc.bill:read'];
-	if (code.includes('giao-dich') || code.includes('lich-su')) return ['tc.transaction:read'];
-	if (code.includes('uu-dai')) return ['tc.discount:read'];
-	if (code.includes('thanh-toan')) return ['tc.transaction:pay'];
-	if (code.includes('hoc-phi')) return ['tc.bill:read', 'tc.transaction:read'];
-
 	return [permission];
 };
 
 export const hasAccessCode = (initialState: IInitialState | undefined, permission?: string) => {
 	if (!permission) return false;
-
 	const roles = initialState?.authorizedRoles ?? [];
-	const scopes = getLegacyPermissionScopes(initialState);
 	const mappedRoles = mapLegacyPermissionToClientRoles(permission);
-
-	return mappedRoles.some((role) => roles.includes(role)) || scopes.includes(permission);
+	return mappedRoles.some((role) => roles.includes(role));
 };
 
-export const hasAnyAccessCode = (initialState: IInitialState | undefined, permissions?: string[]) =>
-	Boolean(permissions?.some((permission) => hasAccessCode(initialState, permission)));
+export const hasAnyAccessCode = (initialState: IInitialState | undefined, permissions?: string[]) => {
+	return Boolean(permissions?.some((permission) => hasAccessCode(initialState, permission)));
+};
 
-export const hasAllAccessCodes = (initialState: IInitialState | undefined, permissions?: string[]) =>
-	Boolean(permissions?.length && permissions.every((permission) => hasAccessCode(initialState, permission)));
+export const hasAllAccessCodes = (initialState: IInitialState | undefined, permissions?: string[]) => {
+	return Boolean(permissions?.length && permissions.every((permission) => hasAccessCode(initialState, permission)));
+};

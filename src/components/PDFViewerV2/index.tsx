@@ -4,6 +4,10 @@ import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { useEffect, useRef, useState } from 'react';
 
+// Worker local — tránh load script từ CDN (CWE-79 / supply-chain)
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const pdfWorkerUrl = require('@react-pdf-viewer/pdfjs-dist-signature/build/pdf.worker.js');
+
 interface PDFViewerProps extends Omit<ViewerProps, 'fileUrl'> {
 	/**
 	 * URL của file PDF
@@ -79,7 +83,7 @@ const PDFViewerV2 = ({
 
 	return (
 		<div ref={viewerRef} style={{ height: heightProps ?? height }}>
-			<Worker workerUrl='https://unpkg.com/@react-pdf-viewer/pdfjs-dist-signature@2.5.207/build/pdf.worker.js'>
+			<Worker workerUrl={pdfWorkerUrl}>
 				<Viewer
 					fileUrl={fileUrl}
 					defaultScale={defaultScale}

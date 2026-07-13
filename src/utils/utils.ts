@@ -4,6 +4,7 @@ import { message, type FormInstance } from 'antd';
 import { type AxiosResponse } from 'axios';
 import type dayjs from 'dayjs';
 import { Dayjs } from 'dayjs';
+import DOMPurify from 'dompurify';
 import * as XLSX from 'xlsx';
 import dayjsLib from './dayjs';
 import { ipFile } from './ip';
@@ -418,27 +419,11 @@ export const removeHtmlTags = (html: string) =>
 		?.trim();
 
 /**
- * Escape HTML entities in a string to prevent XSS attacks
- * @param str
- * @returns
- */
-export const escapeHTML = (str: string): string => {
-	// Loại bỏ tất cả thẻ script, event handler (onclick, onerror, ...)
-	// Chỉ cho phép <b>, <i>, <u>, <strong>, <em>, <br>, <p>
-	return str
-		.replace(/<script.*?>.*?<\/script>/gi, '')
-		.replace(/on\w+="[^"]*"/gi, '')
-		.replace(/<(?!\/?(b|i|u|strong|em|br|p)\b)[^>]*>/gi, '');
-};
-
-/**
- * Sanitize an object by escaping HTML entities in all string properties recursively
- * @param obj
- * @returns
+ * Sanitize object/string recursively — tránh XSS / CWE-79.
  */
 export const sanitizeObject = (obj: any): any => {
 	if (typeof obj === 'string') {
-		return escapeHTML(obj);
+		return DOMPurify.sanitize(obj);
 	} else if (Array.isArray(obj)) {
 		return obj.map(sanitizeObject);
 	} else if (typeof obj === 'object' && obj !== null) {
