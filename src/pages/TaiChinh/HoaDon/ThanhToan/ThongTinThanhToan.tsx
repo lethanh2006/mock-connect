@@ -5,9 +5,7 @@ import {
 	EMaTrangThaiThanhToan,
 	EMauTrangThaiThanhToanTable,
 	ETrangThaiThanhToan,
-	ETransactionPaymentType,
-	ETransactionSourceType,
-	ETransactionStatus,
+	ETransactionPaymentType
 } from '@/services/TaiChinh/constant';
 import { currencyFormat } from '@/utils/utils';
 import {
@@ -22,12 +20,13 @@ import {
 	PhoneOutlined,
 	UserOutlined,
 } from '@ant-design/icons';
-import { Alert, Avatar, Button, Card, Col, Row, Space, Tabs, Tag, Typography } from 'antd';
+import { Alert, Avatar, Button, Card, Col, Modal, Row, Space, Tabs, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import { disableThanhToan } from '..';
 import FormItemHoaDonChiTiet from '../ChiTiet/FormItem';
+import FormThanhToan from './FormThanhToan';
 import LichSuThanhToan from './LichSuThanhToan';
 import ModalThanhToanNganHang from './ModalThanhToanNganHang';
 
@@ -68,8 +67,10 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	const { setVisible, getData } = props;
 	const canPay = hasPermission('tc.transaction:pay');
 	const { record: recHoaDon } = useModel('taichinh.hoadon');
+	const { visibleThanhToan, setVisibleThanhToan } =
+		useModel('taichinh.hoadonchitiet');
+
 	const {
-		getAllModel,
 		record: recGiaoDich,
 		setRecord,
 		loading,
@@ -106,17 +107,17 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	const daRelease: boolean = !!recHoaDon?.dotThu?.daRelease || !!recHoaDon?.dotThu?.thoiGianRelease;
 
 	/** Get giao dịch pending */
-	const getGiaoDich = () =>
-		getAllModel(true, undefined, {
-			status: ETransactionStatus.PENDING,
-			billIdentityCode: recHoaDon?.identityCode,
-			fromAccount: ETransactionSourceType.EXTERNAL,
-		});
+	// const getGiaoDich = () =>
+	// 	getAllModel(true, undefined, {
+	// 		status: ETransactionStatus.PENDING,
+	// 		billIdentityCode: recHoaDon?.identityCode,
+	// 		fromAccount: ETransactionSourceType.EXTERNAL,
+	// 	});
 
 	const onChangeTab = (tab: string) => {
 		setActiveTab(tab);
 		// Get giao dịch nộp tiền chưa hoàn tất
-		if (tab === '1' && recHoaDon?.identityCode) getGiaoDich();
+		// if (tab === '1' && recHoaDon?.identityCode) getGiaoDich();
 	};
 
 	useEffect(() => {
@@ -143,7 +144,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 		if (rec._id)
 			return huyThanhToanModel(rec._id)
 				.then(() => {
-					getGiaoDich();
+					// getGiaoDich();
 					if (getData) getData();
 				})
 				.catch((er: unknown) => console.log(er));
@@ -153,9 +154,9 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 
 	const pendingPaymentAlert =
 		canPay &&
-		recGiaoDich?._id &&
-		recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL &&
-		!ngoaiThoiGianThanhToan ? (
+			recGiaoDich?._id &&
+			recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL &&
+			!ngoaiThoiGianThanhToan ? (
 			<Alert
 				message={intl.formatMessage({ id: 'taichinh.thanhtoan.alert.pending.title' })}
 				description={intl.formatMessage({ id: 'taichinh.thanhtoan.alert.pending.desc' })}
@@ -388,11 +389,28 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 			<ModalThanhToanNganHang
 				visible={visibleHuongDan}
 				onOk={() => {
-					if (activeTab === '1') getGiaoDich();
+					// if (activeTab === '1') getGiaoDich();
 					if (getData) getData();
 					setVisibleHuongDan(false);
 				}}
 			/>
+			<Modal
+				title={intl.formatMessage({ id: 'taichinh.thanhtoan.title' })}
+				open={visibleThanhToan}
+				onCancel={() => setVisibleThanhToan(false)}
+				footer={null}
+				width={1000}
+				maskClosable={false}
+			>
+				<FormThanhToan
+					getData={() => {
+						// if (activeTab === '1') getGiaoDich();
+						if (getData) getData();
+					}}
+				/>
+			</Modal>
+
+
 		</Card>
 	);
 };
