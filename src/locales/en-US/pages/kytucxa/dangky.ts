@@ -118,6 +118,7 @@ export default {
 	'kytucxa.dangky.nguoithan.field.email.placeholder': 'Enter email',
 	'kytucxa.dangky.nguoithan.field.address': 'Address',
 	'kytucxa.dangky.nguoithan.field.address.placeholder': 'Enter address',
+	'kytucxa.dangky.nguoithan.validation.requiredTwo': 'Please update 2 emergency contacts',
 	'kytucxa.dangky.nguoithan.relationship.father': 'Father',
 	'kytucxa.dangky.nguoithan.relationship.mother': 'Mother',
 	'kytucxa.dangky.nguoithan.relationship.guardian': 'Guardian',

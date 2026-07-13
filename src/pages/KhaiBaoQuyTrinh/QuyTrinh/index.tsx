@@ -3,6 +3,7 @@ import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinCh
 import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
 import { ENguonDot } from '@/services/QuyTrinh/constant';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
+import { getPublicAssetPath } from '@/utils/path';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Card, Empty, Modal, Pagination, Popconfirm, Tag, Typography, message } from 'antd';
 import { useEffect, useState } from 'react';
@@ -135,7 +136,7 @@ const QuyTrinhPage = () => {
 								<div className='card-content'>
 									<div className='card-main'>
 										<div className='card-icon'>
-											<img src='/images/folder-icon.png' alt='' width={24} />
+											<img src={getPublicAssetPath('/images/folder-icon.png')} alt='' width={24} />
 										</div>
 
 										<div className='card-info'>

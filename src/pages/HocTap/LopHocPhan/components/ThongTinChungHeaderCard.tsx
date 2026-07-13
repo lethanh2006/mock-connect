@@ -3,6 +3,7 @@ import FilterLopHocPhan from '@/pages/DaoTao/LopHocPhan/FilterLopHocPhan';
 import { primaryColor } from '@/services/base/constant';
 import { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
 import dayjs from '@/utils/dayjs';
+import { getPublicAssetPath } from '@/utils/path';
 import { ArrowLeftOutlined, InfoCircleOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Card, Col, Row, Space, Spin, Tag, Tooltip, Typography } from 'antd';
 import { useRef, useState } from 'react';
@@ -21,7 +22,7 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 	const [visibleGvDetailModal, setVisibleGvDetailModal] = useState(false);
 	const [visibleWithdraw, setVisibleWithdraw] = useState(false);
 	const backgroundRef = useRef(Math.floor(Math.random() * 6));
-	const randomBackground = `/images/isolation-mode-${backgroundRef.current}.svg`;
+	const randomBackground = getPublicAssetPath(`/images/isolation-mode-${backgroundRef.current}.svg`);
 	const navigate = useNavigate();
 	const visibleFilter = useMediaQuery({ query: '(max-width: 1200px)' });
 

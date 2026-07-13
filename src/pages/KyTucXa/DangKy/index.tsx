@@ -2,6 +2,7 @@ import PageCard from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
+import { getPublicAssetPath } from '@/utils/path';
 import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Alert, Button, Col, Empty, Flex, Input, message, Pagination, Row, Select, Space, Spin } from 'antd';
 import _ from 'lodash';
@@ -307,7 +308,7 @@ const DangKyKyTucXa = () => {
 					<Empty
 						style={{ marginTop: 32, marginBottom: 32 }}
 						description={intl.formatMessage({ id: 'kytucxa.dangky.empty.noData' })}
-						image='/images/empty.png'
+						image={getPublicAssetPath('/images/empty.png')}
 					/>
 				)}
 			</Spin>

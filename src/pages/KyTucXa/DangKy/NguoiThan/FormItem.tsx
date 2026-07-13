@@ -7,12 +7,39 @@ import { Modal } from 'antd';
 import { useIntl, useModel } from 'umi';
 import Form from './Form';
 
+export const SO_LIEN_HE_KHAN_CAP_MAC_DINH = 2;
+
+const hasValue = (value?: string) => !!value?.trim();
+
+export const isDuThongTinLienHeKhanCap = (rec?: PhieuDangKyKTX.INguoiThan) =>
+	hasValue(rec?.emergencyContactName) &&
+	hasValue(rec?.emergencyRelationship) &&
+	hasValue(rec?.emergencyContactNumber) &&
+	hasValue(rec?.address);
+
+export const chuanHoaDanhSachLienHeKhanCap = (value?: PhieuDangKyKTX.INguoiThan[]) => {
+	const danhSach = (value ?? []).map((item, index) => ({
+		...item,
+		index: item.index ?? index + 1,
+	}));
+
+	while (danhSach.length < SO_LIEN_HE_KHAN_CAP_MAC_DINH) {
+		danhSach.push({
+			khoiLienHeDefault: true,
+			index: danhSach.length + 1,
+		} as any);
+	}
+
+	return danhSach;
+};
+
 const FormItemNguoiThanKTX = (props: {
 	value?: PhieuDangKyKTX.INguoiThan[];
 	onChange?: (data: PhieuDangKyKTX.INguoiThan[]) => void;
 	disabled?: boolean;
 }) => {
-	const { setVisibleForm, visibleForm, record, handleEdit, setRecord, setEdit, setIsView } = useModel('kytucxa.nguoithan');
+	const { setVisibleForm, visibleForm, record, handleEdit, setRecord, setEdit, setIsView } =
+		useModel('kytucxa.nguoithan');
 	const { value = [], onChange, disabled } = props;
 	const intl = useIntl();
 
@@ -23,24 +50,10 @@ const FormItemNguoiThanKTX = (props: {
 	// };
 
 	//Check: nếu ko có thông tin người thân -> push object rỗng vào table để default 2 khối liên hệ trống
-	const dataNguoiThan = [...value];
-	if (dataNguoiThan.length === 0) { 
-		dataNguoiThan.push({ khoiLienHeDefault: true, index: 1 } as any);
-		dataNguoiThan.push({ khoiLienHeDefault: true, index: 2 } as any);
-	} else if (dataNguoiThan.length === 1) {
-		dataNguoiThan.push({ khoiLienHeDefault: true, index: 2 } as any);
-	}
+	const dataNguoiThan = chuanHoaDanhSachLienHeKhanCap(value);
 
 	//Check: nếu các required field đủ data -> disable edit
-	const isFilledColumn = (rec: any) => {
-		if (rec.khoiLienHeDefault) return false;
-		return !!(
-			rec.emergencyContactName &&
-			rec.emergencyRelationship &&
-			rec.emergencyContactNumber &&
-			rec.address
-		);
-	};
+	const isFilledColumn = isDuThongTinLienHeKhanCap;
 
 	//Nếu là khối trống default -> thêm mới, nếu đã có data nhưng thiếu -> edit mode
 	const onEdit = (rec: any) => {
@@ -55,8 +68,8 @@ const FormItemNguoiThanKTX = (props: {
 	};
 
 	const onAdd = (rec: PhieuDangKyKTX.INguoiThan) => {
-		const data = [...value];
-		if (!record?.index || record.index > data.length) {
+		const data = dataNguoiThan.filter((item: any) => !item.khoiLienHeDefault);
+		if (!record?.index || record.index > dataNguoiThan.length) {
 			data.push({ ...rec, index: data.length + 1 });
 		} else {
 			data.splice(record.index - 1, 1, { ...rec, index: record.index });

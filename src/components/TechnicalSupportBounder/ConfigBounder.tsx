@@ -7,6 +7,7 @@ import {
 	statusColors,
 	textColors,
 } from '@/services/base/constant';
+import { getPublicAssetPath } from '@/utils/path';
 import { getIntl, getLocale } from '@umijs/max';
 import { ConfigProvider, Empty, Spin } from 'antd';
 import { useEffect } from 'react';
@@ -36,7 +37,7 @@ const ConfigBounder = (props: { children?: any }) => {
 			renderEmpty={() => (
 				<Empty
 					style={{ marginTop: 32, marginBottom: 32 }}
-					image='/images/empty.png'
+					image={getPublicAssetPath('/images/empty.png')}
 					description={intl.formatMessage({ id: 'global.table.index.empty' })}
 				/>
 			)}
