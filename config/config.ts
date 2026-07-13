@@ -11,6 +11,8 @@ const {
 	APP_CONFIG_GA_ID = '',
 } = process.env;
 
+const appBasePath = process.env.APP_CONFIG_BASE_PATH || '/';
+
 export default defineConfig({
 	hash: true,
 	title: `HỆ THỐNG CHUYỂN ĐỔI SỐ - ${APP_CONFIG_TEN_TRUONG.toUpperCase()}`,
@@ -29,14 +31,14 @@ export default defineConfig({
 	links: [{ rel: 'icon', href: getPublicAssetPath('/favicon.ico'), type: 'image/x-icon' }],
 	headScripts: APP_CONFIG_GA_ID
 		? [
-				{ src: `https://www.googletagmanager.com/gtag/js?id=${APP_CONFIG_GA_ID}`, async: true },
-				{
-					content: `window.dataLayer = window.dataLayer || [];
+			{ src: `https://www.googletagmanager.com/gtag/js?id=${APP_CONFIG_GA_ID}`, async: true },
+			{
+				content: `window.dataLayer = window.dataLayer || [];
 						function gtag(){dataLayer.push(arguments);}
 						gtag('js', new Date());
 						gtag('config', '${APP_CONFIG_GA_ID}');`,
-				},
-			]
+			},
+		]
 		: [],
 
 	antd: {
@@ -100,6 +102,6 @@ export default defineConfig({
 		return result;
 	}, {}),
 
-	base: process.env.APP_CONFIG_BASE_PATH,
-	publicPath: process.env.APP_CONFIG_BASE_PATH,
+	base: appBasePath,
+	publicPath: appBasePath,
 });
