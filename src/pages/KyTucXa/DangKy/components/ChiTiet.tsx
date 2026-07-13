@@ -1,61 +1,37 @@
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
+import { CheckOutlined, ColumnWidthOutlined } from '@ant-design/icons';
+import { Button, Col, Image, message, Row, Typography } from 'antd';
+import { history, useIntl, useModel } from 'umi';
+import '../style.less';
 import {
-	AppstoreOutlined,
-	BgColorsOutlined,
-	CarOutlined,
-	ColumnWidthOutlined,
-	DesktopOutlined,
-	HomeOutlined,
-	ReadOutlined,
-	WifiOutlined,
-	WindowsOutlined,
-} from '@ant-design/icons';
-import { Button, Col, Image, message, Row } from 'antd';
-import { useIntl, useModel, history } from 'umi';
+	formatGiaPhong,
+	getAnhPhongHienThi,
+	getDaHetCho,
+	getSoChoConLai,
+	getSucChua,
+	getTenPhong,
+	getTienIchPhong,
+} from '../utils';
 
-const defaultImages = [
-	'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900',
-	'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=900',
-	'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=900',
-	'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=900',
-	'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=900',
-];
-
-const tienIchIcons: Record<string, any> = {
-	Chair: DesktopOutlined,
-	'Common kitchen': AppstoreOutlined,
-	Bookshelf: ReadOutlined,
-	Bed: HomeOutlined,
-	'Air conditioner': BgColorsOutlined,
-	Microwave: AppstoreOutlined,
-	Fridge: AppstoreOutlined,
-	'Free gym': WifiOutlined,
-	'Free packing': CarOutlined,
-	'Study desk': DesktopOutlined,
-};
-
-const ChiTietPhong = (props: { daCoLichSuDangKy?: boolean; isPhongDaDangKy?: (phong: Phong.IChinhSachPhongRecord) => boolean }) => {
+const ChiTietPhong = (props: {
+	daCoLichSuDangKy?: boolean;
+	isPhongDaDangKy?: (phong: Phong.IChinhSachPhongRecord) => boolean;
+}) => {
 	const { daCoLichSuDangKy, isPhongDaDangKy } = props;
 	const intl = useIntl();
 	const { visibleForm, setVisibleForm, record, setVisibleDangKy } = useModel('kytucxa.phong');
 	const { record: recLichSu } = useModel('kytucxa.phieudangky');
 	const phong = record as Phong.IChinhSachPhongRecord | undefined;
 	const room = phong?.room;
-	
+
 	const laPhongDaDangKy = phong && isPhongDaDangKy ? isPhongDaDangKy(phong) : false;
-	const danhSachAnh = phong?.danhSachAnh?.length ? phong.danhSachAnh : room?.danhSachAnh;
-	const images =
-		(danhSachAnh?.length ?? 0) > 0 ? danhSachAnh?.map((item: any) => item.url || item.fileUrl || item) : defaultImages;
-	const tienIch = phong?.danhSachTienIch?.length ? phong.danhSachTienIch : (room?.danhSachTienIch ?? []);
-	const sucChua = phong?.sucChua ?? room?.soLuongToiDa ?? room?.sucChua ?? 0;
-
-	const tenPhong = `${room?.ma || room?.soPhong || ''} - ${intl.formatMessage({ id: 'kytucxa.dangky.room.building' })} ${
-		room?.maToaNha || room?.toaNha?.ma || ''
-	} - ${phong?.loaiPhongKtx?.ten || room?.loaiPhongKtx?.ten || phong?.maLoaiPhongKtx || room?.maLoaiPhongKtx || ''}`;
-
-	const soSlotConLai = Math.max(sucChua - (room?.soLuongHienTai ?? 0), 0);
-	const daHetCho = soSlotConLai <= 0 || !room?.isChoThue || phong?.isChoPhepDangKy === false;
+	const images = getAnhPhongHienThi(phong);
+	const tienIch = getTienIchPhong(phong);
+	const sucChua = getSucChua(phong);
+	const tenPhong = phong ? getTenPhong(phong, intl) : '';
+	const soSlotConLai = getSoChoConLai(phong);
+	const daHetCho = getDaHetCho(phong);
 	const khongChoDangKy = !laPhongDaDangKy && (daHetCho || daCoLichSuDangKy);
 
 	const trangThaiThanhToan = recLichSu?.trangThaiThanhToan;
@@ -79,7 +55,9 @@ const ChiTietPhong = (props: { daCoLichSuDangKy?: boolean; isPhongDaDangKy?: (ph
 			width={1000}
 			title={intl.formatMessage({ id: 'kytucxa.dangky.chitiet.title' })}
 		>
-			<div className='room-gallery'>
+			<div
+				className={['room-gallery', images.length <= 1 ? 'room-gallery-single' : undefined].filter(Boolean).join(' ')}
+			>
 				<div>
 					<Image
 						src={images?.[0]}
@@ -115,38 +93,47 @@ const ChiTietPhong = (props: { daCoLichSuDangKy?: boolean; isPhongDaDangKy?: (ph
 				<Col span={18}>
 					<h3 className='room-name'>{tenPhong}</h3>
 
-					<div className='room-summary'>
-						<span>
-							<ColumnWidthOutlined /> <b>{record?.room?.dienTich || '50.2'} m2</b>
-						</span>
-					</div>
+					{record?.room?.dienTich ? (
+						<div className='room-summary'>
+							<ColumnWidthOutlined /> <span>{record?.room?.dienTich}m2</span>
+						</div>
+					) : null}
 
 					<div className='room-card__divider' />
 
 					<Row gutter={[12, 8]} className='room-utilities'>
 						{tienIch.map((item: any) => {
-							const label = item?.maDanhMucTienIch;
-							const Icon = tienIchIcons[label] || WindowsOutlined;
+							const label = item?.tienIch?.ten ?? item?.maDanhMucTienIch;
+							const image = item?.tienIch?.anh;
 
 							return (
 								<Col span={8} key={label}>
 									<span className='utility-item'>
-										<Icon /> <b>{label}</b>
+										{image ? <img className='utility-item__image' src={image} alt={label} /> : <CheckOutlined />}
+										<span>{label}</span>
 									</span>
 								</Col>
 							);
 						})}
+
+						{tienIch.length === 0 && (
+							<Col span={24}>
+								<Typography.Text type='secondary'>
+									{intl.formatMessage({ id: 'kytucxa.dangky.card.tienIchChuaCapNhat' })}
+								</Typography.Text>
+							</Col>
+						)}
 					</Row>
 				</Col>
 
 				<Col span={6}>
 					<div className='room-price-box'>
-						<div className='room-price'>{room?.giaPhong ? room.giaPhong.toLocaleString('vi-VN') : '3,200,000'} VND</div>
+						<div className='room-price'>{formatGiaPhong(room?.giaPhong, room?.donViTienTe, intl)}</div>
 
 						<div className='room-available-box'>
 							<div>{intl.formatMessage({ id: 'kytucxa.dangky.chitiet.available' })}</div>
 							<strong>
-								{intl.formatMessage({ id: 'kytucxa.dangky.chitiet.slotConLai' }, { soLuong: soSlotConLai || 5 })}
+								{intl.formatMessage({ id: 'kytucxa.dangky.chitiet.slotConLai' }, { soLuong: soSlotConLai })}
 							</strong>
 						</div>
 					</div>
@@ -167,7 +154,11 @@ const ChiTietPhong = (props: { daCoLichSuDangKy?: boolean; isPhongDaDangKy?: (ph
 								{intl.formatMessage({ id: 'kytucxa.dangky.card.button.paymentNow' })}
 							</Button>
 						)}
-						<Button onClick={() => {/* Render modal Thông tin sv đã đăng ký với 4 step theo Figma (có chứa thông tin thanh toán) */}}> 
+						<Button
+							onClick={() => {
+								/* Render modal Thông tin sv đã đăng ký với 4 step theo Figma (có chứa thông tin thanh toán) */
+							}}
+						>
 							{intl.formatMessage({ id: 'kytucxa.dangky.card.button.seeMore' })}
 						</Button>
 						<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>

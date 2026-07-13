@@ -8,7 +8,7 @@ export default {
 	'kytucxa.dangky.filter.selectToaNha': 'Chọn tòa nhà',
 	'kytucxa.dangky.filter.selectLoaiPhong': 'Chọn loại phòng',
 	'kytucxa.dangky.filter.selectDotDangKy': 'Chọn đợt đăng ký ký túc xá',
-	'kytucxa.dangky.alert.thoiGianDangKy': 'Đăng ký mở từ {tuNgay} đến {denNgay}.',
+	'kytucxa.dangky.alert.thoiGianDangKy': 'Đăng ký {tenDot} mở từ {tuNgay} đến {denNgay}.',
 	'kytucxa.dangky.alert.daCoLichSu': 'Bạn đã có lịch sử đăng ký trong đợt này nên không thể đăng ký thêm.',
 	'kytucxa.dangky.message.daCoLichSu': 'Bạn đã có lịch sử đăng ký ký túc xá.',
 	'kytucxa.dangky.filter.sucChua.placeholder': 'Chọn sức chứa',
@@ -42,6 +42,7 @@ export default {
 	'kytucxa.dangky.chitiet.xemAnh': 'Xem ảnh',
 	'kytucxa.dangky.chitiet.available': 'CÒN TRỐNG',
 	'kytucxa.dangky.chitiet.slotConLai': 'Còn lại {soLuong} chỗ',
+	'kytucxa.dangky.chitiet.sucChua': 'Sức chứa: {soLuong}',
 	'kytucxa.dangky.chitiet.button.dangKy': 'Đăng ký',
 	'kytucxa.dangky.chitiet.defaultDescription':
 		'Thông tin mô tả phòng đang được cập nhật. Vui lòng xem các tiện ích, sức chứa và giá phòng hiện có trước khi đăng ký.',

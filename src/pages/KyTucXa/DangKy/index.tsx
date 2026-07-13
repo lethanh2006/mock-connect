@@ -13,7 +13,6 @@ import SelectToaNhaKTX from '../ToaNha/Select';
 import CardPhong from './components/CardPhong';
 import ChiTietPhong from './components/ChiTiet';
 import ModalDanKyKTX from './components/Modal';
-import './style.less';
 
 const { Search } = Input;
 
@@ -185,13 +184,13 @@ const DangKyKyTucXa = () => {
 					<SelectToaNhaKTX
 						style={{ width: 250 }}
 						allowClear
-						onChange={(val) => handleFilterChange(['room', 'toaNha', '_id'], val, EOperatorType.EQUAL)}
+						onChange={(val) => handleFilterChange(['room', 'toaNha', '_id'], val, EOperatorType.INCLUDE)}
 					/>
 					<SelectDanhMucChungKTX
 						condition={{ maLoai: 'LOAI_PHONG_KTX' }}
 						style={{ width: 250 }}
 						allowClear
-						onChange={(val) => handleFilterChange(['room', 'maLoaiPhongKtx'], val, EOperatorType.EQUAL)}
+						onChange={(val) => handleFilterChange(['maLoaiPhongKtx'], val, EOperatorType.INCLUDE)}
 					/>
 					<Select
 						style={{ width: 250 }}
@@ -235,6 +234,7 @@ const DangKyKyTucXa = () => {
 						{intl.formatMessage(
 							{ id: 'kytucxa.dangky.alert.thoiGianDangKy' },
 							{
+								tenDot: <b style={{ color: '#0E50CF' }}>{recDot?.tenDot}</b>,
 								tuNgay: (
 									<b style={{ color: '#0E50CF' }}>
 										{recDot?.thoiGianBatDau ? moment(recDot.thoiGianBatDau).format('HH:mm DD/MM/YYYY') : '--'}

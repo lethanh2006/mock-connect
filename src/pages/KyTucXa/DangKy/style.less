@@ -29,7 +29,7 @@
 }
 
 .room-card--registered {
-	border: 1px solid #F19500;
+	border: 1px solid #f19500;
 	box-shadow:
 		0 0 0 2px rgb(82 196 26 / 18%),
 		0 4px 12px rgb(0 0 0 / 12%);
@@ -37,13 +37,13 @@
 
 .room-card__image-wrap {
 	position: relative;
-	height: 190px;
+	height: 200px;
 	overflow: hidden;
 }
 
 .room-card__image {
 	width: 100% !important;
-	height: 190px !important;
+	height: 200px !important;
 	object-fit: cover;
 	transition: 0.3s;
 }
@@ -75,40 +75,20 @@
 	border-radius: 14px;
 }
 
-.room-card__title.ant-typography {
-	margin: 0 0 12px;
-	overflow: hidden;
+.room-card__title {
 	color: @room-primary;
-	font-weight: 700;
+	font-weight: 600;
 	font-size: 15px;
-	text-transform: uppercase;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	margin-bottom: 6px;
 }
 
 .room-card__specifications {
+	color: #2e2e2e;
 	display: flex;
 	align-items: center;
 	gap: 12px;
-	font-size: 14px;
-
-	span {
-		display: flex;
-		align-items: center;
-		gap: 6px;
-		white-space: nowrap;
-	}
-
-	.anticon {
-		font-size: 18px;
-	}
-
-	i {
-		width: 5px;
-		height: 5px;
-		background: #108ec6;
-		border-radius: 50%;
-	}
+	font-size: 12px;
+	font-weight: 500;
 }
 
 .room-card__divider {
@@ -174,6 +154,14 @@
 	margin-bottom: 12px;
 }
 
+.room-gallery-single {
+	grid-template-columns: 1fr;
+
+	.room-gallery-side {
+		display: none;
+	}
+}
+
 .room-gallery-main,
 .room-gallery-item {
 	border-radius: 2px;
@@ -208,31 +196,40 @@
 
 .room-summary {
 	display: flex;
-	gap: 18px;
+	align-items: center;
+	gap: 10px;
 	font-size: 12px;
 	color: #2e2e2e;
-
-	span {
-		display: inline-flex;
-		align-items: center;
-		gap: 5px;
-	}
 }
 
 .room-utilities {
-	font-size: 11px;
+	font-size: 12px;
 	color: #2e2e2e;
+
+	.anticon {
+		flex: 0 0 auto;
+	}
 }
 
 .utility-item {
 	display: inline-flex;
 	align-items: center;
-	gap: 6px;
+	gap: 10px;
 	line-height: 18px;
+	min-width: 0;
 
-	.anticon {
-		font-size: 12px;
+	span:last-child {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
+}
+
+.utility-item__image {
+	flex: 0 0 auto;
+	width: 20px;
+	height: 20px;
+	object-fit: contain;
 }
 
 .room-price-box {
@@ -267,6 +264,13 @@
 		color: #c72127;
 		font-size: 14px;
 		margin-top: 3px;
+	}
+
+	span {
+		display: block;
+		margin-top: 4px;
+		color: #707070;
+		font-size: 12px;
 	}
 }
 

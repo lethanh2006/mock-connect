@@ -8,7 +8,7 @@ export default {
 	'kytucxa.dangky.filter.selectToaNha': 'Select building',
 	'kytucxa.dangky.filter.selectLoaiPhong': 'Select room type',
 	'kytucxa.dangky.filter.selectDotDangKy': 'Select dormitory registration period',
-	'kytucxa.dangky.alert.thoiGianDangKy': 'Registration is open from {tuNgay} to {denNgay}.',
+	'kytucxa.dangky.alert.thoiGianDangKy': 'Registration {tenDot} is open from {tuNgay} to {denNgay}.',
 	'kytucxa.dangky.alert.daCoLichSu':
 		'You already have a registration history for this period, so you cannot register again.',
 	'kytucxa.dangky.message.daCoLichSu': 'You already have a dormitory registration history.',
@@ -43,6 +43,7 @@ export default {
 	'kytucxa.dangky.chitiet.xemAnh': 'View photo',
 	'kytucxa.dangky.chitiet.available': 'AVAILABLE',
 	'kytucxa.dangky.chitiet.slotConLai': '{soLuong} slots left',
+	'kytucxa.dangky.chitiet.sucChua': 'Capacity: {soLuong}',
 	'kytucxa.dangky.chitiet.button.dangKy': 'Register',
 	'kytucxa.dangky.chitiet.defaultDescription':
 		'Room description is being updated. Please review the available amenities, capacity, and room price before registering.',

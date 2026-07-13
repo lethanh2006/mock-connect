@@ -4,11 +4,13 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
+import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { tienVietNam } from '@/utils/utils';
 import { DeleteOutlined, DollarCircleOutlined } from '@ant-design/icons';
-import { Empty, Popconfirm, Tag } from 'antd';
+import { Button, Empty, message, Popconfirm, Tag } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
+import ChiTietPhong from '../DangKy/components/ChiTiet';
 import ModalDanKyKTX from '../DangKy/components/Modal';
 
 const getFloorText = (floor?: number | string | null) => {
@@ -57,7 +59,12 @@ const LichSuaKTX = () => {
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { getByIdModel: getDotDangKy, record: recDot, setRecord: setRecDot } = useModel('kytucxa.dotdangky');
 	const { getModel, page, limit, deleteModel, handleEdit, setRecord } = useModel('kytucxa.phieudangky');
-	const { setVisibleDangKy } = useModel('kytucxa.phong');
+	const {
+		getModel: getPhongChinhSach,
+		setRecord: setRecPhong,
+		setVisibleForm: setVisibleChiTietPhong,
+		setVisibleDangKy,
+	} = useModel('kytucxa.phong');
 
 	//Get đợt đăng ký
 	useEffect(() => {
@@ -89,6 +96,42 @@ const LichSuaKTX = () => {
 		style: { cursor: 'pointer' },
 	});
 
+	const handleViewPhong = async (record: PhieuDangKyKTX.IRecord) => {
+		const maDotId = recDot?._id;
+
+		if (!maDotId) {
+			message.warning(intl.formatMessage({ id: 'global.title.khongcodulieu' }));
+			return;
+		}
+
+		try {
+			const data = await getPhongChinhSach(
+				{
+					maDotId,
+				},
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				'ktx/chinh-sach-phong/page',
+				undefined,
+				false,
+			);
+			const phong = data?.[0] as Phong.IChinhSachPhongRecord | undefined;
+
+			if (!phong) {
+				message.warning(intl.formatMessage({ id: 'global.title.khongcodulieu' }));
+				return;
+			}
+
+			setRecord(record);
+			setRecPhong(phong);
+			setVisibleChiTietPhong(true);
+		} catch {
+			message.error(intl.formatMessage({ id: 'global.message.capnhatthatbai' }));
+		}
+	};
+
 	const columns: IColumn<PhieuDangKyKTX.IRecord>[] = [
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.floor' }),
@@ -100,8 +143,24 @@ const LichSuaKTX = () => {
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.roomCode' }),
 			width: 120,
-			onCell,
-			render: (_val, rec) => rec?.phong?.ma || rec?.maPhong || '--',
+			render: (_val, rec) => {
+				const roomCode = rec?.phong?.ma || rec?.maPhong;
+
+				if (!roomCode) return '--';
+
+				return (
+					<Button
+						type='link'
+						style={{ padding: 0, height: 'auto' }}
+						onClick={(event) => {
+							event.stopPropagation();
+							handleViewPhong(rec);
+						}}
+					>
+						{roomCode}
+					</Button>
+				);
+			},
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.apartmentType' }),
@@ -190,7 +249,10 @@ const LichSuaKTX = () => {
 			) : (
 				<Empty description={intl.formatMessage({ id: 'kytucxa.dangky.empty.noDotDangKy' })} />
 			)}
+
 			<ModalDanKyKTX isView />
+
+			<ChiTietPhong daCoLichSuDangKy />
 		</PageCard>
 	);
 };

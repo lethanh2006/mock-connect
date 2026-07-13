@@ -1,7 +1,16 @@
 import { Phong } from '@/services/KyTucXa/Phong/typing';
-import { CheckCircleFilled, ColumnWidthOutlined, LayoutOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Image, Row, Tag, Typography } from 'antd';
+import { CheckCircleFilled, ColumnWidthOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Image, Row, Space, Tag, Typography } from 'antd';
 import { history, useIntl, useModel } from 'umi';
+import '../style.less';
+import {
+	formatGiaPhong,
+	getAnhPhongHienThi,
+	getDaHetCho,
+	getSoChoConLai,
+	getTenPhong,
+	getTienIchPhong,
+} from '../utils';
 
 interface CardPhongProps {
 	phong: Phong.IChinhSachPhongRecord;
@@ -24,41 +33,22 @@ const getPaymentTag = (status?: string, intl?: any) => {
 	}
 };
 
-const ANH_PHONG_MAC_DINH =
-	'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=85';
-
 const CardPhong = ({ phong, daCoLichSuDangKy, laPhongDaDangKy, onXemChiTiet, onDangKy }: CardPhongProps) => {
 	const intl = useIntl();
 	const { record: recLichSu } = useModel('kytucxa.phieudangky');
 	const room = phong.room;
-	const sucChua = phong.sucChua ?? room?.soLuongToiDa ?? room?.sucChua ?? 0;
-	const soChoConLai = Math.max(0, sucChua - (room?.soLuongHienTai ?? 0));
-	const daHetCho = soChoConLai <= 0 || !room?.isChoThue || phong.isChoPhepDangKy === false;
-	const danhSachAnh = phong.danhSachAnh?.length ? phong.danhSachAnh : room?.danhSachAnh;
-	const anhPhong = danhSachAnh?.[0] || ANH_PHONG_MAC_DINH;
-
-	const tenToaNha = room?.toaNha?.ten || room?.maToaNha;
-	const tenLoaiPhong =
-		phong.loaiPhongKtx?.ten ||
-		room?.loaiPhongKtx?.ten ||
-		room?.danhSachTinhChatPhong?.find((item) => item.congNangChinh)?.loaiPhong?.loaiPhong ||
-		intl.formatMessage({ id: 'kytucxa.dangky.card.chuaPhanLoai' });
-
-	const tienIch = phong.danhSachTienIch?.length ? phong.danhSachTienIch : (room?.danhSachTienIch ?? []);
+	const soChoConLai = getSoChoConLai(phong);
+	const daHetCho = getDaHetCho(phong);
+	const anhPhong = getAnhPhongHienThi(phong)[0];
+	const tenPhong = getTenPhong(phong, intl);
+	const tienIch = getTienIchPhong(phong);
 	const tienIchHienThi = tienIch.slice(0, 3);
-
-	const formatGia = (gia?: number | null, donViTienTe = 'VND') =>
-		gia
-			? `${gia.toLocaleString('vi-VN')} ${donViTienTe}`
-			: intl.formatMessage({ id: 'kytucxa.dangky.card.chuaCapNhat' });
 
 	const trangThaiThanhToan = recLichSu?.trangThaiThanhToan;
 	const daThanhToanXong = trangThaiThanhToan === 'Đã thanh toán' || trangThaiThanhToan === 'Paid';
 	const hienThiTagThanhToan =
 		laPhongDaDangKy &&
-		(trangThaiThanhToan === 'Thanh toán thiếu' ||
-			trangThaiThanhToan === 'Underpaid' ||
-			daThanhToanXong);
+		(trangThaiThanhToan === 'Thanh toán thiếu' || trangThaiThanhToan === 'Underpaid' || daThanhToanXong);
 
 	const khongChoDangKy = (laPhongDaDangKy && daThanhToanXong) || (!laPhongDaDangKy && (daHetCho || daCoLichSuDangKy));
 
@@ -84,31 +74,24 @@ const CardPhong = ({ phong, daCoLichSuDangKy, laPhongDaDangKy, onXemChiTiet, onD
 				</div>
 			}
 		>
-			<Typography.Title level={4} className='room-card__title'>
-				{room?.ma} · {tenToaNha} · {tenLoaiPhong}
-			</Typography.Title>
+			<div className='room-card__title'>{tenPhong}</div>
 
-			<div className='room-card__specifications'>
-				<span>
-					<ColumnWidthOutlined />
-					{room?.dienTich ? `${room.dienTich}m2` : '- m2'}
-				</span>
-
-				<i />
-
-				<span>
-					<LayoutOutlined />
-					{room?.cachBoTri || `${sucChua}/3/2`}
-				</span>
-			</div>
+			{room?.dienTich ? (
+				<div className='room-card__specifications'>
+					<Space>
+						<ColumnWidthOutlined />
+						{`${room.dienTich}m2`}
+					</Space>
+				</div>
+			) : null}
 
 			<div className='room-card__divider' />
 
 			<Row className='room-card__amenities' gutter={[12, 12]}>
-				{tienIchHienThi.map((item) => (
+				{tienIchHienThi.map((item: any) => (
 					<Col key={item.maDanhMucTienIch} span={12}>
 						<CheckCircleFilled />
-						<Typography.Text>{item.maDanhMucTienIch}</Typography.Text>
+						<Typography.Text>{item?.tienIch?.ten ?? item?.maDanhMucTienIch}</Typography.Text>
 					</Col>
 				))}
 
@@ -142,7 +125,7 @@ const CardPhong = ({ phong, daCoLichSuDangKy, laPhongDaDangKy, onXemChiTiet, onD
 					getPaymentTag(trangThaiThanhToan, intl)
 				) : (
 					<Typography.Text className='room-card__price' strong>
-						{formatGia(room?.giaPhong, room?.donViTienTe)}
+						{formatGiaPhong(room?.giaPhong, room?.donViTienTe, intl)}
 					</Typography.Text>
 				)}
 
