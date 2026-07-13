@@ -136,7 +136,7 @@ const QuyTrinhPage = () => {
 								<div className='card-content'>
 									<div className='card-main'>
 										<div className='card-icon'>
-											<img src={getPublicAssetPath('/images/folder-icon.png')} alt='' width={24} />
+											<img src={getPublicAssetPath('images/folder-icon.png')} alt='' width={24} />
 										</div>
 
 										<div className='card-info'>

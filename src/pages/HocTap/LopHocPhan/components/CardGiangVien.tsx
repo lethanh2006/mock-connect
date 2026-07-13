@@ -46,8 +46,8 @@ const CardGiangVienLop = (props: {
 										src={
 											item.nhanSu?.urlAnhDaiDien ||
 											(item.nhanSu?.gioiTinh === 'Nữ'
-												? getPublicAssetPath('/images/teacher-female.svg')
-												: getPublicAssetPath('/images/teacher-male.svg'))
+												? getPublicAssetPath('images/teacher-female.svg')
+												: getPublicAssetPath('images/teacher-male.svg'))
 										}
 									/>
 								}

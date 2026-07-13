@@ -22,7 +22,7 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 	const [visibleGvDetailModal, setVisibleGvDetailModal] = useState(false);
 	const [visibleWithdraw, setVisibleWithdraw] = useState(false);
 	const backgroundRef = useRef(Math.floor(Math.random() * 6));
-	const randomBackground = getPublicAssetPath(`/images/isolation-mode-${backgroundRef.current}.svg`);
+	const randomBackground = getPublicAssetPath(`images/isolation-mode-${backgroundRef.current}.svg`);
 	const navigate = useNavigate();
 	const visibleFilter = useMediaQuery({ query: '(max-width: 1200px)' });
 

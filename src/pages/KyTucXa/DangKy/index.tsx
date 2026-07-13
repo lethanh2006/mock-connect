@@ -308,7 +308,7 @@ const DangKyKyTucXa = () => {
 					<Empty
 						style={{ marginTop: 32, marginBottom: 32 }}
 						description={intl.formatMessage({ id: 'kytucxa.dangky.empty.noData' })}
-						image={getPublicAssetPath('/images/empty.png')}
+						image={getPublicAssetPath('images/empty.png')}
 					/>
 				)}
 			</Spin>

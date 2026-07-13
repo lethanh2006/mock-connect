@@ -104,7 +104,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 										<Avatar
 											src={
 												student.anhDaiDienUrl ||
-												getPublicAssetPath(`/images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`)
+												getPublicAssetPath(`images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`)
 											}
 											size={48}
 										/>
@@ -154,7 +154,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 											<Avatar
 												src={
 													student.anhDaiDienUrl ||
-													getPublicAssetPath(`/images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`)
+													getPublicAssetPath(`images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`)
 												}
 												size={48}
 											/>
@@ -207,7 +207,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 						<Avatar
 							src={
 								record?.anhDaiDienUrl ||
-								getPublicAssetPath(`/images/${record?.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`)
+								getPublicAssetPath(`images/${record?.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`)
 							}
 							size={{ xs: 80, sm: 128, md: 128, lg: 160, xl: 160, xxl: 160 }}
 						/>

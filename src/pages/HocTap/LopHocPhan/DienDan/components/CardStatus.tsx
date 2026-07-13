@@ -183,7 +183,7 @@ const CardStatus = (props: IProps) => {
 								placement={'right'}
 							>
 								<div className='action-menu pointer'>
-									<img src={getPublicAssetPath('/images/menu.svg')} alt='icon' />
+									<img src={getPublicAssetPath('images/menu.svg')} alt='icon' />
 								</div>
 							</Popover>
 						)}

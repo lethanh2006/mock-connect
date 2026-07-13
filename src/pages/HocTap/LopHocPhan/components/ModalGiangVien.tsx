@@ -29,7 +29,7 @@ const ModalThongTinGiangVien = ({
 						<Avatar
 							src={
 								giangVien?.urlAnhDaiDien ||
-								getPublicAssetPath(`/images/${giangVien?.gioiTinh === 'Nữ' ? 'female.svg' : 'male.svg'}`)
+								getPublicAssetPath(`images/${giangVien?.gioiTinh === 'Nữ' ? 'female.svg' : 'male.svg'}`)
 							}
 							size={{ xs: 80, sm: 128, md: 128, lg: 160, xl: 160, xxl: 160 }}
 						/>
