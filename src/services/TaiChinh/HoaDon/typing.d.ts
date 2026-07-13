@@ -1,9 +1,12 @@
 import type { DotThuTaiChinh } from '../DotThu/typing';
 import type { UuDaiThanhToan } from '../UuDaiThanhToan/typing';
-import type { EMaTrangThaiThanhToan, ETransactionStatus } from '../constant';
+import type { EMaTrangThaiThanhToan, ETransactionStatus, ETransactionType } from '../constant';
 
 declare module HoaDon {
 	export interface IRecord extends IKhachHang {
+		amountPaid?: number;
+		totalDebit?: number;
+		totalDiscount?: number
 		_id: string;
 		identityCode: string;
 		ma?: string;
@@ -119,6 +122,7 @@ declare module HoaDon {
 		manualUserSsoId: string;
 		mbBillNumber?: string | null;
 		name: string;
+		phanTramUuDai?: numbẻ
 		ngayDoiSoat?: string | null;
 		oldTransDate?: string | null;
 		paymentType: 'manual' | string;
@@ -131,7 +135,7 @@ declare module HoaDon {
 		toAccount: string;
 		transactionDate?: string | null;
 		transactionId?: string | null;
-		type: string; //'CHARGE' | 'DISCOUNT' | 'PAYMENT'
+		type: ETransactionType
 		updatedAt: string;
 		updatedById?: string | null;
 		updatedByUsername?: string | null;

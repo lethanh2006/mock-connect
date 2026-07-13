@@ -1,5 +1,5 @@
 export default {
-	'taichinh.hoadon.title': 'Công nợ',
+	'taichinh.hoadon.title': 'Học phí & Hóa đơn',
 	'taichinh.hoadon.column.identityCode': 'Mã HĐ',
 	'taichinh.hoadon.column.dotthu': 'Đợt thu',
 	'taichinh.hoadon.column.khoanthu': 'Khoản thu',
@@ -37,6 +37,13 @@ export default {
 	'taichinh.hoadon.desc.conlai': 'Số tiền còn lại phải nộp',
 	'taichinh.common.updating': 'Đang cập nhật',
 	'taichinh.hoadon.status.notOpen': 'Chưa mở đợt',
+	'taichinh.hoadon.status.open': 'Chưa thanh toán',
+	'taichinh.hoadon.status.underpaid': 'Chưa thanh toán',
+	'taichinh.hoadon.status.paid': 'Đã thanh toán',
+	'taichinh.hoadon.status.closed': 'Đóng',
+	'taichinh.hoadon.tab.unpaid': 'Chưa thanh toán',
+	'taichinh.hoadon.tab.paid': 'Đã thanh toán',
+	'taichinh.hoadon.action.paySelected': 'Thanh toán cho ({count}) hóa đơn',
 
 	'taichinh.thanhtoan.title': 'Thông tin thanh toán',
 	'taichinh.thanhtoan.tab.chitiet': 'Chi tiết',
@@ -172,10 +179,26 @@ export default {
 	'taichinh.thanhtoan.info.trangthaisinhvien': 'Trạng thái sinh viên',
 
 	// Thông tin thanh toán - tổng quan tài chính
-	'taichinh.thanhtoan.stat.tongphiphainop': 'Tổng phí phải nộp (1)',
-	'taichinh.thanhtoan.stat.tongphigiamtru': 'Tổng phí giảm trừ (2)',
-	'taichinh.thanhtoan.stat.tongdathanhtoan': 'Tổng tiền đã thanh toán (3)',
-	'taichinh.thanhtoan.stat.tongcanthanhtoan': 'Tổng tiền cần thanh toán (1-2-3)',
+	'taichinh.thanhtoan.stat.tongphiphainop': 'Tổng phí phải nộp',
+	'taichinh.thanhtoan.stat.tongphigiamtru': 'Tổng phí giảm trừ',
+	'taichinh.thanhtoan.stat.tongdathanhtoan': 'Tổng tiền đã thanh toán',
+	'taichinh.thanhtoan.stat.tongcanthanhtoan': 'Tổng tiền cần thanh toán',
+
+	// Thông tin hóa đơn thanh toán
+	'taichinh.thanhtoan.invoice.title': 'Thông tin hóa đơn',
+	'taichinh.thanhtoan.invoice.studentName': 'Họ tên sinh viên',
+	'taichinh.thanhtoan.invoice.studentId': 'Mã sinh viên',
+	'taichinh.thanhtoan.invoice.companyName': 'Tên của công ty, tổ chức, doanh nghiệp',
+	'taichinh.thanhtoan.invoice.companyName.placeholder': 'Nhập tên của công ty, tổ chức, doanh nghiệp',
+	'taichinh.thanhtoan.invoice.taxCode': 'Mã số thuế của công ty, tổ chức, doanh nghiệp',
+	'taichinh.thanhtoan.invoice.taxCode.placeholder': 'Nhập mã số thuế của công ty, tổ chức, doanh nghiệp',
+	'taichinh.thanhtoan.invoice.address': 'Địa chỉ của công ty, tổ chức, doanh nghiệp',
+	'taichinh.thanhtoan.invoice.address.placeholder': 'Nhập địa chỉ của công ty, tổ chức, doanh nghiệp',
+	'taichinh.thanhtoan.invoice.email': 'Email nhận hóa đơn điện tử',
+	'taichinh.thanhtoan.invoice.email.placeholder': 'Nhập email',
+	'taichinh.thanhtoan.invoice.phone': 'Số điện thoại liên hệ',
+	'taichinh.thanhtoan.invoice.phone.placeholder': 'Nhập số điện thoại',
+	'taichinh.thanhtoan.invoice.email.invalid': 'Email không hợp lệ',
 
 	// Thông tin thanh toán - phiếu thu
 	'taichinh.thanhtoan.phieuthu.title': 'Thông tin phiếu thu',
@@ -204,4 +227,3 @@ export default {
 	'taichinh.hoadonchitiet.giaodich.thucong': 'Thủ công',
 	'taichinh.hoadonchitiet.giaodich.hethong': 'Hệ thống',
 };
-

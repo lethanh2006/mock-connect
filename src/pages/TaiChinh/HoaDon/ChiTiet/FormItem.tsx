@@ -58,7 +58,15 @@ const FormItemHoaDonChiTiet = () => {
 			title: intl.formatMessage({ id: 'taichinh.hoadonchitiet.col.tenkhoanthu' }),
 			dataIndex: 'tenKhoanThu',
 			width: 200,
-			render: (val, rec) => val ?? rec?.ten ?? rec?.name ?? '-',
+			render: (val, rec) => {
+				const isDiscount = rec?.type === ETransactionType.DISCOUNT;
+				const tenKhoanThu = val ?? rec?.ten ?? rec?.name ?? '-';
+				return (
+					<div>
+						{tenKhoanThu} {isDiscount ? `- ${rec?.phanTramUuDai ?? 0}%` : ''}
+					</div>
+				);
+			},
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadonchitiet.col.loaigiaodich' }),

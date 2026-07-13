@@ -192,10 +192,20 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 					<TableStaticData
 						columns={
 							[
-								{ title: 'Mã hóa đơn', dataIndex: 'identityCode', key: 'identityCode', width: 140 },
-								{ title: 'Đợt thu', dataIndex: ['dotThu', 'tenDot'], key: 'dotThu', width: 180 },
 								{
-									title: 'Số tiền còn lại',
+									title: intl.formatMessage({ id: 'taichinh.thanhtoan.modal.magd' }),
+									dataIndex: 'identityCode',
+									key: 'identityCode',
+									width: 140,
+								},
+								{
+									title: intl.formatMessage({ id: 'taichinh.hoadon.column.dotthu' }),
+									dataIndex: ['dotThu', 'tenDot'],
+									key: 'dotThu',
+									width: 180,
+								},
+								{
+									title: intl.formatMessage({ id: 'taichinh.thanhtoan.modal.sotienconlai' }),
 									dataIndex: 'soTienConLai',
 									key: 'soTienConLai',
 									align: 'right',
@@ -259,7 +269,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 
 			<div className='payment-detail__invoice-toggle'>
 				<Checkbox checked={guiThongTinHoaDon} onChange={(event) => setGuiThongTinHoaDon(event.target.checked)}>
-					Thông tin hóa đơn
+					{intl.formatMessage({ id: 'taichinh.thanhtoan.invoice.title' })}
 				</Checkbox>
 			</div>
 
