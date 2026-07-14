@@ -3,6 +3,7 @@ import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import CardBaiTapDashboard from '@/pages/TrangChu/HocTapRenLuyen/BaiTap';
 import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/DienDan';
 import { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
+import { getPublicAssetPath } from '@/utils/path';
 import { Card, Col, Empty, Row } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
@@ -18,12 +19,12 @@ const LopHocPhanPage = () => {
 	const { record: recHocKy } = useModel('daotao.hocky');
 
 	// Background images array
-	const bg1 = '/student/images/isolation-mode-1.svg';
-	const bg2 = '/student/images/isolation-mode-2.svg';
-	const bg3 = '/student/images/isolation-mode-3.svg';
-	const bg4 = '/student/images/isolation-mode-4.svg';
-	const bg5 = '/student/images/isolation-mode-5.svg';
-	const bg6 = '/student/images/isolation-mode-6.svg';
+	const bg1 = getPublicAssetPath('images/isolation-mode-1.svg');
+	const bg2 = getPublicAssetPath('images/isolation-mode-2.svg');
+	const bg3 = getPublicAssetPath('images/isolation-mode-3.svg');
+	const bg4 = getPublicAssetPath('images/isolation-mode-4.svg');
+	const bg5 = getPublicAssetPath('images/isolation-mode-5.svg');
+	const bg6 = getPublicAssetPath('images/isolation-mode-6.svg');
 	const backgrounds = [bg1, bg2, bg3, bg4, bg5, bg6];
 
 	const getData = () => {

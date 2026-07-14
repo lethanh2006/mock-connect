@@ -6,7 +6,7 @@ import { EOperatorType } from '@/components/Table/constant';
 import { type IColumn } from '@/components/Table/typing';
 import { getExportBillUrl } from '@/services/TaiChinh/HoaDon';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
+import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import { EyeOutlined, FilePdfOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { Empty, Modal, Tabs, Tag, notification } from 'antd';
@@ -52,6 +52,8 @@ const HoaDonPage = () => {
 	// Multi payment state
 	const [selectedBills, setSelectedBills] = useState<HoaDon.IRecord[]>([]);
 	const [paymentMode, setPaymentMode] = useState<'single' | 'multi'>('single');
+	const getPaymentStatusLabel = (status?: EMaTrangThaiThanhToan) =>
+		status ? intl.formatMessage({ id: `taichinh.hoadon.status.${status}` }) : '';
 
 	// Callback from MOMO
 	useEffect(() => {
@@ -224,7 +226,7 @@ const HoaDonPage = () => {
 		// },
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongdathanhtoan' }),
-			dataIndex: 'soTienDaThu',
+			dataIndex: 'amountPaid',
 			width: 180,
 			align: 'right',
 			sortable: true,
@@ -232,7 +234,7 @@ const HoaDonPage = () => {
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongcanthanhtoan' }),
-			dataIndex: 'soTienConLai',
+			dataIndex: 'totalDebit',
 			width: 180,
 			align: 'right',
 			sortable: true,
@@ -247,12 +249,12 @@ const HoaDonPage = () => {
 			align: 'center',
 			width: 150,
 			render: (val: EMaTrangThaiThanhToan) => (
-				<Tag color={EMauTrangThaiThanhToanTable[val]}>{ETrangThaiThanhToan[val]}</Tag>
+				<Tag color={EMauTrangThaiThanhToanTable[val]}>{getPaymentStatusLabel(val)}</Tag>
 			),
 			filterType: 'select',
 			filterData: Object.values(EMaTrangThaiThanhToan).map((item) => ({
 				value: item,
-				label: ETrangThaiThanhToan[item],
+				label: getPaymentStatusLabel(item),
 			})),
 		},
 		{
@@ -321,8 +323,8 @@ const HoaDonPage = () => {
 					setActiveKey(tab as 'chua_thanh_toan' | 'da_thanh_toan');
 				}}
 			>
-				<Tabs.TabPane key='chua_thanh_toan' tab='Chưa thanh toán' />
-				<Tabs.TabPane key='da_thanh_toan' tab='Đã thanh toán' />
+				<Tabs.TabPane key='chua_thanh_toan' tab={intl.formatMessage({ id: 'taichinh.hoadon.tab.unpaid' })} />
+				<Tabs.TabPane key='da_thanh_toan' tab={intl.formatMessage({ id: 'taichinh.hoadon.tab.paid' })} />
 			</Tabs>
 
 			<TableBase
@@ -346,7 +348,9 @@ const HoaDonPage = () => {
 										setVisibleModalThanhToan(true);
 									}}
 									type='primary'
-								>{`Thanh toán cho (${selectedIds?.length}) hóa đơn`}</ButtonExtend>,
+								>
+									{intl.formatMessage({ id: 'taichinh.hoadon.action.paySelected' }, { count: selectedIds?.length })}
+								</ButtonExtend>,
 							]
 						: []),
 				]}

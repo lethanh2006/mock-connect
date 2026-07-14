@@ -4,21 +4,21 @@ import { getPublicAssetPath } from '../src/utils/path';
 import defaultSettings from './defaultSettings';
 import routes from './routes';
 
-const appBasePath = '/student/';
+const appBasePath = process.env.APP_CONFIG_BASE_PATH || '/';
 const schoolName = 'Trường Đại học VinUni';
 const schoolPrefix = 'Trường';
 const schoolShortName = 'VINUNI';
 const isDev = process.env.NODE_ENV === 'development';
 const appConfigDefines = isDev
 	? Object.entries(process.env).reduce((result, [key, value]) => {
-			if (key.startsWith('APP_CONFIG_')) {
-				return {
-					...result,
-					[key]: value,
-				};
-			}
-			return result;
-		}, {})
+		if (key.startsWith('APP_CONFIG_')) {
+			return {
+				...result,
+				[key]: value,
+			};
+		}
+		return result;
+	}, {})
 	: {};
 
 export default defineConfig({

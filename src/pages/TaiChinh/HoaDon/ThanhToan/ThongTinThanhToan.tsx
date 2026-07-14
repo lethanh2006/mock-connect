@@ -4,8 +4,7 @@ import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import {
 	EMaTrangThaiThanhToan,
 	EMauTrangThaiThanhToanTable,
-	ETrangThaiThanhToan,
-	ETransactionPaymentType
+	ETransactionPaymentType,
 } from '@/services/TaiChinh/constant';
 import { currencyFormat } from '@/utils/utils';
 import {
@@ -14,7 +13,6 @@ import {
 	CalendarOutlined,
 	DollarOutlined,
 	FileOutlined,
-	FileTextOutlined,
 	IdcardOutlined,
 	MailOutlined,
 	PhoneOutlined,
@@ -89,7 +87,9 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	const daThanhToan = recHoaDon?.soTienDaThu ?? 0;
 
 	// Trạng thái thanh toán
-	const statusText: string | undefined = ETrangThaiThanhToan[recHoaDon?.status as EMaTrangThaiThanhToan];
+	const statusText = recHoaDon?.status
+		? intl.formatMessage({ id: `taichinh.hoadon.status.${recHoaDon.status}` })
+		: undefined;
 	const statusColor = EMauTrangThaiThanhToanTable[recHoaDon?.status as EMaTrangThaiThanhToan];
 	const ngoaiThoiGianThanhToan = disableThanhToan(recHoaDon);
 
@@ -351,13 +351,13 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 							/>
 						</Col>
 					)} */}
-					<Col xs={24}>
-						<InfoItem
-							icon={<FileTextOutlined />}
-							label={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.ghichu' })}
-							value={recHoaDon?.ghiChu}
-						/>
-					</Col>
+					{/* <Col xs={24}>
+							<InfoItem
+								icon={<FileTextOutlined />}
+								label={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.ghichu' })}
+								value={recHoaDon?.ghiChu}
+							/>
+						</Col> */}
 				</Row>
 			</Card>
 
