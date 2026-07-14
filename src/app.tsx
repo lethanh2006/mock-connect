@@ -10,7 +10,6 @@ import defaultSettings from '../config/defaultSettings';
 import ErrorBoundary from './components/ErrorBoundary';
 import { OIDCBounder } from './components/OIDCBounder';
 import { unCheckPermissionPaths } from './components/OIDCBounder/constant';
-import AccessRouteGuard from './components/AccessRouteGuard';
 import OneSignalBounder from './components/OneSignalBounder';
 import HeaderContentPage from './components/RightContent/Header';
 import TechnicalSupportBounder from './components/TechnicalSupportBounder';
@@ -108,9 +107,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 			<OIDCBounder>
 				<ErrorBoundary>
 					<TechnicalSupportBounder>
-						<OneSignalBounder>
-							<AccessRouteGuard>{dom}</AccessRouteGuard>
-						</OneSignalBounder>
+						<OneSignalBounder>{dom}</OneSignalBounder>
 					</TechnicalSupportBounder>
 				</ErrorBoundary>
 			</OIDCBounder>
