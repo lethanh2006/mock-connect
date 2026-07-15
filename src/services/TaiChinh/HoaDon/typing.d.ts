@@ -6,6 +6,7 @@ declare module HoaDon {
 	export interface IRecord extends IKhachHang {
 		amountPaid?: number;
 		totalDebit?: number;
+		balance?: number;
 		totalDiscount?: number
 		_id: string;
 		identityCode: string;

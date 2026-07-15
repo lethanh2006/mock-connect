@@ -61,9 +61,14 @@ const FormItemHoaDonChiTiet = () => {
 			render: (val, rec) => {
 				const isDiscount = rec?.type === ETransactionType.DISCOUNT;
 				const tenKhoanThu = val ?? rec?.ten ?? rec?.name ?? '-';
+				const phanTramUuDai = Number(rec?.phanTramUuDai);
+				const discountLabel =
+					Number.isFinite(phanTramUuDai) && phanTramUuDai > 0
+						? `${phanTramUuDai}%`
+						: `${currencyFormat(rec?.amount ?? 0)} VND`;
 				return (
 					<div>
-						{tenKhoanThu} {isDiscount ? `- ${rec?.phanTramUuDai ?? 0}%` : ''}
+						{tenKhoanThu} {isDiscount ? `- ${discountLabel}` : ''}
 					</div>
 				);
 			},
