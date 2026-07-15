@@ -1,10 +1,9 @@
 // https://umijs.org/config/
 import { defineConfig } from 'umi';
-import { getPublicAssetPath } from '../src/utils/path';
 import defaultSettings from './defaultSettings';
 import routes from './routes';
 
-const appBasePath = process.env.APP_CONFIG_BASE_PATH || '/';
+const appBasePath = process.env.APP_CONFIG_BASE_PATH || '/student/';
 const schoolName = 'Trường Đại học VinUni';
 const schoolPrefix = 'Trường';
 const schoolShortName = 'VINUNI';
@@ -29,14 +28,14 @@ export default defineConfig({
 			name: 'keywords',
 			content: `${schoolPrefix}, ${schoolShortName}, Trực tuyến, HỆ THỐNG CHUYỂN ĐỔI SỐ - ${schoolName.toUpperCase()}, đào tạo`,
 		},
-		{ property: 'og:image', content: getPublicAssetPath('/metadata.png') },
+		{ property: 'og:image', content: `${appBasePath}metadata.png` },
 		{
 			name: 'description',
 			content: `HỆ THỐNG CHUYỂN ĐỔI SỐ - ${schoolName.toUpperCase()}`,
 		},
 		{ name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' },
 	],
-	links: [{ rel: 'icon', href: getPublicAssetPath('/favicon.ico'), type: 'image/x-icon' }],
+	links: [{ rel: 'icon', href: `${appBasePath}favicon.ico`, type: 'image/x-icon' }],
 
 	antd: {
 		import: false,
@@ -71,7 +70,7 @@ export default defineConfig({
 	// proxy: proxy[REACT_APP_ENV || 'dev'],
 	// base: '/qldt', 		// Sub-path
 	manifest: {
-		basePath: '/',
+		basePath: appBasePath,
 	},
 	// Fast Refresh 热更新
 	fastRefresh: true,
