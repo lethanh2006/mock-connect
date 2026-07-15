@@ -37,7 +37,7 @@ export default {
 	'taichinh.common.updating': 'Updating',
 	'taichinh.hoadon.status.notOpen': 'Collection Period Not Opened',
 	'taichinh.hoadon.status.open': 'Unpaid',
-	'taichinh.hoadon.status.underpaid': 'Unpaid',
+	'taichinh.hoadon.status.underpaid': 'Underpaid',
 	'taichinh.hoadon.status.paid': 'Paid',
 	'taichinh.hoadon.status.closed': 'Closed',
 	'taichinh.hoadon.tab.unpaid': 'Unpaid',

@@ -234,7 +234,7 @@ const HoaDonPage = () => {
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongcanthanhtoan' }),
-			dataIndex: 'totalDebit',
+			dataIndex: 'balance',
 			width: 180,
 			align: 'right',
 			sortable: true,
@@ -338,20 +338,20 @@ const HoaDonPage = () => {
 				otherButtons={[
 					...(selectedIds && selectedIds?.length > 0
 						? [
-								<ButtonExtend
-									key={'thanh-toan'}
-									icon={<UnorderedListOutlined />}
-									onClick={() => {
-										const bills = danhSach.filter((item) => selectedIds.includes(item._id));
-										setSelectedBills(bills);
-										setPaymentMode('multi');
-										setVisibleModalThanhToan(true);
-									}}
-									type='primary'
-								>
-									{intl.formatMessage({ id: 'taichinh.hoadon.action.paySelected' }, { count: selectedIds?.length })}
-								</ButtonExtend>,
-							]
+							<ButtonExtend
+								key={'thanh-toan'}
+								icon={<UnorderedListOutlined />}
+								onClick={() => {
+									const bills = danhSach.filter((item) => selectedIds.includes(item._id));
+									setSelectedBills(bills);
+									setPaymentMode('multi');
+									setVisibleModalThanhToan(true);
+								}}
+								type='primary'
+							>
+								{intl.formatMessage({ id: 'taichinh.hoadon.action.paySelected' }, { count: selectedIds?.length })}
+							</ButtonExtend>,
+						]
 						: []),
 				]}
 				otherProps={{
