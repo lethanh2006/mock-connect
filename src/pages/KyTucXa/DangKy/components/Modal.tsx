@@ -5,6 +5,8 @@ import { Button, Form, message, Steps } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import { chuanHoaDanhSachLienHeKhanCap } from '../NguoiThan/FormItem';
+import '../style.less';
+import CheckInPrepContent from './CheckInPrepContent';
 import FormDangKyKTX from './Form';
 import FormChinhSachKTX from './FormChinhSach';
 
@@ -102,6 +104,14 @@ const ModalDanKyKTX = (props: {
 
 	const checkbox1: boolean = Form.useWatch('checkbox1', form);
 	const checkbox2: boolean = Form.useWatch('checkbox2', form);
+	const steps = [
+		intl.formatMessage({ id: 'kytucxa.dangky.modal.step.thongTinChung' }),
+		intl.formatMessage({ id: 'kytucxa.dangky.modal.step.liabilityWaiver' }),
+		intl.formatMessage({ id: 'kytucxa.dangky.modal.step.checkInPrep' }),
+		intl.formatMessage({ id: 'kytucxa.dangky.modal.step.paymentInformation' }),
+		...(isView ? [] : []),
+	];
+	const lastStep = steps.length - 1;
 
 	useEffect(() => {
 		if (visibleDangKy && isView) {
@@ -132,6 +142,14 @@ const ModalDanKyKTX = (props: {
 		} catch (error) {
 			console.error(error);
 		}
+	};
+
+	const handleViewNext = () => {
+		setCurrentStep((step) => Math.min(step + 1, lastStep));
+	};
+
+	const handleViewPrevious = () => {
+		setCurrentStep((step) => Math.max(step - 1, 0));
 	};
 
 	const onFinish = async (values: PhieuDangKyKTX.IDangKy & { checkbox1?: boolean; checkbox2?: boolean }) => {
@@ -167,13 +185,14 @@ const ModalDanKyKTX = (props: {
 			open={visibleDangKy}
 			onCancel={handleClose}
 			footer={null}
-			width={1000}
+			width={1200}
 			title={intl.formatMessage({ id: 'kytucxa.dangky.modal.title' })}
 		>
 			<Form layout='vertical' onFinish={onFinish} form={form} preserve>
 				<Steps current={currentStep} style={{ marginBottom: 18 }}>
-					<Steps.Step title={intl.formatMessage({ id: 'kytucxa.dangky.modal.step.thongTinChung' })} />
-					<Steps.Step title={intl.formatMessage({ id: 'kytucxa.dangky.modal.step.liabilityWaiver' })} />
+					{steps.map((title) => (
+						<Steps.Step key={title} title={title} />
+					))}
 				</Steps>
 
 				<hr
@@ -193,18 +212,24 @@ const ModalDanKyKTX = (props: {
 					<FormChinhSachKTX form={form} disabled={isView} />
 				</div>
 
+				<div style={{ display: currentStep === 2 ? 'block' : 'none' }}>
+					<CheckInPrepContent />
+				</div>
+
 				<div className='form-footer'>
 					{isView ? (
 						<>
-							{currentStep === 0 ? (
-								<Button htmlType='button' type='primary' onClick={() => setCurrentStep(1)}>
+							{currentStep < lastStep ? (
+								<Button htmlType='button' type='primary' onClick={handleViewNext}>
 									{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.next' })}
 								</Button>
-							) : (
-								<Button htmlType='button' onClick={() => setCurrentStep(0)}>
+							) : null}
+
+							{currentStep > 0 ? (
+								<Button htmlType='button' onClick={handleViewPrevious}>
 									{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.previous' })}
 								</Button>
-							)}
+							) : null}
 
 							<Button htmlType='button' onClick={handleClose}>
 								{intl.formatMessage({ id: 'activity.outcome.close' })}

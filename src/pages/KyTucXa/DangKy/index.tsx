@@ -3,7 +3,7 @@ import { EOperatorType } from '@/components/Table/constant';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { getPublicAssetPath } from '@/utils/path';
-import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
+import { FileDoneOutlined, InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Alert, Button, Col, Empty, Flex, Input, message, Pagination, Row, Select, Space, Spin } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
@@ -24,6 +24,8 @@ const getLichSuDangKyKeys = (lichSu?: PhieuDangKyKTX.IRecord) =>
 	[lichSu?.maPhong, lichSu?.phong?._id, lichSu?.phong?.ma, (lichSu as any)?.roomId]
 		.filter(Boolean)
 		.map((item) => String(item));
+
+const coFormDonDangKy = (lichSu?: PhieuDangKyKTX.IRecord) => !!lichSu?.formDon?._id;
 
 const DangKyKyTucXa = () => {
 	const intl = useIntl();
@@ -58,7 +60,7 @@ const DangKyKyTucXa = () => {
 
 	//Get lịch sử đăng ký
 	const getLichSuDangKyData = async () => {
-		if (!recDot?._id) {
+		if (!recDot?._id || recDot?.isMienKyTucXa) {
 			setRecLichSu(undefined);
 			return;
 		}
@@ -78,17 +80,17 @@ const DangKyKyTucXa = () => {
 
 	useEffect(() => {
 		getLichSuDangKyData();
-	}, [recDot?._id]);
+	}, [recDot?._id, recDot?.isMienKyTucXa]);
 
 	const getData = () => {
-		if (recDot?._id) {
+		if (recDot?._id && !recDot?.isMienKyTucXa) {
 			getModel({ maDotId: recDot?._id }, undefined, undefined, undefined, undefined, 'ktx/chinh-sach-phong/page');
 		}
 	};
 
 	useEffect(() => {
 		getData();
-	}, [page, limit, filters, recDot?._id]);
+	}, [page, limit, filters, recDot?._id, recDot?.isMienKyTucXa]);
 
 	const handleFilterChange = useCallback(
 		(fieldPath: string[], value: any, operator = EOperatorType.EQUAL) => {
@@ -124,7 +126,7 @@ const DangKyKyTucXa = () => {
 	};
 
 	const handleDangKy = (phong: Phong.IChinhSachPhongRecord) => {
-		if (recLichSu?._id) {
+		if (coFormDonDangKy(recLichSu)) {
 			message.warning(intl.formatMessage({ id: 'kytucxa.dangky.message.daCoLichSu' }));
 			return;
 		}
@@ -135,14 +137,16 @@ const DangKyKyTucXa = () => {
 	};
 
 	const lichSuDangKyKeys = useMemo(() => getLichSuDangKyKeys(recLichSu), [recLichSu]);
-	const daCoLichSuDangKy = !!recLichSu?._id;
+	const daCoLichSuDangKy = coFormDonDangKy(recLichSu);
 
 	const isPhongDaDangKy = useCallback(
 		(phong: Phong.IChinhSachPhongRecord) => {
+			if (!daCoLichSuDangKy) return false;
+
 			const phongKeys = getPhongDangKyKeys(phong);
 			return phongKeys.some((key) => lichSuDangKyKeys.includes(key));
 		},
-		[lichSuDangKyKeys],
+		[daCoLichSuDangKy, lichSuDangKyKeys],
 	);
 
 	const handlePaginationChange = (newPage: number, newPageSize: number) => {
@@ -163,6 +167,19 @@ const DangKyKyTucXa = () => {
 		return (
 			<PageCard title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}>
 				<Empty description={intl.formatMessage({ id: 'kytucxa.dangky.empty.noDotDangKy' })} />
+			</PageCard>
+		);
+	}
+
+	if (recDot?.isMienKyTucXa) {
+		return (
+			<PageCard title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}>
+				<div className='room-exempt-state'>
+					<div className='room-exempt-state__icon'>
+						<FileDoneOutlined />
+					</div>
+					<div className='room-exempt-state__text'>{intl.formatMessage({ id: 'kytucxa.dangky.exempt.message' })}</div>
+				</div>
 			</PageCard>
 		);
 	}
@@ -199,9 +216,9 @@ const DangKyKyTucXa = () => {
 						onChange={(val) => {
 							if (val) {
 								const [min, max] = val.split('-').map(Number);
-								handleFilterChange(['room', 'soLuongToiDa'], [min, max], EOperatorType.BETWEEN);
+								handleFilterChange(['sucChua'], [min, max], EOperatorType.BETWEEN);
 							} else {
-								handleFilterChange(['room', 'soLuongToiDa'], undefined, EOperatorType.BETWEEN);
+								handleFilterChange(['sucChua'], undefined, EOperatorType.BETWEEN);
 							}
 						}}
 						options={[

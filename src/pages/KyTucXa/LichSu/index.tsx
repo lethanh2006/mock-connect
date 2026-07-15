@@ -5,6 +5,12 @@ import { type IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
+import {
+	EMaTrangThaiThanhToan,
+	EMauTrangThaiThanhToanTable,
+	ETrangThaiThanhToanKtxI18n,
+} from '@/services/TaiChinh/constant';
+import { formatDate } from '@/utils/formatDate';
 import { tienVietNam } from '@/utils/utils';
 import { DeleteOutlined, DollarCircleOutlined } from '@ant-design/icons';
 import { Button, Empty, message, Popconfirm, Tag } from 'antd';
@@ -31,29 +37,6 @@ const getFloorText = (floor?: number | string | null) => {
 	}
 };
 
-const getPaymentTag = (status?: string, intl?: any) => {
-	switch (status) {
-		case 'Đã thanh toán':
-		case 'Paid':
-			return <Tag color='success'>{intl.formatMessage({ id: 'kytucxa.lichsu.status.paid' })}</Tag>;
-
-		case 'Chưa thanh toán':
-		case 'Unpaid':
-			return <Tag color='error'>{intl.formatMessage({ id: 'kytucxa.lichsu.status.unpaid' })}</Tag>;
-
-		case 'Thanh toán thiếu':
-		case 'Underpaid':
-			return <Tag color='warning'>{intl.formatMessage({ id: 'kytucxa.lichsu.status.underpaid' })}</Tag>;
-
-		case 'Đã đóng':
-		case 'Closed':
-			return <Tag color='purple'>{intl.formatMessage({ id: 'kytucxa.lichsu.status.closed' })}</Tag>;
-
-		default:
-			return <Tag>{status || '--'}</Tag>;
-	}
-};
-
 const LichSuaKTX = () => {
 	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
@@ -65,6 +48,7 @@ const LichSuaKTX = () => {
 		setVisibleForm: setVisibleChiTietPhong,
 		setVisibleDangKy,
 	} = useModel('kytucxa.phong');
+	const getPaymentStatusLabel = (status?: EMaTrangThaiThanhToan) => (status ? ETrangThaiThanhToanKtxI18n[status] : '');
 
 	//Get đợt đăng ký
 	useEffect(() => {
@@ -177,20 +161,32 @@ const LichSuaKTX = () => {
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.moveInDate' }),
+			dataIndex: 'thoiGianChuyenVao',
 			width: 150,
+			render: (_val, rec) => _val && formatDate(_val),
 			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.moveOutDate' }),
+			dataIndex: 'thoiGianChuyenRa',
 			width: 150,
+			render: (_val, rec) => _val && formatDate(_val),
 			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.paymentStatus' }),
+			dataIndex: 'trangThaiThanhToan',
 			width: 150,
-			sortable: true,
+			render: (val: EMaTrangThaiThanhToan) => (
+				<Tag color={EMauTrangThaiThanhToanTable[val]}>{intl.formatMessage({ id: getPaymentStatusLabel(val) })}</Tag>
+			),
+			filterType: 'select',
+			filterData: Object.values(EMaTrangThaiThanhToan).map((item) => ({
+				value: item,
+				label: intl.formatMessage({ id: getPaymentStatusLabel(item) }),
+			})),
 			onCell,
-			render: (_val, rec) => getPaymentTag(rec?.trangThaiThanhToan, intl),
+			fixed: 'right',
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.action' }),
@@ -198,8 +194,8 @@ const LichSuaKTX = () => {
 			width: 100,
 			fixed: 'right',
 			render: (_val, rec) => {
-				const isPaid = rec?.trangThaiThanhToan === 'Đã thanh toán' || rec?.trangThaiThanhToan === 'Paid';
-				const isClosed = rec?.trangThaiThanhToan === 'Đã đóng' || rec?.trangThaiThanhToan === 'Closed';
+				const isPaid = rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU;
+				const isClosed = rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
 
 				return (
 					<>
@@ -213,7 +209,7 @@ const LichSuaKTX = () => {
 						) : null}
 
 						<Popconfirm
-							onConfirm={() => deleteModel(rec?._id, getData)}
+							onConfirm={() => deleteModel(`me/${rec?._id}`, getData)}
 							title={intl.formatMessage({ id: 'kytucxa.danhmucchung.xacnhanxoa' })}
 							placement='topRight'
 							disabled={isClosed}
