@@ -234,7 +234,7 @@ const HoaDonPage = () => {
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongcanthanhtoan' }),
-			dataIndex: 'soTienConLai',
+			dataIndex: 'balance',
 			width: 180,
 			align: 'right',
 			sortable: true,
