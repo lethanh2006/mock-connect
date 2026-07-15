@@ -71,7 +71,7 @@ export default defineConfig({
 	// proxy: proxy[REACT_APP_ENV || 'dev'],
 	// base: '/qldt', 		// Sub-path
 	manifest: {
-		basePath: '/',
+		basePath: appBasePath,
 	},
 	// Fast Refresh 热更新
 	fastRefresh: true,
