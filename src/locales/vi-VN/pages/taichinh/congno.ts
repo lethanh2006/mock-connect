@@ -44,8 +44,13 @@ export default {
 	'taichinh.hoadon.tab.unpaid': 'Chưa thanh toán',
 	'taichinh.hoadon.tab.paid': 'Đã thanh toán',
 	'taichinh.hoadon.action.paySelected': 'Thanh toán cho ({count}) hóa đơn',
+	'taichinh.hoadon.virtualBill.earlyPayment': 'Thanh toán sớm',
+	'taichinh.hoadon.virtualBill.discount.title': 'Ưu đãi thanh toán trước {percent}%',
+	'taichinh.hoadon.virtualBill.discount.description':
+		'Chọn và thanh toán cùng lúc cả 2 hóa đơn để được giảm ngay {percent}% trên tổng số tiền phải nộp.',
 
 	'taichinh.thanhtoan.title': 'Thông tin thanh toán',
+	'taichinh.thanhtoan.modal.success': 'Thanh toán thành công!',
 	'taichinh.thanhtoan.tab.chitiet': 'Chi tiết',
 	'taichinh.thanhtoan.tab.lichsu': 'Lịch sử giao dịch',
 	'taichinh.thanhtoan.alert.pending.title': 'Có giao dịch nộp tiền đang chờ xử lý! Bạn đã thực hiện thanh toán chưa?',
@@ -226,4 +231,19 @@ export default {
 	'taichinh.hoadonchitiet.col.giaodich': 'Giao dịch',
 	'taichinh.hoadonchitiet.giaodich.thucong': 'Thủ công',
 	'taichinh.hoadonchitiet.giaodich.hethong': 'Hệ thống',
+
+	// PayCollect QR
+	'taichinh.thanhtoan.paycollect.title': 'Thanh toán qua mã QR',
+	'taichinh.thanhtoan.paycollect.hint': 'Vui lòng quét mã QR bằng ứng dụng ngân hàng',
+	'taichinh.thanhtoan.paycollect.bankName': 'Ngân hàng',
+	'taichinh.thanhtoan.paycollect.accountNumber': 'Số tài khoản',
+	'taichinh.thanhtoan.paycollect.amount': 'Số tiền',
+	'taichinh.thanhtoan.paycollect.reference': 'Mã tham chiếu',
+	'taichinh.thanhtoan.paycollect.pending': 'Đang chờ thanh toán',
+	'taichinh.thanhtoan.paycollect.cancel': 'Hủy thanh toán',
+	'taichinh.thanhtoan.paycollect.expired.title': 'Mã QR đã hết hạn',
+	'taichinh.thanhtoan.paycollect.expired.desc': 'Mã QR thanh toán đã hết hiệu lực. Vui lòng tạo lại để thanh toán.',
+	'taichinh.thanhtoan.paycollect.retry': 'Tạo lại mã QR',
+	'taichinh.thanhtoan.paycollect.success.title': 'Thanh toán thành công!',
+	'taichinh.thanhtoan.paycollect.copied': 'Đã sao chép',
 };

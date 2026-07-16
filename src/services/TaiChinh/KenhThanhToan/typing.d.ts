@@ -57,6 +57,7 @@ declare module KenhThanhToan {
         onepayBinForeignMerchant: string;
         onepayBinForeignAccessCode: string;
         onepayCard: EOnepayCard;
+        onepayIntegrationType?: 'PAYGATE' | 'PAYCOLLECT';
 
         createdAt: string;
         updatedAt: string;

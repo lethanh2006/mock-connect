@@ -8,10 +8,10 @@ import { getExportBillUrl } from '@/services/TaiChinh/HoaDon';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
-import { EyeOutlined, FilePdfOutlined, UnorderedListOutlined } from '@ant-design/icons';
+import { EyeOutlined, FilePdfOutlined, GiftOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { Empty, Modal, Tabs, Tag, notification } from 'antd';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState, type Key, type ReactNode } from 'react';
 import { useIntl, useModel } from 'umi';
 import SelectDotThu from '../DotThu/Select';
 import ModalThanhToan from './ThanhToan/ModalThanhToan';
@@ -42,6 +42,7 @@ const HoaDonPage = () => {
 		visibleModalThanhToan,
 		setVisibleModalThanhToan,
 		selectedIds,
+		setSelectedIds,
 		danhSach,
 	} = useModel('taichinh.hoadon');
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
@@ -52,6 +53,80 @@ const HoaDonPage = () => {
 	// Multi payment state
 	const [selectedBills, setSelectedBills] = useState<HoaDon.IRecord[]>([]);
 	const [paymentMode, setPaymentMode] = useState<'single' | 'multi'>('single');
+	type BillTableRecord = HoaDon.IRecord & {
+		_isVirtualBill?: boolean;
+		_isVirtualBillNotice?: boolean;
+		_parentBillId?: string;
+		index?: number;
+		key?: string;
+		children?: BillTableRecord[];
+	};
+	const tableData = useMemo<BillTableRecord[]>(
+		() =>
+			danhSach.map((bill, index) => {
+				const parent: BillTableRecord = {
+					...bill,
+					index: index + 1 + (page - 1) * limit,
+					key: bill._id,
+				};
+				if (bill.virtualBill) {
+					parent.children = [
+						{
+							...bill,
+							_id: `virtual-bill-notice-${bill._id}`,
+							identityCode: '',
+							virtualBill: undefined,
+							_isVirtualBillNotice: true,
+							_parentBillId: bill._id,
+							key: `virtual-bill-notice-${bill._id}`,
+						},
+						{
+							...bill.virtualBill,
+							_isVirtualBill: true,
+							_parentBillId: bill._id,
+							key: bill.virtualBill._id,
+						},
+					];
+				}
+
+				return parent;
+			}),
+		[danhSach, page, limit],
+	);
+	const allTableBills = useMemo(
+		() => tableData.flatMap((bill) => [bill, ...(bill.children ?? []).filter((item) => !item._isVirtualBillNotice)]),
+		[tableData],
+	);
+	const [expandedRowKeys, setExpandedRowKeys] = useState<Key[]>([]);
+
+	useEffect(() => {
+		setExpandedRowKeys(tableData.filter((bill) => bill.children?.length).map((bill) => bill._id));
+	}, [tableData]);
+	const renderVirtualBillNotice = (rec: BillTableRecord) => {
+		const uuDaiThanhToanTruocKy = rec.dotThu?.uuDaiThanhToanTruocKy ?? 0;
+
+		return (
+			<div className='virtual-bill-notice'>
+				<div className='virtual-bill-notice-icon'>
+					<GiftOutlined />
+				</div>
+				<div>
+					<div className='virtual-bill-notice-title'>
+						{intl.formatMessage(
+							{ id: 'taichinh.hoadon.virtualBill.discount.title' },
+							{ percent: uuDaiThanhToanTruocKy },
+						)}
+					</div>
+					<div className='virtual-bill-notice-description'>
+						{intl.formatMessage(
+							{ id: 'taichinh.hoadon.virtualBill.discount.description' },
+							{ percent: uuDaiThanhToanTruocKy },
+						)}
+					</div>
+				</div>
+			</div>
+		);
+	};
 	const getPaymentStatusLabel = (status?: EMaTrangThaiThanhToan) =>
 		status ? intl.formatMessage({ id: `taichinh.hoadon.status.${status}` }) : '';
 
@@ -87,19 +162,42 @@ const HoaDonPage = () => {
 		setVisibleModal(true);
 	};
 
-	const columns: IColumn<HoaDon.IRecord>[] = [
+	const baseColumns: IColumn<HoaDon.IRecord>[] = [
+		{
+			title: intl.formatMessage({ id: 'global.table.column.tt' }),
+			dataIndex: 'index',
+			align: 'center',
+			width: 60,
+			render: (val) => val,
+		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.identityCode' }),
 			dataIndex: 'identityCode',
 			align: 'center',
 			filterType: 'string',
 			width: 120,
+			render: (val, rec: BillTableRecord) =>
+				rec._isVirtualBillNotice ? null : (
+					<div className={rec._isVirtualBill ? 'virtual-bill-identity' : undefined}>
+						{/* {rec._isVirtualBill && <Tag color='blue'>Hóa đơn con</Tag>} */}
+						<div>{val}</div>
+					</div>
+				),
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.dotthu' }),
 			dataIndex: 'idDotThu',
 			width: 180,
-			render: (val, rec) => rec.dotThu?.tenDot,
+			render: (_val, rec: BillTableRecord) => (
+				<div>
+					{rec._isVirtualBill && (
+						<Tag color='gold' style={{ marginBottom: 4 }}>
+							{intl.formatMessage({ id: 'taichinh.hoadon.virtualBill.earlyPayment' })}
+						</Tag>
+					)}
+					<div>{rec.dotThu?.tenDot}</div>
+				</div>
+			),
 			filterType: 'customselect',
 			filterCustomSelect: <SelectDotThu multiple />,
 		},
@@ -311,11 +409,92 @@ const HoaDonPage = () => {
 			),
 		},
 	];
+	const columns: IColumn<HoaDon.IRecord>[] = baseColumns.map((column) => {
+		const originalRender = column.render;
+		const originalOnCell = column.onCell;
+		return {
+			...column,
+			onCell: (rec: BillTableRecord, index) => ({
+				...originalOnCell?.(rec, index),
+				...(rec._isVirtualBillNotice ? { colSpan: 0 } : {}),
+			}),
+			render: (value, rec: BillTableRecord, index) => {
+				if (rec._isVirtualBillNotice) {
+					return null;
+				}
+				return originalRender ? originalRender(value, rec, index) : value;
+			},
+		};
+	});
 	console.log('selectedIds', selectedIds);
 
 	return (
 		<PageCard title={intl.formatMessage({ id: 'taichinh.hoadon.title' })}>
-			<style>{`.row-qua-han { background-color: #fff1f0 !important; }`}</style>
+			<style>{`
+				.row-qua-han > td { background-color: #fff1f0 !important; }
+				.ant-table-wrapper .ant-table-tbody > tr.row-hoa-don-con > td {
+					background: #fafcff !important;
+				}
+				.ant-table-wrapper .ant-table-tbody > tr.row-hoa-don-con:hover > td {
+					background: #f0f7ff !important;
+				}
+				.ant-table-wrapper .ant-table-tbody > tr.virtual-bill-notice-row > td {
+					padding-top: 8px !important;
+					padding-bottom: 8px !important;
+					background: #fffdf0 !important;
+					border-top: 1px solid #f8e8a6 !important;
+					border-bottom: 1px solid #f8e8a6 !important;
+				}
+				.ant-table-wrapper .ant-table-tbody > tr.virtual-bill-notice-row > td.ant-table-selection-column {
+					position: static !important;
+					z-index: auto !important;
+					text-align: left;
+				}
+				.ant-table-wrapper .ant-table-tbody > tr.virtual-bill-notice-row > td.ant-table-cell-fix-right {
+					position: static !important;
+				}
+				.virtual-bill-notice {
+					display: flex;
+					align-items: flex-start;
+					gap: 10px;
+					min-width: 620px;
+					color: #5c4b16;
+					font-size: 12px;
+					line-height: 1.45;
+				}
+				.virtual-bill-notice-icon {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					flex: 0 0 30px;
+					height: 30px;
+					margin-top: 1px;
+					color: #fff;
+					background: #f7c948;
+					border-radius: 6px;
+					font-size: 16px;
+				}
+				.virtual-bill-notice-title {
+					margin-bottom: 1px;
+					color: #594714;
+					font-weight: 600;
+				}
+				.virtual-bill-notice-description {
+					color: #78662e;
+				}
+				.virtual-bill-identity { padding-left: 16px; position: relative; }
+				.virtual-bill-identity::before {
+					content: '';
+					position: absolute;
+					left: 0;
+					top: 6px;
+					width: 9px;
+					height: 12px;
+					border-left: 1px solid #1677ff;
+					border-bottom: 1px solid #1677ff;
+				}
+				.virtual-bill-identity .ant-tag { margin: 0 0 4px; font-size: 11px; }
+			`}</style>
 
 			<Tabs
 				activeKey={activeKey}
@@ -328,6 +507,7 @@ const HoaDonPage = () => {
 			</Tabs>
 
 			<TableBase
+				addStt={false}
 				rowSelection={activeKey === 'chua_thanh_toan'}
 				columns={columns}
 				getData={() => getData(activeKey)}
@@ -338,33 +518,61 @@ const HoaDonPage = () => {
 				otherButtons={[
 					...(selectedIds && selectedIds?.length > 0
 						? [
-							<ButtonExtend
-								key={'thanh-toan'}
-								icon={<UnorderedListOutlined />}
-								onClick={() => {
-									const bills = danhSach.filter((item) => selectedIds.includes(item._id));
-									setSelectedBills(bills);
-									setPaymentMode('multi');
-									setVisibleModalThanhToan(true);
-								}}
-								type='primary'
-							>
-								{intl.formatMessage({ id: 'taichinh.hoadon.action.paySelected' }, { count: selectedIds?.length })}
-							</ButtonExtend>,
-						]
+								<ButtonExtend
+									key={'thanh-toan'}
+									icon={<UnorderedListOutlined />}
+									onClick={() => {
+										const bills = allTableBills.filter((item) => selectedIds.includes(item._id));
+										setSelectedBills(bills);
+										setPaymentMode('multi');
+										setVisibleModalThanhToan(true);
+									}}
+									type='primary'
+								>
+									{intl.formatMessage({ id: 'taichinh.hoadon.action.paySelected' }, { count: selectedIds?.length })}
+								</ButtonExtend>,
+							]
 						: []),
 				]}
 				otherProps={{
-					rowClassName: (rec: HoaDon.IRecord) => {
+					dataSource: tableData,
+					rowKey: (rec: BillTableRecord) => rec._id,
+					expandable: {
+						expandedRowKeys,
+						onExpandedRowsChange: (keys) => setExpandedRowKeys([...keys]),
+						indentSize: 24,
+						rowExpandable: (rec) => Boolean(rec.children?.length),
+					},
+					rowClassName: (rec: BillTableRecord) => {
+						if (rec._isVirtualBillNotice) return 'virtual-bill-notice-row';
+						if (rec._isVirtualBill) return 'row-hoa-don-con';
 						// Check hạn thanh toán từ hóa đơn
 						if (rec.ngayHetHanThanhToan && dayjs().isAfter(dayjs(rec.ngayHetHanThanhToan), 'day')) return 'row-qua-han';
 
 						return '';
 					},
-					onRow: (rec: HoaDon.IRecord) => ({
-						onClick: () => handleDetail(rec),
-						style: { cursor: 'pointer' },
+					onRow: (rec: BillTableRecord) => ({
+						onClick: rec._isVirtualBillNotice ? undefined : () => handleDetail(rec),
+						style: { cursor: rec._isVirtualBillNotice ? 'default' : 'pointer' },
 					}),
+				}}
+				detailRow={{
+					checkStrictly: true,
+					getCheckboxProps: (rec: BillTableRecord) => ({ disabled: Boolean(rec._isVirtualBillNotice) }),
+					onChange: (selectedRowKeys: Key[]) => {
+						const nextSelectedIds = new Set(selectedRowKeys.map(String));
+
+						allTableBills.forEach((bill) => {
+							if (bill._isVirtualBill && nextSelectedIds.has(bill._id) && bill._parentBillId) {
+								nextSelectedIds.add(bill._parentBillId);
+							}
+						});
+
+						setSelectedIds(Array.from(nextSelectedIds));
+					},
+					renderCell: (_checked: boolean, rec: BillTableRecord, _index: number, originNode: ReactNode) =>
+						rec._isVirtualBillNotice ? renderVirtualBillNotice(rec) : originNode,
+					onCell: (rec: BillTableRecord) => (rec._isVirtualBillNotice ? { colSpan: baseColumns.length + 1 } : {}),
 				}}
 			></TableBase>
 

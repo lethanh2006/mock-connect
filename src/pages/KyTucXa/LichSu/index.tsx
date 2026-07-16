@@ -5,9 +5,15 @@ import { type IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
+import {
+	EMaTrangThaiThanhToan,
+	EMauTrangThaiThanhToanTable,
+	ETrangThaiThanhToanKtxI18n,
+} from '@/services/TaiChinh/constant';
+import { formatDate } from '@/utils/formatDate';
 import { tienVietNam } from '@/utils/utils';
 import { DeleteOutlined, DollarCircleOutlined } from '@ant-design/icons';
-import { Button, Empty, message, Popconfirm, Tag } from 'antd';
+import { Button, Empty, Popconfirm, Tag } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChiTietPhong from '../DangKy/components/ChiTiet';
@@ -31,28 +37,22 @@ const getFloorText = (floor?: number | string | null) => {
 	}
 };
 
-const getPaymentTag = (status?: string, intl?: any) => {
-	switch (status) {
-		case 'Đã thanh toán':
-		case 'Paid':
-			return <Tag color='success'>{intl.formatMessage({ id: 'kytucxa.lichsu.status.paid' })}</Tag>;
+const getChinhSachPhong = (record?: PhieuDangKyKTX.IRecord) =>
+	(record?.phong as (Phong.IRecord & { chinhSachPhong?: Phong.IChinhSachPhongRecord }) | undefined)?.chinhSachPhong;
 
-		case 'Chưa thanh toán':
-		case 'Unpaid':
-			return <Tag color='error'>{intl.formatMessage({ id: 'kytucxa.lichsu.status.unpaid' })}</Tag>;
+const getChinhSachPhongChiTiet = (record?: PhieuDangKyKTX.IRecord) => {
+	const chinhSachPhong = getChinhSachPhong(record);
+	if (chinhSachPhong) return chinhSachPhong;
+	if (!record?.phong) return undefined;
 
-		case 'Thanh toán thiếu':
-		case 'Underpaid':
-			return <Tag color='warning'>{intl.formatMessage({ id: 'kytucxa.lichsu.status.underpaid' })}</Tag>;
-
-		case 'Đã đóng':
-		case 'Closed':
-			return <Tag color='purple'>{intl.formatMessage({ id: 'kytucxa.lichsu.status.closed' })}</Tag>;
-
-		default:
-			return <Tag>{status || '--'}</Tag>;
-	}
+	return {
+		_id: record.phong._id,
+		roomId: record.phong._id,
+		room: record.phong,
+	} as Phong.IChinhSachPhongRecord;
 };
+
+const getRoomFromChinhSachPhong = (record?: PhieuDangKyKTX.IRecord) => getChinhSachPhong(record)?.room ?? record?.phong;
 
 const LichSuaKTX = () => {
 	const intl = useIntl();
@@ -60,11 +60,11 @@ const LichSuaKTX = () => {
 	const { getByIdModel: getDotDangKy, record: recDot, setRecord: setRecDot } = useModel('kytucxa.dotdangky');
 	const { getModel, page, limit, deleteModel, handleEdit, setRecord } = useModel('kytucxa.phieudangky');
 	const {
-		getModel: getPhongChinhSach,
 		setRecord: setRecPhong,
 		setVisibleForm: setVisibleChiTietPhong,
 		setVisibleDangKy,
 	} = useModel('kytucxa.phong');
+	const getPaymentStatusLabel = (status?: EMaTrangThaiThanhToan) => (status ? ETrangThaiThanhToanKtxI18n[status] : '');
 
 	//Get đợt đăng ký
 	useEffect(() => {
@@ -96,40 +96,12 @@ const LichSuaKTX = () => {
 		style: { cursor: 'pointer' },
 	});
 
-	const handleViewPhong = async (record: PhieuDangKyKTX.IRecord) => {
-		const maDotId = recDot?._id;
+	const handleViewPhong = (record: PhieuDangKyKTX.IRecord) => {
+		const chinhSachPhong = getChinhSachPhongChiTiet(record);
 
-		if (!maDotId) {
-			message.warning(intl.formatMessage({ id: 'global.title.khongcodulieu' }));
-			return;
-		}
-
-		try {
-			const data = await getPhongChinhSach(
-				{
-					maDotId,
-				},
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				'ktx/chinh-sach-phong/page',
-				undefined,
-				false,
-			);
-			const phong = data?.[0] as Phong.IChinhSachPhongRecord | undefined;
-
-			if (!phong) {
-				message.warning(intl.formatMessage({ id: 'global.title.khongcodulieu' }));
-				return;
-			}
-
-			setRecord(record);
-			setRecPhong(phong);
-			setVisibleChiTietPhong(true);
-		} catch {
-			message.error(intl.formatMessage({ id: 'global.message.capnhatthatbai' }));
-		}
+		setRecord(record);
+		setRecPhong(chinhSachPhong);
+		setVisibleChiTietPhong(true);
 	};
 
 	const columns: IColumn<PhieuDangKyKTX.IRecord>[] = [
@@ -138,13 +110,13 @@ const LichSuaKTX = () => {
 			width: 90,
 			sortable: true,
 			onCell,
-			render: (_val, rec) => getFloorText(rec?.phong?.tangThu),
+			render: (_val, rec) => getFloorText(getRoomFromChinhSachPhong(rec)?.tangThu),
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.roomCode' }),
 			width: 120,
 			render: (_val, rec) => {
-				const roomCode = rec?.phong?.ma || rec?.maPhong;
+				const roomCode = getRoomFromChinhSachPhong(rec)?.ma || rec?.maPhong;
 
 				if (!roomCode) return '--';
 
@@ -167,30 +139,55 @@ const LichSuaKTX = () => {
 			width: 260,
 			sortable: true,
 			onCell,
-			render: (_val, rec) => rec?.phong?.moTa || rec?.phong?.ten || '--',
+			render: (_val, rec) => {
+				const chinhSachPhong = getChinhSachPhong(rec);
+				const room = getRoomFromChinhSachPhong(rec);
+
+				return chinhSachPhong?.loaiPhongKtx?.ten || chinhSachPhong?.moTa || room?.moTa || room?.ten || '--';
+			},
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.price' }),
 			width: 160,
 			onCell,
-			render: (_val, rec) => tienVietNam(rec?.phong?.giaPhong ?? 0),
+			render: (_val, rec) => {
+				const chinhSachPhong = getChinhSachPhong(rec) as
+					| (Phong.IChinhSachPhongRecord & { giaPhong?: number })
+					| undefined;
+
+				return tienVietNam(chinhSachPhong?.giaPhong ?? getRoomFromChinhSachPhong(rec)?.giaPhong ?? 0);
+			},
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.moveInDate' }),
+			dataIndex: 'thoiGianChuyenVao',
 			width: 150,
+			render: (_val, rec) => _val && formatDate(_val),
 			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.moveOutDate' }),
+			dataIndex: 'thoiGianChuyenRa',
+			sortable: true,
 			width: 150,
+			render: (_val, rec) => _val && formatDate(_val),
 			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.paymentStatus' }),
-			width: 150,
+			dataIndex: 'trangThaiThanhToan',
 			sortable: true,
+			width: 150,
+			render: (val: EMaTrangThaiThanhToan) => (
+				<Tag color={EMauTrangThaiThanhToanTable[val]}>{intl.formatMessage({ id: getPaymentStatusLabel(val) })}</Tag>
+			),
+			filterType: 'select',
+			filterData: Object.values(EMaTrangThaiThanhToan).map((item) => ({
+				value: item,
+				label: intl.formatMessage({ id: getPaymentStatusLabel(item) }),
+			})),
 			onCell,
-			render: (_val, rec) => getPaymentTag(rec?.trangThaiThanhToan, intl),
+			fixed: 'right',
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.action' }),
@@ -198,8 +195,8 @@ const LichSuaKTX = () => {
 			width: 100,
 			fixed: 'right',
 			render: (_val, rec) => {
-				const isPaid = rec?.trangThaiThanhToan === 'Đã thanh toán' || rec?.trangThaiThanhToan === 'Paid';
-				const isClosed = rec?.trangThaiThanhToan === 'Đã đóng' || rec?.trangThaiThanhToan === 'Closed';
+				const isPaid = rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU;
+				const isClosed = rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
 
 				return (
 					<>
@@ -213,7 +210,7 @@ const LichSuaKTX = () => {
 						) : null}
 
 						<Popconfirm
-							onConfirm={() => deleteModel(rec?._id, getData)}
+							onConfirm={() => deleteModel(`me/${rec?._id}`, getData)}
 							title={intl.formatMessage({ id: 'kytucxa.danhmucchung.xacnhanxoa' })}
 							placement='topRight'
 							disabled={isClosed}

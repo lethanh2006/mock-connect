@@ -18,5 +18,6 @@ declare module DotDangKyKTX {
 		trangThaiPhatHanh: ETrangThaiPhatHanh;
 		targetDangKy?: number;
 		batBuoc?: boolean;
+		isMienKyTucXa?: boolean;
 	}
 }

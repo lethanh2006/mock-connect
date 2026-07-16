@@ -172,3 +172,176 @@
 		margin-top: 8px;
 	}
 }
+
+// ===== PaymentCollectView =====
+.payment-collect-view {
+	padding: 24px;
+	text-align: center;
+
+	&__header {
+		font-size: 18px;
+		font-weight: 600;
+		margin-bottom: 20px;
+	}
+
+	&__qr {
+		margin-bottom: 12px;
+		display: flex;
+		justify-content: center;
+	}
+
+	&__hint {
+		color: #8c8c8c;
+		font-size: 13px;
+		margin-bottom: 20px;
+	}
+
+	&__info {
+		text-align: left;
+		border: 1px solid #e8e8e8;
+		border-radius: 8px;
+		padding: 16px;
+		margin-bottom: 16px;
+		background: #fafafa;
+	}
+
+	&__info-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 6px 0;
+		font-size: 14px;
+
+		& + & {
+			border-top: 1px solid #f0f0f0;
+		}
+	}
+
+	&__info-label {
+		color: #8c8c8c;
+		font-weight: 500;
+	}
+
+	&__info-value {
+		font-weight: 600;
+		color: #262626;
+
+		&--amount {
+			color: #1890ff;
+			font-size: 16px;
+		}
+
+		&--copyable {
+			display: flex;
+			align-items: center;
+		}
+	}
+
+	&__timer {
+		margin-bottom: 12px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+	}
+
+	&__timer-icon {
+		font-size: 18px;
+	}
+
+	&__timer-value {
+		font-size: 24px;
+		font-weight: 700;
+		font-variant-numeric: tabular-nums;
+		color: #262626;
+
+		&--urgent {
+			color: #ff4d4f;
+			animation: pulse 1s ease-in-out infinite;
+		}
+	}
+
+	&__status {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		margin-bottom: 20px;
+		font-size: 14px;
+		color: #8c8c8c;
+	}
+
+	&__status-dot {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: #faad14;
+		display: inline-block;
+		animation: blink 1.5s ease-in-out infinite;
+	}
+
+	&__footer {
+		margin-top: 8px;
+	}
+
+	// Expired state
+	&__expired {
+		padding: 40px 0;
+		text-align: center;
+	}
+
+	&__expired-icon {
+		font-size: 48px;
+		margin-bottom: 12px;
+	}
+
+	&__expired-title {
+		font-size: 18px;
+		font-weight: 600;
+		margin-bottom: 8px;
+		color: #262626;
+	}
+
+	&__expired-desc {
+		font-size: 14px;
+		color: #8c8c8c;
+		margin-bottom: 8px;
+	}
+
+	// Success state
+	&__success {
+		padding: 60px 0;
+		text-align: center;
+	}
+
+	&__success-icon {
+		font-size: 48px;
+		margin-bottom: 12px;
+	}
+
+	&__success-title {
+		font-size: 18px;
+		font-weight: 600;
+		color: #52c41a;
+	}
+}
+
+@keyframes pulse {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+}
+
+@keyframes blink {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.3;
+	}
+}

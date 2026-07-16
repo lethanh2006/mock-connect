@@ -8,6 +8,16 @@ export const titleLoaiPhuongThucThanhToan = {
     [ELoaiPhuongThucThanhToan.NGAN_HANG]: 'Ngân hàng',
 }
 
+export enum EOnepayIntegrationType {
+    PAYGATE = 'PAYGATE',
+    PAYCOLLECT = 'PAYCOLLECT',
+}
+
+export const titleOnepayIntegrationType = {
+    [EOnepayIntegrationType.PAYGATE]: 'Paygate',
+    [EOnepayIntegrationType.PAYCOLLECT]: 'Paycollect',
+}
+
 
 export enum EOnepayCard {
     INTERCARD = 'INTERCARD',

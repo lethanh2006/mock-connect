@@ -1,5 +1,6 @@
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
+import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { CheckOutlined, ColumnWidthOutlined } from '@ant-design/icons';
 import { Button, Col, Image, message, Row, Typography } from 'antd';
 import { history, useIntl, useModel } from 'umi';
@@ -35,7 +36,14 @@ const ChiTietPhong = (props: {
 	const khongChoDangKy = !laPhongDaDangKy && (daHetCho || daCoLichSuDangKy);
 
 	const trangThaiThanhToan = recLichSu?.trangThaiThanhToan;
-	const daThanhToanXong = trangThaiThanhToan === 'Đã thanh toán' || trangThaiThanhToan === 'Paid';
+	const daThanhToanXong = trangThaiThanhToan === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU;
+	const buttonText = laPhongDaDangKy
+		? daThanhToanXong
+			? intl.formatMessage({ id: 'kytucxa.dangky.card.button.seeMore' })
+			: intl.formatMessage({ id: 'kytucxa.dangky.card.button.paymentNow' })
+		: daHetCho
+			? intl.formatMessage({ id: 'kytucxa.dangky.card.button.full' })
+			: intl.formatMessage({ id: 'kytucxa.dangky.card.button.dangKy' });
 
 	const handleDangKy = () => {
 		if (daCoLichSuDangKy) {
@@ -45,6 +53,15 @@ const ChiTietPhong = (props: {
 
 		setVisibleForm(false);
 		setVisibleDangKy(true);
+	};
+
+	const handleClickButton = () => {
+		if (laPhongDaDangKy) {
+			history.push('/campus-life/student-housing/lich-su');
+			return;
+		}
+
+		handleDangKy();
 	};
 
 	return (
@@ -147,32 +164,10 @@ const ChiTietPhong = (props: {
 			</div>
 
 			<div className='form-footer'>
-				{laPhongDaDangKy ? (
-					<>
-						{!daThanhToanXong && (
-							<Button type='primary' onClick={() => history.push('/campus-life/student-housing/lich-su')}>
-								{intl.formatMessage({ id: 'kytucxa.dangky.card.button.paymentNow' })}
-							</Button>
-						)}
-						<Button
-							onClick={() => {
-								/* Render modal Thông tin sv đã đăng ký với 4 step theo Figma (có chứa thông tin thanh toán) */
-							}}
-						>
-							{intl.formatMessage({ id: 'kytucxa.dangky.card.button.seeMore' })}
-						</Button>
-						<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
-					</>
-				) : (
-					<>
-						<Button type='primary' disabled={khongChoDangKy} onClick={handleDangKy}>
-							{daHetCho
-								? intl.formatMessage({ id: 'kytucxa.dangky.card.button.full' })
-								: intl.formatMessage({ id: 'kytucxa.dangky.chitiet.button.dangKy' })}
-						</Button>
-						<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
-					</>
-				)}
+				<Button type='primary' disabled={khongChoDangKy} onClick={handleClickButton}>
+					{buttonText}
+				</Button>
+				<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 			</div>
 		</ModalExpandable>
 	);

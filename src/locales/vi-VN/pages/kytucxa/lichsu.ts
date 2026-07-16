@@ -1,5 +1,5 @@
 export default {
-	//Page Header 
+	//Page Header
 	'kytucxa.lichsu.title': 'Phiếu đăng ký',
 
 	//Table Columns
@@ -16,6 +16,8 @@ export default {
 	'kytucxa.lichsu.status.paid': 'Đã thanh toán',
 	'kytucxa.lichsu.status.unpaid': 'Chưa thanh toán',
 	'kytucxa.lichsu.status.underpaid': 'Thanh toán thiếu',
+	'kytucxa.lichsu.status.depositPending': 'Chưa hoàn thành cọc',
+	'kytucxa.lichsu.status.depositPaid': 'Đã hoàn thành cọc',
 	'kytucxa.lichsu.status.closed': 'Đã đóng',
 
 	//Tooltip Confirm
