@@ -1,4 +1,3 @@
-import { tenTruongVietTatTiengAnh } from './services/base/constant';
 import type { IInitialState } from './services/base/typing';
 import { hasAccessCode, hasAnyAccessCode } from './utils/keycloakRoles';
 // import { currentRole } from './utils/ip';
@@ -9,6 +8,9 @@ import { hasAccessCode, hasAnyAccessCode } from './utils/keycloakRoles';
 export default function access(initialState: IInitialState) {
 	// const scopes = initialState.authorizedPermissions?.find((item) => item.rsname === currentRole)?.scopes;
 	const scopes = initialState.authorizedPermissions?.map((item) => item.scopes).flat();
+
+	const isPending = !!initialState?.permissionLoading && !scopes?.length;
+	const checkAccess = (allowed: boolean) => isPending || allowed;
 
 	return {
 		// canBoQLKH: token && vaiTro && vaiTro === 'can_bo_qlkh',
@@ -31,9 +33,10 @@ export default function access(initialState: IInitialState) {
 		// guest: (token && ((vaiTro && vaiTro === 'Guest') || !vaiTro)) || false,
 		accessFilter: (route: any) => hasAccessCode(initialState, route?.permission ?? route?.maChucNang),
 		manyAccessFilter: (route: any) => {
-			return hasAnyAccessCode(initialState, route?.permissions ?? route?.listChucNang) || false
+			return hasAnyAccessCode(initialState, route?.permissions ?? route?.listChucNang) || false;
 		},
-		vinuniAccessFilter: () => tenTruongVietTatTiengAnh === 'VINUNI',
+
+		vinuniAccessFilter: () => true, // tenTruongVietTatTiengAnh === 'VINUNI',
 
 		// adminAccessFilter: (route: any) =>
 		//   (token && vaiTro && vaiTro === 'Admin') ||

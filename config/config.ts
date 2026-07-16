@@ -1,4 +1,6 @@
 // https://umijs.org/config/
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import { defineConfig } from 'umi';
 import { getPublicAssetPath } from '../src/utils/path';
 import defaultSettings from './defaultSettings';
@@ -10,6 +12,31 @@ const {
 	APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH = '',
 	APP_CONFIG_GA_ID = '',
 } = process.env;
+
+const getAppConfigDefine = (): Record<string, string> => {
+	const typings = readFileSync(join(__dirname, '../src/typings.d.ts'), 'utf-8');
+
+	//Lấy list key có prefix APP_CONFIG_ trong typings.d.ts
+	const declaredKeys = Array.from(typings.matchAll(/declare const (APP_CONFIG_\w+)/g), (m) => m[1]);
+
+	//Lấy list key có prefix APP_CONFIG_ trong process.env
+	const envKeys = Object.keys(process.env).filter((key) => key.startsWith('APP_CONFIG_'));
+
+	//Lấy list key có trong typings.d.ts nhưng không có trong process.env
+	const missingKeys = declaredKeys.filter((key) => process.env[key] === undefined);
+
+	const define: Record<string, string> = {};
+
+	new Set([...declaredKeys, ...envKeys]).forEach((key) => {
+		define[key] = process.env[key] ?? '';
+	});
+
+	if (missingKeys.length) {
+		console.warn(`[APP_CONFIG] Thiếu cấu hình env, fallback '': ${missingKeys.join(', ')}`);
+	}
+
+	return define;
+};
 
 export default defineConfig({
 	hash: true,
@@ -90,15 +117,7 @@ export default defineConfig({
 	jsMinifier: 'terser',
 	exportStatic: {},
 
-	define: Object.entries(process.env).reduce((result, [key, value]) => {
-		if (key.startsWith('APP_CONFIG_')) {
-			return {
-				...result,
-				[key]: value,
-			};
-		}
-		return result;
-	}, {}),
+	define: getAppConfigDefine(),
 
 	base: process.env.APP_CONFIG_BASE_PATH,
 	publicPath: process.env.APP_CONFIG_BASE_PATH,

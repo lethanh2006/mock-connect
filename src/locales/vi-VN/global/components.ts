@@ -234,6 +234,8 @@ export default {
 	'global.uploadfile.text1': 'Thêm ảnh đại diện',
 	'global.uploadfile.button.chontep': 'Chọn tệp',
 	'global.uploadfile.tepdinhkem': 'Tệp đính kèm',
+	'global.uploadfile.taptin': 'Tập tin',
+	'global.uploadfile.taptin.index': 'Tập tin {index}',
 
 	'app.copyright.produced': 'CopyRight',
 	'app.locale.image': 'vi-VN.svg',

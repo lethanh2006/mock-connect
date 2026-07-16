@@ -1,9 +1,9 @@
 import Footer from '@/components/Footer';
 import { default as GlobalHeaderRight, default as RightContent } from '@/components/RightContent';
+import '@/utils/dayjs';
 import { PageContainer } from '@ant-design/pro-components';
 import '@ant-design/v5-patch-for-react-19';
 import { App } from 'antd';
-import 'dayjs/locale/vi';
 import React from 'react'; // Bổ sung import React
 import type { RunTimeLayoutConfig } from 'umi';
 import { getIntl, history } from 'umi';
@@ -41,7 +41,7 @@ export async function getInitialState(): Promise<IInitialState> {
 			const { authorizedPermissions } = JSON.parse(raw) as Partial<IInitialState>;
 			Object.assign(initialState, { authorizedPermissions });
 		}
-	} catch (e) { }
+	} catch (e) {}
 
 	return initialState;
 }
@@ -117,13 +117,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 
 			if (initialState?.settings?.layout === 'side') {
 				return (
-					<PageContainer
-						ghost
-						breadcrumbRender={false}
-						title={false}
-						extra={<GlobalHeaderRight />}
-						header={{}}
-					>
+					<PageContainer ghost breadcrumbRender={false} title={false} extra={<GlobalHeaderRight />} header={{}}>
 						{content}
 					</PageContainer>
 				);

@@ -1,28 +1,29 @@
 import { HomeOutlined } from '@ant-design/icons';
 import { Button, Result, Spin } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const NotAccessible = () => {
 	const { initialState } = useModel('@@initialState');
+	const intl = useIntl();
 
 	if (initialState?.permissionLoading)
 		return (
 			<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 32, marginBottom: 32 }}>
 				<Spin spinning />
-				<div>Loading...</div>
+				<div>{intl.formatMessage({ id: 'pages.exception.loading' })}</div>
 			</div>
 		);
 	return (
 		<Result
 			status='403'
-			title='Truy cập bị từ chối'
+			title={intl.formatMessage({ id: 'pages.exception.403.title' })}
 			style={{
 				background: 'none',
 			}}
-			subTitle='Xin lỗi, bạn không có quyền truy cập trang này.'
+			subTitle={intl.formatMessage({ id: 'pages.exception.403.subtitle' })}
 			extra={
 				<Button type='primary' icon={<HomeOutlined />} onClick={() => (window.location.href = '/')}>
-					Về trang chủ
+					{intl.formatMessage({ id: 'pages.exception.backhome' })}
 				</Button>
 			}
 		/>
