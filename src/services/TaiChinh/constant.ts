@@ -19,6 +19,13 @@ export const EMauTrangThaiThanhToanTable = {
 	[EMaTrangThaiThanhToan.DONG]: undefined,
 };
 
+export const ETrangThaiThanhToanKtxI18n: Record<EMaTrangThaiThanhToan, string> = {
+	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN]: 'kytucxa.lichsu.status.unpaid',
+	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU]: 'kytucxa.lichsu.status.underpaid',
+	[EMaTrangThaiThanhToan.DA_THANH_TOAN_DU]: 'kytucxa.lichsu.status.paid',
+	[EMaTrangThaiThanhToan.DONG]: 'kytucxa.lichsu.status.closed',
+};
+
 //Giao dịch
 export enum ETransactionType {
 	CHARGE = 'CHARGE',

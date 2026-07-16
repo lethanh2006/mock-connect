@@ -1,5 +1,5 @@
 export default {
-	//Page Header 
+	//Page Header
 	'kytucxa.lichsu.title': 'Phiếu đăng ký',
 
 	//Table Columns

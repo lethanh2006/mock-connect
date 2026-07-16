@@ -43,7 +43,12 @@ export default {
 	'taichinh.hoadon.tab.unpaid': 'Unpaid',
 	'taichinh.hoadon.tab.paid': 'Paid',
 	'taichinh.hoadon.action.paySelected': 'Pay ({count}) invoices',
+	'taichinh.hoadon.virtualBill.earlyPayment': 'Early payment',
+	'taichinh.hoadon.virtualBill.discount.title': '{percent}% early payment discount',
+	'taichinh.hoadon.virtualBill.discount.description':
+		'Select and pay both invoices together to receive an immediate {percent}% discount on the total amount due.',
 	'taichinh.thanhtoan.title': 'Payment Information',
+	'taichinh.thanhtoan.modal.success': 'Payment successful!',
 	'taichinh.thanhtoan.tab.chitiet': 'Details',
 	'taichinh.thanhtoan.tab.lichsu': 'Transaction History',
 	'taichinh.thanhtoan.alert.pending.title': 'There is a pending payment transaction! Have you completed the payment?',
@@ -218,4 +223,19 @@ export default {
 	'taichinh.hoadonchitiet.col.giaodich': 'Transaction',
 	'taichinh.hoadonchitiet.giaodich.thucong': 'Manual',
 	'taichinh.hoadonchitiet.giaodich.hethong': 'System',
+
+	// PayCollect QR
+	'taichinh.thanhtoan.paycollect.title': 'Pay by QR Code',
+	'taichinh.thanhtoan.paycollect.hint': 'Please scan the QR code using your banking app',
+	'taichinh.thanhtoan.paycollect.bankName': 'Bank',
+	'taichinh.thanhtoan.paycollect.accountNumber': 'Account Number',
+	'taichinh.thanhtoan.paycollect.amount': 'Amount',
+	'taichinh.thanhtoan.paycollect.reference': 'Reference Code',
+	'taichinh.thanhtoan.paycollect.pending': 'Awaiting payment',
+	'taichinh.thanhtoan.paycollect.cancel': 'Cancel payment',
+	'taichinh.thanhtoan.paycollect.expired.title': 'QR code expired',
+	'taichinh.thanhtoan.paycollect.expired.desc': 'The QR code has expired. Please create a new one to proceed.',
+	'taichinh.thanhtoan.paycollect.retry': 'Create new QR',
+	'taichinh.thanhtoan.paycollect.success.title': 'Payment successful!',
+	'taichinh.thanhtoan.paycollect.copied': 'Copied',
 };

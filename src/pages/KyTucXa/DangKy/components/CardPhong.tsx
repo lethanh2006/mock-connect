@@ -1,4 +1,5 @@
 import { Phong } from '@/services/KyTucXa/Phong/typing';
+import { EMaTrangThaiThanhToan, ETrangThaiThanhToanKtxI18n } from '@/services/TaiChinh/constant';
 import { CheckCircleFilled, ColumnWidthOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Image, Row, Space, Tag, Typography } from 'antd';
 import { history, useIntl, useModel } from 'umi';
@@ -20,17 +21,17 @@ interface CardPhongProps {
 	onDangKy?: (phong: Phong.IChinhSachPhongRecord) => void;
 }
 
-const getPaymentTag = (status?: string, intl?: any) => {
-	switch (status) {
-		case 'Đã thanh toán':
-		case 'Paid':
-			return <Tag color='success'>{intl.formatMessage({ id: 'kytucxa.lichsu.status.paid' })}</Tag>;
-		case 'Thanh toán thiếu':
-		case 'Underpaid':
-			return <Tag color='warning'>{intl.formatMessage({ id: 'kytucxa.lichsu.status.underpaid' })}</Tag>;
-		default:
-			return <Tag>{status || '--'}</Tag>;
-	}
+const getPaymentTag = (status: EMaTrangThaiThanhToan | undefined, intl: any) => {
+	if (!status) return <Tag>--</Tag>;
+
+	const messageId = ETrangThaiThanhToanKtxI18n[status];
+	if (!messageId) return <Tag>--</Tag>;
+
+	return (
+		<Tag className={`room-card__payment-tag room-card__payment-tag--${status}`}>
+			{intl.formatMessage({ id: messageId })}
+		</Tag>
+	);
 };
 
 const CardPhong = ({ phong, daCoLichSuDangKy, laPhongDaDangKy, onXemChiTiet, onDangKy }: CardPhongProps) => {
@@ -45,12 +46,16 @@ const CardPhong = ({ phong, daCoLichSuDangKy, laPhongDaDangKy, onXemChiTiet, onD
 	const tienIchHienThi = tienIch.slice(0, 3);
 
 	const trangThaiThanhToan = recLichSu?.trangThaiThanhToan;
-	const daThanhToanXong = trangThaiThanhToan === 'Đã thanh toán' || trangThaiThanhToan === 'Paid';
-	const hienThiTagThanhToan =
-		laPhongDaDangKy &&
-		(trangThaiThanhToan === 'Thanh toán thiếu' || trangThaiThanhToan === 'Underpaid' || daThanhToanXong);
+	const daThanhToanXong = trangThaiThanhToan === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU;
 
-	const khongChoDangKy = (laPhongDaDangKy && daThanhToanXong) || (!laPhongDaDangKy && (daHetCho || daCoLichSuDangKy));
+	const khongChoDangKy = !laPhongDaDangKy && (daHetCho || daCoLichSuDangKy);
+	const buttonText = laPhongDaDangKy
+		? daThanhToanXong
+			? intl.formatMessage({ id: 'kytucxa.dangky.card.button.seeMore' })
+			: intl.formatMessage({ id: 'kytucxa.dangky.card.button.paymentNow' })
+		: daHetCho
+			? intl.formatMessage({ id: 'kytucxa.dangky.card.button.full' })
+			: intl.formatMessage({ id: 'kytucxa.dangky.card.button.dangKy' });
 
 	return (
 		<Card
@@ -99,6 +104,7 @@ const CardPhong = ({ phong, daCoLichSuDangKy, laPhongDaDangKy, onXemChiTiet, onD
 					<Col span={12}>
 						<CheckCircleFilled />
 						<Typography.Link
+							style={{ color: '#0087C3', fontWeight: 'normal' }}
 							onClick={(event) => {
 								event.stopPropagation();
 								onXemChiTiet?.(phong);
@@ -121,7 +127,7 @@ const CardPhong = ({ phong, daCoLichSuDangKy, laPhongDaDangKy, onXemChiTiet, onD
 			<div className='room-card__divider' />
 
 			<div className='room-card__footer'>
-				{hienThiTagThanhToan ? (
+				{laPhongDaDangKy ? (
 					getPaymentTag(trangThaiThanhToan, intl)
 				) : (
 					<Typography.Text className='room-card__price' strong>
@@ -130,9 +136,10 @@ const CardPhong = ({ phong, daCoLichSuDangKy, laPhongDaDangKy, onXemChiTiet, onD
 				)}
 
 				<Button
-					type='primary'
+					type={laPhongDaDangKy && daThanhToanXong ? 'default' : 'primary'}
 					size='large'
 					disabled={khongChoDangKy}
+					className={laPhongDaDangKy && daThanhToanXong ? 'room-card__button--secondary' : undefined}
 					onClick={(event) => {
 						event.stopPropagation();
 						if (laPhongDaDangKy) {
@@ -142,13 +149,7 @@ const CardPhong = ({ phong, daCoLichSuDangKy, laPhongDaDangKy, onXemChiTiet, onD
 						}
 					}}
 				>
-					{laPhongDaDangKy
-						? daThanhToanXong
-							? intl.formatMessage({ id: 'kytucxa.dangky.card.button.seeMore' })
-							: intl.formatMessage({ id: 'kytucxa.dangky.card.button.paymentNow' })
-						: daHetCho
-							? intl.formatMessage({ id: 'kytucxa.dangky.card.button.full' })
-							: intl.formatMessage({ id: 'kytucxa.dangky.card.button.dangKy' })}
+					{buttonText}
 				</Button>
 			</div>
 		</Card>

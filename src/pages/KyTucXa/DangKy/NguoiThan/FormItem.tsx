@@ -9,6 +9,18 @@ import Form from './Form';
 
 export const SO_LIEN_HE_KHAN_CAP_MAC_DINH = 2;
 
+export const normalizeThongTinLienHe = (value?: string) => value?.trim().toLowerCase();
+
+export const normalizeSoDienThoaiLienHe = (value?: string) => normalizeThongTinLienHe(value)?.replace(/\s+/g, '');
+
+export const FIELD_KIEM_TRA_TRUNG_LIEN_HE_KHAN_CAP = [
+	{ key: 'emergencyContactName', normalize: normalizeThongTinLienHe },
+	{ key: 'emergencyRelationship', normalize: normalizeThongTinLienHe },
+	{ key: 'emergencyEmail', normalize: normalizeThongTinLienHe },
+];
+
+export const FIELD_SO_DIEN_THOAI_LIEN_HE_KHAN_CAP = ['emergencyContactNumber', 'secondaryContactNumber'];
+
 const hasValue = (value?: string) => !!value?.trim();
 
 export const isDuThongTinLienHeKhanCap = (rec?: PhieuDangKyKTX.INguoiThan) =>
@@ -33,6 +45,21 @@ export const chuanHoaDanhSachLienHeKhanCap = (value?: PhieuDangKyKTX.INguoiThan[
 	return danhSach;
 };
 
+export const coThongTinLienHeBiTrung = (danhSach: PhieuDangKyKTX.INguoiThan[]) =>
+	FIELD_KIEM_TRA_TRUNG_LIEN_HE_KHAN_CAP.some(({ key, normalize }) => {
+		const values = danhSach.map((item: any) => normalize(item?.[key])).filter(Boolean);
+		return new Set(values).size !== values.length;
+	}) ||
+	(() => {
+		const soDienThoai = danhSach
+			.flatMap((item: any) =>
+				FIELD_SO_DIEN_THOAI_LIEN_HE_KHAN_CAP.map((field) => normalizeSoDienThoaiLienHe(item?.[field])),
+			)
+			.filter(Boolean);
+
+		return new Set(soDienThoai).size !== soDienThoai.length;
+	})();
+
 const FormItemNguoiThanKTX = (props: {
 	value?: PhieuDangKyKTX.INguoiThan[];
 	onChange?: (data: PhieuDangKyKTX.INguoiThan[]) => void;
@@ -52,8 +79,20 @@ const FormItemNguoiThanKTX = (props: {
 	//Check: nếu ko có thông tin người thân -> push object rỗng vào table để default 2 khối liên hệ trống
 	const dataNguoiThan = chuanHoaDanhSachLienHeKhanCap(value);
 
-	//Check: nếu các required field đủ data -> disable edit
-	const isFilledColumn = isDuThongTinLienHeKhanCap;
+	const getRelationshipLabel = (value?: string) => {
+		switch (value) {
+			case 'Father':
+				return intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.relationship.father' });
+			case 'Mother':
+				return intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.relationship.mother' });
+			case 'Guardian':
+				return intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.relationship.guardian' });
+			case 'Other':
+				return intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.relationship.other' });
+			default:
+				return value || '--';
+		}
+	};
 
 	//Nếu là khối trống default -> thêm mới, nếu đã có data nhưng thiếu -> edit mode
 	const onEdit = (rec: any) => {
@@ -88,6 +127,7 @@ const FormItemNguoiThanKTX = (props: {
 			title: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.relationship' }),
 			dataIndex: 'emergencyRelationship',
 			width: 160,
+			render: (val) => getRelationshipLabel(val),
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.primaryPhone' }),
@@ -122,7 +162,8 @@ const FormItemNguoiThanKTX = (props: {
 					<ButtonExtend
 						tooltip={intl.formatMessage({ id: 'global.button.chinhsua' })}
 						type='link'
-						disabled={disabled || isFilledColumn(rec)}
+						disabled={disabled}
+						// || isFilledColumn(rec)}
 						onClick={() => onEdit(rec)}
 						icon={<EditOutlined />}
 					/>
@@ -176,7 +217,7 @@ const FormItemNguoiThanKTX = (props: {
 				footer={null}
 				onCancel={() => setVisibleForm(false)}
 			>
-				<Form onOk={onAdd} />
+				<Form onOk={onAdd} danhSachNguoiThan={dataNguoiThan.filter((item: any) => !item.khoiLienHeDefault)} />
 			</Modal>
 		</>
 	);
