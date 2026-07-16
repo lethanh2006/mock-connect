@@ -223,6 +223,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 						data={bills}
 						size='small'
 						addStt
+						hideChildrenRows
 					/>
 				</div>
 			) : null}
