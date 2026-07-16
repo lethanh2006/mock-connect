@@ -5,11 +5,12 @@ import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { postTransactionMePayment } from '@/services/TaiChinh/KenhThanhToan';
 import { inputFormat } from '@/utils/utils';
 import { Button, Checkbox, Descriptions, Form, InputNumber, message } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import InvoiceForm from './InvoiceForm';
+import PaymentCollectView from './PaymentCollectView';
 import './style.less';
-import type { PaymentDetailProps } from './typing';
+import type { IPaymentCollect, PaymentDetailProps } from './typing';
 
 type ThongTinHoaDon = {
 	tenToChuc?: string;
@@ -33,6 +34,8 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
 	const [loadingOnePay, setLoadingOnePay] = useState(false);
+	const [paymentCollectData, setPaymentCollectData] = useState<IPaymentCollect | null>(null);
+	const [transactionIdentityCodes, setTransactionIdentityCodes] = useState<string[]>([]);
 
 	useEffect(() => {
 		const fetchThongTinHoaDon = async () => {
@@ -97,18 +100,16 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 	const isInvoiceValid =
 		!guiThongTinHoaDon ||
 		Boolean(thongTinHoaDon.tenToChuc?.trim() && thongTinHoaDon.maSoThue?.trim() && thongTinHoaDon.diaChi?.trim());
+
 	const handlePayment = async () => {
 		setLoadingOnePay(true);
 
-		// Multi mode
-		if (mode === 'multi') {
-			try {
-				const tongSoTienConLai = (bills ?? []).reduce((sum, b) => sum + (b.soTienConLai ?? 0), 0);
-
+		try {
+			// Multi mode
+			if (mode === 'multi') {
 				const body: Parameters<typeof postTransactionMePayment>[0] = {
 					kenhThanhToanId: method._id,
 					billIdentityCodes: (bills ?? []).map((b) => b.identityCode ?? ''),
-					// soTienThanhToan: tongSoTienConLai,
 					againLink: window.location.href,
 					webUrlCallBack: window.location.href,
 				};
@@ -118,41 +119,41 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 					body.thongTinHoaDon = invoiceValues;
 				}
 				const res = await postTransactionMePayment(body);
-				const paymentUrl = res?.data?.data?.payUrl;
-				if (paymentUrl) {
-					window.location.href = paymentUrl;
+				const data = res?.data?.data;
+
+				if (data?.paymentCollect) {
+					setPaymentCollectData(data.paymentCollect);
+					setTransactionIdentityCodes(data.transactionPayments?.map((tp: any) => tp.identityCode) ?? []);
+				} else if (data?.payUrl) {
+					window.location.href = data.payUrl;
 				} else {
 					message.error(intl.formatMessage({ id: 'taichinh.thanhtoan.modal.error.noPaymentUrl' }));
 				}
-			} catch (er) {
-				console.log(er);
-			} finally {
-				setLoadingOnePay(false);
-			}
-			return;
-		}
-
-		// Single mode
-		const currentUrl = window.location.href;
-		try {
-			const body: Parameters<typeof postTransactionMePayment>[0] = {
-				againLink: currentUrl,
-				billIdentityCode: invoiceCode,
-				kenhThanhToanId: method._id,
-				soTienThanhToan: soTienThanhToan,
-				webUrlCallBack: currentUrl,
-			};
-			if (guiThongTinHoaDon) {
-				const invoiceValues = await invoiceForm.validateFields();
-				body.guiThongTinHoaDon = true;
-				body.thongTinHoaDon = invoiceValues;
-			}
-			const res = await postTransactionMePayment(body);
-			const paymentUrl = res?.data?.data?.payUrl;
-			if (paymentUrl) {
-				window.location.href = paymentUrl;
 			} else {
-				message.error(intl.formatMessage({ id: 'taichinh.thanhtoan.modal.error.noPaymentUrl' }));
+				// Single mode
+				const body: Parameters<typeof postTransactionMePayment>[0] = {
+					againLink: window.location.href,
+					billIdentityCode: invoiceCode,
+					kenhThanhToanId: method._id,
+					soTienThanhToan: soTienThanhToan,
+					webUrlCallBack: window.location.href,
+				};
+				if (guiThongTinHoaDon) {
+					const invoiceValues = await invoiceForm.validateFields();
+					body.guiThongTinHoaDon = true;
+					body.thongTinHoaDon = invoiceValues;
+				}
+				const res = await postTransactionMePayment(body);
+				const data = res?.data?.data;
+
+				if (data?.paymentCollect) {
+					setPaymentCollectData(data.paymentCollect);
+					setTransactionIdentityCodes(data.transactionPayments?.map((tp: any) => tp.identityCode) ?? []);
+				} else if (data?.payUrl) {
+					window.location.href = data.payUrl;
+				} else {
+					message.error(intl.formatMessage({ id: 'taichinh.thanhtoan.modal.error.noPaymentUrl' }));
+				}
 			}
 		} catch (er) {
 			console.log(er);
@@ -161,157 +162,176 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 		}
 	};
 
+	const handlePaymentCollectExpired = useCallback(() => {
+		setPaymentCollectData(null);
+		setTransactionIdentityCodes([]);
+	}, []);
+
+	const handlePaymentCollectSuccess = useCallback(() => {
+		message.success(intl.formatMessage({ id: 'taichinh.thanhtoan.modal.success' }) || 'Thanh toán thành công!');
+	}, [intl]);
+
 	return (
 		<div className='payment-detail'>
-			<div className='payment-detail__header'>
-				<div className='payment-detail__title'>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.title' })}</div>
-				<div className='payment-detail__subtitle'>
-					{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.subtitle' })}
-				</div>
-			</div>
-
-			{mode !== 'multi' && (
-				<div className='payment-detail__provider-card'>
-					<div className='payment-detail__provider-name'>{method.tenNganHang || method.code}</div>
-					{method.huongDanThanhToan && <div className='payment-detail__provider-desc'>{method.huongDanThanhToan}</div>}
-					<Descriptions column={1} size='small' style={{ marginTop: 12 }}>
-						<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.thanhtoan.modal.magd' })}>
-							#{invoiceCode}
-						</Descriptions.Item>
-
-						<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.thanhtoan.modal.noidung' })}>
-							{addInfo}
-						</Descriptions.Item>
-					</Descriptions>
-				</div>
-			)}
-
-			{/* Multi: bang danh sach hoa don */}
-			{mode === 'multi' && bills?.length ? (
-				<div className='payment-detail__multi-table'>
-					<TableStaticData
-						columns={
-							[
-								{
-									title: intl.formatMessage({ id: 'taichinh.thanhtoan.modal.magd' }),
-									dataIndex: 'identityCode',
-									key: 'identityCode',
-									width: 140,
-								},
-								{
-									title: intl.formatMessage({ id: 'taichinh.hoadon.column.dotthu' }),
-									dataIndex: ['dotThu', 'tenDot'],
-									key: 'dotThu',
-									width: 180,
-								},
-								{
-									title: intl.formatMessage({ id: 'taichinh.thanhtoan.modal.sotienconlai' }),
-									dataIndex: 'soTienConLai',
-									key: 'soTienConLai',
-									align: 'right',
-									width: 160,
-									render: (val: number) => inputFormat(val ?? 0) + 'đ',
-								},
-							] as unknown as IColumn<HoaDon.IRecord>[]
-						}
-						otherProps={{
-							pagination: false,
-							scroll: {
-								y: 400,
-							},
-						}}
-						data={bills}
-						size='small'
-						addStt
-						hideChildrenRows
-					/>
-				</div>
-			) : null}
-
-			{/* Single: nhap so tien */}
-			{mode !== 'multi' ? (
-				<div className='payment-detail__amount-input'>
-					<div className='payment-detail__amount-input-label'>
-						{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.sotienmuonthanhtoan' })}
-					</div>
-					<InputNumber
-						style={{ width: '100%' }}
-						placeholder={intl.formatMessage({ id: 'taichinh.thanhtoan.modal.nhapsotienthanhtoan' })}
-						value={soTienMuonThanhToan}
-						onChange={(value) => setSoTienMuonThanhToan(value)}
-						min={1}
-						// max={totalThanhToan}
-						step={1}
-						precision={0}
-						formatter={(value) => `${value}`.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-						parser={(value) => value?.replace(/,/g, '') as any}
-						status={
-							soTienMuonThanhToan !== null && (soTienMuonThanhToan <= 0 || soTienMuonThanhToan > totalThanhToan)
-								? 'error'
-								: undefined
-						}
-					/>
-
-					{soTienMuonThanhToan !== null && soTienMuonThanhToan > totalThanhToan ? (
-						<div className='payment-detail__amount-error'>
-							{intl.formatMessage(
-								{ id: 'taichinh.thanhtoan.modal.vuotquasotien' },
-								{ soTien: inputFormat(totalThanhToan) },
-							)}
+			{paymentCollectData ? (
+				<PaymentCollectView
+					data={paymentCollectData}
+					transactionIdentityCodes={transactionIdentityCodes}
+					onExpired={handlePaymentCollectExpired}
+					onSuccess={handlePaymentCollectSuccess}
+				/>
+			) : (
+				<>
+					<div className='payment-detail__header'>
+						<div className='payment-detail__title'>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.title' })}</div>
+						<div className='payment-detail__subtitle'>
+							{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.subtitle' })}
 						</div>
-					) : (
-						<div className='payment-detail__amount-input-hint'>
-							{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.sotienconlai' })}:{' '}
-							{inputFormat(totalThanhToan - (soTienMuonThanhToan ?? 0))}đ
+					</div>
+
+					{mode !== 'multi' && (
+						<div className='payment-detail__provider-card'>
+							<div className='payment-detail__provider-name'>{method.tenNganHang || method.code}</div>
+							{method.huongDanThanhToan && <div className='payment-detail__provider-desc'>{method.huongDanThanhToan}</div>}
+							<Descriptions column={1} size='small' style={{ marginTop: 12 }}>
+								<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.thanhtoan.modal.magd' })}>
+									#{invoiceCode}
+								</Descriptions.Item>
+
+								<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.thanhtoan.modal.noidung' })}>
+									{addInfo}
+								</Descriptions.Item>
+							</Descriptions>
 						</div>
 					)}
-				</div>
-			) : null}
 
-			<div className='payment-detail__invoice-toggle'>
-				<Checkbox checked={guiThongTinHoaDon} onChange={(event) => setGuiThongTinHoaDon(event.target.checked)}>
-					{intl.formatMessage({ id: 'taichinh.thanhtoan.invoice.title' })}
-				</Checkbox>
-			</div>
+					{/* Multi: bang danh sach hoa don */}
+					{mode === 'multi' && bills?.length ? (
+						<div className='payment-detail__multi-table'>
+							<TableStaticData
+								columns={
+									[
+										{
+											title: intl.formatMessage({ id: 'taichinh.thanhtoan.modal.magd' }),
+											dataIndex: 'identityCode',
+											key: 'identityCode',
+											width: 140,
+										},
+										{
+											title: intl.formatMessage({ id: 'taichinh.hoadon.column.dotthu' }),
+											dataIndex: ['dotThu', 'tenDot'],
+											key: 'dotThu',
+											width: 180,
+										},
+										{
+											title: intl.formatMessage({ id: 'taichinh.thanhtoan.modal.sotienconlai' }),
+											dataIndex: 'soTienConLai',
+											key: 'soTienConLai',
+											align: 'right',
+											width: 160,
+											render: (val: number) => inputFormat(val ?? 0) + 'đ',
+										},
+									] as unknown as IColumn<HoaDon.IRecord>[]
+								}
+								otherProps={{
+									pagination: false,
+									scroll: {
+										y: 400,
+									},
+								}}
+								data={bills}
+								size='small'
+								addStt
+							/>
+						</div>
+					) : null}
 
-			<InvoiceForm
-				userFullname={userFullname ?? ''}
-				userCode={userCode ?? ''}
-				visible={guiThongTinHoaDon}
-				form={invoiceForm}
-			/>
+					{/* Single: nhap so tien */}
+					{mode !== 'multi' ? (
+						<div className='payment-detail__amount-input'>
+							<div className='payment-detail__amount-input-label'>
+								{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.sotienmuonthanhtoan' })}
+							</div>
+							<InputNumber
+								style={{ width: '100%' }}
+								placeholder={intl.formatMessage({ id: 'taichinh.thanhtoan.modal.nhapsotienthanhtoan' })}
+								value={soTienMuonThanhToan}
+								onChange={(value) => setSoTienMuonThanhToan(value)}
+								min={1}
+								// max={totalThanhToan}
+								step={1}
+								precision={0}
+								formatter={(value) => `${value}`.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+								parser={(value) => value?.replace(/,/g, '') as any}
+								status={
+									soTienMuonThanhToan !== null && (soTienMuonThanhToan <= 0 || soTienMuonThanhToan > totalThanhToan)
+										? 'error'
+										: undefined
+								}
+							/>
 
-			<div className='payment-detail__summary'>
-				<div className='payment-detail__summary-row'>
-					<span>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.tamtinh' })}</span>
-					<span>{inputFormat(soTienThanhToanTong)}đ</span>
-				</div>
+							{soTienMuonThanhToan !== null && soTienMuonThanhToan > totalThanhToan ? (
+								<div className='payment-detail__amount-error'>
+									{intl.formatMessage(
+										{ id: 'taichinh.thanhtoan.modal.vuotquasotien' },
+										{ soTien: inputFormat(totalThanhToan) },
+									)}
+								</div>
+							) : (
+								<div className='payment-detail__amount-input-hint'>
+									{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.sotienconlai' })}:{' '}
+									{inputFormat(totalThanhToan - (soTienMuonThanhToan ?? 0))}đ
+								</div>
+							)}
+						</div>
+					) : null}
 
-				{/* {phiThanhToan > 0 && ( */}
-				<div className='payment-detail__summary-row'>
-					<span>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.phigiaodich' })}</span>
-					<span>{inputFormat(phiThanhToan)}đ</span>
-				</div>
-				{/* )} */}
+					<div className='payment-detail__invoice-toggle'>
+						<Checkbox checked={guiThongTinHoaDon} onChange={(event) => setGuiThongTinHoaDon(event.target.checked)}>
+							{intl.formatMessage({ id: 'taichinh.thanhtoan.invoice.title' })}
+						</Checkbox>
+					</div>
 
-				<div className='payment-detail__total'>
-					<span>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.tongcong' })}</span>
-					<span>{inputFormat(finalAmount)}đ</span>
-				</div>
-			</div>
+					<InvoiceForm
+						userFullname={userFullname ?? ''}
+						userCode={userCode ?? ''}
+						visible={guiThongTinHoaDon}
+						form={invoiceForm}
+					/>
 
-			<div className='payment-detail__footer'>
-				<Button
-					type='primary'
-					block
-					size='large'
-					onClick={handlePayment}
-					loading={loading || loadingOnePay}
-					disabled={!isAmountValid || !isInvoiceValid}
-				>
-					{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.thanhtoanngay' })}
-				</Button>
-			</div>
+					<div className='payment-detail__summary'>
+						<div className='payment-detail__summary-row'>
+							<span>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.tamtinh' })}</span>
+							<span>{inputFormat(soTienThanhToanTong)}đ</span>
+						</div>
+
+						{/* {phiThanhToan > 0 && ( */}
+						<div className='payment-detail__summary-row'>
+							<span>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.phigiaodich' })}</span>
+							<span>{inputFormat(phiThanhToan)}đ</span>
+						</div>
+						{/* )} */}
+
+						<div className='payment-detail__total'>
+							<span>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.tongcong' })}</span>
+							<span>{inputFormat(finalAmount)}đ</span>
+						</div>
+					</div>
+
+					<div className='payment-detail__footer'>
+						<Button
+							type='primary'
+							block
+							size='large'
+							onClick={handlePayment}
+							loading={loading || loadingOnePay}
+							disabled={!isAmountValid || !isInvoiceValid || !!paymentCollectData}
+						>
+							{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.thanhtoanngay' })}
+						</Button>
+					</div>
+				</>
+			)}
 		</div>
 	);
 };

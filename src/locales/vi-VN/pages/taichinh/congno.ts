@@ -226,4 +226,19 @@ export default {
 	'taichinh.hoadonchitiet.col.giaodich': 'Giao dịch',
 	'taichinh.hoadonchitiet.giaodich.thucong': 'Thủ công',
 	'taichinh.hoadonchitiet.giaodich.hethong': 'Hệ thống',
+
+	// PayCollect QR
+	'taichinh.thanhtoan.paycollect.title': 'Thanh toán qua mã QR',
+	'taichinh.thanhtoan.paycollect.hint': 'Vui lòng quét mã QR bằng ứng dụng ngân hàng',
+	'taichinh.thanhtoan.paycollect.bankName': 'Ngân hàng',
+	'taichinh.thanhtoan.paycollect.accountNumber': 'Số tài khoản',
+	'taichinh.thanhtoan.paycollect.amount': 'Số tiền',
+	'taichinh.thanhtoan.paycollect.reference': 'Mã tham chiếu',
+	'taichinh.thanhtoan.paycollect.pending': 'Đang chờ thanh toán',
+	'taichinh.thanhtoan.paycollect.cancel': 'Hủy thanh toán',
+	'taichinh.thanhtoan.paycollect.expired.title': 'Mã QR đã hết hạn',
+	'taichinh.thanhtoan.paycollect.expired.desc': 'Mã QR thanh toán đã hết hiệu lực. Vui lòng tạo lại để thanh toán.',
+	'taichinh.thanhtoan.paycollect.retry': 'Tạo lại mã QR',
+	'taichinh.thanhtoan.paycollect.success.title': 'Thanh toán thành công!',
+	'taichinh.thanhtoan.paycollect.copied': 'Đã sao chép',
 };

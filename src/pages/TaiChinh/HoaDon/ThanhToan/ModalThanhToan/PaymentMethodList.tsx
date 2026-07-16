@@ -1,4 +1,10 @@
-import { EOnepayCard, titleLoaiPhuongThucThanhToan, titleOnepayCard } from '@/services/TaiChinh/KenhThanhToan/constants';
+import {
+	EOnepayCard,
+	EOnepayIntegrationType,
+	titleLoaiPhuongThucThanhToan,
+	titleOnepayCard,
+	titleOnepayIntegrationType,
+} from '@/services/TaiChinh/KenhThanhToan/constants';
 import { KenhThanhToan } from '@/services/TaiChinh/KenhThanhToan/typing';
 import { Image, Spin } from 'antd';
 import clsx from 'clsx';
@@ -11,12 +17,13 @@ const PaymentMethodList: React.FC<PaymentMethodListProps> = ({ methods, selected
 	const intl = useIntl();
 
 	const getKenhThanhToanByPhuongThucTT = (method: KenhThanhToan.IRecord) => {
-		const label =
-			method.phuongThucThanhToan === 'ONEPAY'
-				? titleOnepayCard?.[method?.onepayCard as EOnepayCard]
-				: method.tenNganHang;
-
-		return label;
+		if (method.phuongThucThanhToan === 'ONEPAY') {
+			if (method.onepayIntegrationType === EOnepayIntegrationType.PAYCOLLECT) {
+				return titleOnepayIntegrationType[EOnepayIntegrationType.PAYCOLLECT];
+			}
+			return titleOnepayCard?.[method?.onepayCard as EOnepayCard] ?? method.tenNganHang ?? method.code;
+		}
+		return method.tenNganHang ?? method.code;
 	};
 
 	const groupedMethods = methods.reduce(
