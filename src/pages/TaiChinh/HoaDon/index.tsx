@@ -111,10 +111,17 @@ const HoaDonPage = () => {
 					<GiftOutlined />
 				</div>
 				<div>
-					<div className='virtual-bill-notice-title'>Ưu đãi thanh toán trước {uuDaiThanhToanTruocKy}%</div>
+					<div className='virtual-bill-notice-title'>
+						{intl.formatMessage(
+							{ id: 'taichinh.hoadon.virtualBill.discount.title' },
+							{ percent: uuDaiThanhToanTruocKy },
+						)}
+					</div>
 					<div className='virtual-bill-notice-description'>
-						Chọn và thanh toán cùng lúc cả 2 hóa đơn để được giảm ngay {uuDaiThanhToanTruocKy}% trên tổng số tiền phải
-						nộp.
+						{intl.formatMessage(
+							{ id: 'taichinh.hoadon.virtualBill.discount.description' },
+							{ percent: uuDaiThanhToanTruocKy },
+						)}
 					</div>
 				</div>
 			</div>
@@ -185,7 +192,7 @@ const HoaDonPage = () => {
 				<div>
 					{rec._isVirtualBill && (
 						<Tag color='gold' style={{ marginBottom: 4 }}>
-							Thanh toán sớm
+							{intl.formatMessage({ id: 'taichinh.hoadon.virtualBill.earlyPayment' })}
 						</Tag>
 					)}
 					<div>{rec.dotThu?.tenDot}</div>

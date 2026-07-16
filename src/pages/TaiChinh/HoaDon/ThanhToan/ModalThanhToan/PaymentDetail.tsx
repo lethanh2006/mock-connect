@@ -168,7 +168,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 	}, []);
 
 	const handlePaymentCollectSuccess = useCallback(() => {
-		message.success(intl.formatMessage({ id: 'taichinh.thanhtoan.modal.success' }) || 'Thanh toán thành công!');
+		message.success(intl.formatMessage({ id: 'taichinh.thanhtoan.modal.success' }));
 	}, [intl]);
 
 	return (
@@ -192,7 +192,9 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 					{mode !== 'multi' && (
 						<div className='payment-detail__provider-card'>
 							<div className='payment-detail__provider-name'>{method.tenNganHang || method.code}</div>
-							{method.huongDanThanhToan && <div className='payment-detail__provider-desc'>{method.huongDanThanhToan}</div>}
+							{method.huongDanThanhToan && (
+								<div className='payment-detail__provider-desc'>{method.huongDanThanhToan}</div>
+							)}
 							<Descriptions column={1} size='small' style={{ marginTop: 12 }}>
 								<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.thanhtoan.modal.magd' })}>
 									#{invoiceCode}
