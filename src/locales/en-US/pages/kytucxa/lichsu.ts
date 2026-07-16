@@ -16,6 +16,8 @@ export default {
 	'kytucxa.lichsu.status.paid': 'Paid',
 	'kytucxa.lichsu.status.unpaid': 'Unpaid',
 	'kytucxa.lichsu.status.underpaid': 'Underpaid',
+	'kytucxa.lichsu.status.depositPending': 'Deposit Pending',
+	'kytucxa.lichsu.status.depositPaid': 'Deposit Paid',
 	'kytucxa.lichsu.status.closed': 'Closed',
 
 	//Tooltip Confirm

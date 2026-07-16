@@ -76,10 +76,16 @@
 }
 
 .room-card__title {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
 	color: @room-primary;
 	font-weight: 600;
 	font-size: 15px;
+	line-height: 20px;
 	margin-bottom: 6px;
+	text-overflow: ellipsis;
 }
 
 .room-card__specifications {
@@ -115,7 +121,7 @@
 
 	.ant-typography {
 		overflow: hidden;
-		font-size: 14px;
+		font-size: 12px;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
@@ -263,15 +269,18 @@
 
 .utility-item {
 	display: inline-flex;
-	align-items: center;
+	align-items: flex-start;
 	gap: 10px;
 	line-height: 18px;
 	min-width: 0;
+	width: 100%;
 
 	span:last-child {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
+		flex: 1;
+		min-width: 0;
+		overflow-wrap: anywhere;
+		white-space: normal;
+		word-break: break-word;
 	}
 }
 

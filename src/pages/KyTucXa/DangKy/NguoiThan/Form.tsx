@@ -182,6 +182,7 @@ const FormNguoiThanKTX = (props: {
 						rules={[
 							...rules.text,
 							...rules.email,
+							...rules.length(255),
 							getDuplicateRule('emergencyEmail', intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.email' })),
 						]}
 					>
