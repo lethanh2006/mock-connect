@@ -152,7 +152,7 @@ const ModalDanKyKTX = (props: {
 		setCurrentStep((step) => Math.max(step - 1, 0));
 	};
 
-	const onFinish = async (values: PhieuDangKyKTX.IDangKy & { checkbox1?: boolean; checkbox2?: boolean }) => {
+	const handleSubmit = async () => {
 		if (isView) return;
 		if (currentStep !== 1) return;
 		if (daCoLichSuDangKy) {
@@ -161,6 +161,7 @@ const ModalDanKyKTX = (props: {
 			return;
 		}
 
+		const values = await form.validateFields();
 		const maPhong = recPhong?.room?.ma ?? recPhong?.roomId;
 
 		const { checkbox1: _checkbox1, checkbox2: _checkbox2, ...formValues } = values;
@@ -188,7 +189,7 @@ const ModalDanKyKTX = (props: {
 			width={1200}
 			title={intl.formatMessage({ id: 'kytucxa.dangky.modal.title' })}
 		>
-			<Form layout='vertical' onFinish={onFinish} form={form} preserve>
+			<Form layout='vertical' form={form} preserve>
 				<Steps current={currentStep} style={{ marginBottom: 18 }}>
 					{steps.map((title) => (
 						<Steps.Step key={title} title={title} />
@@ -247,7 +248,13 @@ const ModalDanKyKTX = (props: {
 						</>
 					) : (
 						<>
-							<Button disabled={!checkbox2} htmlType='submit' type='primary' loading={formSubmiting}>
+							<Button
+								disabled={!checkbox2}
+								htmlType='button'
+								type='primary'
+								loading={formSubmiting}
+								onClick={handleSubmit}
+							>
 								{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.submit' })}
 							</Button>
 

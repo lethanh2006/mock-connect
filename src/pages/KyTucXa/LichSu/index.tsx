@@ -13,7 +13,7 @@ import {
 import { formatDate } from '@/utils/formatDate';
 import { tienVietNam } from '@/utils/utils';
 import { DeleteOutlined, DollarCircleOutlined } from '@ant-design/icons';
-import { Button, Empty, message, Popconfirm, Tag } from 'antd';
+import { Button, Empty, Popconfirm, Tag } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChiTietPhong from '../DangKy/components/ChiTiet';
@@ -37,13 +37,29 @@ const getFloorText = (floor?: number | string | null) => {
 	}
 };
 
+const getChinhSachPhong = (record?: PhieuDangKyKTX.IRecord) =>
+	(record?.phong as (Phong.IRecord & { chinhSachPhong?: Phong.IChinhSachPhongRecord }) | undefined)?.chinhSachPhong;
+
+const getChinhSachPhongChiTiet = (record?: PhieuDangKyKTX.IRecord) => {
+	const chinhSachPhong = getChinhSachPhong(record);
+	if (chinhSachPhong) return chinhSachPhong;
+	if (!record?.phong) return undefined;
+
+	return {
+		_id: record.phong._id,
+		roomId: record.phong._id,
+		room: record.phong,
+	} as Phong.IChinhSachPhongRecord;
+};
+
+const getRoomFromChinhSachPhong = (record?: PhieuDangKyKTX.IRecord) => getChinhSachPhong(record)?.room ?? record?.phong;
+
 const LichSuaKTX = () => {
 	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { getByIdModel: getDotDangKy, record: recDot, setRecord: setRecDot } = useModel('kytucxa.dotdangky');
 	const { getModel, page, limit, deleteModel, handleEdit, setRecord } = useModel('kytucxa.phieudangky');
 	const {
-		getModel: getPhongChinhSach,
 		setRecord: setRecPhong,
 		setVisibleForm: setVisibleChiTietPhong,
 		setVisibleDangKy,
@@ -80,40 +96,12 @@ const LichSuaKTX = () => {
 		style: { cursor: 'pointer' },
 	});
 
-	const handleViewPhong = async (record: PhieuDangKyKTX.IRecord) => {
-		const maDotId = recDot?._id;
+	const handleViewPhong = (record: PhieuDangKyKTX.IRecord) => {
+		const chinhSachPhong = getChinhSachPhongChiTiet(record);
 
-		if (!maDotId) {
-			message.warning(intl.formatMessage({ id: 'global.title.khongcodulieu' }));
-			return;
-		}
-
-		try {
-			const data = await getPhongChinhSach(
-				{
-					maDotId,
-				},
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				'ktx/chinh-sach-phong/page',
-				undefined,
-				false,
-			);
-			const phong = data?.[0] as Phong.IChinhSachPhongRecord | undefined;
-
-			if (!phong) {
-				message.warning(intl.formatMessage({ id: 'global.title.khongcodulieu' }));
-				return;
-			}
-
-			setRecord(record);
-			setRecPhong(phong);
-			setVisibleChiTietPhong(true);
-		} catch {
-			message.error(intl.formatMessage({ id: 'global.message.capnhatthatbai' }));
-		}
+		setRecord(record);
+		setRecPhong(chinhSachPhong);
+		setVisibleChiTietPhong(true);
 	};
 
 	const columns: IColumn<PhieuDangKyKTX.IRecord>[] = [
@@ -122,13 +110,13 @@ const LichSuaKTX = () => {
 			width: 90,
 			sortable: true,
 			onCell,
-			render: (_val, rec) => getFloorText(rec?.phong?.tangThu),
+			render: (_val, rec) => getFloorText(getRoomFromChinhSachPhong(rec)?.tangThu),
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.roomCode' }),
 			width: 120,
 			render: (_val, rec) => {
-				const roomCode = rec?.phong?.ma || rec?.maPhong;
+				const roomCode = getRoomFromChinhSachPhong(rec)?.ma || rec?.maPhong;
 
 				if (!roomCode) return '--';
 
@@ -151,13 +139,24 @@ const LichSuaKTX = () => {
 			width: 260,
 			sortable: true,
 			onCell,
-			render: (_val, rec) => rec?.phong?.moTa || rec?.phong?.ten || '--',
+			render: (_val, rec) => {
+				const chinhSachPhong = getChinhSachPhong(rec);
+				const room = getRoomFromChinhSachPhong(rec);
+
+				return chinhSachPhong?.loaiPhongKtx?.ten || chinhSachPhong?.moTa || room?.moTa || room?.ten || '--';
+			},
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.price' }),
 			width: 160,
 			onCell,
-			render: (_val, rec) => tienVietNam(rec?.phong?.giaPhong ?? 0),
+			render: (_val, rec) => {
+				const chinhSachPhong = getChinhSachPhong(rec) as
+					| (Phong.IChinhSachPhongRecord & { giaPhong?: number })
+					| undefined;
+
+				return tienVietNam(chinhSachPhong?.giaPhong ?? getRoomFromChinhSachPhong(rec)?.giaPhong ?? 0);
+			},
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.moveInDate' }),
@@ -169,6 +168,7 @@ const LichSuaKTX = () => {
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.moveOutDate' }),
 			dataIndex: 'thoiGianChuyenRa',
+			sortable: true,
 			width: 150,
 			render: (_val, rec) => _val && formatDate(_val),
 			onCell,
@@ -176,6 +176,7 @@ const LichSuaKTX = () => {
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.paymentStatus' }),
 			dataIndex: 'trangThaiThanhToan',
+			sortable: true,
 			width: 150,
 			render: (val: EMaTrangThaiThanhToan) => (
 				<Tag color={EMauTrangThaiThanhToanTable[val]}>{intl.formatMessage({ id: getPaymentStatusLabel(val) })}</Tag>
