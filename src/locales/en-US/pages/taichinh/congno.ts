@@ -218,4 +218,19 @@ export default {
 	'taichinh.hoadonchitiet.col.giaodich': 'Transaction',
 	'taichinh.hoadonchitiet.giaodich.thucong': 'Manual',
 	'taichinh.hoadonchitiet.giaodich.hethong': 'System',
+
+	// PayCollect QR
+	'taichinh.thanhtoan.paycollect.title': 'Pay by QR Code',
+	'taichinh.thanhtoan.paycollect.hint': 'Please scan the QR code using your banking app',
+	'taichinh.thanhtoan.paycollect.bankName': 'Bank',
+	'taichinh.thanhtoan.paycollect.accountNumber': 'Account Number',
+	'taichinh.thanhtoan.paycollect.amount': 'Amount',
+	'taichinh.thanhtoan.paycollect.reference': 'Reference Code',
+	'taichinh.thanhtoan.paycollect.pending': 'Awaiting payment',
+	'taichinh.thanhtoan.paycollect.cancel': 'Cancel payment',
+	'taichinh.thanhtoan.paycollect.expired.title': 'QR code expired',
+	'taichinh.thanhtoan.paycollect.expired.desc': 'The QR code has expired. Please create a new one to proceed.',
+	'taichinh.thanhtoan.paycollect.retry': 'Create new QR',
+	'taichinh.thanhtoan.paycollect.success.title': 'Payment successful!',
+	'taichinh.thanhtoan.paycollect.copied': 'Copied',
 };

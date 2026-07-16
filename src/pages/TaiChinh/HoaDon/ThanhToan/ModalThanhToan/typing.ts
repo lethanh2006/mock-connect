@@ -49,3 +49,32 @@ export interface InvoiceFormProps {
     form: any; // FormInstance<ThongTinHoaDon>
 }
 
+/** PayCollect response từ API tạo thanh toán */
+export interface IPaymentCollect {
+    provider: string;
+    type: string;
+    invoiceId: string;
+    invoiceReference: string;
+    userReference: string;
+    accountNumber: string;
+    bankName: string;
+    swiftCode: string;
+    qrData: string;
+    qrImage: string;
+    amount: number;
+    feeAmount: number;
+    totalAmount: number;
+    status: string;
+    expiredAt: string;
+}
+
+/** Response từ postTransactionMePayment */
+export interface IPaymentResponse {
+    transactionPayments: Array<{ identityCode: string; status: string }>;
+    amount: number;
+    soTienLePhiThanhToan: number;
+    tongTienThucTra: number;
+    paymentCollect?: IPaymentCollect;
+    payUrl?: string;
+}
+

@@ -23,3 +23,11 @@ export async function postTransactionMePayment(body: {
 }) {
 	return axios.post(`${ipTaiChinh}/transaction/me/payment`, body);
 }
+
+/** Polling trạng thái giao dịch PayCollect */
+export async function getTransactionMePage(params?: {
+	page?: number;
+	limit?: number;
+}) {
+	return axios.get(`${ipTaiChinh}/transaction/me/page`, { params });
+}
