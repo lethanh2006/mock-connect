@@ -12,6 +12,9 @@ export default {
 	'taichinh.hoadon.hanthanhtoan.hethan': 'Đã hết hạn',
 	'taichinh.hoadon.hanthanhtoan.con1ngay': 'Còn 1 ngày',
 	'taichinh.hoadon.hanthanhtoan.conngay': 'Còn {soNgay} ngày',
+	'taichinh.hoadon.ktxDeposit.countdown': 'Còn {minutes} phút {seconds} giây',
+	'taichinh.hoadon.ktxDeposit.expirationWarning':
+		'Slot đăng ký KTX của bạn sẽ bị hủy nếu bạn không thanh toán khoản này trong thời gian quy định',
 	'taichinh.hoadon.column.phiphainop': 'Phí phải nộp',
 	'taichinh.hoadon.column.phigiamtru': 'Phí giảm trừ',
 	'taichinh.hoadon.column.tongphiphainop': 'Tổng phí phải nộp (1)',

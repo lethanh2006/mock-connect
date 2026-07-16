@@ -93,6 +93,7 @@ declare module HoaDon {
 	export interface ITransaction {
 		_id: string;
 		amount: number;
+		isKtxDeposit: boolean
 		amountAvailable?: number | null;
 		bankName?: string | null;
 		billId: string;
