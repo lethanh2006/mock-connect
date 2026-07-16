@@ -44,8 +44,13 @@ export default {
 	'taichinh.hoadon.tab.unpaid': 'Chưa thanh toán',
 	'taichinh.hoadon.tab.paid': 'Đã thanh toán',
 	'taichinh.hoadon.action.paySelected': 'Thanh toán cho ({count}) hóa đơn',
+	'taichinh.hoadon.virtualBill.earlyPayment': 'Thanh toán sớm',
+	'taichinh.hoadon.virtualBill.discount.title': 'Ưu đãi thanh toán trước {percent}%',
+	'taichinh.hoadon.virtualBill.discount.description':
+		'Chọn và thanh toán cùng lúc cả 2 hóa đơn để được giảm ngay {percent}% trên tổng số tiền phải nộp.',
 
 	'taichinh.thanhtoan.title': 'Thông tin thanh toán',
+	'taichinh.thanhtoan.modal.success': 'Thanh toán thành công!',
 	'taichinh.thanhtoan.tab.chitiet': 'Chi tiết',
 	'taichinh.thanhtoan.tab.lichsu': 'Lịch sử giao dịch',
 	'taichinh.thanhtoan.alert.pending.title': 'Có giao dịch nộp tiền đang chờ xử lý! Bạn đã thực hiện thanh toán chưa?',

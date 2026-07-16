@@ -43,7 +43,12 @@ export default {
 	'taichinh.hoadon.tab.unpaid': 'Unpaid',
 	'taichinh.hoadon.tab.paid': 'Paid',
 	'taichinh.hoadon.action.paySelected': 'Pay ({count}) invoices',
+	'taichinh.hoadon.virtualBill.earlyPayment': 'Early payment',
+	'taichinh.hoadon.virtualBill.discount.title': '{percent}% early payment discount',
+	'taichinh.hoadon.virtualBill.discount.description':
+		'Select and pay both invoices together to receive an immediate {percent}% discount on the total amount due.',
 	'taichinh.thanhtoan.title': 'Payment Information',
+	'taichinh.thanhtoan.modal.success': 'Payment successful!',
 	'taichinh.thanhtoan.tab.chitiet': 'Details',
 	'taichinh.thanhtoan.tab.lichsu': 'Transaction History',
 	'taichinh.thanhtoan.alert.pending.title': 'There is a pending payment transaction! Have you completed the payment?',
