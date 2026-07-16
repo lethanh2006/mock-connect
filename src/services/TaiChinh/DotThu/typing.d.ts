@@ -17,6 +17,7 @@ declare module DotThuTaiChinh {
 		thoiGianRelease?: string;
 		suDungVi: boolean; // true;
 		kichHoat: boolean; // true;
+		uuDaiThanhToanTruocKy?: number;
 		metadata?: Record;
 
 		kenhThanhToanId?: string;

@@ -35,6 +35,7 @@ declare module HoaDon {
 		loaiTienTe?: string;
 
 		ghiChu?: string;
+		virtualBill?: HoaDon.IRecord
 	}
 
 	interface IKhachHang {
