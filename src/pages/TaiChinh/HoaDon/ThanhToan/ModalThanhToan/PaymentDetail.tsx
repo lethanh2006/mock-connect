@@ -20,6 +20,8 @@ type ThongTinHoaDon = {
 	userSoDienThoai?: string;
 };
 
+type PaymentBillRecord = HoaDon.IRecord & { children?: HoaDon.IRecord[] };
+
 const PaymentDetail: React.FC<PaymentDetailProps> = ({
 	bill,
 	method,
@@ -34,6 +36,16 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
 	const [loadingOnePay, setLoadingOnePay] = useState(false);
+	const flatBills = useMemo<HoaDon.IRecord[]>(
+		() =>
+			(bills ?? []).map((bill) => {
+				const flatBill: PaymentBillRecord = { ...bill };
+				delete flatBill.children;
+				delete flatBill.virtualBill;
+				return flatBill;
+			}),
+		[bills],
+	);
 	const [paymentCollectData, setPaymentCollectData] = useState<IPaymentCollect | null>(null);
 	const [transactionIdentityCodes, setTransactionIdentityCodes] = useState<string[]>([]);
 
@@ -208,7 +220,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 					)}
 
 					{/* Multi: bang danh sach hoa don */}
-					{mode === 'multi' && bills?.length ? (
+					{mode === 'multi' && flatBills.length ? (
 						<div className='payment-detail__multi-table'>
 							<TableStaticData
 								columns={
@@ -241,9 +253,10 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 										y: 400,
 									},
 								}}
-								data={bills}
+								data={flatBills}
 								size='small'
 								addStt
+								hideChildrenRows
 							/>
 						</div>
 					) : null}
