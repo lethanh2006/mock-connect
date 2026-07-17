@@ -90,15 +90,16 @@ const HoaDonPage = () => {
 	};
 	const tableData = useMemo<BillTableRecord[]>(
 		() =>
-			danhSach.map((bill, index) => {
+			danhSach.flatMap((bill, index) => {
 				const parent: BillTableRecord = {
 					...bill,
 					index: index + 1 + (page - 1) * limit,
 					key: bill._id,
 				};
 				const children: BillTableRecord[] = [];
+				const rows: BillTableRecord[] = [];
 				if (bill.transactions?.some((transaction) => transaction.isKtxDeposit === true)) {
-					children.push({
+					rows.push({
 						...bill,
 						_id: `ktx-deposit-notice-${bill._id}`,
 						identityCode: '',
@@ -129,16 +130,18 @@ const HoaDonPage = () => {
 				}
 				if (children.length) parent.children = children;
 
-				return parent;
+				return [...rows, parent];
 			}),
 		[danhSach, page, limit],
 	);
 	const allTableBills = useMemo(
 		() =>
-			tableData.flatMap((bill) => [
-				bill,
-				...(bill.children ?? []).filter((item) => !item._isVirtualBillNotice && !item._isKtxDepositNotice),
-			]),
+			tableData
+				.filter((bill) => !bill._isVirtualBillNotice && !bill._isKtxDepositNotice)
+				.flatMap((bill) => [
+					bill,
+					...(bill.children ?? []).filter((item) => !item._isVirtualBillNotice && !item._isKtxDepositNotice),
+				]),
 		[tableData],
 	);
 	const [expandedRowKeys, setExpandedRowKeys] = useState<Key[]>([]);
@@ -415,7 +418,7 @@ const HoaDonPage = () => {
 			align: 'center',
 			width: 150,
 			fixed: 'right',
-			render: (val, rec: HoaDon.IRecord) => (
+			render: (val, rec: BillTableRecord) => (
 				<div onClick={(e) => e.stopPropagation()}>
 					<ButtonExtend
 						tooltip={
@@ -439,27 +442,29 @@ const HoaDonPage = () => {
 						type='link'
 					/>
 
-					<ButtonExtend
-						tooltip={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemhuongdan' })}
-						danger
-						loading={loadingPdfMap[rec._id]}
-						onClick={async () => {
-							try {
-								setLoadingPdfMap((prev) => ({ ...prev, [rec._id]: true }));
-								const url = await getExportBillUrl(rec.identityCode);
-								if (url) {
-									setPdfUrl(url);
-									setVisibleModalPDF(true);
+					{!rec._isVirtualBill && (
+						<ButtonExtend
+							tooltip={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemhuongdan' })}
+							danger
+							loading={loadingPdfMap[rec._id]}
+							onClick={async () => {
+								try {
+									setLoadingPdfMap((prev) => ({ ...prev, [rec._id]: true }));
+									const url = await getExportBillUrl(rec.identityCode);
+									if (url) {
+										setPdfUrl(url);
+										setVisibleModalPDF(true);
+									}
+								} catch {
+									// error handled by axios interceptor
+								} finally {
+									setLoadingPdfMap((prev) => ({ ...prev, [rec._id]: false }));
 								}
-							} catch {
-								// error handled by axios interceptor
-							} finally {
-								setLoadingPdfMap((prev) => ({ ...prev, [rec._id]: false }));
-							}
-						}}
-						type='link'
-						icon={<FilePdfOutlined />}
-					/>
+							}}
+							type='link'
+							icon={<FilePdfOutlined />}
+						/>
+					)}
 				</div>
 			),
 		},
@@ -588,9 +593,20 @@ const HoaDonPage = () => {
 									key={'thanh-toan'}
 									icon={<UnorderedListOutlined />}
 									onClick={() => {
-										const bills = allTableBills.filter((item) => selectedIds.includes(item._id));
-										setSelectedBills(bills);
-										setPaymentMode('multi');
+										const bills = allTableBills.filter(
+											(item) =>
+												selectedIds.includes(item._id) &&
+												!item.transactions?.some((transaction) => transaction.isKtxDeposit === true),
+										);
+										if (!bills.length) return;
+										if (bills.length === 1) {
+											setRecord(bills[0]);
+											setSelectedBills([]);
+											setPaymentMode('single');
+										} else {
+											setSelectedBills(bills);
+											setPaymentMode('multi');
+										}
 										setVisibleModalThanhToan(true);
 									}}
 									type='primary'
@@ -626,12 +642,20 @@ const HoaDonPage = () => {
 				detailRow={{
 					checkStrictly: true,
 					getCheckboxProps: (rec: BillTableRecord) => ({
-						disabled: Boolean(rec._isVirtualBillNotice || rec._isKtxDepositNotice),
+						disabled: Boolean(
+							rec._isVirtualBillNotice ||
+								rec._isKtxDepositNotice ||
+								rec.transactions?.some((transaction) => transaction.isKtxDeposit === true),
+						),
 					}),
 					onChange: (selectedRowKeys: Key[]) => {
 						const nextSelectedIds = new Set(selectedRowKeys.map(String));
 
 						allTableBills.forEach((bill) => {
+							if (bill.transactions?.some((transaction) => transaction.isKtxDeposit === true)) {
+								nextSelectedIds.delete(bill._id);
+								return;
+							}
 							if (bill._isVirtualBill && nextSelectedIds.has(bill._id) && bill._parentBillId) {
 								nextSelectedIds.add(bill._parentBillId);
 							}
