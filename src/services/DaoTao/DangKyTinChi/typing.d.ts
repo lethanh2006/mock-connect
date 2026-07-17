@@ -84,6 +84,8 @@ declare module DangKyTinChi {
 		isWaitlist?: boolean;
 		trangThai?: ETrangThaiDangKyTinChi;
 
+		dkVuotTinChiLop?: Partial<DkVuotTinChi.IRecord> | null;
+		dangKyHocDuThinh?: Partial<DangKyHocDuThinh.IRecord> | null;
 		createdAt?: Date;
 		updatedAt?: Date;
 	}

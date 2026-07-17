@@ -1,4 +1,3 @@
-import type { SinhVien } from '../SinhVien/typings';
 import { type TrangThaiDonDangKyHocVuot } from './constant';
 
 export namespace DkVuotTinChi {
@@ -6,24 +5,16 @@ export namespace DkVuotTinChi {
 		_id: string;
 		sinhVienSsoId: string;
 		maHocKy: string;
-		hocKy?: HocKy.IRecord;
+		lopHocPhanId: string;
 		trangThai: TrangThaiDonDangKyHocVuot;
-		soTinChiToiDaDangKy: number;
-		stcToiDaDangKy?: number;
 		nguoiDuyet?: string | null;
-		thongTinNhanSuDuyet: string;
-		nguoiXuLy?: string | null;
 		thoiGianDuyet?: string | null;
-		ghiChuNguoiDuyet?: string | null;
-		ghiChu?: string | null;
+		ghiChuDuyet?: string | null;
 		createdAt?: string;
-		maSinhVien?: string;
-		hoTen?: string;
-		stcToiThieuHienTai?: number;
-		stcToiDaHienTai?: number;
-		soTinChiToiThieu?: number;
-		soTinChiToiDa?: number;
+		updatedAt?: string;
 		sinhVien?: SinhVien.IRecord;
+		lopHocPhan?: LopHocPhan.IRecord;
+		hocKy?: HocKy.IRecord;
 	}
 
 	export interface ISoTinChiDangKy {

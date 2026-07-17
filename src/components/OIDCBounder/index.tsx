@@ -7,7 +7,7 @@ import { currentRole, financeApiClientId, qldtApiClientId, replaceRole } from '@
 import type { AuthorizedRolesByClient } from '@/utils/keycloakRoles';
 import { getKeycloakRoleContext, hasModulePermission } from '@/utils/keycloakRoles';
 import { oidcConfig } from '@/utils/oidcConfig';
-import { getAppBasePath } from '@/utils/path';
+import { getAppBasePath, getPublicAssetPath } from '@/utils/path';
 import { notification } from 'antd';
 import queryString from 'query-string';
 import { useEffect, type FC } from 'react';
@@ -70,7 +70,7 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 		if (newSearch) newSearch = '?' + newSearch;
 		// Reload trang để cập nhật access token mới
 		const pathname =
-			window.location.pathname === '/' || window.location.pathname === '/student/user/login'
+			window.location.pathname === '/' || window.location.pathname === `${getPublicAssetPath('user/login')}`
 				? '/dashboard'
 				: window.location.pathname;
 		window.location.replace(`${pathname}${newSearch}${window.location.hash}`);
@@ -138,10 +138,10 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 						message: intl.formatMessage({ id: 'global.OIDCBounder.message' }),
 						description: intl.formatMessage({ id: 'global.OIDCBounder.description' }),
 					});
-					history.replace('/student/user/login');
+					history.replace(`${getPublicAssetPath('user/login')}`);
 				}
 			}
-		} else history.replace('/student/user/login');
+		} else history.replace(`${getPublicAssetPath('user/login')}`);
 	};
 
 	useEffect(() => {
