@@ -12,6 +12,9 @@ export default {
 	'taichinh.hoadon.hanthanhtoan.hethan': 'Overdue',
 	'taichinh.hoadon.hanthanhtoan.con1ngay': '1 day left',
 	'taichinh.hoadon.hanthanhtoan.conngay': '{soNgay} days left',
+	'taichinh.hoadon.ktxDeposit.countdown': '{minutes} minutes {seconds} seconds remaining',
+	'taichinh.hoadon.ktxDeposit.expirationWarning':
+		'Your dormitory registration slot will be canceled if you do not pay this charge within the specified time',
 	'taichinh.hoadon.column.phiphainop': 'Charges',
 	'taichinh.hoadon.column.phigiamtru': 'Deductions',
 	'taichinh.hoadon.column.tongphiphainop': 'Charge Amount',
