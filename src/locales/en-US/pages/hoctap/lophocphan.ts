@@ -41,6 +41,8 @@ export default {
 	'lophocphan.card.v2.danghoc': 'In progress',
 	'lophocphan.card.v2.waitlist': 'Waitlist / Auditors',
 	'lophocphan.tin-chi': 'credits',
+	'lophocphan.chua-co-tai-lieu': 'No materials available',
+	'diendan.tepdinhkem': 'Attachment',
 	'lophocphan.hocsaptoi.title': 'Upcoming Class Session',
 	'lophocphan.hocsaptoi.empty': 'No Scheduled Classes',
 	'lophocphan.hocsaptoi.xemchitiet': 'View Details',

@@ -44,6 +44,8 @@ export default {
 	'lophocphan.card.v2.danghoc': 'Đang học',
 	'lophocphan.card.v2.waitlist': 'Danh sách dự thính',
 	'lophocphan.tin-chi': 'tín chỉ',
+	'lophocphan.chua-co-tai-lieu': 'Chưa có tài liệu',
+	'diendan.tepdinhkem': 'Tệp đính kèm',
 
 	'lophocphan.hocsaptoi.title': 'Tiết học sắp tới',
 	'lophocphan.hocsaptoi.empty': 'Không có lịch học',

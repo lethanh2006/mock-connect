@@ -4,15 +4,17 @@ import { ExclamationCircleFilled } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, Modal, Row } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
+import { isDuThinhDaDuyet } from '../utils';
 
 const ConfirmKetHuyLopDKTC = (props: {
 	visible: boolean;
 	setVisible: (val: boolean) => void;
 	recLopDangKy?: DangKyTinChi.ILopDangKy;
+	onReload?: () => void | Promise<unknown>;
 }) => {
 	const intl = useIntl();
 	const [form] = Form.useForm();
-	const { visible, setVisible, recLopDangKy } = props;
+	const { visible, setVisible, recLopDangKy, onReload } = props;
 	const {
 		deleteDangKyTinChiModel,
 		phieuDangKy,
@@ -29,17 +31,20 @@ const ConfirmKetHuyLopDKTC = (props: {
 
 	const handleXoaDangKyTinChi = async () => {
 		try {
+			const successMsg = intl.formatMessage({ id: 'global.message.xoathanhcong' });
+
 			await deleteDangKyTinChiModel(
 				{
 					phieuDktcId: phieuDangKy?._id ?? '',
 					lopHocPhanId: recLopDangKy?._id ?? '',
 				},
-				intl.formatMessage({ id: 'global.message.xoathanhcong' }),
+				successMsg,
 			);
 
 			const data = danhSachLopDangKy.filter((item) => item.maHocPhan !== recLopDangKy?.maHocPhan);
 			tinhDataLichHoc(data);
 			setDanhSachLopDangKy(data);
+			await onReload?.();
 			setVisible(false);
 		} catch (er) {
 			console.log(er);
@@ -76,12 +81,14 @@ const ConfirmKetHuyLopDKTC = (props: {
 							</div>
 
 							<p style={{ color: 'red' }}>
-								{intl.formatMessage(
-									{ id: 'dangkytinchi.modalconfimhuylop.luuy.thaotackhonthehuy' },
-									{
-										b: (chunks) => <b>{chunks}</b>,
-									},
-								)}{' '}
+								{isDuThinhDaDuyet(recLopDangKy)
+									? intl.formatMessage({ id: 'dangkytinchi.phieudangky.huy.duthinh.daduyet.luuy' })
+									: intl.formatMessage(
+											{ id: 'dangkytinchi.modalconfimhuylop.luuy.thaotackhonthehuy' },
+											{
+												b: (chunks) => <b>{chunks}</b>,
+											},
+										)}{' '}
 							</p>
 						</div>
 					</Col>

@@ -6,6 +6,7 @@ export namespace DkVuotTinChi {
 		sinhVienSsoId: string;
 		maHocKy: string;
 		lopHocPhanId: string;
+		idPhieuDktc: string;
 		trangThai: TrangThaiDonDangKyHocVuot;
 		nguoiDuyet?: string | null;
 		thoiGianDuyet?: string | null;
@@ -15,11 +16,6 @@ export namespace DkVuotTinChi {
 		sinhVien?: SinhVien.IRecord;
 		lopHocPhan?: LopHocPhan.IRecord;
 		hocKy?: HocKy.IRecord;
-	}
-
-	export interface ISoTinChiDangKy {
-		soTinChiToiThieu: number;
-		soTinChiToiDa: number;
-		ghiChu?: string | null;
+		lyDo: string;
 	}
 }
