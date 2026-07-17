@@ -36,6 +36,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
 	const [loadingOnePay, setLoadingOnePay] = useState(false);
+	const isKtxDeposit = transactions.some((transaction) => transaction.isKtxDeposit === true);
 	const flatBills = useMemo<HoaDon.IRecord[]>(
 		() =>
 			(bills ?? []).map((bill) => {
@@ -269,6 +270,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 							</div>
 							<InputNumber
 								style={{ width: '100%' }}
+								disabled={isKtxDeposit}
 								placeholder={intl.formatMessage({ id: 'taichinh.thanhtoan.modal.nhapsotienthanhtoan' })}
 								value={soTienMuonThanhToan}
 								onChange={(value) => setSoTienMuonThanhToan(value)}
