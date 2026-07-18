@@ -90,8 +90,9 @@ const ModalDanKyKTX = (props: {
 	daCoLichSuDangKy?: boolean;
 	onDangKyThanhCong?: () => void | Promise<void>;
 	isView?: boolean;
+	initialStep?: number;
 }) => {
-	const { getData, daCoLichSuDangKy, onDangKyThanhCong, isView } = props;
+	const { getData, daCoLichSuDangKy, onDangKyThanhCong, isView, initialStep = 0 } = props;
 	const intl = useIntl();
 	const [form] = Form.useForm();
 
@@ -102,20 +103,17 @@ const ModalDanKyKTX = (props: {
 
 	const [currentStep, setCurrentStep] = useState<number>(0);
 
-	const checkbox1: boolean = Form.useWatch('checkbox1', form);
-	const checkbox2: boolean = Form.useWatch('checkbox2', form);
 	const steps = [
 		intl.formatMessage({ id: 'kytucxa.dangky.modal.step.thongTinChung' }),
 		intl.formatMessage({ id: 'kytucxa.dangky.modal.step.liabilityWaiver' }),
-		intl.formatMessage({ id: 'kytucxa.dangky.modal.step.checkInPrep' }),
-		intl.formatMessage({ id: 'kytucxa.dangky.modal.step.paymentInformation' }),
-		...(isView ? [] : []),
+		...(isView ? [intl.formatMessage({ id: 'kytucxa.dangky.modal.step.checkInPrep' })] : []),
+		...(isView ? [intl.formatMessage({ id: 'kytucxa.dangky.modal.step.paymentInformation' })] : []),
 	];
 	const lastStep = steps.length - 1;
 
 	useEffect(() => {
 		if (visibleDangKy && isView) {
-			setCurrentStep(0);
+			setCurrentStep(initialStep);
 			form.setFieldsValue({
 				...recPhieuDangKy?.formDon,
 				checkbox1: true,
@@ -127,7 +125,7 @@ const ModalDanKyKTX = (props: {
 		if (visibleDangKy && recSinhVien) {
 			form.setFieldsValue(getThongTinSinhVienForm(recSinhVien));
 		}
-	}, [visibleDangKy, isView, recSinhVien?._id, recPhieuDangKy?._id]);
+	}, [visibleDangKy, isView, initialStep, recSinhVien?._id, recPhieuDangKy?._id]);
 
 	const handleClose = () => {
 		form.resetFields();
@@ -161,9 +159,8 @@ const ModalDanKyKTX = (props: {
 			return;
 		}
 
-		const values = await form.validateFields();
+		const values = form.getFieldsValue(true) as PhieuDangKyKTX.IDangKy & { checkbox1?: boolean; checkbox2?: boolean };
 		const maPhong = recPhong?.room?.ma ?? recPhong?.roomId;
-
 		const { checkbox1: _checkbox1, checkbox2: _checkbox2, ...formValues } = values;
 
 		const data = {
@@ -190,7 +187,7 @@ const ModalDanKyKTX = (props: {
 			title={intl.formatMessage({ id: 'kytucxa.dangky.modal.title' })}
 		>
 			<Form layout='vertical' form={form} preserve>
-				<Steps current={currentStep} style={{ marginBottom: 18 }}>
+				<Steps current={currentStep} onChange={isView ? setCurrentStep : undefined} style={{ marginBottom: 18 }}>
 					{steps.map((title) => (
 						<Steps.Step key={title} title={title} />
 					))}
@@ -217,6 +214,10 @@ const ModalDanKyKTX = (props: {
 					<CheckInPrepContent />
 				</div>
 
+				<div style={{ display: currentStep === 3 ? 'block' : 'none' }}>
+					<></>
+				</div>
+
 				<div className='form-footer'>
 					{isView ? (
 						<>
@@ -238,7 +239,7 @@ const ModalDanKyKTX = (props: {
 						</>
 					) : currentStep === 0 ? (
 						<>
-							<Button htmlType='button' disabled={!checkbox1} type='primary' onClick={handleNext}>
+							<Button htmlType='button' type='primary' onClick={handleNext}>
 								{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.next' })}
 							</Button>
 
@@ -248,13 +249,7 @@ const ModalDanKyKTX = (props: {
 						</>
 					) : (
 						<>
-							<Button
-								disabled={!checkbox2}
-								htmlType='button'
-								type='primary'
-								loading={formSubmiting}
-								onClick={handleSubmit}
-							>
+							<Button htmlType='button' type='primary' loading={formSubmiting} onClick={handleSubmit}>
 								{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.submit' })}
 							</Button>
 

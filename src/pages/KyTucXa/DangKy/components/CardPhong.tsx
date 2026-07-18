@@ -1,8 +1,9 @@
+import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { EMaTrangThaiThanhToan, ETrangThaiThanhToanKtxI18n } from '@/services/TaiChinh/constant';
 import { CheckCircleFilled, ColumnWidthOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Image, Row, Space, Tag, Typography } from 'antd';
-import { history, useIntl, useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import '../style.less';
 import {
 	formatGiaPhong,
@@ -15,8 +16,10 @@ import {
 
 interface CardPhongProps {
 	phong: Phong.IChinhSachPhongRecord;
+	lichSuDangKy?: PhieuDangKyKTX.IRecord;
 	daCoLichSuDangKy?: boolean;
 	laPhongDaDangKy?: boolean;
+	onOpenLichSuDangKy?: (phong: Phong.IChinhSachPhongRecord, initialStep?: number) => void;
 	onXemChiTiet?: (phong: Phong.IChinhSachPhongRecord) => void;
 	onDangKy?: (phong: Phong.IChinhSachPhongRecord) => void;
 }
@@ -34,9 +37,18 @@ const getPaymentTag = (status: EMaTrangThaiThanhToan | undefined, intl: any) => 
 	);
 };
 
-const CardPhong = ({ phong, daCoLichSuDangKy, laPhongDaDangKy, onXemChiTiet, onDangKy }: CardPhongProps) => {
+const CardPhong = ({
+	phong,
+	lichSuDangKy,
+	daCoLichSuDangKy,
+	laPhongDaDangKy,
+	onOpenLichSuDangKy,
+	onXemChiTiet,
+	onDangKy,
+}: CardPhongProps) => {
 	const intl = useIntl();
 	const { record: recLichSu } = useModel('kytucxa.phieudangky');
+	const lichSuPhong = lichSuDangKy ?? recLichSu;
 	const room = phong.room;
 	const soChoConLai = getSoChoConLai(phong);
 	const daHetCho = getDaHetCho(phong);
@@ -45,11 +57,13 @@ const CardPhong = ({ phong, daCoLichSuDangKy, laPhongDaDangKy, onXemChiTiet, onD
 	const tienIch = getTienIchPhong(phong);
 	const tienIchHienThi = tienIch.slice(0, 3);
 
-	const trangThaiThanhToan = recLichSu?.trangThaiThanhToan;
+	const trangThaiThanhToan = lichSuPhong?.trangThaiThanhToan;
 	const daThanhToanXong = trangThaiThanhToan === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU;
+	const daQuaHanThanhToan = trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
+	const hienThiNhuDaDangKy = laPhongDaDangKy && !daQuaHanThanhToan;
 
-	const khongChoDangKy = !laPhongDaDangKy && (daHetCho || daCoLichSuDangKy);
-	const buttonText = laPhongDaDangKy
+	const khongChoDangKy = !hienThiNhuDaDangKy && (daHetCho || daCoLichSuDangKy);
+	const buttonText = hienThiNhuDaDangKy
 		? daThanhToanXong
 			? intl.formatMessage({ id: 'kytucxa.dangky.card.button.seeMore' })
 			: intl.formatMessage({ id: 'kytucxa.dangky.card.button.paymentNow' })
@@ -59,7 +73,7 @@ const CardPhong = ({ phong, daCoLichSuDangKy, laPhongDaDangKy, onXemChiTiet, onD
 
 	return (
 		<Card
-			className={['room-card', laPhongDaDangKy ? 'room-card--registered' : undefined].filter(Boolean).join(' ')}
+			className={['room-card', hienThiNhuDaDangKy ? 'room-card--registered' : undefined].filter(Boolean).join(' ')}
 			hoverable
 			onClick={() => onXemChiTiet?.(phong)}
 			cover={
@@ -127,7 +141,7 @@ const CardPhong = ({ phong, daCoLichSuDangKy, laPhongDaDangKy, onXemChiTiet, onD
 			<div className='room-card__divider' />
 
 			<div className='room-card__footer'>
-				{laPhongDaDangKy ? (
+				{hienThiNhuDaDangKy ? (
 					getPaymentTag(trangThaiThanhToan, intl)
 				) : (
 					<Typography.Text className='room-card__price' strong>
@@ -136,14 +150,14 @@ const CardPhong = ({ phong, daCoLichSuDangKy, laPhongDaDangKy, onXemChiTiet, onD
 				)}
 
 				<Button
-					type={laPhongDaDangKy && daThanhToanXong ? 'default' : 'primary'}
+					type={hienThiNhuDaDangKy && daThanhToanXong ? 'default' : 'primary'}
 					size='large'
 					disabled={khongChoDangKy}
-					className={laPhongDaDangKy && daThanhToanXong ? 'room-card__button--secondary' : undefined}
+					className={hienThiNhuDaDangKy && daThanhToanXong ? 'room-card__button--secondary' : undefined}
 					onClick={(event) => {
 						event.stopPropagation();
-						if (laPhongDaDangKy) {
-							history.push('/campus-life/student-housing/lich-su');
+						if (hienThiNhuDaDangKy) {
+							onOpenLichSuDangKy?.(phong, daThanhToanXong ? 0 : 3);
 						} else {
 							onDangKy?.(phong);
 						}
