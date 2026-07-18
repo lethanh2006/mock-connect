@@ -14,6 +14,7 @@ import SelectToaNhaKTX from '../ToaNha/Select';
 import CardPhong from './components/CardPhong';
 import ChiTietPhong from './components/ChiTiet';
 import ModalDanKyKTX from './components/Modal';
+import { ETrangThaiDuyetKTX } from '@/services/TaiChinh/constant';
 
 const { Search } = Input;
 
@@ -25,10 +26,10 @@ const getLichSuDangKyKeys = (lichSu?: PhieuDangKyKTX.IRecord) =>
 		.filter(Boolean)
 		.map((item) => String(item));
 
-const coFormDonDangKy = (lichSu?: PhieuDangKyKTX.IRecord) => !!lichSu?.formDon?._id;
+const coFormDonDangKy = (lichSu?: PhieuDangKyKTX.IRecord) => !!(lichSu?.formDon?._id && lichSu?.trangThaiDuyet!==ETrangThaiDuyetKTX.HUY);
 
 const DangKyKyTucXa = () => {
-	const intl = useIntl();
+	const intl = useIntl();``
 	const {
 		getModel,
 		danhSach,
