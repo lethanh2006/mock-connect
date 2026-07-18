@@ -2,12 +2,13 @@ import PageCard from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
+import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
+import { formatDateTime } from '@/utils/formatDate';
 import { getPublicAssetPath } from '@/utils/path';
 import { FileDoneOutlined, InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Alert, Button, Col, Empty, Flex, Input, message, Pagination, Row, Select, Space, Spin } from 'antd';
 import _ from 'lodash';
-import moment from 'moment';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import SelectDanhMucChungKTX from '../DanhMucChung/Select';
 import SelectToaNhaKTX from '../ToaNha/Select';
@@ -25,7 +26,18 @@ const getLichSuDangKyKeys = (lichSu?: PhieuDangKyKTX.IRecord) =>
 		.filter(Boolean)
 		.map((item) => String(item));
 
-const coFormDonDangKy = (lichSu?: PhieuDangKyKTX.IRecord) => !!lichSu?.formDon?._id;
+const laLichSuDaDong = (lichSu?: PhieuDangKyKTX.IRecord) => lichSu?.trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
+
+const coFormDonDangKy = (lichSu?: PhieuDangKyKTX.IRecord) => !!lichSu?.formDon?._id && !laLichSuDaDong(lichSu);
+
+const laLichSuCuaPhong = (phong?: Phong.IChinhSachPhongRecord, lichSu?: PhieuDangKyKTX.IRecord) => {
+	if (!phong || !lichSu?.formDon?._id) return false;
+
+	const phongKeys = getPhongDangKyKeys(phong);
+	const lichSuKeys = getLichSuDangKyKeys(lichSu);
+
+	return phongKeys.some((key) => lichSuKeys.includes(key));
+};
 
 const DangKyKyTucXa = () => {
 	const intl = useIntl();
@@ -52,10 +64,14 @@ const DangKyKyTucXa = () => {
 		setRecord: setRecLichSu,
 		loading: loadingLichSu,
 	} = useModel('kytucxa.phieudangky');
+	const [isViewDangKy, setIsViewDangKy] = useState<boolean>(false);
+	const [initialModalStep, setInitialModalStep] = useState<number>(0);
 
 	//Get đợt đăng ký
 	useEffect(() => {
-		getDotDangKy('me/one', true).then((res: any) => setRecDot(res?.data));
+		getDotDangKy('me/one', true)
+			.then((res: any) => setRecDot(res?.data))
+			.catch(() => setRecDot(undefined));
 	}, []);
 
 	//Get lịch sử đăng ký
@@ -65,17 +81,21 @@ const DangKyKyTucXa = () => {
 			return;
 		}
 
-		const res = await getLichSuDangKy(
-			{ maDotId: recDot?._id },
-			undefined,
-			undefined,
-			undefined,
-			undefined,
-			'me/page',
-			undefined,
-			false,
-		);
-		setRecLichSu(res?.[0]);
+		try {
+			const res = await getLichSuDangKy(
+				{ maDotId: recDot?._id },
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				'me/page',
+				undefined,
+				false,
+			);
+			setRecLichSu(res?.[0]);
+		} catch {
+			setRecLichSu(undefined);
+		}
 	};
 
 	useEffect(() => {
@@ -121,6 +141,22 @@ const DangKyKyTucXa = () => {
 		[handleFilterChange],
 	);
 
+	const getLichSuDangKyTheoPhong = useCallback(
+		(phong: Phong.IChinhSachPhongRecord) => (laLichSuCuaPhong(phong, recLichSu) ? recLichSu : undefined),
+		[recLichSu],
+	);
+
+	const danhSachHienThi = useMemo(
+		() =>
+			[...(danhSach ?? [])].sort((a, b) => {
+				const aDaDangKy = coFormDonDangKy(getLichSuDangKyTheoPhong(a));
+				const bDaDangKy = coFormDonDangKy(getLichSuDangKyTheoPhong(b));
+
+				return Number(bDaDangKy) - Number(aDaDangKy);
+			}),
+		[danhSach, getLichSuDangKyTheoPhong],
+	);
+
 	const handleXemChiTiet = (phong: Phong.IChinhSachPhongRecord) => {
 		handleView(phong);
 	};
@@ -133,20 +169,30 @@ const DangKyKyTucXa = () => {
 
 		setVisibleForm(false);
 		setRecord(phong);
+		setIsViewDangKy(false);
+		setInitialModalStep(0);
 		setVisibleDangKy(true);
 	};
 
-	const lichSuDangKyKeys = useMemo(() => getLichSuDangKyKeys(recLichSu), [recLichSu]);
+	const handleOpenLichSuDangKy = (phong: Phong.IChinhSachPhongRecord, initialStep = 0) => {
+		if (!getLichSuDangKyTheoPhong(phong)) return;
+
+		setRecord(phong);
+		setVisibleForm(false);
+		setIsViewDangKy(true);
+		setInitialModalStep(initialStep);
+		setVisibleDangKy(true);
+	};
+
 	const daCoLichSuDangKy = coFormDonDangKy(recLichSu);
 
 	const isPhongDaDangKy = useCallback(
 		(phong: Phong.IChinhSachPhongRecord) => {
-			if (!daCoLichSuDangKy) return false;
+			const lichSu = getLichSuDangKyTheoPhong(phong);
 
-			const phongKeys = getPhongDangKyKeys(phong);
-			return phongKeys.some((key) => lichSuDangKyKeys.includes(key));
+			return coFormDonDangKy(lichSu);
 		},
-		[daCoLichSuDangKy, lichSuDangKyKeys],
+		[getLichSuDangKyTheoPhong],
 	);
 
 	const handlePaginationChange = (newPage: number, newPageSize: number) => {
@@ -158,7 +204,7 @@ const DangKyKyTucXa = () => {
 		}
 	};
 
-	const handlePageSizeChange = (current: number, size: number) => {
+	const handlePageSizeChange = (_current: number, size: number) => {
 		setPage(1);
 		setLimit(size);
 	};
@@ -239,7 +285,7 @@ const DangKyKyTucXa = () => {
 					/>
 				</Space>
 
-				<Button icon={<ReloadOutlined />} onClick={getData} />
+				<Button icon={<ReloadOutlined />} loading={loading} onClick={getData} />
 			</Flex>
 
 			<Alert
@@ -255,12 +301,12 @@ const DangKyKyTucXa = () => {
 								tenDot: <b style={{ color: '#0E50CF' }}>{recDot?.tenDot}</b>,
 								tuNgay: (
 									<b style={{ color: '#0E50CF' }}>
-										{recDot?.thoiGianBatDau ? moment(recDot.thoiGianBatDau).format('HH:mm DD/MM/YYYY') : '--'}
+										{recDot?.thoiGianBatDau ? formatDateTime(recDot.thoiGianBatDau) : '--'}
 									</b>
 								),
 								denNgay: (
 									<b style={{ color: '#0E50CF' }}>
-										{recDot?.thoiGianKetThuc ? moment(recDot.thoiGianKetThuc).format('HH:mm DD/MM/YYYY') : '--'}
+										{recDot?.thoiGianKetThuc ? formatDateTime(recDot.thoiGianKetThuc) : '--'}
 									</b>
 								),
 							},
@@ -288,20 +334,26 @@ const DangKyKyTucXa = () => {
 			/>
 
 			<Spin spinning={loading || loadingLichSu}>
-				{danhSach?.length ? (
+				{danhSachHienThi?.length ? (
 					<>
 						<Row gutter={[12, 12]}>
-							{danhSach.map((phong) => (
-								<Col key={phong._id} xs={24} md={12} xl={8} className='room-list-col'>
-									<CardPhong
-										phong={phong}
-										daCoLichSuDangKy={daCoLichSuDangKy}
-										laPhongDaDangKy={isPhongDaDangKy(phong)}
-										onXemChiTiet={handleXemChiTiet}
-										onDangKy={handleDangKy}
-									/>
-								</Col>
-							))}
+							{danhSachHienThi.map((phong) => {
+								const lichSuDangKy = getLichSuDangKyTheoPhong(phong);
+
+								return (
+									<Col key={phong._id} xs={24} md={12} xl={8} className='room-list-col'>
+										<CardPhong
+											phong={phong}
+											lichSuDangKy={lichSuDangKy}
+											daCoLichSuDangKy={coFormDonDangKy(lichSuDangKy)}
+											laPhongDaDangKy={isPhongDaDangKy(phong)}
+											onOpenLichSuDangKy={handleOpenLichSuDangKy}
+											onXemChiTiet={handleXemChiTiet}
+											onDangKy={handleDangKy}
+										/>
+									</Col>
+								);
+							})}
 						</Row>
 
 						{total > 0 && (
@@ -314,7 +366,7 @@ const DangKyKyTucXa = () => {
 									onShowSizeChange={handlePageSizeChange}
 									pageSizeOptions={['5', '10', '20', '50']}
 									showSizeChanger={false}
-									disabled={loading}
+									disabled={loading || loadingLichSu}
 									size='default'
 									className='pagination'
 								/>
@@ -330,8 +382,19 @@ const DangKyKyTucXa = () => {
 				)}
 			</Spin>
 
-			<ChiTietPhong daCoLichSuDangKy={daCoLichSuDangKy} isPhongDaDangKy={isPhongDaDangKy} />
-			<ModalDanKyKTX getData={getData} daCoLichSuDangKy={daCoLichSuDangKy} onDangKyThanhCong={getLichSuDangKyData} />
+			<ChiTietPhong
+				daCoLichSuDangKy={daCoLichSuDangKy}
+				getLichSuDangKyTheoPhong={getLichSuDangKyTheoPhong}
+				isPhongDaDangKy={isPhongDaDangKy}
+				onOpenLichSuDangKy={handleOpenLichSuDangKy}
+			/>
+			<ModalDanKyKTX
+				getData={getData}
+				daCoLichSuDangKy={daCoLichSuDangKy}
+				isView={isViewDangKy}
+				initialStep={initialModalStep}
+				onDangKyThanhCong={getLichSuDangKyData}
+			/>
 		</PageCard>
 	);
 };
