@@ -29,7 +29,7 @@ const getLichSuDangKyKeys = (lichSu?: PhieuDangKyKTX.IRecord) =>
 const coFormDonDangKy = (lichSu?: PhieuDangKyKTX.IRecord) => !!(lichSu?.formDon?._id && lichSu?.trangThaiDuyet!==ETrangThaiDuyetKTX.HUY);
 
 const DangKyKyTucXa = () => {
-	const intl = useIntl();``
+	const intl = useIntl();
 	const {
 		getModel,
 		danhSach,
