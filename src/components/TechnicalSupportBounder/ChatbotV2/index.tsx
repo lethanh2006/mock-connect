@@ -1,4 +1,5 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import { getPublicAssetPath } from '@/utils/path';
 import { toCamelCase } from '@/utils/utils';
 import { RightOutlined } from '@ant-design/icons';
 import { Card, Spin } from 'antd';
@@ -41,8 +42,11 @@ const ChatbotOverlayV2 = () => {
 		}
 
 		if (boxChatVisible && !recordUser?.id) {
+			const chatbotPassword = typeof APP_CONFIG_CHATBOT_PASSWORD !== 'undefined' ? APP_CONFIG_CHATBOT_PASSWORD : '';
+			if (!chatbotPassword) return;
+
 			createUserChatBotModel({
-				password: 'abc@1234',
+				password: chatbotPassword,
 				username: fullName ?? 'admin',
 				email:
 					recSinhVien?.email ??
@@ -83,7 +87,7 @@ const ChatbotOverlayV2 = () => {
 					</div>
 
 					<div className='pulse' onClick={() => setBoxChatVisible(true)}>
-						<img src='/student/images/chatbot.png' alt='chatbot' />
+						<img src={getPublicAssetPath('images/chatbot.png')} alt='chatbot' />
 					</div>
 				</div>
 			)}

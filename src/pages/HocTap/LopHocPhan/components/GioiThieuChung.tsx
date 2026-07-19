@@ -1,8 +1,11 @@
-import { DownloadOutlined } from '@ant-design/icons';
-import { Button, Col, Empty, Row, Spin, Tag } from 'antd';
+import PreviewFile from '@/components/PreviewFile';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { getNameFile } from '@/utils/utils';
+import { DownloadOutlined, PaperClipOutlined } from '@ant-design/icons';
+import { Button, Col, Divider, Empty, Row, Spin, Tag } from 'antd';
+import DOMPurify from 'dompurify';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
-import BoxFile from '../DienDan/components/BoxFile';
 import './style.less';
 
 const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void; deCuongId?: string }) => {
@@ -16,6 +19,8 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 		setDanhSach: setHocLieu,
 	} = useModel('hocphan.hoclieudecuong');
 	const [expand, setExpand] = useState(false);
+	const [visiblePreview, setVisiblePreview] = useState(false);
+	const [previewFile, setPreviewFile] = useState<string>('');
 	const { onShowDeCuong, deCuongId } = props;
 
 	// Lấy dữ liệu học liệu thực tế (giới hạn 3 item đầu tiên để hiển thị)
@@ -36,25 +41,31 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 	return (
 		<>
 			<div className='gioi-thieu-section'>
-				<div className='thong-tin-header' style={{ fontSize: 16 }}>
-					{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu' })}
-				</div>
+				<Divider orientation='left' className='divider-big-title' dashed>
+					{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieuchung' })}
+				</Divider>
 
-				<span className='fw500'>{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieuchung' })}</span>
-				<div
-					className='gioi-thieu-chung-content'
-					style={{ display: expand ? 'block' : '-webkit-box' }}
-					dangerouslySetInnerHTML={{ __html: record?.gioiThieuChung ?? '' }}
-				/>
 				{record?.gioiThieuChung ? (
-					<a onClick={() => setExpand((v) => !v)} style={{ marginTop: 8 }}>
-						{expand
-							? intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.thugon' })
-							: intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.xemthem' })}
-					</a>
-				) : null}
+					<>
+						<div
+							className='gioi-thieu-chung-content'
+							style={{ display: expand ? 'block' : '-webkit-box' }}
+							dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(record.gioiThieuChung) }}
+						/>
+						<a onClick={() => setExpand((v) => !v)} style={{ marginTop: 8 }}>
+							{expand
+								? intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.thugon' })
+								: intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.xemthem' })}
+						</a>
+					</>
+				) : (
+					<Empty
+						image={Empty.PRESENTED_IMAGE_SIMPLE}
+						description={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.empty' })}
+					/>
+				)}
 
-				{record?.lmsUrl ? (
+				{/* {record?.lmsUrl ? (
 					<>
 						<span className='fw500' style={{ marginTop: 12 }}>
 							{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.hoctructuyen' })}:{' '}
@@ -63,54 +74,86 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 							{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.duongdan' })}
 						</a>
 					</>
-				) : null}
+				) : null} */}
 			</div>
 
-			{recDeCuong?.mucTieuHocPhan && (
-				<div className='gioi-thieu-section'>
-					<div className='thong-tin-header'>
+			<div className='gioi-thieu-section'>
+				<div className='thong-tin-header'>
+					<Divider orientation='left' className='divider-big-title' dashed style={{ margin: 0, flex: 1, minWidth: 0 }}>
 						{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.muctieu' })}
-						<a onClick={() => onShowDeCuong('0')}>
-							{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.chitiet' })}
-						</a>
-					</div>
+					</Divider>
+					<a onClick={() => onShowDeCuong('0')}>
+						{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.chitiet' })}
+					</a>
+				</div>
 
+				{recDeCuong?.mucTieuHocPhan ? (
 					<div
 						className='gioi-thieu-chung-content'
 						style={{ display: '-webkit-box' }}
-						dangerouslySetInnerHTML={{ __html: recDeCuong?.mucTieuHocPhan ?? '' }}
+						dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(recDeCuong.mucTieuHocPhan) }}
 					/>
-				</div>
-			)}
+				) : (
+					<Empty
+						image={Empty.PRESENTED_IMAGE_SIMPLE}
+						description={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.empty' })}
+					/>
+				)}
+			</div>
 
 			<div className='gioi-thieu-section'>
 				<Row gutter={[16, 16]}>
-					<Col span={24} md={12}>
+					<Col span={24} md={24}>
 						<div className='thong-tin-header'>
-							{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.tailieu' })}
+							<Divider
+								orientation='left'
+								className='divider-big-title'
+								dashed
+								style={{ margin: 0, flex: 1, minWidth: 0 }}
+							>
+								{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.tailieu' })}
+							</Divider>
 						</div>
 						<Spin spinning={loadingHocLieu}>
 							{displayTaiLieu.length > 0 ? (
-								<div>
+								<div className='tai-lieu-list'>
 									{displayTaiLieu.map((item, index) => (
-										<div key={index} className='tai-lieu-item'>
-											<BoxFile url={item} />
+										<div key={`${item}-${index}`} className='tai-lieu-item'>
+											<span className='tai-lieu-label'>{intl.formatMessage({ id: 'diendan.tepdinhkem' })}</span>
+											<span className='tai-lieu-file'>
+												<PaperClipOutlined />
+												<a
+													onClick={() => {
+														setPreviewFile(item);
+														setVisiblePreview(true);
+													}}
+												>
+													{getNameFile(item) || item}
+												</a>
+											</span>
 										</div>
 									))}
 								</div>
 							) : (
 								<Empty
 									image={Empty.PRESENTED_IMAGE_SIMPLE}
-									description={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.empty' })}
+									description={intl.formatMessage({ id: 'lophocphan.chua-co-tai-lieu' })}
 								/>
 							)}
 						</Spin>
 					</Col>
 
-					<Col span={24} md={12}>
+					<Col span={24} md={24}>
 						<div className='thong-tin-header'>
-							{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.hoclieu' })}
-							<a onClick={() => onShowDeCuong('3')}>
+							<Divider
+								orientation='left'
+								className='divider-big-title'
+								dashed
+								style={{ margin: 0, flex: 1, minWidth: 0 }}
+							>
+								{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.hoclieu' })}
+							</Divider>
+							<a onClick={() => onShowDeCuong('0')}>
 								{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.chitiet' })}
 							</a>
 						</div>
@@ -157,6 +200,30 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 					</Col>
 				</Row>
 			</div>
+
+			<ModalExpandable
+				title={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.tailieu' })}
+				width={1000}
+				open={visiblePreview}
+				footer={
+					<div className='form-footer'>
+						<Button
+							onClick={() => {
+								setVisiblePreview(false);
+								setPreviewFile('');
+							}}
+						>
+							{intl.formatMessage({ id: 'global.button.dong' })}
+						</Button>
+					</div>
+				}
+				onCancel={() => {
+					setVisiblePreview(false);
+					setPreviewFile('');
+				}}
+			>
+				{previewFile ? <PreviewFile file={previewFile} /> : null}
+			</ModalExpandable>
 		</>
 	);
 };

@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build:netlify"
+  publish = "dist"
+
+[[redirects]]
+  from = "/"
+  to = "/student/"
+  status = 301
+
+[[redirects]]
+  from = "/student/*"
+  to = "/student/index.html"
+  status = 200

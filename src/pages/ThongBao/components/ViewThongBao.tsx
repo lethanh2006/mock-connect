@@ -1,11 +1,13 @@
 import { EModuleKey } from '@/services/base/constant';
 import { type ESourceTypeNotification, mapModuleKey } from '@/services/ThongBao/constant';
 import { type ThongBao } from '@/services/ThongBao/typing';
-import { currentRole } from '@/utils/ip';
-import { getNameFile } from '@/utils/utils';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
+import { currentRole } from '@/utils/ip';
+import { getSafeHref } from '@/utils/security';
+import { getNameFile } from '@/utils/utils';
 import { CalendarOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Divider, Row } from 'antd';
+import DOMPurify from 'dompurify';
 import { history, useIntl } from 'umi';
 import './style.less';
 
@@ -33,18 +35,19 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 
 		const sourceType = mapModuleKey[record?.metadata?.sourceType as ESourceTypeNotification];
 		const sourceModule = mapModuleKey[record?.metadata?.phanHe as ESourceTypeNotification];
-
-		const pathWeb = record?.metadata?.pathWeb?.replace(/^\/+/, '');
+		const rawPath = record?.metadata?.pathWeb?.trim();
+		if (!rawPath || rawPath.startsWith('//') || /^[a-z][a-z0-9+.-]*:/i.test(rawPath)) return;
+		const pathWeb = getSafeHref(`/${rawPath.replace(/^\/+/, '')}`);
+		if (!pathWeb) return;
 
 		if (sourceType === currentRole) {
 			if (afterViewDetail) afterViewDetail();
-			if (record?.metadata?.pathWeb) {
-				history.push(`${pathWeb}`);
-			}
+			history.push(pathWeb);
 		} else {
 			const baseUrl = urlMap[sourceModule as EModuleKey];
-			if (baseUrl && record?.metadata?.pathWeb) {
-				window.location.href = `${baseUrl}${pathWeb}`;
+			const target = baseUrl ? getSafeHref(`${baseUrl.replace(/\/+$/, '')}${pathWeb}`) : undefined;
+			if (target) {
+				window.location.href = target;
 			}
 		}
 	};
@@ -61,19 +64,24 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 					</>
 				}
 			/>
+
 			<br />
-			<div dangerouslySetInnerHTML={{ __html: record?.content ?? '' }} className='notif-content' />
+			<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(record?.content ?? '') }} className='notif-content' />
+
 			<Row style={{ marginTop: 12 }} gutter={[12, 12]}>
 				{record?.taiLieuDinhKem?.length ? (
 					<>
 						<Col span={24}>{intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao.tepdanhkem' })}: </Col>
-						{record?.taiLieuDinhKem?.map((item) => (
-							<Col span={24} key={item}>
-								<a href={item} target='_blank' rel='noreferrer'>
-									{getNameFile(item)}
-								</a>
-							</Col>
-						))}
+						{record?.taiLieuDinhKem?.map((item) => {
+							const href = getSafeHref(item);
+							return href ? (
+								<Col span={24} key={item}>
+									<a href={href} target='_blank' rel='noreferrer'>
+										{getNameFile(item)}
+									</a>
+								</Col>
+							) : null;
+						})}
 					</>
 				) : null}
 

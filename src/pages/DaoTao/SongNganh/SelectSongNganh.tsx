@@ -1,8 +1,8 @@
-import { KhoaNganh } from '@/services/DaoTao/KhoaNganh/typing';
+import { getLocalizedName } from '@/utils/localeName';
 import { Select } from 'antd';
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import { useEffect } from 'react';
-import { getLocale, useIntl, useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const SelectSongNganh = (props: {
 	style?: React.CSSProperties;
@@ -13,13 +13,8 @@ const SelectSongNganh = (props: {
 	size?: SizeType;
 }) => {
 	const intl = useIntl();
-	const locale = getLocale();
 	const { style, disabled, value, onChange, hideSelect, size } = props;
 	const { getKhoaNganhMeModel, khoaNganhMe, loading } = useModel('sinhvien.sinhvien');
-	const getTenNganh = (khoaNganh?: KhoaNganh.IRecord) =>
-		locale === 'vi-VN'
-			? (khoaNganh?.nganh?.ten ?? khoaNganh?.nganh?.tenTiengAnh ?? khoaNganh?.ten)
-			: (khoaNganh?.nganh?.tenTiengAnh ?? khoaNganh?.nganh?.ten ?? khoaNganh?.ten);
 
 	useEffect(() => {
 		getKhoaNganhMeModel().then((response) => {
@@ -41,17 +36,17 @@ const SelectSongNganh = (props: {
 					? [
 							{
 								value: khoaNganhMe?.khoaNganhChinh?.ma,
-								label: getTenNganh(khoaNganhMe?.khoaNganhChinh),
+								label: getLocalizedName(khoaNganhMe?.khoaNganhChinh.nganh),
 							},
 							{
 								value: khoaNganhMe?.khoaNganhPhu?.ma,
-								label: getTenNganh(khoaNganhMe?.khoaNganhPhu),
+								label: getLocalizedName(khoaNganhMe?.khoaNganhPhu.nganh),
 							},
 						]
 					: [
 							{
 								value: khoaNganhMe?.khoaNganhChinh?.ma,
-								label: getTenNganh(khoaNganhMe?.khoaNganhChinh),
+								label: getLocalizedName(khoaNganhMe?.khoaNganhChinh.nganh),
 							},
 						]
 			}

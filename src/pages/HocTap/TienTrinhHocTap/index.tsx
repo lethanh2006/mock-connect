@@ -3,6 +3,8 @@ import { TabViewPage } from '@/components/TabViewPage';
 import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { formatDate } from '@/utils/formatDate';
+import { getLocalizedName } from '@/utils/localeName';
+import { getPublicAssetPath } from '@/utils/path';
 import { BookOutlined, ScheduleOutlined } from '@ant-design/icons';
 import { Alert, Col, Descriptions, Divider, Row, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
@@ -70,7 +72,7 @@ const TienTrinhHocTap = () => {
 					style={{ marginBottom: 16 }}
 				>
 					<Descriptions.Item label={intl.formatMessage({ id: 'thongtincanhan.hoso.trainingProgram' })}>
-						<a onClick={() => setVisibleChuongTrinh(true)}>{tenNganhHienThi || '-'}</a>
+						<a onClick={() => setVisibleChuongTrinh(true)}>{getLocalizedName(recTienTrinh?.ctdtKeHoach) || '-'}</a>
 					</Descriptions.Item>
 
 					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.college' })}>
@@ -137,7 +139,7 @@ const TienTrinhHocTap = () => {
 									/>
 								</div>
 								<div className='progress-logo'>
-									<img src='/student/logo.png' alt='' width={30} height={30} />
+									<img src={getPublicAssetPath('logo.png')} alt='' style={{ objectFit: 'contain' }} />
 								</div>
 							</div>
 							<div className='progress-meta'>

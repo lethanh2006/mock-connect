@@ -1,6 +1,7 @@
 import { EKieuDuLieu, ETextDisplay } from '@/services/QuyTrinh/LoaiHinh/constants';
 import type { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
 import { Col, Row } from 'antd';
+import DOMPurify from 'dompurify';
 import ViewRender from '../../MauDon/ViewRender';
 
 const ViewFromCauHinh = (props: { cauHinhLoaiHinh: LoaiHinh.TruongThongTin[]; thongTinKhaiBao: any }) => {
@@ -37,7 +38,7 @@ const ViewFromCauHinh = (props: { cauHinhLoaiHinh: LoaiHinh.TruongThongTin[]; th
 									{isDoanVanBan ? (
 										<div>
 											{item.customDefaultValue ? (
-												<div dangerouslySetInnerHTML={{ __html: item.customDefaultValue }} />
+												<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.customDefaultValue) }} />
 											) : (
 												<div>{item.ten}</div>
 											)}

@@ -3,13 +3,14 @@ import { getUserInfo } from '@/services/base/api';
 import { AppModules, EModuleKey } from '@/services/base/constant';
 import { type Login } from '@/services/base/typing';
 import axios from '@/utils/axios';
-import { getKeycloakRoleContext, hasModulePermission } from '@/utils/keycloakRoles';
-import type { AuthorizedRolesByClient } from '@/utils/keycloakRoles';
 import { currentRole, financeApiClientId, qldtApiClientId, replaceRole } from '@/utils/ip';
+import type { AuthorizedRolesByClient } from '@/utils/keycloakRoles';
+import { getKeycloakRoleContext, hasModulePermission } from '@/utils/keycloakRoles';
 import { oidcConfig } from '@/utils/oidcConfig';
+import { getAppBasePath, getPublicAssetPath } from '@/utils/path';
 import { notification } from 'antd';
 import queryString from 'query-string';
-import { useEffect, type FC } from 'react';
+import { useEffect, useRef, type FC } from 'react';
 import { AuthProvider, hasAuthParams, useAuth } from 'react-oidc-context';
 import { history, useIntl, useModel } from 'umi';
 import LoadingPage from '../Loading';
@@ -54,7 +55,8 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 	const auth = useAuth();
 	const actions = useAuthActions();
 	const isUnauth = unAuthPaths.some((path) => window.location.pathname.includes(path));
-	let timeout: any = null;
+	const authTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const loginInProgressRef = useRef(false);
 
 	const handleAxios = (access_token: string) => {
 		axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
@@ -67,17 +69,17 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 			.map((key) => `${key}=${other[key]}`)
 			.join('&');
 		if (newSearch) newSearch = '?' + newSearch;
-		// Reload trang để cập nhật access token mới
 		const pathname =
-			window.location.pathname === '/' || window.location.pathname === '/student/user/login'
+			window.location.pathname === '/' || window.location.pathname === `${getPublicAssetPath('user/login')}`
 				? '/dashboard'
 				: window.location.pathname;
-		window.location.replace(`${pathname}${newSearch}${window.location.hash}`);
-		// window.history.replaceState({}, document.title, `${pathname}${newSearch}${window.location.hash}`);
-		// window.location.reload();
+		window.history.replaceState({}, document.title, `${pathname}${newSearch}${window.location.hash}`);
 	};
 
 	const handleLogin = async () => {
+		if (loginInProgressRef.current) return;
+		loginInProgressRef.current = true;
+
 		if (auth.user) {
 			handleAxios(auth.user.access_token);
 			try {
@@ -131,16 +133,19 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 						redirectLocation();
 				}
 			} catch {
-				if (auth.isAuthenticated) auth.removeUser();
-				else {
-					notification.warning({
-						message: intl.formatMessage({ id: 'global.OIDCBounder.message' }),
-						description: intl.formatMessage({ id: 'global.OIDCBounder.description' }),
-					});
-					history.replace('/student/user/login');
-				}
+				setInitialState((prev) => ({ ...prev, permissionLoading: false }));
+				notification.warning({
+					message: intl.formatMessage({ id: 'global.OIDCBounder.message' }),
+					description: intl.formatMessage({ id: 'global.OIDCBounder.description' }),
+				});
+				history.replace('/student/user/login');
+			} finally {
+				loginInProgressRef.current = false;
 			}
-		} else history.replace('/student/user/login');
+		} else {
+			loginInProgressRef.current = false;
+			history.replace('/student/user/login');
+		}
 	};
 
 	useEffect(() => {
@@ -161,20 +166,28 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 		}
 
 		// Quá 5s nếu ko auth được thì xóa params
-		if (!timeout)
-			timeout = setTimeout(() => {
+		if (!authTimeoutRef.current)
+			authTimeoutRef.current = setTimeout(() => {
 				if (hasAuthParams() && !auth.isAuthenticated) redirectLocation();
 			}, 1000 * 5);
 
 		// Đã login => Xoá toàn bộ auth params được sử dụng để login trước đó
 		if (auth.isAuthenticated) {
-			if (hasAuthParams()) redirectLocation();
-			else {
-				if (timeout) clearTimeout(timeout);
-				handleLogin();
+			if (authTimeoutRef.current) {
+				clearTimeout(authTimeoutRef.current);
+				authTimeoutRef.current = null;
 			}
+			if (hasAuthParams()) redirectLocation();
+			handleLogin();
 		}
 	}, [auth.isAuthenticated, auth.isLoading]);
+
+	useEffect(
+		() => () => {
+			if (authTimeoutRef.current) clearTimeout(authTimeoutRef.current);
+		},
+		[],
+	);
 
 	useEffect(() => {
 		if (auth.user?.access_token) handleAxios(auth.user.access_token);
@@ -195,7 +208,7 @@ export const OIDCBounder: FC<{ children: React.ReactElement }> & { getActions: (
 			{...oidcConfig}
 			redirect_uri={
 				window.location.pathname.includes('/user')
-					? `${window.location.origin}${APP_CONFIG_BASE_PATH}`
+					? `${window.location.origin}${getAppBasePath()}`
 					: window.location.href
 			}
 		>

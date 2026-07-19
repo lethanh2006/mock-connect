@@ -1,6 +1,7 @@
 import { colorTrangThaiHocSv, genderMessageIds, trangThaiHocSv } from '@/services/DaoTao/constant';
 import { placeOfBirthTypeMessageIds } from '@/services/DaoTao/SinhVien/constants';
 import { formatDate } from '@/utils/formatDate';
+import { getPublicAssetPath } from '@/utils/path';
 import { formatPhoneNumber } from '@/utils/utils';
 import { Card, Col, Divider, Flex, Image, Row, Spin, Tag, Typography } from 'antd';
 // import { Card, Descriptions, Divider, Flex, Image, Spin, Splitter, Typography } from 'antd';
@@ -44,9 +45,15 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 
 	const { record, loading } = useModel('sinhvien.sinhvien');
 	// const { danhSach: danhSachQuocTich, getAllModel } = useModel('core.quoctich');
-	const extraRecord = record as ExtraStudentProfile | undefined;
 	const { getChuongTrinhHienTaiModel, chuongTrinhHienTai } = useModel('daotao.chuongtrinhdaotao');
+	const extraRecord = record as ExtraStudentProfile | undefined;
 	// const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
+
+	useEffect(() => {
+		if (record?.khoaNganh?.ma) {
+			getChuongTrinhHienTaiModel(record?.khoaNganh?.ma);
+		}
+	}, [record?.khoaNganh?.ma]);
 
 	// useEffect(() => {
 	// 	if (!danhSachQuocTich.length) getAllModel();
@@ -89,7 +96,7 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 			<div className='sv-profile-summary'>
 				<Flex vertical align='center' gap={8}>
 					<div className='avatar-container'>
-						<Image src={record?.anhDaiDienUrl ?? '/student/metadata.png'} />
+						<Image src={record?.anhDaiDienUrl ?? getPublicAssetPath('/metadata.png')} />
 					</div>
 					<Title level={4} className='sv-profile-name'>
 						{record?.ten ?? '--'}
@@ -260,7 +267,7 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 				)}
 				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.trainingProgram' })}:`,
-					getLocalizedName(chuongTrinhHienTai ?? '--'),
+					getLocalizedName(chuongTrinhHienTai),
 				)}
 				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.major' })}:`,

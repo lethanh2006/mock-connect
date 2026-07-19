@@ -32,7 +32,7 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 					{intl.formatMessage({ id: 'dangkytinchi.duongdan.thongtinkyhoc' })}
 				</Divider>
 
-				<Space direction='vertical' size={4}>
+				<Space direction='vertical' size={8}>
 					<div>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tenhocky' })}</strong>: {recHocKy?.ten ?? '--'}
 					</div>
@@ -51,7 +51,7 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 							{intl.formatMessage({ id: 'dangkytinchi.duongdan.thongtindotdangky' })}
 						</Divider>
 
-						<Space direction='vertical' size={4}>
+						<Space direction='vertical' size={8}>
 							<div>
 								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tendotdangky' })}</strong>:{' '}
 								{dotDangKyHienTai?.ten ?? '--'}
@@ -101,7 +101,7 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 					{intl.formatMessage({ id: 'dangkytinchi.duongdan.huongdandangky' })}
 				</Divider>
 
-				<Space direction='vertical' size={4}>
+				<Space direction='vertical' size={8}>
 					<div>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc1' })}</strong>:{' '}
 						{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc1.mota' })}

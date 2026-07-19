@@ -35,9 +35,9 @@ export default {
 	'ketquahoctap.ketquahocky.hocluc.kem': 'Weak',
 	'ketquahoctap.ketquahocky.hocluc.chuaxeploai': 'Unranked',
 	'ketquahoctap.chart.tichluy': 'Credits Earned',
-	'ketquahoctap.chart.tongtichluy': 'Credits Earned',
+	'ketquahoctap.chart.tongtichluy': 'Total Credits Earned',
 	'ketquahoctap.chart.chuadat': 'Credits Failed',
-	'ketquahoctap.chart.tongchuadat': 'Credits Failed',
+	'ketquahoctap.chart.tongchuadat': 'Total Credits Failed',
 	'ketquahoctap.chart.stc': 'Number of Credits',
 	'ketquahoctap.chart.creditStatistics': 'Statistics Chart',
 	'ketquahoctap.diemtb.hk': 'Semester GPA',
@@ -65,11 +65,21 @@ export default {
 	'ketquahoctap.diemtp.col.diemThanhPhan': 'Component Scores',
 	'ketquahoctap.diemtp.notInProgram': 'Not Applied',
 	'ketquahoctap.diemtp.convertedScore': 'Converted Score',
+	'ketquahoctap.diemtp.deCuong.notFound': 'Course outline not found',
 	'ketquahoctap.diemtp.semester.default': 'Semester {maHocKy}',
 	'ketquahoctap.diemtp.semester.summary':
 		' (Semester GPA: {gpa}, Credits earned: {earned}, Cumulative credits: {cumulative})',
 	'ketquahoctap.diemtp.filter.semester': 'Semester',
 	'ketquahoctap.diemtp.filter.allSemesters': 'All semesters',
+	'ketquahoctap.diemtp.gpaInfo.tooltip': 'Semester and cumulative GPA calculation guide',
+	'ketquahoctap.diemtp.gpaInfo.title': 'SGPA and CGPA Calculation Guide',
+	'ketquahoctap.diemtp.gpaInfo.intro':
+		'Before calculating semester GPA and cumulative GPA, the letter grade will be converted into a 4-point scale.',
+	'ketquahoctap.diemtp.gpaInfo.semGpa':
+		'The Semester Grade Point Average (SGPA) is calculated for all courses taken in one semester, including failed courses, but excluding on-graded courses. It is weighted by the credit units for each course taken.',
+	'ketquahoctap.diemtp.gpaInfo.cumGpa':
+		"The Cumulative GPA (CGPA) is calculated for all courses taken by the student during enrollment for a specific program. It reflects the student's performance for all semesters up to the latest semester of study. The computation is the same as the SGPA except that for course repeats, only the latest attempt is included in the CGPA calculation.",
+	'ketquahoctap.diemtp.gpaInfo.note': '*See details in the training regulations.',
 	'ketquahoctap.maytinh.title.intro':
 		'Here students can simulate grades to proactively plan course retakes or grade improvement.',
 	'ketquahoctap.maytinh.more': '(View more)',

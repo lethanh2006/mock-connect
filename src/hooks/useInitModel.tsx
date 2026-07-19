@@ -182,13 +182,24 @@ const useInitModel = <T extends object>(
 	const getByIdModel = async (
 		id: string | number,
 		isSetRecord?: boolean,
-		config?: { dataPartitionCode?: string | null | string },
+		config?: { dataPartitionCode?: string | null | string; condition?: QueryCondition<T> },
+		conditionParam?: QueryCondition<T>,
 	): Promise<T> => {
 		if (!id) return Promise.reject('Invalid id');
 		setLoading(true);
 		try {
+			const queryCondition = conditionParam ?? config?.condition;
+			const payload = queryCondition
+				? {
+						[fieldNameCondtion ?? 'condition']: {
+							...condition,
+							...queryCondition,
+						},
+					}
+				: undefined;
 			const response = await getByIdService(
 				id,
+				payload,
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 			);
 			if (isSetRecord !== false) setRecord(response?.data?.data ?? null);
@@ -453,6 +464,7 @@ const useInitModel = <T extends object>(
 	const postValidateModel = async (
 		payload: any[],
 		config?: { dataPartitionCode?: string | null | undefined; messageText?: string },
+		params?: any,
 	): Promise<TImportResponse> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
@@ -460,6 +472,7 @@ const useInitModel = <T extends object>(
 			const res = await postValidateImport(
 				{ rows: payload },
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
+				params,
 			);
 			message.success(config?.messageText ?? formatIntlMsg('global.message.validated'));
 			return res.data?.data ?? [];
@@ -477,6 +490,7 @@ const useInitModel = <T extends object>(
 	const postExecuteImpotModel = async (
 		payload: any[],
 		config?: { dataPartitionCode?: string | null | undefined; messageText?: string },
+		params?: any,
 	): Promise<TImportResponse> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
@@ -484,6 +498,7 @@ const useInitModel = <T extends object>(
 			const res = await postExecuteImport(
 				{ rows: payload },
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
+				params,
 			);
 			message.success(config?.messageText ?? formatIntlMsg('global.message.imported'));
 			return res.data?.data ?? [];

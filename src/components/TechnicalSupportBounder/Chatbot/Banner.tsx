@@ -1,3 +1,4 @@
+import { getPublicAssetPath } from '@/utils/path';
 import { useModel } from 'umi';
 import './style.less';
 
@@ -6,7 +7,7 @@ const ChatbotBanner = () => {
 
 	return (
 		<div className='chatbot-banner' onClick={() => setBoxChatVisible(true)}>
-			<img src='/student/images/chatbot_banner.png' alt='banner' />
+			<img src={getPublicAssetPath('images/chatbot_banner.png')} alt='banner' />
 		</div>
 	);
 };

@@ -12,6 +12,7 @@ import {
 import type { QuanLyThuVien } from '@/services/QuanLyThuVien/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
+import { getSafeHref } from '@/utils/security';
 import { CloudUploadOutlined, DeleteOutlined, EditOutlined, EyeOutlined, MenuOutlined } from '@ant-design/icons';
 import { Button, Card, Popconfirm, Popover, Space, Tabs, Tag } from 'antd';
 import { useEffect, useState } from 'react';
@@ -49,6 +50,16 @@ const QuanLyThuVienPage = () => {
 		onClick: () => handleView(rec),
 		style: { cursor: 'pointer' },
 	});
+
+	const renderDocLink = (url: unknown) => {
+		const href = getSafeHref(url);
+		if (!href) return null;
+		return (
+			<a href={href} target='_blank' rel='noreferrer'>
+				Xem tài liệu
+			</a>
+		);
+	};
 
 	const columns: IColumn<QuanLyThuVien.IQuanLyDanhSachNop>[] = [
 		{
@@ -94,36 +105,21 @@ const QuanLyThuVienPage = () => {
 			dataIndex: 'urlTaiLieu',
 			align: 'center',
 			width: 180,
-			render: (val, rec) =>
-				val && (
-					<a href={val} target='_blank' rel='noreferrer'>
-						Xem tài liệu
-					</a>
-				),
+			render: (val) => renderDocLink(val),
 		},
 		{
 			title: 'Tài liệu tóm tắt đề tài',
 			dataIndex: 'urlTomTat',
 			align: 'center',
 			width: 180,
-			render: (val, rec) =>
-				val && (
-					<a href={val} target='_blank' rel='noreferrer'>
-						Xem tài liệu
-					</a>
-				),
+			render: (val) => renderDocLink(val),
 		},
 		{
 			title: 'Tài liệu minh chứng đề tài',
 			dataIndex: 'urlTaiLieuMinhChung',
 			align: 'center',
 			width: 200,
-			render: (val, rec) =>
-				val && (
-					<a href={val} target='_blank' rel='noreferrer'>
-						Xem tài liệu
-					</a>
-				),
+			render: (val) => renderDocLink(val),
 		},
 		{
 			title: 'Thời gian nộp',

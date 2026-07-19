@@ -1,5 +1,5 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/constant';
+import { colorHinhThucGiangDay, EHinhThucGiangDay, mapHinhThucGiangDayI18n } from '@/services/HocTap/constant';
 import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
@@ -12,7 +12,7 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useMediaQuery } from 'react-responsive';
-import { Link, useModel } from 'umi';
+import { Link, useIntl, useModel } from 'umi';
 import FormLichCaNhan from '../components/FormLichCaNhan';
 import GhiChuLich from '../components/GhiChuLich';
 import ModalViewDetailCalendar from '../components/ModalViewDetail';
@@ -29,6 +29,7 @@ const getThoiGianMotTuanKeTuHomNay = () => {
 };
 
 const LichDashboard = () => {
+	const intl = useIntl();
 	const {
 		visibleForm,
 		setVisibleForm,
@@ -162,7 +163,7 @@ const LichDashboard = () => {
 					{cacSuKienSorted.map((sukien) => (
 						<div
 							key={sukien._id}
-							className={styles.su_kien}
+							className={`${styles.su_kien} ${dayjs().isSame(ngay, 'day') ? styles.today : ''}`}
 							onClick={() => {
 								setSelectEvent(sukien);
 								setVisibleDetail(true);
@@ -189,7 +190,9 @@ const LichDashboard = () => {
 								</div>
 								{sukien.loaiSuKien === ELoaiSuKien.LICH_HOC && sukien.hinhThucGiangDay === EHinhThucGiangDay.ONLINE && (
 									<Tag color={colorHinhThucGiangDay[sukien.hinhThucGiangDay as EHinhThucGiangDay]}>
-										{sukien.hinhThucGiangDay}
+										{intl.formatMessage({
+											id: mapHinhThucGiangDayI18n[sukien.hinhThucGiangDay as EHinhThucGiangDay],
+										})}
 									</Tag>
 								)}
 							</Space>

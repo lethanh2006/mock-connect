@@ -1,6 +1,5 @@
-import ButtonExtend from '@/components/Table/ButtonExtend';
-import { DesktopOutlined, GlobalOutlined } from '@ant-design/icons';
-import { Card, message, Space, Spin } from 'antd';
+import { openSafeUrl } from '@/utils/security';
+import { Card, message, Spin } from 'antd';
 import { useIntl, useModel } from 'umi';
 import GioiThieuChungLopHp from './GioiThieuChung';
 import './style.less';
@@ -30,8 +29,9 @@ const ThongTinChung = (props: { onShowDeCuong: (activeTab: string) => void }) =>
 	const handleMoodle = () => {
 		if (record?.moodleShortname && record?._id)
 			getMoodleLopHocPhanModel(record._id).then((data) => {
-				if (data?.url) window.open(`${data.url}`);
-				else message.error('Có lỗi, vui lòng thử lại sau');
+				if (data?.url && openSafeUrl(data.url)) return;
+				if (data?.url) message.error(intl.formatMessage({ id: 'lichsukien.chitiet.duongdan.khonghople' }));
+				else message.error(intl.formatMessage({ id: 'lichsukien.chitiet.loi' }));
 			});
 	};
 
@@ -140,10 +140,10 @@ const ThongTinChung = (props: { onShowDeCuong: (activeTab: string) => void }) =>
 
 	return (
 		<Spin spinning={loading}>
-			{record?.lmsUrl || record?.moodleShortname ? (
+			{/* {record?.lmsUrl || record?.moodleShortname ? (
 				<Space wrap className='button-space'>
 					{record?.lmsUrl ? (
-						<ButtonExtend notHideText icon={<GlobalOutlined />} onClick={() => window.open(record.lmsUrl, '_blank')}>
+						<ButtonExtend notHideText icon={<GlobalOutlined />} onClick={() => openSafeUrl(record.lmsUrl)}>
 							{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.hoctructuyen' })}
 						</ButtonExtend>
 					) : null}
@@ -153,7 +153,7 @@ const ThongTinChung = (props: { onShowDeCuong: (activeTab: string) => void }) =>
 						</ButtonExtend>
 					) : null}
 				</Space>
-			) : null}
+			) : null} */}
 
 			<Card variant='borderless' className='thong-tin-chung-container'>
 				<GioiThieuChungLopHp onShowDeCuong={props.onShowDeCuong} deCuongId={deCuongId} />

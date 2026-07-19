@@ -4,11 +4,30 @@ import { ipTaiChinh } from '@/utils/ip';
 
 export async function postTransactionMePayment(body: {
 	againLink?: string;
-	billIdentityCode: string;
+	billIdentityCode?: string;
+	billIdentityCodes?: string[];
 	kenhThanhToanId: string;
 	loaiLePhiThanhToan?: 'PHAN_TRAM' | 'TIEN';
 	phanTramLePhiThanhToan?: number;
 	soTienLePhiThanhToan?: number;
+	soTienThanhToan?: number;
+	webUrlCallBack?: string;
+	guiThongTinHoaDon?: boolean;
+	thongTinHoaDon?: {
+		tenToChuc?: string;
+		maSoThue?: string;
+		diaChi?: string;
+		emailNhanHoaDonDienTu?: string;
+		userSoDienThoai?: string;
+	};
 }) {
 	return axios.post(`${ipTaiChinh}/transaction/me/payment`, body);
+}
+
+/** Polling trạng thái giao dịch PayCollect */
+export async function getTransactionMePage(params?: {
+	page?: number;
+	limit?: number;
+}) {
+	return axios.get(`${ipTaiChinh}/transaction/me/page`, { params });
 }

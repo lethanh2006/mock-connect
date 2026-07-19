@@ -135,6 +135,9 @@ export declare module LopHocPhan {
 
 		//fake
 		trangThai?: ETrangThaiDangKyTinChi;
+
+		dkVuotTinChiLop?: Partial<DkVuotTinChi.IRecord> | null;
+		dangKyHocDuThinh?: Partial<DangKyHocDuThinh.IRecord> | null;
 	}
 
 	export interface IDiemHpSvHk

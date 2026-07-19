@@ -1,7 +1,7 @@
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
-import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import type { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
+import { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
+import { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { Button, Descriptions, Divider } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -134,12 +134,12 @@ const ThongTinChungPage = (props: { khoiChuongTrinh?: any }) => {
 
 			{/* <Collapse style={{ marginTop: 12 }}>
 				<Collapse.Panel header={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.muctieu' })} key='1'>
-					<div dangerouslySetInnerHTML={{ __html: record?.mucTieuHocPhan ?? '--' }} />
+					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(record?.mucTieuHocPhan ?? '--') }} />
 				</Collapse.Panel>
 				<Collapse.Panel header={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.cdr' })} key='2'>
-					<div dangerouslySetInnerHTML={{ __html: record?.chuanDauRa ?? '--' }} />
-				</Collapse.Panel> */}
-			{/* <Collapse.Panel header='Nội dung tóm tắt' key='2'>
+					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(record?.chuanDauRa ?? '--') }} />
+				</Collapse.Panel>
+				{/* <Collapse.Panel header='Nội dung tóm tắt' key='2'>
 					<div dangerouslySetInnerHTML={{ __html: record?.noiDungTomTat ?? '--' }} />
 				</Collapse.Panel>
 				<Collapse.Panel header='Nội dung chi tiết' key='3'>

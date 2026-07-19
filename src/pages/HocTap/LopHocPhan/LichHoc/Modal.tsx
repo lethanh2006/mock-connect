@@ -1,10 +1,10 @@
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import dayjs from '@/utils/dayjs';
-import { Button, Carousel, Descriptions, Empty, Tabs } from 'antd';
+import { Button, Carousel, Descriptions } from 'antd';
+import DOMPurify from 'dompurify';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
-import DanhGiaTietHocPage from '../DanhGiaTietHoc';
 import ThongTinBuoiHoc from './ThongTinBuoiHoc';
 
 const ModalThoiKhoaBieu = () => {
@@ -30,35 +30,35 @@ const ModalThoiKhoaBieu = () => {
 		>
 			<ThongTinBuoiHoc buoiHoc={recThoiKhoaBieu} hideCard column={2} />
 
-			<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
-				<Tabs.TabPane tab={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.baihoc' })} key='noidung'>
-					<Descriptions column={1} title='' style={{ marginTop: 12 }}>
-						<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.hocphan' })}>
-							{recThoiKhoaBieu?.noiDungHp?.ten ?? '--'}
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.tieude' })}>
-							{recThoiKhoaBieu?.tieuDeBaiHoc ?? '--'}
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.noidung' })}>
-							<div dangerouslySetInnerHTML={{ __html: recThoiKhoaBieu?.noiDungBaiHoc ?? '--' }} />
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.hoclieu' })}>
-							{recThoiKhoaBieu?.hocLieuList?.filter((item) => item?.url)?.length ? (
-								<a
-									onClick={() => {
-										setVisibleFormFile(true);
-									}}
-								>
-									{intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.xemchitiet' })}
-								</a>
-							) : (
-								'--'
-							)}
-						</Descriptions.Item>
-					</Descriptions>
-				</Tabs.TabPane>
+			{/* <Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
+				<Tabs.TabPane tab={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.baihoc' })} key='noidung'> */}
+			<Descriptions column={1} title='' style={{ marginTop: 12 }}>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.hocphan' })}>
+					{recThoiKhoaBieu?.noiDungHp?.ten ?? '--'}
+				</Descriptions.Item>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.tieude' })}>
+					{recThoiKhoaBieu?.tieuDeBaiHoc ?? '--'}
+				</Descriptions.Item>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.noidung' })}>
+					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(recThoiKhoaBieu?.noiDungBaiHoc ?? '--') }} />
+				</Descriptions.Item>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.hoclieu' })}>
+					{recThoiKhoaBieu?.hocLieuList?.filter((item) => item?.url)?.length ? (
+						<a
+							onClick={() => {
+								setVisibleFormFile(true);
+							}}
+						>
+							{intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.xemchitiet' })}
+						</a>
+					) : (
+						'--'
+					)}
+				</Descriptions.Item>
+			</Descriptions>
+			{/* </Tabs.TabPane> */}
 
-				<Tabs.TabPane tab={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.danhgia' })} key='danhgia'>
+			{/* <Tabs.TabPane tab={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.danhgia' })} key='danhgia'>
 					{chuaKetThuc ? (
 						<Empty
 							style={{ marginTop: 32, marginBottom: 32 }}
@@ -68,7 +68,7 @@ const ModalThoiKhoaBieu = () => {
 						<DanhGiaTietHocPage />
 					)}
 				</Tabs.TabPane>
-			</Tabs>
+			</Tabs> */}
 
 			<ModalExpandable
 				title={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.chitiethoclieu' })}

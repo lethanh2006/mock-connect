@@ -1,5 +1,5 @@
 export default {
-	'taichinh.hoadon.title': 'Công nợ',
+	'taichinh.hoadon.title': 'Học phí & Hóa đơn',
 	'taichinh.hoadon.column.identityCode': 'Mã HĐ',
 	'taichinh.hoadon.column.dotthu': 'Đợt thu',
 	'taichinh.hoadon.column.khoanthu': 'Khoản thu',
@@ -12,12 +12,15 @@ export default {
 	'taichinh.hoadon.hanthanhtoan.hethan': 'Đã hết hạn',
 	'taichinh.hoadon.hanthanhtoan.con1ngay': 'Còn 1 ngày',
 	'taichinh.hoadon.hanthanhtoan.conngay': 'Còn {soNgay} ngày',
+	'taichinh.hoadon.ktxDeposit.countdown': 'Còn {minutes} phút {seconds} giây',
+	'taichinh.hoadon.ktxDeposit.expirationWarning':
+		'Slot đăng ký KTX của bạn sẽ bị hủy nếu bạn không thanh toán khoản này trong thời gian quy định',
 	'taichinh.hoadon.column.phiphainop': 'Phí phải nộp',
 	'taichinh.hoadon.column.phigiamtru': 'Phí giảm trừ',
 	'taichinh.hoadon.column.tongphiphainop': 'Tổng phí phải nộp (1)',
 	'taichinh.hoadon.column.tongphigiamtru': 'Tổng phí giảm trừ (2)',
-	'taichinh.hoadon.column.tongdathanhtoan': 'Tổng tiền đã thanh toán (3)',
-	'taichinh.hoadon.column.tongcanthanhtoan': 'Tổng tiền cần thanh toán (1-2-3)',
+	'taichinh.hoadon.column.tongdathanhtoan': 'Tổng tiền đã thanh toán',
+	'taichinh.hoadon.column.tongcanthanhtoan': 'Tổng tiền cần thanh toán',
 	'taichinh.hoadon.tooltip.ngoaithoihan': 'Ngoài thời hạn thanh toán',
 	'taichinh.hoadon.tooltip.thanhtoanngay': 'Thanh toán ngay',
 	'taichinh.hoadon.tooltip.xemchitiet': 'Xem chi tiết phiếu thu',
@@ -37,8 +40,20 @@ export default {
 	'taichinh.hoadon.desc.conlai': 'Số tiền còn lại phải nộp',
 	'taichinh.common.updating': 'Đang cập nhật',
 	'taichinh.hoadon.status.notOpen': 'Chưa mở đợt',
+	'taichinh.hoadon.status.open': 'Chưa thanh toán',
+	'taichinh.hoadon.status.underpaid': 'Chưa thanh toán đủ',
+	'taichinh.hoadon.status.paid': 'Đã thanh toán đủ',
+	'taichinh.hoadon.status.closed': 'Đã đóng',
+	'taichinh.hoadon.tab.unpaid': 'Chưa thanh toán',
+	'taichinh.hoadon.tab.paid': 'Đã thanh toán',
+	'taichinh.hoadon.action.paySelected': 'Thanh toán cho ({count}) hóa đơn',
+	'taichinh.hoadon.virtualBill.earlyPayment': 'Thanh toán sớm',
+	'taichinh.hoadon.virtualBill.discount.title': 'Ưu đãi thanh toán trước {percent}%',
+	'taichinh.hoadon.virtualBill.discount.description':
+		'Chọn và thanh toán cùng lúc cả 2 hóa đơn để được giảm ngay {percent}% trên tổng số tiền phải nộp.',
 
 	'taichinh.thanhtoan.title': 'Thông tin thanh toán',
+	'taichinh.thanhtoan.modal.success': 'Thanh toán thành công!',
 	'taichinh.thanhtoan.tab.chitiet': 'Chi tiết',
 	'taichinh.thanhtoan.tab.lichsu': 'Lịch sử giao dịch',
 	'taichinh.thanhtoan.alert.pending.title': 'Có giao dịch nộp tiền đang chờ xử lý! Bạn đã thực hiện thanh toán chưa?',
@@ -152,6 +167,13 @@ export default {
 	'taichinh.thanhtoan.modal.tongcong': 'Tổng cộng',
 	'taichinh.thanhtoan.modal.thanhtoanngay': 'Thanh toán ngay',
 	'taichinh.thanhtoan.modal.baomat': 'Bảo mật',
+	'taichinh.thanhtoan.modal.sotienmuonthanhtoan': 'Số tiền muốn thanh toán',
+	'taichinh.thanhtoan.modal.sotienconlai': 'Số tiền còn lại',
+	'taichinh.thanhtoan.modal.tamtinh': 'Tạm tính',
+	'taichinh.thanhtoan.modal.sotienkhonghople': 'Số tiền không hợp lệ',
+	'taichinh.thanhtoan.modal.vuotquasotien': 'Số tiền không được vượt quá {soTien}đ',
+	'taichinh.thanhtoan.modal.nhapsotienthanhtoan': 'Nhập số tiền muốn thanh toán',
+
 	'taichinh.thanhtoan.modal.error.noPaymentUrl': 'Không nhận được URL thanh toán từ ONEPAY',
 
 	// Thông tin thanh toán - header sinh viên
@@ -165,10 +187,26 @@ export default {
 	'taichinh.thanhtoan.info.trangthaisinhvien': 'Trạng thái sinh viên',
 
 	// Thông tin thanh toán - tổng quan tài chính
-	'taichinh.thanhtoan.stat.tongphiphainop': 'Tổng phí phải nộp (1)',
-	'taichinh.thanhtoan.stat.tongphigiamtru': 'Tổng phí giảm trừ (2)',
-	'taichinh.thanhtoan.stat.tongdathanhtoan': 'Tổng tiền đã thanh toán (3)',
-	'taichinh.thanhtoan.stat.tongcanthanhtoan': 'Tổng tiền cần thanh toán (1-2-3)',
+	'taichinh.thanhtoan.stat.tongphiphainop': 'Tổng phí phải nộp',
+	'taichinh.thanhtoan.stat.tongphigiamtru': 'Tổng phí giảm trừ',
+	'taichinh.thanhtoan.stat.tongdathanhtoan': 'Tổng tiền đã thanh toán',
+	'taichinh.thanhtoan.stat.tongcanthanhtoan': 'Tổng tiền cần thanh toán',
+
+	// Thông tin hóa đơn thanh toán
+	'taichinh.thanhtoan.invoice.title': 'Thông tin hóa đơn',
+	'taichinh.thanhtoan.invoice.studentName': 'Họ tên sinh viên',
+	'taichinh.thanhtoan.invoice.studentId': 'Mã sinh viên',
+	'taichinh.thanhtoan.invoice.companyName': 'Tên của công ty, tổ chức, doanh nghiệp',
+	'taichinh.thanhtoan.invoice.companyName.placeholder': 'Nhập tên của công ty, tổ chức, doanh nghiệp',
+	'taichinh.thanhtoan.invoice.taxCode': 'Mã số thuế của công ty, tổ chức, doanh nghiệp',
+	'taichinh.thanhtoan.invoice.taxCode.placeholder': 'Nhập mã số thuế của công ty, tổ chức, doanh nghiệp',
+	'taichinh.thanhtoan.invoice.address': 'Địa chỉ của công ty, tổ chức, doanh nghiệp',
+	'taichinh.thanhtoan.invoice.address.placeholder': 'Nhập địa chỉ của công ty, tổ chức, doanh nghiệp',
+	'taichinh.thanhtoan.invoice.email': 'Email nhận hóa đơn điện tử',
+	'taichinh.thanhtoan.invoice.email.placeholder': 'Nhập email',
+	'taichinh.thanhtoan.invoice.phone': 'Số điện thoại liên hệ',
+	'taichinh.thanhtoan.invoice.phone.placeholder': 'Nhập số điện thoại',
+	'taichinh.thanhtoan.invoice.email.invalid': 'Email không hợp lệ',
 
 	// Thông tin thanh toán - phiếu thu
 	'taichinh.thanhtoan.phieuthu.title': 'Thông tin phiếu thu',
@@ -196,5 +234,19 @@ export default {
 	'taichinh.hoadonchitiet.col.giaodich': 'Giao dịch',
 	'taichinh.hoadonchitiet.giaodich.thucong': 'Thủ công',
 	'taichinh.hoadonchitiet.giaodich.hethong': 'Hệ thống',
-};
 
+	// PayCollect QR
+	'taichinh.thanhtoan.paycollect.title': 'Thanh toán qua mã QR',
+	'taichinh.thanhtoan.paycollect.hint': 'Vui lòng quét mã QR bằng ứng dụng ngân hàng',
+	'taichinh.thanhtoan.paycollect.bankName': 'Ngân hàng',
+	'taichinh.thanhtoan.paycollect.accountNumber': 'Số tài khoản',
+	'taichinh.thanhtoan.paycollect.amount': 'Số tiền',
+	'taichinh.thanhtoan.paycollect.reference': 'Mã tham chiếu',
+	'taichinh.thanhtoan.paycollect.pending': 'Đang chờ thanh toán',
+	'taichinh.thanhtoan.paycollect.cancel': 'Hủy thanh toán',
+	'taichinh.thanhtoan.paycollect.expired.title': 'Mã QR đã hết hạn',
+	'taichinh.thanhtoan.paycollect.expired.desc': 'Mã QR thanh toán đã hết hiệu lực. Vui lòng tạo lại để thanh toán.',
+	'taichinh.thanhtoan.paycollect.retry': 'Tạo lại mã QR',
+	'taichinh.thanhtoan.paycollect.success.title': 'Thanh toán thành công!',
+	'taichinh.thanhtoan.paycollect.copied': 'Đã sao chép',
+};

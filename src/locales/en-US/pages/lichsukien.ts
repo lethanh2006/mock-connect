@@ -5,6 +5,7 @@ export default {
 	'lichsukien.xemthem': 'View More',
 	'lichsukien.themmoi': 'Add Personal Event',
 	'lichsukien.empty': 'No Events',
+	'lichsukien.caidat': 'Calendar Settings',
 	'lichsukien.cauhinh': 'Calendar Color Settings',
 	'lichsukien.cauhinh.macdinh': 'Reset to Default',
 	'lichsukien.form.themmoi': 'Add New Event',
@@ -55,6 +56,8 @@ export default {
 	'lichsukien.chitiet.xoa': 'Delete',
 	'lichsukien.chitiet.xoa.xacnhan': 'Are you sure you want to delete this event?',
 	'lichsukien.chitiet.loai': 'Event Type',
+	'lichsukien.chitiet.duongdan.khonghople': 'Invalid link',
+	'lichsukien.chitiet.loi': 'An error occurred. Please try again later.',
 
 	'lichsukien.calendar.allday': 'All Day',
 	'lichsukien.calendar.previous': 'Back',
