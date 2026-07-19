@@ -2,7 +2,6 @@ import ModalKhaoSatBatBuoc from '@/pages/TienIch/KhaoSat/components/ModalKhaoSat
 import { landingUrl } from '@/services/base/constant';
 import { ELoaiDot, EThoiGianDot } from '@/services/TienIch/KhaoSat/constants';
 import { formatDate } from '@/utils/formatDate';
-import { getPublicAssetPath } from '@/utils/path';
 import { DatabaseOutlined, FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Col, Dropdown, Modal, Row, Spin } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
@@ -61,7 +60,7 @@ const AvatarDropdown = () => {
 							<div>
 								<img
 									style={{ width: '100%', marginTop: -8, marginBottom: 12 }}
-									src={getPublicAssetPath('logi-thong-bao.png')}
+									src='/student/logi-thong-bao.png'
 									alt={'image'}
 								/>
 							</div>

@@ -7,7 +7,7 @@ import { currentRole, financeApiClientId, qldtApiClientId, replaceRole } from '@
 import type { AuthorizedRolesByClient } from '@/utils/keycloakRoles';
 import { getKeycloakRoleContext, hasModulePermission } from '@/utils/keycloakRoles';
 import { oidcConfig } from '@/utils/oidcConfig';
-import { getAppBasePath, getPublicAssetPath } from '@/utils/path';
+import { getAppBasePath } from '@/utils/path';
 import { notification } from 'antd';
 import queryString from 'query-string';
 import { useEffect, useRef, type FC } from 'react';
@@ -70,7 +70,7 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 			.join('&');
 		if (newSearch) newSearch = '?' + newSearch;
 		const pathname =
-			window.location.pathname === '/' || window.location.pathname === `${getPublicAssetPath('user/login')}`
+			window.location.pathname === '/' || window.location.pathname === '/student/user/login'
 				? '/dashboard'
 				: window.location.pathname;
 		window.history.replaceState({}, document.title, `${pathname}${newSearch}${window.location.hash}`);
@@ -108,7 +108,7 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 				// Persist minimal initial state so reload won't lose permissions immediately
 				try {
 					sessionStorage.setItem('initialState', JSON.stringify(tmpInitialState));
-				} catch (e) {}
+				} catch (e) { }
 
 				// Use setTimeout to ensure state update is completed before setting permissionLoading to false
 				setTimeout(() => {

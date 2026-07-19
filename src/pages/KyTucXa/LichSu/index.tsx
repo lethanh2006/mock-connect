@@ -195,9 +195,10 @@ const LichSuaKTX = () => {
 			dataIndex: 'trangThaiThanhToan',
 			sortable: true,
 			width: 150,
-			render: (val: EMaTrangThaiThanhToan) => (
-				<Tag color={getPaymentStatusColor(val)}>{intl.formatMessage({ id: getPaymentStatusLabel(val) })}</Tag>
-			),
+			render: (val: EMaTrangThaiThanhToan) => {
+				const statusLabel = getPaymentStatusLabel(val);
+				return <Tag color={getPaymentStatusColor(val)}>{statusLabel ? intl.formatMessage({ id: statusLabel }) : val}</Tag>;
+			},
 			filterType: 'select',
 			filterData: Object.values(EMaTrangThaiThanhToan).map((item) => ({
 				value: item,

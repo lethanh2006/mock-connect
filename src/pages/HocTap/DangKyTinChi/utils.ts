@@ -1,4 +1,3 @@
-import { TrangThaiDonDangKyHocDuThinh } from '@/services/DaoTao/DkDuThinh/constant';
 import {
 	ELoaiDangKyTheoLop,
 	ELoaiHocPhanDangKyTinChi,
@@ -50,20 +49,11 @@ export const buildDanhSachLopHienThi = (danhSachLopDangKy: DangKyTinChi.ILopDang
 		);
 };
 
-/** Lớp có đăng ký dự thính (bất kể trạng thái duyệt) */
-export const isLopDuThinh = (item?: DangKyTinChi.ILopDangKy) =>
-	!!(item?.dangKyHocDuThinh?._id || item?.dangKyHocDuThinh?.trangThai);
-
-/** Dự thính đã được giảng viên phê duyệt */
-export const isDuThinhDaDuyet = (item?: DangKyTinChi.ILopDangKy) =>
-	item?.dangKyHocDuThinh?.trangThai === TrangThaiDonDangKyHocDuThinh.DA_DUYET;
-
-/** Lớp có được tính vào tổng số tín chỉ đăng ký không (loại học phần không tính, lớp đăng ký dự thính) */
-export const isTinhTinChiDangKy = (item: DangKyTinChi.ILopDangKy) =>
-	item.hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy !== false && !isLopDuThinh(item);
-
 export const tinhTongTinChi = (danhSachLopHienThi: DangKyTinChi.ILopDangKy[]): number =>
-	_.sumBy(danhSachLopHienThi.filter(isTinhTinChiDangKy), (item) => item.soTinChi);
+	_.sumBy(
+		danhSachLopHienThi.filter((item) => item.hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy !== false),
+		(item) => item.soTinChi,
+	);
 
 export const tinhTongHocPhanDangKy = (danhSachLopHienThi: DangKyTinChi.ILopDangKy[]): number =>
 	_.uniq(danhSachLopHienThi.map((item) => item.maHocPhan).filter(Boolean)).length;
@@ -168,7 +158,9 @@ export const isVuotSoTinChiToiDa = (
 	if (!soTinChiToiDa) return false;
 
 	const stcHienTaiCuaHp = _.sumBy(
-		danhSachLopHienThi.filter((item) => item.maHocPhan === record.maHocPhan && isTinhTinChiDangKy(item)),
+		danhSachLopHienThi.filter(
+			(item) => item.maHocPhan === record.maHocPhan && item.hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy !== false,
+		),
 		(item) => item.soTinChi ?? 0,
 	);
 

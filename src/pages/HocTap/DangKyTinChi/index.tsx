@@ -11,6 +11,7 @@ import CreditRegistrationBar from './components/CreditRegistrationBar';
 import DangKyLopHocPhan from './components/DangKyLopHocPhan';
 import FilterDotDangKy from './components/FilterDotDangKy';
 import HuongDanDangKyTinChi from './components/HuongDanDangKyTinChi';
+import ModalLichSuVuotTin from './components/ModalLichSuVuotTin';
 import PhieuDangKy from './components/PhieuDangKy';
 import './components/style.less';
 import ViewGhiChuDangKyTinChi from './components/ViewGhiChuDangKyTinChi';
@@ -24,10 +25,12 @@ const DangKyTinChiPage = () => {
 	const { dotDangKyHienTai, loading, sinhVienDot, phieuDangKy, danhSachLopDangKy, getLopDangKyModel, setVisibleModal } =
 		useModel('daotao.dotdangkytinchi');
 	const { loading: loadingHocKy } = useModel('daotao.hocky');
+	// const { getModel } = useModel('daotao.dkvuottinchi');
 	// const { getMeModel: getLopHc } = useModel('daotao.lophanhchinh');
 	const { setPage } = useModel('lophocphan.lophocphan');
 	// const { getByKeyModel } = useModel('tienich.caidat');
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
+	const [visibleLichSu, setVisibleLichSu] = useState<boolean>(false);
 	const [visibleThongTin, setVisibleThongTin] = useState<boolean>(false);
 	const [showFixedBar, setShowFixedBar] = useState(false);
 	const [fixedBarRect, setFixedBarRect] = useState<{ left: number; width: number }>();
@@ -155,6 +158,8 @@ const DangKyTinChiPage = () => {
 						/>
 					) : null}
 
+					{/* {cctFilter?.() && <AlertVuotTin onViewLichSu={() => setVisibleLichSu(true)} />} */}
+
 					{dotDangKyHienTai && sinhVienDot ? (
 						sinhVienDot.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.KHONG_DUOC_DK ? (
 							<Empty
@@ -224,7 +229,6 @@ const DangKyTinChiPage = () => {
 									tongTinChi={tongTinChi}
 									soTinChiToiDa={soTinChiToiDa}
 									danhSachLopHienThi={danhSachLopHienThi}
-									onReload={getLopDangKy}
 								/>
 							</>
 						) : (
@@ -275,6 +279,7 @@ const DangKyTinChiPage = () => {
 
 			<HuongDanDangKyTinChi />
 
+			<ModalLichSuVuotTin visible={visibleLichSu} onClose={() => setVisibleLichSu(false)} />
 			<ViewGhiChuDangKyTinChi visible={visibleThongTin} setVisible={setVisibleThongTin} />
 		</GoogleReCaptchaProvider>
 	);
