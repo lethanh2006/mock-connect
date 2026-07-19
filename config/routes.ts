@@ -51,25 +51,25 @@ export default [
 		name: 'HocTap',
 		icon: 'BookOutlined',
 		routes: [
-			{
-				name: 'LopHocPhan',
-				path: 'lop-tin-chi',
-				routes: [
-					{
-						path: '',
-						hideInMenu: true,
-						component: 'HocTap/LopHocPhan',
-						exact: true,
-					},
-					{
-						name: 'LopHocPhan',
-						path: ':id',
-						component: 'HocTap/LopHocPhan/$id',
-						hideInMenu: true,
-						exact: true,
-					},
-				],
-			},
+			// {
+			// 	name: 'LopHocPhan',
+			// 	path: 'lop-tin-chi',
+			// 	routes: [
+			// 		{
+			// 			path: '',
+			// 			hideInMenu: true,
+			// 			component: 'HocTap/LopHocPhan',
+			// 			exact: true,
+			// 		},
+			// 		{
+			// 			name: 'LopHocPhan',
+			// 			path: ':id',
+			// 			component: 'HocTap/LopHocPhan/$id',
+			// 			hideInMenu: true,
+			// 			exact: true,
+			// 		},
+			// 	],
+			// },
 			{
 				path: 'dang-ky-tin-chi',
 				name: 'CourseRegistration',
