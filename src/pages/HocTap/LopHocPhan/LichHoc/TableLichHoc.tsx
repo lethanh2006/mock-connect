@@ -9,6 +9,7 @@ import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/LopH
 import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
+import { getSafeHref } from '@/utils/security';
 import { MailOutlined } from '@ant-design/icons';
 import { Button, Carousel, Tag } from 'antd';
 import { useState } from 'react';
@@ -18,13 +19,17 @@ import ModalXinNghi from '../YeuCauNghiHoc/ModalXinNghi';
 const TableLichHocLopHP = (props: {
 	items: ThoiKhoaBieu.IRecord[];
 	onClickItem: (val: ThoiKhoaBieu.IRecord) => void;
+	onReload: () => void;
 }) => {
 	const intl = useIntl();
 	const { loading, setRecord } = useModel('daotao.thoikhoabieu');
 	const { visibleForm, setVisibleForm, daXinNghiHoc } = useModel('daotao.dangkynghihoc');
-	const { items, onClickItem } = props;
+	const { items, onClickItem, onReload } = props;
 	const [url, setUrl] = useState<any[]>([]);
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
+
+	const getSafeHocLieuList = (list?: ThoiKhoaBieu.IRecord['hocLieuList']) =>
+		(list ?? []).filter((item) => !!getSafeHref(item?.url));
 
 	const onCellStyle = (rec: ThoiKhoaBieu.IRecord) => ({
 		onClick: () => onClickItem(rec),
@@ -40,13 +45,6 @@ const TableLichHocLopHP = (props: {
 	});
 
 	const columns: IColumn<ThoiKhoaBieu.IRecord>[] = [
-		{
-			title: 'TT',
-			dataIndex: 'index',
-			width: 60,
-			align: 'center',
-			onCell,
-		},
 		{
 			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.ngayhoc' }),
 			dataIndex: 'ngay',
@@ -117,10 +115,10 @@ const TableLichHocLopHP = (props: {
 			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.hoclieu' }),
 			width: 140,
 			render: (val, rec) =>
-				rec.hocLieuList?.filter((item) => item?.url)?.length ? (
+				getSafeHocLieuList(rec.hocLieuList).length ? (
 					<a
 						onClick={() => {
-							setUrl(rec?.hocLieuList ?? []);
+							setUrl(getSafeHocLieuList(rec?.hocLieuList));
 							setVisibleFormFile(true);
 						}}
 					>
@@ -147,6 +145,7 @@ const TableLichHocLopHP = (props: {
 			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.thaotac' }),
 			width: 60,
 			align: 'center',
+			hidden: true,
 			render: (_, rec) => (
 				<ButtonExtend
 					type='link'
@@ -172,9 +171,11 @@ const TableLichHocLopHP = (props: {
 		<>
 			<TableStaticData
 				hasTotal
+				addStt
 				data={items}
 				columns={columns}
 				otherProps={{ pagination: false, loading, scroll: { y: 600 } }}
+				onReload={onReload}
 			/>
 
 			<ModalExpandable
@@ -185,10 +186,11 @@ const TableLichHocLopHP = (props: {
 				onCancel={() => setVisibleFormFile(false)}
 			>
 				<Carousel autoplay pauseOnDotsHover>
-					{url?.map((item) => (
-						// eslint-disable-next-line react/jsx-key
-						<PreviewFile file={item.url ?? ''} tenFile={item?.ten} />
-					))}
+					{url.map((item) => {
+						const safeUrl = getSafeHref(item?.url);
+						if (!safeUrl) return null;
+						return <PreviewFile key={safeUrl} file={safeUrl} tenFile={item?.ten} />;
+					})}
 				</Carousel>
 
 				<div className='form-footer'>

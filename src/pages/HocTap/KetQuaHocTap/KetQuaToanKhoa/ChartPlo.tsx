@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import Chart from 'react-apexcharts';
 import { useMediaQuery } from 'react-responsive';
 import { useIntl, useModel } from 'umi';
+import DOMPurify from 'dompurify';
 
 const ChartPloToanKhoa = (props: { maKhoaNganh: string }) => {
 	const intl = useIntl();
@@ -64,8 +65,8 @@ const ChartPloToanKhoa = (props: { maKhoaNganh: string }) => {
 				return `
 					<div style="padding:6px 8px;max-width:260px;white-space:normal;word-break:break-word;font-size:12px;">
 						<div>
-							<strong>${plo.maPlo}</strong>
-							<span style="font-size:11px; color:#666; margin-left:6px;">${plo.ten}</span>
+							<strong>${DOMPurify.sanitize(plo.maPlo)}</strong>
+							<span style="font-size:11px; color:#666; margin-left:6px;">${DOMPurify.sanitize(plo.ten)}</span>
 						</div>
 						<div style="margin-top:4px">
 							<span style="color:#3b82f6;">●</span> ${intl.formatMessage({ id: 'ketquahoctap.chart.toankhoa.plo' })}: 

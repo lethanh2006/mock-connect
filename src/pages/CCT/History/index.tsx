@@ -6,6 +6,7 @@ import { Activity } from '@/services/CCT/Activity/typing';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EActivityCategory, EActivityStatus, EApprovalStatus, mapNameActivityCategory } from '@/services/CCT/constant';
 import dayjs from '@/utils/dayjs';
+import { getPublicAssetPath } from '@/utils/path';
 import { DashOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
 import { Button, Col, Empty, Pagination, Popconfirm, Popover, Row, Space, Spin, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
@@ -396,7 +397,7 @@ const HistoryActivityPage = () => {
 					<Empty
 						style={{ marginTop: 32, marginBottom: 32 }}
 						description={intl.formatMessage({ id: 'global.table.index.empty' })}
-						image='/student/images/empty.png'
+						image={getPublicAssetPath('images/empty.png')}
 					/>
 				)}
 			</Spin>

@@ -1,3 +1,4 @@
+import { getPublicAssetPath } from '@/utils/path';
 import { Card } from 'antd';
 import { useIntl, useModel } from 'umi';
 import './style.less';
@@ -6,8 +7,8 @@ const WelcomeCard = () => {
 	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
 	const { record: recSinhVien, loading } = useModel('sinhvien.sinhvien');
-	const frame = '/student/images/welcome-frame.png';
-	const gif = '/student/images/welcome.gif';
+	const frame = getPublicAssetPath('images/welcome-frame.png');
+	const gif = getPublicAssetPath('images/welcome.gif');
 
 	return (
 		<Card variant='borderless' className='welcome-card' loading={loading}>

@@ -2,6 +2,7 @@ import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { colorHinhThucGiangDay, mapHinhThucGiangDayI18n, type EHinhThucGiangDay } from '@/services/HocTap/constant';
 import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac, LoaiSuKienLocaleKey } from '@/services/SuKien/constant';
 import { formatDateTime } from '@/utils/formatDate';
+import { getSafeHref, openSafeUrl } from '@/utils/security';
 import { Button, Descriptions, Modal, Space, Tag, message } from 'antd';
 import { JSX } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -39,8 +40,9 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 	const handleMoodle = (lopHocPhanId?: string) => {
 		if (lopHocPhanId)
 			getMoodleLopHocPhanModel(lopHocPhanId).then((data) => {
-				if (data?.url) window.open(`${data.url}`);
-				else message.error('Có lỗi, vui lòng thử lại sau');
+				if (data?.url && openSafeUrl(data.url)) return;
+				if (data?.url) message.error(intl.formatMessage({ id: 'lichsukien.chitiet.duongdan.khonghople' }));
+				else message.error(intl.formatMessage({ id: 'lichsukien.chitiet.loi' }));
 			});
 	};
 
@@ -108,9 +110,9 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 								</a>
 							</Descriptions.Item>
 						) : null}
-						{thoiKhoaBieu?.lopHocPhan?.lmsUrl ? (
+						{getSafeHref(thoiKhoaBieu?.lopHocPhan?.lmsUrl) ? (
 							<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.hoctructuyen' })}>
-								<a href={thoiKhoaBieu?.lopHocPhan?.lmsUrl} target='_blank' rel='noreferrer'>
+								<a href={getSafeHref(thoiKhoaBieu?.lopHocPhan?.lmsUrl)} target='_blank' rel='noreferrer'>
 									{intl.formatMessage({ id: 'lichsukien.chitiet.duongdan' })}
 								</a>
 							</Descriptions.Item>

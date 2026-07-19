@@ -1,5 +1,6 @@
 import PageCard from '@/components/PageCard';
 import { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
+import { getPublicAssetPath } from '@/utils/path';
 import { DownOutlined } from '@ant-design/icons';
 import { Button, Card, Carousel, Dropdown, Empty, Menu, Space } from 'antd';
 import { CarouselRef } from 'antd/es/carousel';
@@ -49,12 +50,12 @@ const CardLopHocPhan = () => {
 	}, []);
 
 	// Assets
-	const Isolation_Mode_1 = '/student/images/isolation-mode-1.svg';
-	const Isolation_Mode_2 = '/student/images/isolation-mode-2.svg';
-	const Isolation_Mode_3 = '/student/images/isolation-mode-3.svg';
-	const Isolation_Mode_4 = '/student/images/isolation-mode-4.svg';
-	const Isolation_Mode_5 = '/student/images/isolation-mode-5.svg';
-	const Isolation_Mode_6 = '/student/images/isolation-mode-6.svg';
+	const Isolation_Mode_1 = getPublicAssetPath('images/isolation-mode-1.svg');
+	const Isolation_Mode_2 = getPublicAssetPath('images/isolation-mode-2.svg');
+	const Isolation_Mode_3 = getPublicAssetPath('images/isolation-mode-3.svg');
+	const Isolation_Mode_4 = getPublicAssetPath('images/isolation-mode-4.svg');
+	const Isolation_Mode_5 = getPublicAssetPath('images/isolation-mode-5.svg');
+	const Isolation_Mode_6 = getPublicAssetPath('images/isolation-mode-6.svg');
 
 	const getData = () => recHocKy?.ma && sinhVienGetModel({ maHocKy: recHocKy?.ma });
 

@@ -95,7 +95,7 @@ const ThongTinSinhVienPage = () => {
 
 	return (
 		<Card
-			title={intl.formatMessage({ id: 'thongtincanhan.title' })}
+			title={intl.formatMessage({ id: 'menu.MyProfile' })}
 			variant='borderless'
 			className='card-borderless card-big-title has-indicator'
 		>
@@ -115,13 +115,36 @@ const ThongTinSinhVienPage = () => {
 					/>
 				) : null}
 
-				{isCapNhat ? (
-					<>
+			{isCapNhat ? (
+				<>
+					<Space style={{ marginBottom: 12 }} wrap>
+						<Button icon={<LeftOutlined />} onClick={() => setIsCapNhat(false)}>
+							{intl.formatMessage({ id: 'thongtincanhan.quaylai' })}
+						</Button>
+					</Space>
+
+					<Spin spinning={loading}>
+						<FormSinhVien onCancel={() => setIsCapNhat(false)} />
+					</Spin>
+				</>
+			) : (
+				<>
+					{record?.ssoId ? (
 						<Space style={{ marginBottom: 12 }} wrap>
-							<Button icon={<LeftOutlined />} onClick={() => setIsCapNhat(false)}>
-								{intl.formatMessage({ id: 'thongtincanhan.quaylai' })}
-							</Button>
-						</Space>
+							<ButtonExtend
+								disabled={!choPhepSua}
+								type='primary'
+								icon={<EditOutlined />}
+								onClick={() => setIsCapNhat(true)}
+								tooltip={
+									!choPhepSua
+										? intl.formatMessage({ id: 'thongtincanhan.ngoaithoigian' })
+										: intl.formatMessage({ id: 'thongtincanhan.capnhathoso' })
+								}
+								notHideText
+							>
+								{intl.formatMessage({ id: 'thongtincanhan.capnhathoso' })}
+							</ButtonExtend>
 
 						<Spin spinning={loading}>
 							<FormSinhVien onCancel={() => setIsCapNhat(false)} />

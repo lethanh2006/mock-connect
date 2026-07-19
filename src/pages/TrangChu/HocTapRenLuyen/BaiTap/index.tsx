@@ -1,5 +1,6 @@
 // import PDFViewerV2 from '@/components/PDFViewerV2';
 import PageCard from '@/components/PageCard';
+import DOMPurify from 'dompurify';
 import BoxFile from '@/pages/HocTap/LopHocPhan/DienDan/components/BoxFile';
 import {
 	colorTrangThaiNopBaiTap,
@@ -115,7 +116,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 					{/* Assignment Content - Giới hạn 3 dòng */}
 					<div className='assignment-content'>
 						<Text className='content-text'>
-							<div dangerouslySetInnerHTML={{ __html: item.assignment.noiDung ?? '' }} />
+							<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.assignment.noiDung ?? '') }} />
 						</Text>
 					</div>
 				</div>

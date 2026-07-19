@@ -48,6 +48,8 @@ export interface IInitialState {
 	authorizedRolesByClient?: Record<string, string[]>;
 	realmRoles?: string[];
 	permissionLoading?: boolean;
+	authorizedRoles: string[]
+	authorizedRolesByClient: Record<string, string[]>;
 }
 
 export interface ISetting {

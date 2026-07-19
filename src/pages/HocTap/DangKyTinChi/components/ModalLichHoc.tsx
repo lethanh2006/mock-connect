@@ -21,20 +21,14 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 	const [calendarView, setCalendarView] = useState<View>(Views.WEEK);
 	const [calendarData, setCalendarData] = useState<{
 		dataCalendar: CalendarLichHocEvent[];
+		ready: boolean;
 		date?: Date;
 		startDate?: Date;
 		endDate?: Date;
-		ready: boolean;
-	}>({
-		dataCalendar: [],
-		ready: false,
-	});
-	const [selectedEvent, setSelectedEvent] = useState<CalendarLichHocEvent>();
+	}>({ dataCalendar: [], ready: false });
+	const [date, setDate] = useState<Date>();
 	const [visibleDetail, setVisibleDetail] = useState(false);
-
-	// useEffect(() => {
-	// 	if (!recSetting?._id) getSettingLich();
-	// }, []);
+	const [selectedEvent, setSelectedEvent] = useState<CalendarLichHocEvent | undefined>();
 
 	useEffect(() => {
 		if (!visibleModal) {
@@ -56,8 +50,8 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 			classes.flatMap((item) =>
 				(item.thoiKhoaBieuList ?? []).map((j) => ({
 					title: `${item?.hocPhan?.ten || item?.maHocPhan} - ${item?.ten || ''}`,
-					start: new Date(j?.thoiGianBatDau ?? ''),
-					end: new Date(j?.thoiGianKetThuc ?? ''),
+					start: dayjs(j?.thoiGianBatDau).toDate(),
+					end: dayjs(j?.thoiGianKetThuc).toDate(),
 					lopHocPhan: item,
 					tkb: j,
 				})),
@@ -76,7 +70,7 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 			});
 
 			const ready = classIndex >= danhSachLopDangKy.length;
-			setCalendarData((prev) => ({
+			setCalendarData((prev: typeof calendarData) => ({
 				dataCalendar: batch.length ? [...prev.dataCalendar, ...batch] : prev.dataCalendar,
 				date: prev.date ?? startDate,
 				startDate,
@@ -106,8 +100,14 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 	});
 
 	const eventCustom = ({ event }: any) => {
-		const { title } = event;
-		return <div style={{ width: '100%', fontSize: 13 }}>{title}</div>;
+		const { title, tkb } = event as CalendarLichHocEvent;
+		const location = tkb?.phongHoc ?? '';
+		return (
+			<div style={{ width: '100%', fontSize: 13, lineHeight: 1.25 }}>
+				<div>{title}</div>
+				{!!location ? <div style={{ fontSize: 12, opacity: 0.85 }}>{location}</div> : null}
+			</div>
+		);
 	};
 
 	return (
@@ -140,42 +140,38 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 							})}
 						</p>
 
-						{calendarData.ready || calendarData.dataCalendar.length ? (
-							<Calendar
-								formats={{
-									dayRangeHeaderFormat: (range: DateRange) => {
-										return `${dayjs(range.start).format('DD/MM')} - ${dayjs(range.end).format('DD/MM')}`;
-									},
-									eventTimeRangeFormat: () => '',
-								}}
-								localizer={localizer}
-								events={calendarData.dataCalendar}
-								views={[Views.MONTH, Views.WEEK]}
-								defaultView={Views.MONTH}
-								view={calendarView}
-								onView={(view) => setCalendarView(view)}
-								defaultDate={new Date()}
-								date={calendarData.date}
-								onNavigate={(newDate) => setCalendarData((prev) => ({ ...prev, date: newDate }))}
-								selectable={false}
-								messages={messagesCalendar}
-								style={{ height: 600, overflow: 'auto' }}
-								min={dayjs('0600', 'HHmm').toDate()}
-								max={dayjs('2100', 'HHmm').toDate()}
-								eventPropGetter={eventPropGetter}
-								components={{ event: (event: any) => eventCustom(event) }}
-								onSelectEvent={(event: CalendarLichHocEvent) => {
-									setSelectedEvent(event);
-									setVisibleDetail(true);
-								}}
-								onShowMore={(events: any[], d) => {
-									setCalendarView(Views.WEEK);
-									setCalendarData((prev) => ({ ...prev, date: d }));
-								}}
-							/>
-						) : (
-							<div style={{ height: 600 }} />
-						)}
+						<Calendar
+							formats={{
+								dayRangeHeaderFormat: (range: DateRange) => {
+									return `${dayjs(range.start).format('DD/MM')} - ${dayjs(range.end).format('DD/MM')}`;
+								},
+								eventTimeRangeFormat: () => '',
+							}}
+							localizer={localizer}
+							events={calendarData.dataCalendar}
+							views={[Views.MONTH, Views.WEEK]}
+							defaultView={Views.MONTH}
+							view={calendarView}
+							onView={(view) => setCalendarView(view)}
+							defaultDate={new Date()}
+							date={date}
+							onNavigate={(newDate) => setDate(newDate)}
+							selectable={false}
+							messages={messagesCalendar}
+							style={{ height: 600, overflow: 'auto' }}
+							min={dayjs('0600', 'HHmm').toDate()}
+							max={dayjs('2100', 'HHmm').toDate()}
+							eventPropGetter={eventPropGetter}
+							components={{ event: (event: any) => eventCustom(event) }}
+							onSelectEvent={(event) => {
+								setSelectedEvent(event as CalendarLichHocEvent);
+								setVisibleDetail(true);
+							}}
+							onShowMore={(events: any[], d) => {
+								setCalendarView(Views.WEEK);
+								setDate(d);
+							}}
+						/>
 					</Spin>
 				</Card>
 			) : null}

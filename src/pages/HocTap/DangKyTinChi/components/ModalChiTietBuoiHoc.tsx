@@ -33,9 +33,6 @@ const ModalChiTietBuoiHoc = (props: {
 		>
 			{event ? (
 				<>
-					<Divider orientation='left' className='divider-big-title' style={{ marginTop: 0 }}>
-						{intl.formatMessage({ id: 'dangkytinchi.modallichhoc.chitiet.title' })}
-					</Divider>
 					<Descriptions column={1} size='small'>
 						<Descriptions.Item label={intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.tenhocphan' })}>
 							{event.lopHocPhan?.hocPhan?.ten || event.lopHocPhan?.maHocPhan}

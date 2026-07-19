@@ -128,8 +128,8 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		}).then((data) => {
 			const temp = data.map((item) => ({
 				...item,
-				title: item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || '',
-				location: item.phongHoc,
+				title: `${item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || ''}`,
+				location: `${item.phongHoc ?? ''}`,
 				loaiSuKien: ELoaiSuKien.LICH_HOC,
 				start: dayjs(item?.thoiGianBatDau).toDate(),
 				end: dayjs(item?.thoiGianKetThuc).toDate(),
@@ -534,7 +534,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 
 					<Pane initialSize='300px' minSize='250px' maxSize='40%'>
 						<Card
-							title='Calendar Settings'
+							title={intl.formatMessage({ id: 'lichsukien.caidat' })}
 							extra={
 								<Space wrap>
 									{/* <ButtonExtend

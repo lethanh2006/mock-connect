@@ -1,9 +1,13 @@
 import type { DotThuTaiChinh } from '../DotThu/typing';
 import type { UuDaiThanhToan } from '../UuDaiThanhToan/typing';
-import type { EMaTrangThaiThanhToan } from '../constant';
+import type { EMaTrangThaiThanhToan, ETransactionStatus, ETransactionType } from '../constant';
 
 declare module HoaDon {
 	export interface IRecord extends IKhachHang {
+		amountPaid?: number;
+		totalDebit?: number;
+		balance?: number;
+		totalDiscount?: number
 		_id: string;
 		identityCode: string;
 		ma?: string;
@@ -31,6 +35,7 @@ declare module HoaDon {
 		loaiTienTe?: string;
 
 		ghiChu?: string;
+		virtualBill?: HoaDon.IRecord
 	}
 
 	interface IKhachHang {
@@ -53,7 +58,7 @@ declare module HoaDon {
 
 		userTenTinhChat?: string;
 		userMaTinhChat?: string;
-		userTrangThaiSv?: string;
+		userTrangThaiSV?: string;
 		userTrangThaiHoc?: string;
 	}
 
@@ -88,6 +93,7 @@ declare module HoaDon {
 	export interface ITransaction {
 		_id: string;
 		amount: number;
+		isKtxDeposit: boolean
 		amountAvailable?: number | null;
 		bankName?: string | null;
 		billId: string;
@@ -119,6 +125,7 @@ declare module HoaDon {
 		manualUserSsoId: string;
 		mbBillNumber?: string | null;
 		name: string;
+		phanTramUuDai?: numbẻ
 		ngayDoiSoat?: string | null;
 		oldTransDate?: string | null;
 		paymentType: 'manual' | string;
@@ -127,11 +134,11 @@ declare module HoaDon {
 		responseData?: any | null;
 		shbCreateAliasMsgId?: string | null;
 		shbDebtQrCode?: string | null;
-		status: 'success' | 'failed' | string;
+		status: ETransactionStatus
 		toAccount: string;
 		transactionDate?: string | null;
 		transactionId?: string | null;
-		type: string; //'CHARGE' | 'DISCOUNT' | 'PAYMENT'
+		type: ETransactionType
 		updatedAt: string;
 		updatedById?: string | null;
 		updatedByUsername?: string | null;
@@ -165,5 +172,21 @@ declare module HoaDon {
 		ten?: string;
 		unitLabel?: string;
 		unitAmount?: number;
+	}
+
+	export interface IThongTinHoaDon {
+		_id: string;
+		userSsoId: string;
+		userFullName: string;
+		userCode: string;
+		tenToChuc: string;
+		maSoThue: string;
+		diaChi: string;
+		emailNhanHoaDonDienTu: string;
+		userSoDienThoai: string;
+		userMaKhoa: string;
+		userTenKhoa: string;
+		userMaNganh: string;
+		userTenNganh: string;
 	}
 }

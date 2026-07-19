@@ -15,6 +15,7 @@ import {
 import { EFileScope, uploadFileManagerMultipart } from '@/services/uploadFile';
 import { ipCCT } from '@/utils/ip';
 import rules from '@/utils/rules';
+import { getSafeTagColor } from '@/utils/security';
 import { buildDisabledDateTime, resetFieldsForm } from '@/utils/utils';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, Input, message, Radio, Row, Select, Space, Tag, Typography } from 'antd';
@@ -339,7 +340,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 														{dsActivityType
 															?.find((i) => i._id === activitiesTypeId)
 															?.attributes?.map((item) => (
-																<Tag key={item?._id} color={item?.color}>
+																<Tag key={item?._id} color={getSafeTagColor(item?.color)}>
 																	{item?.name}
 																</Tag>
 															))}

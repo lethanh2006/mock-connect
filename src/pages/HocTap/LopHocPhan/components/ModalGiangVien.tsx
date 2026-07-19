@@ -1,4 +1,5 @@
 import { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
+import { getPublicAssetPath } from '@/utils/path';
 import { Avatar, Col, Descriptions, Modal, Row, Typography } from 'antd';
 import { useIntl } from 'umi';
 
@@ -28,7 +29,7 @@ const ModalThongTinGiangVien = ({
 						<Avatar
 							src={
 								giangVien?.urlAnhDaiDien ||
-								`/student/images/${giangVien?.gioiTinh === 'Nữ' ? 'female.svg' : 'male.svg'}`
+								getPublicAssetPath(`images/${giangVien?.gioiTinh === 'Nữ' ? 'female.svg' : 'male.svg'}`)
 							}
 							size={{ xs: 80, sm: 128, md: 128, lg: 160, xl: 160, xxl: 160 }}
 						/>

@@ -2,9 +2,13 @@ import axios from '@/utils/axios';
 import { ipTaiChinh } from '@/utils/ip';
 
 export async function getExportBillUrl(identityCode: string) {
-	const res = await axios.get(`${ipTaiChinh}/bill/export/${identityCode}`, {
+	const res = await axios.get(`${ipTaiChinh}/bill/me/export/${identityCode}`, {
 		responseType: 'arraybuffer',
 	});
 	const blob = new Blob([res?.data], { type: 'application/pdf' });
 	return URL.createObjectURL(blob);
+}
+
+export async function getThongTinHoaDonMe() {
+	return await axios.get(`${ipTaiChinh}/thong-tin-hoa-don/me`);
 }

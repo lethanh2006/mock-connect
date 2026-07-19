@@ -6,6 +6,7 @@ import CardSuKienCCT from '@/pages/CCT/Activity/components/CardSuKien';
 import ModalDangKyThanhCong from '@/pages/CCT/Activity/components/DangKyThanhCong';
 import FormActivityOutCome from '@/pages/CCT/History/components/Form';
 import { EApprovalStatus } from '@/services/CCT/constant';
+import { getPublicAssetPath } from '@/utils/path';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Card, Carousel, Col, Empty, Flex, Popconfirm, Row, Spin } from 'antd';
 import dayjs from 'dayjs';
@@ -244,7 +245,7 @@ const Activities = () => {
 						<Empty
 							style={{ marginTop: 32, marginBottom: 32 }}
 							description={intl.formatMessage({ id: 'global.table.index.empty' })}
-							image='/student/images/empty.png'
+							image={getPublicAssetPath('images/empty.png')}
 						/>
 					)}
 				</Spin>

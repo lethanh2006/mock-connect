@@ -6,7 +6,9 @@ import { primaryColor } from '@/services/base/constant';
 import { EKieuDuLieu, ETextDisplay } from '@/services/FormDong/LoaiHinh/constants';
 import type { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
+import { getSafeHref } from '@/utils/security';
 import { currencyFormat } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { Modal, Tag } from 'antd';
 import { useState } from 'react';
 import { useIntl } from 'umi';
@@ -44,7 +46,7 @@ const ViewRender = (props: {
 		case EKieuDuLieu.TEXT:
 			value =
 				cauHinh.textDisplay === ETextDisplay.TEXT_EDITOR ? (
-					<div dangerouslySetInnerHTML={{ __html: valueFinal }} />
+					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(valueFinal ?? '') }} />
 				) : (
 					<div>{valueFinal}</div>
 				);
@@ -103,23 +105,28 @@ const ViewRender = (props: {
 			value =
 				typeof valueFinal === 'string' ? (
 					<div>
-						<Tag style={{ marginLeft: 8 }} color={primaryColor} key={cauHinh.ma}>
-							<a href={valueFinal} target='_blank' rel='noreferrer'>
-								{intl.formatMessage({ id: 'diemrenluyen.minhchung.xemtaptin' })}
-							</a>
-						</Tag>
+						{getSafeHref(valueFinal) && (
+							<Tag style={{ marginLeft: 8 }} color={primaryColor} key={cauHinh.ma}>
+								<a href={getSafeHref(valueFinal)} target='_blank' rel='noreferrer'>
+									{intl.formatMessage({ id: 'diemrenluyen.minhchung.xemtaptin' })}
+								</a>
+							</Tag>
+						)}
 					</div>
 				) : (
 					<div>
 						{recordSanPhamFinal?.[cauHinh.ma] &&
 							valueFinal?.length > 0 &&
-							valueFinal?.map((item: string) => (
-								<Tag style={{ marginLeft: 8 }} color={primaryColor} key={cauHinh.ma}>
-									<a href={item} target='_blank' rel='noreferrer'>
-										{intl.formatMessage({ id: 'diemrenluyen.minhchung.xemtaptin' })}
-									</a>
-								</Tag>
-							))}
+							valueFinal?.map((item: string) => {
+								const href = getSafeHref(item);
+								return href ? (
+									<Tag style={{ marginLeft: 8 }} color={primaryColor} key={cauHinh.ma}>
+										<a href={href} target='_blank' rel='noreferrer'>
+											{intl.formatMessage({ id: 'diemrenluyen.minhchung.xemtaptin' })}
+										</a>
+									</Tag>
+								) : null;
+							})}
 					</div>
 				);
 

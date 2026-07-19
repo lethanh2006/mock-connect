@@ -30,6 +30,14 @@ export const getDateTimeFormat = (): string => {
 };
 
 /**
+ * Short date format without year, based on locale.
+ */
+export const getShortDateFormat = (): string => {
+	const locale = getDayjsLocale();
+	return locale === 'vi' ? 'DD/MM' : 'MM/DD';
+};
+
+/**
  * Formats time from HH:mm string or ISO datetime.
  */
 export const formatTime = (time: any, formatStr?: string): string => {
@@ -73,6 +81,18 @@ export const formatDate = (date: any, formatStr?: string): string => {
 	const locale = getDayjsLocale();
 	const format = formatStr || (locale === 'vi' ? 'DD/MM/YYYY' : 'MM/DD/YYYY');
 	return dayjs(date).locale(locale).format(format);
+};
+
+/**
+ * Formats a date range based on the current locale.
+ */
+export const formatDateRange = (start: any, end: any, formatStr?: string): string => {
+	const startStr = formatDate(start, formatStr || getShortDateFormat());
+	const endStr = formatDate(end, formatStr || getShortDateFormat());
+
+	if (!startStr || !endStr) return '';
+
+	return `${startStr} - ${endStr}`;
 };
 
 /**
