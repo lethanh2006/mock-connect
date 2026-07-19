@@ -1,10 +1,12 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
-import { EHinhThucGiangDay, mapHinhThucGiangDayI18n } from '@/services/HocTap/LopHocPhan/constant';
+import { EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
-import { CalendarOutlined, TableOutlined } from '@ant-design/icons';
-import { Card, Col, Row, Segmented, Space, Spin } from 'antd';
+import { CalendarOutlined, MailOutlined, TableOutlined } from '@ant-design/icons';
+import { Card, Segmented, Space, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import LichSuDonXinNghi from '../YeuCauNghiHoc/LichSuDonXinNghi';
 import CalendarLichHocLopHp from './CalendarLichHoc';
 import ModalThoiKhoaBieu from './Modal';
 import StatDiemDanhV2 from './StatV2';
@@ -14,8 +16,9 @@ import ThongTinBuoiHoc from './ThongTinBuoiHoc';
 const DanhSachBuoiHoc = () => {
 	const intl = useIntl();
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
-	const { setRecord, setVisibleForm, getTheoLopHocPhan, danhSach } = useModel('daotao.thoikhoabieu');
+	const { setRecord, setVisibleForm, getTheoLopHocPhan, loading, danhSach } = useModel('daotao.thoikhoabieu');
 	const [buoiHocGanNhat, setBuoiHocGanNhat] = useState<ThoiKhoaBieu.IRecord>();
+	const [visibleDonXinNghi, setVisibleDonXinNghi] = useState<boolean>(false);
 	const [show, setShow] = useState<string>('table');
 	const [hinhThucFilter, setHinhThucFilter] = useState<'all' | EHinhThucGiangDay>('all');
 	const danhSachHienThi = danhSach.filter(
@@ -44,40 +47,37 @@ const DanhSachBuoiHoc = () => {
 	};
 
 	return (
-		<Spin spinning={false}>
-			<Row gutter={[16, 16]} style={{ marginBottom: 16 }} align='stretch'>
-				<Col xs={24} md={10} lg={8} xl={7}>
-					<StatDiemDanhV2 />
-				</Col>
-				<Col xs={24} md={14} lg={16} xl={17}>
+		<Spin spinning={loading}>
+			<StatDiemDanhV2 />
+
+			{buoiHocGanNhat?._id ? (
+				<div style={{ marginBottom: 16 }}>
 					<ThongTinBuoiHoc
 						buoiHoc={buoiHocGanNhat}
-						cardProps={{
-							extra: buoiHocGanNhat ? (
-								<>
-									{' '}
-									<a onClick={() => onClickViewTkb(buoiHocGanNhat)} style={{ fontSize: 14, fontWeight: 400 }}>
-										{intl.formatMessage({ id: 'lophocphan.id.lichhoc.xemchitiet' })}
-									</a>
-								</>
-							) : null,
-						}}
-						title={<>{intl.formatMessage({ id: 'lophocphan.id.lichhoc.hocgannhat' })}</>}
+						title={
+							<>
+								{intl.formatMessage({ id: 'lophocphan.id.lichhoc.hocgannhat' })} (
+								<a onClick={() => onClickViewTkb(buoiHocGanNhat)} style={{ fontSize: 14, fontWeight: 400 }}>
+									{intl.formatMessage({ id: 'lophocphan.id.lichhoc.xemchitiet' })}
+								</a>
+								)
+							</>
+						}
 					/>
-				</Col>
-			</Row>
+				</div>
+			) : null}
 
 			<Card
 				title={
 					<Space wrap size={12}>
-						<span>{intl.formatMessage({ id: 'lophocphan.id.lichhoc.dsbuoihoc' })}</span>
+						<span style={{ fontWeight: 600, fontSize: 16 }}>Danh sách buổi học</span>
+						<ButtonExtend icon={<MailOutlined />} onClick={() => setVisibleDonXinNghi(true)}>
+							{intl.formatMessage({ id: 'lophocphan.id.lichhoc.nghihoc' })}
+						</ButtonExtend>
 						<Segmented
 							options={[
 								{ value: 'all', label: intl.formatMessage({ id: 'lophocphan.id.lichhoc.tatca' }) },
-								...Object.values(EHinhThucGiangDay).map((item) => ({
-									value: item,
-									label: intl.formatMessage({ id: mapHinhThucGiangDayI18n[item] }),
-								})),
+								...Object.values(EHinhThucGiangDay).map((item) => ({ value: item, label: item })),
 							]}
 							onChange={(val) => setHinhThucFilter(val as any)}
 							value={hinhThucFilter}
@@ -107,15 +107,13 @@ const DanhSachBuoiHoc = () => {
 				{show === 'calendar' ? (
 					<CalendarLichHocLopHp items={danhSachHienThi} onClickItem={onClickViewTkb} />
 				) : (
-					<TableLichHocLopHP
-						items={danhSachHienThi}
-						onClickItem={onClickViewTkb}
-						onReload={() => getTheoLopHocPhan(recLopHocPhan?.ten ?? '')}
-					/>
+					<TableLichHocLopHP items={danhSachHienThi} onClickItem={onClickViewTkb} />
 				)}
 			</Card>
 
 			<ModalThoiKhoaBieu />
+
+			<LichSuDonXinNghi visible={visibleDonXinNghi} setVisible={setVisibleDonXinNghi} />
 		</Spin>
 	);
 };

@@ -4,30 +4,15 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
 import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
 import {
-	ColorTrangThaiDangKyTinChi,
 	EColorLopDangKy,
 	ELoaiDangKyTheoLop,
 	ETinhChatDangKyTC,
 	ETrangThaiDangKyTinChi,
-	mapTrangThaiDangKyTinChiI18n,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
-import {
-	loaiDangKyDuThinhI18n,
-	TrangThaiDonDangKyHocDuThinh,
-	trangThaiDonDangKyHocDuThinhColor,
-	trangThaiDonDangKyHocDuThinhText,
-} from '@/services/DaoTao/DkDuThinh/constant';
-import {
-	loaiDangKyVuotTinI18n,
-	TrangThaiDonDangKyHocVuot,
-	trangThaiDonDangKyHocVuotColor,
-	trangThaiDonDangKyHocVuotText,
-} from '@/services/DaoTao/DkVuotTinChi/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { formatDateTime } from '@/utils/formatDate';
 import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Descriptions, Modal, Popconfirm, Popover, Select, Space, Tag } from 'antd';
+import { Modal, Popconfirm, Popover, Select, Space, Tag } from 'antd';
 import { useMemo, useState } from 'react';
 import { useAccess, useIntl, useModel } from 'umi';
 import {
@@ -38,7 +23,6 @@ import {
 	getLopTrungLich,
 	isDaChonLop,
 	isDaDangKyHocPhanKhacLop,
-	isDuThinhDaDuyet,
 	isHetSiSo,
 	isVuotSoTinChiToiDa,
 	renderKhoangThoiGian,
@@ -50,10 +34,9 @@ type DangKyLopHocPhanProps = {
 	tongTinChi: number;
 	soTinChiToiDa: number;
 	danhSachLopHienThi: DangKyTinChi.ILopDangKy[];
-	onReload?: () => void | Promise<unknown>;
 };
 
-const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onReload }: DangKyLopHocPhanProps) => {
+const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: DangKyLopHocPhanProps) => {
 	const intl = useIntl();
 	const { cctFilter } = useAccess();
 	const { record: recHocKy } = useModel('daotao.hocky');
@@ -80,7 +63,6 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 	}, [khoaNganhMe?.khoaNganhPhu?.ma]);
 
 	const [visibleDangKyNgay, setVisibleDangKyNgay] = useState<boolean>(false);
-	const [isVuotTin, setIsVuotTin] = useState<boolean>(false);
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
 	const dangKyNgay: boolean = true;
@@ -102,91 +84,6 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 			sort,
 		).then((data) => setExpandedLopHocPhan(data.filter((item) => !!item.children?.length).map((item) => item.ten)));
 	};
-
-	const renderTrangThaiDangKy = (rec?: DangKyTinChi.ILopDangKy) => {
-		if (!rec) return null;
-
-		const val = rec.trangThai;
-		const trangThaiVuotTin = rec?.dkVuotTinChiLop?.trangThai;
-		const trangThaiDuThinh = rec?.dangKyHocDuThinh?.trangThai;
-		const isVuotTin = !!trangThaiVuotTin;
-		const isDuThinh = !!trangThaiDuThinh;
-		const trangThaiDacBiet = trangThaiVuotTin ?? trangThaiDuThinh;
-
-		const isApproved =
-			trangThaiDacBiet === TrangThaiDonDangKyHocVuot.DA_DUYET ||
-			trangThaiDacBiet === TrangThaiDonDangKyHocDuThinh.DA_DUYET;
-		const thongTinDuyet = rec?.dkVuotTinChiLop ?? rec?.dangKyHocDuThinh;
-		const hasThongTinDuyet =
-			isApproved && !!(thongTinDuyet?.nguoiDuyet || thongTinDuyet?.thoiGianDuyet || thongTinDuyet?.ghiChuDuyet);
-
-		const statusI18nId = isVuotTin
-			? trangThaiDonDangKyHocVuotText[trangThaiVuotTin as TrangThaiDonDangKyHocVuot]
-			: isDuThinh
-				? trangThaiDonDangKyHocDuThinhText[trangThaiDuThinh as TrangThaiDonDangKyHocDuThinh]
-				: undefined;
-		const statusColor = isVuotTin
-			? trangThaiDonDangKyHocVuotColor[trangThaiVuotTin as TrangThaiDonDangKyHocVuot]
-			: isDuThinh
-				? trangThaiDonDangKyHocDuThinhColor[trangThaiDuThinh as TrangThaiDonDangKyHocDuThinh]
-				: 'gold';
-		const loaiI18nId = isVuotTin ? loaiDangKyVuotTinI18n : isDuThinh ? loaiDangKyDuThinhI18n : undefined;
-		const trangThaiThuongI18nId = mapTrangThaiDangKyTinChiI18n[val as ETrangThaiDangKyTinChi];
-
-		return (
-			<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-				{trangThaiDacBiet && (isVuotTin || isDuThinh) ? (
-					<>
-						<Space size={4} align='center'>
-							<Tag color={isApproved ? 'green' : (statusColor ?? 'gold')} style={{ marginInlineEnd: 0 }}>
-								{statusI18nId
-									? intl.formatMessage({ id: statusI18nId, defaultMessage: String(trangThaiDacBiet) })
-									: trangThaiDacBiet}
-							</Tag>
-							{hasThongTinDuyet ? (
-								<Popover
-									trigger='hover'
-									placement='top'
-									content={
-										<Descriptions column={1} size='small' style={{ maxWidth: 280 }}>
-											<Descriptions.Item label={intl.formatMessage({ id: 'dangkytinchi.phieudangky.duyet.nguoi' })}>
-												{thongTinDuyet?.nguoiDuyet ?? '--'}
-											</Descriptions.Item>
-											<Descriptions.Item label={intl.formatMessage({ id: 'dangkytinchi.phieudangky.duyet.thoigian' })}>
-												{thongTinDuyet?.thoiGianDuyet ? formatDateTime(thongTinDuyet.thoiGianDuyet) : '--'}
-											</Descriptions.Item>
-											<Descriptions.Item label={intl.formatMessage({ id: 'dangkytinchi.phieudangky.duyet.ghichu' })}>
-												<ExpandText style={{ marginBottom: 0 }} ellipsis={{ rows: 2 }}>
-													{thongTinDuyet?.ghiChuDuyet ?? '--'}
-												</ExpandText>
-											</Descriptions.Item>
-										</Descriptions>
-									}
-								>
-									<InfoCircleOutlined style={{ color: '#1677ff', cursor: 'pointer' }} />
-								</Popover>
-							) : null}
-						</Space>
-						{!(isApproved && isDuThinh) && loaiI18nId ? (
-							<span style={{ color: 'rgba(0, 0, 0, 0.45)', fontSize: 12 }}>
-								{intl.formatMessage({ id: loaiI18nId })}
-							</span>
-						) : null}
-					</>
-				) : (
-					<Tag color={ColorTrangThaiDangKyTinChi[val as ETrangThaiDangKyTinChi]}>
-						{trangThaiThuongI18nId ? intl.formatMessage({ id: trangThaiThuongI18nId }) : (val ?? '--')}
-					</Tag>
-				)}
-				{rec?.isWaitlist && (
-					<Tag color='orange'>{intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.hangcho' })}</Tag>
-				)}
-			</div>
-		);
-	};
-
-	const canHuyLop = (rec?: DangKyTinChi.ILopDangKy) =>
-		!!(rec?.dangKyTinChi || rec?.dkVuotTinChiLop?._id || rec?.dangKyHocDuThinh?._id);
 
 	const renderTrangThaiCanhBao = (rec: LopHocPhan.IRecord) => {
 		if (isDaChonLop(rec, danhSachLopDangKy)) return null;
@@ -245,10 +142,10 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 
 		if (checkTrungLich(allThoiKhoaBieu)) return true;
 
-		return false;
+		return isVuotSoTinChiToiDa(record, danhSachLopHienThi, danhSachLopDktc, tongTinChi, soTinChiToiDa);
 	};
 
-	const handleDangKy = (lopVuaChon: LopHocPhan.IRecord, isWaitList = false, vuotTin = false) => {
+	const handleDangKy = (lopVuaChon: LopHocPhan.IRecord, isWaitList = false) => {
 		const dangKyRoiMap = getDangKyRoiMap(lopVuaChon.maHocPhan, danhSachLopDangKy);
 		if (
 			!lopVuaChon.children?.length &&
@@ -267,7 +164,6 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 
 			if (dangKyNgay) {
 				setRecord(lopVuaChon);
-				setIsVuotTin(vuotTin);
 				setVisibleDangKyNgay(true);
 				return;
 			}
@@ -277,21 +173,21 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 		}
 	};
 
-	const onClickDangKy = (lopVuaChon: LopHocPhan.IRecord, vuotTin = false) => {
+	const onClickDangKy = (lopVuaChon: LopHocPhan.IRecord) => {
 		const isHetCho = lopVuaChon.siSoToiDa - (lopVuaChon.siSo ?? 0) <= 0;
 
-		if (isHetCho && cctFilter?.() && !vuotTin) {
+		if (isHetCho && cctFilter?.()) {
 			Modal.confirm({
 				title: intl.formatMessage({ id: 'dangkytinchi.waitlist.confirm.title' }),
 				content: intl.formatMessage({ id: 'dangkytinchi.waitlist.confirm.content' }),
 				okText: intl.formatMessage({ id: 'dangkytinchi.waitlist.confirm.ok' }),
 				cancelText: intl.formatMessage({ id: 'global.button.huy' }),
-				onOk: () => handleDangKy(lopVuaChon, true, false),
+				onOk: () => handleDangKy(lopVuaChon, true),
 			});
 			return;
 		}
 
-		handleDangKy(lopVuaChon, false, vuotTin);
+		handleDangKy(lopVuaChon, false);
 	};
 
 	const onClickBoChon = (rec: LopHocPhan.IRecord) => {
@@ -482,99 +378,80 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 		// 	onCell,
 		// },
 		{
-			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.trangthai' }),
-			align: 'center',
-			width: 120,
-			fixed: 'right',
-			render: (val, rec) => {
-				const daChon = isDaChonLop(rec, danhSachLopDangKy);
-				const lopDangKy = danhSachLopDangKy.find((item) => item._id === rec._id || item.ten === rec.ten);
-
-				if (daChon) {
-					return renderTrangThaiDangKy(lopDangKy);
-				}
-
-				return renderTrangThaiCanhBao(rec);
-			},
-		},
-		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.thaotac' }),
 			align: 'center',
-			width: 120,
+			width: 150,
 			fixed: 'right',
 			render: (val, rec) => {
 				const daChon = isDaChonLop(rec, danhSachLopDangKy);
 				const lopDangKy = danhSachLopDangKy.find((item) => item._id === rec._id || item.ten === rec.ten);
-				// Lớp đã full thì đi theo luồng hàng chờ/dự thính (không tính tín chỉ) => bỏ qua check vượt tín
-				const hetCho = rec.siSoToiDa - (rec.siSo ?? 0) <= 0;
-				const vuotSoTinChi =
-					!hetCho && isVuotSoTinChiToiDa(rec, danhSachLopHienThi, danhSachLopDktc, tongTinChi, soTinChiToiDa);
+				const vuotSoTinChi = isVuotSoTinChiToiDa(rec, danhSachLopHienThi, danhSachLopDktc, tongTinChi, soTinChiToiDa);
 				const disabled = getDisabledDangKy(rec) || !coDotDangKyTinChi;
+				const canhBao = renderTrangThaiCanhBao(rec);
 				const isChuaDangKy = lopDangKy?.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY;
 				const disabledDelete =
 					(lopDangKy?.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
-						dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY &&
-						!lopDangKy?.dkVuotTinChiLop?._id &&
-						!lopDangKy?.dangKyHocDuThinh?._id) ||
-					!canHuyLop(lopDangKy) ||
+						dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
+					!rec.dangKyTinChi ||
 					!coDotDangKyTinChi;
 
 				if (daChon && isChuaDangKy) {
 					return (
-						<ButtonExtend
-							type='default'
-							danger
-							size='small'
-							onClick={(e) => {
-								e.stopPropagation();
-								onClickBoChon(rec);
-							}}
-							disabled={!coDotDangKyTinChi}
-						>
-							{intl.formatMessage({
-								id: 'dangkytinchi.dankylophocphan.action.bochon',
-							})}
-						</ButtonExtend>
+						<div>
+							<ButtonExtend
+								type='default'
+								danger
+								size='small'
+								onClick={(e) => {
+									e.stopPropagation();
+									onClickBoChon(rec);
+								}}
+								disabled={!coDotDangKyTinChi}
+							>
+								{intl.formatMessage({
+									id: 'dangkytinchi.dankylophocphan.action.bochon',
+								})}
+							</ButtonExtend>
+						</div>
 					);
 				}
 
 				if (daChon) {
 					return (
-						<Popconfirm
-							title={
-								<>
-									{intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy.confirm' })}
-									{isDuThinhDaDuyet(lopDangKy) ? (
-										<>
-											<br />
-											<i className='text-error'>
-												{intl.formatMessage({ id: 'dangkytinchi.phieudangky.huy.duthinh.daduyet.luuy' })}
-											</i>
-										</>
-									) : null}
-								</>
-							}
-							overlayStyle={{ maxWidth: 400 }}
-							placement='topRight'
-							onConfirm={() => lopDangKy?._id && onDeleteLop(lopDangKy)}
-							disabled={disabledDelete}
-						>
-							<ButtonExtend
-								icon={<DeleteOutlined />}
-								danger
-								otherTooltipProps={{
-									placement: 'bottom',
-								}}
-								type='link'
-								disabled={disabledDelete}
-								tooltip={intl.formatMessage({
-									id: 'dangkytinchi.phieudangky.columntable.huy.tooltip',
+						<Space size={6} wrap={false}>
+							<Tag color='green'>
+								{intl.formatMessage({
+									id: 'dangkytinchi.dankylophocphan.action.dadangky',
 								})}
-								onClick={(e) => e.stopPropagation()}
-							/>
-						</Popconfirm>
+							</Tag>
+
+							<Popconfirm
+								title={intl.formatMessage({
+									id: 'dangkytinchi.phieudangky.columntable.huy.confirm',
+								})}
+								placement='topRight'
+								onConfirm={() => lopDangKy?._id && onDeleteLop(lopDangKy)}
+								disabled={disabledDelete}
+							>
+								<ButtonExtend
+									icon={<DeleteOutlined />}
+									danger
+									otherTooltipProps={{
+										placement: 'bottom',
+									}}
+									type='link'
+									disabled={disabledDelete}
+									tooltip={intl.formatMessage({
+										id: 'dangkytinchi.phieudangky.columntable.huy.tooltip',
+									})}
+									onClick={(e) => e.stopPropagation()}
+								/>
+							</Popconfirm>
+						</Space>
 					);
 				}
+
+				if (canhBao && disabled) return canhBao;
 
 				return (
 					<div>
@@ -588,7 +465,10 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 							}
 							onClick={(e) => {
 								e.stopPropagation();
-								if (!disabled) onClickDangKy(rec, vuotSoTinChi);
+
+								if (!disabled) {
+									onClickDangKy(rec);
+								}
 							}}
 						>
 							{intl.formatMessage({
@@ -645,14 +525,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 				/>
 			</div>
 
-			<ModalDangKyNgay
-				visible={visibleDangKyNgay}
-				setVisible={(val) => {
-					setVisibleDangKyNgay(val);
-					if (!val) setIsVuotTin(false);
-				}}
-				isVuotTin={isVuotTin}
-			/>
+			<ModalDangKyNgay visible={visibleDangKyNgay} setVisible={setVisibleDangKyNgay} />
 
 			<ModalHocPhan
 				visible={visibleDeCuong}

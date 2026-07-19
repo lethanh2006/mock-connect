@@ -23,15 +23,6 @@ export const mapHinhThucGiangDayI18n: Record<EHinhThucGiangDay, string> = {
 	[EHinhThucGiangDay.ONLINE]: 'lophocphan.hinhthucgiangday.online',
 };
 
-export const mapLoaiHinhHocTapI18n: Record<ELoaiHinhHocTap, string> = {
-	[ELoaiHinhHocTap.LY_THUYET]: 'lophocphan.loaihinhhoctap.lythuyet',
-	[ELoaiHinhHocTap.THUC_HANH]: 'lophocphan.loaihinhhoctap.thuchanh',
-	[ELoaiHinhHocTap.THI_NGHIEM]: 'lophocphan.loaihinhhoctap.thinghiem',
-	[ELoaiHinhHocTap.DO_AN]: 'lophocphan.loaihinhhoctap.doan',
-	[ELoaiHinhHocTap.BAI_TAP]: 'lophocphan.loaihinhhoctap.baitap',
-	[ELoaiHinhHocTap.BAI_TAP_LON]: 'lophocphan.loaihinhhoctap.baitaplon',
-};
-
 export const colorHinhThucGiangDay: Record<EHinhThucGiangDay, string> = {
 	[EHinhThucGiangDay.TRUC_TIEP]: 'green',
 	[EHinhThucGiangDay.ONLINE]: 'blue',

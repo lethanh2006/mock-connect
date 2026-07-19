@@ -1,3 +1,4 @@
+import type { SinhVien } from '../SinhVien/typings';
 import { type TrangThaiDonDangKyHocVuot } from './constant';
 
 export namespace DkVuotTinChi {
@@ -5,17 +6,29 @@ export namespace DkVuotTinChi {
 		_id: string;
 		sinhVienSsoId: string;
 		maHocKy: string;
-		lopHocPhanId: string;
-		idPhieuDktc: string;
-		trangThai: TrangThaiDonDangKyHocVuot;
-		nguoiDuyet?: string | null;
-		thoiGianDuyet?: string | null;
-		ghiChuDuyet?: string | null;
-		createdAt?: string;
-		updatedAt?: string;
-		sinhVien?: SinhVien.IRecord;
-		lopHocPhan?: LopHocPhan.IRecord;
 		hocKy?: HocKy.IRecord;
-		lyDo: string;
+		trangThai: TrangThaiDonDangKyHocVuot;
+		soTinChiToiDaDangKy: number;
+		stcToiDaDangKy?: number;
+		nguoiDuyet?: string | null;
+		thongTinNhanSuDuyet: string;
+		nguoiXuLy?: string | null;
+		thoiGianDuyet?: string | null;
+		ghiChuNguoiDuyet?: string | null;
+		ghiChu?: string | null;
+		createdAt?: string;
+		maSinhVien?: string;
+		hoTen?: string;
+		stcToiThieuHienTai?: number;
+		stcToiDaHienTai?: number;
+		soTinChiToiThieu?: number;
+		soTinChiToiDa?: number;
+		sinhVien?: SinhVien.IRecord;
+	}
+
+	export interface ISoTinChiDangKy {
+		soTinChiToiThieu: number;
+		soTinChiToiDa: number;
+		ghiChu?: string | null;
 	}
 }
