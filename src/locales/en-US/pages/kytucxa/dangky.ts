@@ -54,7 +54,6 @@ export default {
 	'kytucxa.dangky.modal.step.thongTinChung': 'General Information',
 	'kytucxa.dangky.modal.step.liabilityWaiver': 'Student Liability Release and Waiver',
 	'kytucxa.dangky.modal.step.checkInPrep': 'Check-in Prep',
-	'kytucxa.dangky.modal.step.paymentInformation': 'Payment Information',
 	'kytucxa.dangky.modal.success.title': 'Registration Successful! Welcome to VinUni Dormitory',
 	'kytucxa.dangky.modal.button.next': 'Next',
 	'kytucxa.dangky.modal.button.previous': 'Previous',
