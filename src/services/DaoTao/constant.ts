@@ -149,6 +149,14 @@ export const trangThaiUserDiemDanh: Record<ETrangThaiUserDiemDanh, string> = {
 	[ETrangThaiUserDiemDanh.CHUA_DIEM_DANH]: 'Chưa điểm danh',
 };
 
+export const mapTrangThaiUserDiemDanhI18n: Record<ETrangThaiUserDiemDanh, string> = {
+	[ETrangThaiUserDiemDanh.CO_MAT]: 'lophocphan.diemdanh.comat',
+	[ETrangThaiUserDiemDanh.MUON_VE_SOM]: 'lophocphan.diemdanh.muonvesom',
+	[ETrangThaiUserDiemDanh.VANG_CO_PHEP]: 'lophocphan.diemdanh.vangcophep',
+	[ETrangThaiUserDiemDanh.VANG_KHONG_PHEP]: 'lophocphan.diemdanh.vangkhongphep',
+	[ETrangThaiUserDiemDanh.CHUA_DIEM_DANH]: 'lophocphan.diemdanh.chuadiemdanh',
+};
+
 export const colorTrangThaiUserDiemDanh: Record<ETrangThaiUserDiemDanh, string> = {
 	[ETrangThaiUserDiemDanh.CO_MAT]: 'green',
 	[ETrangThaiUserDiemDanh.MUON_VE_SOM]: 'blue',

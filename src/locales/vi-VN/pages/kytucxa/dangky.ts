@@ -54,6 +54,7 @@ export default {
 	'kytucxa.dangky.modal.step.liabilityWaiver': 'Miễn trừ trách nhiệm pháp lý',
 	'kytucxa.dangky.modal.step.checkInPrep': 'Check-in Prep',
 	'kytucxa.dangky.modal.step.paymentInformation': 'Payment Information',
+	'kytucxa.dangky.modal.success.title': 'Registration Successful! Welcome to VinUni Dormitory',
 	'kytucxa.dangky.modal.button.next': 'Tiếp theo',
 	'kytucxa.dangky.modal.button.previous': 'Quay lại',
 	'kytucxa.dangky.modal.button.submit': 'Gửi đăng ký',

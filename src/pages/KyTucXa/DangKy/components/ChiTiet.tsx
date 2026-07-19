@@ -1,43 +1,48 @@
 import ModalExpandable from '@/components/Table/ModalExpandable';
+import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { CheckOutlined, ColumnWidthOutlined } from '@ant-design/icons';
 import { Button, Col, Image, message, Row, Typography } from 'antd';
-import { history, useIntl, useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import '../style.less';
 import {
 	formatGiaPhong,
 	getAnhPhongHienThi,
 	getDaHetCho,
 	getSoChoConLai,
-	getSucChua,
 	getTenPhong,
 	getTienIchPhong,
 } from '../utils';
 
 const ChiTietPhong = (props: {
 	daCoLichSuDangKy?: boolean;
+	getLichSuDangKyTheoPhong?: (phong: Phong.IChinhSachPhongRecord) => PhieuDangKyKTX.IRecord | undefined;
 	isPhongDaDangKy?: (phong: Phong.IChinhSachPhongRecord) => boolean;
+	onOpenLichSuDangKy?: (phong: Phong.IChinhSachPhongRecord, initialStep?: number) => void;
 }) => {
-	const { daCoLichSuDangKy, isPhongDaDangKy } = props;
+	const { daCoLichSuDangKy, getLichSuDangKyTheoPhong, isPhongDaDangKy, onOpenLichSuDangKy } = props;
 	const intl = useIntl();
 	const { visibleForm, setVisibleForm, record, setVisibleDangKy } = useModel('kytucxa.phong');
 	const { record: recLichSu } = useModel('kytucxa.phieudangky');
 	const phong = record as Phong.IChinhSachPhongRecord | undefined;
 	const room = phong?.room;
+	const lichSuPhong = phong && getLichSuDangKyTheoPhong ? getLichSuDangKyTheoPhong(phong) : recLichSu;
+	const daCoLichSuPhongDangKy =
+		!!lichSuPhong?.formDon?._id && lichSuPhong?.trangThaiThanhToan !== EMaTrangThaiThanhToan.DONG;
 
 	const laPhongDaDangKy = phong && isPhongDaDangKy ? isPhongDaDangKy(phong) : false;
 	const images = getAnhPhongHienThi(phong);
 	const tienIch = getTienIchPhong(phong);
-	const sucChua = getSucChua(phong);
 	const tenPhong = phong ? getTenPhong(phong, intl) : '';
 	const soSlotConLai = getSoChoConLai(phong);
 	const daHetCho = getDaHetCho(phong);
-	const khongChoDangKy = !laPhongDaDangKy && (daHetCho || daCoLichSuDangKy);
-
-	const trangThaiThanhToan = recLichSu?.trangThaiThanhToan;
+	const trangThaiThanhToan = lichSuPhong?.trangThaiThanhToan;
 	const daThanhToanXong = trangThaiThanhToan === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU;
-	const buttonText = laPhongDaDangKy
+	const daQuaHanThanhToan = trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
+	const hienThiNhuDaDangKy = laPhongDaDangKy && !daQuaHanThanhToan;
+	const khongChoDangKy = !hienThiNhuDaDangKy && (daHetCho || daCoLichSuPhongDangKy);
+	const buttonText = hienThiNhuDaDangKy
 		? daThanhToanXong
 			? intl.formatMessage({ id: 'kytucxa.dangky.card.button.seeMore' })
 			: intl.formatMessage({ id: 'kytucxa.dangky.card.button.paymentNow' })
@@ -46,7 +51,7 @@ const ChiTietPhong = (props: {
 			: intl.formatMessage({ id: 'kytucxa.dangky.card.button.dangKy' });
 
 	const handleDangKy = () => {
-		if (daCoLichSuDangKy) {
+		if (daCoLichSuPhongDangKy || (!lichSuPhong && daCoLichSuDangKy)) {
 			message.warning(intl.formatMessage({ id: 'kytucxa.dangky.message.daCoLichSu' }));
 			return;
 		}
@@ -56,8 +61,8 @@ const ChiTietPhong = (props: {
 	};
 
 	const handleClickButton = () => {
-		if (laPhongDaDangKy) {
-			history.push('/campus-life/student-housing/lich-su');
+		if (hienThiNhuDaDangKy) {
+			if (phong) onOpenLichSuDangKy?.(phong, daThanhToanXong ? 0 : 3);
 			return;
 		}
 
