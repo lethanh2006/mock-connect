@@ -10,14 +10,26 @@ import {
 	mapTrangThaiDangKyTinChiI18n,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
+import {
+	loaiDangKyVuotTinI18n,
+	TrangThaiDonDangKyHocVuot,
+	trangThaiDonDangKyHocVuotColor,
+	trangThaiDonDangKyHocVuotText,
+} from '@/services/DaoTao/DkVuotTinChi/constant';
+import {
+	loaiDangKyDuThinhI18n,
+	TrangThaiDonDangKyHocDuThinh,
+	trangThaiDonDangKyHocDuThinhColor,
+	trangThaiDonDangKyHocDuThinhText,
+} from '@/services/DaoTao/DkDuThinh/constant';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
-import { formatDateTime, formatTimeRange } from '@/utils/formatDate';
-import { CalendarOutlined, DeleteOutlined, HistoryOutlined } from '@ant-design/icons';
-import { Popconfirm, Space, Tag } from 'antd';
-import _ from 'lodash';
+import { formatDateTime } from '@/utils/formatDate';
+import { CalendarOutlined, DeleteOutlined, HistoryOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Descriptions, Popconfirm, Popover, Space, Tag } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import { isDuThinhDaDuyet, isTinhTinChiDangKy, renderKhoangThoiGian } from '../utils';
 import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
@@ -27,15 +39,15 @@ import RenderLichHoc from './RenderLichHoc';
 /** Hiển thị danh sách các lớp đã đăng ký và đã chọn
  * Học phí dự kiến, số tín chỉ được phép đăng ký, lịch học dự kiến
  */
-const PhieuDangKy = (props: {
-	getData?: () => void;
-
+type PhieuDangKyProps = {
 	danhSachLopHienThi: DangKyTinChi.ILopDangKy[];
 	tongTinChi: number;
 	soTinChiToiDa: number;
 	soTinChiToiThieu: number;
-}) => {
-	const { getData, danhSachLopHienThi, tongTinChi, soTinChiToiThieu } = props;
+	onReload: () => void | Promise<unknown>;
+};
+
+const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReload }: PhieuDangKyProps) => {
 	const intl = useIntl();
 	const {
 		dotDangKyHienTai,
@@ -63,35 +75,31 @@ const PhieuDangKy = (props: {
 
 	const onDeleteLop = async (rec: DangKyTinChi.ILopDangKy) => {
 		try {
-			// Nếu đã đăng ký rồi thì gọi API để xóa lớp
-			if (rec.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY)
+			const successMsg = intl.formatMessage({ id: 'global.message.xoathanhcong' });
+
+			if (rec.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY) {
+				// Nếu đã đăng ký rồi thì gọi API để xóa lớp
 				await deleteDangKyTinChiModel(
 					{
 						phieuDktcId: phieuDangKy?._id ?? '',
 						lopHocPhanId: rec._id ?? '',
 					},
-					intl.formatMessage({ id: 'global.message.xoathanhcong' }),
+					successMsg,
 				);
+			}
 
 			// Xóa lớp ở danh sách tại local
 			const data = danhSachLopDangKy.filter((item) => item.maHocPhan !== rec.maHocPhan);
 			tinhDataLichHoc(data); // Tính lại dữ liệu lịch học
 			setDanhSachLopDangKy(data);
+			await onReload();
 		} catch (er) {
 			console.log(er);
 		}
 	};
 
-	const renderKhoangThoiGian = (rec: DangKyTinChi.ILopDangKy) => {
-		const thoiKhoaBieuList = rec.thoiKhoaBieuList ?? [];
-		if (!thoiKhoaBieuList.length) return null;
-
-		const start = _.minBy(thoiKhoaBieuList, (item) => dayjs(item.ngay).valueOf())?.ngay;
-		const end = _.maxBy(thoiKhoaBieuList, (item) => dayjs(item.ngay).valueOf())?.ngay;
-		if (!start || !end) return null;
-
-		return formatTimeRange(start, end, 'DD/MM');
-	};
+	const canHuyLop = (rec: DangKyTinChi.ILopDangKy) =>
+		!!(rec.dangKyTinChi || rec.dkVuotTinChiLop?._id || rec.dangKyHocDuThinh?._id);
 
 	const handleXemDeCuong = (rec: DangKyTinChi.ILopDangKy) => {
 		const deCuongId = rec.hocPhan?.ma ?? rec.maHocPhan;
@@ -125,8 +133,22 @@ const PhieuDangKy = (props: {
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.tenhocphan' }),
 			dataIndex: ['hocPhan', 'ten'],
-			width: 170,
+			width: 220,
 			filterType: 'string',
+		},
+		{
+			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.sotinchi' }),
+			dataIndex: 'soTinChi',
+			width: 80,
+			align: 'center',
+			render: (val, rec) => (
+				<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+					<span>{val}</span>
+					{!isTinhTinChiDangKy(rec) ? (
+						<i>{intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.label.khongtinh' })}</i>
+					) : null}
+				</div>
+			),
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.malop' }),
@@ -137,20 +159,8 @@ const PhieuDangKy = (props: {
 			filterType: 'string',
 		},
 		{
-			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.sotinchi' }),
-			dataIndex: 'soTinChi',
-			width: 100,
-			align: 'center',
-			sortable: true,
-			render: (val, rec) => (
-				<>
-					{val} {rec.hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy === false ? <i>(không tính)</i> : null}
-				</>
-			),
-		},
-		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.giangvien' }),
-			width: 160,
+			width: 140,
 			render: (val, rec) => (
 				<ExpandText>
 					{rec.nhanSuList
@@ -169,7 +179,7 @@ const PhieuDangKy = (props: {
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.thongtinchitiet' }),
-			width: 250,
+			width: 220,
 			render: (val, rec) => <RenderLichHoc lopHocPhan={{ ...rec, loai: ELoaiLopHocPhan.CHINH }} />, // Fake loại để ko lỗi
 		},
 		{
@@ -212,18 +222,90 @@ const PhieuDangKy = (props: {
 			dataIndex: 'trangThai',
 			width: 120,
 			align: 'center',
-			render: (val, rec) => (
-				<Space wrap size={'small'}>
-					<Tag color={ColorTrangThaiDangKyTinChi[val as ETrangThaiDangKyTinChi]}>
-						{intl.formatMessage({
-							id: mapTrangThaiDangKyTinChiI18n[val as ETrangThaiDangKyTinChi],
-						})}
-					</Tag>{' '}
-					{rec?.isWaitlist && (
-						<Tag color={'orange'}>{intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.hangcho' })}</Tag>
-					)}
-				</Space>
-			),
+			render: (val, rec) => {
+				const trangThaiVuotTin = rec?.dkVuotTinChiLop?.trangThai;
+				const trangThaiDuThinh = rec?.dangKyHocDuThinh?.trangThai;
+				const isVuotTin = !!trangThaiVuotTin;
+				const isDuThinh = !!trangThaiDuThinh;
+				const trangThaiDacBiet = trangThaiVuotTin ?? trangThaiDuThinh;
+
+				const isApproved =
+					trangThaiDacBiet === TrangThaiDonDangKyHocVuot.DA_DUYET ||
+					trangThaiDacBiet === TrangThaiDonDangKyHocDuThinh.DA_DUYET;
+				const thongTinDuyet = rec?.dkVuotTinChiLop ?? rec?.dangKyHocDuThinh;
+				const hasThongTinDuyet =
+					isApproved && !!(thongTinDuyet?.nguoiDuyet || thongTinDuyet?.thoiGianDuyet || thongTinDuyet?.ghiChuDuyet);
+
+				const statusI18nId = isVuotTin
+					? trangThaiDonDangKyHocVuotText[trangThaiVuotTin as TrangThaiDonDangKyHocVuot]
+					: isDuThinh
+						? trangThaiDonDangKyHocDuThinhText[trangThaiDuThinh as TrangThaiDonDangKyHocDuThinh]
+						: undefined;
+				const statusColor = isVuotTin
+					? trangThaiDonDangKyHocVuotColor[trangThaiVuotTin as TrangThaiDonDangKyHocVuot]
+					: isDuThinh
+						? trangThaiDonDangKyHocDuThinhColor[trangThaiDuThinh as TrangThaiDonDangKyHocDuThinh]
+						: 'gold';
+				const loaiI18nId = isVuotTin ? loaiDangKyVuotTinI18n : isDuThinh ? loaiDangKyDuThinhI18n : undefined;
+				const trangThaiThuongI18nId = mapTrangThaiDangKyTinChiI18n[val as ETrangThaiDangKyTinChi];
+
+				return (
+					<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+						{trangThaiDacBiet && (isVuotTin || isDuThinh) ? (
+							<>
+								<Space size={4} align='center'>
+									<Tag color={isApproved ? 'green' : (statusColor ?? 'gold')} style={{ marginInlineEnd: 0 }}>
+										{statusI18nId
+											? intl.formatMessage({ id: statusI18nId, defaultMessage: String(trangThaiDacBiet) })
+											: trangThaiDacBiet}
+									</Tag>
+									{hasThongTinDuyet ? (
+										<Popover
+											trigger='hover'
+											placement='top'
+											content={
+												<Descriptions column={1} size='small' style={{ maxWidth: 280 }}>
+													<Descriptions.Item label={intl.formatMessage({ id: 'dangkytinchi.phieudangky.duyet.nguoi' })}>
+														{thongTinDuyet?.nguoiDuyet ?? '--'}
+													</Descriptions.Item>
+													<Descriptions.Item
+														label={intl.formatMessage({ id: 'dangkytinchi.phieudangky.duyet.thoigian' })}
+													>
+														{thongTinDuyet?.thoiGianDuyet ? formatDateTime(thongTinDuyet.thoiGianDuyet) : '--'}
+													</Descriptions.Item>
+													<Descriptions.Item
+														label={intl.formatMessage({ id: 'dangkytinchi.phieudangky.duyet.ghichu' })}
+													>
+														<ExpandText style={{ marginBottom: 0 }} ellipsis={{ rows: 2 }}>
+															{(thongTinDuyet?.ghiChuDuyet || thongTinDuyet?.ghiChu) ?? '--'}
+														</ExpandText>
+													</Descriptions.Item>
+												</Descriptions>
+											}
+										>
+											<InfoCircleOutlined style={{ color: '#1677ff', cursor: 'pointer' }} />
+										</Popover>
+									) : null}
+								</Space>
+								{!(isApproved && isDuThinh) && loaiI18nId ? (
+									<span style={{ color: 'rgba(0, 0, 0, 0.45)', fontSize: 12 }}>
+										{intl.formatMessage({ id: loaiI18nId })}
+									</span>
+								) : null}
+							</>
+						) : (
+							<Tag color={ColorTrangThaiDangKyTinChi[val as ETrangThaiDangKyTinChi]}>
+								{trangThaiThuongI18nId
+									? intl.formatMessage({ id: trangThaiThuongI18nId })
+									: (val ?? '--')}
+							</Tag>
+						)}
+						{rec?.isWaitlist && (
+							<Tag color={'orange'}>{intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.hangcho' })}</Tag>
+						)}
+					</div>
+				);
+			},
 
 			fixed: 'right',
 		},
@@ -237,8 +319,11 @@ const PhieuDangKy = (props: {
 					<ButtonExtend
 						icon={<DeleteOutlined />}
 						danger
+						otherTooltipProps={{
+							placement: 'bottom',
+						}}
 						type='link'
-						disabled={rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY && !rec.dangKyTinChi}
+						disabled={rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY && !canHuyLop(rec)}
 						tooltip={intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy.tooltip' })}
 						onClick={() => {
 							setRecLopDangKy(rec);
@@ -250,7 +335,14 @@ const PhieuDangKy = (props: {
 						title={
 							<>
 								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy.confirm' })}
-								{tongTinChi - rec.soTinChi < soTinChiToiThieu ? (
+								{isDuThinhDaDuyet(rec) ? (
+									<>
+										<br />
+										<i className='text-error'>
+											{intl.formatMessage({ id: 'dangkytinchi.phieudangky.huy.duthinh.daduyet.luuy' })}
+										</i>
+									</>
+								) : tongTinChi - rec.soTinChi < soTinChiToiThieu ? (
 									<>
 										<br />
 										<i className='text-error'>
@@ -266,8 +358,10 @@ const PhieuDangKy = (props: {
 						// Đợt chỉ cho đk mới thì ko cho xóa những lớp đã đăng ký
 						disabled={
 							(rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
-								dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
-							!rec.dangKyTinChi
+								dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY &&
+								!rec.dkVuotTinChiLop?._id &&
+								!rec.dangKyHocDuThinh?._id) ||
+							!canHuyLop(rec)
 						}
 					>
 						<ButtonExtend
@@ -279,8 +373,10 @@ const PhieuDangKy = (props: {
 							}}
 							disabled={
 								(rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
-									dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
-								!rec.dangKyTinChi
+									dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY &&
+									!rec.dkVuotTinChiLop?._id &&
+									!rec.dangKyHocDuThinh?._id) ||
+								!canHuyLop(rec)
 							}
 							tooltip={intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy.tooltip' })}
 						/>
@@ -298,7 +394,7 @@ const PhieuDangKy = (props: {
 				addStt
 				loading={loading}
 				hasTotal
-				onReload={getData}
+				onReload={onReload}
 				header={{
 					total: {
 						prefix: intl.formatMessage({ id: 'dangkytinchi.filter.lop.total.prefix' }),
@@ -331,7 +427,12 @@ const PhieuDangKy = (props: {
 
 			<ModalDangKy tongTinChi={tongTinChi} danhSachDangKy={danhSachLopHienThi} />
 
-			<ConfirmKetHuyLopDKTC visible={visibleHuyLop} setVisible={setVisibleHuyLop} recLopDangKy={recLopDangKy} />
+			<ConfirmKetHuyLopDKTC
+				visible={visibleHuyLop}
+				setVisible={setVisibleHuyLop}
+				recLopDangKy={recLopDangKy}
+				onReload={onReload}
+			/>
 			<ModalHocPhan
 				visible={visibleDeCuong}
 				setVisible={setVisibleDeCuong}

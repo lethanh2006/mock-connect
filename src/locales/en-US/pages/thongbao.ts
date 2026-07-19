@@ -4,7 +4,6 @@ export default {
 	'thongbao.column.tieude': 'Subject',
 	'thongbao.column.mota': 'Description',
 	'thongbao.column.thoigian': 'Sent time',
-	'thongbaolop.title.hanhchinh': 'Administrative Class',
-	'thongbaolop.title.hocphan': 'Course Section',
+	'thongbaolop.title': 'Notification',
 	'thongbao.detail.title': 'Notification details',
 };

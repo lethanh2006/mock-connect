@@ -1,4 +1,5 @@
 import { EFileScope, uploadFile } from '@/services/uploadFile';
+import { getPublicAssetPath } from '@/utils/path';
 import { Editor } from '@tinymce/tinymce-react';
 import { useAccess } from 'umi';
 import { getTinyEditorDefaultFontFamily, getTinyEditorFontFamilyFormats } from './config';
@@ -102,14 +103,12 @@ const TinyEditor = (props: {
 	return (
 		<>
 			<Editor
-				// apiKey='ihu6rlypska4k9h96g5x752rocpj133f20q41afy85shcrc5'
-				tinymceScriptSrc='/student/tinymce/tinymce.min.js'
-				// apiKey='vrh3rpim05kai51zg4tcenfbzwhl243use11yolfq6d9ufvw'
+				tinymceScriptSrc={getPublicAssetPath('tinymce/tinymce.min.js')}
 				value={value}
 				disabled={disabled}
 				licenseKey='gpl'
 				init={{
-					language_url: '/student/lang/vi_VN.js',
+					language_url: getPublicAssetPath('lang/vi_VN.js'),
 					language: 'vi_VN',
 					max_height: height,
 					autoresize_bottom_margin: minHeight,

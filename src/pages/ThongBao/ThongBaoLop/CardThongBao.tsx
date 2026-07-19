@@ -1,10 +1,11 @@
+import PageCard from '@/components/PageCard';
 import styles from '@/components/RightContent/NoticeIcon/index.less';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import ViewThongBao from '@/pages/ThongBao/components/ViewThongBao';
 import type { ThongBao } from '@/services/ThongBao/typing';
 import dayjs from '@/utils/dayjs';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Avatar, Card, List, Modal } from 'antd';
+import { Avatar, List, Modal } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -20,13 +21,11 @@ const CardThongBao = (props: { loai: 'lop-hanh-chinh' | 'lop-hoc-phan'; idLop?: 
 	}, [props.idLop, props.loai]);
 
 	return (
-		<Card
-		size='small'
-			title={
-				props.loai === 'lop-hanh-chinh'
-					? intl.formatMessage({ id: 'thongbaolop.title.hanhchinh' })
-					: intl.formatMessage({ id: 'thongbaolop.title.hocphan' })
-			}
+		<PageCard
+			level={2}
+			hideInnerCard
+			size='small'
+			title={intl.formatMessage({ id: 'thongbaolop.title' })}
 			className={styles.list}
 			extra={
 				<ButtonExtend
@@ -74,7 +73,7 @@ const CardThongBao = (props: { loai: 'lop-hanh-chinh' | 'lop-hoc-phan'; idLop?: 
 			>
 				<ViewThongBao record={record} />
 			</Modal>
-		</Card>
+		</PageCard>
 	);
 };
 

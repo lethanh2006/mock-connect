@@ -233,7 +233,7 @@ export default () => {
 	const sinhVienGetLopDangKyTheoHocPhanModel = async (
 		maHocKy: string,
 		idDot: string,
-		loaiDangKyTheoLop: 'lop-hanh-chinh' | 'khoa-nganh' | 'tat-ca',
+		loaiDangKyTheoLop: ELoaiDangKyTheoLop,
 		otherQuery?: any,
 		filterParams?: TFilter<LopHocPhan.IRecord>[],
 		sortParams?: Record<string, 1 | -1 | undefined>,

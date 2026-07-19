@@ -1,12 +1,10 @@
 import { usePermissionCheck } from '@/hooks/usePermissionCheck';
+import { colorTrangThaiHocSv, ETrangThaiHocSv } from '@/services/DaoTao/constant';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import {
 	EMaTrangThaiThanhToan,
 	EMauTrangThaiThanhToanTable,
-	ETrangThaiThanhToan,
 	ETransactionPaymentType,
-	ETransactionSourceType,
-	ETransactionStatus,
 } from '@/services/TaiChinh/constant';
 import { currencyFormat } from '@/utils/utils';
 import {
@@ -15,18 +13,18 @@ import {
 	CalendarOutlined,
 	DollarOutlined,
 	FileOutlined,
-	FileTextOutlined,
 	IdcardOutlined,
 	MailOutlined,
 	PhoneOutlined,
 	UserOutlined,
 } from '@ant-design/icons';
-import { Alert, Avatar, Button, Card, Col, Row, Space, Tabs, Tag, Typography } from 'antd';
+import { Alert, Avatar, Button, Card, Col, Modal, Row, Space, Tabs, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import { disableThanhToan } from '..';
 import FormItemHoaDonChiTiet from '../ChiTiet/FormItem';
+import FormThanhToan from './FormThanhToan';
 import LichSuThanhToan from './LichSuThanhToan';
 import ModalThanhToanNganHang from './ModalThanhToanNganHang';
 
@@ -67,8 +65,10 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	const { setVisible, getData } = props;
 	const canPay = hasPermission('tc.transaction:pay');
 	const { record: recHoaDon } = useModel('taichinh.hoadon');
+	const { visibleThanhToan, setVisibleThanhToan } =
+		useModel('taichinh.hoadonchitiet');
+
 	const {
-		getAllModel,
 		record: recGiaoDich,
 		setRecord,
 		loading,
@@ -87,7 +87,9 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	const daThanhToan = recHoaDon?.soTienDaThu ?? 0;
 
 	// Trạng thái thanh toán
-	const statusText: string | undefined = ETrangThaiThanhToan[recHoaDon?.status as EMaTrangThaiThanhToan];
+	const statusText = recHoaDon?.status
+		? intl.formatMessage({ id: `taichinh.hoadon.status.${recHoaDon.status}` })
+		: undefined;
 	const statusColor = EMauTrangThaiThanhToanTable[recHoaDon?.status as EMaTrangThaiThanhToan];
 	const ngoaiThoiGianThanhToan = disableThanhToan(recHoaDon);
 
@@ -97,7 +99,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 
 	// Trạng thái sinh viên
 	const trangThaiSinhVien: string | undefined =
-		recHoaDon?.userTrangThaiSv ||
+		recHoaDon?.userTrangThaiSV ||
 		recHoaDon?.userTrangThaiHoc ||
 		recHoaDon?.userMetadata?.trangThaiHoc ||
 		recHoaDon?.userMetadata?.trangThaiSv;
@@ -105,17 +107,17 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	const daRelease: boolean = !!recHoaDon?.dotThu?.daRelease || !!recHoaDon?.dotThu?.thoiGianRelease;
 
 	/** Get giao dịch pending */
-	const getGiaoDich = () =>
-		getAllModel(true, undefined, {
-			status: ETransactionStatus.PENDING,
-			billIdentityCode: recHoaDon?.identityCode,
-			fromAccount: ETransactionSourceType.EXTERNAL,
-		});
+	// const getGiaoDich = () =>
+	// 	getAllModel(true, undefined, {
+	// 		status: ETransactionStatus.PENDING,
+	// 		billIdentityCode: recHoaDon?.identityCode,
+	// 		fromAccount: ETransactionSourceType.EXTERNAL,
+	// 	});
 
 	const onChangeTab = (tab: string) => {
 		setActiveTab(tab);
 		// Get giao dịch nộp tiền chưa hoàn tất
-		if (tab === '1' && recHoaDon?.identityCode) getGiaoDich();
+		// if (tab === '1' && recHoaDon?.identityCode) getGiaoDich();
 	};
 
 	useEffect(() => {
@@ -142,7 +144,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 		if (rec._id)
 			return huyThanhToanModel(rec._id)
 				.then(() => {
-					getGiaoDich();
+					// getGiaoDich();
 					if (getData) getData();
 				})
 				.catch((er: unknown) => console.log(er));
@@ -152,9 +154,9 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 
 	const pendingPaymentAlert =
 		canPay &&
-		recGiaoDich?._id &&
-		recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL &&
-		!ngoaiThoiGianThanhToan ? (
+			recGiaoDich?._id &&
+			recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL &&
+			!ngoaiThoiGianThanhToan ? (
 			<Alert
 				message={intl.formatMessage({ id: 'taichinh.thanhtoan.alert.pending.title' })}
 				description={intl.formatMessage({ id: 'taichinh.thanhtoan.alert.pending.desc' })}
@@ -191,6 +193,9 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 								{fullname || intl.formatMessage({ id: 'taichinh.thanhtoan.info.sinhvien' })}
 							</span>
 							{statusText && <Tag color={statusColor}>{statusText}</Tag>}
+							{trangThaiSinhVien && (
+								<Tag color={colorTrangThaiHocSv[trangThaiSinhVien as ETrangThaiHocSv]}>{trangThaiSinhVien}</Tag>
+							)}
 						</Space>
 					</div>
 				</div>
@@ -330,7 +335,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 							}
 						/>
 					</Col>
-					{daRelease && recHoaDon?.dotThu?.tenNguoiRelease && (
+					{/* {daRelease && recHoaDon?.dotThu?.tenNguoiRelease && (
 						<Col xs={12} md={8}>
 							<InfoItem
 								label={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.nguoirelease' })}
@@ -345,80 +350,36 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 								value={dayjs(recHoaDon?.dotThu?.thoiGianRelease).format('HH:mm DD/MM/YYYY')}
 							/>
 						</Col>
-					)}
-					<Col xs={24}>
-						<InfoItem
-							icon={<FileTextOutlined />}
-							label={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.ghichu' })}
-							value={recHoaDon?.ghiChu}
-						/>
-					</Col>
+					)} */}
+					{/* <Col xs={24}>
+							<InfoItem
+								icon={<FileTextOutlined />}
+								label={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.ghichu' })}
+								value={recHoaDon?.ghiChu}
+							/>
+						</Col> */}
 				</Row>
+			</Card>
 
-				{/* Thông tin phiếu thu */}
-				<Card size='small' title='Thông tin phiếu thu' style={{ marginBottom: 16 }}>
-					<Row gutter={[16, 8]}>
-						<Col xs={12} md={12}>
-							<InfoItem
-								icon={<CalendarOutlined />}
-								label='Hạn thanh toán'
-								value={
-									recHoaDon?.ngayHetHanThanhToan ? (
-										<span style={{ color: '#ff4d4f', fontWeight: 700 }}>
-											{dayjs(recHoaDon.ngayHetHanThanhToan).format('DD/MM/YYYY')}
-										</span>
-									) : (
-										'-'
-									)
-								}
-							/>
-						</Col>
-						<Col xs={12} md={12}>
-							<InfoItem
-								icon={<FileOutlined />}
-								label='Trạng thái phiếu thu'
-								value={<Tag color={daRelease ? 'success' : 'warning'}>{daRelease ? 'Đã release' : 'Chưa release'}</Tag>}
-							/>
-						</Col>
-						{daRelease && recHoaDon?.dotThu?.tenNguoiRelease && (
-							<Col xs={12} md={8}>
-								<InfoItem label='Người release' value={recHoaDon?.dotThu?.tenNguoiRelease} />
-							</Col>
-						)}
-						{daRelease && recHoaDon?.dotThu?.thoiGianRelease && (
-							<Col xs={12} md={8}>
-								<InfoItem
-									label='Thời gian release'
-									value={dayjs(recHoaDon?.dotThu?.thoiGianRelease).format('HH:mm DD/MM/YYYY')}
-								/>
-							</Col>
-						)}
-						<Col xs={24}>
-							<InfoItem icon={<FileTextOutlined />} label='Ghi chú' value={recHoaDon?.ghiChu} />
-						</Col>
-					</Row>
-				</Card>
-
-				<Card size='small' title={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.chitietgiaodich' })}>
-					<Tabs
-						activeKey={activeTab}
-						onChange={onChangeTab}
-						items={[
-							{
-								key: '1',
-								label: intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.tab.chitiet' }),
-								children: <FormItemHoaDonChiTiet />,
-							},
-							{
-								key: '2',
-								label: intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.tab.lichsu' }),
-								children: (
-									<LichSuThanhToan onPay={onPay} onCancel={onCancel} ngoaiThoiGianThanhToan={ngoaiThoiGianThanhToan} />
-								),
-							},
-						]}
-					/>
-				</Card>
+			<Card size='small' title={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.chitietgiaodich' })}>
+				<Tabs
+					activeKey={activeTab}
+					onChange={onChangeTab}
+					items={[
+						{
+							key: '1',
+							label: intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.tab.chitiet' }),
+							children: <FormItemHoaDonChiTiet />,
+						},
+						{
+							key: '2',
+							label: intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.tab.lichsu' }),
+							children: (
+								<LichSuThanhToan onPay={onPay} onCancel={onCancel} ngoaiThoiGianThanhToan={ngoaiThoiGianThanhToan} />
+							),
+						},
+					]}
+				/>
 			</Card>
 
 			<div style={{ marginTop: 18 }} className='form-footer'>
@@ -428,11 +389,28 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 			<ModalThanhToanNganHang
 				visible={visibleHuongDan}
 				onOk={() => {
-					if (activeTab === '1') getGiaoDich();
+					// if (activeTab === '1') getGiaoDich();
 					if (getData) getData();
 					setVisibleHuongDan(false);
 				}}
 			/>
+			<Modal
+				title={intl.formatMessage({ id: 'taichinh.thanhtoan.title' })}
+				open={visibleThanhToan}
+				onCancel={() => setVisibleThanhToan(false)}
+				footer={null}
+				width={1000}
+				maskClosable={false}
+			>
+				<FormThanhToan
+					getData={() => {
+						// if (activeTab === '1') getGiaoDich();
+						if (getData) getData();
+					}}
+				/>
+			</Modal>
+
+
 		</Card>
 	);
 };

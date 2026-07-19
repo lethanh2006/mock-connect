@@ -4,12 +4,13 @@ import { landingUrl } from '@/services/base/constant';
 import { currentRole, financeApiClientId, qldtApiClientId } from '@/utils/ip';
 import { hasModulePermission } from '@/utils/keycloakRoles';
 import { GlobalOutlined, LogoutOutlined } from '@ant-design/icons';
-import { Button, Result } from 'antd';
+import { Button, Result, Space } from 'antd';
 import { useEffect } from 'react';
-import { history, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 
 const NotAccessible = () => {
 	const { initialState } = useModel('@@initialState');
+	const intl = useIntl();
 
 	useEffect(() => {
 		if (currentRole && hasModulePermission(initialState, currentRole, [qldtApiClientId, financeApiClientId]))
@@ -31,20 +32,20 @@ const NotAccessible = () => {
 			>
 				<Result
 					status='403'
-					title='Truy cập bị từ chối'
+					title={intl.formatMessage({ id: 'pages.exception.403.title' })}
 					style={{
 						background: 'none',
 					}}
-					subTitle='Xin lỗi, bạn không có quyền truy cập trang này.'
+					subTitle={intl.formatMessage({ id: 'pages.exception.403.subtitle' })}
 					extra={
-						<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+						<Space>
 							<Button type='primary' onClick={() => (window.location.href = landingUrl)} icon={<GlobalOutlined />}>
-								Tới trang Cổng thông tin
+								{intl.formatMessage({ id: 'pages.exception.portal' })}
 							</Button>
 							<Button icon={<LogoutOutlined />} onClick={onLogout}>
-								Đăng xuất
+								{intl.formatMessage({ id: 'pages.exception.logout' })}
 							</Button>
-						</div>
+						</Space>
 					}
 				/>
 

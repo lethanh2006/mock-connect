@@ -2,6 +2,7 @@ import ModalKhaoSatBatBuoc from '@/pages/TienIch/KhaoSat/components/ModalKhaoSat
 import { landingUrl } from '@/services/base/constant';
 import { ELoaiDot, EThoiGianDot } from '@/services/TienIch/KhaoSat/constants';
 import { formatDate } from '@/utils/formatDate';
+import { getPublicAssetPath } from '@/utils/path';
 import { DatabaseOutlined, FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Col, Dropdown, Modal, Row, Spin } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
@@ -60,7 +61,7 @@ const AvatarDropdown = () => {
 							<div>
 								<img
 									style={{ width: '100%', marginTop: -8, marginBottom: 12 }}
-									src='/student/logi-thong-bao.png'
+									src={getPublicAssetPath('logi-thong-bao.png')}
 									alt={'image'}
 								/>
 							</div>
@@ -113,24 +114,24 @@ const AvatarDropdown = () => {
 	useEffect(() => {
 		if (initialState?.currentUser?.ssoId) {
 			getThongTinCuaToiModel().then((res) => {
-				// 	// if (res.needUpdateFaceReg)
-				// 	// 	notification.warn({
-				// 	// 		message: 'Nhận diện khuôn mặt',
-				// 	// 		description: 'Cần cập nhật ảnh nhận diện khuôn mặt',
-				// 	// 		key: 'updateFaceRegNoti',
-				// 	// 		btn: (
-				// 	// 			<Button
-				// 	// 				type='primary'
-				// 	// 				size='small'
-				// 	// 				onClick={() => {
-				// 	// 					history.push('/thong-tin-ca-nhan');
-				// 	// 					notification.close('updateFaceRegNoti');
-				// 	// 				}}
-				// 	// 			>
-				// 	// 				Cập nhật ngay
-				// 	// 			</Button>
-				// 	// 		),
-				// 	// 	});
+				// if (res.needUpdateFaceReg)
+				// 	notification.warn({
+				// 		message: 'Nhận diện khuôn mặt',
+				// 		description: 'Cần cập nhật ảnh nhận diện khuôn mặt',
+				// 		key: 'updateFaceRegNoti',
+				// 		btn: (
+				// 			<Button
+				// 				type='primary'
+				// 				size='small'
+				// 				onClick={() => {
+				// 					history.push('/thong-tin-ca-nhan');
+				// 					notification.close('updateFaceRegNoti');
+				// 				}}
+				// 			>
+				// 				Cập nhật ngay
+				// 			</Button>
+				// 		),
+				// 	});
 			});
 			// handleCheckKhaoSatBatBuoc();
 			// getSuKienModel();

@@ -1,5 +1,6 @@
 export default {
 	'dangkytinchi.title': 'Đăng ký tín chỉ',
+	'dangkytinchi.loading.message': 'Hệ thống đang tải dữ liệu, vui lòng không tải lại trang (F5) để tránh mất dữ liệu',
 
 	'dangkytinchi.filter.btn.xemchitiet': 'Xem chi tiết',
 	'dangkytinchi.filter.thoigiandangky.title':
@@ -58,7 +59,10 @@ export default {
 
 	'dangkytinchi.dankylophocphan.action.dadangky': 'Đã đăng ký',
 	'dangkytinchi.dankylophocphan.action.dachon': 'Đã chọn',
+	'dangkytinchi.dankylophocphan.action.bochon': 'Bỏ chọn',
 	'dangkytinchi.dankylophocphan.action.dangky': 'Đăng ký',
+	'dangkytinchi.dankylophocphan.action.duthinh': 'Dự thính',
+	'dangkytinchi.dankylophocphan.action.dangkyduthinh': 'Đăng ký dự thính',
 	'dangkytinchi.dankylophocphan.action.chon': 'Chọn',
 	'dangkytinchi.dankylophocphan.filter.lopcontrong': 'Lớp còn trống',
 	'dangkytinchi.dankylophocphan.filter.tatca': 'Tất cả',
@@ -94,6 +98,7 @@ export default {
 	'dangkytinchi.phieudangky.columntable.huy': 'Thao tác',
 	'dangkytinchi.phieudangky.columntable.huy.tooltip': 'Xóa lớp',
 	'dangkytinchi.phieudangky.columntable.huy.confirm': 'Bạn có chắc chắn muốn xóa đăng ký lớp tín chỉ này?',
+	'dangkytinchi.phieudangky.huy.duthinh.daduyet.luuy': 'Lưu ý: Lớp học phần này đã được Giảng viên phê duyệt dự thính.',
 	'dangkytinchi.phieudangky.columntable.huy.luuy':
 		'Lưu ý: Sau khi hủy lớp, tổng số tín chỉ còn lại không thỏa mãn điều kiện số tín chỉ tối thiểu',
 
@@ -107,6 +112,7 @@ export default {
 	'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc': 'Xem trước lịch học',
 	'dangkytinchi.phieudangky.table.btn.caclopdahuy': 'Các lớp đã hủy đăng ký',
 	'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin': 'Bạn đã đăng ký quá số tín chỉ tối đa',
+	'dangkytinchi.phieudangky.table.tooltip.alert.khongcolopchuadangky': 'Bạn chưa chọn đăng ký lớp',
 	'dangkytinchi.phieudangky.table.tooltip.alert.chuadangkydusotin': 'Bạn chưa đăng ký đủ số tín chỉ tối thiểu',
 	'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi': 'Ngoài thời gian đăng ký tín chỉ',
 	'dangkytinchi.phieudangky.table.tooltip.alert.dangkytc': 'Đăng ký tín chỉ',
@@ -191,6 +197,7 @@ export default {
 
 	// đăng ký vượt tín
 	'dangkytinchi.vuottin.button.dangkyvuottin': 'Đăng ký vượt tín',
+	'dangkytinchi.vuottin.button.dangky': 'Đăng ký',
 	'dangkytinchi.vuottin.button.xemlichsu': 'Xem lịch sử',
 	'dangkytinchi.vuottin.form.descriptions.msv': 'Mã sinh viên',
 	'dangkytinchi.vuottin.form.descriptions.hoten': 'Họ tên',
@@ -212,20 +219,51 @@ export default {
 	'dangkytinchi.vuottin.status.text.CHO_DUYET': 'Chờ duyệt',
 	'dangkytinchi.vuottin.status.text.DA_DUYET': 'Đã duyệt',
 	'dangkytinchi.vuottin.status.text.TU_CHOI': 'Từ chối',
-	'dangkytinchi.vuottin.status.text.YEU_CAU_CHINH_SUA': 'Yêu cầu chỉnh sửa',
 
+	'dangkytinchi.phieudangky.type.overload': 'Vượt tín',
+	'dangkytinchi.phieudangky.type.audit': 'Dự thính',
+	'dangkytinchi.phieudangky.status.CHO_DUYET': 'Chờ duyệt',
+	'dangkytinchi.phieudangky.status.DA_DUYET': 'Đã duyệt',
+	'dangkytinchi.phieudangky.status.TU_CHOI': 'Từ chối',
+	'dangkytinchi.phieudangky.status.overload.DA_DUYET': 'Đã đăng ký',
+	'dangkytinchi.phieudangky.status.audit.DA_DUYET': 'Đã dự thính',
+
+	'dangkytinchi.phieudangky.duyet.nguoi': 'Người duyệt',
+	'dangkytinchi.phieudangky.duyet.thoigian': 'Thời gian duyệt',
+	'dangkytinchi.phieudangky.duyet.ghichu': 'Ghi chú',
+
+	'dangkytinchi.vuottin.status.message.DEFAULT': 'Bạn có thể đăng ký vượt tín chỉ nếu cần',
 	'dangkytinchi.vuottin.status.message.CHO_DUYET': 'Yêu cầu đăng ký vượt tín của bạn đang được xử lý',
 	'dangkytinchi.vuottin.status.message.DA_DUYET': 'Yêu cầu đăng ký vượt tín của bạn đã được duyệt',
 	'dangkytinchi.vuottin.status.message.TU_CHOI': 'Yêu cầu đăng ký vượt tín của bạn đã bị từ chối',
-	'dangkytinchi.vuottin.status.message.YEU_CAU_CHINH_SUA': 'Yêu cầu đăng ký vượt tín của bạn cần chỉnh sửa',
 
 	'dangkytinchi.dangkyngay.modal.title': 'Thông báo xác nhận',
+	'dangkytinchi.dangkyngay.modal.alert':
+		'Bạn có chắc chắn muốn <b>"Đăng ký"</b> học lớp học phần này không? Bạn cũng có thể chọn <b>Đăng ký dự thính</b>.',
 	'dangkytinchi.dangkyngay.modal.message': 'Bạn có chắc chắn muốn <b>"Đăng ký"</b> học lớp học phần này không?',
 	'dangkytinchi.dangkyngay.modal.malop': 'Mã lớp',
 	'dangkytinchi.dangkyngay.modal.tenhocphan': 'Tên học phần',
 	'dangkytinchi.dangkyngay.modal.giangvien': 'Giảng viên',
 	'dangkytinchi.dangkyngay.modal.thongtinlophoc': 'Thông tin lịch học',
 	'dangkytinchi.dangkyngay.modal.error': 'Đăng ký lớp học phần không thành công',
+	'dangkytinchi.dangkyngay.modal.lydo': 'Lý do',
+	'dangkytinchi.dangkyngay.modal.lydo.placeholder': 'Nhập lý do',
+	'dangkytinchi.dangkyngay.modal.lydo.required': 'Vui lòng nhập lý do',
+	'dangkytinchi.dangkyngay.modal.duthinh.lydo': 'Lý do đăng ký dự thính',
+	'dangkytinchi.dangkyngay.modal.duthinh.lydo.placeholder': 'Nhập lý do đăng ký dự thính',
+	'dangkytinchi.dangkyngay.modal.duthinh.lydo.required': 'Vui lòng nhập lý do đăng ký dự thính',
+	'dangkytinchi.dangkyngay.modal.duthinh.title': 'Đăng ký dự thính',
+	'dangkytinchi.dangkyngay.modal.vuottin.title': 'Xác nhận đăng ký vượt tín',
+	'dangkytinchi.dangkyngay.modal.vuottin.alert':
+		'Bạn đã đủ số tín chỉ tối đa. Bạn có thể chọn <b>Đăng ký vượt tín</b> hoặc <b>Đăng ký dự thính</b> cho lớp học phần này.',
+	'dangkytinchi.dangkyngay.modal.vuottin.message':
+		'Bạn đã đủ số tín chỉ tối đa. Bạn có chắc chắn muốn <b>"Đăng ký vượt tín"</b> lớp học phần này không?',
+	'dangkytinchi.dangkyngay.modal.vuottin.error': 'Đăng ký vượt tín không thành công',
+	'dangkytinchi.dangkyngay.modal.vuottin.lydo.title': 'Đăng ký vượt tín',
+	'dangkytinchi.dangkyngay.modal.vuottin.lydo': 'Lý do đăng ký vượt tín',
+	'dangkytinchi.dangkyngay.modal.vuottin.lydo.placeholder': 'Nhập lý do đăng ký vượt tín',
+	'dangkytinchi.dangkyngay.modal.vuottin.lydo.required': 'Vui lòng nhập lý do đăng ký vượt tín',
+	'dangkytinchi.thongbao.dangkyvuottin': 'Đăng ký vượt tín thành công',
 
 	'dangkytinchi.tcdangky': 'Tổng STC đã đăng ký',
 	'dangkytinchi.trangthaidangky.chuadangky': 'Chưa đăng ký',
@@ -286,5 +324,6 @@ export default {
 	'dangkytinchi.duongdan.dangky': 'ĐĂNG KÝ',
 
 	'dangkytinchi.thongbao.dangky': 'Đăng ký thành công',
+	'dangkytinchi.thongbao.dangkyduthinh': 'Đăng ký dự thính thành công',
 	'dangkytinchi.thongbao.huydangky': 'Hủy đăng ký thành công',
 };

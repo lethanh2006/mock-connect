@@ -1,36 +1,19 @@
 import { TabViewPage } from '@/components/TabViewPage';
 import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
-import BaiTapPage from '@/pages/HocTap/LopHocPhan/BaiTap';
-import DienDan from '@/pages/HocTap/LopHocPhan/DienDan';
-import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
-import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
 import { AppModules, ESettingKey } from '@/services/base/constant';
 import { currentRole, ipDaoTao } from '@/utils/ip';
-import {
-	BarChartOutlined,
-	BellOutlined,
-	BookOutlined,
-	CalendarOutlined,
-	FileTextOutlined,
-	InfoCircleOutlined,
-	LaptopOutlined,
-	MessageOutlined,
-	StarOutlined,
-} from '@ant-design/icons';
-import { Card, Col, Row, Tabs } from 'antd';
+import { CalendarOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Breadcrumb, Card, Col, Row, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'react-oidc-context';
 import { history, useAccess, useIntl, useModel, useParams } from 'umi';
-import DetailKetQuaHocTap from '../KetQuaHocTap/components/DetailKetQuaHocTap';
-import CardBaiTapLopHp from './components/CardBaiTapLopHp';
 import DanhSachGiangVien from './components/DanhSachGiangVien';
 import DanhSachSinhVien from './components/DanhSachSinhVien';
+import SelectLopHocPhanBreadcrumb from './components/SelectLopHocPhanBreadcrumb';
+import './components/style.less';
 import ThongTinChung from './components/ThongTinChung';
 import ThongTinChungHeaderCard from './components/ThongTinChungHeaderCard';
-import DanhGiaGiangVienPage from './DanhGiaGiangVien';
 import DanhSachBuoiHoc from './LichHoc';
-import LmsOdooPage from './LMS';
-import SyllabusPage from './Syllabus';
 
 const DetailLopTinChi = () => {
 	const intl = useIntl();
@@ -74,6 +57,22 @@ const DetailLopTinChi = () => {
 		intl.formatMessage({ id: 'lophocphan.id.syllabus' }),
 	];
 	const [visibleDeCuongHp, setVisibleDeCuongHp] = useState<[boolean, string]>([false, '3']);
+	const [activeTabTitle, setActiveTabTitle] = useState(titles[0]);
+
+	useEffect(() => {
+		const updateTabFromHash = () => {
+			const currentHash = window.location.hash.replace('#', '');
+			const index = currentHash ? paths.indexOf(currentHash) : 0;
+			setActiveTabTitle(titles[index >= 0 ? index : 0]);
+		};
+
+		updateTabFromHash();
+		window.addEventListener('hashchange', updateTabFromHash);
+
+		return () => {
+			window.removeEventListener('hashchange', updateTabFromHash);
+		};
+	}, []);
 
 	useEffect(() => {
 		document.title = [record?.ten, intl.formatMessage({ id: AppModules[currentRole].title })]
@@ -152,7 +151,7 @@ const DetailLopTinChi = () => {
 							<Col span={24}>
 								<ThongTinChung onShowDeCuong={(tab) => setVisibleDeCuongHp([true, tab])} />
 							</Col>
-							<Col span={24} lg={12}>
+							{/* <Col span={24} lg={12}>
 								<CardBaiTapLopHp lopHocPhanId={record?._id ?? ''} />
 							</Col>
 							<Col span={24} lg={12}>
@@ -161,24 +160,28 @@ const DetailLopTinChi = () => {
 									idLop={record?._id}
 									onShowAll={() => (window.location.hash = 'thong-bao')}
 								/>
-							</Col>
+							</Col> */}
 						</Row>
 					</Col>
 					<Col span={24} md={{ span: 8 }} xxl={{ span: 6 }}>
 						<Card variant='borderless' styles={{ body: { paddingTop: 0 } }}>
 							<Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)}>
-								<Tabs.TabPane tab={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.dssv' })} key='-1' />
+								<Tabs.TabPane
+									tab={`${intl.formatMessage({ id: 'lophocphan.id.thongtinchung.dssv' })} (${record?.sinhVienList?.length ?? 0})`}
+									key='-1'
+								/>
 								{danhSachLopThucHanh?.map((item) => (
-									<Tabs.TabPane tab={`Nhóm ${item.loai} ${item.soThuTuNhom}`} key={item._id} />
+									<Tabs.TabPane
+										tab={intl.formatMessage(
+											{ id: 'lophocphan.id.thongtinchung.nhom' },
+											{ loai: item.loai, soThuTuNhom: item.soThuTuNhom },
+										)}
+										key={item._id}
+									/>
 								))}
 							</Tabs>
 
-							{activeKey !== '-1' ? (
-								<DanhSachGiangVien
-									danhSachNhanSu={danhSachNhanSuLopTH}
-									title={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.dssv.gv' })}
-								/>
-							) : null}
+							{activeKey !== '-1' ? <DanhSachGiangVien danhSachNhanSu={danhSachNhanSuLopTH} /> : null}
 
 							<DanhSachSinhVien
 								sinhVienList={activeKey !== '-1' ? (recLopThucHanh?.sinhVienList ?? []) : (record?.sinhVienList ?? [])}
@@ -192,13 +195,13 @@ const DetailLopTinChi = () => {
 			icon: <InfoCircleOutlined />,
 		},
 
-		{
-			title: titles[8],
-			menuKey: paths[8],
-			content: <SyllabusPage lopHocPhanId={id as string} />,
-			icon: <BookOutlined />,
-			hide: !cctFilter?.(),
-		},
+		// {
+		// 	title: titles[8],
+		// 	menuKey: paths[8],
+		// 	content: <SyllabusPage lopHocPhanId={id as string} />,
+		// 	icon: <BookOutlined />,
+		// 	hide: !cctFilter?.(),
+		// },
 
 		{
 			title: titles[1],
@@ -206,78 +209,100 @@ const DetailLopTinChi = () => {
 			content: <DanhSachBuoiHoc />,
 			icon: <CalendarOutlined />,
 		},
-		{
-			title: titles[2],
-			menuKey: paths[2],
-			content: (
-				<Card variant='borderless'>
-					<ThongBaoLopPage loai='lop-hoc-phan' idLop={id as string} />
-				</Card>
-			),
-			icon: <BellOutlined />,
-		},
+		// {
+		// 	title: titles[2],
+		// 	menuKey: paths[2],
+		// 	content: (
+		// 		<Card variant='borderless'>
+		// 			<ThongBaoLopPage loai='lop-hoc-phan' idLop={id as string} />
+		// 		</Card>
+		// 	),
+		// 	icon: <BellOutlined />,
+		// },
 
-		{
-			title: titles[3],
-			menuKey: paths[3],
-			content: <DienDan idLopHocPhan={record?._id ?? (id as string)} />,
-			icon: <MessageOutlined />,
-		},
+		// {
+		// 	title: titles[3],
+		// 	menuKey: paths[3],
+		// 	content: <DienDan idLopHocPhan={record?._id ?? (id as string)} />,
+		// 	icon: <MessageOutlined />,
+		// },
 
-		{
-			title: titles[4],
-			menuKey: paths[4],
-			content: <LmsOdooPage idLopHocPhan={id as string} />,
-			hide: !(settings?.GENERAL_INFO?.lmsMode === 'odoo' && record?.syncLms),
-			icon: <LaptopOutlined />,
-		},
+		// {
+		// 	title: titles[4],
+		// 	menuKey: paths[4],
+		// 	content: <LmsOdooPage idLopHocPhan={id as string} />,
+		// 	hide: !(settings?.GENERAL_INFO?.lmsMode === 'odoo' && record?.syncLms),
+		// 	icon: <LaptopOutlined />,
+		// },
 
-		{
-			title: titles[5],
-			menuKey: paths[5],
-			content: <BaiTapPage lopHocPhanId={id as string} />,
-			icon: <FileTextOutlined />,
-		},
-		{
-			title: titles[6],
-			menuKey: paths[6],
-			content: (
-				<Card variant='borderless' style={{ maxWidth: 1000, margin: 'auto' }}>
-					<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm học phần</h4>
-					<DetailKetQuaHocTap
-						lopHocPhanId={record?._id}
-						toDanhGiaGiangVien={() => (window.location.hash = 'danh-gia-giang-vien')}
-					/>
-				</Card>
-			),
-			icon: <BarChartOutlined />,
-		},
-		{
-			title: titles[7],
-			menuKey: paths[7],
-			content: (
-				<Card variant='borderless'>
-					<DanhGiaGiangVienPage />
-				</Card>
-			),
-			icon: <StarOutlined />,
-		},
+		// {
+		// 	title: titles[5],
+		// 	menuKey: paths[5],
+		// 	content: <BaiTapPage lopHocPhanId={id as string} />,
+		// 	icon: <FileTextOutlined />,
+		// },
+		// {
+		// 	title: titles[6],
+		// 	menuKey: paths[6],
+		// 	content: (
+		// 		<Card variant='borderless' style={{ maxWidth: 1000, margin: 'auto' }}>
+		// 			<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm học phần</h4>
+		// 			<DetailKetQuaHocTap
+		// 				lopHocPhanId={record?._id}
+		// 				toDanhGiaGiangVien={() => (window.location.hash = 'danh-gia-giang-vien')}
+		// 			/>
+		// 		</Card>
+		// 	),
+		// 	icon: <BarChartOutlined />,
+		// },
+		// {
+		// 	title: titles[7],
+		// 	menuKey: paths[7],
+		// 	content: (
+		// 		<Card variant='borderless'>
+		// 			<DanhGiaGiangVienPage />
+		// 		</Card>
+		// 	),
+		// 	icon: <StarOutlined />,
+		// },
 	];
 
 	return (
-		<>
+		<Card
+			className='card-borderless card-big-title has-indicator'
+			variant='borderless'
+			title={intl.formatMessage({ id: 'lophocphan.id.title' })}
+			extra={
+				<Breadcrumb
+					className='lhp-detail-breadcrumb'
+					items={[
+						{
+							title: (
+								<a onClick={() => history.push('/hoc-tap/lop-tin-chi')}>
+									{intl.formatMessage({ id: 'lophocphan.title' })}
+								</a>
+							),
+						},
+						{
+							title: (
+								<SelectLopHocPhanBreadcrumb
+									value={record?._id || id}
+									onChange={(lopId: string) => {
+										if (lopId) history.push(`/hoc-tap/lop-tin-chi/${lopId}${window.location.hash}`);
+									}}
+								/>
+							),
+						},
+						{
+							title: activeTabTitle,
+						},
+					]}
+				/>
+			}
+		>
 			<ThongTinChungHeaderCard onShowDeCuong={() => setVisibleDeCuongHp([true, '0'])} />
 
-			<TabViewPage
-				offsetTop={106}
-				hideCard
-				menu={menus}
-				tabType='line'
-				tabStyle={{
-					backgroundColor: 'var(--color-primary-bg)',
-					marginTop: '-50px', // để phần Tabpane nằm bên trong ThongTinChungHeaderCard
-				}}
-			/>
+			<TabViewPage offsetTop={64} hideCard menu={menus} tabType='line' />
 
 			<ModalHocPhan
 				visible={visibleDeCuongHp[0]}
@@ -285,7 +310,7 @@ const DetailLopTinChi = () => {
 				title={`${intl.formatMessage({ id: 'lophocphan.id.decuong.title' })} ${record?.hocKy?.ten ? `- ${record?.hocKy?.ten ?? ''}` : ''}`}
 				activeKey={visibleDeCuongHp[1]}
 			/>
-		</>
+		</Card>
 	);
 };
 

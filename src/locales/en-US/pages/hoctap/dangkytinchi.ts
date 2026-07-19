@@ -1,5 +1,6 @@
 export default {
 	'dangkytinchi.title': 'Course Registration',
+	'dangkytinchi.loading.message': 'The system is loading data. Please do not reload the page (F5) to avoid data loss.',
 	'dangkytinchi.filter.btn.xemchitiet': 'View details',
 	'dangkytinchi.filter.thoigiandangky.title':
 		'Course registration is open from <b>{thoigianbatdau}</b> to <b>{thoigianketthuc}</b>',
@@ -10,7 +11,7 @@ export default {
 
 	'dangkytinchi.loaidangky.lop-hanh-chinh': 'Planned Courses',
 	'dangkytinchi.loaidangky.khoa-nganh': 'By Curriculum',
-	'dangkytinchi.loaidangky.khoa-nganh-2': 'According to the second major curriculum',
+	'dangkytinchi.loaidangky.khoa-nganh-2': 'By Secondary Major Curriculum',
 	'dangkytinchi.loaidangky.tat-ca': 'All courses',
 
 	'dangkytinchi.chitiethocky.description.tenhocky': 'Semester name',
@@ -56,7 +57,10 @@ export default {
 
 	'dangkytinchi.dankylophocphan.action.dadangky': 'Registered',
 	'dangkytinchi.dankylophocphan.action.dachon': 'Selected',
+	'dangkytinchi.dankylophocphan.action.bochon': 'Deselect',
 	'dangkytinchi.dankylophocphan.action.dangky': 'Register',
+	'dangkytinchi.dankylophocphan.action.duthinh': 'Audit',
+	'dangkytinchi.dankylophocphan.action.dangkyduthinh': 'Audit Registration',
 	'dangkytinchi.dankylophocphan.action.chon': 'Select',
 	'dangkytinchi.dankylophocphan.filter.lopcontrong': 'Available Classes',
 	'dangkytinchi.dankylophocphan.filter.tatca': 'All',
@@ -92,6 +96,7 @@ export default {
 	'dangkytinchi.phieudangky.columntable.huy.tooltip': 'Delete section',
 	'dangkytinchi.phieudangky.columntable.huy.confirm':
 		'Are you sure you want to delete the registration for this section?',
+	'dangkytinchi.phieudangky.huy.duthinh.daduyet.luuy': 'Note: This audit registration has been approved.',
 	'dangkytinchi.phieudangky.columntable.huy.luuy':
 		'Note: After canceling the class, the total remaining credits do not meet the minimum credit requirement',
 	'dangkytinchi.phieudangky.danhsachdadangky.title': 'List of Registered Sections',
@@ -105,6 +110,7 @@ export default {
 	'dangkytinchi.phieudangky.table.btn.caclopdahuy': 'Unregistered classes',
 	'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin':
 		'You have registered for more than the maximum number of credits',
+	'dangkytinchi.phieudangky.table.tooltip.alert.khongcolopchuadangky': 'No classes selected to register',
 	'dangkytinchi.phieudangky.table.tooltip.alert.chuadangkydusotin':
 		'You have not registered for the minimum required number of credits',
 	'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi': 'Outside the credit registration period',
@@ -183,6 +189,7 @@ export default {
 
 	// credit overload registration
 	'dangkytinchi.vuottin.button.dangkyvuottin': 'Credit Overload Registration',
+	'dangkytinchi.vuottin.button.dangky': 'Register',
 	'dangkytinchi.vuottin.button.xemlichsu': 'View History',
 	'dangkytinchi.vuottin.form.descriptions.msv': 'Student ID',
 	'dangkytinchi.vuottin.form.descriptions.hoten': 'Full Name',
@@ -204,20 +211,51 @@ export default {
 	'dangkytinchi.vuottin.status.text.CHO_DUYET': 'Pending',
 	'dangkytinchi.vuottin.status.text.DA_DUYET': 'Approved',
 	'dangkytinchi.vuottin.status.text.TU_CHOI': 'Rejected',
-	'dangkytinchi.vuottin.status.text.YEU_CAU_CHINH_SUA': 'Revision required',
 
+	'dangkytinchi.phieudangky.type.overload': 'Overload',
+	'dangkytinchi.phieudangky.type.audit': 'Audit',
+	'dangkytinchi.phieudangky.status.CHO_DUYET': 'Pending',
+	'dangkytinchi.phieudangky.status.DA_DUYET': 'Approved',
+	'dangkytinchi.phieudangky.status.TU_CHOI': 'Reject',
+	'dangkytinchi.phieudangky.status.overload.DA_DUYET': 'Registered',
+	'dangkytinchi.phieudangky.status.audit.DA_DUYET': 'Auditing',
+
+	'dangkytinchi.phieudangky.duyet.nguoi': 'Approver',
+	'dangkytinchi.phieudangky.duyet.thoigian': 'Approval time',
+	'dangkytinchi.phieudangky.duyet.ghichu': 'Note',
+
+	'dangkytinchi.vuottin.status.message.DEFAULT': 'You can register for credit overload if needed',
 	'dangkytinchi.vuottin.status.message.CHO_DUYET': 'Your credit overload request is being processed',
 	'dangkytinchi.vuottin.status.message.DA_DUYET': 'Your credit overload request has been approved',
 	'dangkytinchi.vuottin.status.message.TU_CHOI': 'Your credit overload request has been rejected',
-	'dangkytinchi.vuottin.status.message.YEU_CAU_CHINH_SUA': 'Your credit overload request needs revision',
 
 	'dangkytinchi.dangkyngay.modal.title': 'Confirmation Message',
+	'dangkytinchi.dangkyngay.modal.alert':
+		'Are you sure you want to <b>"Register"</b> for this course section? You can also choose <b>Audit Registration</b>.',
 	'dangkytinchi.dangkyngay.modal.message': 'Are you sure you want to <b>"Register"</b> for this course section?',
 	'dangkytinchi.dangkyngay.modal.malop': 'Section Code',
 	'dangkytinchi.dangkyngay.modal.tenhocphan': 'Course Name',
 	'dangkytinchi.dangkyngay.modal.giangvien': 'Faculty',
 	'dangkytinchi.dangkyngay.modal.thongtinlophoc': 'Schedule',
 	'dangkytinchi.dangkyngay.modal.error': 'Failed to register for the course section',
+	'dangkytinchi.dangkyngay.modal.lydo': 'Reason',
+	'dangkytinchi.dangkyngay.modal.lydo.placeholder': 'Enter reason',
+	'dangkytinchi.dangkyngay.modal.lydo.required': 'Please enter a reason',
+	'dangkytinchi.dangkyngay.modal.duthinh.lydo': 'Reason for audit registration',
+	'dangkytinchi.dangkyngay.modal.duthinh.lydo.placeholder': 'Enter reason for audit registration',
+	'dangkytinchi.dangkyngay.modal.duthinh.lydo.required': 'Please enter a reason for audit registration',
+	'dangkytinchi.dangkyngay.modal.duthinh.title': 'Audit Registration',
+	'dangkytinchi.dangkyngay.modal.vuottin.title': 'Confirm credit overload registration',
+	'dangkytinchi.dangkyngay.modal.vuottin.alert':
+		'You have reached the maximum credits. You can choose <b>Credit Overload Registration</b> or <b>Audit Registration</b> for this course section.',
+	'dangkytinchi.dangkyngay.modal.vuottin.message':
+		'You have reached the maximum credits. Are you sure you want to <b>"register for credit overload"</b> for this course section?',
+	'dangkytinchi.dangkyngay.modal.vuottin.error': 'Failed to register for credit overload',
+	'dangkytinchi.dangkyngay.modal.vuottin.lydo.title': 'Credit overload registration',
+	'dangkytinchi.dangkyngay.modal.vuottin.lydo': 'Reason for credit overload registration',
+	'dangkytinchi.dangkyngay.modal.vuottin.lydo.placeholder': 'Enter reason for credit overload registration',
+	'dangkytinchi.dangkyngay.modal.vuottin.lydo.required': 'Please enter a reason for credit overload registration',
+	'dangkytinchi.thongbao.dangkyvuottin': 'Credit overload registered successfully',
 
 	'dangkytinchi.tcdangky': 'Registered Credits',
 	'dangkytinchi.trangthaidangky.chuadangky': 'Not Registered',
@@ -265,7 +303,7 @@ export default {
 	'dangkytinchi.duongdan.theochuongtrinhdaotao': 'By Curriculum',
 	'dangkytinchi.duongdan.theochuongtrinhdaotao.mota':
 		'Displays the courses belonging to the standard training program that have available classes',
-	'dangkytinchi.duongdan.theochuongtrinhnganh2': 'By Double Major Curriculum',
+	'dangkytinchi.duongdan.theochuongtrinhnganh2': 'By Secondary Major Curriculum',
 	'dangkytinchi.duongdan.theochuongtrinhnganh2.mota':
 		'Displays the courses belonging to the double major program that have available classes',
 	'dangkytinchi.duongdan.tatcahocphan': 'All Courses',
@@ -279,5 +317,6 @@ export default {
 	'dangkytinchi.duongdan.dangky': 'REGISTER',
 
 	'dangkytinchi.thongbao.dangky': 'Registered successfully',
+	'dangkytinchi.thongbao.dangkyduthinh': 'Audit registration successful',
 	'dangkytinchi.thongbao.huydangky': 'Registration cancelled successfully',
 };

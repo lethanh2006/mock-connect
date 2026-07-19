@@ -1,27 +1,49 @@
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import { getPublicAssetPath } from '@/utils/path';
 import { formatPhoneNumber } from '@/utils/utils';
-import { Avatar, Image, List } from 'antd';
-import { useState } from 'react';
+import { Avatar, Image, Input, List } from 'antd';
+import { useMemo, useState } from 'react';
 import { useIntl } from 'umi';
 
 type TNhanSu = Pick<LopHocPhan.IRecordNhanSuLopHP, 'tenNhanSu' | 'maNhanSu' | 'nhanSu' | 'nhanSuSsoId'>;
 
-const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?: string }) => {
+const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[] }) => {
 	const intl = useIntl();
-	const { title, danhSachNhanSu } = props;
+	const { danhSachNhanSu } = props;
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
+	const [searchText, setSearchText] = useState('');
+
+	const filteredList = useMemo(() => {
+		const keyword = searchText.trim().toLowerCase();
+		if (!keyword) return danhSachNhanSu ?? [];
+
+		return (danhSachNhanSu ?? []).filter((item) => {
+			const hoTen = item.nhanSu?.ten
+				? [item.nhanSu?.hoDem, item.nhanSu?.ten].filter(Boolean).join(' ')
+				: (item.tenNhanSu ?? '');
+			const email = item.nhanSu?.email ?? '';
+			const sdt = item.nhanSu?.sdtCaNhan ?? '';
+			const ma = item.maNhanSu ?? '';
+
+			return [hoTen, email, sdt, ma].some((field) => field.toLowerCase().includes(keyword));
+		});
+	}, [danhSachNhanSu, searchText]);
 
 	return (
 		<div>
-			<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 12 }}>
-				{title ?? intl.formatMessage({ id: 'lophocphan.id.thongtinchung.dssv.gv2' })}
-			</h4>
-			{danhSachNhanSu?.length ? (
+			<Input.Search
+				allowClear
+				value={searchText}
+				onChange={(e) => setSearchText(e.target.value)}
+				placeholder={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.dssv.search.gv' })}
+				style={{ marginBottom: 12 }}
+			/>
+			{filteredList.length ? (
 				<List
 					itemLayout='horizontal'
 					size='small'
-					dataSource={danhSachNhanSu}
+					dataSource={filteredList}
 					renderItem={(item) => (
 						<List.Item style={{ padding: '12px 0', borderBottom: '1px solid #f0f0f0' }}>
 							<div
@@ -49,8 +71,8 @@ const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?:
 										src={
 											item.nhanSu?.urlAnhDaiDien ||
 											(item.nhanSu?.gioiTinh === 'Nữ'
-												? '/student/images/teacher-female.svg'
-												: '/student/images/teacher-male.svg')
+												? getPublicAssetPath('images/teacher-female.svg')
+												: getPublicAssetPath('images/teacher-male.svg'))
 										}
 									/>
 								</div>

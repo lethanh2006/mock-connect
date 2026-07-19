@@ -3,6 +3,7 @@ import type { BinhLuan } from '@/services/HocTap/DienDan/BinhLuan/typing';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import { formatDateTime } from '@/utils/formatDate';
 import { createTextLinks } from '@/utils/utils';
+import DOMPurify from 'dompurify';
 import { CheckCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Form, Input, Popconfirm, Popover } from 'antd';
 import { nanoid } from 'nanoid';
@@ -183,7 +184,7 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 										<ExpandText>
 											<div
 												dangerouslySetInnerHTML={{
-													__html: createTextLinks(val?.noiDung ?? '')?.replace(/\n/g, '<br/>'),
+													__html: createTextLinks(DOMPurify.sanitize(val?.noiDung ?? ''))?.replace(/\n/g, '<br/>'),
 												}}
 											/>
 										</ExpandText>

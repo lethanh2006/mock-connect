@@ -23,6 +23,7 @@ const ipChatbot = getConnectTarget('not-deployed/chatbot-api');
 const ipCCT = getConnectTarget('co-curriculum'); // ip dev
 const ipFile = getConnectTarget('file');
 // const ipCCT = 'http://192.168.1.38:3010'; // ip dev
+const ipCsvc = ipRoot + 'csvc';
 
 const ipNewsWP = APP_CONFIG_URL_LANDING;
 
@@ -48,6 +49,7 @@ export {
 	ipChatbot,
 	ipConnect,
 	ipCore,
+	ipCsvc,
 	ipDaoTao,
 	ipFile, ipKhaoThi,
 	ipNewsWP,

@@ -4,6 +4,7 @@ import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinCh
 import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
 import { ENguonDot } from '@/services/QuyTrinh/constant';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
+import { getPublicAssetPath } from '@/utils/path';
 import { ArrowRightOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Card, Col, message, Modal, Popconfirm, Row, Space, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
@@ -28,7 +29,7 @@ const CardDichVuSinhVien = () => {
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
 	const [recordThongTinChung, setRecordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
 
-	const playIc = 'student/student/images/play-icon.png';
+	const playIc = getPublicAssetPath('images/play-icon.png');
 
 	useEffect(() => {
 		// Reset states khi component mount

@@ -3,10 +3,11 @@ import { getUserInfo } from '@/services/base/api';
 import { AppModules, EModuleKey } from '@/services/base/constant';
 import { type Login } from '@/services/base/typing';
 import axios from '@/utils/axios';
-import { getKeycloakRoleContext, hasModulePermission } from '@/utils/keycloakRoles';
-import type { AuthorizedRolesByClient } from '@/utils/keycloakRoles';
 import { currentRole, financeApiClientId, qldtApiClientId, replaceRole } from '@/utils/ip';
+import type { AuthorizedRolesByClient } from '@/utils/keycloakRoles';
+import { getKeycloakRoleContext, hasModulePermission } from '@/utils/keycloakRoles';
 import { oidcConfig } from '@/utils/oidcConfig';
+import { getAppBasePath, getPublicAssetPath } from '@/utils/path';
 import { notification } from 'antd';
 import queryString from 'query-string';
 import { useEffect, type FC } from 'react';
@@ -69,7 +70,7 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 		if (newSearch) newSearch = '?' + newSearch;
 		// Reload trang để cập nhật access token mới
 		const pathname =
-			window.location.pathname === '/' || window.location.pathname === '/student/user/login'
+			window.location.pathname === '/' || window.location.pathname === `${getPublicAssetPath('user/login')}`
 				? '/dashboard'
 				: window.location.pathname;
 		window.location.replace(`${pathname}${newSearch}${window.location.hash}`);
@@ -137,10 +138,10 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 						message: intl.formatMessage({ id: 'global.OIDCBounder.message' }),
 						description: intl.formatMessage({ id: 'global.OIDCBounder.description' }),
 					});
-					history.replace('/student/user/login');
+					history.replace(`${getPublicAssetPath('user/login')}`);
 				}
 			}
-		} else history.replace('/student/user/login');
+		} else history.replace(`${getPublicAssetPath('user/login')}`);
 	};
 
 	useEffect(() => {
@@ -195,7 +196,7 @@ export const OIDCBounder: FC<{ children: React.ReactElement }> & { getActions: (
 			{...oidcConfig}
 			redirect_uri={
 				window.location.pathname.includes('/user')
-					? `${window.location.origin}${APP_CONFIG_BASE_PATH}`
+					? `${window.location.origin}${getAppBasePath()}`
 					: window.location.href
 			}
 		>

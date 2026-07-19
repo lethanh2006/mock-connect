@@ -1,14 +1,14 @@
+import PageCard from '@/components/PageCard';
 import { EVaiTroSvLhc, vaiTroSvLhc } from '@/services/DaoTao/SinhVien/constants';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EGioiTinh } from '@/services/DaoTao/constant';
 import { formatDate } from '@/utils/formatDate';
+import { getPublicAssetPath } from '@/utils/path';
 import { EyeOutlined, MoreOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Col, Descriptions, Dropdown, List, Menu, Modal, Row, Typography } from 'antd';
+import { Avatar, Button, Card, Col, Descriptions, Dropdown, Input, List, Menu, Modal, Row, Typography } from 'antd';
+import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'umi';
 import './style.less';
-
-import PageCard from '@/components/PageCard';
-import { useEffect, useState } from 'react';
 const { Text } = Typography;
 
 type TSinhVien = Partial<SinhVien.IRecord> & Partial<SinhVien.ISinhVienHocKy>;
@@ -18,6 +18,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 	const { sinhVienList, loading, fromLopHocPhan } = props;
 	const [modalVisible, setModalVisible] = useState<boolean>(false);
 	const [record, setRecord] = useState<TSinhVien>();
+	const [searchText, setSearchText] = useState('');
 
 	const [screenSize, setScreenSize] = useState({
 		width: window.innerWidth,
@@ -34,6 +35,17 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 		window.addEventListener('resize', handleResize);
 		return () => window.removeEventListener('resize', handleResize);
 	}, []);
+
+	const filteredList = useMemo(() => {
+		const keyword = searchText.trim().toLowerCase();
+		if (!keyword) return sinhVienList;
+
+		return sinhVienList.filter((student) =>
+			[student.ten, student.ma, student.email, student.soDienThoai]
+				.filter(Boolean)
+				.some((field) => String(field).toLowerCase().includes(keyword)),
+		);
+	}, [sinhVienList, searchText]);
 
 	const showStudentDetail = (student: TSinhVien) => {
 		setRecord(student);
@@ -54,27 +66,17 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 		<PageCard
 			loading={loading}
 			level={3}
+			hideInnerCard
 			style={{
 				borderRadius: '8px',
 			}}
 			title={
-				<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-					<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-						<span>{intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongtinlop.dssv' })}</span>
-						<span
-							style={{
-								backgroundColor: '#f6ffed',
-								padding: '2px 8px',
-								borderRadius: '8px',
-								fontSize: '12px',
-								color: '#49AA19',
-								border: '1px solid #B7EB8F',
-							}}
-						>
-							{sinhVienList.length}
-						</span>
-					</div>
-				</div>
+				<Input.Search
+					allowClear
+					value={searchText}
+					onChange={(e) => setSearchText(e.target.value)}
+					placeholder={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.dssv.search.sv' })}
+				/>
 			}
 			bodyStyle={{ padding: 0 }}
 		>
@@ -88,7 +90,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 			>
 				{fromLopHocPhan || isMobile ? (
 					<List
-						dataSource={sinhVienList}
+						dataSource={filteredList}
 						renderItem={(student) => (
 							<List.Item
 								style={{ padding: '12px 0px', borderBottom: '1px solid #f0f0f0' }}
@@ -103,14 +105,14 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 										<Avatar
 											src={
 												student.anhDaiDienUrl ||
-												`/student/images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`
+												getPublicAssetPath(`images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`)
 											}
-											size={48}
+											size={36}
 										/>
 									}
 									title={
 										<div
-											style={{ fontSize: '16px', fontWeight: 500, color: '#333', cursor: 'pointer' }}
+											style={{ fontSize: '14px', fontWeight: 500, color: '#333', cursor: 'pointer' }}
 											onClick={() => showStudentDetail(student)}
 										>
 											{student.ten}
@@ -129,7 +131,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 				) : (
 					<List
 						grid={{ gutter: 12, column: 3 }}
-						dataSource={sinhVienList}
+						dataSource={filteredList}
 						renderItem={(student) => (
 							<List.Item
 								style={{
@@ -153,13 +155,13 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 											<Avatar
 												src={
 													student.anhDaiDienUrl ||
-													`/student/images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`
+													getPublicAssetPath(`images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`)
 												}
-												size={48}
+												size={36}
 											/>
 										</Col>
 										<Col flex='1'>
-											<div style={{ fontSize: 16, fontWeight: 500 }}>{student.ten}</div>
+											<div style={{ fontSize: 14, fontWeight: 500 }}>{student.ten}</div>
 											<div style={{ color: '#666', fontSize: 14 }}>
 												{student.ma} • {student.gioiTinh}{' '}
 												{!fromLopHocPhan && student.vaiTro && (
@@ -206,7 +208,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 						<Avatar
 							src={
 								record?.anhDaiDienUrl ||
-								`/student/images/${record?.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`
+								getPublicAssetPath(`images/${record?.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`)
 							}
 							size={{ xs: 80, sm: 128, md: 128, lg: 160, xl: 160, xxl: 160 }}
 						/>

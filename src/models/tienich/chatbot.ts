@@ -1,4 +1,5 @@
 import { postChatMessage, postVoiceMessage } from '@/services/TienIch/Chatbot';
+import DOMPurify from 'dompurify';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
 
@@ -14,7 +15,7 @@ export default () => {
 			.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
 			.replace(/\*(.*?)\*/g, '<i>$1</i>')
 			.replace(/\\n/g, '<br/>');
-		return updatedText;
+		return DOMPurify.sanitize(updatedText);
 	};
 
 	const genVideoMessageModel = async (record: ChatbotAmi.IRecord): Promise<ChatbotAmi.IRecord> => {
