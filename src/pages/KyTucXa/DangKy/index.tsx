@@ -9,13 +9,12 @@ import { FileDoneOutlined, InfoCircleOutlined, ReloadOutlined } from '@ant-desig
 import { Alert, Button, Col, Empty, Flex, Input, message, Pagination, Row, Select, Space, Spin } from 'antd';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useIntl, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 import SelectDanhMucChungKTX from '../DanhMucChung/Select';
 import SelectToaNhaKTX from '../ToaNha/Select';
 import CardPhong from './components/CardPhong';
 import ChiTietPhong from './components/ChiTiet';
 import ModalDanKyKTX from './components/Modal';
-import { ETrangThaiDuyetKTX } from '@/services/TaiChinh/constant';
 
 const { Search } = Input;
 
@@ -109,6 +108,11 @@ const DangKyKyTucXa = () => {
 		}
 	};
 
+	const handleDangKyThanhCong = () => {
+		getData();
+		getLichSuDangKyData();
+	};
+
 	useEffect(() => {
 		getData();
 	}, [page, limit, filters, recDot?._id, recDot?.isMienKyTucXa]);
@@ -176,6 +180,12 @@ const DangKyKyTucXa = () => {
 	};
 
 	const handleOpenLichSuDangKy = (phong: Phong.IChinhSachPhongRecord, initialStep = 0) => {
+		if (initialStep === 3) {
+			setVisibleForm(false);
+			history.push('/finance/tuition-billing');
+			return;
+		}
+
 		if (!getLichSuDangKyTheoPhong(phong)) return;
 
 		setRecord(phong);
@@ -346,7 +356,7 @@ const DangKyKyTucXa = () => {
 										<CardPhong
 											phong={phong}
 											lichSuDangKy={lichSuDangKy}
-											daCoLichSuDangKy={coFormDonDangKy(lichSuDangKy)}
+											daCoLichSuDangKy={daCoLichSuDangKy}
 											laPhongDaDangKy={isPhongDaDangKy(phong)}
 											onOpenLichSuDangKy={handleOpenLichSuDangKy}
 											onXemChiTiet={handleXemChiTiet}
@@ -390,11 +400,10 @@ const DangKyKyTucXa = () => {
 				onOpenLichSuDangKy={handleOpenLichSuDangKy}
 			/>
 			<ModalDanKyKTX
-				getData={getData}
+				getData={handleDangKyThanhCong}
 				daCoLichSuDangKy={daCoLichSuDangKy}
 				isView={isViewDangKy}
 				initialStep={initialModalStep}
-				onDangKyThanhCong={getLichSuDangKyData}
 			/>
 		</PageCard>
 	);
