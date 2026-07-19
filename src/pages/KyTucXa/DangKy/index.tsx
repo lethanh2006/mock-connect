@@ -15,6 +15,7 @@ import SelectToaNhaKTX from '../ToaNha/Select';
 import CardPhong from './components/CardPhong';
 import ChiTietPhong from './components/ChiTiet';
 import ModalDanKyKTX from './components/Modal';
+import { ETrangThaiDuyetKTX } from '@/services/TaiChinh/constant';
 
 const { Search } = Input;
 
