@@ -1,5 +1,6 @@
 export default {
 	'dangkytinchi.title': 'Course Registration',
+	'dangkytinchi.loading.message': 'The system is loading data. Please do not reload the page (F5) to avoid data loss.',
 	'dangkytinchi.filter.btn.xemchitiet': 'View details',
 	'dangkytinchi.filter.thoigiandangky.title':
 		'Course registration is open from <b>{thoigianbatdau}</b> to <b>{thoigianketthuc}</b>',
@@ -10,7 +11,7 @@ export default {
 
 	'dangkytinchi.loaidangky.lop-hanh-chinh': 'Planned Courses',
 	'dangkytinchi.loaidangky.khoa-nganh': 'By Curriculum',
-	'dangkytinchi.loaidangky.khoa-nganh-2': 'According to the second major curriculum',
+	'dangkytinchi.loaidangky.khoa-nganh-2': 'By Secondary Major Curriculum',
 	'dangkytinchi.loaidangky.tat-ca': 'All courses',
 
 	'dangkytinchi.chitiethocky.description.tenhocky': 'Semester name',
@@ -56,6 +57,7 @@ export default {
 
 	'dangkytinchi.dankylophocphan.action.dadangky': 'Registered',
 	'dangkytinchi.dankylophocphan.action.dachon': 'Selected',
+	'dangkytinchi.dankylophocphan.action.bochon': 'Deselect',
 	'dangkytinchi.dankylophocphan.action.dangky': 'Register',
 	'dangkytinchi.dankylophocphan.action.chon': 'Select',
 	'dangkytinchi.dankylophocphan.filter.lopcontrong': 'Available Classes',
@@ -105,6 +107,7 @@ export default {
 	'dangkytinchi.phieudangky.table.btn.caclopdahuy': 'Unregistered classes',
 	'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin':
 		'You have registered for more than the maximum number of credits',
+	'dangkytinchi.phieudangky.table.tooltip.alert.khongcolopchuadangky': 'No classes selected to register',
 	'dangkytinchi.phieudangky.table.tooltip.alert.chuadangkydusotin':
 		'You have not registered for the minimum required number of credits',
 	'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi': 'Outside the credit registration period',
@@ -265,7 +268,7 @@ export default {
 	'dangkytinchi.duongdan.theochuongtrinhdaotao': 'By Curriculum',
 	'dangkytinchi.duongdan.theochuongtrinhdaotao.mota':
 		'Displays the courses belonging to the standard training program that have available classes',
-	'dangkytinchi.duongdan.theochuongtrinhnganh2': 'By Double Major Curriculum',
+	'dangkytinchi.duongdan.theochuongtrinhnganh2': 'By Secondary Major Curriculum',
 	'dangkytinchi.duongdan.theochuongtrinhnganh2.mota':
 		'Displays the courses belonging to the double major program that have available classes',
 	'dangkytinchi.duongdan.tatcahocphan': 'All Courses',

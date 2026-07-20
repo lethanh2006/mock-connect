@@ -1,11 +1,11 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
-import { colorTransactionType, ETransactionType, transactionType } from '@/services/TaiChinh/constant';
+import { colorTransactionStatus, colorTransactionType, ETransactionStatus, ETransactionType, transactionType } from '@/services/TaiChinh/constant';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import { currencyFormat, inputFormat } from '@/utils/utils';
+import { currencyFormat } from '@/utils/utils';
 import { AppstoreAddOutlined } from '@ant-design/icons';
-import { Col, Row, Tag } from 'antd';
+import { Col, Row, Space, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -13,30 +13,23 @@ import { disableThanhToan } from '..';
 
 const FormItemHoaDonChiTiet = () => {
 	const intl = useIntl();
-	const { record, visibleModalThanhToan, setVisibleModalThanhToan } = useModel('taichinh.hoadon');
-
-	const { getAllModel, loading, danhSach, xemRutGonChiTiet } = useModel('taichinh.hoadonchitiet');
-	// const [result, setResult] = useState<HoaDon.IBillItem[]>([]);
+	const { record, setVisibleModalThanhToan } = useModel('taichinh.hoadon');
+	const { loading } = useModel('taichinh.hoadonchitiet');
 	const [result, setResult] = useState<HoaDon.ITransaction[]>([]);
 
 	const isDisabled = disableThanhToan(record);
 
 	useEffect(() => {
-		const data = record?.transactions
-			?.filter((tran) => tran.status === 'success')
-			?.sort((a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf());
+		const data = (record?.transactions ?? [])
+			.filter((tran) => tran.type === ETransactionType.PAYMENT ? tran.status === ETransactionStatus.SUCCESS : true)
+			.sort((a, b) => dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf());
 		setResult(data ?? []);
 	}, [record]);
 
+	const isTransactionStatus = (status?: unknown): status is ETransactionStatus =>
+		Object.values(ETransactionStatus).includes(status as ETransactionStatus);
+
 	const columns: IColumn<HoaDon.ITransaction & { index: number }>[] = [
-		{
-			title: intl.formatMessage({ id: 'taichinh.hoadonchitiet.col.loaigiaodich' }),
-			dataIndex: 'type',
-			width: 130,
-			align: 'center',
-			render: (val: ETransactionType) =>
-				val ? <Tag color={colorTransactionType[val]}>{transactionType[val]}</Tag> : '--',
-		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadonchitiet.col.magiaodich' }),
 			dataIndex: 'identityCode',
@@ -65,7 +58,39 @@ const FormItemHoaDonChiTiet = () => {
 			title: intl.formatMessage({ id: 'taichinh.hoadonchitiet.col.tenkhoanthu' }),
 			dataIndex: 'tenKhoanThu',
 			width: 200,
-			render: (val, rec) => val ?? rec?.ten ?? rec?.name ?? '-',
+			render: (val, rec) => {
+				const isDiscount = rec?.type === ETransactionType.DISCOUNT;
+				const tenKhoanThu = val ?? rec?.ten ?? rec?.name ?? '-';
+				const phanTramUuDai = Number(rec?.phanTramUuDai);
+				const discountLabel =
+					Number.isFinite(phanTramUuDai) && phanTramUuDai > 0
+						? `${phanTramUuDai}%`
+						: `${currencyFormat(rec?.amount ?? 0)} VND`;
+				return (
+					<div>
+						{tenKhoanThu} {isDiscount ? `- ${discountLabel}` : ''}
+					</div>
+				);
+			},
+		},
+		{
+			title: intl.formatMessage({ id: 'taichinh.hoadonchitiet.col.loaigiaodich' }),
+			dataIndex: 'type',
+			width: 130,
+			align: 'center',
+			render: (val: ETransactionType, record) => {
+				if (!val) return '--';
+				const status = record?.status;
+				const isPayment = val === ETransactionType.PAYMENT || String(val).toLowerCase() === 'payment';
+				return (
+					<Space size={4} wrap>
+						<Tag color={colorTransactionType[val]}>{transactionType[val] ?? val}</Tag>
+						{isPayment && isTransactionStatus(status) ? (
+							<Tag color={colorTransactionStatus[status]}>{status.toUpperCase()}</Tag>
+						) : null}
+					</Space>
+				);
+			},
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadonchitiet.col.donvitinh' }),
@@ -121,7 +146,7 @@ const FormItemHoaDonChiTiet = () => {
 						: intl.formatMessage({ id: 'taichinh.hoadonchitiet.giaodich.hethong' })}
 				</Tag>
 			),
-		}
+		},
 		// {
 		// 	title: 'Ghi chú',
 		// 	dataIndex: 'ghiChu',

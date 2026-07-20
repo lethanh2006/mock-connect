@@ -3,6 +3,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Button, Card, Collapse, Form, Input, Space } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
+import DOMPurify from 'dompurify';
 const { Panel } = Collapse;
 
 const CauHoiThuongGap = () => {
@@ -56,7 +57,7 @@ const CauHoiThuongGap = () => {
 					{danhSach.map((item) => (
 						<Panel header={item.cauHoi} key={item._id}>
 							<p style={{ paddingLeft: 24 }}>
-								<div dangerouslySetInnerHTML={{ __html: item.cauTraLoi }} />
+								<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.cauTraLoi ?? '') }} />
 							</p>
 						</Panel>
 					))}

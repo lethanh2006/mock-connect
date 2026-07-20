@@ -10,7 +10,7 @@ import {
 	postDangKyTinChi,
 	revertLopDangKyTinDaHuy,
 } from '@/services/DaoTao/DangKyTinChi';
-import { ETrangThaiDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
+import { ETrangThaiDangKyTinChi, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { ETrangThaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
@@ -39,23 +39,34 @@ export default () => {
 
 	const getDotDangKyAvailableModel = async (maHocKy: string): Promise<DangKyTinChi.IDotDangKy> => {
 		setLoading(true);
+		setPhieuDangKy(undefined);
+		setSinhVienDot(undefined);
+		let sinhVienDotData: DangKyTinChi.ISinhVienDotDangKy | undefined;
+		let dotData: DangKyTinChi.IDotDangKy | undefined;
+
 		try {
 			const res = await getDotAvailable(maHocKy);
-			const data: DangKyTinChi.IDotDangKy = res.data?.data;
-			setDotDangKyHienTai(data);
+			dotData = res.data?.data;
+			setDotDangKyHienTai(dotData);
 
-			if (data?._id) {
-				const dotDangKyTinChiId = data?._id;
-				const res1 = await getSinhVienDot(dotDangKyTinChiId);
-				setSinhVienDot(res1.data?.data);
-			} else setSinhVienDot(undefined);
+			if (dotData?._id) {
+				const res1 = await getSinhVienDot(dotData._id);
+				sinhVienDotData = res1.data?.data;
+				setSinhVienDot(sinhVienDotData);
+			} else {
+				setSinhVienDot(undefined);
+			}
 
-			return data;
+			return dotData as DangKyTinChi.IDotDangKy;
 		} catch (er) {
 			setDotDangKyHienTai(undefined);
+			setSinhVienDot(undefined);
 			return Promise.reject(er);
 		} finally {
 			setLoading(false);
+			if (sinhVienDotData?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK && dotData?._id) {
+				void getPhieuDangKyModel(dotData._id);
+			}
 		}
 	};
 
@@ -127,8 +138,6 @@ export default () => {
 	const getLopDangKyModel = async (maHocKy: string): Promise<DangKyTinChi.ILopDangKy[]> => {
 		if (!maHocKy) return Promise.reject('Invalid maHocKy');
 
-		setLoading(true);
-
 		try {
 			const res = await getLopDangKy(maHocKy);
 
@@ -158,16 +167,24 @@ export default () => {
 
 			const result = [...lopDangKy, ...lopWaitList];
 
-			setDanhSachLopDangKy(result);
-			tinhDataLichHoc(result);
+			setDanhSachLopDangKy((prev) => {
+				const maHocPhanDaDangKy = new Set(result.map((item) => item.maHocPhan).filter(Boolean));
+				const lopChuaDangKy = prev.filter(
+					(item) =>
+						item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY &&
+						item.maHocPhan &&
+						!maHocPhanDaDangKy.has(item.maHocPhan),
+				);
+				const merged = [...lopChuaDangKy, ...result];
+				tinhDataLichHoc(merged);
+				return merged;
+			});
 
 			return result;
 		} catch (er) {
 			setDanhSachLopDangKy([]);
 			setDataLichHoc({});
 			return Promise.reject(er);
-		} finally {
-			setLoading(false);
 		}
 	};
 
@@ -175,11 +192,12 @@ export default () => {
 		data: {
 			dangKy: { lopHocPhanId: string; maKhoaNganh: string };
 			phieuDktcId: string;
+			recaptchaToken?: string;
 		},
 		messageText?: string,
 	): Promise<LopHocPhan.IRecordSinhVienLopHP> => {
 		try {
-			const res = await postDangKyTinChi(data);
+			const res = await postDangKyTinChi({ ...data });
 			message.success(messageText ?? intl.formatMessage({ id: 'dangkytinchi.thongbao.dangky' }));
 
 			return res.data?.data;

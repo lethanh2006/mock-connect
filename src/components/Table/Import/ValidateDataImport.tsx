@@ -13,9 +13,10 @@ const ValidateDataImport = (props: {
 	onBack: any;
 	modelName: any;
 	importHeaders: TImportHeader[];
+	extendData?: Record<string, string | number | boolean | null | undefined>;
 }) => {
 	const intl = useIntl();
-	const { onOk, onCancel, onBack, modelName, importHeaders } = props;
+	const { onOk, onCancel, onBack, modelName, importHeaders, extendData } = props;
 	const { dataImport, startLine } = useModel('import');
 	const { postValidateModel, postExecuteImpotModel, formSubmiting } = useModel(modelName) as any;
 	const [importResponses, setImportResponses] = useState<TImportRowResponse[]>([]);
@@ -53,9 +54,13 @@ const ValidateDataImport = (props: {
 
 	const validateData = async () => {
 		if (postValidateModel)
-			postValidateModel(dataImport, {
-				messageText: intl.formatMessage({ id: 'global.message.validated' }),
-			})
+			postValidateModel(
+				dataImport,
+				{
+					messageText: intl.formatMessage({ id: 'global.message.validated' }),
+				},
+				extendData,
+			)
 				.then((res: TImportResponse) => {
 					setErrorCount(res.validate?.filter((item) => !!item.rowErrors?.length).length);
 					setIsError(res.error);
@@ -70,9 +75,13 @@ const ValidateDataImport = (props: {
 	}, []);
 
 	const onExecute = () => {
-		postExecuteImpotModel(dataImport, {
-			messageText: intl.formatMessage({ id: 'global.message.imported' }),
-		})
+		postExecuteImpotModel(
+			dataImport,
+			{
+				messageText: intl.formatMessage({ id: 'global.message.imported' }),
+			},
+			extendData,
+		)
 			.then((res: TImportResponse) => {
 				setStep(1);
 				setErrorCount(res.validate?.filter((item) => !!item.rowErrors?.length).length);

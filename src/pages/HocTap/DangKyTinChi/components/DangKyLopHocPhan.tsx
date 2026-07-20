@@ -6,28 +6,41 @@ import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
 import {
 	EColorLopDangKy,
 	ELoaiDangKyTheoLop,
-	ELoaiHocPhanDangKyTinChi,
 	ETinhChatDangKyTC,
 	ETrangThaiDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
-import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import dayjs from '@/utils/dayjs';
-import { formatTimeRange } from '@/utils/formatDate';
 import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Empty, Modal, Popconfirm, Popover, Select, Space, Tag, Tooltip } from 'antd';
-import _ from 'lodash';
-import { useEffect, useState } from 'react';
+import { Modal, Popconfirm, Popover, Select, Space, Tag } from 'antd';
+import { useMemo, useState } from 'react';
 import { useAccess, useIntl, useModel } from 'umi';
+import {
+	buildLopDangKy,
+	filterBoChonLop,
+	getDangKyRoiMap,
+	getLopChaContext,
+	getLopTrungLich,
+	isDaChonLop,
+	isDaDangKyHocPhanKhacLop,
+	isHetSiSo,
+	isVuotSoTinChiToiDa,
+	renderKhoangThoiGian,
+} from '../utils';
 import ModalDangKyNgay from './ModalDangKyNgay';
 import RenderLichHoc from './RenderLichHoc';
 
-const DangKyLopHocPhan = () => {
+type DangKyLopHocPhanProps = {
+	tongTinChi: number;
+	soTinChiToiDa: number;
+	danhSachLopHienThi: DangKyTinChi.ILopDangKy[];
+};
+
+const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: DangKyLopHocPhanProps) => {
 	const intl = useIntl();
 	const { cctFilter } = useAccess();
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const { page, limit, filters, sort, danhSachLopDktc, sinhVienGetLopDangKyTheoHocPhanModel, setRecord } =
+	const { filters, sort, danhSachLopDktc, sinhVienGetLopDangKyTheoHocPhanModel, setRecord } =
 		useModel('lophocphan.lophocphan');
 	const {
 		dotDangKyHienTai,
@@ -38,110 +51,42 @@ const DangKyLopHocPhan = () => {
 		phieuDangKy,
 		deleteDangKyTinChiModel,
 	} = useModel('daotao.dotdangkytinchi');
-	const { record: recHocPhan, loaiDangKy, setLoaiDangKy } = useModel('hocphan.hocphan');
-	const { khoaNganhMe } = useModel('sinhvien.sinhvien'); // Đã get khóa ngành của tôi ở file Filter Học phần
+	const { loaiDangKy, setLoaiDangKy } = useModel('hocphan.hocphan');
+	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
 	const { settings } = useModel('tienich.caidat');
 	// const { danhSach: danhSachLopHanhChinh } = useModel('daotao.lophanhchinh');
-	const [coDangKyMoi, setCoDangKyMoi] = useState<boolean>();
 	const [expandedLopHocPhan, setExpandedLopHocPhan] = useState<string[]>([]);
-	const [typeLop] = useState<string>('Lớp gợi ý');
-	const allLoaiDangKy = Object.values(ELoaiDangKyTheoLop);
-	// Học phần đang chọn đã được đăng ký 1 lớp nào đó rồi
-	const dangKyRoiMap: Partial<Record<ELoaiLopHocPhan, DangKyTinChi.ILopDangKy>> = {};
-	danhSachLopDangKy.find((item) => {
-		if (item.maHocPhan === recHocPhan?.ma && item.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY) {
-			dangKyRoiMap[item.loaiLop!] = item;
-		}
-	});
-	// const danhSachMaLopHc = danhSachLopHanhChinh.map((item) => item.ten);
+	const allLoaiDangKy = useMemo(() => {
+		const all = Object.values(ELoaiDangKyTheoLop);
+		if (!khoaNganhMe?.khoaNganhPhu?.ma) return all.filter((item) => item !== ELoaiDangKyTheoLop.KHOA_NGANH_2);
+		return all;
+	}, [khoaNganhMe?.khoaNganhPhu?.ma]);
+
 	const [visibleDangKyNgay, setVisibleDangKyNgay] = useState<boolean>(false);
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
 	const dangKyNgay: boolean = true;
 	const coDotDangKyTinChi = !!dotDangKyHienTai?._id && dotDangKyHienTai.maHocKy === recHocKy?.ma;
+	const tableDependencies = useMemo(
+		() => [coDotDangKyTinChi ? dotDangKyHienTai?._id : null, loaiDangKy],
+		[coDotDangKyTinChi, dotDangKyHienTai?._id, loaiDangKy],
+	);
 
-	const getData = () =>
-		recHocKy?.ma &&
-		dotDangKyHienTai?._id &&
-		sinhVienGetLopDangKyTheoHocPhanModel(
+	const getData = () => {
+		if (!coDotDangKyTinChi || !recHocKy?.ma || !dotDangKyHienTai?._id) return;
+
+		return sinhVienGetLopDangKyTheoHocPhanModel(
 			recHocKy.ma,
-			dotDangKyHienTai?._id,
+			dotDangKyHienTai._id,
 			loaiDangKy,
-			{ tatCa: typeLop !== 'Lớp gợi ý' },
+			undefined,
 			filters,
 			sort,
 		).then((data) => setExpandedLopHocPhan(data.filter((item) => !!item.children?.length).map((item) => item.ten)));
-
-	/**
-	 * Khi nào chuyển sang học phần khác
-	 */
-	useEffect(() => {
-		if (recHocPhan?.ma) {
-			const lopChonMoi = danhSachLopDangKy.find(
-				(item) => item.maHocPhan === recHocPhan.ma && item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY,
-			);
-			// Học phần này có trong danh sách vừa mới chọn
-			if (!!lopChonMoi) {
-				const tempDanhSach = danhSachLopDangKy.filter((item) => item.maHocPhan !== recHocPhan.ma);
-				tinhDataLichHoc(tempDanhSach); // Tính lại lịch học không bao gồm môn này
-				setCoDangKyMoi(true); // Đánh dấu để khi sang học phần khác thì tính lại lịch học
-			}
-			// Hp trước đó có chọn lớp mới
-			else if (coDangKyMoi) {
-				tinhDataLichHoc(danhSachLopDangKy); // Tính lại dữ liệu lịch học bao gồm lớp vừa chọn kia
-				setCoDangKyMoi(false);
-			}
-		}
-	}, [recHocPhan?.ma]);
-
-	const isDaChonLop = (rec: LopHocPhan.IRecord) =>
-		!!danhSachLopDangKy.find((item) => item._id === rec._id || item.ten === rec.ten);
-
-	const isCungLopDangKy = (lopDangKy: DangKyTinChi.ILopDangKy, lopHocPhan: LopHocPhan.IRecord) =>
-		lopDangKy._id === lopHocPhan._id ||
-		lopDangKy.ten === lopHocPhan.ten ||
-		lopDangKy.tenCha === lopHocPhan.ten ||
-		lopDangKy.ten === lopHocPhan.tenCha;
-
-	const isDaDangKyHocPhanKhacLop = (lopHocPhan: LopHocPhan.IRecord) =>
-		!!lopHocPhan.maHocPhan &&
-		danhSachLopDangKy.some((item) => item.maHocPhan === lopHocPhan.maHocPhan && !isCungLopDangKy(item, lopHocPhan));
-
-	const getLopTrungLich = (rec: LopHocPhan.IRecord) => {
-		const thoiKhoaBieuList = rec.thoiKhoaBieuList ?? [];
-		if (!thoiKhoaBieuList.length) return [];
-
-		return _.uniq(
-			danhSachLopDangKy
-				.filter((lopDangKy) =>
-					thoiKhoaBieuList.some((tkb) =>
-						(lopDangKy.thoiKhoaBieuList ?? []).some((tkbDangKy) => {
-							const isSameDate = dayjs(tkbDangKy.ngay).isSame(dayjs(tkb.ngay), 'day');
-							const isOverlap =
-								(tkb.tietBatDau ?? 0) <= (tkbDangKy.tietKetThuc ?? 0) &&
-								(tkb.tietKetThuc ?? 0) >= (tkbDangKy.tietBatDau ?? 0);
-							return isSameDate && isOverlap;
-						}),
-					),
-				)
-				.map((lopDangKy) => lopDangKy.maLop ?? lopDangKy.ten ?? lopDangKy.maHocPhan)
-				.filter(Boolean),
-		);
-	};
-
-	const renderKhoangThoiGian = (rec: LopHocPhan.IRecord) => {
-		const thoiKhoaBieuList = rec.thoiKhoaBieuList ?? [];
-		if (!thoiKhoaBieuList.length) return null;
-
-		const start = _.minBy(thoiKhoaBieuList, (item) => dayjs(item.ngay).valueOf())?.ngay;
-		const end = _.maxBy(thoiKhoaBieuList, (item) => dayjs(item.ngay).valueOf())?.ngay;
-		if (!start || !end) return null;
-
-		return formatTimeRange(start, end, 'DD/MM');
 	};
 
 	const renderTrangThaiCanhBao = (rec: LopHocPhan.IRecord) => {
-		if (isDaChonLop(rec)) return null;
+		if (isDaChonLop(rec, danhSachLopDangKy)) return null;
 
 		if (rec.siSoToiDa - (rec.siSo ?? 0) <= 0) {
 			return (
@@ -151,7 +96,7 @@ const DangKyLopHocPhan = () => {
 			);
 		}
 
-		const lopTrungLich = getLopTrungLich(rec);
+		const lopTrungLich = getLopTrungLich(rec, danhSachLopDangKy);
 		if (lopTrungLich.length || checkTrungLich(rec.thoiKhoaBieuList ?? [])) {
 			return (
 				<Space size={4}>
@@ -177,24 +122,12 @@ const DangKyLopHocPhan = () => {
 		return null;
 	};
 
-	const getLopChaContext = (record: LopHocPhan.IRecord) => {
-		const lopCha = danhSachLopDktc.find((item) => item.ten === record.tenCha);
-		const needCheckLopCha = !!(lopCha && dangKyRoiMap[lopCha.loai]?.soThuTuLop !== lopCha.soThuTuLop);
-		return { lopCha, needCheckLopCha };
-	};
-
-	const isHetSiSo = (record: LopHocPhan.IRecord, lopCha?: LopHocPhan.IRecord, needCheckLopCha?: boolean) => {
-		const hetCho = record.siSoToiDa - (record.siSo ?? 0) <= 0;
-		if (!needCheckLopCha || !lopCha?._id) return hetCho;
-		return hetCho || lopCha.siSoToiDa - (lopCha.siSo ?? 0) <= 0;
-	};
-
 	const getDisabledDangKy = (record: LopHocPhan.IRecord) => {
 		if (record.children?.length) return true;
 
-		const { lopCha, needCheckLopCha } = getLopChaContext(record);
+		const { lopCha, needCheckLopCha, dangKyRoiMap } = getLopChaContext(record, danhSachLopDktc, danhSachLopDangKy);
 
-		if (isDaDangKyHocPhanKhacLop(record)) return true;
+		if (isDaDangKyHocPhanKhacLop(record, danhSachLopDangKy)) return true;
 		if (dangKyRoiMap[record.loai]) return true;
 		if (needCheckLopCha && lopCha?.loai && dangKyRoiMap[lopCha.loai]) return true;
 
@@ -207,53 +140,27 @@ const DangKyLopHocPhan = () => {
 			? [...(record.thoiKhoaBieuList ?? []), ...(lopCha?.thoiKhoaBieuList ?? [])]
 			: (record.thoiKhoaBieuList ?? []);
 
-		return checkTrungLich(allThoiKhoaBieu);
-	};
+		if (checkTrungLich(allThoiKhoaBieu)) return true;
 
-	const buildLopDangKy = (lopVuaChon: LopHocPhan.IRecord, isWaitlist = false) => {
-		const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác cùng học phần
-		let soTinChi = lopVuaChon.hocPhan?.soTinChi ?? recHocPhan?.soTinChi ?? 0;
-		const khoaNganh = khoaNganhMe?.khoaNganhChinh;
-		// loaiDangKy === ELoaiDangKyTheoLop.KHOA_NGANH_2 ? khoaNganhMe?.khoaNganhPhu :
-		const lopDangKy = {
-			hocPhan: recHocPhan,
-			maNganh: khoaNganh?.maNganh,
-			maKhoaNganh: khoaNganh?.ma,
-			// TODO: Update loại đăng ký
-			loai: ELoaiHocPhanDangKyTinChi.TIEN_TRINH,
-			trangThai: dangKyNgay ? ETrangThaiDangKyTinChi.DA_DANG_KY : ETrangThaiDangKyTinChi.CHUA_DANG_KY,
-			isWaitlist,
-		};
-
-		const listDangKy: DangKyTinChi.ILopDangKy[] = [];
-
-		// Nếu lớp vừa chọn là lớp thực hành thì lấy số tín chỉ của lớp cha nó
-		if (lopVuaChon.tenCha) {
-			const lopCha = danhSachLopDktc.find((item) => item.ten === lopVuaChon.tenCha);
-			if (!soTinChi) soTinChi = lopCha?.hocPhan?.soTinChi ?? 0;
-			// Thêm cả lớp cha vào để hiển thị lịch học ở lớp đăng ký
-			if (lopCha) listDangKy.push({ ...lopCha, soTinChi, ...lopDangKy } as DangKyTinChi.ILopDangKy);
-		}
-
-		// Thêm lớp vừa chọn vào danh sách Lớp đăng ký
-		// Loại đăng ký theo loại học phần đã chọn
-		listDangKy.push({ ...lopVuaChon, soTinChi, ...lopDangKy } as DangKyTinChi.ILopDangKy);
-
-		return {
-			temp: [...listDangKy, ...temp],
-			listDangKy,
-		};
+		return isVuotSoTinChiToiDa(record, danhSachLopHienThi, danhSachLopDktc, tongTinChi, soTinChiToiDa);
 	};
 
 	const handleDangKy = (lopVuaChon: LopHocPhan.IRecord, isWaitList = false) => {
-		const isDungHocPhanDangChon = !recHocPhan?.ma || lopVuaChon.maHocPhan === recHocPhan.ma;
+		const dangKyRoiMap = getDangKyRoiMap(lopVuaChon.maHocPhan, danhSachLopDangKy);
 		if (
 			!lopVuaChon.children?.length &&
-			!isDaDangKyHocPhanKhacLop(lopVuaChon) &&
-			!dangKyRoiMap[lopVuaChon.loai!] &&
-			isDungHocPhanDangChon
+			!isDaDangKyHocPhanKhacLop(lopVuaChon, danhSachLopDangKy) &&
+			!dangKyRoiMap[lopVuaChon.loai!]
 		) {
-			const { temp } = buildLopDangKy(lopVuaChon, isWaitList);
+			const { temp } = buildLopDangKy({
+				lopVuaChon,
+				danhSachLopDangKy,
+				danhSachLopDktc,
+				loaiDangKy,
+				khoaNganhMe,
+				dangKyNgay,
+				isWaitlist: isWaitList,
+			});
 
 			if (dangKyNgay) {
 				setRecord(lopVuaChon);
@@ -262,8 +169,7 @@ const DangKyLopHocPhan = () => {
 			}
 
 			setDanhSachLopDangKy(temp);
-			setCoDangKyMoi(true);
-			// Không tính lại lịch học ở đây vì sẽ trùng với các lớp trong môn hiện tại
+			tinhDataLichHoc(temp);
 		}
 	};
 
@@ -287,18 +193,14 @@ const DangKyLopHocPhan = () => {
 	const onClickBoChon = (rec: LopHocPhan.IRecord) => {
 		if (dangKyNgay) return;
 
-		const temp = danhSachLopDangKy.filter(
-			(item) =>
-				item.maHocPhan !== rec.maHocPhan ||
-				(item._id !== rec._id && item.ten !== rec.ten && item.tenCha !== rec.ten && item.ten !== rec.tenCha),
-		);
+		const temp = filterBoChonLop(danhSachLopDangKy, rec);
 
 		setDanhSachLopDangKy(temp);
-		setCoDangKyMoi(true);
+		tinhDataLichHoc(temp);
 	};
 
 	const handleXemDeCuong = (rec: LopHocPhan.IRecord) => {
-		const deCuongId = rec.hocPhan?.deCuongHienTaiId ?? rec.deCuong?.deCuongId ?? rec.hocPhan?.ma ?? rec.maHocPhan;
+		const deCuongId = rec.hocPhan?.ma ?? rec.maHocPhan;
 		if (!deCuongId) return;
 
 		setDeCuongModal({
@@ -352,7 +254,7 @@ const DangKyLopHocPhan = () => {
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.mahp' }),
 			dataIndex: 'maHocPhan',
-			width: 150,
+			width: 120,
 			align: 'center',
 			filterType: 'string',
 			sortable: true,
@@ -370,19 +272,19 @@ const DangKyLopHocPhan = () => {
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.tenhocphan' }),
 			dataIndex: ['hocPhan', 'ten'],
-			width: 280,
+			width: 220,
 			filterType: 'string',
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.sotinchi' }),
 			dataIndex: ['hocPhan', 'soTinChi'],
-			width: 70,
+			width: 50,
 			align: 'center',
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.malop' }),
 			dataIndex: 'ten',
-			width: 140,
+			width: 150,
 			align: 'center',
 			filterType: 'string',
 			render: (val, rec) => val ?? rec?.ten,
@@ -401,7 +303,7 @@ const DangKyLopHocPhan = () => {
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.giangvien' }),
-			width: 160,
+			width: 140,
 			render: (val, rec) => (
 				<ExpandText>
 					{rec.nhanSuList
@@ -420,19 +322,19 @@ const DangKyLopHocPhan = () => {
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.thongtinchitiet' }),
-			width: 250,
+			width: 220,
 			render: (val, rec) => <RenderLichHoc lopHocPhan={rec} />,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.sisotoida' }),
 			dataIndex: 'siSoToiDa',
 			align: 'center',
-			width: 100,
+			width: 60,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.controng' }),
 			align: 'center',
-			width: 100,
+			width: 60,
 			render: (val, rec) => (rec.siSo !== undefined && rec.siSoToiDa >= rec.siSo ? rec.siSoToiDa - rec.siSo : 0),
 		},
 		// {
@@ -478,20 +380,43 @@ const DangKyLopHocPhan = () => {
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.thaotac' }),
 			align: 'center',
-			width: 120,
+			width: 150,
 			fixed: 'right',
 			render: (val, rec) => {
-				const daChon = isDaChonLop(rec);
+				const daChon = isDaChonLop(rec, danhSachLopDangKy);
 				const lopDangKy = danhSachLopDangKy.find((item) => item._id === rec._id || item.ten === rec.ten);
+				const vuotSoTinChi = isVuotSoTinChiToiDa(rec, danhSachLopHienThi, danhSachLopDktc, tongTinChi, soTinChiToiDa);
 				const disabled = getDisabledDangKy(rec) || !coDotDangKyTinChi;
+				const canhBao = renderTrangThaiCanhBao(rec);
+				const isChuaDangKy = lopDangKy?.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY;
+				const disabledDelete =
+					(lopDangKy?.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
+						dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
+					!rec.dangKyTinChi ||
+					!coDotDangKyTinChi;
 
-				if (daChon && dangKyNgay) {
-					const disabledDelete =
-						(lopDangKy?.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
-							dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
-						!rec.dangKyTinChi ||
-						!coDotDangKyTinChi;
+				if (daChon && isChuaDangKy) {
+					return (
+						<div>
+							<ButtonExtend
+								type='default'
+								danger
+								size='small'
+								onClick={(e) => {
+									e.stopPropagation();
+									onClickBoChon(rec);
+								}}
+								disabled={!coDotDangKyTinChi}
+							>
+								{intl.formatMessage({
+									id: 'dangkytinchi.dankylophocphan.action.bochon',
+								})}
+							</ButtonExtend>
+						</div>
+					);
+				}
 
+				if (daChon) {
 					return (
 						<Space size={6} wrap={false}>
 							<Tag color='green'>
@@ -508,51 +433,24 @@ const DangKyLopHocPhan = () => {
 								onConfirm={() => lopDangKy?._id && onDeleteLop(lopDangKy)}
 								disabled={disabledDelete}
 							>
-								<Tooltip
-									placement='bottom'
-									title={intl.formatMessage({
+								<ButtonExtend
+									icon={<DeleteOutlined />}
+									danger
+									otherTooltipProps={{
+										placement: 'bottom',
+									}}
+									type='link'
+									disabled={disabledDelete}
+									tooltip={intl.formatMessage({
 										id: 'dangkytinchi.phieudangky.columntable.huy.tooltip',
 									})}
-								>
-									<span
-										style={{
-											color: disabledDelete ? '#d9d9d9' : '#ff4d4f',
-											cursor: disabledDelete ? 'not-allowed' : 'pointer',
-											fontSize: 18,
-											lineHeight: 1,
-										}}
-										onClick={(e) => {
-											if (disabledDelete) e.preventDefault();
-										}}
-									>
-										<DeleteOutlined />
-									</span>
-								</Tooltip>
+									onClick={(e) => e.stopPropagation()}
+								/>
 							</Popconfirm>
 						</Space>
 					);
 				}
 
-				if (daChon) {
-					return (
-						<div>
-							<ButtonExtend
-								type='primary'
-								onClick={(e) => {
-									e.stopPropagation();
-									onClickBoChon(rec);
-								}}
-								disabled={!coDotDangKyTinChi}
-							>
-								{intl.formatMessage({
-									id: 'dangkytinchi.dankylophocphan.action.dachon',
-								})}
-							</ButtonExtend>
-						</div>
-					);
-				}
-
-				const canhBao = renderTrangThaiCanhBao(rec);
 				if (canhBao && disabled) return canhBao;
 
 				return (
@@ -560,6 +458,11 @@ const DangKyLopHocPhan = () => {
 						<ButtonExtend
 							type='primary'
 							disabled={disabled}
+							tooltip={
+								vuotSoTinChi
+									? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin' })
+									: undefined
+							}
 							onClick={(e) => {
 								e.stopPropagation();
 
@@ -585,84 +488,45 @@ const DangKyLopHocPhan = () => {
 			{/* {recHocPhan?.ma ? ( */}
 			{/* recHocPhan.trangThai === ETrangThaiHocPhanDangKyTinChi.DUOC_DK ? ( */}
 			<div className='table-dang-ky'>
-				{coDotDangKyTinChi ? (
-					<TableBase
-						params={{
-							maHocKy: recHocKy?.ma,
-						}}
-						columns={columns}
-						dependencies={[page, limit, recHocKy?.ma, recHocPhan?.ma, typeLop, loaiDangKy]}
-						getData={getData}
-						dataState='danhSachLopDktc'
-						modelName='lophocphan.lophocphan'
-						hideCard
-						buttons={{ create: false }}
-						otherProps={{
-							rowKey: 'ten',
-							expandable: {
-								expandRowByClick: true,
-								indentSize: 0,
-								expandedRowKeys: expandedLopHocPhan,
-								onExpand,
-							},
-						}}
-						otherButtons={[
-							<Select
-								key='loai-dang-ky'
-								options={allLoaiDangKy.map((item) => ({
-									key: item,
-									value: item,
-									label: intl.formatMessage({
-										id: `dangkytinchi.loaidangky.${item}`,
-									}),
-								}))}
-								value={loaiDangKy}
-								onChange={(val) => setLoaiDangKy(val)}
-								style={{ width: 300 }}
-							/>,
-						]}
-						emptyText={intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.table.empty.khongcolop' })}
-					/>
-				) : (
-					<Empty
-						description={intl.formatMessage({ id: 'dangkytinchi.thongtindangky.empty.khongcodotdangky' })}
-						style={{ margin: '32px 0' }}
-					/>
-				)}
+				<TableBase
+					columns={columns}
+					dependencies={tableDependencies}
+					getData={getData}
+					dataState='danhSachLopDktc'
+					modelName='lophocphan.lophocphan'
+					hideCard
+					buttons={{ create: false }}
+					scroll={{ y: 600 }}
+					otherProps={{
+						rowKey: 'ten',
+						expandable: {
+							expandRowByClick: true,
+							indentSize: 0,
+							expandedRowKeys: expandedLopHocPhan,
+							onExpand,
+						},
+					}}
+					otherButtons={[
+						<Select
+							key='loai-dang-ky'
+							options={allLoaiDangKy.map((item) => ({
+								key: item,
+								value: item,
+								label: intl.formatMessage({
+									id: `dangkytinchi.loaidangky.${item}`,
+								}),
+							}))}
+							value={loaiDangKy}
+							onChange={(val) => setLoaiDangKy(val)}
+							style={{ width: 260 }}
+						/>,
+					]}
+					emptyText={intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.table.empty.khongcolop' })}
+				/>
 			</div>
-			{/* ) : ( */}
-			{/* ) : ( */}
-			{/* 	<Empty
-				// 		description={
-				// 			<>
-				// 				<i style={{ color: '#999' }}>Bạn không đủ điều kiện để đăng ký tín chỉ này !</i>
-				// 				<br />
-				// 				{recHocPhan.trangThai === ETrangThaiHocPhanDangKyTinChi.MIEN
-				// 					? 'Học phần được miễn'
-				// 					: recHocPhan.trangThai}
-				// 				{recHocPhan.hpTienQuyet ? (
-				// 					<div>
-				// 						Học phần tiên quyết: {recHocPhan.hpTienQuyet?.ten ?? ''} - {recHocPhan.hpTienQuyet?.ma ?? ''}
-				// 					</div>
-				// 				) : null}
-				// 				{recHocPhan.hpHocTruoc ? (
-				// 					<div>
-				// 						Học phần trước: {recHocPhan.hpHocTruoc?.ten ?? ''} - {recHocPhan.hpHocTruoc?.ma ?? ''}
-				// 					</div>
-				// 				) : null}
-				// 			</>
-				// 		}
-				// 		style={{ marginTop: 30, marginBottom: 30 }}
-				// 	/>
-				// ) */}
-			{/* <Empty
-					description={
-						<i style={{ color: '#999' }}>
-							{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.table.empty.chonhocphanmuondangky' })}
-				/> */}
-			{/* )} */}
 
 			<ModalDangKyNgay visible={visibleDangKyNgay} setVisible={setVisibleDangKyNgay} />
+
 			<ModalHocPhan
 				visible={visibleDeCuong}
 				setVisible={setVisibleDeCuong}

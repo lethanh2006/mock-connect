@@ -1,4 +1,5 @@
 import { ELoaiHinhThucThanhToan } from "@/services/TaiChinh/HinhThucThanhToan/constant";
+import { EOnepayCard } from "@/services/TaiChinh/KenhThanhToan/constants";
 
 declare module KenhThanhToan {
     export interface IRecord {
@@ -55,6 +56,8 @@ declare module KenhThanhToan {
         onepayBinVnAccessCode: string;
         onepayBinForeignMerchant: string;
         onepayBinForeignAccessCode: string;
+        onepayCard: EOnepayCard;
+        onepayIntegrationType?: 'PAYGATE' | 'PAYCOLLECT';
 
         createdAt: string;
         updatedAt: string;

@@ -1,14 +1,24 @@
+import { getRecaptchaSiteKey } from '@/utils/config';
 import { Alert, Button, Col, Descriptions, Modal, Row } from 'antd';
 import { useState } from 'react';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { useIntl, useModel } from 'umi';
 import RenderLichHoc from './RenderLichHoc';
 
-const ModalDangKyNgay = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
+type ModalDangKyNgayProps = {
+	visible: boolean;
+	setVisible: (val: boolean) => void;
+};
+
+type ExecuteRecaptcha = (action?: string) => Promise<string>;
+
+const ModalDangKyNgayContent = ({
+	visible,
+	setVisible,
+	executeRecaptcha,
+}: ModalDangKyNgayProps & { executeRecaptcha?: ExecuteRecaptcha }) => {
 	const intl = useIntl();
-	const { visible, setVisible } = props;
-
 	const [errorMessage, setErrorMessage] = useState<string>();
-
 	const { record, formSubmiting, setFormSubmiting } = useModel('lophocphan.lophocphan');
 	const { dotDangKyHienTai, postDangKyTinChiModel, phieuDangKy, getPhieuDangKyModel, getLopDangKyModel } =
 		useModel('daotao.dotdangkytinchi');
@@ -33,6 +43,8 @@ const ModalDangKyNgay = (props: { visible: boolean; setVisible: (val: boolean) =
 			setErrorMessage(undefined);
 			setFormSubmiting(true);
 
+			const recaptchaToken = executeRecaptcha ? await executeRecaptcha('DANG_KY_TIN_CHI') : undefined;
+
 			await postDangKyTinChiModel(
 				{
 					phieuDktcId: phieuDangKy?._id ?? '',
@@ -40,6 +52,7 @@ const ModalDangKyNgay = (props: { visible: boolean; setVisible: (val: boolean) =
 						lopHocPhanId: record?._id ?? '',
 						maKhoaNganh: khoaNganh?.ma ?? '',
 					},
+					...(recaptchaToken ? { recaptchaToken } : {}),
 				},
 				intl.formatMessage({ id: 'dangkytinchi.thongbao.dangky' }),
 			);
@@ -118,6 +131,20 @@ const ModalDangKyNgay = (props: { visible: boolean; setVisible: (val: boolean) =
 			</div>
 		</Modal>
 	);
+};
+
+const ModalDangKyNgayWithRecaptcha = (props: ModalDangKyNgayProps) => {
+	const { executeRecaptcha } = useGoogleReCaptcha();
+
+	return <ModalDangKyNgayContent {...props} executeRecaptcha={executeRecaptcha} />;
+};
+
+const ModalDangKyNgay = (props: ModalDangKyNgayProps) => {
+	if (getRecaptchaSiteKey()) {
+		return <ModalDangKyNgayWithRecaptcha {...props} />;
+	}
+
+	return <ModalDangKyNgayContent {...props} />;
 };
 
 export default ModalDangKyNgay;

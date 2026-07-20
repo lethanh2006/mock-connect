@@ -3,6 +3,7 @@ import type { IFileInfo } from '@/services/base/typing';
 import { getFileContent, getFileInfo, getFileRouteBase } from '@/services/uploadFile';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
+import { openSafeUrl } from '@/utils/security';
 import { getFileType, getNameFile } from '@/utils/utils';
 import { DownloadOutlined, FileSearchOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Empty, message, Spin } from 'antd';
@@ -111,7 +112,8 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 				const fileInfo: IFileInfo = result?.data?.data;
 				const fileRouteBase = getFileRouteBase(ip);
 				frame.url = getProxiedFileUrl(
-					fileInfo?.url ?? (!isFileId ? srcUrl : `${fileRouteBase}/${idFile}/${encodeURIComponent(fileInfo?.name ?? 'file')}`),
+					fileInfo?.url ??
+						(!isFileId ? srcUrl : `${fileRouteBase}/${idFile}/${encodeURIComponent(fileInfo?.name ?? 'file')}`),
 				);
 				frame.name = fileInfo?.name;
 
@@ -163,7 +165,6 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	const handleDownloadOrView = async () => {
 		if (!frameData?.url) return;
 
-		// if (isDownloadableUrl(frameData.url)) {
 		try {
 			const response = await axios.get(frameData.url, {
 				responseType: 'blob',
@@ -173,11 +174,8 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 			fileDownload(blob, getNameFile(frameData.url));
 		} catch (error) {
 			console.error('Error downloading file:', error);
-			window.open(frameData.url, '_blank');
+			openSafeUrl(frameData.url);
 		}
-		// } else {
-		// 	window.open(frameData.url, '_blank');
-		// }
 	};
 
 	const handleCopy = () => {
@@ -278,7 +276,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 								type='link'
 								tooltip={intl.formatMessage({ id: 'global.previewfile.button.morong' })}
 								icon={<ExpandOutlined />}
-								onClick={() => window.open(frameData?.src, '_blank')}
+								onClick={() => openSafeUrl(frameData?.src)}
 							/>
 						)} */}
 

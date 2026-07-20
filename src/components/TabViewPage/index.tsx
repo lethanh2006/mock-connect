@@ -120,7 +120,6 @@ export const TabViewPage = (props: TabViewPageComponentProps) => {
 				title={currentTitle}
 				variant='borderless'
 				className={`card-borderless card-big-title has-indicator ${cardProps?.className ?? ''}`.trim()}
-				extra={extraCard}
 			>
 				<Card variant='borderless'>{mainContent()}</Card>
 			</Card>

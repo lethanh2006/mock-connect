@@ -1,4 +1,5 @@
 import UploadFile from '@/components/Upload/UploadFile';
+import DOMPurify from 'dompurify';
 import {
 	colorTrangThaiNopBaiTap,
 	ETrangThaiNopBaiTap,
@@ -273,12 +274,14 @@ const FormBaiTap = (props: any) => {
 									<div
 										className='detail-noi-dong-post'
 										dangerouslySetInnerHTML={{
-											__html: record?.assignment?.huongDanNop
-												? record?.assignment.huongDanNop.replace(
-														/<img/g,
-														'<img style="max-width:100%;height:auto;display:block;margin:10px 0;"',
-													)
-												: '',
+											__html: DOMPurify.sanitize(
+												record?.assignment?.huongDanNop
+													? record?.assignment.huongDanNop.replace(
+															/<img/g,
+															'<img style="max-width:100%;height:auto;display:block;margin:10px 0;"',
+														)
+													: '',
+											),
 										}}
 									/>
 								</Col>

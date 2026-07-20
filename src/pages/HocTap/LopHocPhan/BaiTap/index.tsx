@@ -1,5 +1,6 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import ModalExpandable from '@/components/Table/ModalExpandable';
+import { getPublicAssetPath } from '@/utils/path';
 import { ReloadOutlined } from '@ant-design/icons';
 import { Segmented, Skeleton, Spin } from 'antd';
 import { useEffect, useState } from 'react';
@@ -53,7 +54,7 @@ const BaiTapPage = (props: { lopHocPhanId: string }) => {
 					{!danhSach?.length ? (
 						<div style={{ textAlign: 'center' }}>
 							<div style={{ marginBottom: 8 }}>
-								<img src='/student/images/bai-tap.svg' />
+								<img src={getPublicAssetPath('images/bai-tap.svg')} />
 							</div>
 							<div>
 								<b>{intl.formatMessage({ id: 'lophocphan.id.baitap.noti1' })}</b> <br />
@@ -77,9 +78,7 @@ const BaiTapPage = (props: { lopHocPhanId: string }) => {
 								}
 								scrollableTarget='body'
 							>
-								{danhSach?.map((val) => (
-									<CardStatusBaiTap key={val._id} data={val} />
-								))}
+								{danhSach?.map((val) => <CardStatusBaiTap key={val._id} data={val} />)}
 							</InfiniteScroll>
 						</>
 					)}

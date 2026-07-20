@@ -13,14 +13,14 @@ export default {
 	'menu.OtherGroup': 'Others',
 
 	// DEFAULT
-	'menu.Lich': 'Calendar',
+	'menu.Lich': 'My Calendar',
 	'menu.ThongTinCaNhan': 'Personal Information',
 
 	'menu.LopHanhChinh': 'Administrative Class',
 
 	// STUDENT
 	'menu.HocTap': 'Study',
-	'menu.HocTap.TienTrinhHocTap': 'Study Progress',
+	'menu.HocTap.TienTrinhHocTap': 'Degree Audit',
 	'menu.HocTap.DangKyNhuCau': 'Register for on-demand learning',
 	'menu.HocTap.DangKyTinChi': 'Course Registration',
 	'menu.HocTap.NhuCauHocPhan': 'Course Enrollment Request',
@@ -29,7 +29,7 @@ export default {
 	'menu.ChiTietLopHocPhan': 'Section',
 	'menu.HocTap.LichThi': 'Exam Schedule',
 	'menu.HocTap.BaiThiCuoiKy': 'Final Exam Submission',
-	'menu.HocTap.KetQuaHocTap': 'Study Results',
+	'menu.HocTap.KetQuaHocTap': 'Academic Results',
 	'menu.HocTap.HocTapKhac': 'Other Study Activities',
 	'menu.HocTap.HocTapKhac.DangKyChuyenNganh': 'Concentration Registration',
 	'menu.HocTap.HocTapKhac.XetHocVu': 'Academic Review',
@@ -124,6 +124,9 @@ export default {
 	'menu.Activity.MyActivity': 'My Activity',
 	'menu.Activity.MyCCT': 'Co-curricular Transcript',
 
+	'menu.GeneralService': 'General Service',
+	'menu.GeneralService.Dormitory': 'Dormitory',
+
 	'menu.MyProfile': 'My Profile',
 	'menu.MyCalendar': 'My Calendar',
 	'menu.Academic': 'Academic',
@@ -158,6 +161,8 @@ export default {
 	'menu.StudentSupport.ITSupport': 'IT Support',
 	'menu.CampusLife': 'Campus Life',
 	'menu.CampusLife.StudentHousing': 'Student Housing',
+	'menu.CampusLife.StudentHousing.DangKy': 'Registration',
+	'menu.CampusLife.StudentHousing.LichSu': 'History',
 	'menu.CampusLife.Club': 'Club',
 	'menu.CampusLife.CodeConduct': 'Code of Conduct',
 	'menu.CampusLife.FacilityBooking': 'Facility Booking',

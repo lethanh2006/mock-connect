@@ -35,7 +35,7 @@ export default [
 	// 	hideInMenu: true,
 	// },
 	{
-		path: '/my-profile',
+		path: '/thong-tin-ca-nhan',
 		name: 'MyProfile',
 		icon: 'UserOutlined',
 		component: 'SinhVien',
@@ -47,12 +47,12 @@ export default [
 		component: 'Calendar',
 	},
 	{
-		path: '/academic',
+		path: '/hoc-tap',
 		name: 'Academic',
 		icon: 'BookOutlined',
 		routes: [
 			{
-				path: 'course-registration',
+				path: 'dang-ky-tin-chi',
 				name: 'CourseRegistration',
 				component: 'HocTap/DangKyTinChi',
 			},
@@ -62,12 +62,12 @@ export default [
 			// 	component: 'Calendar',
 			// },
 			{
-				path: 'grades-transcript',
+				path: 'ket-qua-hoc-tap',
 				name: 'GradesTranscript',
 				component: 'HocTap/KetQuaHocTap',
 			},
 			{
-				path: 'degree-audit',
+				path: 'tien-trinh-hoc-tap',
 				name: 'DegreeAudit',
 				component: 'HocTap/TienTrinhHocTap',
 			},
@@ -137,11 +137,11 @@ export default [
 				name: 'StudentDevelopment',
 				component: 'New/StudentDevelopment',
 			},
-			{
-				path: 'student-awarding',
-				name: 'StudentAwarding',
-				component: 'New/StudentAwarding',
-			},
+			// {
+			// 	path: 'student-awarding',
+			// 	name: 'StudentAwarding',
+			// 	component: 'New/StudentAwarding',
+			// },
 			{
 				path: 'events',
 				name: 'Events',
@@ -164,81 +164,92 @@ export default [
 	// 	name: 'StudentSupport',
 	// 	icon: 'CustomerServiceOutlined',
 	// 	routes: [
-	// 		{
-	// 			path: 'registrar-services',
-	// 			name: 'RegistrarServices',
-	// 			routes: [
-	// 				{
-	// 					path: 'registration',
-	// 					name: 'Registration',
-	// 					component: 'New/Registration',
-	// 				},
-	// 				{
-	// 					path: 'history',
-	// 					name: 'History',
-	// 					component: 'New/History',
-	// 				},
-	// 			],
-	// 		},
+	// 		// {
+	// 		// 	path: 'registrar-services',
+	// 		// 	name: 'RegistrarServices',
+	// 		// 	routes: [
+	// 		// 		{
+	// 		// 			path: 'registration',
+	// 		// 			name: 'Registration',
+	// 		// 			component: 'New/Registration',
+	// 		// 		},
+	// 		// 		{
+	// 		// 			path: 'history',
+	// 		// 			name: 'History',
+	// 		// 			component: 'New/History',
+	// 		// 		},
+	// 		// 	],
+	// 		// },
 	// 		{
 	// 			path: 'health-clinic',
 	// 			name: 'HealthClinic',
-	// 			component: 'New/HealthClinic',
+	// 			component: 'BaoHiemYTe',
 	// 		},
-	// 		{
-	// 			path: 'mental-health',
-	// 			name: 'MentalHealth',
-	// 			component: 'New/MentalHealth',
-	// 		},
-	// 		{
-	// 			path: 'work-study',
-	// 			name: 'WorkStudy',
-	// 			component: 'New/WorkStudy',
-	// 		},
-	// 		{
-	// 			path: 'international',
-	// 			name: 'International',
-	// 			component: 'New/International',
-	// 		},
-	// 		{
-	// 			path: 'IT-support',
-	// 			name: 'ITSupport',
-	// 			component: 'New/ITSupport',
-	// 		},
+	// 		// {
+	// 		// 	path: 'mental-health',
+	// 		// 	name: 'MentalHealth',
+	// 		// 	component: 'New/MentalHealth',
+	// 		// },
+	// 		// {
+	// 		// 	path: 'work-study',
+	// 		// 	name: 'WorkStudy',
+	// 		// 	component: 'New/WorkStudy',
+	// 		// },
+	// 		// {
+	// 		// 	path: 'international',
+	// 		// 	name: 'International',
+	// 		// 	component: 'New/International',
+	// 		// },
+	// 		// {
+	// 		// 	path: 'IT-support',
+	// 		// 	name: 'ITSupport',
+	// 		// 	component: 'New/ITSupport',
+	// 		// },
 	// 	],
 	// },
-	// {
-	// 	path: '/campus-life',
-	// 	name: 'CampusLife',
-	// 	icon: 'BankOutlined',
-	// 	routes: [
-	// 		{
-	// 			path: 'student-housing',
-	// 			name: 'StudentHousing',
-	// 			component: 'New/StudentHousing',
-	// 		},
-	// 		{
-	// 			path: 'Club',
-	// 			name: 'Club',
-	// 			component: 'New/Club',
-	// 		},
-	// 		{
-	// 			path: 'code-conduct',
-	// 			name: 'CodeConduct',
-	// 			component: 'New/CodeConduct',
-	// 		},
-	// 		{
-	// 			path: 'facility-booking',
-	// 			name: 'FacilityBooking',
-	// 			component: 'New/FacilityBooking',
-	// 		},
-	// 		{
-	// 			path: 'campus-news',
-	// 			name: 'CampusNews',
-	// 			component: 'New/CampusNews',
-	// 		},
-	// 	],
-	// },
+	{
+		path: '/campus-life',
+		name: 'CampusLife',
+		icon: 'BankOutlined',
+		routes: [
+			{
+				path: 'student-housing',
+				name: 'StudentHousing',
+				routes: [
+					{
+						path: 'dang-ky',
+						name: 'DangKy',
+						component: 'KyTucXa/DangKy',
+					},
+					{
+						path: 'lich-su',
+						name: 'LichSu',
+						component: 'KyTucXa/LichSu',
+					},
+				],
+			},
+			// {
+			// 	path: 'Club',
+			// 	name: 'Club',
+			// 	component: 'New/Club',
+			// },
+			// {
+			// 	path: 'code-conduct',
+			// 	name: 'CodeConduct',
+			// 	component: 'New/CodeConduct',
+			// },
+			// {
+			// 	path: 'facility-booking',
+			// 	name: 'FacilityBooking',
+			// 	component: 'New/FacilityBooking',
+			// },
+			// {
+			// 	path: 'campus-news',
+			// 	name: 'CampusNews',
+			// 	component: 'New/CampusNews',
+			// },
+		],
+	},
 	// {
 	// 	path: '/career-industry',
 	// 	name: 'CareerIndustry',
@@ -335,33 +346,33 @@ export default [
 	// 		},
 	// 	],
 	// },
-	// {
-	// 	path: '/finance',
-	// 	name: 'Finance',
-	// 	icon: 'DollarOutlined',
-	// 	routes: [
-	// 		{
-	// 			path: 'tuition-billing',
-	// 			name: 'TuitionBilling',
-	// 			component: 'New/TuitionBilling',
-	// 		},
-	// 		{
-	// 			path: 'payment-tracking',
-	// 			name: 'PaymentTracking',
-	// 			component: 'New/PaymentTracking',
-	// 		},
-	// 		{
-	// 			path: 'scholarship',
-	// 			name: 'Scholarship',
-	// 			component: 'New/Scholarship',
-	// 		},
-	// 		{
-	// 			path: 'financial-planning',
-	// 			name: 'FinancialPlanning',
-	// 			component: 'New/FinancialPlanning',
-	// 		},
-	// 	],
-	// },
+	{
+		path: '/finance',
+		name: 'Finance',
+		icon: 'DollarOutlined',
+		routes: [
+			{
+				path: 'tuition-billing',
+				name: 'TuitionBilling',
+				component: 'TaiChinh/HoaDon',
+			},
+			// {
+			// 	path: 'payment-tracking',
+			// 	name: 'PaymentTracking',
+			// 	component: 'New/PaymentTracking',
+			// },
+			// {
+			// 	path: 'scholarship',
+			// 	name: 'Scholarship',
+			// 	component: 'New/Scholarship',
+			// },
+			// {
+			// 	path: 'financial-planning',
+			// 	name: 'FinancialPlanning',
+			// 	component: 'New/FinancialPlanning',
+			// },
+		],
+	},
 
 	// DANH MUC HE THONG
 	// {
@@ -860,36 +871,36 @@ export default [
 	// },
 
 	// TÀI CHÍNH
-	{
-		name: 'TaiChinh',
-		icon: 'TransactionOutlined',
-		path: '/tai-chinh',
-		access: 'manyAccessFilter',
-		permissions: ['tc.bill:read', 'tc.transaction:read', 'tc.discount:read'],
-		routes: [
-			// {
-			// 	name: 'CongNo',
-			// 	path: 'cong-no',
-			// 	component: 'TaiChinh/HoaDon',
-			// 	access: 'accessFilter',
-			// 	permission: 'tc.bill:read',
-			// },
-			// {
-			// 	name: 'GiaoDich',
-			// 	path: 'giao-dich',
-			// 	component: 'TaiChinh/GiaoDich',
-			// 	access: 'accessFilter',
-			// 	permission: 'tc.transaction:read',
-			// },
-			// {
-			// 	name: 'UuDaiThanhToan',
-			// 	path: 'uu-dai-thanh-toan',
-			// 	component: 'TaiChinh/UuDaiThanhToan',
-			// 	access: 'accessFilter',
-			// 	permission: 'tc.discount:read',
-			// },
-		],
-	},
+	// {
+	// 	name: 'TaiChinh',
+	// 	icon: 'TransactionOutlined',
+	// 	path: '/tai-chinh',
+	// 	access: 'manyAccessFilter',
+	// 	permissions: ['tc.bill:read', 'tc.transaction:read', 'tc.discount:read'],
+	// 	routes: [
+	// 		{
+	// 			name: 'CongNo',
+	// 			path: 'cong-no',
+	// 			component: 'TaiChinh/HoaDon',
+	// 			access: 'accessFilter',
+	// 			permission: 'tc.bill:read',
+	// 		},
+	// 		// {
+	// 		// 	name: 'GiaoDich',
+	// 		// 	path: 'giao-dich',
+	// 		// 	component: 'TaiChinh/GiaoDich',
+	// 		// 	access: 'accessFilter',
+	// 		// 	permission: 'tc.transaction:read',
+	// 		// },
+	// 		// {
+	// 		// 	name: 'UuDaiThanhToan',
+	// 		// 	path: 'uu-dai-thanh-toan',
+	// 		// 	component: 'TaiChinh/UuDaiThanhToan',
+	// 		// 	access: 'accessFilter',
+	// 		// 	permission: 'tc.discount:read',
+	// 		// },
+	// 	],
+	// },
 
 	// TIỆN ÍCH
 	// {

@@ -67,7 +67,10 @@ const FormLichCaNhan = (props: { getData: () => void }) => {
 					</Col>
 					<Col xs={24} md={12}>
 						<Form.Item
-							rules={[...rules.required, ...rules.sauNgay(startDate)]}
+							rules={[
+								...rules.required,
+								...rules.sauNgay(startDate, intl.formatMessage({ id: 'lichsukien.form.tgbt' })),
+							]}
 							name='thoiGianKetThuc'
 							label={intl.formatMessage({ id: 'lichsukien.form.tgkt' })}
 						>

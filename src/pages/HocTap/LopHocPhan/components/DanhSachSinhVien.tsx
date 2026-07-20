@@ -1,14 +1,14 @@
+import PageCard from '@/components/PageCard';
 import { EVaiTroSvLhc, vaiTroSvLhc } from '@/services/DaoTao/SinhVien/constants';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EGioiTinh } from '@/services/DaoTao/constant';
 import { formatDate } from '@/utils/formatDate';
+import { getPublicAssetPath } from '@/utils/path';
 import { EyeOutlined, MoreOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Descriptions, Dropdown, List, Menu, Modal, Row, Typography } from 'antd';
+import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
 import './style.less';
-
-import PageCard from '@/components/PageCard';
-import { useEffect, useState } from 'react';
 const { Text } = Typography;
 
 type TSinhVien = Partial<SinhVien.IRecord> & Partial<SinhVien.ISinhVienHocKy>;
@@ -54,6 +54,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 		<PageCard
 			loading={loading}
 			level={3}
+			hideInnerCard
 			style={{
 				borderRadius: '8px',
 			}}
@@ -103,7 +104,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 										<Avatar
 											src={
 												student.anhDaiDienUrl ||
-												`/student/images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`
+												getPublicAssetPath(`images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`)
 											}
 											size={48}
 										/>
@@ -153,7 +154,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 											<Avatar
 												src={
 													student.anhDaiDienUrl ||
-													`/student/images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`
+													getPublicAssetPath(`images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`)
 												}
 												size={48}
 											/>
@@ -206,7 +207,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 						<Avatar
 							src={
 								record?.anhDaiDienUrl ||
-								`/student/images/${record?.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`
+								getPublicAssetPath(`images/${record?.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`)
 							}
 							size={{ xs: 80, sm: 128, md: 128, lg: 160, xl: 160, xxl: 160 }}
 						/>
