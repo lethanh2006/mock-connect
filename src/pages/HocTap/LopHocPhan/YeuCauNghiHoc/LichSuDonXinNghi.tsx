@@ -10,7 +10,7 @@ import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { getSafeHref } from '@/utils/security';
 import { CloseOutlined } from '@ant-design/icons';
 import { Popconfirm, Tag } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
 interface LichSuDonXinNghiProps {
@@ -27,9 +27,9 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 
 	const getData = () => getModel(recLopHocPhan?.ten ?? '');
 
-	useEffect(() => {
-		getData();
-	}, [recLopHocPhan?.ten]);
+	// useEffect(() => {
+	// 	getData();
+	// }, [recLopHocPhan?.ten]);
 
 	const columns: IColumn<YeuCauNghiHoc.IRecord>[] = [
 		// {

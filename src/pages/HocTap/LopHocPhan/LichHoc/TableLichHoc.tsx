@@ -19,11 +19,12 @@ import ModalXinNghi from '../YeuCauNghiHoc/ModalXinNghi';
 const TableLichHocLopHP = (props: {
 	items: ThoiKhoaBieu.IRecord[];
 	onClickItem: (val: ThoiKhoaBieu.IRecord) => void;
+	onReload: () => void;
 }) => {
 	const intl = useIntl();
 	const { loading, setRecord } = useModel('daotao.thoikhoabieu');
 	const { visibleForm, setVisibleForm, daXinNghiHoc } = useModel('daotao.dangkynghihoc');
-	const { items, onClickItem } = props;
+	const { items, onClickItem, onReload } = props;
 	const [url, setUrl] = useState<any[]>([]);
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
@@ -44,13 +45,6 @@ const TableLichHocLopHP = (props: {
 	});
 
 	const columns: IColumn<ThoiKhoaBieu.IRecord>[] = [
-		{
-			title: 'TT',
-			dataIndex: 'index',
-			width: 60,
-			align: 'center',
-			onCell,
-		},
 		{
 			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.ngayhoc' }),
 			dataIndex: 'ngay',
@@ -151,6 +145,7 @@ const TableLichHocLopHP = (props: {
 			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.thaotac' }),
 			width: 60,
 			align: 'center',
+			hidden: true,
 			render: (_, rec) => (
 				<ButtonExtend
 					type='link'
@@ -176,9 +171,11 @@ const TableLichHocLopHP = (props: {
 		<>
 			<TableStaticData
 				hasTotal
+				addStt
 				data={items}
 				columns={columns}
 				otherProps={{ pagination: false, loading, scroll: { y: 600 } }}
+				onReload={onReload}
 			/>
 
 			<ModalExpandable
