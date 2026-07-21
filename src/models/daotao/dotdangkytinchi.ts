@@ -157,6 +157,8 @@ export default () => {
 						maKhoaNganh: item.maKhoaNganh,
 						isWaitlist,
 						trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
+						dkVuotTinChiLop: item.dkVuotTinChiLop,
+						dangKyHocDuThinh: item.dangKyHocDuThinh,
 					})) ?? [];
 
 			const lop = res.data?.data?.registeredList ?? res.data?.data ?? []; // Back trả về có thể là {registeredList: [], waitlistList: []} hoặc chỉ là mảng lớp đã đăng ký
