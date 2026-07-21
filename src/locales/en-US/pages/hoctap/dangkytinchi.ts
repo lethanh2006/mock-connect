@@ -96,7 +96,8 @@ export default {
 	'dangkytinchi.phieudangky.columntable.huy.tooltip': 'Delete section',
 	'dangkytinchi.phieudangky.columntable.huy.confirm':
 		'Are you sure you want to delete the registration for this section?',
-	'dangkytinchi.phieudangky.huy.duthinh.daduyet.luuy': 'Note: This audit registration has been approved.',
+	'dangkytinchi.phieudangky.huy.duthinh.daduyet.luuy':
+		'Note: This class section has been approved for auditing by the instructor.',
 	'dangkytinchi.phieudangky.columntable.huy.luuy':
 		'Note: After canceling the class, the total remaining credits do not meet the minimum credit requirement',
 	'dangkytinchi.phieudangky.danhsachdadangky.title': 'List of Registered Sections',
