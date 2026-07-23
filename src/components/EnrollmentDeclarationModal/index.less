@@ -1,0 +1,342 @@
+.declarationModal {
+	:global(.ant-modal-content) {
+		padding: 0;
+		overflow: hidden;
+		border-radius: 12px;
+	}
+
+	:global(.ant-modal-content .ant-modal-body) {
+		padding: 0 !important;
+	}
+}
+
+.shell {
+	display: flex;
+	flex-direction: column;
+	height: 88vh;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex: 0 0 auto;
+	padding: 20px 28px;
+	background: #eef3fb;
+}
+
+.title {
+	margin: 0;
+	color: #275694;
+	font-size: 22px;
+	font-weight: 700;
+}
+
+.closeButton {
+	color: #333;
+	font-size: 18px;
+}
+
+.body {
+	display: flex;
+	flex: 1;
+	min-height: 0;
+}
+
+.sidebar {
+	display: flex;
+	flex: 0 0 260px;
+	flex-direction: column;
+	padding: 24px;
+	border-right: 1px solid #eee;
+}
+
+.studentCard {
+	text-align: center;
+}
+
+.avatar {
+	margin-bottom: 12px;
+	background: #f0f0f0;
+}
+
+.studentName {
+	margin-bottom: 14px;
+	font-size: 17px;
+	font-weight: 700;
+}
+
+.studentInfoRow {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 10px;
+	color: #555;
+	font-size: 14px;
+	text-align: left;
+}
+
+.studentInfoValue {
+	color: #222;
+	font-weight: 600;
+}
+
+.statusAdmitted {
+	color: #57a443;
+	font-weight: 600;
+}
+
+.sidebarSpacer {
+	flex: 1;
+}
+
+.contactBox {
+	padding: 16px;
+	border: 1px solid #eee;
+	border-radius: 10px;
+	text-align: left;
+}
+
+.contactTitle {
+	margin-bottom: 8px;
+	color: #222;
+	font-weight: 700;
+	text-decoration: underline;
+}
+
+.contactOffice {
+	margin-bottom: 10px;
+	font-weight: 700;
+}
+
+.contactLine {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	margin-top: 8px;
+	color: #444;
+	font-size: 13px;
+	line-height: 1.4;
+}
+
+.contactLine :global(.anticon) {
+	margin-top: 2px;
+	color: #275694;
+}
+
+.main {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	min-width: 0;
+}
+
+.stepper {
+	display: flex;
+	flex: 0 0 auto;
+	padding: 22px 32px 18px;
+}
+
+.stepperItem {
+	position: relative;
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+}
+
+.stepperItem::before {
+	position: absolute;
+	top: 17px;
+	left: -50%;
+	z-index: 0;
+	width: 100%;
+	height: 1px;
+	background: #ddd;
+	content: '';
+}
+
+.stepperItem:first-child::before {
+	display: none;
+}
+
+.stepperItem.completed::before {
+	background: #57a443;
+}
+
+.stepperCircle {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex: 0 0 auto;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
+	border: 2px solid #ddd;
+	border-radius: 50%;
+	background: #fff;
+	color: #999;
+	font-weight: 700;
+	font-size: 14px;
+}
+
+.stepperCircle.active {
+	border-color: #57a443;
+	background: #57a443;
+	color: #fff;
+}
+
+.stepperLabel {
+	margin-top: 8px;
+	color: #999;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.stepperLabel.active {
+	color: #57a443;
+}
+
+.content {
+	flex: 1;
+	min-height: 0;
+	padding: 8px 32px 24px;
+	overflow-y: auto;
+}
+
+.sectionHeader {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 22px 0 16px;
+	color: #275694;
+	font-size: 16px;
+	font-weight: 700;
+}
+
+.sectionHeader:first-child {
+	margin-top: 0;
+}
+
+.sectionHeaderArrow {
+	color: #e64545;
+	font-size: 11px;
+}
+
+.sectionHeaderLine {
+	flex: 1;
+	border-top: 1px dashed #ccc;
+}
+
+.subLabel {
+	margin: 16px 0 10px;
+	font-weight: 700;
+}
+
+.uploadButton {
+	:global(.ant-upload) {
+		width: 100%;
+	}
+
+	:global(.ant-btn) {
+		display: flex;
+		width: 100%;
+		height: 40px;
+		align-items: center;
+		justify-content: center;
+		border: 1px dashed #d9d9d9;
+		border-radius: 6px;
+		background: #fff;
+		color: #666;
+	}
+
+	:global(.ant-btn:hover) {
+		border-color: #285797;
+		color: #285797;
+	}
+}
+
+.uploadHelperText {
+	margin-top: 4px;
+	color: #999;
+	font-size: 12px;
+	font-style: italic;
+}
+
+.docTable {
+	margin-bottom: 8px;
+
+	:global(.ant-table-thead > tr > th) {
+		background: #f7fbff;
+	}
+}
+
+.footer {
+	display: flex;
+	flex: 0 0 auto;
+	justify-content: flex-end;
+	gap: 12px;
+	padding: 16px 32px;
+	border-top: 1px solid #eee;
+}
+
+.nextButton {
+	height: 42px;
+	padding: 0 28px;
+	border-radius: 5px;
+	background: #285797;
+	font-weight: 700;
+}
+
+@media (max-width: 992px) {
+	.declarationModal:global(.ant-modal) {
+		top: 12px;
+		width: calc(100vw - 24px) !important;
+		max-width: calc(100vw - 24px);
+		margin: 0 auto;
+	}
+
+	.shell {
+		height: auto;
+		max-height: calc(100dvh - 24px);
+	}
+
+	.body {
+		flex-direction: column;
+		overflow-y: auto;
+		min-height: 0;
+	}
+
+	.sidebar {
+		flex: 0 0 auto;
+		flex-direction: column;
+		border-right: none;
+		border-bottom: 1px solid #eee;
+	}
+
+	.studentCard,
+	.contactBox {
+		width: 100%;
+	}
+
+	.sidebarSpacer {
+		display: none;
+	}
+
+	.main {
+		flex: none;
+	}
+
+	.content {
+		flex: none;
+		overflow-y: visible;
+	}
+
+	.footer {
+		position: sticky;
+		bottom: 0;
+		flex: none;
+		background: #fff;
+	}
+}

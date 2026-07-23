@@ -1,8 +1,8 @@
 import { AppModules, EModuleKey } from '@/services/base/constant';
 
 const ipRoot = APP_CONFIG_IP_ROOT; // ip dev
-const ipRootWithSlash = ipRoot.replace(/\/?$/, '/');
-const ipConnect = ipRootWithSlash + 'connect';
+const ipRootWithSlash = ipRoot.replace(/\/?$/, '');
+const ipConnect = ipRootWithSlash;
 const getConnectTarget = (target: string) => `${ipConnect}/${target}`;
 
 const ip3 = ipConnect; // ip dev
@@ -10,8 +10,8 @@ const ip3 = ipConnect; // ip dev
 
 const ipNotif = getConnectTarget('notification'); // ip dev
 // const ipDaoTao = ipRoot + 'qldt'; // ip dev
-const ipDaoTao = getConnectTarget('qldt'); // ip dev
-// const ipDaoTao = 'http://192.168.1.149:3001'; // ip dev
+// const ipDaoTao = getConnectTarget('qldt'); // ip dev
+const ipDaoTao = 'http://172.16.8.55:3999'; // ip dev
 
 // const ipDaoTao = 'http://192.168.1.80:3001'; // ip dev
 const ipNhanSu = getConnectTarget('tcns');

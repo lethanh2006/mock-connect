@@ -42,3 +42,17 @@ export async function getMyLopHanhChinh() {
 export async function postChungChiSinhVien(payLoad: any) {
 	return axios.post(`${ipDaoTao}/chung-chi-sv/sinh-vien/dang-ky`, payLoad);
 }
+
+// Khai báo nhập học
+
+export async function putNhapHocStep1(payLoad: any) {
+	return axios.put(`${ipDaoTao}/sinh-vien/me/nhap-hoc/step/1`, payLoad);
+}
+
+export async function putNhapHocStep2(payLoad: any) {
+	return axios.put(`${ipDaoTao}/sinh-vien/me/nhap-hoc/step/2`, payLoad);
+}
+
+export async function putNhapHocStep3(payLoad: any) {
+	return axios.put(`${ipDaoTao}/sinh-vien/me/nhap-hoc/step/3`, payLoad);
+}

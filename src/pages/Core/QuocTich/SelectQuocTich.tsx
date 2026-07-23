@@ -28,11 +28,13 @@ const SelectQuocTich = (props: {
 			value={value}
 			allowClear={allowClear}
 			onChange={onChange}
-			options={danhSach.map((item) => ({
-				key: item._id,
-				value: selectTen ? item.tenQuocTich : item._id,
-				label: `${item.tenQuocTich} - ${item.ma}`,
-			}))}
+			options={
+				danhSach?.map((item) => ({
+					key: item._id,
+					value: selectTen ? item.tenQuocTich : item._id,
+					label: `${item.tenQuocTich} - ${item.ma}`,
+				}))
+			}
 			showSearch
 			optionFilterProp='label'
 			placeholder={placeholder ?? intl.formatMessage({ id: 'thongtincanhan.form.quoctich.place' })}
