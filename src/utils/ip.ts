@@ -2,7 +2,7 @@ import { AppModules, EModuleKey } from '@/services/base/constant';
 
 const ipRoot = APP_CONFIG_IP_ROOT; // ip dev
 const ipRootWithSlash = ipRoot.replace(/\/?$/, '/');
-const ipConnect = ipRootWithSlash ;
+const ipConnect = ipRootWithSlash + 'connect';
 const getConnectTarget = (target: string) => `${ipConnect}/${target}`;
 
 const ip3 = ipConnect; // ip dev
@@ -16,7 +16,7 @@ const ipDaoTao = getConnectTarget('qldt'); // ip dev
 // const ipDaoTao = 'http://192.168.1.80:3001'; // ip dev
 const ipNhanSu = getConnectTarget('tcns');
 const ipCore = getConnectTarget('core');
-const ipTaiChinh = 'http://localhost:3003';
+const ipTaiChinh = getConnectTarget('tai-chinh');
 const ipKhaoThi = getConnectTarget('not-deployed/khao-thi');
 const ipThuVien = getConnectTarget('not-deployed/thu-vien'); // ip dev
 const ipChatbot = getConnectTarget('not-deployed/chatbot-api');
