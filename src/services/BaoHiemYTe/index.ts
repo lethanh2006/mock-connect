@@ -1,10 +1,15 @@
+import { BaoHiemYTe } from '@/services/BaoHiemYTe/typing';
 import axios from '@/utils/axios';
-import { ipCsvc } from '@/utils/ip';
+import { ipCCT } from '@/utils/ip';
 
-export async function postSinhVienDangKyTruong(idDot: string) {
-	return axios.post(`${ipCsvc}/bhyt/registration-periods/${idDot}/purchase-school-package`);
+export async function postSinhVienDangKyTruong(payLoad: BaoHiemYTe.ISinhVienDangKyTruong) {
+	return axios.post(`${ipCCT}/bhyt/registration-periods/purchase-school-package`, payLoad);
 }
 
-export async function postSinhVienDangKyTuChon(periodStudentId: string, payLoad: any) {
-	return axios.post(`${ipCsvc}/bhyt/registration-periods/${periodStudentId}/declare-insurance`, payLoad);
+export async function postSinhVienDangKyTuChon(payLoad: BaoHiemYTe.ISinhVienDangKy) {
+	return axios.post(`${ipCCT}/bhyt/registration-periods/me/declare-insurance`, payLoad);
+}
+
+export async function putSinhVienDangKyTuChon(payLoad: BaoHiemYTe.ISinhVienDangKy) {
+	return axios.put(`${ipCCT}/bhyt/registration-periods/me/declare-insurance`, payLoad);
 }

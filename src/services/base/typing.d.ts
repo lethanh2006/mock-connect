@@ -24,6 +24,8 @@ declare module Login {
 		given_name: string; // 'Administrator';
 		family_name: string; // '';
 		picture: string; // 'https://images2.thanhnien.vn/528068263637045248/2023/10/14/ronaldo-1697254043939678025874.jpeg';
+		/** Trạng thái nhập học trả về từ hồ sơ SSO. */
+		enrollmentStatus?: string;
 	}
 
 	export interface IPermission {
@@ -48,7 +50,7 @@ export interface IInitialState {
 	authorizedRolesByClient?: Record<string, string[]>;
 	realmRoles?: string[];
 	permissionLoading?: boolean;
-	authorizedRoles: string[]
+	authorizedRoles: string[];
 	authorizedRolesByClient: Record<string, string[]>;
 }
 

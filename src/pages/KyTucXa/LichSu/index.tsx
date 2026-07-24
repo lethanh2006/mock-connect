@@ -15,7 +15,7 @@ import { tienVietNam } from '@/utils/utils';
 import { DeleteOutlined, DollarCircleOutlined } from '@ant-design/icons';
 import { Button, Empty, Popconfirm, Tag } from 'antd';
 import { useEffect, useState } from 'react';
-import { useIntl, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 import ChiTietPhong from '../DangKy/components/ChiTiet';
 import ModalDanKyKTX from '../DangKy/components/Modal';
 
@@ -61,7 +61,7 @@ const LichSuaKTX = () => {
 	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { getByIdModel: getDotDangKy, record: recDot, setRecord: setRecDot } = useModel('kytucxa.dotdangky');
-	const { getModel, page, limit, deleteModel, handleEdit, setRecord } = useModel('kytucxa.phieudangky');
+	const { getModel, page, limit, deleteModel, setRecord } = useModel('kytucxa.phieudangky');
 	const {
 		setRecord: setRecPhong,
 		setVisibleForm: setVisibleChiTietPhong,
@@ -110,9 +110,8 @@ const LichSuaKTX = () => {
 		deleteModel(`me/${record?._id}`, getData);
 	};
 
-	const handleOpenPayment = (record: PhieuDangKyKTX.IRecord) => {
-		setInitialModalStep(3);
-		handleEdit(record);
+	const handleOpenPayment = () => {
+		history.push('/finance/tuition-billing');
 	};
 
 	const handleViewPhong = (record: PhieuDangKyKTX.IRecord) => {
@@ -196,9 +195,10 @@ const LichSuaKTX = () => {
 			dataIndex: 'trangThaiThanhToan',
 			sortable: true,
 			width: 150,
-			render: (val: EMaTrangThaiThanhToan) => (
-				<Tag color={getPaymentStatusColor(val)}>{intl.formatMessage({ id: getPaymentStatusLabel(val) })}</Tag>
-			),
+			render: (val: EMaTrangThaiThanhToan) => {
+				const statusLabel = getPaymentStatusLabel(val);
+				return <Tag color={getPaymentStatusColor(val)}>{statusLabel ? intl.formatMessage({ id: statusLabel }) : val}</Tag>;
+			},
 			filterType: 'select',
 			filterData: Object.values(EMaTrangThaiThanhToan).map((item) => ({
 				value: item,
@@ -216,7 +216,8 @@ const LichSuaKTX = () => {
 				const isPaid = rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU;
 				const isClosed = rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
 				const isUnpaid = rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.CHUA_THANH_TOAN;
-				const canDelete = isClosed || isUnpaid;
+				const isUndeposit = rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.CHUA_HOAN_THANH_COC;
+				const canDelete = isClosed || isUnpaid || isUndeposit;
 
 				return (
 					<>
@@ -226,7 +227,7 @@ const LichSuaKTX = () => {
 								tooltip={intl.formatMessage({ id: 'kytucxa.lichsu.tooltip.thanhToan' })}
 								onClick={(event) => {
 									event.stopPropagation();
-									handleOpenPayment(rec);
+									handleOpenPayment();
 								}}
 								icon={<DollarCircleOutlined />}
 							/>
@@ -273,7 +274,7 @@ const LichSuaKTX = () => {
 
 			<ModalDanKyKTX isView initialStep={initialModalStep} />
 
-			<ChiTietPhong daCoLichSuDangKy />
+			<ChiTietPhong daCoLichSuDangKy chiHienThiNutDong />
 		</PageCard>
 	);
 };

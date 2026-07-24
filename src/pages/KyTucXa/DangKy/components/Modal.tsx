@@ -3,7 +3,7 @@ import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Button, Form, message, Steps } from 'antd';
 import { useEffect, useState } from 'react';
-import { useIntl, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 import { chuanHoaDanhSachLienHeKhanCap } from '../NguoiThan/FormItem';
 import '../style.less';
 import CheckInPrepContent from './CheckInPrepContent';
@@ -88,11 +88,10 @@ const getThongTinSinhVienForm = (sinhVien?: SinhVien.IRecord): Partial<PhieuDang
 const ModalDanKyKTX = (props: {
 	getData?: () => void;
 	daCoLichSuDangKy?: boolean;
-	onDangKyThanhCong?: () => void | Promise<void>;
 	isView?: boolean;
 	initialStep?: number;
 }) => {
-	const { getData, daCoLichSuDangKy, onDangKyThanhCong, isView, initialStep = 0 } = props;
+	const { getData, daCoLichSuDangKy, isView, initialStep = 0 } = props;
 	const intl = useIntl();
 	const [form] = Form.useForm();
 
@@ -102,18 +101,18 @@ const ModalDanKyKTX = (props: {
 	const { sinhVienDangKyKTXModel, formSubmiting, record: recPhieuDangKy } = useModel('kytucxa.phieudangky');
 
 	const [currentStep, setCurrentStep] = useState<number>(0);
+	const [visibleDangKyThanhCong, setVisibleDangKyThanhCong] = useState<boolean>(false);
 
 	const steps = [
 		intl.formatMessage({ id: 'kytucxa.dangky.modal.step.thongTinChung' }),
 		intl.formatMessage({ id: 'kytucxa.dangky.modal.step.liabilityWaiver' }),
 		...(isView ? [intl.formatMessage({ id: 'kytucxa.dangky.modal.step.checkInPrep' })] : []),
-		...(isView ? [intl.formatMessage({ id: 'kytucxa.dangky.modal.step.paymentInformation' })] : []),
 	];
 	const lastStep = steps.length - 1;
 
 	useEffect(() => {
 		if (visibleDangKy && isView) {
-			setCurrentStep(initialStep);
+			setCurrentStep(Math.min(initialStep, lastStep));
 			form.setFieldsValue({
 				...recPhieuDangKy?.formDon,
 				checkbox1: true,
@@ -125,7 +124,7 @@ const ModalDanKyKTX = (props: {
 		if (visibleDangKy && recSinhVien) {
 			form.setFieldsValue(getThongTinSinhVienForm(recSinhVien));
 		}
-	}, [visibleDangKy, isView, initialStep, recSinhVien?._id, recPhieuDangKy?._id]);
+	}, [visibleDangKy, isView, initialStep, lastStep, recSinhVien?._id, recPhieuDangKy?._id]);
 
 	const handleClose = () => {
 		form.resetFields();
@@ -173,94 +172,116 @@ const ModalDanKyKTX = (props: {
 		};
 
 		await sinhVienDangKyKTXModel(data as any, getData);
-		await onDangKyThanhCong?.();
 
 		handleClose();
+
+		setVisibleDangKyThanhCong(true);
 	};
 
 	return (
-		<ModalExpandable
-			open={visibleDangKy}
-			onCancel={handleClose}
-			footer={null}
-			width={1200}
-			title={intl.formatMessage({ id: 'kytucxa.dangky.modal.title' })}
-		>
-			<Form layout='vertical' form={form} preserve>
-				<Steps current={currentStep} onChange={isView ? setCurrentStep : undefined} style={{ marginBottom: 18 }}>
-					{steps.map((title) => (
-						<Steps.Step key={title} title={title} />
-					))}
-				</Steps>
+		<>
+			<ModalExpandable
+				open={visibleDangKy}
+				onCancel={handleClose}
+				footer={null}
+				width={1200}
+				title={intl.formatMessage({ id: 'kytucxa.dangky.modal.title' })}
+			>
+				<Form layout='vertical' form={form} preserve>
+					<Steps current={currentStep} onChange={isView ? setCurrentStep : undefined} style={{ marginBottom: 18 }}>
+						{steps.map((title) => (
+							<Steps.Step key={title} title={title} />
+						))}
+					</Steps>
 
-				<hr
-					style={{
-						marginTop: 16,
-						marginBottom: 16,
-						border: 'none',
-						borderTop: '2px solid #F4F4F4',
-					}}
-				/>
+					<hr
+						style={{
+							marginTop: 16,
+							marginBottom: 16,
+							border: 'none',
+							borderTop: '2px solid #F4F4F4',
+						}}
+					/>
 
-				<div style={{ display: currentStep === 0 ? 'block' : 'none' }}>
-					<FormDangKyKTX form={form} disabled={isView} />
-				</div>
+					<div style={{ display: currentStep === 0 ? 'block' : 'none' }}>
+						<FormDangKyKTX form={form} disabled={isView} />
+					</div>
 
-				<div style={{ display: currentStep === 1 ? 'block' : 'none' }}>
-					<FormChinhSachKTX form={form} disabled={isView} />
-				</div>
+					<div style={{ display: currentStep === 1 ? 'block' : 'none' }}>
+						<FormChinhSachKTX form={form} disabled={isView} />
+					</div>
 
-				<div style={{ display: currentStep === 2 ? 'block' : 'none' }}>
-					<CheckInPrepContent />
-				</div>
+					<div style={{ display: currentStep === 2 ? 'block' : 'none' }}>
+						<CheckInPrepContent />
+					</div>
 
-				<div style={{ display: currentStep === 3 ? 'block' : 'none' }}>
-					<></>
-				</div>
+					<div className='form-footer'>
+						{isView ? (
+							<>
+								{currentStep < lastStep ? (
+									<Button htmlType='button' type='primary' onClick={handleViewNext}>
+										{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.next' })}
+									</Button>
+								) : null}
 
-				<div className='form-footer'>
-					{isView ? (
-						<>
-							{currentStep < lastStep ? (
-								<Button htmlType='button' type='primary' onClick={handleViewNext}>
+								{currentStep > 0 ? (
+									<Button htmlType='button' onClick={handleViewPrevious}>
+										{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.previous' })}
+									</Button>
+								) : null}
+
+								<Button htmlType='button' onClick={handleClose}>
+									{intl.formatMessage({ id: 'activity.outcome.close' })}
+								</Button>
+							</>
+						) : currentStep === 0 ? (
+							<>
+								<Button htmlType='button' type='primary' onClick={handleNext}>
 									{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.next' })}
 								</Button>
-							) : null}
 
-							{currentStep > 0 ? (
-								<Button htmlType='button' onClick={handleViewPrevious}>
+								<Button htmlType='button' onClick={handleClose}>
+									{intl.formatMessage({ id: 'activity.outcome.close' })}
+								</Button>
+							</>
+						) : (
+							<>
+								<Button htmlType='button' type='primary' loading={formSubmiting} onClick={handleSubmit}>
+									{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.submit' })}
+								</Button>
+
+								<Button htmlType='button' onClick={() => setCurrentStep(0)}>
 									{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.previous' })}
 								</Button>
-							) : null}
+							</>
+						)}
+					</div>
+				</Form>
+			</ModalExpandable>
 
-							<Button htmlType='button' onClick={handleClose}>
-								{intl.formatMessage({ id: 'activity.outcome.close' })}
-							</Button>
-						</>
-					) : currentStep === 0 ? (
-						<>
-							<Button htmlType='button' type='primary' onClick={handleNext}>
-								{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.next' })}
-							</Button>
+			<ModalExpandable
+				open={visibleDangKyThanhCong}
+				onCancel={() => setVisibleDangKyThanhCong(false)}
+				footer={null}
+				width={800}
+				title={intl.formatMessage({ id: 'kytucxa.dangky.modal.success.title' })}
+			>
+				<CheckInPrepContent />
 
-							<Button htmlType='button' onClick={handleClose}>
-								{intl.formatMessage({ id: 'activity.outcome.close' })}
-							</Button>
-						</>
-					) : (
-						<>
-							<Button htmlType='button' type='primary' loading={formSubmiting} onClick={handleSubmit}>
-								{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.submit' })}
-							</Button>
-
-							<Button htmlType='button' onClick={() => setCurrentStep(0)}>
-								{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.previous' })}
-							</Button>
-						</>
-					)}
+				<div className='form-footer'>
+					<Button
+						htmlType='button'
+						type='primary'
+						onClick={() => {
+							setVisibleDangKyThanhCong(false);
+							history.push('/finance/tuition-billing');
+						}}
+					>
+						{intl.formatMessage({ id: 'kytucxa.dangky.card.button.paymentNow' })}
+					</Button>
 				</div>
-			</Form>
-		</ModalExpandable>
+			</ModalExpandable>
+		</>
 	);
 };
 

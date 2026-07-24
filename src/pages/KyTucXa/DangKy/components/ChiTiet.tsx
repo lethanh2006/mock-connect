@@ -20,8 +20,9 @@ const ChiTietPhong = (props: {
 	getLichSuDangKyTheoPhong?: (phong: Phong.IChinhSachPhongRecord) => PhieuDangKyKTX.IRecord | undefined;
 	isPhongDaDangKy?: (phong: Phong.IChinhSachPhongRecord) => boolean;
 	onOpenLichSuDangKy?: (phong: Phong.IChinhSachPhongRecord, initialStep?: number) => void;
+	chiHienThiNutDong?: boolean;
 }) => {
-	const { daCoLichSuDangKy, getLichSuDangKyTheoPhong, isPhongDaDangKy, onOpenLichSuDangKy } = props;
+	const { daCoLichSuDangKy, getLichSuDangKyTheoPhong, isPhongDaDangKy, onOpenLichSuDangKy, chiHienThiNutDong } = props;
 	const intl = useIntl();
 	const { visibleForm, setVisibleForm, record, setVisibleDangKy } = useModel('kytucxa.phong');
 	const { record: recLichSu } = useModel('kytucxa.phieudangky');
@@ -41,7 +42,7 @@ const ChiTietPhong = (props: {
 	const daThanhToanXong = trangThaiThanhToan === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU;
 	const daQuaHanThanhToan = trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
 	const hienThiNhuDaDangKy = laPhongDaDangKy && !daQuaHanThanhToan;
-	const khongChoDangKy = !hienThiNhuDaDangKy && (daHetCho || daCoLichSuPhongDangKy);
+	const khongChoDangKy = !hienThiNhuDaDangKy && (daHetCho || daCoLichSuPhongDangKy || daCoLichSuDangKy);
 	const buttonText = hienThiNhuDaDangKy
 		? daThanhToanXong
 			? intl.formatMessage({ id: 'kytucxa.dangky.card.button.seeMore' })
@@ -169,9 +170,11 @@ const ChiTietPhong = (props: {
 			</div>
 
 			<div className='form-footer'>
-				<Button type='primary' disabled={khongChoDangKy} onClick={handleClickButton}>
-					{buttonText}
-				</Button>
+				{chiHienThiNutDong ? null : (
+					<Button type='primary' disabled={khongChoDangKy} onClick={handleClickButton}>
+						{buttonText}
+					</Button>
+				)}
 				<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 			</div>
 		</ModalExpandable>
