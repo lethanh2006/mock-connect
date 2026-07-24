@@ -5,4 +5,9 @@ export default {
 
 	'kiemtrasuckhoe.mien.gioitinh.nam': 'Nam',
 	'kiemtrasuckhoe.mien.gioitinh.nu': 'Nữ',
+
+	'kiemtrasuckhoe.mien.nguoiPheDuyet': 'Người phê duyệt',
+	'kiemtrasuckhoe.mien.thoiGianDuyet': 'Thời gian duyệt',
+	'kiemtrasuckhoe.mien.ketQua': 'Kết quả',
+	'kiemtrasuckhoe.mien.ghiChu': 'Ghi chú',
 };

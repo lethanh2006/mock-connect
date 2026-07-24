@@ -1,5 +1,4 @@
-import type { EMaTrangThaiThanhToan } from '../TaiChinh/constant';
-import { EDeclarationType, EKtscPublishStatus, EKtscReviewStatus } from './constant';
+import { EDeclarationType, EKtscPublishStatus, EKtscReviewStatus, KtscPaymentStatus } from './constant';
 
 declare module KiemTraSucKhoe {
 	export interface IDotDangKy {
@@ -13,18 +12,19 @@ declare module KiemTraSucKhoe {
 		publishStatus: EKtscPublishStatus;
 		periodStatus?: 'OPEN' | string;
 		registrationId?: string;
+		periodStudentId?: string;
 		student?: IStudentRegistration;
 		note?: string;
 		declarationType?: EDeclarationType;
 		reviewStatus?: EKtscReviewStatus | string | null;
-		billStatus?: EMaTrangThaiThanhToan | null;
+		paymentStatus?: KtscPaymentStatus | null;
 	}
 
 	export interface IMyRegistration {
 		_id?: string;
 		declarationType?: EDeclarationType;
 		reviewStatus?: EKtscReviewStatus | null;
-		billStatus?: EMaTrangThaiThanhToan | null;
+		paymentStatus?: KtscPaymentStatus | null;
 	}
 
 	/** Snapshot của một đợt đăng ký kiểm tra sức khỏe của sinh viên, trả về bởi `/me/current` */
@@ -37,17 +37,23 @@ declare module KiemTraSucKhoe {
 		canSubmit?: boolean;
 	}
 
-	/** Một dòng lịch sử đăng ký kiểm tra sức khỏe, trả về bởi `/me/history` */
+	/**
+	 * Một dòng lịch sử đăng ký kiểm tra sức khỏe, trả về bởi `/me/history`.
+	 * `declarationSnapshot` là dữ liệu tại thời điểm của record nhưng có thể thiếu field;
+	 * `student` là dữ liệu mới nhất, đầy đủ field, dùng để bổ khuyết cho declarationSnapshot.
+	 */
 	export interface IHistoryItem {
 		_id?: string;
+		periodStudentId?: string;
 		declarationType?: EDeclarationType;
 		reviewStatus?: EKtscReviewStatus | null;
-		lastReviewAction?: string;
-		lastReviewerId?: string;
-		lastReviewerName?: string;
-		lastReviewNote?: string;
-		lastReviewedAt?: string;
+		reviewerId?: string;
+		reviewerName?: string;
+		action?: string;
+		note?: string;
+		createdAt?: string;
 		period?: IDotDangKy;
+		declarationSnapshot?: IStudentRegistration;
 		student?: IStudentRegistration;
 	}
 
@@ -61,7 +67,7 @@ declare module KiemTraSucKhoe {
 		institute?: string;
 		declarationType?: EDeclarationType;
 		reviewStatus?: string | null;
-		billStatus?: EMaTrangThaiThanhToan | null;
+		paymentStatus?: KtscPaymentStatus | null;
 		reminderCount?: number;
 		billRequestedAt?: string | null;
 		createdAt?: string;
@@ -69,6 +75,8 @@ declare module KiemTraSucKhoe {
 	}
 
 	export interface ISinhVienDangKyThongTin {
+		ssoId?: string;
+		studentId?: string;
 		periodStudentId?: string;
 		periodId?: string;
 		fullName?: string;

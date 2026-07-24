@@ -23,12 +23,16 @@ const PersonalInfoFields = ({ info }: IProps) => {
 	return (
 		<>
 			<Col span={24} md={12}>
-				<Form.Item rules={[...rules.required]} name='fullName' label={t('baohiemyte.dangky.hoTen')}>
+				<Form.Item rules={[...rules.required, ...rules.text]} name='fullName' label={t('baohiemyte.dangky.hoTen')}>
 					<Input disabled={info.isPersonalFieldDisabled(info.studentFullName)} />
 				</Form.Item>
 			</Col>
 			<Col span={24} md={12}>
-				<Form.Item rules={[...rules.required]} name='studentCode' label={t('baohiemyte.dangky.maSinhVien')}>
+				<Form.Item
+					rules={[...rules.required, ...rules.text]}
+					name='studentCode'
+					label={t('baohiemyte.dangky.maSinhVien')}
+				>
 					<Input disabled={info.isPersonalFieldDisabled(info.studentCode)} />
 				</Form.Item>
 			</Col>
@@ -37,16 +41,17 @@ const PersonalInfoFields = ({ info }: IProps) => {
 					<MyDatePicker disabled={info.isPersonalFieldDisabled(info.studentNgaySinh)} format='DD/MM/YYYY' />
 				</Form.Item>
 			</Col>
-			<Col span={24} md={12}>
-				{info.isVN ? (
-					<Form.Item rules={[...rules.required]} name='cccd' label={t('baohiemyte.dangky.cccd')}>
+			{info.isVN ? (
+				<Col span={24} md={12}>
+					<Form.Item rules={[...rules.required, ...rules.text]} name='cccd' label={t('baohiemyte.dangky.cccd')}>
 						<Input disabled={info.isPersonalFieldDisabled(info.studentCccd)} />
 					</Form.Item>
-				) : (
-					<Form.Item rules={[...rules.required]} name='nationality' label={t('baohiemyte.dangky.quocTich')}>
-						<Select disabled={info.isPersonalFieldDisabled(info.studentNationality)} options={nationalityOptions} />
-					</Form.Item>
-				)}
+				</Col>
+			) : null}
+			<Col span={24} md={12}>
+				<Form.Item rules={[...rules.required]} name='nationality' label={t('baohiemyte.dangky.quocTich')}>
+					<Select disabled={info.isPersonalFieldDisabled(info.studentNationality)} options={nationalityOptions} />
+				</Form.Item>
 			</Col>
 			<Col span={24} md={12}>
 				<Form.Item rules={[...rules.required]} name='gioiTinh' label={t('baohiemyte.dangky.gioiTinh')}>
@@ -66,12 +71,16 @@ const PersonalInfoFields = ({ info }: IProps) => {
 				</Form.Item>
 			</Col>
 			<Col span={24} md={12}>
-				<Form.Item rules={[...rules.required]} name='phone' label={t('baohiemyte.dangky.soDienThoai')}>
+				<Form.Item
+					rules={[...rules.required, ...rules.text, ...rules.soDienThoai]}
+					name='phone'
+					label={t('baohiemyte.dangky.soDienThoai')}
+				>
 					<Input disabled={info.isPersonalFieldDisabled(info.studentPhone)} />
 				</Form.Item>
 			</Col>
 			<Col span={24} md={12}>
-				<Form.Item rules={[...rules.required]} name='email' label={t('baohiemyte.dangky.email')}>
+				<Form.Item rules={[...rules.required, ...rules.email]} name='email' label={t('baohiemyte.dangky.email')}>
 					<Input disabled={info.isPersonalFieldDisabled(info.studentEmail)} />
 				</Form.Item>
 			</Col>

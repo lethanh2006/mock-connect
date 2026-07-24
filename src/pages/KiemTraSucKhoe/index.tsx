@@ -5,14 +5,19 @@ import { type IColumn } from '@/components/Table/typing';
 import {
 	EDeclarationType,
 	EKtscReviewStatus,
+	KtscPaymentStatus,
+	paymentStatusColor,
+	paymentStatusIntlId,
 	reviewStatusColor,
 	reviewStatusIntlId,
 } from '@/services/KiemTraSucKhoe/constant';
 import { KiemTraSucKhoe } from '@/services/KiemTraSucKhoe/typing';
+import { ETagColor } from '@/services/base/constant';
+import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { chuanHoaTen } from '@/utils/utils';
-import { ClockCircleOutlined, EyeOutlined, FormOutlined } from '@ant-design/icons';
-import { Button, Space, Tag } from 'antd';
+import { ClockCircleOutlined, EyeOutlined, FormOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Button, Popover, Space, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChoiceModal from './components/ChoiceModal';
@@ -85,16 +90,38 @@ const SinhVienDangKyKiemTraSucKhoe = () => {
 		};
 	};
 
+	// declarationSnapshot là dữ liệu tại thời điểm nộp đơn nhưng có thể thiếu field,
+	// student là dữ liệu sinh viên mới nhất (đầy đủ field) dùng để bổ khuyết field còn thiếu
+	const mergeStudentSnapshot = (
+		declarationSnapshot?: KiemTraSucKhoe.IStudentRegistration,
+		student?: KiemTraSucKhoe.IStudentRegistration,
+	): KiemTraSucKhoe.IStudentRegistration | undefined => {
+		if (!declarationSnapshot && !student) return undefined;
+
+		const merged: KiemTraSucKhoe.IStudentRegistration = { ...student };
+		Object.entries(declarationSnapshot ?? {}).forEach(([key, value]) => {
+			if (value !== null && value !== undefined) (merged as any)[key] = value;
+		});
+
+		return merged;
+	};
+
+	const getEffectiveStudent = (rec?: KiemTraSucKhoe.IHistoryItem) =>
+		mergeStudentSnapshot(rec?.declarationSnapshot, rec?.student);
+
 	const toDotDangKyRecordFromHistory = (item?: KiemTraSucKhoe.IHistoryItem): KiemTraSucKhoe.IDotDangKy | undefined => {
 		if (!item?.period) return undefined;
+
+		const effectiveStudent = getEffectiveStudent(item);
 
 		return {
 			...item.period,
 			periodId: item.period._id ?? '',
+			periodStudentId: item.periodStudentId,
 			declarationType: item.declarationType,
 			reviewStatus: item.reviewStatus,
-			billStatus: item.student?.billStatus,
-			student: item.student,
+			paymentStatus: effectiveStudent?.paymentStatus,
+			student: effectiveStudent,
 		};
 	};
 
@@ -124,22 +151,22 @@ const SinhVienDangKyKiemTraSucKhoe = () => {
 		const newRecord = toNewRegistrationRecord(currentInfo);
 		if (!newRecord?.periodId) return;
 
-		const student = newRecord.student ?? {};
 		const payload: KiemTraSucKhoe.ISinhVienDangKy = {
-			periodStudentId: (recordSinhVien as any)?.ssoId,
+			ssoId: (recordSinhVien as any)?.ssoId,
+			studentId: (recordSinhVien as any)?.ssoId,
+			studentCode: (recordSinhVien as any)?.ma,
 			periodId: newRecord.periodId,
-			fullName: student.fullName,
-			studentCode: student.studentCode,
-			ngaySinh: student.ngaySinh,
-			cccd: student.cccd,
-			nationality: student.nationality,
-			gioiTinh: student.gioiTinh,
-			khoa: student.khoa,
-			nganh: student.nganh,
+			fullName: (recordSinhVien as any)?.ten,
+			ngaySinh: (recordSinhVien as any)?.ngaySinh,
+			cccd: (recordSinhVien as any)?.cccd,
+			nationality: (recordSinhVien as any)?.quocTich,
+			gioiTinh: (recordSinhVien as any)?.gioiTinh,
+			khoa: (recordSinhVien as any)?.khoaSinhVien?.ten,
+			nganh: (recordSinhVien as any)?.nganh?.ten,
 			maKhoa: (recordSinhVien as any)?.maKhoaSinhVien,
 			maNganh: (recordSinhVien as any)?.maNganh,
-			phone: student.phone,
-			email: student.email,
+			phone: (recordSinhVien as any)?.soDienThoai,
+			email: (recordSinhVien as any)?.email,
 		};
 
 		try {
@@ -182,6 +209,28 @@ const SinhVienDangKyKiemTraSucKhoe = () => {
 		);
 	};
 
+	// Trạng thái thanh toán chỉ áp dụng cho hình thức đăng ký khám tại trường (dangKy),
+	// hình thức khai báo miễn (mien) không phát sinh thanh toán nên hiển thị "Không áp dụng"
+	const renderPaymentStatusTag = (paymentStatus?: KtscPaymentStatus | null, declarationType?: EDeclarationType) => {
+		const type = getFormTypeFromDeclaration(declarationType);
+
+		if (type !== 'dangKy') {
+			return <Tag color={ETagColor.DEFAULT}>{t('kiemtrasuckhoe.dangky.trangThaiThanhToan.notApplicable')}</Tag>;
+		}
+
+		const status = paymentStatus ?? KtscPaymentStatus.CHUA_THANH_TOAN;
+
+		return <Tag color={paymentStatusColor[status]}>{t(paymentStatusIntlId[status])}</Tag>;
+	};
+
+	const labelStyle = { color: '#8c8c8c', fontSize: 13 };
+
+	// Chỉ hiển thị lịch sử xử lý cho hình thức khai báo miễn đã thực sự được xử lý (có thông tin người xử lý),
+	// hình thức đăng ký (dangKy) không có quy trình duyệt nên không show
+	const canShowLichSuXuLyMien = (rec?: KiemTraSucKhoe.IHistoryItem) =>
+		getFormTypeFromDeclaration(rec?.declarationType) === 'mien' &&
+		!!(rec?.reviewerId || rec?.reviewerName || rec?.action);
+
 	const renderThoiGianDangKy = (start?: string, end?: string) =>
 		intl.formatMessage(
 			{ id: 'kiemtrasuckhoe.dangky.banner.thoiGianDangKy' },
@@ -204,7 +253,7 @@ const SinhVienDangKyKiemTraSucKhoe = () => {
 			title: t('kiemtrasuckhoe.dangky.maSinhVien'),
 			dataIndex: ['student', 'studentCode'],
 			width: 160,
-			render: (_val, rec) => rec.student?.studentCode || '--',
+			render: (_val, rec) => getEffectiveStudent(rec)?.studentCode || '--',
 			onCell,
 		},
 		{
@@ -230,10 +279,42 @@ const SinhVienDangKyKiemTraSucKhoe = () => {
 		{
 			title: t('kiemtrasuckhoe.dangky.column.trangThai'),
 			dataIndex: 'reviewStatus',
-			width: 180,
+			width: 200,
 			align: 'center',
 			sortable: true,
-			render: (_val, rec) => renderReviewStatusTag(rec.reviewStatus, rec.declarationType) ?? '--',
+			render: (_val, rec) => (
+				<Space size={4}>
+					{renderReviewStatusTag(rec.reviewStatus, rec.declarationType) ?? '--'}
+
+					{canShowLichSuXuLyMien(rec) && (
+						<Popover
+							trigger='hover'
+							placement='top'
+							content={
+								<div style={{ minWidth: 260, maxWidth: 320 }}>
+									<div>
+										<b>{t('kiemtrasuckhoe.mien.nguoiPheDuyet')}:</b> {rec.reviewerName || rec.reviewerId || '--'}
+									</div>
+									<div>
+										<b>{t('kiemtrasuckhoe.mien.thoiGianDuyet')}:</b>{' '}
+										{rec.createdAt ? dayjs(rec.createdAt).format('DD/MM/YYYY HH:mm') : ''}
+									</div>
+									<div>
+										<b>{t('kiemtrasuckhoe.mien.ketQua')}:</b> {rec.action || ''}
+									</div>
+									{rec.note && (
+										<div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+											<b>{t('kiemtrasuckhoe.mien.ghiChu')}:</b> {rec.note}
+										</div>
+									)}
+								</div>
+							}
+						>
+							<Button type='text' size='small' icon={<InfoCircleOutlined />} style={{ paddingInline: 4 }} />
+						</Popover>
+					)}
+				</Space>
+			),
 			filterType: 'select',
 			filterData: Object.values(EKtscReviewStatus).map((item) => ({
 				value: item,
@@ -243,7 +324,7 @@ const SinhVienDangKyKiemTraSucKhoe = () => {
 		},
 		{
 			title: t('kiemtrasuckhoe.dangky.thaoTac'),
-			width: 80,
+			width: 100,
 			align: 'center',
 			fixed: 'right',
 			render: (_val, rec) => {
@@ -252,14 +333,16 @@ const SinhVienDangKyKiemTraSucKhoe = () => {
 
 				return (
 					<>
-						<ButtonExtend
-							onClick={() => {
-								const type = getFormTypeFromDeclaration(rec.declarationType);
-								if (type) openForm(type, toDotDangKyRecordFromHistory(rec), { isView: true });
-							}}
-							type='link'
-							icon={<EyeOutlined />}
-						/>
+						{type === 'mien' && (
+							<ButtonExtend
+								onClick={() => {
+									const type = getFormTypeFromDeclaration(rec.declarationType);
+									if (type) openForm(type, toDotDangKyRecordFromHistory(rec), { isView: true });
+								}}
+								type='link'
+								icon={<EyeOutlined />}
+							/>
+						)}
 						{canEdit && type === 'mien' && (
 							<ButtonExtend
 								tooltip={t('global.button.chinhsua')}
@@ -280,6 +363,8 @@ const SinhVienDangKyKiemTraSucKhoe = () => {
 		const hasPeriod = !!currentInfo.period?._id;
 		const myRegistration = currentInfo.myRegistration;
 		const canRegister = canRegisterAgain(myRegistration);
+		const reviewTag = renderReviewStatusTag(myRegistration?.reviewStatus, myRegistration?.declarationType);
+		const paymentTag = renderPaymentStatusTag(currentInfo.student?.paymentStatus, myRegistration?.declarationType);
 
 		return (
 			<div
@@ -311,7 +396,20 @@ const SinhVienDangKyKiemTraSucKhoe = () => {
 							{t('kiemtrasuckhoe.dangky.banner.xemDayDu')}
 						</Button>
 					) : (
-						renderReviewStatusTag(myRegistration?.reviewStatus, myRegistration?.declarationType)
+						<Space size={16}>
+							{reviewTag && (
+								<Space size={6}>
+									<span style={labelStyle}>{t('kiemtrasuckhoe.dangky.banner.duyet')}:</span>
+									{reviewTag}
+								</Space>
+							)}
+							{paymentTag && (
+								<Space size={6}>
+									<span style={labelStyle}>{t('kiemtrasuckhoe.dangky.banner.thanhToan')}:</span>
+									{paymentTag}
+								</Space>
+							)}
+						</Space>
 					)
 				) : null}
 			</div>
@@ -353,7 +451,7 @@ const SinhVienDangKyKiemTraSucKhoe = () => {
 
 			<ModalExpandable
 				title={formModalTitle}
-				width={1000}
+				width={formModal?.edit || formModal?.isView ? 1000 : 600}
 				open={!!formModal}
 				onCancel={closeFormModal}
 				footer={null}

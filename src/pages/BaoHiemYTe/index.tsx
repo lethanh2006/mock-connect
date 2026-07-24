@@ -3,17 +3,24 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { type IColumn } from '@/components/Table/typing';
 import {
+	BhytPaymentStatus,
 	EBhytReviewStatus,
 	EDeclarationType,
+	paymentStatusColor,
+	paymentStatusIntlId,
 	reviewStatusColor,
 	reviewStatusIntlId,
 } from '@/services/BaoHiemYTe/constant';
 import { BaoHiemYTe } from '@/services/BaoHiemYTe/typing';
+import { getPhuongXa, getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
+import type { DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
+import { ETagColor } from '@/services/base/constant';
+import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { chuanHoaTen } from '@/utils/utils';
-import { ClockCircleOutlined, EyeOutlined, FormOutlined } from '@ant-design/icons';
-import { Button, Space, Tag } from 'antd';
-import { useEffect, useState } from 'react';
+import { ClockCircleOutlined, EyeOutlined, FormOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Button, Popover, Space, Tag } from 'antd';
+import { useEffect, useRef, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChoiceModal from './components/ChoiceModal';
 import FormDangKy from './components/FormDangKy';
@@ -38,10 +45,13 @@ const getFormTypeFromDeclaration = (declarationType?: EDeclarationType): TFormTy
 const SinhVienDangKyBHYT = () => {
 	const intl = useIntl();
 	const t = (id: string) => intl.formatMessage({ id });
-	const { page, limit, getModel, getByIdModel } = useModel('baohiemyte.dotdangky');
+	const { page, limit, getModel, getByIdModel, danhSach } = useModel('baohiemyte.dotdangky');
 	const [currentInfo, setCurrentInfo] = useState<BaoHiemYTe.IPeriodSnapshot>();
 	const [choiceModalOpen, setChoiceModalOpen] = useState(false);
 	const [formModal, setFormModal] = useState<IFormModalState | null>(null);
+	const [tenTinhByMa, setTenTinhByMa] = useState<Record<string, string>>({});
+	const [tenXaByMa, setTenXaByMa] = useState<Record<string, string>>({});
+	const fetchedMaTinhRef = useRef<Set<string>>(new Set());
 
 	const getData = () => {
 		getModel(undefined, undefined, undefined, undefined, undefined, 'me/history/page');
@@ -59,6 +69,60 @@ const SinhVienDangKyBHYT = () => {
 	useEffect(() => {
 		void getCurrentInfo();
 	}, []);
+
+	useEffect(() => {
+		getTinhThanhPho().then((data) => {
+			const map: Record<string, string> = {};
+			(data.data.data as DonViHanhChinh.IRecord[])?.forEach((item) => {
+				map[String(item.ma)] = item.tenDonVi;
+			});
+			setTenTinhByMa(map);
+		});
+	}, []);
+
+	// declarationSnapshot là dữ liệu tại thời điểm nộp đơn nhưng có thể thiếu field,
+	// student là dữ liệu sinh viên mới nhất (đầy đủ field) dùng để bổ khuyết field còn thiếu
+	const mergeStudentSnapshot = (
+		declarationSnapshot?: BaoHiemYTe.IStudentRegistration,
+		student?: BaoHiemYTe.IStudentRegistration,
+	): BaoHiemYTe.IStudentRegistration | undefined => {
+		if (!declarationSnapshot && !student) return undefined;
+
+		const merged: BaoHiemYTe.IStudentRegistration = { ...student };
+		Object.entries(declarationSnapshot ?? {}).forEach(([key, value]) => {
+			if (value !== null && value !== undefined) (merged as any)[key] = value;
+		});
+
+		return merged;
+	};
+
+	const getEffectiveStudent = (rec?: BaoHiemYTe.IHistoryItem) =>
+		mergeStudentSnapshot(rec?.declarationSnapshot, rec?.student);
+
+	// Xã/phường phụ thuộc tỉnh, chỉ load thêm cho những mã tỉnh xuất hiện trong dữ liệu đang hiển thị
+	useEffect(() => {
+		const maTinhCanLoad = Array.from(
+			new Set(
+				(danhSach as BaoHiemYTe.IHistoryItem[])
+					?.map((item) => getEffectiveStudent(item)?.diaChiThuongTru?.maTinh)
+					.filter((ma): ma is string => !!ma && !fetchedMaTinhRef.current.has(ma)) ?? [],
+			),
+		);
+		if (!maTinhCanLoad.length) return;
+
+		maTinhCanLoad.forEach((ma) => fetchedMaTinhRef.current.add(ma));
+		Promise.all(maTinhCanLoad.map((ma) => getPhuongXa(ma))).then((results) => {
+			setTenXaByMa((prev) => {
+				const next = { ...prev };
+				results.forEach((res) => {
+					(res.data.data as DonViHanhChinh.IRecord[])?.forEach((item) => {
+						next[String(item.ma)] = item.tenDonVi;
+					});
+				});
+				return next;
+			});
+		});
+	}, [danhSach]);
 
 	const refreshAll = () => {
 		getData();
@@ -83,13 +147,16 @@ const SinhVienDangKyBHYT = () => {
 	const toDotDangKyRecordFromHistory = (item?: BaoHiemYTe.IHistoryItem): BaoHiemYTe.IDotDangKy | undefined => {
 		if (!item?.period) return undefined;
 
+		const effectiveStudent = getEffectiveStudent(item);
+
 		return {
 			...item.period,
 			periodId: item.period._id ?? '',
+			periodStudentId: item.periodStudentId,
 			declarationType: item.declarationType,
 			reviewStatus: item.reviewStatus,
-			billStatus: item.student?.billStatus,
-			student: item.student,
+			paymentStatus: effectiveStudent?.paymentStatus,
+			student: effectiveStudent,
 		};
 	};
 
@@ -149,6 +216,28 @@ const SinhVienDangKyBHYT = () => {
 		);
 	};
 
+	// Trạng thái thanh toán chỉ áp dụng cho hình thức mua BHYT qua trường (dangKy),
+	// hình thức khai báo miễn (mien) không phát sinh thanh toán nên hiển thị "Không áp dụng"
+	const renderPaymentStatusTag = (paymentStatus?: BhytPaymentStatus | null, declarationType?: EDeclarationType) => {
+		const type = getFormTypeFromDeclaration(declarationType);
+
+		if (type !== 'dangKy') {
+			return <Tag color={ETagColor.DEFAULT}>{t('baohiemyte.dangky.trangThaiThanhToan.notApplicable')}</Tag>;
+		}
+
+		const status = paymentStatus ?? BhytPaymentStatus.CHUA_THANH_TOAN;
+
+		return <Tag color={paymentStatusColor[status]}>{t(paymentStatusIntlId[status])}</Tag>;
+	};
+
+	const labelStyle = { color: '#8c8c8c', fontSize: 13 };
+
+	// Chỉ hiển thị lịch sử xử lý cho hình thức khai báo miễn đã thực sự được xử lý (có thông tin người xử lý),
+	// hình thức đăng ký (dangKy) không có quy trình duyệt nên không show
+	const canShowLichSuXuLyMien = (rec?: BaoHiemYTe.IHistoryItem) =>
+		getFormTypeFromDeclaration(rec?.declarationType) === 'mien' &&
+		!!(rec?.reviewerId || rec?.reviewerName || rec?.action);
+
 	const renderThoiGianDangKy = (start?: string, end?: string) =>
 		intl.formatMessage(
 			{ id: 'baohiemyte.dangky.banner.thoiGianDangKy' },
@@ -171,7 +260,7 @@ const SinhVienDangKyBHYT = () => {
 			title: t('baohiemyte.dangky.soBHXH'),
 			dataIndex: ['student', 'ssnNumber'],
 			width: 180,
-			render: (_val, rec) => rec.student?.ssnNumber || '--',
+			render: (_val, rec) => getEffectiveStudent(rec)?.ssnNumber || '--',
 			onCell,
 		},
 		{
@@ -186,17 +275,22 @@ const SinhVienDangKyBHYT = () => {
 			title: t('baohiemyte.dangky.diaChiThuongTru'),
 			dataIndex: ['student', 'diaChiThuongTru'],
 			width: 280,
-			render: (_val, rec) => rec.student?.diaChiThuongTru || '--',
+			render: (_val, rec) => {
+				const diaChi = getEffectiveStudent(rec)?.diaChiThuongTru;
+				const tenTinh = diaChi?.maTinh ? (tenTinhByMa[diaChi.maTinh] ?? diaChi.maTinh) : undefined;
+				const tenXa = diaChi?.maXaPhuong ? (tenXaByMa[diaChi.maXaPhuong] ?? diaChi.maXaPhuong) : undefined;
+				return [diaChi?.soNhaTenDuong, tenXa, tenTinh].filter(Boolean).join(', ') || '--';
+			},
 			onCell,
 		},
 		{
 			title: t('baohiemyte.dangky.column.hanSuDung'),
 			dataIndex: ['student', 'hanBHYTHienTai'],
-			width: 140,
+			width: 190,
 			align: 'center',
 			sortable: true,
 			render: (_val, rec) => {
-				const expiredDate = getExpiredDate(rec.student);
+				const expiredDate = getExpiredDate(getEffectiveStudent(rec));
 				return expiredDate ? formatDate(expiredDate) : '--';
 			},
 			onCell,
@@ -204,10 +298,42 @@ const SinhVienDangKyBHYT = () => {
 		{
 			title: t('baohiemyte.dangky.column.trangThai'),
 			dataIndex: 'reviewStatus',
-			width: 180,
+			width: 190,
 			align: 'center',
 			sortable: true,
-			render: (_val, rec) => renderReviewStatusTag(rec.reviewStatus, rec.declarationType) ?? '--',
+			render: (_val, rec) => (
+				<Space size={4}>
+					{renderReviewStatusTag(rec.reviewStatus, rec.declarationType) ?? '--'}
+
+					{canShowLichSuXuLyMien(rec) && (
+						<Popover
+							trigger='hover'
+							placement='top'
+							content={
+								<div style={{ minWidth: 260, maxWidth: 320 }}>
+									<div>
+										<b>{t('baohiemyte.mien.nguoiPheDuyet')}:</b> {rec.reviewerName || rec.reviewerId || '--'}
+									</div>
+									<div>
+										<b>{t('baohiemyte.mien.thoiGianDuyet')}:</b>{' '}
+										{rec.createdAt ? dayjs(rec.createdAt).format('DD/MM/YYYY HH:mm') : ''}
+									</div>
+									<div>
+										<b>{t('baohiemyte.mien.ketQua')}:</b> {rec.action || ''}
+									</div>
+									{rec.note && (
+										<div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+											<b>{t('baohiemyte.mien.ghiChu')}:</b> {rec.note}
+										</div>
+									)}
+								</div>
+							}
+						>
+							<Button type='text' size='small' icon={<InfoCircleOutlined />} style={{ paddingInline: 4 }} />
+						</Popover>
+					)}
+				</Space>
+			),
 			filterType: 'select',
 			filterData: Object.values(EBhytReviewStatus).map((item) => ({
 				value: item,
@@ -217,7 +343,7 @@ const SinhVienDangKyBHYT = () => {
 		},
 		{
 			title: t('baohiemyte.dangky.thaoTac'),
-			width: 80,
+			width: 100,
 			align: 'center',
 			fixed: 'right',
 			render: (_val, rec) => {
@@ -254,6 +380,8 @@ const SinhVienDangKyBHYT = () => {
 		const hasPeriod = !!currentInfo.period?._id;
 		const myRegistration = currentInfo.myRegistration;
 		const canRegister = canRegisterAgain(myRegistration);
+		const reviewTag = renderReviewStatusTag(myRegistration?.reviewStatus, myRegistration?.declarationType);
+		const paymentTag = renderPaymentStatusTag(currentInfo.student?.paymentStatus, myRegistration?.declarationType);
 
 		return (
 			<div
@@ -285,7 +413,20 @@ const SinhVienDangKyBHYT = () => {
 							{t('baohiemyte.dangky.banner.xemDayDu')}
 						</Button>
 					) : (
-						renderReviewStatusTag(myRegistration?.reviewStatus, myRegistration?.declarationType)
+						<Space size={16}>
+							{reviewTag && (
+								<Space size={6}>
+									<span style={labelStyle}>{t('baohiemyte.dangky.banner.duyet')}:</span>
+									{reviewTag}
+								</Space>
+							)}
+							{paymentTag && (
+								<Space size={6}>
+									<span style={labelStyle}>{t('baohiemyte.dangky.banner.thanhToan')}:</span>
+									{paymentTag}
+								</Space>
+							)}
+						</Space>
 					)
 				) : null}
 			</div>
@@ -294,15 +435,15 @@ const SinhVienDangKyBHYT = () => {
 
 	const formModalTitle = formModal
 		? intl.formatMessage(
-			{
-				id: formModal.isView
-					? 'global.table.form.title.chitiet'
-					: formModal.edit
-						? 'global.table.form.title.chinhsua'
-						: 'global.table.form.title.themmoi',
-			},
-			{ title: chuanHoaTen(t('baohiemyte.dangky.title').toLowerCase()) },
-		)
+				{
+					id: formModal.isView
+						? 'global.table.form.title.chitiet'
+						: formModal.edit
+							? 'global.table.form.title.chinhsua'
+							: 'global.table.form.title.themmoi',
+				},
+				{ title: chuanHoaTen(t('baohiemyte.dangky.title').toLowerCase()) },
+			)
 		: undefined;
 
 	return (
