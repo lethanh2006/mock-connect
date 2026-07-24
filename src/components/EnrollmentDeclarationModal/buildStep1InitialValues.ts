@@ -55,6 +55,7 @@ export const buildStep1InitialValues = (sinhVien?: SinhVien.IRecord): Record<str
 		bloodType: hoSoNhapHoc?.nhomMau,
 		...(hoSoNhapHoc?.coVanDeSucKhoe !== undefined ? { hasHealthProblem: hoSoNhapHoc.coVanDeSucKhoe } : {}),
 		healthProblemAttachment: hoSoNhapHoc?.urlDinhKemVanDeSucKhoe,
+		isRegisterFreeDormitory: hoSoNhapHoc?.isRegisterFreeDormitory,
 		frontIdCard: hoSoNhapHoc?.urlMatTruocCccd,
 		backIdCard: hoSoNhapHoc?.urlMatSauCccd,
 		...documentAttachments,

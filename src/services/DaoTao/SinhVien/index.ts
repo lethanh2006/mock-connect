@@ -56,3 +56,8 @@ export async function putNhapHocStep2(payLoad: any) {
 export async function putNhapHocStep3(payLoad: any) {
 	return axios.put(`${ipDaoTao}/sinh-vien/me/nhap-hoc/step/3`, payLoad);
 }
+
+export async function putNhapHocStep4(payLoad: any) {
+	return axios.put(`${ipDaoTao}/sinh-vien/me/nhap-hoc/step/4`, payLoad);
+}
+

@@ -1,8 +1,9 @@
 import EnrollmentDeclarationModal from '@/components/EnrollmentDeclarationModal';
+import LocaleSwitch from '@/components/RightContent/LocaleSwitch';
 import { getPublicAssetPath } from '@/utils/path';
 import { Button, Modal } from 'antd';
 import { useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import styles from './index.less';
 import { EnrollmentStatus } from '@/services/DaoTao/SinhVien/constants';
 
@@ -15,8 +16,10 @@ type EnrollmentPromptProps = {
  * `maskClosable`, `keyboard` và nút đóng đều được tắt để người dùng không thể bỏ qua.
  */
 const EnrollmentPrompt = ({ onStartEnrollment }: EnrollmentPromptProps) => {
+	const intl = useIntl();
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
-	const isAdmitted = recSinhVien?.enrollmentStatus === EnrollmentStatus.ADMITTED
+	// const isAdmitted = recSinhVien?.enrollmentStatus === EnrollmentStatus.ADMITTED;
+	const isAdmitted = true
 	const [declarationOpen, setDeclarationOpen] = useState(false);
 
 	const handleStartEnrollment = () => {
@@ -37,37 +40,57 @@ const EnrollmentPrompt = ({ onStartEnrollment }: EnrollmentPromptProps) => {
 				className={styles.enrollmentPrompt}
 			>
 				<div className={styles.topBar} />
+				<div className={styles.topHeader}>
+					<LocaleSwitch />
+				</div>
 				<div className={styles.content}>
 					<img className={styles.logo} src={getPublicAssetPath('logo.png')} alt='VinUniversity' />
-					<span className={styles.congratulations}>Chúc mừng!</span>
+					<span className={styles.congratulations}>
+						{intl.formatMessage({ id: 'global.enrollmentPrompt.congratulations' })}
+					</span>
 					<h1>
-						Chào mừng bạn đến với
+						{intl.formatMessage({ id: 'global.enrollmentPrompt.welcomePrefix' })}
 						<br />
-						gia đình <span className={styles.brand}>VinUniversity</span>!
+						{intl.formatMessage(
+							{ id: 'global.enrollmentPrompt.welcomeSuffix' },
+							{ brand: <span className={styles.brand}>VinUniversity</span> },
+						)}
 					</h1>
 					<p className={styles.description}>
-						Bạn đã chính thức trúng tuyển vào <strong>VinUniversity</strong>.
+						{intl.formatMessage(
+							{ id: 'global.enrollmentPrompt.descriptionLine1' },
+							{ brand: <strong>VinUniversity</strong> },
+						)}
 						<br />
-						Đây là khởi đầu của một hành trình phi thường.
+						{intl.formatMessage({ id: 'global.enrollmentPrompt.descriptionLine2' })}
 						<br />
-						Chúng tôi tự hào vì có bạn đồng hành.
+						{intl.formatMessage({ id: 'global.enrollmentPrompt.descriptionLine3' })}
 					</p>
 
 					<div className={styles.divider} />
 					<section className={styles.nextSteps}>
-						<h2>NHỮNG VIỆC CẦN THỰC HIỆN</h2>
+						<h2>{intl.formatMessage({ id: 'global.enrollmentPrompt.nextStepsTitle' })}</h2>
 						<ol>
-							<li>Hoàn tất xác nhận nhập học</li>
-							<li>Thiết lập tài khoản gia đình</li>
-							<li>Đăng ký các dịch vụ bổ sung</li>
+							<li>{intl.formatMessage({ id: 'global.enrollmentPrompt.step1' })}</li>
+							<li>{intl.formatMessage({ id: 'global.enrollmentPrompt.step2' })}</li>
+							<li>{intl.formatMessage({ id: 'global.enrollmentPrompt.step3' })}</li>
 						</ol>
 					</section>
 
 					<Button type='primary' size='large' block className={styles.startButton} onClick={handleStartEnrollment}>
-						BẮT ĐẦU NHẬP HỌC
+						{intl.formatMessage({ id: 'global.enrollmentPrompt.startButton' })}
 					</Button>
 					<p className={styles.estimatedTime}>
-						Thời gian hoàn thành dự kiến: <strong>15–20 phút</strong>
+						{intl.formatMessage(
+							{ id: 'global.enrollmentPrompt.estimatedTime' },
+							{
+								time: (
+									<strong>
+										{intl.formatMessage({ id: 'global.enrollmentPrompt.estimatedTimeValue' })}
+									</strong>
+								),
+							},
+						)}
 					</p>
 				</div>
 			</Modal>

@@ -2,29 +2,70 @@ import type { DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import { DeleteOutlined, EditOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Popconfirm, Table, type FormInstance } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import { useIntl } from 'umi';
 import FamilyMemberModal from './FamilyMemberModal';
-import { LIABILITY_WAIVER_INTRO, LIABILITY_WAIVER_ITEMS, STUDENT_DECLARATION_ITEMS } from './guardianConstants';
+import { getLiabilityWaiverIntro, getLiabilityWaiverItems, getStudentDeclarationItems } from './guardianConstants';
 import SectionHeader from './SectionHeader';
 import type { TDiaChiGiaDinh, TFamilyMember } from './typing';
 
 const formatAddress = (diaChi?: TDiaChiGiaDinh) =>
 	diaChi ? [diaChi.diaChi, diaChi.tenXaPhuong, diaChi.tenTP].filter(Boolean).join(', ') : '';
 
-const requiredCheckedRule = {
-	validator: async (_: unknown, value: boolean) => {
-		if (!value) throw new Error('This confirmation is required');
-	},
-};
+const getColumns = (
+	intl: any,
+	handleEdit: (index: number) => void,
+	handleDelete: (index: number) => void,
+): ColumnsType<TFamilyMember> => [
+		{ title: intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.table.no' }), width: 56, render: (_, __, index) => index + 1 },
+		{ title: intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.table.name' }), dataIndex: 'fullName' },
+		{ title: intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.table.relationship' }), dataIndex: 'loaiThanhVien' },
+		{ title: intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.table.primaryPhone' }), dataIndex: 'soDienThoai' },
+		{ title: intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.table.secondaryPhone' }), dataIndex: 'soDienThoai2' },
+		{ title: intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.table.email' }), dataIndex: 'email' },
+		{ title: intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.table.address' }), render: (_, row) => formatAddress(row.diaChiHienNay ?? row.hoKhauThuongTru) },
+		{
+			title: intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.table.action' }),
+			width: 90,
+			render: (_, __, index) => (
+				<Fragment>
+					<Button type='text' icon={<EditOutlined />} onClick={() => handleEdit(index)} />
+					<Popconfirm title={intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.table.deleteConfirm' })} onConfirm={() => handleDelete(index)}>
+						<Button type='text' icon={<DeleteOutlined />} />
+					</Popconfirm>
+				</Fragment>
+			),
+		},
+	];
 
 const GuardianConsentsStep = ({ form, listTinh }: { form: FormInstance<any>; listTinh?: DonViHanhChinh.IRecord[] }) => {
-	const [familyMembers, setFamilyMembers] = useState<TFamilyMember[]>([]);
+	const intl = useIntl();
+	const [familyMembers, setFamilyMembers] = useState<TFamilyMember[]>(
+		() => form.getFieldValue('thanhVienGiaDinh') || [],
+	);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
+	const requiredCheckedRule = useMemo(
+		() => ({
+			validator: async (_: unknown, value: boolean) => {
+				if (!value) throw new Error(intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.requiredConsentError' }));
+			},
+		}),
+		[intl],
+	);
+
 	useEffect(() => {
-		form.setFieldsValue({ thanhVienGiaDinh: familyMembers });
-	}, [familyMembers]);
+		const initialList = form.getFieldValue('thanhVienGiaDinh');
+		if (initialList && Array.isArray(initialList) && initialList.length > 0 && familyMembers.length === 0) {
+			setFamilyMembers(initialList);
+		}
+	}, []);
+
+	const updateFamilyMembers = (newList: TFamilyMember[]) => {
+		setFamilyMembers(newList);
+		form.setFieldsValue({ thanhVienGiaDinh: newList });
+	};
 
 	const handleAdd = () => {
 		setEditingIndex(null);
@@ -37,54 +78,36 @@ const GuardianConsentsStep = ({ form, listTinh }: { form: FormInstance<any>; lis
 	};
 
 	const handleDelete = (index: number) => {
-		setFamilyMembers((list) => list.filter((_, i) => i !== index));
+		const newList = familyMembers.filter((_, i) => i !== index);
+		updateFamilyMembers(newList);
 	};
 
 	const handleSave = (values: TFamilyMember) => {
-		setFamilyMembers((list) => {
-			if (editingIndex === null) return [...list, values];
-			return list.map((item, i) => (i === editingIndex ? values : item));
-		});
+		const newList =
+			editingIndex === null
+				? [...familyMembers, values]
+				: familyMembers.map((item, i) => (i === editingIndex ? values : item));
+		updateFamilyMembers(newList);
 		setModalOpen(false);
 	};
 
-	const columns: ColumnsType<TFamilyMember> = [
-		{ title: 'No.', width: 56, render: (_, __, index) => index + 1 },
-		{ title: 'Parent/Guardian Name', dataIndex: 'fullName' },
-		{ title: 'Relationship', dataIndex: 'loaiThanhVien' },
-		{ title: 'Primary Contact Number', dataIndex: 'soDienThoai' },
-		{ title: 'Secondary Contact Number', dataIndex: 'soDienThoai2' },
-		{ title: 'Email', dataIndex: 'email' },
-		{ title: 'Address', render: (_, row) => formatAddress(row.diaChiHienNay ?? row.hoKhauThuongTru) },
-		{
-			title: 'Action',
-			width: 90,
-			render: (_, __, index) => (
-				<Fragment>
-					<Button type='text' icon={<EditOutlined />} onClick={() => handleEdit(index)} />
-					<Popconfirm title='Remove this family member?' onConfirm={() => handleDelete(index)}>
-						<Button type='text' icon={<DeleteOutlined />} />
-					</Popconfirm>
-				</Fragment>
-			),
-		},
-	];
+	const columns = useMemo(() => getColumns(intl, handleEdit, handleDelete), [intl, familyMembers]);
 
 	return (
 		<Fragment>
-			<SectionHeader>Family Information</SectionHeader>
+			<SectionHeader>{intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.familyInfo' })}</SectionHeader>
 
 			<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
 				<span>
-					Total: <strong>{familyMembers.length}</strong>{' '}
+					{intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.total' })} <strong>{familyMembers.length}</strong>{' '}
 					<span style={{ color: '#d4622a', fontStyle: 'italic' }}>
-						(You need to provide information for at least two family members)
+						{intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.memberCountRequirement' })}
 					</span>
 				</span>
 				<div style={{ display: 'flex', gap: 8 }}>
 					<Button icon={<ReloadOutlined />} />
 					<Button type='primary' onClick={handleAdd}>
-						Add more
+						{intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.addMore' })}
 					</Button>
 				</div>
 			</div>
@@ -95,7 +118,7 @@ const GuardianConsentsStep = ({ form, listTinh }: { form: FormInstance<any>; lis
 					{
 						validator: async (_, value) => {
 							if (!value || value.length < 2)
-								throw new Error('Please provide information for at least two family members');
+								throw new Error(intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.minMembersError' }));
 						},
 					},
 				]}
@@ -105,28 +128,27 @@ const GuardianConsentsStep = ({ form, listTinh }: { form: FormInstance<any>; lis
 
 			<Form.Item name='consentShareWithGuardian' valuePropName='checked' rules={[requiredCheckedRule]}>
 				<Checkbox>
-					I consent to granting the parent/guardian selected above access to my academic results, tuition information,
-					attendance records, and university notifications.
+					{intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.consentShare' })}
 				</Checkbox>
 			</Form.Item>
 
-			<SectionHeader>Student Liability Release and Waiver</SectionHeader>
-			<p style={{ fontWeight: 700 }}>{LIABILITY_WAIVER_INTRO}</p>
+			<SectionHeader>{intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.waiverTitle' })}</SectionHeader>
+			<p style={{ fontWeight: 700 }}>{getLiabilityWaiverIntro(intl)}</p>
 			<ol>
-				{LIABILITY_WAIVER_ITEMS.map((item) => (
+				{getLiabilityWaiverItems(intl).map((item) => (
 					<li key={item.slice(0, 24)} style={{ marginBottom: 12 }}>
 						{item}
 					</li>
 				))}
 			</ol>
 
-			<SectionHeader>Student Declaration</SectionHeader>
-			{STUDENT_DECLARATION_ITEMS.map((item) => (
+			<SectionHeader>{intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.declarationTitle' })}</SectionHeader>
+			{getStudentDeclarationItems(intl).map((item) => (
 				<p key={item.slice(0, 24)}>{item}</p>
 			))}
 
 			<Form.Item name='agreeDeclaration' valuePropName='checked' rules={[requiredCheckedRule]}>
-				<Checkbox>I have carefully read, fully understood, and agree to the above.</Checkbox>
+				<Checkbox>{intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.agreeDeclaration' })}</Checkbox>
 			</Form.Item>
 
 			<FamilyMemberModal

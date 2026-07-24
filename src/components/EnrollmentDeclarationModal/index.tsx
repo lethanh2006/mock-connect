@@ -2,28 +2,26 @@ import { getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
 import type { DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import { getTinhTpTruongThpt } from '@/services/Core/TruongThpt';
 import { getManyLoaiKhuyetTat } from '@/services/DaoTao/LoaiKhuyetTat';
-import { putNhapHocStep1, putNhapHocStep2, putNhapHocStep3 } from '@/services/DaoTao/SinhVien';
+import { putNhapHocStep1, putNhapHocStep2, putNhapHocStep3, putNhapHocStep4 } from '@/services/DaoTao/SinhVien';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { Avatar, Button, Form, Modal, message } from 'antd';
 import { CheckOutlined, CloseOutlined, ClockCircleOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
+import LocaleSwitch from '@/components/RightContent/LocaleSwitch';
 import AcademicInformationStep from './AcademicInformationStep';
+import AdditionalServicesStep from './AdditionalServicesStep';
 import { buildStep1InitialValues } from './buildStep1InitialValues';
 import { buildStep1Payload } from './buildStep1Payload';
+import { buildStep2InitialValues } from './buildStep2InitialValues';
 import { buildStep2Payload } from './buildStep2Payload';
+import { buildStep3InitialValues } from './buildStep3InitialValues';
 import { buildStep3Payload } from './buildStep3Payload';
+import { buildStep4InitialValues } from './buildStep4InitialValues';
+import { buildStep4Payload } from './buildStep4Payload';
 import GuardianConsentsStep from './GuardianConsentsStep';
 import styles from './index.less';
 import PersonalInformationStep from './PersonalInformationStep';
-
-const STEP_TITLES = [
-	'Personal Information',
-	'Academic Information',
-	'Guardian & Consents',
-	'Additional Services',
-	'Payment Information',
-];
 
 const getStudentName = (sinhVien?: SinhVien.IRecord) =>
 	sinhVien?.ten || [sinhVien?.firstName, sinhVien?.lastName].filter(Boolean).join(' ');
@@ -37,6 +35,7 @@ type EnrollmentDeclarationModalProps = {
 };
 
 const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModalProps) => {
+	const intl = useIntl();
 	const { record: recSinhVien, getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
 	const [form] = Form.useForm();
 	const [currentStep, setCurrentStep] = useState(0);
@@ -45,6 +44,14 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 	const [listLoaiKhuyetTat, setListLoaiKhuyetTat] = useState<LoaiKhuyetTat.IRecord[]>();
 	const [submitting, setSubmitting] = useState(false);
 	const resumedRef = useRef(false);
+
+	const stepTitles = [
+		intl.formatMessage({ id: 'global.enrollmentDeclaration.stepTitle.0' }),
+		intl.formatMessage({ id: 'global.enrollmentDeclaration.stepTitle.1' }),
+		intl.formatMessage({ id: 'global.enrollmentDeclaration.stepTitle.2' }),
+		intl.formatMessage({ id: 'global.enrollmentDeclaration.stepTitle.3' }),
+		intl.formatMessage({ id: 'global.enrollmentDeclaration.stepTitle.4' }),
+	];
 
 	useEffect(() => {
 		if (!open) return;
@@ -61,14 +68,19 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 		}
 		if (resumedRef.current || !recSinhVien) return;
 		resumedRef.current = true;
-		form.setFieldsValue(buildStep1InitialValues(recSinhVien));
+		form.setFieldsValue({
+			...buildStep1InitialValues(recSinhVien),
+			...buildStep2InitialValues(recSinhVien),
+			...buildStep3InitialValues(recSinhVien),
+			...buildStep4InitialValues(recSinhVien),
+		});
 		setCurrentStep(Math.max((recSinhVien.enrollmentStep ?? 1) - 1, 0));
 	}, [open, recSinhVien]);
 
-	const lastStep = STEP_TITLES.length - 1;
+	const lastStep = stepTitles.length - 1;
 
 	const handleNext = async () => {
-		if (currentStep > 2) {
+		if (currentStep > 3) {
 			setCurrentStep((step) => Math.min(step + 1, lastStep));
 			return;
 		}
@@ -90,11 +102,14 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 			} else if (currentStep === 1) {
 				const payload = await buildStep2Payload(values);
 				await putNhapHocStep2(payload);
-			} else {
+			} else if (currentStep === 2) {
 				const payload = buildStep3Payload(values);
 				await putNhapHocStep3(payload);
+			} else if (currentStep === 3) {
+				const payload = await buildStep4Payload(values);
+				await putNhapHocStep4(payload);
 			}
-			message.success('Your information has been saved successfully.');
+			message.success(intl.formatMessage({ id: 'global.enrollmentDeclaration.saveSuccess' }));
 			getThongTinCuaToiModel().catch(console.error);
 			setCurrentStep((step) => Math.min(step + 1, lastStep));
 		} catch (error) {
@@ -118,8 +133,13 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 		>
 			<div className={styles.shell}>
 				<div className={styles.header}>
-					<h1 className={styles.title}>Enrollment Profile Declaration</h1>
-					<Button type='text' icon={<CloseOutlined />} className={styles.closeButton} onClick={onClose} />
+					<h1 className={styles.title}>
+						{intl.formatMessage({ id: 'global.enrollmentDeclaration.title' })}
+					</h1>
+					<div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+						<LocaleSwitch />
+						<Button type='text' icon={<CloseOutlined />} className={styles.closeButton} onClick={onClose} />
+					</div>
 				</div>
 
 				<div className={styles.body}>
@@ -129,15 +149,15 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 							<div className={styles.studentName}>{getStudentName(recSinhVien)}</div>
 
 							<div className={styles.studentInfoRow}>
-								<span>Student ID</span>
+								<span>{intl.formatMessage({ id: 'global.enrollmentDeclaration.studentId' })}</span>
 								<span className={styles.studentInfoValue}>{recSinhVien?.ma}</span>
 							</div>
 							<div className={styles.studentInfoRow}>
-								<span>Program</span>
+								<span>{intl.formatMessage({ id: 'global.enrollmentDeclaration.program' })}</span>
 								<span className={styles.studentInfoValue}>{getProgram(recSinhVien)}</span>
 							</div>
 							<div className={styles.studentInfoRow}>
-								<span>Status</span>
+								<span>{intl.formatMessage({ id: 'global.enrollmentDeclaration.status' })}</span>
 								<span className={styles.statusAdmitted}>{recSinhVien?.enrollmentStatus}</span>
 							</div>
 						</div>
@@ -145,8 +165,12 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 						<div className={styles.sidebarSpacer} />
 
 						<div className={styles.contactBox}>
-							<div className={styles.contactTitle}>Contact</div>
-							<div className={styles.contactOffice}>The Registrar&apos;s Office</div>
+							<div className={styles.contactTitle}>
+								{intl.formatMessage({ id: 'global.enrollmentDeclaration.contact' })}
+							</div>
+							<div className={styles.contactOffice}>
+								{intl.formatMessage({ id: 'global.enrollmentDeclaration.contactOffice' })}
+							</div>
 							<div className={styles.contactLine}>
 								<PhoneOutlined />
 								<span>+84-2471 089 779 (ext. 9004)</span>
@@ -158,11 +182,11 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 							<div className={styles.contactLine}>
 								<ClockCircleOutlined />
 								<span>
-									Monday – Friday:
+									{intl.formatMessage({ id: 'global.enrollmentDeclaration.contactHoursLine1' })}
 									<br />
-									Morning: 8.30AM - 12.30PM
+									{intl.formatMessage({ id: 'global.enrollmentDeclaration.contactHoursLine2' })}
 									<br />
-									Afternoon: 1.30PM - 5.30PM
+									{intl.formatMessage({ id: 'global.enrollmentDeclaration.contactHoursLine3' })}
 								</span>
 							</div>
 						</div>
@@ -170,7 +194,7 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 
 					<div className={styles.main}>
 						<div className={styles.stepper}>
-							{STEP_TITLES.map((title, index) => {
+							{stepTitles.map((title, index) => {
 								const isDone = index <= currentStep;
 								return (
 									<div onClick={() => { setCurrentStep(index) }} key={title} className={`${styles.stepperItem} ${isDone ? styles.completed : ''}`}>
@@ -190,13 +214,18 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 								)}
 								{currentStep === 1 && <AcademicInformationStep form={form} listTinhTruongThpt={listTinhTruongThpt} />}
 								{currentStep === 2 && <GuardianConsentsStep form={form} listTinh={listTinh} />}
+								{currentStep === 3 && <AdditionalServicesStep form={form} />}
 							</Form>
 						</div>
 
 						<div className={styles.footer}>
-							{currentStep > 0 && <Button onClick={handlePrevious}>PREVIOUS</Button>}
+							{currentStep > 0 && (
+								<Button className={styles.prevButton} onClick={handlePrevious}>
+									{intl.formatMessage({ id: 'global.enrollmentDeclaration.previous' })}
+								</Button>
+							)}
 							<Button type='primary' className={styles.nextButton} loading={submitting} onClick={handleNext}>
-								NEXT STEP
+								{intl.formatMessage({ id: 'global.enrollmentDeclaration.nextStep' })}
 							</Button>
 						</div>
 					</div>

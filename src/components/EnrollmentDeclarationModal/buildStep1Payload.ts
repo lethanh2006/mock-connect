@@ -75,6 +75,7 @@ export const buildStep1Payload = async (
 		nhomMau: values.bloodType,
 		coVanDeSucKhoe: values.hasHealthProblem,
 		urlDinhKemVanDeSucKhoe: urlDinhKemVanDeSucKhoe ?? undefined,
+		isRegisterFreeDormitory: values.hasHealthProblem === true ? Boolean(values.isRegisterFreeDormitory) : undefined,
 		soHoChieu: values.passportNumber,
 		urlDinhKemHoChieu: urlDinhKemHoChieu ?? undefined,
 		visa: hasVisa

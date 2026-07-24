@@ -205,6 +205,7 @@ declare module SinhVien {
 		chuTaiKhoanNganHang?: string;
 		coVanDeSucKhoe?: boolean;
 		urlDinhKemVanDeSucKhoe?: string;
+		isRegisterFreeDormitory?: boolean;
 		soHoChieu?: string;
 		urlDinhKemHoChieu?: string;
 		visa?: {
@@ -226,7 +227,14 @@ declare module SinhVien {
 		firstGenStudent?: boolean;
 		adjustmentNeeds?: string[];
 		adjustmentOthersText?: string;
+		alreadyHadCheckup?: boolean;
+		healthCheckupAttachment?: string;
+		hasInsurance?: boolean;
+		healthInsuranceNumber?: string;
+		healthInsuranceAttachment?: string;
+		isRegisterDormitory?: boolean;
 	};
+
 
 	export interface INoiTruSinhVien {
 		_id: string;

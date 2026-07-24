@@ -17,7 +17,20 @@ export const FAMILY_RELATIONSHIP_OPTIONS = [
 	{ value: 'Chồng', label: 'Husband' },
 ];
 
-/** Placeholder — no such catalog exists in this codebase yet. */
+export const getFamilyRelationshipOptions = (intl: any) => [
+	{ value: 'Bố', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.father' }) },
+	{ value: 'Mẹ', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.mother' }) },
+	{ value: 'Người giám hộ', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.guardian' }) },
+	{ value: 'Anh trai', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.olderBrother' }) },
+	{ value: 'Chị gái', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.olderSister' }) },
+	{ value: 'Em trai', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.youngerBrother' }) },
+	{ value: 'Em gái', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.youngerSister' }) },
+	{ value: 'Người liên hệ', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.contactPerson' }) },
+	{ value: 'Con', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.child' }) },
+	{ value: 'Vợ', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.wife' }) },
+	{ value: 'Chồng', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.husband' }) },
+];
+
 export const TRAINING_LEVEL_OPTIONS = [
 	{ value: 'High School', label: 'High School' },
 	{ value: 'Undergraduate', label: 'Undergraduate' },
@@ -25,6 +38,40 @@ export const TRAINING_LEVEL_OPTIONS = [
 	{ value: 'Postgraduate', label: 'Postgraduate' },
 	{ value: 'Doctorate', label: 'Doctorate' },
 	{ value: 'Other', label: 'Other' },
+];
+
+export const getTrainingLevelOptions = (intl: any) => [
+	{ value: 'High School', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.trainingLevel.highSchool' }) },
+	{ value: 'Undergraduate', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.trainingLevel.undergraduate' }) },
+	{ value: 'Graduate', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.trainingLevel.graduate' }) },
+	{ value: 'Postgraduate', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.trainingLevel.postgraduate' }) },
+	{ value: 'Doctorate', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.trainingLevel.doctorate' }) },
+	{ value: 'Other', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.trainingLevel.other' }) },
+];
+
+
+export const getLiabilityWaiverIntro = (intl: any): string =>
+	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.waiverIntro' });
+
+export const getLiabilityWaiverItems = (intl: any): string[] => [
+	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.waiverItem1' }),
+	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.waiverItem2' }),
+	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.waiverItem3' }),
+	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.waiverItem4' }),
+	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.waiverItem5' }),
+	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.waiverItem6' }),
+	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.waiverItem7' }),
+	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.waiverItem8' }),
+	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.waiverItem9' }),
+];
+
+export const getStudentDeclarationItems = (intl: any): string[] => [
+	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.declarationItem1' }),
+	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.declarationItem2' }),
+	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.declarationItem3' }),
+	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.declarationItem4' }),
+	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.declarationItem5' }),
+	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.declarationItem6' }),
 ];
 
 export const LIABILITY_WAIVER_INTRO =
@@ -50,3 +97,4 @@ export const STUDENT_DECLARATION_ITEMS = [
 	'I understand that VinUniversity may be required to disclose my personal information and information about my studies to related competent authorities as part of its legal obligations',
 	"I hereby consent to providing my personal information to VinUniversity and consent to VinUniversity using and processing my personal data for the purposes of my enrollment and studies at VinUni and operations of VinUni in accordance with the Personal Data Protection Policy as published on VinUniversity's official website (www.vinuni.edu.vn)",
 ];
+

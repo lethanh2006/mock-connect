@@ -34,6 +34,7 @@ export type TStep1Payload = {
 	nhomMau?: string;
 	coVanDeSucKhoe: boolean;
 	urlDinhKemVanDeSucKhoe?: string;
+	isRegisterFreeDormitory?: boolean;
 	soHoChieu?: string;
 	urlDinhKemHoChieu?: string;
 	visa?: {
@@ -136,3 +137,17 @@ export type TStep3Payload = {
 	dongYNhanThongBao: boolean;
 	dongYDieuKhoan: boolean;
 };
+
+export type TStep4Payload = {
+	id1: string;
+	id2: string;
+	id3: string;
+	alreadyHadCheckup?: boolean;
+	healthCheckupAttachment?: string;
+	hasInsurance?: boolean;
+	healthInsuranceNumber?: string;
+	healthInsuranceAttachment?: string;
+	isRegisterDormitory?: boolean;
+};
+
+
