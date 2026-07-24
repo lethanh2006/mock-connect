@@ -45,6 +45,8 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 	const [listLoaiKhuyetTat, setListLoaiKhuyetTat] = useState<LoaiKhuyetTat.IRecord[]>();
 	const [submitting, setSubmitting] = useState(false);
 	const resumedRef = useRef(false);
+	const contentRef = useRef<HTMLDivElement>(null);
+	const bodyRef = useRef<HTMLDivElement>(null);
 
 	const stepTitles = [
 		intl.formatMessage({ id: 'global.enrollmentDeclaration.stepTitle.0' }),
@@ -77,6 +79,11 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 		});
 		setCurrentStep(Math.max((recSinhVien.enrollmentStep ?? 1) - 1, 0));
 	}, [open, recSinhVien]);
+
+	useEffect(() => {
+		contentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+		bodyRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+	}, [currentStep]);
 
 	const lastStep = stepTitles.length - 1;
 
@@ -148,7 +155,7 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 					</div>
 				</div>
 
-				<div className={styles.body}>
+				<div className={styles.body} ref={bodyRef}>
 					<div className={styles.sidebar}>
 						<div className={styles.studentCard}>
 							<Avatar size={80} icon={<UserOutlined />} src={recSinhVien?.anhDaiDienUrl} className={styles.avatar} />
@@ -215,7 +222,7 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 							})}
 						</div>
 
-						<div className={styles.content}>
+						<div className={styles.content} ref={contentRef}>
 							{currentStep === lastStep ? (
 								<PaymentStep onGoToPayment={handleGoToPayment} />
 							) : (
