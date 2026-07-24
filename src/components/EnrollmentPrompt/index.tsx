@@ -18,8 +18,7 @@ type EnrollmentPromptProps = {
 const EnrollmentPrompt = ({ onStartEnrollment }: EnrollmentPromptProps) => {
 	const intl = useIntl();
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
-	// const isAdmitted = recSinhVien?.enrollmentStatus === EnrollmentStatus.ADMITTED;
-	const isAdmitted = true
+	const isAdmitted = recSinhVien?.enrollmentStatus === EnrollmentStatus.ADMITTED;
 	const [declarationOpen, setDeclarationOpen] = useState(false);
 
 	const handleStartEnrollment = () => {

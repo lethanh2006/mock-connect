@@ -113,7 +113,7 @@ const FormMienKiemTraSucKhoe = ({ record, isView, edit, onCancel, getData }: IPr
 							maxCount={5}
 							accept='.png,.jpg,.jpeg'
 							maxFileSize={5}
-							buttonSize='middle'
+							// buttonSize='middle'
 							otherProps={{ multiple: true }}
 						/>
 					</Form.Item>

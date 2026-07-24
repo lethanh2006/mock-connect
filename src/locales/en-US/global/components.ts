@@ -35,6 +35,11 @@ export default {
 	'global.enrollmentDeclaration.nextStep': 'NEXT STEP',
 	'global.enrollmentDeclaration.saveSuccess': 'Your information has been saved successfully.',
 
+	'global.enrollmentDeclaration.payment.title': 'Congratulations, you have completed the enrollment process!',
+	'global.enrollmentDeclaration.payment.description': 'Please make your tuition payment {here} to complete the enrollment process.',
+	'global.enrollmentDeclaration.payment.here': 'here',
+	'global.enrollmentDeclaration.payment.goToPayment': 'Go to Tuition & Billing',
+
 	'global.enrollmentDeclaration.placeholder.enter': 'Enter content',
 	'global.enrollmentDeclaration.placeholder.select': 'Select',
 	'global.enrollmentDeclaration.yes': 'Yes',
@@ -240,6 +245,9 @@ export default {
 	'global.enrollmentDeclaration.additional.submittedDate': 'Submitted {date}',
 	'global.enrollmentDeclaration.additional.dormitoryExemptionBody': 'You will be notified once your exemption is approved',
 	'global.enrollmentDeclaration.additional.dormitoryUnavailableNote': 'Dormitory application is unavailable while your exemption request is pending.',
+	'global.enrollmentDeclaration.additional.dormitoryRegisteredAlert': 'You have registered for the dormitory. Your application is currently under review.',
+	'global.enrollmentDeclaration.additional.dormitoryRegisteredTitle': 'Dormitory Registration Application',
+	'global.enrollmentDeclaration.additional.dormitoryRegisteredBody': 'You will be notified once your registration is approved',
 
 	// Health Checkup Status View
 	'global.enrollmentDeclaration.additional.kskTitle': 'Health Checkup Application',

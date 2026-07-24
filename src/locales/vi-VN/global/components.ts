@@ -35,6 +35,11 @@ export default {
 	'global.enrollmentDeclaration.nextStep': 'BƯỚC TIẾP THEO',
 	'global.enrollmentDeclaration.saveSuccess': 'Thông tin của bạn đã được lưu thành công.',
 
+	'global.enrollmentDeclaration.payment.title': 'Chúc mừng bạn đã hoàn thành thủ tục nhập học!',
+	'global.enrollmentDeclaration.payment.description': 'Vui lòng thực hiện thanh toán học phí {here} để hoàn tất quy trình nhập học.',
+	'global.enrollmentDeclaration.payment.here': 'tại đây',
+	'global.enrollmentDeclaration.payment.goToPayment': 'Đến trang Học phí & Hóa đơn',
+
 	'global.enrollmentDeclaration.placeholder.enter': 'Nhập nội dung',
 	'global.enrollmentDeclaration.placeholder.select': 'Chọn',
 	'global.enrollmentDeclaration.yes': 'Có',
@@ -96,7 +101,7 @@ export default {
 	'global.enrollmentDeclaration.field.hasHealthProblem': 'Bạn có vấn đề về sức khỏe không?',
 	'global.enrollmentDeclaration.field.healthProblemAttachment': 'Tệp đính kèm chứng nhận sức khỏe',
 	'global.enrollmentDeclaration.field.healthProblemAttachment.tooltip': 'Vui lòng tải lên tài liệu chứng nhận y tế về tình trạng sức khỏe của bạn.',
-	'global.enrollmentDeclaration.field.isRegisterFreeDormitory': 'Đăng ký miễn phí ký túc xá',
+	'global.enrollmentDeclaration.field.isRegisterFreeDormitory': 'Đăng ký miễn ký túc xá',
 	'global.enrollmentDeclaration.field.freeDormitoryIntro': '(Nếu tình trạng sức khỏe của bạn thuộc một trong các danh mục sau, bạn có thể đủ điều kiện nộp đơn xin Miễn ở Ký túc xá:',
 	'global.enrollmentDeclaration.field.freeDormitoryMental': 'Sức khỏe tâm thần: Các tình trạng gây khó khăn đáng kể trong môi trường sống tập thể hoặc yêu cầu phác đồ điều trị chuyên biệt.',
 	'global.enrollmentDeclaration.field.freeDormitoryPhysical': 'Sức khỏe thể chất: Các tình trạng y tế ảnh hưởng trực tiếp đến sinh hoạt cộng đồng hoặc yêu cầu nghiêm ngặt sự giám sát/chăm sóc liên tục từ người giám hộ.',
@@ -240,11 +245,14 @@ export default {
 	'global.enrollmentDeclaration.additional.submittedDate': 'Đã nộp ngày {date}',
 	'global.enrollmentDeclaration.additional.dormitoryExemptionBody': 'Bạn sẽ nhận được thông báo sau khi đơn xin miễn được phê duyệt',
 	'global.enrollmentDeclaration.additional.dormitoryUnavailableNote': 'Không thể đăng ký ký túc xá trong khi đơn xin miễn đang chờ xử lý.',
+	'global.enrollmentDeclaration.additional.dormitoryRegisteredAlert': 'Bạn đã đăng ký ở ký túc xá. Đơn đăng ký hiện đang được xem xét.',
+	'global.enrollmentDeclaration.additional.dormitoryRegisteredTitle': 'Đơn đăng ký Ký túc xá',
+	'global.enrollmentDeclaration.additional.dormitoryRegisteredBody': 'Bạn sẽ nhận được thông báo sau khi đơn đăng ký được phê duyệt',
 
 	// Health Checkup Status View
 	'global.enrollmentDeclaration.additional.kskTitle': 'Đơn đăng ký Khám sức khỏe',
 	'global.enrollmentDeclaration.additional.kskRegisteredSchoolAlert': 'Bạn đã đăng ký khám sức khỏe do VinUniversity tổ chức. Chi phí sẽ được cộng vào bước thanh toán.',
-	'global.enrollmentDeclaration.additional.kskExemptionAlert': 'Bạn đã nộp đơn/minh chứng miễn khám sức khỏe. Đơn hiện đang được xem xét.',
+	'global.enrollmentDeclaration.additional.kskExemptionAlert': 'Bạn đã nộp đơn/minh chứng khám sức khỏe. Đơn hiện đang được xem xét.',
 	'global.enrollmentDeclaration.additional.kskBody': 'Bạn sẽ nhận được thông báo khi trạng thái khám sức khỏe được cập nhật.',
 	'global.enrollmentDeclaration.additional.kskRegisteredBtn': 'ĐÃ ĐĂNG KÝ KHÁM SỨC KHỎE',
 	'global.enrollmentDeclaration.additional.kskUnavailableNote': 'Đã hoàn tất đăng ký khám sức khỏe.',

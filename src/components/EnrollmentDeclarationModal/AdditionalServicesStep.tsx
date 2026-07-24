@@ -3,9 +3,10 @@ import ModalExpandable from '@/components/Table/ModalExpandable';
 import FormDangKyBHYT from '@/pages/BaoHiemYTe/components/FormDangKy';
 import FormMienBHYT from '@/pages/BaoHiemYTe/components/FormMien';
 import FormMienKiemTraSucKhoe from '@/pages/KiemTraSucKhoe/components/FormMien';
+import { EDeclarationType as EBhytDeclarationType, isRegisteredDeclarationType as isBhytDeclarationTypeRegistered } from '@/services/BaoHiemYTe/constant';
 import type { BaoHiemYTe } from '@/services/BaoHiemYTe/typing';
+import { EDeclarationType as EKskDeclarationType, isRegisteredDeclarationType as isKskDeclarationTypeRegistered } from '@/services/KiemTraSucKhoe/constant';
 import type { KiemTraSucKhoe } from '@/services/KiemTraSucKhoe/typing';
-import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { formatDate } from '@/utils/formatDate';
 import rules from '@/utils/rules';
 import {
@@ -16,7 +17,7 @@ import {
 	SafetyCertificateOutlined,
 	WarningFilled,
 } from '@ant-design/icons';
-import { Button, Col, Form, Input, Row, Tag, message, type FormInstance } from 'antd';
+import { Button, Col, Form, Input, Row, Spin, Tag, message, type FormInstance } from 'antd';
 import { Fragment, useEffect, useState } from 'react';
 import { getLocale, useIntl, useModel } from 'umi';
 import styles from './index.less';
@@ -43,6 +44,8 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 	const alreadyHadCheckup: boolean | undefined = Form.useWatch('alreadyHadCheckup', form);
 	const hasInsurance: boolean | undefined = Form.useWatch('hasInsurance', form);
 	const isRegisterDormitory: boolean | undefined = Form.useWatch('isRegisterDormitory', form);
+	// Khai báo ở step 1 (Thông tin cá nhân) khi có vấn đề sức khỏe: xin miễn ở ký túc xá.
+	const isRegisterFreeDormitory: boolean | undefined = Form.useWatch('isRegisterFreeDormitory', form);
 
 	// Modals & Registrations
 	const [housingModalOpen, setHousingModalOpen] = useState(false);
@@ -55,10 +58,17 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 
 	const [kskRegistration, setKskRegistration] = useState<any>(undefined);
 	const [bhytRegistration, setBhytRegistration] = useState<any>(undefined);
+	const [kskHasActivePeriod, setKskHasActivePeriod] = useState(false);
+	const [bhytHasActivePeriod, setBhytHasActivePeriod] = useState(false);
 	const [ktxPeriod, setKtxPeriod] = useState<any>(undefined);
 	const [ktxRegistration, setKtxRegistration] = useState<any>(undefined);
 
+	const [kskLoading, setKskLoading] = useState(true);
+	const [bhytLoading, setBhytLoading] = useState(true);
+	const [ktxLoading, setKtxLoading] = useState(true);
+
 	const fetchKtxRegistration = async () => {
+		setKtxLoading(true);
 		try {
 			const dotRes: any = await getDotDangKyKtx('me/one', false);
 			const dot = dotRes?.data ?? dotRes;
@@ -83,32 +93,52 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 		} catch {
 			setKtxPeriod(undefined);
 			setKtxRegistration(undefined);
+		} finally {
+			setKtxLoading(false);
+		}
+	};
+
+	const fetchKskRegistration = async () => {
+		setKskLoading(true);
+		try {
+			const res: any = await getKskPeriod('me/current', false);
+			setKskHasActivePeriod(Boolean(res?.hasActivePeriod ?? res?.period?._id));
+			setKskRegistration(res?.myRegistration || res?.student || undefined);
+		} catch {
+			setKskHasActivePeriod(false);
+			setKskRegistration(undefined);
+		} finally {
+			setKskLoading(false);
+		}
+	};
+
+	const fetchBhytRegistration = async () => {
+		setBhytLoading(true);
+		try {
+			const res: any = await getBhytPeriod('me/current', false);
+			setBhytHasActivePeriod(Boolean(res?.hasActivePeriod ?? res?.period?._id));
+			setBhytRegistration(res?.myRegistration || res?.student || undefined);
+		} catch {
+			setBhytHasActivePeriod(false);
+			setBhytRegistration(undefined);
+		} finally {
+			setBhytLoading(false);
 		}
 	};
 
 	useEffect(() => {
-		getKskPeriod('me/current', false)
-			.then((res: any) => {
-				if (res?.myRegistration || res?.student?.declarationType) {
-					setKskRegistration(res.myRegistration || res.student);
-				}
-			})
-			.catch(() => setKskRegistration(undefined));
-
-		getBhytPeriod('me/current', false)
-			.then((res: any) => {
-				if (res?.myRegistration || res?.student?.declarationType) {
-					setBhytRegistration(res.myRegistration || res.student);
-				}
-			})
-			.catch(() => setBhytRegistration(undefined));
-
+		fetchKskRegistration();
+		fetchBhytRegistration();
 		fetchKtxRegistration();
 	}, []);
 
 	const hasActiveKtxPeriod = Boolean(ktxPeriod?._id);
 
 	const handleOpenHousingModal = () => {
+		if (isRegisterFreeDormitory) {
+			message.warning(intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryUnavailableNote' }));
+			return;
+		}
 		if (!hasActiveKtxPeriod) {
 			message.warning(intl.formatMessage({ id: 'kytucxa.dangky.empty.noDotDangKy' }));
 			return;
@@ -123,6 +153,10 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 
 	// 1. Health Checkup Handlers
 	const handleSelectHealthDangKy = async () => {
+		if (!kskHasActivePeriod) {
+			message.warning(intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.banner.khongCoDot' }));
+			return;
+		}
 		form.setFieldsValue({ alreadyHadCheckup: false, healthCheckupAttachment: undefined });
 
 		try {
@@ -147,10 +181,9 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 					phone: student.phone || recordSinhVien?.soDienThoai,
 					email: student.email || recordSinhVien?.email,
 				};
-				await postSinhVienDangKyKhamModel(payload);
-				setKskRegistration({ declarationType: 'DA_DANG_KY', createdAt: new Date() });
+				await postSinhVienDangKyKhamModel(payload, fetchKskRegistration);
 			} else {
-				message.success(intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.choiceModal.chuaKham.title' }));
+				message.warning(intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.banner.khongCoDot' }));
 			}
 		} catch (error) {
 			console.error('Lỗi khi đăng ký khám sức khỏe:', error);
@@ -158,6 +191,10 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 	};
 
 	const handleSelectHealthMien = async () => {
+		if (!kskHasActivePeriod) {
+			message.warning(intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.banner.khongCoDot' }));
+			return;
+		}
 		form.setFieldsValue({ alreadyHadCheckup: true });
 		try {
 			const res: any = await getKskPeriod('me/current', false);
@@ -188,6 +225,10 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 
 	// 2. Health Insurance Handlers
 	const handleSelectInsuranceDangKy = async () => {
+		if (!bhytHasActivePeriod) {
+			message.warning(intl.formatMessage({ id: 'baohiemyte.dangky.banner.khongCoDot' }));
+			return;
+		}
 		form.setFieldsValue({
 			hasInsurance: false,
 			healthInsuranceNumber: undefined,
@@ -222,6 +263,10 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 	};
 
 	const handleSelectInsuranceMien = async () => {
+		if (!bhytHasActivePeriod) {
+			message.warning(intl.formatMessage({ id: 'baohiemyte.dangky.banner.khongCoDot' }));
+			return;
+		}
 		form.setFieldsValue({ hasInsurance: true });
 
 		try {
@@ -251,12 +296,21 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 		setFormMienBhytModalOpen(true);
 	};
 
-	const isKskRegistered = kskRegistration?.declarationType || alreadyHadCheckup === false;
-	const isBhytRegistered = bhytRegistration?.declarationType || hasInsurance === false;
+	const isKskRegistered = isKskDeclarationTypeRegistered(kskRegistration?.declarationType);
+	const isBhytRegistered = isBhytDeclarationTypeRegistered(bhytRegistration?.declarationType);
 
-	const isKtxActuallyRegistered =
-		Boolean(ktxRegistration?.formDon?._id) && ktxRegistration?.trangThaiThanhToan !== EMaTrangThaiThanhToan.DONG;
+	// Ưu tiên declarationType thật từ API (đáng tin cậy hơn cờ form, vốn có thể chưa được lưu
+	// nếu sinh viên khai báo "đã khám"/"đã có BHYT" qua modal riêng mà chưa bấm Lưu ở step 4).
+	const isKskExternal = kskRegistration?.declarationType
+		? kskRegistration.declarationType === EKskDeclarationType.MIEN_KHAM
+		: alreadyHadCheckup === true;
+	const isBhytExternal = bhytRegistration?.declarationType
+		? bhytRegistration.declarationType === EBhytDeclarationType.DA_CO_BEN_NGOAI
+		: hasInsurance === true;
+
+	const isKtxActuallyRegistered = Boolean(ktxRegistration?.formDon?._id);
 	const isDormitoryRegistered = Boolean(isRegisterDormitory) && isKtxActuallyRegistered;
+
 
 	const formattedKtxSubmittedDate = formatDate(
 		ktxRegistration?.createdAt || (ktxRegistration as any)?.createdAtTime || new Date(),
@@ -282,6 +336,12 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 			<Form.Item name='hasInsurance' hidden>
 				<Input />
 			</Form.Item>
+			{/* isRegisterFreeDormitory's only real Form.Item lives in Step 1 (PersonalInformationStep).
+			    If the wizard resumes straight into a later step, Step 1 never mounts, so the field is
+			    never registered and Form.useWatch here would get stuck at undefined without this. */}
+			<Form.Item name='isRegisterFreeDormitory' hidden>
+				<Input />
+			</Form.Item>
 
 			{/* Card 1: Health Checkup */}
 			<div className={styles.serviceCard}>
@@ -294,14 +354,15 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 					</div>
 				</div>
 
+				<Spin spinning={kskLoading}>
 				{isKskRegistered ? (
 					<Fragment>
 						<div className={styles.dormitoryInfoAlert}>
 							<InfoCircleFilled className={styles.infoIcon} />
 							<div className={styles.infoText}>
-								{alreadyHadCheckup === false
-									? intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskRegisteredSchoolAlert' })
-									: intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskExemptionAlert' })}
+								{isKskExternal
+									? intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskExemptionAlert' })
+									: intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskRegisteredSchoolAlert' })}
 							</div>
 						</div>
 
@@ -311,9 +372,6 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskTitle' })}
 								</div>
 								<div className={styles.dormitoryExemptionTagWrap}>
-									<Tag className={styles.dormitoryExemptionTag}>
-										{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.pendingApproval' })}
-									</Tag>
 									<div className={styles.dormitoryExemptionSubDate}>
 										{intl.formatMessage(
 											{ id: 'global.enrollmentDeclaration.additional.submittedDate' },
@@ -345,10 +403,19 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 							</div>
 						</div>
 
+						{!kskHasActivePeriod && (
+							<div className={styles.warningBox} style={{ marginTop: 8 }}>
+								<WarningFilled className={styles.warningIcon} />
+								<div className={styles.warningContent}>
+									<div>{intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.banner.khongCoDot' })}</div>
+								</div>
+							</div>
+						)}
+
 						<Row gutter={[16, 16]}>
 							<Col span={24} md={12}>
 								<div
-									className={`${styles.checkupOptionCard} ${alreadyHadCheckup === false ? styles.active : ''}`}
+									className={`${styles.checkupOptionCard} ${Boolean(alreadyHadCheckup) === false ? styles.active : ''}`}
 									onClick={handleSelectHealthDangKy}
 								>
 									<div className={styles.checkupOptionTitle}>
@@ -361,6 +428,7 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 										<Button
 											type='primary'
 											loading={loadingDangKyKham}
+											disabled={!kskHasActivePeriod}
 											onClick={(e) => {
 												e.stopPropagation();
 												handleSelectHealthDangKy();
@@ -386,6 +454,7 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 									<div className={styles.checkupOptionAction}>
 										<Button
 											type={alreadyHadCheckup === true ? 'primary' : 'default'}
+											disabled={!kskHasActivePeriod}
 											onClick={(e) => {
 												e.stopPropagation();
 												handleSelectHealthMien();
@@ -414,6 +483,7 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 						)}
 					</Fragment>
 				)}
+				</Spin>
 			</div>
 
 			{/* Card 2: Health Insurance */}
@@ -427,14 +497,15 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 					</div>
 				</div>
 
+				<Spin spinning={bhytLoading}>
 				{isBhytRegistered ? (
 					<Fragment>
 						<div className={styles.dormitoryInfoAlert}>
 							<InfoCircleFilled className={styles.infoIcon} />
 							<div className={styles.infoText}>
-								{hasInsurance === false
-									? intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytRegisteredSchoolAlert' })
-									: intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytExemptionAlert' })}
+								{isBhytExternal
+									? intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytExemptionAlert' })
+									: intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytRegisteredSchoolAlert' })}
 							</div>
 						</div>
 
@@ -444,9 +515,11 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytTitle' })}
 								</div>
 								<div className={styles.dormitoryExemptionTagWrap}>
-									<Tag className={styles.dormitoryExemptionTag}>
-										{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.pendingApproval' })}
-									</Tag>
+									{isBhytExternal && (
+										<Tag className={styles.dormitoryExemptionTag}>
+											{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.pendingApproval' })}
+										</Tag>
+									)}
 									<div className={styles.dormitoryExemptionSubDate}>
 										{intl.formatMessage(
 											{ id: 'global.enrollmentDeclaration.additional.submittedDate' },
@@ -481,10 +554,19 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 							</div>
 						</div>
 
+						{!bhytHasActivePeriod && (
+							<div className={styles.warningBox} style={{ marginTop: 8 }}>
+								<WarningFilled className={styles.warningIcon} />
+								<div className={styles.warningContent}>
+									<div>{intl.formatMessage({ id: 'baohiemyte.dangky.banner.khongCoDot' })}</div>
+								</div>
+							</div>
+						)}
+
 						<Row gutter={[16, 16]}>
 							<Col span={24} md={12}>
 								<div
-									className={`${styles.checkupOptionCard} ${hasInsurance === false ? styles.active : ''}`}
+									className={`${styles.checkupOptionCard} ${Boolean(hasInsurance) === false ? styles.active : ''}`}
 									onClick={handleSelectInsuranceDangKy}
 								>
 									<div className={styles.checkupOptionTitle}>
@@ -496,6 +578,7 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 									<div className={styles.checkupOptionAction}>
 										<Button
 											type='primary'
+											disabled={!bhytHasActivePeriod}
 											onClick={(e) => {
 												e.stopPropagation();
 												handleSelectInsuranceDangKy();
@@ -521,6 +604,7 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 									<div className={styles.checkupOptionAction}>
 										<Button
 											type={hasInsurance === true ? 'primary' : 'default'}
+											disabled={!bhytHasActivePeriod}
 											onClick={(e) => {
 												e.stopPropagation();
 												handleSelectInsuranceMien();
@@ -561,6 +645,7 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 						)}
 					</Fragment>
 				)}
+				</Spin>
 			</div>
 
 			{/* Card 3: Dormitory Registration */}
@@ -574,7 +659,8 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 					</div>
 				</div>
 
-				{isDormitoryRegistered ? (
+				<Spin spinning={ktxLoading}>
+				{isRegisterFreeDormitory ? (
 					<Fragment>
 						<div className={styles.dormitoryInfoAlert}>
 							<InfoCircleFilled className={styles.infoIcon} />
@@ -592,12 +678,6 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 									<Tag className={styles.dormitoryExemptionTag}>
 										{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.pendingApproval' })}
 									</Tag>
-									<div className={styles.dormitoryExemptionSubDate}>
-										{intl.formatMessage(
-											{ id: 'global.enrollmentDeclaration.additional.submittedDate' },
-											{ date: formattedKtxSubmittedDate },
-										)}
-									</div>
 								</div>
 							</div>
 							<div className={styles.dormitoryExemptionBody}>
@@ -611,9 +691,43 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 							</Button>
 						</Form.Item>
 
-						{/* <div className={styles.dormitoryUnavailableNote}>
+						<div className={styles.dormitoryUnavailableNote}>
 							{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryUnavailableNote' })}
-						</div> */}
+						</div>
+					</Fragment>
+				) : isDormitoryRegistered ? (
+					<Fragment>
+						<div className={styles.dormitoryInfoAlert}>
+							<InfoCircleFilled className={styles.infoIcon} />
+							<div className={styles.infoText}>
+								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryRegisteredAlert' })}
+							</div>
+						</div>
+
+						<div className={styles.dormitoryExemptionCard}>
+							<div className={styles.dormitoryExemptionHeader}>
+								<div className={styles.dormitoryExemptionTitle}>
+									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryRegisteredTitle' })}
+								</div>
+								<div className={styles.dormitoryExemptionTagWrap}>
+									<div className={styles.dormitoryExemptionSubDate}>
+										{intl.formatMessage(
+											{ id: 'global.enrollmentDeclaration.additional.submittedDate' },
+											{ date: formattedKtxSubmittedDate },
+										)}
+									</div>
+								</div>
+							</div>
+							<div className={styles.dormitoryExemptionBody}>
+								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryRegisteredBody' })}
+							</div>
+						</div>
+
+						<Form.Item name='isRegisterDormitory' valuePropName='checked' style={{ marginBottom: 0 }}>
+							<Button disabled block icon={<BankOutlined />} className={styles.actionButton}>
+								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.appliedDormitory' })}
+							</Button>
+						</Form.Item>
 					</Fragment>
 				) : (
 					<Fragment>
@@ -647,6 +761,7 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 						</Form.Item>
 					</Fragment>
 				)}
+				</Spin>
 			</div>
 
 			{/* Modal KSK Miễn */}
@@ -666,6 +781,7 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 					isView={false}
 					edit={false}
 					onCancel={() => setFormMienKskModalOpen(false)}
+					getData={fetchKskRegistration}
 				/>
 			</ModalExpandable>
 
@@ -685,6 +801,7 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 					record={currentBhytRecord}
 					isView={false}
 					onCancel={() => setFormDangKyBhytModalOpen(false)}
+					getData={fetchBhytRegistration}
 				/>
 			</ModalExpandable>
 
@@ -705,6 +822,7 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 					isView={false}
 					edit={false}
 					onCancel={() => setFormMienBhytModalOpen(false)}
+					getData={fetchBhytRegistration}
 				/>
 			</ModalExpandable>
 

@@ -161,7 +161,7 @@ const PersonalInformationStep = ({
 					</Form.Item>
 				</Col>
 				<Col span={24} md={8}>
-					<Form.Item name='middleName' label={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.middleName' })} rules={[...rules.required, ...rules.ten]}>
+					<Form.Item name='middleName' label={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.middleName' })} rules={[...rules.ten]}>
 						<Input placeholder={enterContentText} />
 					</Form.Item>
 				</Col>
@@ -212,7 +212,9 @@ const PersonalInformationStep = ({
 					</Form.Item>
 				</Col>
 				<Col span={24} md={8}>
-					<Form.Item name='placeOfIssue' label={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.placeOfIssue' })} rules={[...rules.text, ...rules.length(250)]}>
+					<Form.Item name='placeOfIssue' label={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.placeOfIssue' })}
+						rules={[...rules.text, ...rules.length(250)]}
+					>
 						<Input placeholder={enterContentText} />
 					</Form.Item>
 				</Col>
@@ -307,7 +309,7 @@ const PersonalInformationStep = ({
 							</Form.Item>
 						</Col>
 						<Col span={24} md={8}>
-							<Form.Item name='visaPlaceOfIssue' label={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.visaPlaceOfIssue' })} rules={[...rules.required, ...rules.text]}>
+							<Form.Item name='visaPlaceOfIssue' label={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.visaPlaceOfIssue' })} rules={[...rules.text]}>
 								<Input placeholder={enterContentText} />
 							</Form.Item>
 						</Col>
@@ -315,55 +317,56 @@ const PersonalInformationStep = ({
 							<Form.Item name='passportAttachment' label={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.passportAttachment' })} rules={[...rules.fileRequired]}>
 								<UploadFile buttonDescription={intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.uploadButton' })} maxCount={1} otherProps={{ className: styles.uploadButton }} />
 							</Form.Item>
-							<div className={styles.uploadHelperText}>{intl.formatMessage({ id: 'global.enrollmentDeclaration.field.passportAttachmentHelper' })}</div>
+							{/* <div className={styles.uploadHelperText}>{intl.formatMessage({ id: 'global.enrollmentDeclaration.field.passportAttachmentHelper' })}</div> */}
 						</Col>
 					</Row>
 				</Fragment>
 			)}
 
-			<div className={styles.subLabel}>{intl.formatMessage({ id: 'global.enrollmentDeclaration.section.placeOfBirth' })}</div>
-			<SelectDonViHanhChinh
-				form={form}
-				listTinh={listTinh}
-				suffix='NoiSinh'
-				hideXaPhuong
-				hasLabel
-				labelTinh={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.provinceCity' })}
-				placeholderTinh={enterContentText}
-			/>
 
-			<div className={styles.subLabel}>{intl.formatMessage({ id: 'global.enrollmentDeclaration.section.placeOfResidence' })}</div>
-			<SelectDonViHanhChinh
-				form={form}
-				listTinh={listTinh}
-				suffix='KhaiBao'
-				hasLabel
-				labelTinh={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.provinceCity' })}
-				placeholderTinh={enterContentText}
-				labelXaPhuong={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.communeWard' })}
-				placeholderXaPhuong={enterContentText}
-			/>
+			{!isForeignNational && <>
+				<div className={styles.subLabel}>{intl.formatMessage({ id: 'global.enrollmentDeclaration.section.placeOfBirth' })}</div>
+				<SelectDonViHanhChinh
+					form={form}
+					listTinh={listTinh}
+					suffix='NoiSinh'
+					hideXaPhuong
+					hasLabel
+					labelTinh={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.provinceCity' })}
+					placeholderTinh={enterContentText}
+				/>
 
-			<div className={styles.subLabel}>{intl.formatMessage({ id: 'global.enrollmentDeclaration.section.permanentResidence' })}</div>
-			<Form.Item name='sameAsResidence' valuePropName='checked' style={{ marginBottom: 8 }}>
-				<Checkbox onChange={(e) => handleSameAsResidence(e.target.checked)}>
-					{intl.formatMessage({ id: 'global.enrollmentDeclaration.field.sameAsResidence' })}
-				</Checkbox>
-			</Form.Item>
-			<SelectDonViHanhChinh
-				form={form}
-				listTinh={listTinh}
-				suffix='ThuongTru'
-				hasSoNha
-				hasLabel
-				labelTinh={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.provinceCity' })}
-				placeholderTinh={enterContentText}
-				labelXaPhuong={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.communeWard' })}
-				placeholderXaPhuong={enterContentText}
-				labelSoNha={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.houseNumber' })}
-				placeholderSoNha={enterContentText}
-			/>
-
+				<div className={styles.subLabel}>{intl.formatMessage({ id: 'global.enrollmentDeclaration.section.placeOfResidence' })}</div>
+				<SelectDonViHanhChinh
+					form={form}
+					listTinh={listTinh}
+					suffix='KhaiBao'
+					hasLabel
+					labelTinh={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.provinceCity' })}
+					placeholderTinh={enterContentText}
+					labelXaPhuong={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.communeWard' })}
+					placeholderXaPhuong={enterContentText}
+				/>
+				<div className={styles.subLabel}>{intl.formatMessage({ id: 'global.enrollmentDeclaration.section.permanentResidence' })}</div>
+				<Form.Item name='sameAsResidence' valuePropName='checked' style={{ marginBottom: 8 }}>
+					<Checkbox onChange={(e) => handleSameAsResidence(e.target.checked)}>
+						{intl.formatMessage({ id: 'global.enrollmentDeclaration.field.sameAsResidence' })}
+					</Checkbox>
+				</Form.Item>
+				<SelectDonViHanhChinh
+					form={form}
+					listTinh={listTinh}
+					suffix='ThuongTru'
+					hasSoNha
+					hasLabel
+					labelTinh={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.provinceCity' })}
+					placeholderTinh={enterContentText}
+					labelXaPhuong={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.communeWard' })}
+					placeholderXaPhuong={enterContentText}
+					labelSoNha={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.houseNumber' })}
+					placeholderSoNha={enterContentText}
+				/>
+			</>}
 			<SectionHeader>{intl.formatMessage({ id: 'global.enrollmentDeclaration.section.bankAccountInfo' })}</SectionHeader>
 			<Row gutter={[12, 0]}>
 				<Col span={24} md={8}>

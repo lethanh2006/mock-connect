@@ -543,6 +543,59 @@
 	text-transform: uppercase;
 }
 
+.paymentStep {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 100%;
+	padding: 48px 24px;
+	text-align: center;
+}
+
+.paymentSuccessIcon {
+	margin-bottom: 20px;
+	color: #57a443;
+	font-size: 64px;
+}
+
+.paymentTitle {
+	max-width: 560px;
+	margin: 0 0 12px;
+	color: #275694;
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.paymentDesc {
+	max-width: 480px;
+	margin: 0 0 28px;
+	color: #595959;
+	font-size: 15px;
+	line-height: 1.6;
+}
+
+.paymentHereLink {
+	color: #285797;
+	font-weight: 700;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.paymentButton {
+	height: 46px;
+	padding: 0 32px;
+	border-color: #285797;
+	background: #285797;
+	font-weight: 700;
+
+	&:hover,
+	&:focus {
+		border-color: #1f477d;
+		background: #1f477d;
+	}
+}
+
 @media (max-width: 992px) {
 	.declarationModal:global(.ant-modal) {
 		top: 12px;

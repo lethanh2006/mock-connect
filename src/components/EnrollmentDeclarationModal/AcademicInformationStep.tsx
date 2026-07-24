@@ -229,12 +229,12 @@ const AcademicInformationStep = ({
 					</Form.Item>
 				</Col>
 				<Col span={24} md={8}>
-					<Form.Item name='certificateIssueDate' label={intl.formatMessage({ id: 'global.enrollmentDeclaration.academic.certificateIssueDate' })}>
+					<Form.Item rules={[...rules.required]} name='certificateIssueDate' label={intl.formatMessage({ id: 'global.enrollmentDeclaration.academic.certificateIssueDate' })}>
 						<MyDatePicker placeholder={selectText} style={{ width: '100%' }} allowClear />
 					</Form.Item>
 				</Col>
 				<Col span={24} md={12}>
-					<Form.Item name='certificateIssuer' label={intl.formatMessage({ id: 'global.enrollmentDeclaration.academic.certificateIssuer' })} rules={[...rules.required, ...rules.text]}>
+					<Form.Item name='certificateIssuer' label={intl.formatMessage({ id: 'global.enrollmentDeclaration.academic.certificateIssuer' })} rules={[...rules.text]}>
 						<Input placeholder={enterContentText} />
 					</Form.Item>
 				</Col>

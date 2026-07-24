@@ -7,7 +7,7 @@ import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { Avatar, Button, Form, Modal, message } from 'antd';
 import { CheckOutlined, CloseOutlined, ClockCircleOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
-import { useIntl, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 import LocaleSwitch from '@/components/RightContent/LocaleSwitch';
 import AcademicInformationStep from './AcademicInformationStep';
 import AdditionalServicesStep from './AdditionalServicesStep';
@@ -21,6 +21,7 @@ import { buildStep4InitialValues } from './buildStep4InitialValues';
 import { buildStep4Payload } from './buildStep4Payload';
 import GuardianConsentsStep from './GuardianConsentsStep';
 import styles from './index.less';
+import PaymentStep from './PaymentStep';
 import PersonalInformationStep from './PersonalInformationStep';
 
 const getStudentName = (sinhVien?: SinhVien.IRecord) =>
@@ -121,6 +122,11 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 
 	const handlePrevious = () => setCurrentStep((step) => Math.max(step - 1, 0));
 
+	const handleGoToPayment = () => {
+		onClose();
+		history.push('/finance/tuition-billing');
+	};
+
 	return (
 		<Modal
 			open={open}
@@ -154,7 +160,7 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 							</div>
 							<div className={styles.studentInfoRow}>
 								<span>{intl.formatMessage({ id: 'global.enrollmentDeclaration.program' })}</span>
-								<span className={styles.studentInfoValue}>{getProgram(recSinhVien)}</span>
+								<span style={{ textAlign: 'right' }} className={styles.studentInfoValue}>{getProgram(recSinhVien)}</span>
 							</div>
 							<div className={styles.studentInfoRow}>
 								<span>{intl.formatMessage({ id: 'global.enrollmentDeclaration.status' })}</span>
@@ -197,7 +203,9 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 							{stepTitles.map((title, index) => {
 								const isDone = index <= currentStep;
 								return (
-									<div onClick={() => { setCurrentStep(index) }} key={title} className={`${styles.stepperItem} ${isDone ? styles.completed : ''}`}>
+									<div onClick={() => {
+										setCurrentStep(index)
+									}} key={title} className={`${styles.stepperItem} ${isDone ? styles.completed : ''}`}>
 										<div className={`${styles.stepperCircle} ${isDone ? styles.active : ''}`}>
 											{isDone ? <CheckOutlined /> : index + 1}
 										</div>
@@ -208,26 +216,32 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 						</div>
 
 						<div className={styles.content}>
-							<Form form={form} layout='vertical' preserve>
-								{currentStep === 0 && (
-									<PersonalInformationStep form={form} listTinh={listTinh} listLoaiKhuyetTat={listLoaiKhuyetTat} />
-								)}
-								{currentStep === 1 && <AcademicInformationStep form={form} listTinhTruongThpt={listTinhTruongThpt} />}
-								{currentStep === 2 && <GuardianConsentsStep form={form} listTinh={listTinh} />}
-								{currentStep === 3 && <AdditionalServicesStep form={form} />}
-							</Form>
+							{currentStep === lastStep ? (
+								<PaymentStep onGoToPayment={handleGoToPayment} />
+							) : (
+								<Form form={form} layout='vertical' preserve>
+									{currentStep === 0 && (
+										<PersonalInformationStep form={form} listTinh={listTinh} listLoaiKhuyetTat={listLoaiKhuyetTat} />
+									)}
+									{currentStep === 1 && <AcademicInformationStep form={form} listTinhTruongThpt={listTinhTruongThpt} />}
+									{currentStep === 2 && <GuardianConsentsStep form={form} listTinh={listTinh} />}
+									{currentStep === 3 && <AdditionalServicesStep form={form} />}
+								</Form>
+							)}
 						</div>
 
-						<div className={styles.footer}>
-							{currentStep > 0 && (
-								<Button className={styles.prevButton} onClick={handlePrevious}>
-									{intl.formatMessage({ id: 'global.enrollmentDeclaration.previous' })}
+						{currentStep !== lastStep && (
+							<div className={styles.footer}>
+								{currentStep > 0 && (
+									<Button className={styles.prevButton} onClick={handlePrevious}>
+										{intl.formatMessage({ id: 'global.enrollmentDeclaration.previous' })}
+									</Button>
+								)}
+								<Button type='primary' className={styles.nextButton} loading={submitting} onClick={handleNext}>
+									{intl.formatMessage({ id: 'global.enrollmentDeclaration.nextStep' })}
 								</Button>
-							)}
-							<Button type='primary' className={styles.nextButton} loading={submitting} onClick={handleNext}>
-								{intl.formatMessage({ id: 'global.enrollmentDeclaration.nextStep' })}
-							</Button>
-						</div>
+							</div>
+						)}
 					</div>
 				</div>
 			</div>
