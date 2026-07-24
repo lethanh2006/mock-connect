@@ -56,12 +56,9 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				title += intl.formatMessage(
 					{ id: 'ketquahoctap.diemtp.semester.summary' },
 					{
-						// gpa: kqhk.trungBinhHocKyThang4 ?? '--',
-						gpa: '--',
-						// earned: kqhk.tongSoTinChiHocKy ?? '--',
-						earned: '--',
-						// cumulative: kqhk.tongSoTinChiTichLuyToanKhoa ?? '--',
-						cumulative: '--',
+						gpa: kqhk.trungBinhHocKyThang4 ?? '--',
+						earned: kqhk.tongSoTinChiHocKy ?? '--',
+						cumulative: kqhk.tongSoTinChiTichLuyToanKhoa ?? '--',
 					},
 				);
 			}
