@@ -1,4 +1,5 @@
 import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
+import { getLocalizedName } from '@/utils/localeName';
 import { getLocale } from '@umijs/max';
 import { type ApexOptions } from 'apexcharts';
 import en from 'apexcharts/dist/locales/en.json';
@@ -75,7 +76,7 @@ const ChartSoTinChi = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 				showDuplicates: true,
 				maxHeight: 90,
 				formatter: (value: any) => {
-					return value?.ten || value;
+					return getLocalizedName(value, String(value ?? '')) ?? '';
 				},
 			},
 		},

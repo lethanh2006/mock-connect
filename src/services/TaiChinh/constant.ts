@@ -7,6 +7,18 @@ export enum EMaTrangThaiThanhToan {
 	DONG = 'closed',
 }
 
+export enum ETrangThaiDuyetKTX {
+	CHO_DUYET = 'Chờ duyệt',
+	// Trạng thái khởi tạo riêng cho đơn DAC_BIET/GIA_HAN do admin tạo, chờ SV vào điền form + xác nhận.
+	CHO_XAC_NHAN = 'Chờ xác nhận',
+	DA_DUYET = 'Đã duyệt',
+	TU_CHOI = 'Từ chối',
+	CHO_THANH_TOAN = 'Chờ thanh toán',
+	DA_THANH_TOAN = 'Đã thanh toán',
+	DA_NHAN_PHONG = 'Đã nhận phòng',
+	HUY = 'Hủy',
+}
+
 export const ETrangThaiThanhToan: any = {
 	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN]: 'Chưa thanh toán',
 	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU]: 'Chưa thanh toán đủ',

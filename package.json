@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "max dev",
     "build": "max build",
+    "build:netlify": "max build && node ./scripts/netlify-prepare.mjs",
     "format": "prettier --cache --write .",
     "postinstall": "max setup node ./postinstall.js",
     "setup": "max setup",
