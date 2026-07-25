@@ -86,6 +86,8 @@ const HoaDonPage = () => {
 	const [visibleModalDangKyTraGop, setVisibleModalDangKyTraGop] = useState<boolean>(false);
 	const [visibleModalTienDoTraGop, setVisibleModalTienDoTraGop] = useState<boolean>(false);
 	const [billTraGop, setBillTraGop] = useState<HoaDon.IRecord | undefined>(undefined);
+	const [initialPaymentAmount, setInitialPaymentAmount] = useState<number | undefined>(undefined);
+	const [lockPaymentAmount, setLockPaymentAmount] = useState<boolean>(false);
 	const [pdfUrl, setPdfUrl] = useState<string | undefined>(undefined);
 	const [loadingPdfMap, setLoadingPdfMap] = useState<Record<string, boolean>>({});
 	const [activeKey, setActiveKey] = useState<'chua_thanh_toan' | 'da_thanh_toan'>('chua_thanh_toan');
@@ -452,6 +454,8 @@ const HoaDonPage = () => {
 						disabled={disableThanhToan(rec)}
 						onClick={() => {
 							setRecord(rec);
+							setInitialPaymentAmount(undefined);
+							setLockPaymentAmount(false);
 							setVisibleModalThanhToan(true);
 						}}
 						type='link'
@@ -658,6 +662,8 @@ const HoaDonPage = () => {
 											setSelectedBills(bills);
 											setPaymentMode('multi');
 										}
+										setInitialPaymentAmount(undefined);
+										setLockPaymentAmount(false);
 										setVisibleModalThanhToan(true);
 									}}
 									type='primary'
@@ -751,15 +757,21 @@ const HoaDonPage = () => {
 					setVisibleModalThanhToan(false);
 					setSelectedBills([]);
 					setPaymentMode('single');
+					setInitialPaymentAmount(undefined);
+					setLockPaymentAmount(false);
 				}}
 				onSuccess={() => {
 					getData(activeKey);
 					setVisibleModalThanhToan(false);
 					setSelectedBills([]);
 					setPaymentMode('single');
+					setInitialPaymentAmount(undefined);
+					setLockPaymentAmount(false);
 				}}
 				mode={paymentMode}
 				bills={selectedBills}
+				initialAmount={initialPaymentAmount}
+				lockAmount={lockPaymentAmount}
 			/>
 
 			<ModalDangKyTraGop
@@ -773,6 +785,15 @@ const HoaDonPage = () => {
 				visible={visibleModalTienDoTraGop}
 				bill={billTraGop}
 				onClose={() => setVisibleModalTienDoTraGop(false)}
+				onPayNow={(_phien, amount) => {
+					if (!billTraGop) return;
+					setRecord(billTraGop);
+					setPaymentMode('single');
+					setInitialPaymentAmount(amount);
+					setLockPaymentAmount(true);
+					setVisibleModalTienDoTraGop(false);
+					setVisibleModalThanhToan(true);
+				}}
 			/>
 		</PageCard>
 	);
