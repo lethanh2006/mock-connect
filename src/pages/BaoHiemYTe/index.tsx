@@ -12,15 +12,13 @@ import {
 	reviewStatusIntlId,
 } from '@/services/BaoHiemYTe/constant';
 import { BaoHiemYTe } from '@/services/BaoHiemYTe/typing';
-import { getPhuongXa, getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
-import type { DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import { ETagColor } from '@/services/base/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { chuanHoaTen } from '@/utils/utils';
 import { ClockCircleOutlined, EyeOutlined, FormOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Button, Popover, Space, Tag } from 'antd';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChoiceModal from './components/ChoiceModal';
 import FormDangKy from './components/FormDangKy';
@@ -45,13 +43,10 @@ const getFormTypeFromDeclaration = (declarationType?: EDeclarationType): TFormTy
 const SinhVienDangKyBHYT = () => {
 	const intl = useIntl();
 	const t = (id: string) => intl.formatMessage({ id });
-	const { page, limit, getModel, getByIdModel, danhSach } = useModel('baohiemyte.dotdangky');
+	const { page, limit, getModel, getByIdModel } = useModel('baohiemyte.dotdangky');
 	const [currentInfo, setCurrentInfo] = useState<BaoHiemYTe.IPeriodSnapshot>();
 	const [choiceModalOpen, setChoiceModalOpen] = useState(false);
 	const [formModal, setFormModal] = useState<IFormModalState | null>(null);
-	const [tenTinhByMa, setTenTinhByMa] = useState<Record<string, string>>({});
-	const [tenXaByMa, setTenXaByMa] = useState<Record<string, string>>({});
-	const fetchedMaTinhRef = useRef<Set<string>>(new Set());
 
 	const getData = () => {
 		getModel(undefined, undefined, undefined, undefined, undefined, 'me/history/page');
@@ -68,16 +63,6 @@ const SinhVienDangKyBHYT = () => {
 
 	useEffect(() => {
 		void getCurrentInfo();
-	}, []);
-
-	useEffect(() => {
-		getTinhThanhPho().then((data) => {
-			const map: Record<string, string> = {};
-			(data.data.data as DonViHanhChinh.IRecord[])?.forEach((item) => {
-				map[String(item.ma)] = item.tenDonVi;
-			});
-			setTenTinhByMa(map);
-		});
 	}, []);
 
 	// declarationSnapshot là dữ liệu tại thời điểm nộp đơn nhưng có thể thiếu field,
@@ -98,31 +83,6 @@ const SinhVienDangKyBHYT = () => {
 
 	const getEffectiveStudent = (rec?: BaoHiemYTe.IHistoryItem) =>
 		mergeStudentSnapshot(rec?.declarationSnapshot, rec?.student);
-
-	// Xã/phường phụ thuộc tỉnh, chỉ load thêm cho những mã tỉnh xuất hiện trong dữ liệu đang hiển thị
-	useEffect(() => {
-		const maTinhCanLoad = Array.from(
-			new Set(
-				(danhSach as BaoHiemYTe.IHistoryItem[])
-					?.map((item) => getEffectiveStudent(item)?.diaChiThuongTru?.maTinh)
-					.filter((ma): ma is string => !!ma && !fetchedMaTinhRef.current.has(ma)) ?? [],
-			),
-		);
-		if (!maTinhCanLoad.length) return;
-
-		maTinhCanLoad.forEach((ma) => fetchedMaTinhRef.current.add(ma));
-		Promise.all(maTinhCanLoad.map((ma) => getPhuongXa(ma))).then((results) => {
-			setTenXaByMa((prev) => {
-				const next = { ...prev };
-				results.forEach((res) => {
-					(res.data.data as DonViHanhChinh.IRecord[])?.forEach((item) => {
-						next[String(item.ma)] = item.tenDonVi;
-					});
-				});
-				return next;
-			});
-		});
-	}, [danhSach]);
 
 	const refreshAll = () => {
 		getData();
@@ -187,8 +147,35 @@ const SinhVienDangKyBHYT = () => {
 		openForm('mien', toNewRegistrationRecord(currentInfo), { edit: false });
 	};
 
+	// hanBHYTHienTai KHÔNG dùng ở đây: đó là hạn thẻ CŨ sinh viên tự khai trước khi mua qua trường (chỉ có ở FormDangKy),
+	// không phải hạn của thẻ/gói đang được đăng ký hoặc khai báo trong record này
 	const getExpiredDate = (student?: BaoHiemYTe.IStudentRegistration) =>
-		student?.hanBHYTHienTai || student?.cardExpiredAt || student?.insuranceValidTo;
+		student?.cardExpiredAt || student?.insuranceValidTo;
+
+	// Cùng logic xác định quốc tịch VN với usePersonalInfo: so khớp chuỗi vì dữ liệu có thể là tên quốc gia thay vì mã enum
+	const isVietnameseNationality = (nationality?: string) => {
+		const normalized = (nationality ?? '').toLowerCase().trim();
+		return normalized.includes('viet') || normalized.includes('việt');
+	};
+
+	// MUA_TRONG_TRUONG: sinh viên chưa có bảo hiểm nên đăng ký mua qua trường
+	// DA_CO_BEN_NGOAI: sinh viên đã có bảo hiểm/thẻ, chỉ khai báo lại
+	// CHUA_DANG_KY: chưa xác nhận có bảo hiểm, xếp chung nhóm "chưa có"
+	const renderRegistrationType = (rec: BaoHiemYTe.IHistoryItem) => {
+		const isVN = isVietnameseNationality(getEffectiveStudent(rec)?.nationality);
+		const hasInsurance = rec.declarationType === EDeclarationType.DA_CO_BEN_NGOAI;
+
+		if (isVN) return t(hasInsurance ? 'baohiemyte.dangky.loaiDangKy.coBHYT' : 'baohiemyte.dangky.loaiDangKy.khongCoBHYT');
+		return t(hasInsurance ? 'baohiemyte.dangky.loaiDangKy.coTheBaoHiem' : 'baohiemyte.dangky.loaiDangKy.khongCoTheBaoHiem');
+	};
+
+	// Hạn của thẻ/gói bảo hiểm thực tế (cardExpiredAt cho SV Việt Nam, insuranceValidTo cho SV quốc tế),
+	// áp dụng chung cho cả 2 case: mua mới qua trường (hạn thẻ do admin cấp sau khi xử lý)
+	// và đã có sẵn/khai báo miễn (hạn thẻ SV khai khi nộp). Chưa có dữ liệu thì hiển thị "--"
+	const renderValidity = (rec: BaoHiemYTe.IHistoryItem) => {
+		const expiredDate = getExpiredDate(getEffectiveStudent(rec));
+		return expiredDate ? formatDate(expiredDate) : '--';
+	};
 
 	// Mỗi đợt chỉ được đăng ký 1 lần, trừ trường hợp khai báo miễn bị từ chối thì cho đăng ký lại
 	const canRegisterAgain = (myRegistration?: BaoHiemYTe.IMyRegistration) => {
@@ -257,42 +244,25 @@ const SinhVienDangKyBHYT = () => {
 
 	const columns: IColumn<BaoHiemYTe.IHistoryItem>[] = [
 		{
-			title: t('baohiemyte.dangky.soBHXH'),
-			dataIndex: ['student', 'ssnNumber'],
-			width: 180,
-			render: (_val, rec) => getEffectiveStudent(rec)?.ssnNumber || '--',
+			title: t('baohiemyte.dangky.maSinhVien'),
+			dataIndex: ['student', 'studentCode'],
+			width: 160,
+			render: (_val, rec) => getEffectiveStudent(rec)?.studentCode || '--',
 			onCell,
 		},
 		{
-			title: t('baohiemyte.dangky.column.thoiGian'),
-			dataIndex: ['period', 'registrationStartAt'],
-			width: 260,
-			sortable: true,
-			render: (_val, rec) => renderThoiGianDangKy(rec.period?.registrationStartAt, rec.period?.registrationEndAt),
+			title: t('baohiemyte.dangky.hinhThucDangKy'),
+			dataIndex: 'declarationType',
+			width: 220,
+			render: (_val, rec) => renderRegistrationType(rec),
 			onCell,
 		},
 		{
-			title: t('baohiemyte.dangky.diaChiThuongTru'),
-			dataIndex: ['student', 'diaChiThuongTru'],
-			width: 280,
-			render: (_val, rec) => {
-				const diaChi = getEffectiveStudent(rec)?.diaChiThuongTru;
-				const tenTinh = diaChi?.maTinh ? (tenTinhByMa[diaChi.maTinh] ?? diaChi.maTinh) : undefined;
-				const tenXa = diaChi?.maXaPhuong ? (tenXaByMa[diaChi.maXaPhuong] ?? diaChi.maXaPhuong) : undefined;
-				return [diaChi?.soNhaTenDuong, tenXa, tenTinh].filter(Boolean).join(', ') || '--';
-			},
-			onCell,
-		},
-		{
-			title: t('baohiemyte.dangky.column.hanSuDung'),
-			dataIndex: ['student', 'hanBHYTHienTai'],
-			width: 190,
+			title: t('baohiemyte.dangky.column.thoiHan'),
+			dataIndex: ['student', 'cardExpiredAt'],
+			width: 200,
 			align: 'center',
-			sortable: true,
-			render: (_val, rec) => {
-				const expiredDate = getExpiredDate(getEffectiveStudent(rec));
-				return expiredDate ? formatDate(expiredDate) : '--';
-			},
+			render: (_val, rec) => renderValidity(rec),
 			onCell,
 		},
 		{
@@ -435,15 +405,15 @@ const SinhVienDangKyBHYT = () => {
 
 	const formModalTitle = formModal
 		? intl.formatMessage(
-				{
-					id: formModal.isView
-						? 'global.table.form.title.chitiet'
-						: formModal.edit
-							? 'global.table.form.title.chinhsua'
-							: 'global.table.form.title.themmoi',
-				},
-				{ title: chuanHoaTen(t('baohiemyte.dangky.title').toLowerCase()) },
-			)
+			{
+				id: formModal.isView
+					? 'global.table.form.title.chitiet'
+					: formModal.edit
+						? 'global.table.form.title.chinhsua'
+						: 'global.table.form.title.themmoi',
+			},
+			{ title: chuanHoaTen(t('baohiemyte.dangky.title').toLowerCase()) },
+		)
 		: undefined;
 
 	return (

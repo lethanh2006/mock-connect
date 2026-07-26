@@ -74,7 +74,13 @@ export default {
 
 	'baohiemyte.dangky.column.thoiGian': 'Đợt đăng ký',
 	'baohiemyte.dangky.column.hanSuDung': 'Thời hạn bảo hiểm y tế',
+	'baohiemyte.dangky.column.thoiHan': 'Thời hạn / Ngày hết hạn',
 	'baohiemyte.dangky.column.trangThai': 'Trạng thái',
+
+	'baohiemyte.dangky.loaiDangKy.coBHYT': 'Đã có bảo hiểm y tế',
+	'baohiemyte.dangky.loaiDangKy.khongCoBHYT': 'Chưa có bảo hiểm y tế',
+	'baohiemyte.dangky.loaiDangKy.coTheBaoHiem': 'Đã có thẻ bảo hiểm',
+	'baohiemyte.dangky.loaiDangKy.khongCoTheBaoHiem': 'Chưa có thẻ bảo hiểm',
 
 	'baohiemyte.dangky.banner.thoiGianDangKy': 'Đợt đăng ký đang mở từ {tuNgay} đến {denNgay}.',
 	'baohiemyte.dangky.banner.xemDayDu': 'Xem đầy đủ',
