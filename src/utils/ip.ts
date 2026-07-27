@@ -10,7 +10,7 @@ const ip3 = ipConnect; // ip dev
 
 const ipNotif = getConnectTarget('notification'); // ip dev
 // const ipDaoTao = ipRoot + 'qldt'; // ip dev
-const ipDaoTao = getConnectTarget('qldt-test'); // ip dev
+const ipDaoTao = getConnectTarget('qldt'); // ip dev
 // const ipDaoTao = 'http://172.16.8.55:3999'; // ip dev
 
 // const ipDaoTao = 'http://192.168.1.80:3001'; // ip dev
