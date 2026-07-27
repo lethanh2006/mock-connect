@@ -50,6 +50,17 @@ export default {
 	'taichinh.hoadon.virtualBill.discount.title': '{percent}% early payment discount',
 	'taichinh.hoadon.virtualBill.discount.description':
 		'Select and pay both invoices together to receive an immediate {percent}% discount on the total amount due.',
+
+	'taichinh.hoadon.detail.backToList': 'Back to invoice list',
+	'taichinh.hoadon.detail.groupEyebrow': 'Tuition invoice group',
+	'taichinh.hoadon.detail.groupMeta': '{count} invoices in this group',
+	'taichinh.hoadon.detail.currentTermChip': 'Current invoice',
+	'taichinh.hoadon.detail.discountDeadline': 'Discount deadline',
+	'taichinh.hoadon.detail.optionalNote': "Not due yet — this is an optional early payment to unlock the discount.",
+	'taichinh.hoadon.detail.viewBreakdown': 'View item breakdown',
+	'taichinh.hoadon.detail.selectAtLeastOne': 'Select at least 1 invoice to pay',
+	'taichinh.hoadon.detail.needHelp': 'Need help? Contact the Finance Office.',
+	'taichinh.hoadon.detail.notFound': 'Invoice not found',
 	'taichinh.thanhtoan.title': 'Payment Information',
 	'taichinh.thanhtoan.modal.success': 'Payment successful!',
 	'taichinh.thanhtoan.tab.chitiet': 'Details',

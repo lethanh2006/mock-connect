@@ -52,6 +52,17 @@ export default {
 	'taichinh.hoadon.virtualBill.discount.description':
 		'Chọn và thanh toán cùng lúc cả 2 hóa đơn để được giảm ngay {percent}% trên tổng số tiền phải nộp.',
 
+	'taichinh.hoadon.detail.backToList': 'Quay lại danh sách hóa đơn',
+	'taichinh.hoadon.detail.groupEyebrow': 'Nhóm hóa đơn học phí',
+	'taichinh.hoadon.detail.groupMeta': '{count} hóa đơn trong nhóm',
+	'taichinh.hoadon.detail.currentTermChip': 'Hóa đơn hiện tại',
+	'taichinh.hoadon.detail.discountDeadline': 'Hạn ưu đãi',
+	'taichinh.hoadon.detail.optionalNote': 'Khoản này chưa đến hạn — đây là lựa chọn thêm để đóng sớm và nhận ưu đãi.',
+	'taichinh.hoadon.detail.viewBreakdown': 'Xem chi tiết khoản mục',
+	'taichinh.hoadon.detail.selectAtLeastOne': 'Chọn ít nhất 1 hóa đơn để thanh toán',
+	'taichinh.hoadon.detail.needHelp': 'Cần hỗ trợ? Liên hệ Phòng Tài chính.',
+	'taichinh.hoadon.detail.notFound': 'Không tìm thấy hóa đơn',
+
 	'taichinh.thanhtoan.title': 'Thông tin thanh toán',
 	'taichinh.thanhtoan.modal.success': 'Thanh toán thành công!',
 	'taichinh.thanhtoan.tab.chitiet': 'Chi tiết',

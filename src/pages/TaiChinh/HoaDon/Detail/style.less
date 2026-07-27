@@ -1,0 +1,226 @@
+.invoice-group-detail {
+	max-width: 880px;
+	margin: 0 auto;
+
+	&__back {
+		padding-left: 0;
+		margin-bottom: 8px;
+	}
+
+	&__header {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 16px;
+		margin-bottom: 16px;
+	}
+
+	&__eyebrow {
+		margin-bottom: 4px;
+		font-size: 11.5px;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: #faad14;
+	}
+
+	&__summary {
+		padding: 20px 22px;
+		margin-bottom: 16px;
+		background: #fff;
+		border: 1px solid #f0f0f0;
+		border-radius: 8px;
+	}
+
+	&__stat-label {
+		margin-bottom: 4px;
+		font-size: 12px;
+		color: #8c8c8c;
+	}
+
+	&__stat-value {
+		font-size: 20px;
+		font-weight: 700;
+	}
+
+	&__ticket {
+		position: relative;
+		display: flex;
+		align-items: flex-start;
+		gap: 14px;
+		padding: 16px 24px;
+		margin-bottom: 16px;
+		background: #fffbe6;
+		border: 1px dashed #ffd591;
+		border-radius: 8px;
+
+		&::before,
+		&::after {
+			position: absolute;
+			top: 50%;
+			width: 18px;
+			height: 18px;
+			content: '';
+			background: #f4f4f4;
+			border-radius: 50%;
+			transform: translateY(-50%);
+		}
+
+		&::before {
+			left: -9px;
+		}
+
+		&::after {
+			right: -9px;
+		}
+	}
+
+	&__ticket-badge {
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+		width: 42px;
+		height: 42px;
+		font-size: 12px;
+		font-weight: 700;
+		color: #fff7e6;
+		background: #ad6800;
+		border-radius: 50%;
+	}
+
+	&__ticket-title {
+		margin-bottom: 2px;
+		font-weight: 600;
+		color: #7a4a00;
+	}
+
+	&__ticket-desc {
+		font-size: 12.5px;
+		color: #8c8c8c;
+	}
+
+	&__cards {
+		margin-bottom: 16px;
+	}
+
+	&__pay-bar {
+		position: sticky;
+		bottom: 0;
+		z-index: 2;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		flex-wrap: wrap;
+		padding: 14px 22px;
+		margin-bottom: 12px;
+		background: #fff;
+		border: 1px solid #f0f0f0;
+		border-radius: 8px 8px 0 0;
+		box-shadow: 0 -6px 16px rgba(0, 0, 0, 6%);
+	}
+
+	&__pay-count {
+		font-size: 12px;
+		font-weight: 600;
+		color: #8c8c8c;
+	}
+
+	&__pay-total {
+		font-size: 20px;
+		font-weight: 700;
+	}
+
+	&__footnote {
+		display: block;
+		padding: 4px 0 8px;
+		font-size: 12.5px;
+		text-align: center;
+	}
+}
+
+.invoice-detail-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	// Quan trọng: không để mặc định "stretch" — nếu không Tag/chip (vốn chỉ rộng bằng nội dung)
+	// sẽ bị kéo giãn full-width vì trở thành flex item của container column này.
+	align-items: flex-start;
+	height: 100%;
+	padding: 18px 18px 16px;
+	background: #fff;
+	border: 1px solid #f0f0f0;
+	border-radius: 8px;
+
+	&--virtual {
+		background: linear-gradient(180deg, #fffbe6 0%, #fff 110px);
+		border-color: #ffd591;
+	}
+
+	&__checkbox {
+		position: absolute;
+		top: 18px;
+		left: 16px;
+	}
+
+	&__chip {
+		margin: 0 0 8px 26px !important;
+	}
+
+	&__meta {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		width: 100%;
+		margin: 12px 0 14px;
+
+		> div {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			font-size: 13px;
+		}
+	}
+
+	&__amount {
+		width: 100%;
+		margin-bottom: 12px;
+		font-size: 24px;
+		font-weight: 700;
+
+		span {
+			margin-left: 4px;
+			font-size: 12px;
+			font-weight: 600;
+			color: #8c8c8c;
+		}
+	}
+
+	&__optional-note {
+		display: block;
+		width: 100%;
+		margin: -8px 0 12px;
+		font-size: 11.5px;
+		font-style: italic;
+	}
+
+	&__breakdown {
+		width: 100%;
+		margin: -8px -18px 12px;
+
+		&-row {
+			display: flex;
+			justify-content: space-between;
+			padding: 2px 18px;
+			font-size: 12.5px;
+			color: #8c8c8c;
+		}
+	}
+
+	&__actions {
+		width: 100%;
+		margin-top: auto;
+	}
+}
