@@ -11,7 +11,7 @@ import { CheckCircleFilled, InfoCircleOutlined } from '@ant-design/icons';
 import { Checkbox, Col, Form, Input, InputNumber, Radio, Row, Select, Table, Tooltip, type FormInstance } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { Fragment, useEffect, useMemo } from 'react';
-import { useIntl, useModel, type IntlShape } from 'umi';
+import { useIntl, useModel } from 'umi';
 import styles from './index.less';
 import SectionHeader from './SectionHeader';
 import type { DotNhapHoc } from '@/services/DaoTao/DotNhapHoc/typings';

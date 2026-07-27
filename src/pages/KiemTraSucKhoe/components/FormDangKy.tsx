@@ -29,7 +29,8 @@ const FormDangKyKiemTraSucKhoe = ({ record, onCancel }: IProps) => {
 	const [form] = Form.useForm();
 
 	const studentRegistration = record?.student;
-	const personalInfo = usePersonalInfo(studentRegistration, true);
+
+	const personalInfo = usePersonalInfo(studentRegistration, true, form);
 
 	useEffect(() => {
 		form.setFieldsValue({

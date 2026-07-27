@@ -59,6 +59,21 @@ export enum EKtscNationality {
 	FOREIGN = 'FOREIGN',
 }
 
+export enum KtscPaymentStatus {
+	CHUA_THANH_TOAN = 'unpaid',
+	DA_THANH_TOAN = 'paid',
+}
+
+export const paymentStatusIntlId: Record<KtscPaymentStatus, string> = {
+	[KtscPaymentStatus.CHUA_THANH_TOAN]: 'kiemtrasuckhoe.dangky.trangThaiThanhToan.chuaThanhToan',
+	[KtscPaymentStatus.DA_THANH_TOAN]: 'kiemtrasuckhoe.dangky.trangThaiThanhToan.daThanhToan',
+};
+
+export const paymentStatusColor: Record<KtscPaymentStatus, ETagColor> = {
+	[KtscPaymentStatus.CHUA_THANH_TOAN]: ETagColor.ORANGE,
+	[KtscPaymentStatus.DA_THANH_TOAN]: ETagColor.GREEN,
+};
+
 export const transKtscNationalityIntlId: Record<EKtscNationality, string> = {
 	[EKtscNationality.VIETNAM]: 'kiemtrasuckhoe.dangky.nationality.vietnam',
 	[EKtscNationality.FOREIGN]: 'kiemtrasuckhoe.dangky.nationality.foreign',

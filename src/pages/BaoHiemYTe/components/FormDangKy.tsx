@@ -1,11 +1,13 @@
 import MyDatePicker from '@/components/MyDatePicker';
-import { EBhytNationality, isRegisteredDeclarationType } from '@/services/BaoHiemYTe/constant';
+import { isRegisteredDeclarationType } from '@/services/BaoHiemYTe/constant';
 import { BaoHiemYTe } from '@/services/BaoHiemYTe/typing';
+import { getPhuongXa, getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
+import type { DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Col, Divider, Form, Input, Row } from 'antd';
-import { useEffect } from 'react';
+import { Button, Col, Divider, Form, Input, Row, Select } from 'antd';
+import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import { usePersonalInfo } from '../hooks/usePersonalInfo';
 import PersonalInfoFields from './PersonalInfoFields';
@@ -34,13 +36,37 @@ const FormDangKyBHYT = ({ record, isView, onCancel, getData }: IProps) => {
 	const t = (id: string) => intl.formatMessage({ id });
 	const [form] = Form.useForm();
 	const { postSinhVienDangKyTruongModel, formSubmiting } = useModel('baohiemyte.dotdangky');
+	const [listTinh, setListTinh] = useState<DonViHanhChinh.IRecord[]>();
+	const [listXa, setListXa] = useState<DonViHanhChinh.IRecord[]>();
+	const [maTinhDiaChi, setMaTinhDiaChi] = useState<string>();
 
 	const studentRegistration = record?.student;
 	const declarationType = record?.declarationType ?? studentRegistration?.declarationType;
 	// Form này không có chức năng sửa/bổ sung hồ sơ sau khi đã đăng ký, chỉ FormMien mới hỗ trợ
 	const readOnly = !!isView || isRegisteredDeclarationType(declarationType);
 
-	const personalInfo = usePersonalInfo(studentRegistration, isView);
+	const personalInfo = usePersonalInfo(studentRegistration, isView, form);
+
+	useEffect(() => {
+		getTinhThanhPho().then((data) => {
+			setListTinh(data.data.data);
+		});
+	}, []);
+
+	useEffect(() => {
+		if (!maTinhDiaChi) {
+			setListXa(undefined);
+			return;
+		}
+		getPhuongXa(maTinhDiaChi).then((data) => {
+			setListXa(data.data.data);
+		});
+	}, [maTinhDiaChi]);
+
+	const onChangeTinhDiaChi = (maTinh?: string) => {
+		setMaTinhDiaChi(maTinh);
+		form.setFieldsValue({ diaChiThuongTru: { maXaPhuong: undefined } });
+	};
 
 	useEffect(() => {
 		form.setFieldsValue({
@@ -48,16 +74,19 @@ const FormDangKyBHYT = ({ record, isView, onCancel, getData }: IProps) => {
 			studentCode: personalInfo.studentCode,
 			ngaySinh: parseDate(personalInfo.studentNgaySinh),
 			cccd: personalInfo.studentCccd,
-			nationality: personalInfo.isVN ? EBhytNationality.VIETNAM : EBhytNationality.FOREIGN,
+			nationality: personalInfo.studentNationality,
 			gioiTinh: personalInfo.studentGioiTinh,
 			khoa: personalInfo.studentKhoa,
 			nganh: personalInfo.studentNganh,
+			maKhoa: personalInfo.studentMaKhoa,
+			maNganh: personalInfo.studentMaNganh,
 			phone: personalInfo.studentPhone,
 			email: personalInfo.studentEmail,
 			ssnNumber: studentRegistration?.ssnNumber,
 			hanBHYTHienTai: parseDate(studentRegistration?.hanBHYTHienTai),
 			diaChiThuongTru: studentRegistration?.diaChiThuongTru,
 		});
+		setMaTinhDiaChi(studentRegistration?.diaChiThuongTru?.maTinh);
 
 		return () => resetFieldsForm(form);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,13 +96,14 @@ const FormDangKyBHYT = ({ record, isView, onCancel, getData }: IProps) => {
 		if (readOnly || !record?.periodId) return;
 
 		const payload: BaoHiemYTe.ISinhVienDangKyTruong = {
-			periodStudentId: personalInfo.recordSinhVien?.ssoId,
+			studentId: personalInfo.recordSinhVien?.ssoId,
+			periodStudentId: record.periodStudentId,
 			periodId: record.periodId,
 			fullName: values.fullName,
 			studentCode: values.studentCode,
 			ngaySinh: values.ngaySinh ? dayjs(values.ngaySinh).toISOString() : undefined,
 			cccd: values.cccd,
-			nationality: personalInfo.isVN ? EBhytNationality.VIETNAM : EBhytNationality.FOREIGN,
+			nationality: values.nationality,
 			gioiTinh: values.gioiTinh,
 			khoa: values.khoa,
 			nganh: values.nganh,
@@ -106,7 +136,7 @@ const FormDangKyBHYT = ({ record, isView, onCancel, getData }: IProps) => {
 					</Divider>
 				</Col>
 				<Col span={24} md={12}>
-					<Form.Item name='ssnNumber' label={t('baohiemyte.dangky.soBHXH')} rules={[...rules.required]}>
+					<Form.Item name='ssnNumber' label={t('baohiemyte.dangky.soBHXH')} rules={[...rules.required, ...rules.text]}>
 						<Input disabled={readOnly} placeholder={t('baohiemyte.dangky.placeholder.enterContent')} />
 					</Form.Item>
 				</Col>
@@ -119,9 +149,43 @@ const FormDangKyBHYT = ({ record, isView, onCancel, getData }: IProps) => {
 						/>
 					</Form.Item>
 				</Col>
-				<Col span={24}>
-					<Form.Item name='diaChiThuongTru' label={t('baohiemyte.dangky.diaChiThuongTru')} rules={[...rules.required]}>
-						<Input disabled={readOnly} placeholder={t('baohiemyte.dangky.placeholder.enterContent')} />
+				<Col span={24} md={8}>
+					<Form.Item name={['diaChiThuongTru', 'maTinh']} label={t('donvihanhchinh.tp')} rules={[...rules.required]}>
+						<Select
+							disabled={readOnly}
+							placeholder={t('donvihanhchinh.tp.place')}
+							allowClear
+							showSearch
+							optionFilterProp='label'
+							options={listTinh?.map((item) => ({ value: item.ma, label: item.tenDonVi }))}
+							onChange={onChangeTinhDiaChi}
+						/>
+					</Form.Item>
+				</Col>
+				<Col span={24} md={8}>
+					<Form.Item
+						name={['diaChiThuongTru', 'maXaPhuong']}
+						label={t('donvihanhchinh.xa')}
+						rules={[...rules.required]}
+					>
+						<Select
+							disabled={readOnly}
+							placeholder={t('donvihanhchinh.xa.place')}
+							allowClear
+							showSearch
+							optionFilterProp='label'
+							notFoundContent={!maTinhDiaChi ? 'Chọn tỉnh/thành phố trước' : undefined}
+							options={listXa?.map((item) => ({ value: item.ma, label: item.tenDonVi }))}
+						/>
+					</Form.Item>
+				</Col>
+				<Col span={24} md={8}>
+					<Form.Item
+						name={['diaChiThuongTru', 'soNhaTenDuong']}
+						label={t('donvihanhchinh.sonha')}
+						rules={[...rules.required, ...rules.text, ...rules.length(250)]}
+					>
+						<Input disabled={readOnly} placeholder={t('donvihanhchinh.sonha.place')} />
 					</Form.Item>
 				</Col>
 			</Row>

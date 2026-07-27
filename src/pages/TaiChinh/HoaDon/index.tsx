@@ -7,8 +7,16 @@ import { type IColumn } from '@/components/Table/typing';
 import { getExportBillUrl } from '@/services/TaiChinh/HoaDon';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable } from '@/services/TaiChinh/constant';
+import { EMauTrangThaiTraGopBill, ETrangThaiTraGopBill } from '@/services/TaiChinh/TraGop/constant';
 import { inputFormat } from '@/utils/utils';
-import { EyeOutlined, FilePdfOutlined, GiftOutlined, UnorderedListOutlined } from '@ant-design/icons';
+import {
+	EyeOutlined,
+	FieldTimeOutlined,
+	FilePdfOutlined,
+	GiftOutlined,
+	ScheduleOutlined,
+	UnorderedListOutlined,
+} from '@ant-design/icons';
 import { Alert, Empty, Modal, Tabs, Tag, notification } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState, type Key, type ReactNode } from 'react';
@@ -16,6 +24,8 @@ import { useIntl, useModel } from 'umi';
 import SelectDotThu from '../DotThu/Select';
 import ModalThanhToan from './ThanhToan/ModalThanhToan';
 import ThongTinThanhToan from './ThanhToan/ThongTinThanhToan';
+import ModalDangKyTraGop from './TraGop/ModalDangKyTraGop';
+import ModalTienDoTraGop from './TraGop/ModalTienDoTraGop';
 
 const PaymentDeadlineCountdown = ({ deadline }: { deadline: string }) => {
 	const intl = useIntl();
@@ -73,6 +83,11 @@ const HoaDonPage = () => {
 	} = useModel('taichinh.hoadon');
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
 	const [visibleModalPDF, setVisibleModalPDF] = useState<boolean>(false);
+	const [visibleModalDangKyTraGop, setVisibleModalDangKyTraGop] = useState<boolean>(false);
+	const [visibleModalTienDoTraGop, setVisibleModalTienDoTraGop] = useState<boolean>(false);
+	const [billTraGop, setBillTraGop] = useState<HoaDon.IRecord | undefined>(undefined);
+	const [initialPaymentAmount, setInitialPaymentAmount] = useState<number | undefined>(undefined);
+	const [lockPaymentAmount, setLockPaymentAmount] = useState<boolean>(false);
 	const [pdfUrl, setPdfUrl] = useState<string | undefined>(undefined);
 	const [loadingPdfMap, setLoadingPdfMap] = useState<Record<string, boolean>>({});
 	const [activeKey, setActiveKey] = useState<'chua_thanh_toan' | 'da_thanh_toan'>('chua_thanh_toan');
@@ -414,6 +429,16 @@ const HoaDonPage = () => {
 			})),
 		},
 		{
+			title: intl.formatMessage({ id: 'taichinh.tragop.column.trangthai' }),
+			dataIndex: 'trangThaiTraGop',
+			align: 'center',
+			width: 160,
+			render: (val?: ETrangThaiTraGopBill) =>
+				val ? (
+					<Tag color={EMauTrangThaiTraGopBill[val]}>{intl.formatMessage({ id: `taichinh.tragop.status.${val}` })}</Tag>
+				) : null,
+		},
+		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.thaotac' }),
 			align: 'center',
 			width: 150,
@@ -429,6 +454,8 @@ const HoaDonPage = () => {
 						disabled={disableThanhToan(rec)}
 						onClick={() => {
 							setRecord(rec);
+							setInitialPaymentAmount(undefined);
+							setLockPaymentAmount(false);
 							setVisibleModalThanhToan(true);
 						}}
 						type='link'
@@ -441,6 +468,34 @@ const HoaDonPage = () => {
 						onClick={() => handleDetail(rec)}
 						type='link'
 					/>
+
+					{!rec._isVirtualBill &&
+						rec.status !== EMaTrangThaiThanhToan.DA_THANH_TOAN_DU &&
+						(!rec.trangThaiTraGop || rec.trangThaiTraGop === ETrangThaiTraGopBill.TU_CHOI) && (
+							<ButtonExtend
+								tooltip={intl.formatMessage({ id: 'taichinh.tragop.tooltip.dangky' })}
+								icon={<ScheduleOutlined />}
+								type='link'
+								onClick={() => {
+									setBillTraGop(rec);
+									setVisibleModalDangKyTraGop(true);
+								}}
+							/>
+						)}
+
+					{!rec._isVirtualBill &&
+						(rec.trangThaiTraGop === ETrangThaiTraGopBill.DANG_TRA_GOP ||
+							rec.trangThaiTraGop === ETrangThaiTraGopBill.DA_HOAN_THANH_TRA_GOP) && (
+							<ButtonExtend
+								tooltip={intl.formatMessage({ id: 'taichinh.tragop.tooltip.tiendo' })}
+								icon={<FieldTimeOutlined />}
+								type='link'
+								onClick={() => {
+									setBillTraGop(rec);
+									setVisibleModalTienDoTraGop(true);
+								}}
+							/>
+						)}
 
 					{!rec._isVirtualBill && (
 						<ButtonExtend
@@ -589,31 +644,33 @@ const HoaDonPage = () => {
 				otherButtons={[
 					...(selectedIds && selectedIds?.length > 0
 						? [
-								<ButtonExtend
-									key={'thanh-toan'}
-									icon={<UnorderedListOutlined />}
-									onClick={() => {
-										const bills = allTableBills.filter(
-											(item) =>
-												selectedIds.includes(item._id) &&
-												!item.transactions?.some((transaction) => transaction.isKtxDeposit === true),
-										);
-										if (!bills.length) return;
-										if (bills.length === 1) {
-											setRecord(bills[0]);
-											setSelectedBills([]);
-											setPaymentMode('single');
-										} else {
-											setSelectedBills(bills);
-											setPaymentMode('multi');
-										}
-										setVisibleModalThanhToan(true);
-									}}
-									type='primary'
-								>
-									{intl.formatMessage({ id: 'taichinh.hoadon.action.paySelected' }, { count: selectedIds?.length })}
-								</ButtonExtend>,
-							]
+							<ButtonExtend
+								key={'thanh-toan'}
+								icon={<UnorderedListOutlined />}
+								onClick={() => {
+									const bills = allTableBills.filter(
+										(item) =>
+											selectedIds.includes(item._id) &&
+											!item.transactions?.some((transaction) => transaction.isKtxDeposit === true),
+									);
+									if (!bills.length) return;
+									if (bills.length === 1) {
+										setRecord(bills[0]);
+										setSelectedBills([]);
+										setPaymentMode('single');
+									} else {
+										setSelectedBills(bills);
+										setPaymentMode('multi');
+									}
+									setInitialPaymentAmount(undefined);
+									setLockPaymentAmount(false);
+									setVisibleModalThanhToan(true);
+								}}
+								type='primary'
+							>
+								{intl.formatMessage({ id: 'taichinh.hoadon.action.paySelected' }, { count: selectedIds?.length })}
+							</ButtonExtend>,
+						]
 						: []),
 				]}
 				otherProps={{
@@ -644,8 +701,8 @@ const HoaDonPage = () => {
 					getCheckboxProps: (rec: BillTableRecord) => ({
 						disabled: Boolean(
 							rec._isVirtualBillNotice ||
-								rec._isKtxDepositNotice ||
-								rec.transactions?.some((transaction) => transaction.isKtxDeposit === true),
+							rec._isKtxDepositNotice ||
+							rec.transactions?.some((transaction) => transaction.isKtxDeposit === true),
 						),
 					}),
 					onChange: (selectedRowKeys: Key[]) => {
@@ -700,15 +757,43 @@ const HoaDonPage = () => {
 					setVisibleModalThanhToan(false);
 					setSelectedBills([]);
 					setPaymentMode('single');
+					setInitialPaymentAmount(undefined);
+					setLockPaymentAmount(false);
 				}}
 				onSuccess={() => {
 					getData(activeKey);
 					setVisibleModalThanhToan(false);
 					setSelectedBills([]);
 					setPaymentMode('single');
+					setInitialPaymentAmount(undefined);
+					setLockPaymentAmount(false);
 				}}
 				mode={paymentMode}
 				bills={selectedBills}
+				initialAmount={initialPaymentAmount}
+				lockAmount={lockPaymentAmount}
+			/>
+
+			<ModalDangKyTraGop
+				visible={visibleModalDangKyTraGop}
+				bill={billTraGop}
+				onClose={() => setVisibleModalDangKyTraGop(false)}
+				onSuccess={() => getData(activeKey)}
+			/>
+
+			<ModalTienDoTraGop
+				visible={visibleModalTienDoTraGop}
+				bill={billTraGop}
+				onClose={() => setVisibleModalTienDoTraGop(false)}
+				onPayNow={(_phien, amount) => {
+					if (!billTraGop) return;
+					setRecord(billTraGop);
+					setPaymentMode('single');
+					setInitialPaymentAmount(amount);
+					setLockPaymentAmount(true);
+					setVisibleModalTienDoTraGop(false);
+					setVisibleModalThanhToan(true);
+				}}
 			/>
 		</PageCard>
 	);

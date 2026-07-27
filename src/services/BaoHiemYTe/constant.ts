@@ -75,6 +75,21 @@ export enum EBhytNationality {
 	FOREIGN = 'FOREIGN',
 }
 
+export enum BhytPaymentStatus {
+	CHUA_THANH_TOAN = 'unpaid',
+	DA_THANH_TOAN = 'paid',
+}
+
+export const paymentStatusIntlId: Record<BhytPaymentStatus, string> = {
+	[BhytPaymentStatus.CHUA_THANH_TOAN]: 'baohiemyte.dangky.trangThaiThanhToan.chuaThanhToan',
+	[BhytPaymentStatus.DA_THANH_TOAN]: 'baohiemyte.dangky.trangThaiThanhToan.daThanhToan',
+};
+
+export const paymentStatusColor: Record<BhytPaymentStatus, ETagColor> = {
+	[BhytPaymentStatus.CHUA_THANH_TOAN]: ETagColor.ORANGE,
+	[BhytPaymentStatus.DA_THANH_TOAN]: ETagColor.GREEN,
+};
+
 export const transBhytNationalityIntlId: Record<EBhytNationality, string> = {
 	[EBhytNationality.VIETNAM]: 'baohiemyte.dangky.nationality.vietnam',
 	[EBhytNationality.FOREIGN]: 'baohiemyte.dangky.nationality.foreign',

@@ -1,5 +1,4 @@
-import type { EMaTrangThaiThanhToan } from '../TaiChinh/constant';
-import { EBhytPublishStatus, EBhytReviewStatus, EDeclarationType } from './constant';
+import { BhytPaymentStatus, EBhytPublishStatus, EBhytReviewStatus, EDeclarationType } from './constant';
 
 declare module BaoHiemYTe {
 	export interface IDotDangKy {
@@ -13,18 +12,19 @@ declare module BaoHiemYTe {
 		publishStatus: EBhytPublishStatus;
 		periodStatus?: 'OPEN' | string;
 		registrationId?: string;
+		periodStudentId?: string;
 		student?: IStudentRegistration;
 		note?: string;
 		declarationType?: EDeclarationType;
 		reviewStatus?: EBhytReviewStatus | string | null;
-		billStatus?: EMaTrangThaiThanhToan | null;
+		paymentStatus?: BhytPaymentStatus | null;
 	}
 
 	export interface IMyRegistration {
 		_id?: string;
 		declarationType?: EDeclarationType;
 		reviewStatus?: EBhytReviewStatus | null;
-		billStatus?: EMaTrangThaiThanhToan | null;
+		paymentStatus?: BhytPaymentStatus | null;
 	}
 
 	/** Snapshot của một đợt đăng ký BHYT của sinh viên, trả về bởi `/me/current` */
@@ -37,17 +37,23 @@ declare module BaoHiemYTe {
 		canSubmit?: boolean;
 	}
 
-	/** Một dòng lịch sử đăng ký BHYT, trả về bởi `/me/history` */
+	/**
+	 * Một dòng lịch sử đăng ký BHYT, trả về bởi `/me/history`.
+	 * `declarationSnapshot` là dữ liệu tại thời điểm của record nhưng có thể thiếu field;
+	 * `student` là dữ liệu mới nhất, đầy đủ field, dùng để bổ khuyết cho declarationSnapshot.
+	 */
 	export interface IHistoryItem {
 		_id?: string;
+		periodStudentId?: string;
 		declarationType?: EDeclarationType;
 		reviewStatus?: EBhytReviewStatus | null;
-		lastReviewAction?: string;
-		lastReviewerId?: string;
-		lastReviewerName?: string;
-		lastReviewNote?: string;
-		lastReviewedAt?: string;
+		reviewerId?: string;
+		reviewerName?: string;
+		action?: string;
+		note?: string;
+		createdAt?: string;
 		period?: IDotDangKy;
+		declarationSnapshot?: IStudentRegistration;
 		student?: IStudentRegistration;
 	}
 
@@ -61,7 +67,7 @@ declare module BaoHiemYTe {
 		institute?: string;
 		declarationType?: EDeclarationType;
 		reviewStatus?: string | null;
-		billStatus?: EMaTrangThaiThanhToan | null;
+		paymentStatus?: BhytPaymentStatus | null;
 		reminderCount?: number;
 		billRequestedAt?: string | null;
 		createdAt?: string;
@@ -69,6 +75,7 @@ declare module BaoHiemYTe {
 	}
 
 	export interface ISinhVienDangKyThongTin {
+		studentId?: string;
 		periodStudentId?: string;
 		periodId?: string;
 		fullName?: string;
@@ -103,6 +110,10 @@ declare module BaoHiemYTe {
 	export interface ISinhVienDangKyTruong extends ISinhVienDangKyThongTin {
 		ssnNumber?: string;
 		hanBHYTHienTai?: string;
-		diaChiThuongTru?: string;
+		diaChiThuongTru?: {
+			maTinh?: string;
+			maXaPhuong?: string;
+			soNhaTenDuong?: string;
+		};
 	}
 }

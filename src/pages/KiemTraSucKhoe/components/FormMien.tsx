@@ -1,6 +1,7 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { EKtscReviewStatus, isRegisteredDeclarationType } from '@/services/KiemTraSucKhoe/constant';
 import { KiemTraSucKhoe } from '@/services/KiemTraSucKhoe/typing';
+import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
@@ -8,7 +9,6 @@ import { Button, Col, Form, Row } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import { usePersonalInfo } from '../hooks/usePersonalInfo';
-import PersonalInfoFields from './PersonalInfoFields';
 
 interface IProps {
 	record?: KiemTraSucKhoe.IDotDangKy;
@@ -43,7 +43,7 @@ const FormMienKiemTraSucKhoe = ({ record, isView, edit, onCancel, getData }: IPr
 		!!isView ||
 		(isRegisteredDeclarationType(declarationType) && record?.reviewStatus !== EKtscReviewStatus.CAN_BO_SUNG);
 
-	const personalInfo = usePersonalInfo(studentRegistration, isView);
+	const personalInfo = usePersonalInfo(studentRegistration, isView, form);
 
 	useEffect(() => {
 		form.setFieldsValue({
@@ -68,40 +68,69 @@ const FormMienKiemTraSucKhoe = ({ record, isView, edit, onCancel, getData }: IPr
 		if (readOnly || !record?.periodId) return;
 
 		setFormSubmiting(true);
-		// const proofFileIds = ((await buildUpLoadMultiFile(values, 'proofFileIds')) ?? []) as string[];
-		setFormSubmiting(false);
+		try {
+			const proofFileIds = ((await buildUpLoadMultiFileMultipart(values, 'proofFileIds', {
+				scope: EFileScope.PUBLIC,
+				module: 'kham-suc-khoe',
+				returnValue: 'url',
+			})) ?? []) as string[];
 
-		const payload: KiemTraSucKhoe.ISinhVienMienKham = {
-			periodStudentId: personalInfo.recordSinhVien?.ssoId,
-			periodId: record.periodId,
-			fullName: values.fullName,
-			studentCode: values.studentCode,
-			ngaySinh: values.ngaySinh ? dayjs(values.ngaySinh).toISOString() : undefined,
-			cccd: values.cccd,
-			nationality: values.nationality,
-			gioiTinh: values.gioiTinh,
-			khoa: values.khoa,
-			nganh: values.nganh,
-			maKhoa: personalInfo.studentMaKhoa,
-			maNganh: personalInfo.studentMaNganh,
-			phone: values.phone,
-			email: values.email,
-			proofFileIds: ['proofFileIds'],
-		};
+			if (edit) {
+				const payload: KiemTraSucKhoe.ISinhVienMienKham = {
+					ssoId: personalInfo.recordSinhVien?.ssoId,
+					studentId: personalInfo.recordSinhVien?.ssoId,
+					periodStudentId: record.periodStudentId,
+					periodId: record.periodId,
+					fullName: values.fullName,
+					studentCode: values.studentCode,
+					ngaySinh: values.ngaySinh ? dayjs(values.ngaySinh).toISOString() : undefined,
+					cccd: values.cccd,
+					nationality: values.nationality,
+					gioiTinh: values.gioiTinh,
+					khoa: values.khoa,
+					nganh: values.nganh,
+					maKhoa: personalInfo.studentMaKhoa,
+					maNganh: personalInfo.studentMaNganh,
+					phone: values.phone,
+					email: values.email,
+					proofFileIds: proofFileIds,
+				};
 
-		if (edit) {
-			await putSinhVienMienKhamModel(payload, getData);
-		} else {
-			await postSinhVienMienKhamModel(payload, getData);
+				await putSinhVienMienKhamModel(payload, getData);
+			} else {
+				// Tạo mới: lấy toàn bộ thông tin sinh viên từ recordSinhVien (dữ liệu hệ thống), không lấy từ form
+				const recordSinhVien = personalInfo.recordSinhVien as any;
+				const payload: KiemTraSucKhoe.ISinhVienMienKham = {
+					ssoId: recordSinhVien?.ssoId,
+					studentId: recordSinhVien?.ssoId,
+					periodStudentId: record.periodStudentId,
+					periodId: record.periodId,
+					fullName: recordSinhVien?.ten,
+					studentCode: recordSinhVien?.ma,
+					ngaySinh: recordSinhVien?.ngaySinh,
+					cccd: recordSinhVien?.cccd,
+					nationality: recordSinhVien?.quocTich,
+					gioiTinh: recordSinhVien?.gioiTinh,
+					khoa: recordSinhVien?.khoaSinhVien?.ten,
+					nganh: recordSinhVien?.nganh?.ten,
+					maKhoa: recordSinhVien?.maKhoaSinhVien,
+					maNganh: recordSinhVien?.maNganh,
+					phone: recordSinhVien?.soDienThoai,
+					email: recordSinhVien?.email,
+					proofFileIds: proofFileIds,
+				};
+
+				await postSinhVienMienKhamModel(payload, getData);
+			}
+			onCancel();
+		} finally {
+			setFormSubmiting(false);
 		}
-		onCancel();
 	};
 
 	return (
 		<Form layout='vertical' onFinish={onFinish} form={form}>
 			<Row gutter={[12, 0]}>
-				<PersonalInfoFields info={personalInfo} />
-
 				<Col span={24}>
 					<Form.Item
 						name='proofFileIds'
@@ -111,9 +140,9 @@ const FormMienKiemTraSucKhoe = ({ record, isView, edit, onCancel, getData }: IPr
 						<UploadFile
 							disabled={readOnly}
 							maxCount={5}
-							accept='.png,.jpg,.jpeg'
+							accept='.pdf, .png, .jpg, .jpeg'
 							maxFileSize={5}
-							// buttonSize='middle'
+							buttonSize='middle'
 							otherProps={{ multiple: true }}
 						/>
 					</Form.Item>

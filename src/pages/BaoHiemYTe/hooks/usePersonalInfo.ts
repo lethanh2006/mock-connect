@@ -1,9 +1,12 @@
+import { EBhytNationality } from '@/services/BaoHiemYTe/constant';
 import { BaoHiemYTe } from '@/services/BaoHiemYTe/typing';
+import { Form, type FormInstance } from 'antd';
 import { useModel } from 'umi';
 
 export interface IPersonalInfo {
 	recordSinhVien: any;
 	isVN: boolean;
+	hasNationalityData: boolean;
 	passportImageFileId?: string;
 	visaImageFileId?: string;
 	studentFullName?: string;
@@ -25,11 +28,17 @@ export interface IPersonalInfo {
 export const usePersonalInfo = (
 	studentRegistration?: BaoHiemYTe.IStudentRegistration,
 	isView?: boolean,
+	form?: FormInstance<any>,
 ): IPersonalInfo => {
 	const { record: recordSinhVien } = useModel('sinhvien.sinhvien');
 
 	const normalized = (studentRegistration?.nationality ?? recordSinhVien?.quocTich ?? '').toLowerCase().trim();
-	const isVN = !normalized || normalized.includes('viet') || normalized.includes('việt');
+	const hasNationalityData = !!normalized;
+	const isVNFromData = normalized.includes('viet') || normalized.includes('việt');
+
+	// Đã biết quốc tịch thì khóa theo dữ liệu có sẵn; chưa biết thì để sinh viên tự chọn, không tự gán mặc định
+	const nationalityWatch = Form.useWatch('nationality', form as FormInstance<any>);
+	const isVN = hasNationalityData ? isVNFromData : nationalityWatch === EBhytNationality.VIETNAM;
 
 	// Thông tin đã có sẵn từ hệ thống thì khóa lại, chỉ cho nhập khi còn thiếu
 	const isPersonalFieldDisabled = (value?: unknown) => !!isView || !!value;
@@ -37,6 +46,7 @@ export const usePersonalInfo = (
 	return {
 		recordSinhVien,
 		isVN,
+		hasNationalityData,
 		passportImageFileId: studentRegistration?.passportImageFileId ?? (recordSinhVien as any)?.passportImageFileId,
 		visaImageFileId: studentRegistration?.visaImageFileId ?? (recordSinhVien as any)?.visaImageFileId,
 		studentFullName: studentRegistration?.fullName ?? recordSinhVien?.ten,

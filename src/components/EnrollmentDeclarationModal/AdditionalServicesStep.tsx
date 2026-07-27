@@ -162,24 +162,24 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 		try {
 			const res: any = await getKskPeriod('me/current', false);
 			const period = res?.period;
-			const student = res?.student ?? {};
 
 			if (period?._id) {
 				const payload: KiemTraSucKhoe.ISinhVienDangKy = {
-					periodStudentId: (recordSinhVien as any)?.ssoId,
+					ssoId: (recordSinhVien as any)?.ssoId,
+					studentId: (recordSinhVien as any)?.ssoId,
+					studentCode: recordSinhVien?.ma,
 					periodId: period._id,
-					fullName: student.fullName || [recordSinhVien?.firstName, recordSinhVien?.lastName].filter(Boolean).join(' '),
-					studentCode: student.studentCode || recordSinhVien?.ma,
-					ngaySinh: student.ngaySinh,
-					cccd: student.cccd || recordSinhVien?.cccd,
-					nationality: student.nationality || recordSinhVien?.quocTich,
-					gioiTinh: student.gioiTinh || recordSinhVien?.gioiTinh,
-					khoa: student.khoa,
-					nganh: student.nganh,
+					fullName: recordSinhVien?.ten || [recordSinhVien?.firstName, recordSinhVien?.lastName].filter(Boolean).join(' '),
+					ngaySinh: (recordSinhVien as any)?.ngaySinh,
+					cccd: recordSinhVien?.cccd,
+					nationality: recordSinhVien?.quocTich,
+					gioiTinh: recordSinhVien?.gioiTinh,
+					khoa: (recordSinhVien as any)?.khoaSinhVien?.ten,
+					nganh: recordSinhVien?.nganh?.ten,
 					maKhoa: (recordSinhVien as any)?.maKhoaSinhVien,
 					maNganh: (recordSinhVien as any)?.maNganh,
-					phone: student.phone || recordSinhVien?.soDienThoai,
-					email: student.email || recordSinhVien?.email,
+					phone: recordSinhVien?.soDienThoai,
+					email: recordSinhVien?.email,
 				};
 				await postSinhVienDangKyKhamModel(payload, fetchKskRegistration);
 			} else {
