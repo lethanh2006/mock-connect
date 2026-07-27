@@ -65,8 +65,26 @@ const SinhVienDangKyBHYT = () => {
 		void getCurrentInfo();
 	}, []);
 
-	// declarationSnapshot là dữ liệu tại thời điểm nộp đơn nhưng có thể thiếu field,
-	// student là dữ liệu sinh viên mới nhất (đầy đủ field) dùng để bổ khuyết field còn thiếu
+	// Các field mô tả trạng thái bảo hiểm/thẻ TẠI THỜI ĐIỂM khai báo (declarationSnapshot).
+	// Bảng này là lịch sử nên nếu rỗng ở thời điểm đó thì phải giữ rỗng, KHÔNG được lấy dữ liệu student mới nhất bổ khuyết
+	// (vd: record cũ chưa có thẻ thì phải hiển thị chưa có thẻ, dù sau đó student đã được cấp thẻ ở record khác)
+	const POINT_IN_TIME_FIELDS: (keyof BaoHiemYTe.IStudentRegistration)[] = [
+		'ssnNumber',
+		'cardNumber',
+		'cardExpiredAt',
+		'participantGroup',
+		'initialClinicPlace',
+		'insuranceProviderName',
+		'insuranceCardNumber',
+		'insuranceValidFrom',
+		'insuranceValidTo',
+		'passportImageFileId',
+		'visaImageFileId',
+		'proofFileId',
+	];
+
+	// declarationSnapshot là dữ liệu tại thời điểm nộp đơn nhưng có thể thiếu field (field hồ sơ chung),
+	// student là dữ liệu sinh viên mới nhất dùng để bổ khuyết field còn thiếu đó — trừ nhóm POINT_IN_TIME_FIELDS ở trên
 	const mergeStudentSnapshot = (
 		declarationSnapshot?: BaoHiemYTe.IStudentRegistration,
 		student?: BaoHiemYTe.IStudentRegistration,
@@ -75,7 +93,8 @@ const SinhVienDangKyBHYT = () => {
 
 		const merged: BaoHiemYTe.IStudentRegistration = { ...student };
 		Object.entries(declarationSnapshot ?? {}).forEach(([key, value]) => {
-			if (value !== null && value !== undefined) (merged as any)[key] = value;
+			const isPointInTimeField = POINT_IN_TIME_FIELDS.includes(key as keyof BaoHiemYTe.IStudentRegistration);
+			if (isPointInTimeField || (value !== null && value !== undefined)) (merged as any)[key] = value;
 		});
 
 		return merged;
@@ -165,8 +184,11 @@ const SinhVienDangKyBHYT = () => {
 		const isVN = isVietnameseNationality(getEffectiveStudent(rec)?.nationality);
 		const hasInsurance = rec.declarationType === EDeclarationType.DA_CO_BEN_NGOAI;
 
-		if (isVN) return t(hasInsurance ? 'baohiemyte.dangky.loaiDangKy.coBHYT' : 'baohiemyte.dangky.loaiDangKy.khongCoBHYT');
-		return t(hasInsurance ? 'baohiemyte.dangky.loaiDangKy.coTheBaoHiem' : 'baohiemyte.dangky.loaiDangKy.khongCoTheBaoHiem');
+		if (isVN)
+			return t(hasInsurance ? 'baohiemyte.dangky.loaiDangKy.coBHYT' : 'baohiemyte.dangky.loaiDangKy.khongCoBHYT');
+		return t(
+			hasInsurance ? 'baohiemyte.dangky.loaiDangKy.coTheBaoHiem' : 'baohiemyte.dangky.loaiDangKy.khongCoTheBaoHiem',
+		);
 	};
 
 	// Hạn của thẻ/gói bảo hiểm thực tế (cardExpiredAt cho SV Việt Nam, insuranceValidTo cho SV quốc tế),
@@ -405,15 +427,15 @@ const SinhVienDangKyBHYT = () => {
 
 	const formModalTitle = formModal
 		? intl.formatMessage(
-			{
-				id: formModal.isView
-					? 'global.table.form.title.chitiet'
-					: formModal.edit
-						? 'global.table.form.title.chinhsua'
-						: 'global.table.form.title.themmoi',
-			},
-			{ title: chuanHoaTen(t('baohiemyte.dangky.title').toLowerCase()) },
-		)
+				{
+					id: formModal.isView
+						? 'global.table.form.title.chitiet'
+						: formModal.edit
+							? 'global.table.form.title.chinhsua'
+							: 'global.table.form.title.themmoi',
+				},
+				{ title: chuanHoaTen(t('baohiemyte.dangky.title').toLowerCase()) },
+			)
 		: undefined;
 
 	return (
