@@ -3,12 +3,12 @@ import MyDateRangePicker from '@/components/MyDatePicker/RangePicker';
 import UploadFile from '@/components/Upload/UploadFile';
 import {
 	doiTuongThamGiaBHYTIntlId,
-	EBhytNationality,
 	EBhytReviewStatus,
 	EDoiTuongThamGiaBHYT,
 	isRegisteredDeclarationType,
 } from '@/services/BaoHiemYTe/constant';
 import { BaoHiemYTe } from '@/services/BaoHiemYTe/typing';
+import { buildUpLoadFileMultipart, EFileScope } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
@@ -51,7 +51,7 @@ const FormMienBHYT = ({ record, isView, edit, onCancel, getData }: IProps) => {
 		!!isView ||
 		(isRegisteredDeclarationType(declarationType) && record?.reviewStatus !== EBhytReviewStatus.CAN_BO_SUNG);
 
-	const personalInfo = usePersonalInfo(studentRegistration, isView);
+	const personalInfo = usePersonalInfo(studentRegistration, isView, form);
 	const { isVN, passportImageFileId, visaImageFileId } = personalInfo;
 
 	const doiTuongThamGiaBHYTOptions = Object.values(EDoiTuongThamGiaBHYT).map((value) => ({
@@ -65,7 +65,7 @@ const FormMienBHYT = ({ record, isView, edit, onCancel, getData }: IProps) => {
 			studentCode: personalInfo.studentCode,
 			ngaySinh: parseDate(personalInfo.studentNgaySinh),
 			cccd: personalInfo.studentCccd,
-			nationality: isVN ? EBhytNationality.VIETNAM : EBhytNationality.FOREIGN,
+			nationality: personalInfo.studentNationality,
 			gioiTinh: personalInfo.studentGioiTinh,
 			khoa: personalInfo.studentKhoa,
 			nganh: personalInfo.studentNganh,
@@ -95,49 +95,65 @@ const FormMienBHYT = ({ record, isView, edit, onCancel, getData }: IProps) => {
 		if (readOnly || !record?.periodId) return;
 
 		setFormSubmiting(true);
-		const [insuranceValidFrom, insuranceValidTo] = values.hanBaoHiemRange || [];
-		// const [uploadedPassportImageFileId, uploadedVisaImageFileId, uploadedProofFileId] = await Promise.all([
-		// 	buildUpLoadFile(values, 'passportImageFileId'),
-		// 	buildUpLoadFile(values, 'visaImageFileId'),
-		// 	buildUpLoadFile(values, 'proofFileId'),
-		// ]);
-		setFormSubmiting(false);
+		try {
+			const [insuranceValidFrom, insuranceValidTo] = values.hanBaoHiemRange || [];
+			const [uploadedPassportImageFileId, uploadedVisaImageFileId, uploadedProofFileId] = await Promise.all([
+				buildUpLoadFileMultipart(values, 'passportImageFileId', {
+					scope: EFileScope.PUBLIC,
+					module: 'bao-hiem-y-te',
+					returnValue: 'url',
+				}),
+				buildUpLoadFileMultipart(values, 'visaImageFileId', {
+					scope: EFileScope.PUBLIC,
+					module: 'bao-hiem-y-te',
+					returnValue: 'url',
+				}),
+				buildUpLoadFileMultipart(values, 'proofFileId', {
+					scope: EFileScope.PUBLIC,
+					module: 'bao-hiem-y-te',
+					returnValue: 'url',
+				}),
+			]);
 
-		const payload: BaoHiemYTe.ISinhVienDangKy = {
-			periodStudentId: personalInfo.recordSinhVien?.ssoId,
-			periodId: record.periodId,
-			fullName: values.fullName,
-			studentCode: values.studentCode,
-			ngaySinh: values.ngaySinh ? dayjs(values.ngaySinh).toISOString() : undefined,
-			cccd: values.cccd,
-			nationality: personalInfo.isVN ? EBhytNationality.VIETNAM : EBhytNationality.FOREIGN,
-			gioiTinh: values.gioiTinh,
-			khoa: values.khoa,
-			nganh: values.nganh,
-			maKhoa: personalInfo.studentMaKhoa,
-			maNganh: personalInfo.studentMaNganh,
-			phone: values.phone,
-			email: values.email,
-			proofFileId: 'uploadedProofFileId',
-			ssnNumber: values.ssnNumber,
-			cardNumber: values.cardNumber,
-			cardExpiredAt: values.cardExpiredAt,
-			participantGroup: values.participantGroup,
-			initialClinicPlace: values.initialClinicPlace,
-			passportImageFileId: 'uploadedPassportImageFileId',
-			visaImageFileId: 'uploadedVisaImageFileId',
-			insuranceProviderName: values.insuranceProviderName,
-			insuranceCardNumber: values.insuranceCardNumber,
-			insuranceValidFrom,
-			insuranceValidTo,
-		};
+			const payload: BaoHiemYTe.ISinhVienDangKy = {
+				studentId: personalInfo.recordSinhVien?.ssoId,
+				periodStudentId: record.periodStudentId,
+				periodId: record.periodId,
+				fullName: values.fullName,
+				studentCode: values.studentCode,
+				ngaySinh: values.ngaySinh ? dayjs(values.ngaySinh).toISOString() : undefined,
+				cccd: values.cccd,
+				nationality: values.nationality,
+				gioiTinh: values.gioiTinh,
+				khoa: values.khoa,
+				nganh: values.nganh,
+				maKhoa: personalInfo.studentMaKhoa,
+				maNganh: personalInfo.studentMaNganh,
+				phone: values.phone,
+				email: values.email,
+				proofFileId: uploadedProofFileId ?? studentRegistration?.proofFileId,
+				ssnNumber: values.ssnNumber,
+				cardNumber: values.cardNumber,
+				cardExpiredAt: values.cardExpiredAt,
+				participantGroup: values.participantGroup,
+				initialClinicPlace: values.initialClinicPlace,
+				passportImageFileId: uploadedPassportImageFileId ?? passportImageFileId,
+				visaImageFileId: uploadedVisaImageFileId ?? visaImageFileId,
+				insuranceProviderName: values.insuranceProviderName,
+				insuranceCardNumber: values.insuranceCardNumber,
+				insuranceValidFrom,
+				insuranceValidTo,
+			};
 
-		if (edit) {
-			await putSinhVienDangKyTuChonModel(payload, getData);
-		} else {
-			await postSinhVienDangKyTuChonModel(payload, getData);
+			if (edit) {
+				await putSinhVienDangKyTuChonModel(payload, getData);
+			} else {
+				await postSinhVienDangKyTuChonModel(payload, getData);
+			}
+			onCancel();
+		} finally {
+			setFormSubmiting(false);
 		}
-		onCancel();
 	};
 
 	return (
@@ -158,12 +174,20 @@ const FormMienBHYT = ({ record, isView, edit, onCancel, getData }: IProps) => {
 				{isVN ? (
 					<>
 						<Col span={24} md={12}>
-							<Form.Item name='ssnNumber' label={t('baohiemyte.mien.soBHXH')} rules={[...rules.required]}>
+							<Form.Item
+								name='ssnNumber'
+								label={t('baohiemyte.mien.soBHXH')}
+								rules={[...rules.required, ...rules.text]}
+							>
 								<Input disabled={readOnly} placeholder={t('baohiemyte.mien.nhapSoBHXH')} />
 							</Form.Item>
 						</Col>
 						<Col span={24} md={12}>
-							<Form.Item name='cardNumber' label={t('baohiemyte.mien.soTheBaoHiem')} rules={[...rules.required]}>
+							<Form.Item
+								name='cardNumber'
+								label={t('baohiemyte.mien.soTheBaoHiem')}
+								rules={[...rules.required, ...rules.text]}
+							>
 								<Input disabled={readOnly} placeholder={t('baohiemyte.mien.nhapSoTheBaoHiem')} />
 							</Form.Item>
 						</Col>
@@ -193,7 +217,7 @@ const FormMienBHYT = ({ record, isView, edit, onCancel, getData }: IProps) => {
 							<Form.Item
 								name='initialClinicPlace'
 								label={t('baohiemyte.mien.noiDangKyKCBBanDau')}
-								rules={[...rules.required]}
+								rules={[...rules.required, ...rules.text]}
 							>
 								<Input disabled={readOnly} placeholder={t('baohiemyte.mien.nhapNoiDangKyKCBBanDau')} />
 							</Form.Item>
@@ -203,7 +227,7 @@ const FormMienBHYT = ({ record, isView, edit, onCancel, getData }: IProps) => {
 								<UploadFile
 									disabled={readOnly}
 									maxCount={1}
-									accept='.pdf,.png,.jpg,.jpeg'
+									accept='.pdf, .png, .jpg, .jpeg'
 									maxFileSize={5}
 									buttonSize='middle'
 								/>
@@ -218,7 +242,7 @@ const FormMienBHYT = ({ record, isView, edit, onCancel, getData }: IProps) => {
 									<UploadFile
 										disabled={readOnly}
 										maxCount={1}
-										accept='.pdf,.png,.jpg,.jpeg'
+										accept='.pdf, .png, .jpg, .jpeg'
 										maxFileSize={5}
 										buttonSize='middle'
 									/>
@@ -235,7 +259,7 @@ const FormMienBHYT = ({ record, isView, edit, onCancel, getData }: IProps) => {
 									<UploadFile
 										disabled={readOnly}
 										maxCount={1}
-										accept='.pdf,.png,.jpg,.jpeg'
+										accept='.pdf, .png, .jpg, .jpeg'
 										maxFileSize={5}
 										buttonSize='middle'
 									/>
@@ -246,7 +270,7 @@ const FormMienBHYT = ({ record, isView, edit, onCancel, getData }: IProps) => {
 							<Form.Item
 								name='insuranceProviderName'
 								label={t('baohiemyte.mien.tenDonViBaoHiem')}
-								rules={[...rules.required]}
+								rules={[...rules.required, ...rules.text]}
 							>
 								<Input disabled={readOnly} placeholder={t('baohiemyte.mien.nhapTenDonViBaoHiem')} />
 							</Form.Item>
@@ -255,7 +279,7 @@ const FormMienBHYT = ({ record, isView, edit, onCancel, getData }: IProps) => {
 							<Form.Item
 								name='insuranceCardNumber'
 								label={t('baohiemyte.mien.soTheBaoHiemNuocNgoai')}
-								rules={[...rules.required]}
+								rules={[...rules.required, ...rules.text]}
 							>
 								<Input disabled={readOnly} placeholder={t('baohiemyte.mien.nhapSoTheBaoHiem')} />
 							</Form.Item>
@@ -278,7 +302,7 @@ const FormMienBHYT = ({ record, isView, edit, onCancel, getData }: IProps) => {
 								<UploadFile
 									disabled={readOnly}
 									maxCount={1}
-									accept='.pdf,.png,.jpg,.jpeg'
+									accept='.pdf, .png, .jpg, .jpeg'
 									maxFileSize={5}
 									buttonSize='middle'
 								/>

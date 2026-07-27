@@ -178,54 +178,65 @@ export default [
 			},
 		],
 	},
-	// {
-	// 	path: '/student-support',
-	// 	name: 'StudentSupport',
-	// 	icon: 'CustomerServiceOutlined',
-	// 	routes: [
-	// 		// {
-	// 		// 	path: 'registrar-services',
-	// 		// 	name: 'RegistrarServices',
-	// 		// 	routes: [
-	// 		// 		{
-	// 		// 			path: 'registration',
-	// 		// 			name: 'Registration',
-	// 		// 			component: 'New/Registration',
-	// 		// 		},
-	// 		// 		{
-	// 		// 			path: 'history',
-	// 		// 			name: 'History',
-	// 		// 			component: 'New/History',
-	// 		// 		},
-	// 		// 	],
-	// 		// },
-	// 		{
-	// 			path: 'health-clinic',
-	// 			name: 'HealthClinic',
-	// 			component: 'BaoHiemYTe',
-	// 		},
-	// 		// {
-	// 		// 	path: 'mental-health',
-	// 		// 	name: 'MentalHealth',
-	// 		// 	component: 'New/MentalHealth',
-	// 		// },
-	// 		// {
-	// 		// 	path: 'work-study',
-	// 		// 	name: 'WorkStudy',
-	// 		// 	component: 'New/WorkStudy',
-	// 		// },
-	// 		// {
-	// 		// 	path: 'international',
-	// 		// 	name: 'International',
-	// 		// 	component: 'New/International',
-	// 		// },
-	// 		// {
-	// 		// 	path: 'IT-support',
-	// 		// 	name: 'ITSupport',
-	// 		// 	component: 'New/ITSupport',
-	// 		// },
-	// 	],
-	// },
+	{
+		path: '/student-support',
+		name: 'StudentSupport',
+		icon: 'CustomerServiceOutlined',
+		routes: [
+			// {
+			// 	path: 'registrar-services',
+			// 	name: 'RegistrarServices',
+			// 	routes: [
+			// 		{
+			// 			path: 'registration',
+			// 			name: 'Registration',
+			// 			component: 'New/Registration',
+			// 		},
+			// 		{
+			// 			path: 'history',
+			// 			name: 'History',
+			// 			component: 'New/History',
+			// 		},
+			// 	],
+			// },
+			{
+				path: 'health-clinic',
+				name: 'HealthClinic',
+				routes: [
+					{
+						path: 'health-insurance',
+						name: 'HealthInsurance',
+						component: 'BaoHiemYTe',
+					},
+					{
+						path: 'health-checkup',
+						name: 'HealthCheckup',
+						component: 'KiemTraSucKhoe',
+					},
+				],
+			},
+			// {
+			// 	path: 'mental-health',
+			// 	name: 'MentalHealth',
+			// 	component: 'New/MentalHealth',
+			// },
+			// {
+			// 	path: 'work-study',
+			// 	name: 'WorkStudy',
+			// 	component: 'New/WorkStudy',
+			// },
+			// {
+			// 	path: 'international',
+			// 	name: 'International',
+			// 	component: 'New/International',
+			// },
+			// {
+			// 	path: 'IT-support',
+			// 	name: 'ITSupport',
+			// 	component: 'New/ITSupport',
+			// },
+		],
+	},
 	{
 		path: '/campus-life',
 		name: 'CampusLife',

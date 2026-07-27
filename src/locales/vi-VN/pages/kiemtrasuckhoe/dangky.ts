@@ -10,6 +10,7 @@ export default {
 	'kiemtrasuckhoe.dangky.soDienThoai': 'Số điện thoại',
 	'kiemtrasuckhoe.dangky.email': 'Email',
 	'kiemtrasuckhoe.dangky.quocTich': 'Quốc tịch',
+	'kiemtrasuckhoe.dangky.trangThaiThanhToan': 'Trạng thái thanh toán',
 
 	'kiemtrasuckhoe.dangky.ngaySinh': 'Ngày sinh',
 	'kiemtrasuckhoe.dangky.cccd': 'Số CMND/CCCD',
@@ -32,6 +33,10 @@ export default {
 	'kiemtrasuckhoe.dangky.reviewStatus.canBoSung': 'Yêu cầu chỉnh sửa',
 	'kiemtrasuckhoe.dangky.reviewStatus.hetHan': 'Hết hạn',
 
+	'kiemtrasuckhoe.dangky.trangThaiThanhToan.chuaThanhToan': 'Chưa thanh toán',
+	'kiemtrasuckhoe.dangky.trangThaiThanhToan.daThanhToan': 'Đã thanh toán',
+	'kiemtrasuckhoe.dangky.trangThaiThanhToan.notApplicable': 'Không áp dụng',
+
 	'kiemtrasuckhoe.dangky.hinhThucDangKy': 'Hình thức đăng ký',
 	'kiemtrasuckhoe.dangky.hinhThuc.dangKy': 'Đăng ký khám sức khỏe',
 	'kiemtrasuckhoe.dangky.hinhThuc.mien': 'Khai báo miễn khám sức khỏe',
@@ -50,6 +55,8 @@ export default {
 
 	'kiemtrasuckhoe.dangky.banner.thoiGianDangKy': 'Đợt đăng ký đang mở từ {tuNgay} đến {denNgay}.',
 	'kiemtrasuckhoe.dangky.banner.xemDayDu': 'Xem đầy đủ',
+	'kiemtrasuckhoe.dangky.banner.duyet': 'Duyệt',
+	'kiemtrasuckhoe.dangky.banner.thanhToan': 'Thanh toán',
 	'kiemtrasuckhoe.dangky.banner.khongCoDot': 'Hiện không có đợt đăng ký kiểm tra sức khỏe nào đang mở.',
 
 	'kiemtrasuckhoe.dangky.choiceModal.title': 'Kiểm tra sức khỏe',

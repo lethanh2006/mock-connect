@@ -73,11 +73,19 @@ export default {
 	'baohiemyte.dangky.namHoc': 'Academic Year',
 
 	'baohiemyte.dangky.column.thoiGian': 'Period',
-	'baohiemyte.dangky.column.hanSuDung': 'Expired Date',
+	'baohiemyte.dangky.column.hanSuDung': 'Health Insurance Validity Period',
+	'baohiemyte.dangky.column.thoiHan': 'Validity / Expiration',
 	'baohiemyte.dangky.column.trangThai': 'Status',
+
+	'baohiemyte.dangky.loaiDangKy.coBHYT': 'Has Health Insurance',
+	'baohiemyte.dangky.loaiDangKy.khongCoBHYT': 'No Health Insurance',
+	'baohiemyte.dangky.loaiDangKy.coTheBaoHiem': 'Has Insurance Card',
+	'baohiemyte.dangky.loaiDangKy.khongCoTheBaoHiem': 'No Insurance Card',
 
 	'baohiemyte.dangky.banner.thoiGianDangKy': 'Registration is open from {tuNgay} to {denNgay}.',
 	'baohiemyte.dangky.banner.xemDayDu': 'Register Now',
+	'baohiemyte.dangky.banner.thanhToan': 'Payment',
+	'baohiemyte.dangky.banner.duyet': 'Review',
 	'baohiemyte.dangky.banner.khongCoDot': 'There is no active health insurance registration period at the moment.',
 
 	'baohiemyte.dangky.choiceModal.title': 'Health Insurance',

@@ -10,7 +10,7 @@ const ip3 = ipConnect; // ip dev
 
 const ipNotif = getConnectTarget('notification'); // ip dev
 // const ipDaoTao = ipRoot + 'qldt'; // ip dev
-const ipDaoTao = getConnectTarget('qldt-test'); // ip dev
+const ipDaoTao = getConnectTarget('qldt'); // ip dev
 // const ipDaoTao = 'http://172.16.8.55:3999'; // ip dev
 
 // const ipDaoTao = 'http://192.168.1.80:3001'; // ip dev
@@ -21,7 +21,9 @@ const ipKhaoThi = getConnectTarget('not-deployed/khao-thi');
 const ipThuVien = getConnectTarget('not-deployed/thu-vien'); // ip dev
 const ipChatbot = getConnectTarget('not-deployed/chatbot-api');
 const ipCCT = getConnectTarget('co-curriculum'); // ip dev
-const ipFile = getConnectTarget('file');
+const ipFile = ipRoot + 'file/file';
+const ipFileMultiPart = ipRoot + 'file/file';
+
 // const ipCCT = 'http://192.168.1.38:3010'; // ip dev
 const ipCsvc = ipRoot + 'csvc';
 
@@ -44,6 +46,7 @@ const oneSignalClient = APP_CONFIG_ONE_SIGNAL_ID;
 const moodleEndpoint = APP_CONFIG_MOODLE_ENDPOINT;
 
 export {
+	ipFileMultiPart,
 	currentRole, financeApiClientId, ip3,
 	ipCCT,
 	ipChatbot,

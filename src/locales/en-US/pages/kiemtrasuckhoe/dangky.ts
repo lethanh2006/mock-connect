@@ -10,6 +10,7 @@ export default {
 	'kiemtrasuckhoe.dangky.soDienThoai': 'Phone',
 	'kiemtrasuckhoe.dangky.email': 'Email',
 	'kiemtrasuckhoe.dangky.quocTich': 'Nationality',
+	'kiemtrasuckhoe.dangky.trangThaiThanhToan': 'Payment Status',
 
 	'kiemtrasuckhoe.dangky.ngaySinh': 'Date of Birth',
 	'kiemtrasuckhoe.dangky.cccd': 'National ID Number',
@@ -32,6 +33,10 @@ export default {
 	'kiemtrasuckhoe.dangky.reviewStatus.canBoSung': 'Change Required',
 	'kiemtrasuckhoe.dangky.reviewStatus.hetHan': 'Expired',
 
+	'kiemtrasuckhoe.dangky.trangThaiThanhToan.chuaThanhToan': 'Unpaid',
+	'kiemtrasuckhoe.dangky.trangThaiThanhToan.daThanhToan': 'Paid',
+	'kiemtrasuckhoe.dangky.trangThaiThanhToan.notApplicable': 'N/A',
+
 	'kiemtrasuckhoe.dangky.hinhThucDangKy': 'Registration Method',
 	'kiemtrasuckhoe.dangky.hinhThuc.dangKy': 'Health Checkup Registration',
 	'kiemtrasuckhoe.dangky.hinhThuc.mien': 'Health Checkup Exemption',
@@ -50,6 +55,8 @@ export default {
 
 	'kiemtrasuckhoe.dangky.banner.thoiGianDangKy': 'Registration is open from {tuNgay} to {denNgay}.',
 	'kiemtrasuckhoe.dangky.banner.xemDayDu': 'Register Now',
+	'kiemtrasuckhoe.dangky.banner.duyet': 'Review',
+	'kiemtrasuckhoe.dangky.banner.thanhToan': 'Payment',
 	'kiemtrasuckhoe.dangky.banner.khongCoDot': 'There is no active health checkup registration period at the moment.',
 
 	'kiemtrasuckhoe.dangky.choiceModal.title': 'Health Checkup',

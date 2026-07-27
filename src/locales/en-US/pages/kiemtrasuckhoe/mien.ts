@@ -5,4 +5,9 @@ export default {
 
 	'kiemtrasuckhoe.mien.gioitinh.nam': 'Male',
 	'kiemtrasuckhoe.mien.gioitinh.nu': 'Female',
+
+	'kiemtrasuckhoe.mien.nguoiPheDuyet': 'Reviewer',
+	'kiemtrasuckhoe.mien.thoiGianDuyet': 'Review Time',
+	'kiemtrasuckhoe.mien.ketQua': 'Result',
+	'kiemtrasuckhoe.mien.ghiChu': 'Note',
 };

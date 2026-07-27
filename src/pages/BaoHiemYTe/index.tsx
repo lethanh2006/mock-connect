@@ -3,16 +3,21 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { type IColumn } from '@/components/Table/typing';
 import {
+	BhytPaymentStatus,
 	EBhytReviewStatus,
 	EDeclarationType,
+	paymentStatusColor,
+	paymentStatusIntlId,
 	reviewStatusColor,
 	reviewStatusIntlId,
 } from '@/services/BaoHiemYTe/constant';
 import { BaoHiemYTe } from '@/services/BaoHiemYTe/typing';
+import { ETagColor } from '@/services/base/constant';
+import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { chuanHoaTen } from '@/utils/utils';
-import { ClockCircleOutlined, EyeOutlined, FormOutlined } from '@ant-design/icons';
-import { Button, Space, Tag } from 'antd';
+import { ClockCircleOutlined, EyeOutlined, FormOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Button, Popover, Space, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChoiceModal from './components/ChoiceModal';
@@ -60,6 +65,44 @@ const SinhVienDangKyBHYT = () => {
 		void getCurrentInfo();
 	}, []);
 
+	// Các field mô tả trạng thái bảo hiểm/thẻ TẠI THỜI ĐIỂM khai báo (declarationSnapshot).
+	// Bảng này là lịch sử nên nếu rỗng ở thời điểm đó thì phải giữ rỗng, KHÔNG được lấy dữ liệu student mới nhất bổ khuyết
+	// (vd: record cũ chưa có thẻ thì phải hiển thị chưa có thẻ, dù sau đó student đã được cấp thẻ ở record khác)
+	const POINT_IN_TIME_FIELDS: (keyof BaoHiemYTe.IStudentRegistration)[] = [
+		'ssnNumber',
+		'cardNumber',
+		'cardExpiredAt',
+		'participantGroup',
+		'initialClinicPlace',
+		'insuranceProviderName',
+		'insuranceCardNumber',
+		'insuranceValidFrom',
+		'insuranceValidTo',
+		'passportImageFileId',
+		'visaImageFileId',
+		'proofFileId',
+	];
+
+	// declarationSnapshot là dữ liệu tại thời điểm nộp đơn nhưng có thể thiếu field (field hồ sơ chung),
+	// student là dữ liệu sinh viên mới nhất dùng để bổ khuyết field còn thiếu đó — trừ nhóm POINT_IN_TIME_FIELDS ở trên
+	const mergeStudentSnapshot = (
+		declarationSnapshot?: BaoHiemYTe.IStudentRegistration,
+		student?: BaoHiemYTe.IStudentRegistration,
+	): BaoHiemYTe.IStudentRegistration | undefined => {
+		if (!declarationSnapshot && !student) return undefined;
+
+		const merged: BaoHiemYTe.IStudentRegistration = { ...student };
+		Object.entries(declarationSnapshot ?? {}).forEach(([key, value]) => {
+			const isPointInTimeField = POINT_IN_TIME_FIELDS.includes(key as keyof BaoHiemYTe.IStudentRegistration);
+			if (isPointInTimeField || (value !== null && value !== undefined)) (merged as any)[key] = value;
+		});
+
+		return merged;
+	};
+
+	const getEffectiveStudent = (rec?: BaoHiemYTe.IHistoryItem) =>
+		mergeStudentSnapshot(rec?.declarationSnapshot, rec?.student);
+
 	const refreshAll = () => {
 		getData();
 		void getCurrentInfo();
@@ -83,13 +126,16 @@ const SinhVienDangKyBHYT = () => {
 	const toDotDangKyRecordFromHistory = (item?: BaoHiemYTe.IHistoryItem): BaoHiemYTe.IDotDangKy | undefined => {
 		if (!item?.period) return undefined;
 
+		const effectiveStudent = getEffectiveStudent(item);
+
 		return {
 			...item.period,
 			periodId: item.period._id ?? '',
+			periodStudentId: item.periodStudentId,
 			declarationType: item.declarationType,
 			reviewStatus: item.reviewStatus,
-			billStatus: item.student?.billStatus,
-			student: item.student,
+			paymentStatus: effectiveStudent?.paymentStatus,
+			student: effectiveStudent,
 		};
 	};
 
@@ -120,8 +166,38 @@ const SinhVienDangKyBHYT = () => {
 		openForm('mien', toNewRegistrationRecord(currentInfo), { edit: false });
 	};
 
+	// hanBHYTHienTai KHÔNG dùng ở đây: đó là hạn thẻ CŨ sinh viên tự khai trước khi mua qua trường (chỉ có ở FormDangKy),
+	// không phải hạn của thẻ/gói đang được đăng ký hoặc khai báo trong record này
 	const getExpiredDate = (student?: BaoHiemYTe.IStudentRegistration) =>
-		student?.hanBHYTHienTai || student?.cardExpiredAt || student?.insuranceValidTo;
+		student?.cardExpiredAt || student?.insuranceValidTo;
+
+	// Cùng logic xác định quốc tịch VN với usePersonalInfo: so khớp chuỗi vì dữ liệu có thể là tên quốc gia thay vì mã enum
+	const isVietnameseNationality = (nationality?: string) => {
+		const normalized = (nationality ?? '').toLowerCase().trim();
+		return normalized.includes('viet') || normalized.includes('việt');
+	};
+
+	// MUA_TRONG_TRUONG: sinh viên chưa có bảo hiểm nên đăng ký mua qua trường
+	// DA_CO_BEN_NGOAI: sinh viên đã có bảo hiểm/thẻ, chỉ khai báo lại
+	// CHUA_DANG_KY: chưa xác nhận có bảo hiểm, xếp chung nhóm "chưa có"
+	const renderRegistrationType = (rec: BaoHiemYTe.IHistoryItem) => {
+		const isVN = isVietnameseNationality(getEffectiveStudent(rec)?.nationality);
+		const hasInsurance = rec.declarationType === EDeclarationType.DA_CO_BEN_NGOAI;
+
+		if (isVN)
+			return t(hasInsurance ? 'baohiemyte.dangky.loaiDangKy.coBHYT' : 'baohiemyte.dangky.loaiDangKy.khongCoBHYT');
+		return t(
+			hasInsurance ? 'baohiemyte.dangky.loaiDangKy.coTheBaoHiem' : 'baohiemyte.dangky.loaiDangKy.khongCoTheBaoHiem',
+		);
+	};
+
+	// Hạn của thẻ/gói bảo hiểm thực tế (cardExpiredAt cho SV Việt Nam, insuranceValidTo cho SV quốc tế),
+	// áp dụng chung cho cả 2 case: mua mới qua trường (hạn thẻ do admin cấp sau khi xử lý)
+	// và đã có sẵn/khai báo miễn (hạn thẻ SV khai khi nộp). Chưa có dữ liệu thì hiển thị "--"
+	const renderValidity = (rec: BaoHiemYTe.IHistoryItem) => {
+		const expiredDate = getExpiredDate(getEffectiveStudent(rec));
+		return expiredDate ? formatDate(expiredDate) : '--';
+	};
 
 	// Mỗi đợt chỉ được đăng ký 1 lần, trừ trường hợp khai báo miễn bị từ chối thì cho đăng ký lại
 	const canRegisterAgain = (myRegistration?: BaoHiemYTe.IMyRegistration) => {
@@ -149,6 +225,28 @@ const SinhVienDangKyBHYT = () => {
 		);
 	};
 
+	// Trạng thái thanh toán chỉ áp dụng cho hình thức mua BHYT qua trường (dangKy),
+	// hình thức khai báo miễn (mien) không phát sinh thanh toán nên hiển thị "Không áp dụng"
+	const renderPaymentStatusTag = (paymentStatus?: BhytPaymentStatus | null, declarationType?: EDeclarationType) => {
+		const type = getFormTypeFromDeclaration(declarationType);
+
+		if (type !== 'dangKy') {
+			return <Tag color={ETagColor.DEFAULT}>{t('baohiemyte.dangky.trangThaiThanhToan.notApplicable')}</Tag>;
+		}
+
+		const status = paymentStatus ?? BhytPaymentStatus.CHUA_THANH_TOAN;
+
+		return <Tag color={paymentStatusColor[status]}>{t(paymentStatusIntlId[status])}</Tag>;
+	};
+
+	const labelStyle = { color: '#8c8c8c', fontSize: 13 };
+
+	// Chỉ hiển thị lịch sử xử lý cho hình thức khai báo miễn đã thực sự được xử lý (có thông tin người xử lý),
+	// hình thức đăng ký (dangKy) không có quy trình duyệt nên không show
+	const canShowLichSuXuLyMien = (rec?: BaoHiemYTe.IHistoryItem) =>
+		getFormTypeFromDeclaration(rec?.declarationType) === 'mien' &&
+		!!(rec?.reviewerId || rec?.reviewerName || rec?.action);
+
 	const renderThoiGianDangKy = (start?: string, end?: string) =>
 		intl.formatMessage(
 			{ id: 'baohiemyte.dangky.banner.thoiGianDangKy' },
@@ -168,46 +266,66 @@ const SinhVienDangKyBHYT = () => {
 
 	const columns: IColumn<BaoHiemYTe.IHistoryItem>[] = [
 		{
-			title: t('baohiemyte.dangky.soBHXH'),
-			dataIndex: ['student', 'ssnNumber'],
-			width: 180,
-			render: (_val, rec) => rec.student?.ssnNumber || '--',
+			title: t('baohiemyte.dangky.maSinhVien'),
+			dataIndex: ['student', 'studentCode'],
+			width: 160,
+			render: (_val, rec) => getEffectiveStudent(rec)?.studentCode || '--',
 			onCell,
 		},
 		{
-			title: t('baohiemyte.dangky.column.thoiGian'),
-			dataIndex: ['period', 'registrationStartAt'],
-			width: 260,
-			sortable: true,
-			render: (_val, rec) => renderThoiGianDangKy(rec.period?.registrationStartAt, rec.period?.registrationEndAt),
+			title: t('baohiemyte.dangky.hinhThucDangKy'),
+			dataIndex: 'declarationType',
+			width: 220,
+			render: (_val, rec) => renderRegistrationType(rec),
 			onCell,
 		},
 		{
-			title: t('baohiemyte.dangky.diaChiThuongTru'),
-			dataIndex: ['student', 'diaChiThuongTru'],
-			width: 280,
-			render: (_val, rec) => rec.student?.diaChiThuongTru || '--',
-			onCell,
-		},
-		{
-			title: t('baohiemyte.dangky.column.hanSuDung'),
-			dataIndex: ['student', 'hanBHYTHienTai'],
-			width: 140,
+			title: t('baohiemyte.dangky.column.thoiHan'),
+			dataIndex: ['student', 'cardExpiredAt'],
+			width: 200,
 			align: 'center',
-			sortable: true,
-			render: (_val, rec) => {
-				const expiredDate = getExpiredDate(rec.student);
-				return expiredDate ? formatDate(expiredDate) : '--';
-			},
+			render: (_val, rec) => renderValidity(rec),
 			onCell,
 		},
 		{
 			title: t('baohiemyte.dangky.column.trangThai'),
 			dataIndex: 'reviewStatus',
-			width: 180,
+			width: 190,
 			align: 'center',
 			sortable: true,
-			render: (_val, rec) => renderReviewStatusTag(rec.reviewStatus, rec.declarationType) ?? '--',
+			render: (_val, rec) => (
+				<Space size={4}>
+					{renderReviewStatusTag(rec.reviewStatus, rec.declarationType) ?? '--'}
+
+					{canShowLichSuXuLyMien(rec) && (
+						<Popover
+							trigger='hover'
+							placement='top'
+							content={
+								<div style={{ minWidth: 260, maxWidth: 320 }}>
+									<div>
+										<b>{t('baohiemyte.mien.nguoiPheDuyet')}:</b> {rec.reviewerName || rec.reviewerId || '--'}
+									</div>
+									<div>
+										<b>{t('baohiemyte.mien.thoiGianDuyet')}:</b>{' '}
+										{rec.createdAt ? dayjs(rec.createdAt).format('DD/MM/YYYY HH:mm') : ''}
+									</div>
+									<div>
+										<b>{t('baohiemyte.mien.ketQua')}:</b> {rec.action || ''}
+									</div>
+									{rec.note && (
+										<div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+											<b>{t('baohiemyte.mien.ghiChu')}:</b> {rec.note}
+										</div>
+									)}
+								</div>
+							}
+						>
+							<Button type='text' size='small' icon={<InfoCircleOutlined />} style={{ paddingInline: 4 }} />
+						</Popover>
+					)}
+				</Space>
+			),
 			filterType: 'select',
 			filterData: Object.values(EBhytReviewStatus).map((item) => ({
 				value: item,
@@ -217,7 +335,7 @@ const SinhVienDangKyBHYT = () => {
 		},
 		{
 			title: t('baohiemyte.dangky.thaoTac'),
-			width: 80,
+			width: 100,
 			align: 'center',
 			fixed: 'right',
 			render: (_val, rec) => {
@@ -254,6 +372,8 @@ const SinhVienDangKyBHYT = () => {
 		const hasPeriod = !!currentInfo.period?._id;
 		const myRegistration = currentInfo.myRegistration;
 		const canRegister = canRegisterAgain(myRegistration);
+		const reviewTag = renderReviewStatusTag(myRegistration?.reviewStatus, myRegistration?.declarationType);
+		const paymentTag = renderPaymentStatusTag(currentInfo.student?.paymentStatus, myRegistration?.declarationType);
 
 		return (
 			<div
@@ -285,7 +405,20 @@ const SinhVienDangKyBHYT = () => {
 							{t('baohiemyte.dangky.banner.xemDayDu')}
 						</Button>
 					) : (
-						renderReviewStatusTag(myRegistration?.reviewStatus, myRegistration?.declarationType)
+						<Space size={16}>
+							{reviewTag && (
+								<Space size={6}>
+									<span style={labelStyle}>{t('baohiemyte.dangky.banner.duyet')}:</span>
+									{reviewTag}
+								</Space>
+							)}
+							{paymentTag && (
+								<Space size={6}>
+									<span style={labelStyle}>{t('baohiemyte.dangky.banner.thanhToan')}:</span>
+									{paymentTag}
+								</Space>
+							)}
+						</Space>
 					)
 				) : null}
 			</div>
@@ -294,15 +427,15 @@ const SinhVienDangKyBHYT = () => {
 
 	const formModalTitle = formModal
 		? intl.formatMessage(
-			{
-				id: formModal.isView
-					? 'global.table.form.title.chitiet'
-					: formModal.edit
-						? 'global.table.form.title.chinhsua'
-						: 'global.table.form.title.themmoi',
-			},
-			{ title: chuanHoaTen(t('baohiemyte.dangky.title').toLowerCase()) },
-		)
+				{
+					id: formModal.isView
+						? 'global.table.form.title.chitiet'
+						: formModal.edit
+							? 'global.table.form.title.chinhsua'
+							: 'global.table.form.title.themmoi',
+				},
+				{ title: chuanHoaTen(t('baohiemyte.dangky.title').toLowerCase()) },
+			)
 		: undefined;
 
 	return (
