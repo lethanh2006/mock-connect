@@ -189,14 +189,18 @@ const HoaDonPage = () => {
 
 				const content = (
 					<div
-						className={hasDiscount ? 'hd-ribbon-wrap' : undefined}
+						style={{ display: 'inline-flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}
 						onClick={(e) => {
 							e.stopPropagation();
 							history.push(`/finance/tuition-billing/${rec.identityCode}`);
 						}}
 					>
-						{hasDiscount && <span className='hd-ribbon'>-{uuDaiThanhToanTruocKy}%</span>}
-						<div className='text-primary fw500'>{val}</div>
+						<span className='text-primary fw500'>{val}</span>
+						{hasDiscount && (
+							<Tag color='error' style={{ margin: 0, fontSize: 10, lineHeight: '15px', padding: '0 4px' }}>
+								-{uuDaiThanhToanTruocKy}%
+							</Tag>
+						)}
 					</div>
 				);
 
@@ -505,31 +509,6 @@ const HoaDonPage = () => {
 					text-align: left;
 				}
 				.ktx-deposit-notice { width: 100%; }
-				.hd-ribbon-wrap {
-					position: relative;
-					overflow: hidden;
-					width: 100%;
-					min-height: 36px;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					cursor: pointer;
-				}
-				.hd-ribbon {
-					position: absolute;
-					top: 7px;
-					left: -32px;
-					width: 104px;
-					background: #ad6800;
-					color: #fff7e6;
-					font-size: 9px;
-					font-weight: 700;
-					line-height: 15px;
-					text-align: center;
-					letter-spacing: 0.02em;
-					transform: rotate(-45deg);
-					box-shadow: 0 1px 2px rgba(0, 0, 0, 15%);
-				}
 			`}</style>
 
 			<Tabs

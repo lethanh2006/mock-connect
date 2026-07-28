@@ -186,15 +186,14 @@ const InvoiceCard = ({
 const HoaDonDetailPage = () => {
 	const intl = useIntl();
 	const { identityCode } = useParams<{ identityCode: string }>();
-	const {
-		record: bill,
-		setRecord,
-		danhSach,
-		getModel,
-		loading,
-		visibleModalThanhToan,
-		setVisibleModalThanhToan,
-	} = useModel('taichinh.hoadon');
+	// Lưu ý: `record`/`setRecord` của model `taichinh.hoadon` dùng CHUNG cho các modal con
+	// (xem nhanh, thanh toán, trả góp) — nếu dùng luôn `record` làm dữ liệu chính của trang thì
+	// khi bấm "Xem chi tiết" ở card virtualBill, setRecord(virtualBill) sẽ ghi đè và làm cả trang
+	// hiển thị nhầm sang virtualBill. Vì vậy trang này giữ dữ liệu chính (`bill`) ở state riêng,
+	// chỉ dùng `setRecord` khi cần mở các modal đó.
+	const { setRecord, danhSach, getModel, loading, visibleModalThanhToan, setVisibleModalThanhToan } =
+		useModel('taichinh.hoadon');
+	const [bill, setBill] = useState<HoaDon.IRecord | undefined>(undefined);
 
 	const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 	const [paymentMode, setPaymentMode] = useState<'single' | 'multi'>('single');
@@ -216,7 +215,7 @@ const HoaDonDetailPage = () => {
 		getModel()
 			.then((res) => {
 				const found = res.find((item) => item.identityCode === identityCode);
-				if (found) setRecord(found);
+				if (found) setBill(found);
 			})
 			.catch(() => undefined);
 	};
@@ -224,7 +223,7 @@ const HoaDonDetailPage = () => {
 	useEffect(() => {
 		if (!identityCode) return;
 		const existing = danhSach.find((item) => item.identityCode === identityCode);
-		if (existing) setRecord(existing);
+		if (existing) setBill(existing);
 		else fetchBill();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [identityCode]);
@@ -330,15 +329,9 @@ const HoaDonDetailPage = () => {
 
 				<div className='invoice-group-detail__header'>
 					<div>
-						<div className='invoice-group-detail__eyebrow'>
-							{intl.formatMessage({ id: 'taichinh.hoadon.detail.groupEyebrow' })}
-						</div>
-						<Title level={3} style={{ margin: '2px 0 4px' }}>
+						<Title level={3} style={{ margin: 0 }}>
 							{bill.identityCode}
 						</Title>
-						<Text type='secondary'>
-							{intl.formatMessage({ id: 'taichinh.hoadon.detail.groupMeta' }, { count: groupBills.length })}
-						</Text>
 					</div>
 					<Tag color={EMauTrangThaiThanhToanTable[bill.status]} style={{ fontSize: 13, padding: '4px 12px' }}>
 						{intl.formatMessage({ id: `taichinh.hoadon.status.${bill.status}` })}

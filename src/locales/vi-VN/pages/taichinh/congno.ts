@@ -53,8 +53,6 @@ export default {
 		'Chọn và thanh toán cùng lúc cả 2 hóa đơn để được giảm ngay {percent}% trên tổng số tiền phải nộp.',
 
 	'taichinh.hoadon.detail.backToList': 'Quay lại danh sách hóa đơn',
-	'taichinh.hoadon.detail.groupEyebrow': 'Nhóm hóa đơn học phí',
-	'taichinh.hoadon.detail.groupMeta': '{count} hóa đơn trong nhóm',
 	'taichinh.hoadon.detail.currentTermChip': 'Hóa đơn hiện tại',
 	'taichinh.hoadon.detail.discountDeadline': 'Hạn ưu đãi',
 	'taichinh.hoadon.detail.optionalNote': 'Khoản này chưa đến hạn — đây là lựa chọn thêm để đóng sớm và nhận ưu đãi.',

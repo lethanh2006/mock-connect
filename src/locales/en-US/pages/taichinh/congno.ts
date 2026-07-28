@@ -52,8 +52,6 @@ export default {
 		'Select and pay both invoices together to receive an immediate {percent}% discount on the total amount due.',
 
 	'taichinh.hoadon.detail.backToList': 'Back to invoice list',
-	'taichinh.hoadon.detail.groupEyebrow': 'Tuition invoice group',
-	'taichinh.hoadon.detail.groupMeta': '{count} invoices in this group',
 	'taichinh.hoadon.detail.currentTermChip': 'Current invoice',
 	'taichinh.hoadon.detail.discountDeadline': 'Discount deadline',
 	'taichinh.hoadon.detail.optionalNote': "Not due yet — this is an optional early payment to unlock the discount.",
