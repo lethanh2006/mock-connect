@@ -6,8 +6,8 @@ import { EOperatorType } from '@/components/Table/constant';
 import { type IColumn } from '@/components/Table/typing';
 import { getExportBillUrl } from '@/services/TaiChinh/HoaDon';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable } from '@/services/TaiChinh/constant';
 import { EMauTrangThaiTraGopBill, ETrangThaiTraGopBill } from '@/services/TaiChinh/TraGop/constant';
+import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import {
 	EyeOutlined,
@@ -469,33 +469,25 @@ const HoaDonPage = () => {
 						type='link'
 					/>
 
-					{!rec._isVirtualBill &&
-						rec.status !== EMaTrangThaiThanhToan.DA_THANH_TOAN_DU &&
-						(!rec.trangThaiTraGop || rec.trangThaiTraGop === ETrangThaiTraGopBill.TU_CHOI) && (
-							<ButtonExtend
-								tooltip={intl.formatMessage({ id: 'taichinh.tragop.tooltip.dangky' })}
-								icon={<ScheduleOutlined />}
-								type='link'
-								onClick={() => {
-									setBillTraGop(rec);
-									setVisibleModalDangKyTraGop(true);
-								}}
-							/>
-						)}
+					<ButtonExtend
+						tooltip={intl.formatMessage({ id: 'taichinh.tragop.tooltip.dangky' })}
+						icon={<ScheduleOutlined />}
+						type='link'
+						onClick={() => {
+							setBillTraGop(rec);
+							setVisibleModalDangKyTraGop(true);
+						}}
+					/>
 
-					{!rec._isVirtualBill &&
-						(rec.trangThaiTraGop === ETrangThaiTraGopBill.DANG_TRA_GOP ||
-							rec.trangThaiTraGop === ETrangThaiTraGopBill.DA_HOAN_THANH_TRA_GOP) && (
-							<ButtonExtend
-								tooltip={intl.formatMessage({ id: 'taichinh.tragop.tooltip.tiendo' })}
-								icon={<FieldTimeOutlined />}
-								type='link'
-								onClick={() => {
-									setBillTraGop(rec);
-									setVisibleModalTienDoTraGop(true);
-								}}
-							/>
-						)}
+					<ButtonExtend
+						tooltip={intl.formatMessage({ id: 'taichinh.tragop.tooltip.tiendo' })}
+						icon={<FieldTimeOutlined />}
+						type='link'
+						onClick={() => {
+							setBillTraGop(rec);
+							setVisibleModalTienDoTraGop(true);
+						}}
+					/>
 
 					{!rec._isVirtualBill && (
 						<ButtonExtend
@@ -644,33 +636,33 @@ const HoaDonPage = () => {
 				otherButtons={[
 					...(selectedIds && selectedIds?.length > 0
 						? [
-							<ButtonExtend
-								key={'thanh-toan'}
-								icon={<UnorderedListOutlined />}
-								onClick={() => {
-									const bills = allTableBills.filter(
-										(item) =>
-											selectedIds.includes(item._id) &&
-											!item.transactions?.some((transaction) => transaction.isKtxDeposit === true),
-									);
-									if (!bills.length) return;
-									if (bills.length === 1) {
-										setRecord(bills[0]);
-										setSelectedBills([]);
-										setPaymentMode('single');
-									} else {
-										setSelectedBills(bills);
-										setPaymentMode('multi');
-									}
-									setInitialPaymentAmount(undefined);
-									setLockPaymentAmount(false);
-									setVisibleModalThanhToan(true);
-								}}
-								type='primary'
-							>
-								{intl.formatMessage({ id: 'taichinh.hoadon.action.paySelected' }, { count: selectedIds?.length })}
-							</ButtonExtend>,
-						]
+								<ButtonExtend
+									key={'thanh-toan'}
+									icon={<UnorderedListOutlined />}
+									onClick={() => {
+										const bills = allTableBills.filter(
+											(item) =>
+												selectedIds.includes(item._id) &&
+												!item.transactions?.some((transaction) => transaction.isKtxDeposit === true),
+										);
+										if (!bills.length) return;
+										if (bills.length === 1) {
+											setRecord(bills[0]);
+											setSelectedBills([]);
+											setPaymentMode('single');
+										} else {
+											setSelectedBills(bills);
+											setPaymentMode('multi');
+										}
+										setInitialPaymentAmount(undefined);
+										setLockPaymentAmount(false);
+										setVisibleModalThanhToan(true);
+									}}
+									type='primary'
+								>
+									{intl.formatMessage({ id: 'taichinh.hoadon.action.paySelected' }, { count: selectedIds?.length })}
+								</ButtonExtend>,
+							]
 						: []),
 				]}
 				otherProps={{
