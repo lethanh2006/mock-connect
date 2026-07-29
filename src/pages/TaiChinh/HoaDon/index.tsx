@@ -469,25 +469,33 @@ const HoaDonPage = () => {
 						type='link'
 					/>
 
-					<ButtonExtend
-						tooltip={intl.formatMessage({ id: 'taichinh.tragop.tooltip.dangky' })}
-						icon={<ScheduleOutlined />}
-						type='link'
-						onClick={() => {
-							setBillTraGop(rec);
-							setVisibleModalDangKyTraGop(true);
-						}}
-					/>
+					{!rec._isVirtualBill &&
+						rec.status !== EMaTrangThaiThanhToan.DA_THANH_TOAN_DU &&
+						(!rec.trangThaiTraGop || rec.trangThaiTraGop === ETrangThaiTraGopBill.TU_CHOI) && (
+							<ButtonExtend
+								tooltip={intl.formatMessage({ id: 'taichinh.tragop.tooltip.dangky' })}
+								icon={<ScheduleOutlined />}
+								type='link'
+								onClick={() => {
+									setBillTraGop(rec);
+									setVisibleModalDangKyTraGop(true);
+								}}
+							/>
+						)}
 
-					<ButtonExtend
-						tooltip={intl.formatMessage({ id: 'taichinh.tragop.tooltip.tiendo' })}
-						icon={<FieldTimeOutlined />}
-						type='link'
-						onClick={() => {
-							setBillTraGop(rec);
-							setVisibleModalTienDoTraGop(true);
-						}}
-					/>
+					{!rec._isVirtualBill &&
+						(rec.trangThaiTraGop === ETrangThaiTraGopBill.DANG_TRA_GOP ||
+							rec.trangThaiTraGop === ETrangThaiTraGopBill.DA_HOAN_THANH_TRA_GOP) && (
+							<ButtonExtend
+								tooltip={intl.formatMessage({ id: 'taichinh.tragop.tooltip.tiendo' })}
+								icon={<FieldTimeOutlined />}
+								type='link'
+								onClick={() => {
+									setBillTraGop(rec);
+									setVisibleModalTienDoTraGop(true);
+								}}
+							/>
+						)}
 
 					{!rec._isVirtualBill && (
 						<ButtonExtend
