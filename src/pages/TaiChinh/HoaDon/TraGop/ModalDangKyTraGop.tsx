@@ -231,7 +231,7 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 								},
 							]}
 						>
-							<Input.TextArea rows={4} placeholder={intl.formatMessage({ id: 'taichinh.tragop.modal.lydo.place' })} />
+							<Input.TextArea rows={3} placeholder={intl.formatMessage({ id: 'taichinh.tragop.modal.lydo.place' })} />
 						</Form.Item>
 
 						<Form.Item
