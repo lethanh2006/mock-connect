@@ -8,7 +8,7 @@ import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { inputFormat, inputParse } from '@/utils/utils';
-import { Alert, Button, Checkbox, Empty, Form, Input, InputNumber, Modal, Radio, Spin, message } from 'antd';
+import { Alert, Button, Checkbox, Col, Empty, Form, Input, InputNumber, Modal, Radio, Row, Spin, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -28,6 +28,7 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 	const [form] = Form.useForm();
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const hinhThucHoTro = Form.useWatch('hinhThucHoTro', form);
+	const camKet = Form.useWatch('camKet', form);
 	const [loadingCheck, setLoadingCheck] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
 	const [eligibleData, setEligibleData] = useState<TraGop.ICheckEligible | undefined>(undefined);
@@ -107,7 +108,9 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 			onCancel={onClose}
 			footer={null}
 			destroyOnClose
-			width={640}
+			width={1000}
+			centered
+			styles={{ body: { maxHeight: '85vh', overflowY: 'auto', overflowX: 'hidden', paddingRight: 8 } }}
 			title={intl.formatMessage({ id: 'taichinh.tragop.modal.title' })}
 		>
 			<Spin spinning={loadingCheck}>
@@ -129,23 +132,50 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 				)}
 
 				{!loadingCheck && eligibleData?.eligible === true && (
-					<Form layout='vertical' form={form} onFinish={handleSubmit}>
-						<Form.Item name='ten' label={intl.formatMessage({ id: 'taichinh.tragop.modal.hoten.label' })} rules={[...rules.required]}>
-							<Input disabled />
-						</Form.Item>
-						<Form.Item name='email' label={intl.formatMessage({ id: 'taichinh.tragop.modal.email.label' })} rules={[...rules.required]}>
-							<Input disabled />
-						</Form.Item>
-						<Form.Item name='ma' label={intl.formatMessage({ id: 'taichinh.tragop.modal.mssv.label' })} rules={[...rules.required]}>
-							<Input disabled />
-						</Form.Item>
-						<Form.Item
-							name='soDienThoai'
-							label={intl.formatMessage({ id: 'taichinh.tragop.modal.sdt.label' })}
-							rules={[...rules.required]}
-						>
-							<Input disabled />
-						</Form.Item>
+					<Form
+						layout='vertical'
+						form={form}
+						onFinish={handleSubmit}
+						initialValues={{ hinhThucHoTro: EHinhThucHoTro.TRA_GOP }}
+					>
+						<Row gutter={16}>
+							<Col span={12}>
+								<Form.Item
+									name='ten'
+									label={intl.formatMessage({ id: 'taichinh.tragop.modal.hoten.label' })}
+									rules={[...rules.required]}
+								>
+									<Input disabled />
+								</Form.Item>
+							</Col>
+							<Col span={12}>
+								<Form.Item
+									name='email'
+									label={intl.formatMessage({ id: 'taichinh.tragop.modal.email.label' })}
+									rules={[...rules.required]}
+								>
+									<Input disabled />
+								</Form.Item>
+							</Col>
+							<Col span={12}>
+								<Form.Item
+									name='ma'
+									label={intl.formatMessage({ id: 'taichinh.tragop.modal.mssv.label' })}
+									rules={[...rules.required]}
+								>
+									<Input disabled />
+								</Form.Item>
+							</Col>
+							<Col span={12}>
+								<Form.Item
+									name='soDienThoai'
+									label={intl.formatMessage({ id: 'taichinh.tragop.modal.sdt.label' })}
+									rules={[...rules.required]}
+								>
+									<Input disabled />
+								</Form.Item>
+							</Col>
+						</Row>
 
 						<Form.Item
 							name='college'
@@ -156,28 +186,33 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 							<Input disabled />
 						</Form.Item>
 
-						<Form.Item
-							name='tongTienHocBongHoTro'
-							label={intl.formatMessage({ id: 'taichinh.tragop.modal.tonghocbong.label' })}
-							rules={[...rules.required]}
-						>
-							<InputNumber
-								style={{ width: '100%' }}
-								min={0}
-								formatter={inputFormat}
-								parser={inputParse}
-								addonAfter='VND'
-								placeholder={intl.formatMessage({ id: 'taichinh.tragop.modal.tonghocbong.place' })}
-							/>
-						</Form.Item>
-
-						<Form.Item
-							name='soTienPhaiNop'
-							label={intl.formatMessage({ id: 'taichinh.tragop.modal.sotienphainop.label' })}
-							rules={[...rules.required]}
-						>
-							<InputNumber style={{ width: '100%' }} formatter={inputFormat} addonAfter='VND' disabled />
-						</Form.Item>
+						<Row gutter={16}>
+							<Col span={12}>
+								<Form.Item
+									name='tongTienHocBongHoTro'
+									label={intl.formatMessage({ id: 'taichinh.tragop.modal.tonghocbong.label' })}
+									rules={[...rules.required]}
+								>
+									<InputNumber
+										style={{ width: '100%' }}
+										min={0}
+										formatter={inputFormat}
+										parser={inputParse}
+										addonAfter='VND'
+										placeholder={intl.formatMessage({ id: 'taichinh.tragop.modal.tonghocbong.place' })}
+									/>
+								</Form.Item>
+							</Col>
+							<Col span={12}>
+								<Form.Item
+									name='soTienPhaiNop'
+									label={intl.formatMessage({ id: 'taichinh.tragop.modal.sotienphainop.label' })}
+									rules={[...rules.required]}
+								>
+									<InputNumber style={{ width: '100%' }} formatter={inputFormat} addonAfter='VND' disabled />
+								</Form.Item>
+							</Col>
+						</Row>
 
 						<Form.Item
 							name='lyDo'
@@ -258,7 +293,10 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 									label={intl.formatMessage({ id: 'taichinh.tragop.modal.lotrinh.label' })}
 									rules={[...rules.required]}
 								>
-									<Input.TextArea rows={3} placeholder={intl.formatMessage({ id: 'taichinh.tragop.modal.lotrinh.place' })} />
+									<Input.TextArea
+										rows={3}
+										placeholder={intl.formatMessage({ id: 'taichinh.tragop.modal.lotrinh.place' })}
+									/>
 								</Form.Item>
 							</>
 						)}
@@ -302,7 +340,7 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 							<Button onClick={onClose} style={{ marginRight: 8 }}>
 								{intl.formatMessage({ id: 'global.button.huy' })}
 							</Button>
-							<Button type='primary' htmlType='submit' loading={submitting}>
+							<Button type='primary' htmlType='submit' loading={submitting} disabled={!camKet}>
 								{intl.formatMessage({ id: 'taichinh.tragop.modal.guidangky' })}
 							</Button>
 						</div>
