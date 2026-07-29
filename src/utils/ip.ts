@@ -21,8 +21,8 @@ const ipKhaoThi = getConnectTarget('not-deployed/khao-thi');
 const ipThuVien = getConnectTarget('not-deployed/thu-vien'); // ip dev
 const ipChatbot = getConnectTarget('not-deployed/chatbot-api');
 const ipCCT = getConnectTarget('co-curriculum'); // ip dev
-const ipFile = ipRoot + 'file/file';
-const ipFileMultiPart = ipRoot + 'file/file';
+const ipFile = ipRoot + 'file';
+const ipFileMultiPart = ipRoot + 'file';
 
 // const ipCCT = 'http://192.168.1.38:3010'; // ip dev
 const ipCsvc = ipRoot + 'csvc';
