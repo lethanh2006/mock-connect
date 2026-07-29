@@ -9,7 +9,7 @@ export function checkEligibleTraGop(billId: string) {
 
 /** Sinh viên gửi yêu cầu đăng ký trả góp cho một hóa đơn */
 export function postYeuCauTraGop(payload: TraGop.IYeuCauPayload) {
-	return axios.post(`${ipTaiChinh}/tra-gop/yeu-cau`, { ...payload, silent: true });
+	return axios.post(`${ipTaiChinh}/tra-gop/yeu-cau`, payload);
 }
 
 /** Lấy danh sách các đợt (phiên) trả góp đã được phân bổ cho hóa đơn */

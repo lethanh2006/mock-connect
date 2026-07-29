@@ -291,16 +291,6 @@ export default {
 		'Tôi hiểu rằng Nhà trường sẽ căn cứ vào các thông tin tôi đã cung cấp trong biểu mẫu này, và tôi xin chịu hoàn toàn trách nhiệm nếu có bất kỳ sai sót hoặc thiếu sót nào',
 	'taichinh.tragop.modal.camket.required': 'Bạn cần xác nhận nội dung trên để có thể gửi đăng ký',
 	'taichinh.tragop.modal.guidangky': 'Gửi đăng ký',
-	'taichinh.tragop.modal.error': 'Gửi đăng ký trả góp thất bại, vui lòng thử lại',
-
-	'taichinh.tragop.error.bill-not-found': 'Không tìm thấy hóa đơn tương ứng',
-	'taichinh.tragop.error.not-eligible': 'Hóa đơn này không đủ điều kiện để đăng ký trả góp',
-	'taichinh.tragop.error.request-existed': 'Hóa đơn này đã có yêu cầu đang chờ duyệt hoặc đã được duyệt',
-	'taichinh.tragop.error.ngay-gia-han-required': 'Vui lòng chọn ngày xin gia hạn',
-	'taichinh.tragop.error.ngay-gia-han-invalid': 'Ngày xin gia hạn không hợp lệ',
-	'taichinh.tragop.error.ngay-gia-han-must-be-greater': 'Ngày xin gia hạn phải lớn hơn hạn nộp hiện tại của hóa đơn',
-	'taichinh.tragop.error.so-lan-invalid': 'Số lần trả góp phải từ 2 lần trở lên',
-	'taichinh.tragop.error.so-lan-exceed-max': 'Số lần trả góp vượt quá số lần tối đa cho phép',
 
 	'taichinh.tragop.tiendo.title': 'Tiến độ trả góp hóa đơn {identityCode}',
 	'taichinh.tragop.tiendo.summary.label': 'Tiến độ các đợt trả góp',

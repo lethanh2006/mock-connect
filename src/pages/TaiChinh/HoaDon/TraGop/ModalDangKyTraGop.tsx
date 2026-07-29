@@ -2,7 +2,7 @@ import MyDatePicker from '@/components/MyDatePicker';
 import UploadFile from '@/components/Upload/UploadFile';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { checkEligibleTraGop, postYeuCauTraGop } from '@/services/TaiChinh/TraGop';
-import { EHinhThucHoTro, TRA_GOP_ERROR_MESSAGE_IDS } from '@/services/TaiChinh/TraGop/constant';
+import { EHinhThucHoTro } from '@/services/TaiChinh/TraGop/constant';
 import type { TraGop } from '@/services/TaiChinh/TraGop/typing';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
@@ -89,14 +89,8 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 			message.success(intl.formatMessage({ id: 'taichinh.tragop.modal.success' }));
 			onSuccess?.();
 			onClose();
-		} catch (err: any) {
-			const errorCode = err?.response?.data?.message;
-			const errorMessageId = errorCode && TRA_GOP_ERROR_MESSAGE_IDS[errorCode];
-			message.error(
-				errorMessageId
-					? intl.formatMessage({ id: errorMessageId })
-					: errorCode || intl.formatMessage({ id: 'taichinh.tragop.modal.error' }),
-			);
+		} catch {
+			// error handled by axios interceptor
 		} finally {
 			setSubmitting(false);
 		}
