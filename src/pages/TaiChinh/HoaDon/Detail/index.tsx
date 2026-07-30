@@ -116,17 +116,19 @@ const InvoiceCard = ({
 			</Text>
 
 			<div className='invoice-detail-card__meta'>
-				<div>
-					<Text type='secondary'>
-						{intl.formatMessage({
-							id: isVirtual ? 'taichinh.hoadon.detail.discountDeadline' : 'taichinh.hoadon.column.hanthanhtoan',
-						})}
-					</Text>
-					<Space size={8}>
-						<Text strong>{bill.ngayHetHanThanhToan ? dayjs(bill.ngayHetHanThanhToan).format('DD/MM/YYYY') : '-'}</Text>
-						{renderDeadlineBadge(intl, bill.ngayHetHanThanhToan)}
-					</Space>
-				</div>
+				{!(isVirtual && !!discountPercent) && (
+					<div>
+						<Text type='secondary'>
+							{intl.formatMessage({
+								id: isVirtual ? 'taichinh.hoadon.detail.discountDeadline' : 'taichinh.hoadon.column.hanthanhtoan',
+							})}
+						</Text>
+						<Space size={8}>
+							<Text strong>{bill.ngayHetHanThanhToan ? dayjs(bill.ngayHetHanThanhToan).format('DD/MM/YYYY') : '-'}</Text>
+							{renderDeadlineBadge(intl, bill.ngayHetHanThanhToan)}
+						</Space>
+					</div>
+				)}
 				<div>
 					<Text type='secondary'>{intl.formatMessage({ id: 'taichinh.hoadon.column.trangthai' })}</Text>
 					<Tag color={statusColor}>{statusLabel}</Tag>
@@ -182,7 +184,14 @@ const InvoiceCard = ({
 			)}
 			{isVirtual && (
 				<Text type='secondary' className='invoice-detail-card__optional-note'>
-					{intl.formatMessage({ id: 'taichinh.hoadon.detail.optionalNote' })}
+					{discountPercent
+						? intl.formatMessage(
+								{ id: 'taichinh.hoadon.detail.discountPaymentNote' },
+								{
+									date: bill.ngayHetHanThanhToan ? dayjs(bill.ngayHetHanThanhToan).format('DD/MM/YYYY') : '-',
+								},
+						  )
+						: intl.formatMessage({ id: 'taichinh.hoadon.detail.optionalNote' })}
 				</Text>
 			)}
 

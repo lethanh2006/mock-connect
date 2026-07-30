@@ -55,6 +55,7 @@ export default {
 	'taichinh.hoadon.detail.currentTermChip': 'Hóa đơn hiện tại',
 	'taichinh.hoadon.detail.discountDeadline': 'Hạn ưu đãi',
 	'taichinh.hoadon.detail.optionalNote': 'Khoản này chưa đến hạn — đây là lựa chọn thêm để đóng sớm và nhận ưu đãi.',
+	'taichinh.hoadon.detail.discountPaymentNote': 'Thanh toán ngay trước ngày {date} để được hưởng ưu đãi',
 	'taichinh.hoadon.detail.combinedTotalLabel': 'Tổng thanh toán nếu chọn cả 2 hóa đơn',
 	'taichinh.hoadon.detail.totalAmountLabel': 'Tổng tiền',
 	'taichinh.hoadon.detail.discountAmountLine': 'Đã bao gồm ưu đãi {discountPercent} − {amount}',

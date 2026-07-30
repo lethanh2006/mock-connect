@@ -54,6 +54,7 @@ export default {
 	'taichinh.hoadon.detail.currentTermChip': 'Current invoice',
 	'taichinh.hoadon.detail.discountDeadline': 'Discount deadline',
 	'taichinh.hoadon.detail.optionalNote': 'Not due yet — this is an optional early payment to unlock the discount.',
+	'taichinh.hoadon.detail.discountPaymentNote': 'Pay before {date} to enjoy the discount',
 	'taichinh.hoadon.detail.combinedTotalLabel': 'Total if you pay both invoices',
 	'taichinh.hoadon.detail.totalAmountLabel': 'Total',
 	'taichinh.hoadon.detail.discountAmountLine': 'Already includes a {discountPercent} − {amount} discount',
