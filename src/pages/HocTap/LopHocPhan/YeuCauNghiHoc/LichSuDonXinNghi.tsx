@@ -145,7 +145,7 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 				cancelText={intl.formatMessage({ id: 'global.button.dong' })}
 				onCancel={() => setFilesVisible(false)}
 			>
-				<PreviewFile file={file ?? ''} />
+				<PreviewFile file={file ?? ''} isPrivate />
 			</ModalExpandable>
 		</ModalExpandable>
 	);

@@ -7,7 +7,7 @@ import { ELoaiDanhMucChung } from '@/services/FormDong/DanhMuc/constants';
 import { EKieuDuLieu, ETextDisplay, MapKeyNameTextDisplay } from '@/services/FormDong/LoaiHinh/constants';
 import type { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
 import { LoaiDefaultValue } from '@/services/FormDong/QuyTrinh/constants';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { removeVietnameseTones } from '@/utils/utils';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
@@ -82,7 +82,12 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 			return;
 		}
 
-		const danhSachFileDinhKem = (await buildUpLoadMultiFile(values, 'danhSachFileDinhKem')) || [];
+		const danhSachFileDinhKem =
+			(await buildUpLoadMultiFileMultipart(values, 'danhSachFileDinhKem', {
+				scope: EFileScope.PUBLIC,
+				module: 'diem-ren-luyen',
+				returnValue: 'url',
+			})) || [];
 
 		if (editCauHinh && recordCauHinh) {
 			const index = recordMauDon.cauHinhLoaiHinh.map((item: { ma: any }) => item.ma).indexOf(recordCauHinh.ma);
@@ -331,7 +336,7 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 				{kieuDuLieu === EKieuDuLieu.FILE && (
 					<>
 						<Form.Item name='danhSachFileDinhKem' label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.filedinhkem' })}>
-							<UploadFile maxCount={5} />
+							<UploadFile maxCount={5} isPrivate />
 						</Form.Item>
 						<Form.Item name='ghiChuFileDinhKem' label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.ghichufile' })}>
 							<Input placeholder={intl.formatMessage({ id: 'diemrenluyen.cauhinh.placeholder.ghichufile' })} />

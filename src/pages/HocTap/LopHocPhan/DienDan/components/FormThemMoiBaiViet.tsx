@@ -1,7 +1,7 @@
 import MyDatePicker from '@/components/MyDatePicker';
 import TinyEditor from '@/components/TinyEditor';
 import UploadFile from '@/components/Upload/UploadFile';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
@@ -33,7 +33,11 @@ const FormThemMoiBaiViet = (props: IProps) => {
 
 	const onFinish = async (values: any) => {
 		setFormSubmiting(true);
-		const fileDinhKem = await buildUpLoadMultiFile(values, 'fileDinhKem');
+		const fileDinhKem = await buildUpLoadMultiFileMultipart(values, 'fileDinhKem', {
+			scope: EFileScope.PUBLIC,
+			module: 'dien-dan',
+			returnValue: 'url',
+		});
 
 		let danhSachLuaChonPayload = null;
 		if (values?.isBinhChon) {
@@ -213,7 +217,7 @@ const FormThemMoiBaiViet = (props: IProps) => {
 							name={'fileDinhKem'}
 							label={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.form.file' })}
 						>
-							<UploadFile resize maxCount={5} accept={'.png, .jpg, .doc, .docx, .pdf'} />
+							<UploadFile resize maxCount={5} accept={'.png, .jpg, .doc, .docx, .pdf'} isPrivate />
 						</Form.Item>
 
 						<div className='form-footer'>
