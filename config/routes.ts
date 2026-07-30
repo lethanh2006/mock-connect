@@ -367,6 +367,13 @@ export default [
 				name: 'TuitionBilling',
 				component: 'TaiChinh/HoaDon',
 			},
+			{
+				path: 'tuition-billing/:identityCode',
+				name: 'TuitionBillingDetail',
+				component: 'TaiChinh/HoaDon/Detail',
+				hideInMenu: true,
+				exact: true,
+			},
 			// {
 			// 	path: 'payment-tracking',
 			// 	name: 'PaymentTracking',

@@ -13,14 +13,13 @@ import {
 	EyeOutlined,
 	FieldTimeOutlined,
 	FilePdfOutlined,
-	GiftOutlined,
 	ScheduleOutlined,
 	UnorderedListOutlined,
 } from '@ant-design/icons';
-import { Alert, Empty, Modal, Tabs, Tag, notification } from 'antd';
+import { Alert, Empty, Modal, Tabs, Tag, Tooltip, notification } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState, type Key, type ReactNode } from 'react';
-import { useIntl, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 import SelectDotThu from '../DotThu/Select';
 import ModalThanhToan from './ThanhToan/ModalThanhToan';
 import ThongTinThanhToan from './ThanhToan/ThongTinThanhToan';
@@ -67,6 +66,7 @@ export const disableThanhToan = (rec?: HoaDon.IRecord): boolean => {
 	return false;
 };
 
+
 const HoaDonPage = () => {
 	const intl = useIntl();
 	const {
@@ -95,13 +95,10 @@ const HoaDonPage = () => {
 	const [selectedBills, setSelectedBills] = useState<HoaDon.IRecord[]>([]);
 	const [paymentMode, setPaymentMode] = useState<'single' | 'multi'>('single');
 	type BillTableRecord = HoaDon.IRecord & {
-		_isVirtualBill?: boolean;
-		_isVirtualBillNotice?: boolean;
 		_isKtxDepositNotice?: boolean;
 		_parentBillId?: string;
 		index?: number;
 		key?: string;
-		children?: BillTableRecord[];
 	};
 	const tableData = useMemo<BillTableRecord[]>(
 		() =>
@@ -111,7 +108,6 @@ const HoaDonPage = () => {
 					index: index + 1 + (page - 1) * limit,
 					key: bill._id,
 				};
-				const children: BillTableRecord[] = [];
 				const rows: BillTableRecord[] = [];
 				if (bill.transactions?.some((transaction) => transaction.isKtxDeposit === true)) {
 					rows.push({
@@ -124,71 +120,12 @@ const HoaDonPage = () => {
 						key: `ktx-deposit-notice-${bill._id}`,
 					});
 				}
-				if (bill.virtualBill) {
-					children.push(
-						{
-							...bill,
-							_id: `virtual-bill-notice-${bill._id}`,
-							identityCode: '',
-							virtualBill: undefined,
-							_isVirtualBillNotice: true,
-							_parentBillId: bill._id,
-							key: `virtual-bill-notice-${bill._id}`,
-						},
-						{
-							...bill.virtualBill,
-							_isVirtualBill: true,
-							_parentBillId: bill._id,
-							key: bill.virtualBill._id,
-						},
-					);
-				}
-				if (children.length) parent.children = children;
 
 				return [...rows, parent];
 			}),
 		[danhSach, page, limit],
 	);
-	const allTableBills = useMemo(
-		() =>
-			tableData
-				.filter((bill) => !bill._isVirtualBillNotice && !bill._isKtxDepositNotice)
-				.flatMap((bill) => [
-					bill,
-					...(bill.children ?? []).filter((item) => !item._isVirtualBillNotice && !item._isKtxDepositNotice),
-				]),
-		[tableData],
-	);
-	const [expandedRowKeys, setExpandedRowKeys] = useState<Key[]>([]);
-
-	useEffect(() => {
-		setExpandedRowKeys(tableData.filter((bill) => bill.children?.length).map((bill) => bill._id));
-	}, [tableData]);
-	const renderVirtualBillNotice = (rec: BillTableRecord) => {
-		const uuDaiThanhToanTruocKy = rec.dotThu?.uuDaiThanhToanTruocKy ?? 0;
-
-		return (
-			<div className='virtual-bill-notice'>
-				<div className='virtual-bill-notice-icon'>
-					<GiftOutlined />
-				</div>
-				<div>
-					<div className='virtual-bill-notice-title'>
-						{intl.formatMessage(
-							{ id: 'taichinh.hoadon.virtualBill.discount.title' },
-							{ percent: uuDaiThanhToanTruocKy },
-						)}
-					</div>
-					<div className='virtual-bill-notice-description'>
-						{intl.formatMessage(
-							{ id: 'taichinh.hoadon.virtualBill.discount.description' },
-							{ percent: uuDaiThanhToanTruocKy },
-						)}
-					</div>
-				</div>
-			</div>
-		);
-	};
+	const allTableBills = useMemo(() => tableData.filter((bill) => !bill._isKtxDepositNotice), [tableData]);
 	const renderKtxDepositNotice = () => (
 		<Alert
 			className='ktx-deposit-notice'
@@ -246,28 +183,46 @@ const HoaDonPage = () => {
 			align: 'center',
 			filterType: 'string',
 			width: 120,
-			render: (val, rec: BillTableRecord) =>
-				rec._isVirtualBillNotice ? null : (
-					<div className={rec._isVirtualBill ? 'virtual-bill-identity' : undefined}>
-						{/* {rec._isVirtualBill && <Tag color='blue'>Hóa đơn con</Tag>} */}
-						<div>{val}</div>
+			render: (val, rec: BillTableRecord) => {
+				const hasDiscount = Boolean(rec.virtualBill);
+				const uuDaiThanhToanTruocKy = rec.dotThu?.uuDaiThanhToanTruocKy ?? 0;
+
+				const content = (
+					<div
+						style={{ display: 'inline-flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}
+						onClick={(e) => {
+							e.stopPropagation();
+							history.push(`/finance/tuition-billing/${rec.identityCode}`);
+						}}
+					>
+						<span className='text-primary fw500'>{val}</span>
+						{hasDiscount && (
+							<Tag color='error' style={{ margin: 0, fontSize: 10, lineHeight: '15px', padding: '0 4px' }}>
+								-{uuDaiThanhToanTruocKy}%
+							</Tag>
+						)}
 					</div>
-				),
+				);
+
+				if (!hasDiscount) return content;
+
+				return (
+					<Tooltip
+						title={intl.formatMessage(
+							{ id: 'taichinh.hoadon.virtualBill.discount.description' },
+							{ percent: uuDaiThanhToanTruocKy },
+						)}
+					>
+						{content}
+					</Tooltip>
+				);
+			},
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.dotthu' }),
 			dataIndex: 'idDotThu',
 			width: 180,
-			render: (_val, rec: BillTableRecord) => (
-				<div>
-					{rec._isVirtualBill && (
-						<Tag color='gold' style={{ marginBottom: 4 }}>
-							{intl.formatMessage({ id: 'taichinh.hoadon.virtualBill.earlyPayment' })}
-						</Tag>
-					)}
-					<div>{rec.dotThu?.tenDot}</div>
-				</div>
-			),
+			render: (_val, rec: BillTableRecord) => <div>{rec.dotThu?.tenDot}</div>,
 			filterType: 'customselect',
 			filterCustomSelect: <SelectDotThu multiple />,
 		},
@@ -469,8 +424,7 @@ const HoaDonPage = () => {
 						type='link'
 					/>
 
-					{!rec._isVirtualBill &&
-						rec.status !== EMaTrangThaiThanhToan.DA_THANH_TOAN_DU &&
+					{rec.status !== EMaTrangThaiThanhToan.DA_THANH_TOAN_DU &&
 						(!rec.trangThaiTraGop || rec.trangThaiTraGop === ETrangThaiTraGopBill.TU_CHOI) && (
 							<ButtonExtend
 								tooltip={intl.formatMessage({ id: 'taichinh.tragop.tooltip.dangky' })}
@@ -483,43 +437,40 @@ const HoaDonPage = () => {
 							/>
 						)}
 
-					{!rec._isVirtualBill &&
-						(rec.trangThaiTraGop === ETrangThaiTraGopBill.DANG_TRA_GOP ||
-							rec.trangThaiTraGop === ETrangThaiTraGopBill.DA_HOAN_THANH_TRA_GOP) && (
-							<ButtonExtend
-								tooltip={intl.formatMessage({ id: 'taichinh.tragop.tooltip.tiendo' })}
-								icon={<FieldTimeOutlined />}
-								type='link'
-								onClick={() => {
-									setBillTraGop(rec);
-									setVisibleModalTienDoTraGop(true);
-								}}
-							/>
-						)}
-
-					{!rec._isVirtualBill && (
+					{(rec.trangThaiTraGop === ETrangThaiTraGopBill.DANG_TRA_GOP ||
+						rec.trangThaiTraGop === ETrangThaiTraGopBill.DA_HOAN_THANH_TRA_GOP) && (
 						<ButtonExtend
-							tooltip={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemhuongdan' })}
-							danger
-							loading={loadingPdfMap[rec._id]}
-							onClick={async () => {
-								try {
-									setLoadingPdfMap((prev) => ({ ...prev, [rec._id]: true }));
-									const url = await getExportBillUrl(rec.identityCode);
-									if (url) {
-										setPdfUrl(url);
-										setVisibleModalPDF(true);
-									}
-								} catch {
-									// error handled by axios interceptor
-								} finally {
-									setLoadingPdfMap((prev) => ({ ...prev, [rec._id]: false }));
-								}
-							}}
+							tooltip={intl.formatMessage({ id: 'taichinh.tragop.tooltip.tiendo' })}
+							icon={<FieldTimeOutlined />}
 							type='link'
-							icon={<FilePdfOutlined />}
+							onClick={() => {
+								setBillTraGop(rec);
+								setVisibleModalTienDoTraGop(true);
+							}}
 						/>
 					)}
+
+					<ButtonExtend
+						tooltip={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemhuongdan' })}
+						danger
+						loading={loadingPdfMap[rec._id]}
+						onClick={async () => {
+							try {
+								setLoadingPdfMap((prev) => ({ ...prev, [rec._id]: true }));
+								const url = await getExportBillUrl(rec.identityCode);
+								if (url) {
+									setPdfUrl(url);
+									setVisibleModalPDF(true);
+								}
+							} catch {
+								// error handled by axios interceptor
+							} finally {
+								setLoadingPdfMap((prev) => ({ ...prev, [rec._id]: false }));
+							}
+						}}
+						type='link'
+						icon={<FilePdfOutlined />}
+					/>
 				</div>
 			),
 		},
@@ -531,10 +482,10 @@ const HoaDonPage = () => {
 			...column,
 			onCell: (rec: BillTableRecord, index) => ({
 				...originalOnCell?.(rec, index),
-				...(rec._isVirtualBillNotice || rec._isKtxDepositNotice ? { colSpan: 0 } : {}),
+				...(rec._isKtxDepositNotice ? { colSpan: 0 } : {}),
 			}),
 			render: (value, rec: BillTableRecord, index) => {
-				if (rec._isVirtualBillNotice || rec._isKtxDepositNotice) {
+				if (rec._isKtxDepositNotice) {
 					return null;
 				}
 				return originalRender ? originalRender(value, rec, index) : value;
@@ -547,27 +498,6 @@ const HoaDonPage = () => {
 		<PageCard title={intl.formatMessage({ id: 'taichinh.hoadon.title' })}>
 			<style>{`
 				.row-qua-han > td { background-color: #fff1f0 !important; }
-				.ant-table-wrapper .ant-table-tbody > tr.row-hoa-don-con > td {
-					background: #fafcff !important;
-				}
-				.ant-table-wrapper .ant-table-tbody > tr.row-hoa-don-con:hover > td {
-					background: #f0f7ff !important;
-				}
-				.ant-table-wrapper .ant-table-tbody > tr.virtual-bill-notice-row > td {
-					padding-top: 8px !important;
-					padding-bottom: 8px !important;
-					background: #fffdf0 !important;
-					border-top: 1px solid #f8e8a6 !important;
-					border-bottom: 1px solid #f8e8a6 !important;
-				}
-				.ant-table-wrapper .ant-table-tbody > tr.virtual-bill-notice-row > td.ant-table-selection-column {
-					position: static !important;
-					z-index: auto !important;
-					text-align: left;
-				}
-				.ant-table-wrapper .ant-table-tbody > tr.virtual-bill-notice-row > td.ant-table-cell-fix-right {
-					position: static !important;
-				}
 				.ant-table-wrapper .ant-table-tbody > tr.ktx-deposit-notice-row > td {
 					padding: 8px !important;
 					background: #fff1f0 !important;
@@ -579,47 +509,6 @@ const HoaDonPage = () => {
 					text-align: left;
 				}
 				.ktx-deposit-notice { width: 100%; }
-				.virtual-bill-notice {
-					display: flex;
-					align-items: flex-start;
-					gap: 10px;
-					min-width: 620px;
-					color: #5c4b16;
-					font-size: 12px;
-					line-height: 1.45;
-				}
-				.virtual-bill-notice-icon {
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					flex: 0 0 30px;
-					height: 30px;
-					margin-top: 1px;
-					color: #fff;
-					background: #f7c948;
-					border-radius: 6px;
-					font-size: 16px;
-				}
-				.virtual-bill-notice-title {
-					margin-bottom: 1px;
-					color: #594714;
-					font-weight: 600;
-				}
-				.virtual-bill-notice-description {
-					color: #78662e;
-				}
-				.virtual-bill-identity { padding-left: 16px; position: relative; }
-				.virtual-bill-identity::before {
-					content: '';
-					position: absolute;
-					left: 0;
-					top: 6px;
-					width: 9px;
-					height: 12px;
-					border-left: 1px solid #1677ff;
-					border-bottom: 1px solid #1677ff;
-				}
-				.virtual-bill-identity .ant-tag { margin: 0 0 4px; font-size: 11px; }
 			`}</style>
 
 			<Tabs
@@ -676,24 +565,18 @@ const HoaDonPage = () => {
 				otherProps={{
 					dataSource: tableData,
 					rowKey: (rec: BillTableRecord) => rec._id,
-					expandable: {
-						expandedRowKeys,
-						onExpandedRowsChange: (keys) => setExpandedRowKeys([...keys]),
-						indentSize: 24,
-						rowExpandable: (rec) => Boolean(rec.children?.length),
-					},
 					rowClassName: (rec: BillTableRecord) => {
-						if (rec._isVirtualBillNotice) return 'virtual-bill-notice-row';
 						if (rec._isKtxDepositNotice) return 'ktx-deposit-notice-row';
-						if (rec._isVirtualBill) return 'row-hoa-don-con';
 						// Check hạn thanh toán từ hóa đơn
 						if (rec.ngayHetHanThanhToan && dayjs().isAfter(dayjs(rec.ngayHetHanThanhToan), 'day')) return 'row-qua-han';
 
 						return '';
 					},
 					onRow: (rec: BillTableRecord) => ({
-						onClick: rec._isVirtualBillNotice || rec._isKtxDepositNotice ? undefined : () => handleDetail(rec),
-						style: { cursor: rec._isVirtualBillNotice || rec._isKtxDepositNotice ? 'default' : 'pointer' },
+						onClick: rec._isKtxDepositNotice
+							? undefined
+							: () => history.push(`/finance/tuition-billing/${rec.identityCode}`),
+						style: { cursor: rec._isKtxDepositNotice ? 'default' : 'pointer' },
 					}),
 				}}
 				detailRow={{
@@ -711,22 +594,16 @@ const HoaDonPage = () => {
 						allTableBills.forEach((bill) => {
 							if (bill.transactions?.some((transaction) => transaction.isKtxDeposit === true)) {
 								nextSelectedIds.delete(bill._id);
-								return;
-							}
-							if (bill._isVirtualBill && nextSelectedIds.has(bill._id) && bill._parentBillId) {
-								nextSelectedIds.add(bill._parentBillId);
 							}
 						});
 
 						setSelectedIds(Array.from(nextSelectedIds));
 					},
 					renderCell: (_checked: boolean, rec: BillTableRecord, _index: number, originNode: ReactNode) => {
-						if (rec._isVirtualBillNotice) return renderVirtualBillNotice(rec);
 						if (rec._isKtxDepositNotice) return renderKtxDepositNotice();
 						return originNode;
 					},
-					onCell: (rec: BillTableRecord) =>
-						rec._isVirtualBillNotice || rec._isKtxDepositNotice ? { colSpan: baseColumns.length + 1 } : {},
+					onCell: (rec: BillTableRecord) => (rec._isKtxDepositNotice ? { colSpan: baseColumns.length + 1 } : {}),
 				}}
 			></TableBase>
 
