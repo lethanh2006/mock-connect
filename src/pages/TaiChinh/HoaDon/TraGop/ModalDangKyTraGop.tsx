@@ -207,7 +207,19 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 						<Form.Item
 							name='lyDo'
 							label={intl.formatMessage({ id: 'taichinh.tragop.modal.lydo.label' })}
-							rules={[...rules.required, ...rules.length(200)]}
+							rules={[
+								...rules.required,
+								{
+									validator: (_, value) => {
+										if (countWords(value) > MAX_SO_TU_LY_DO) {
+											return Promise.reject(
+												intl.formatMessage({ id: 'taichinh.tragop.modal.lydo.maxwords' }, { max: MAX_SO_TU_LY_DO }),
+											);
+										}
+										return Promise.resolve();
+									},
+								},
+							]}
 						>
 							<Input.TextArea rows={3} placeholder={intl.formatMessage({ id: 'taichinh.tragop.modal.lydo.place' })} />
 						</Form.Item>
