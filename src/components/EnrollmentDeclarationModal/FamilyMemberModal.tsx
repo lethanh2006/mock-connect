@@ -56,7 +56,7 @@ const FamilyMemberModal = ({ open, initialValues, listTinh, onClose, onSave }: F
 	const selectText = intl.formatMessage({ id: 'global.enrollmentDeclaration.placeholder.select' });
 
 	return (
-		<Modal open={open} onCancel={onClose} closable={false} footer={null} width={1000} centered className={styles.declarationModal}>
+		<Modal open={open} onCancel={onClose} closable={false} footer={null} width={1200} centered className={styles.declarationModal}>
 			<div className={styles.header}>
 				<h1 className={styles.title}>{intl.formatMessage({ id: 'global.enrollmentDeclaration.familyModal.title' })}</h1>
 				<Button type='text' icon={<span>✕</span>} className={styles.closeButton} onClick={onClose} />

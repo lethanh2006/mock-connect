@@ -46,15 +46,18 @@ const oneSignalClient = APP_CONFIG_ONE_SIGNAL_ID;
 const moodleEndpoint = APP_CONFIG_MOODLE_ENDPOINT;
 
 export {
-	ipFileMultiPart,
-	currentRole, financeApiClientId, ip3,
+	currentRole,
+	financeApiClientId,
+	ip3,
 	ipCCT,
 	ipChatbot,
 	ipConnect,
 	ipCore,
 	ipCsvc,
 	ipDaoTao,
-	ipFile, ipKhaoThi,
+	ipFile,
+	ipFileMultiPart,
+	ipKhaoThi,
 	ipNewsWP,
 	ipNhanSu,
 	ipNotif,
@@ -70,6 +73,5 @@ export {
 	oneSignalRole,
 	qldtApiClientId,
 	replaceRole,
-	sentryDSN
+	sentryDSN,
 };
-
