@@ -8,7 +8,7 @@ import {
 import { getCauTraLoiMeBaiTap } from '@/services/TienIch/KhaoSat/BieuMau';
 import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
-import { buildUpLoadMultiFile, handleSingleFile } from '@/services/uploadFile';
+import { buildUpLoadMultiFileMultipart, EFileScope, handleSingleFile } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import { resetFieldsForm } from '@/utils/utils';
@@ -140,7 +140,11 @@ const FormBaiTap = (props: any) => {
 	};
 
 	const onFinish = async (values: any) => {
-		const urlImages = await buildUpLoadMultiFile(values, 'urlImages');
+		const urlImages = await buildUpLoadMultiFileMultipart(values, 'urlImages', {
+			scope: EFileScope.PUBLIC,
+			module: 'bai-tap',
+			returnValue: 'url',
+		});
 
 		const danhSachTraLoi: Partial<BieuMau.TraLoiRecord[]> = [];
 		const dsCauHoi = recBieuMau?.danhSachKhoi?.map((khoi) => khoi.danhSachCauHoi).flat();
@@ -325,6 +329,7 @@ const FormBaiTap = (props: any) => {
 									disabled: disable || disableIsQuiz,
 								}}
 								resize
+								isPrivate
 							/>
 						</Form.Item>
 					</Col>

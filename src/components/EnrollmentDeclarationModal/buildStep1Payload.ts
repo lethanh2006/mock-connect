@@ -1,5 +1,5 @@
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
-import { buildUpLoadFile } from '@/services/uploadFile';
+import { buildUpLoadFileMultipart, EFileScope } from '@/services/uploadFile';
 import type { TStep1Payload } from './typing';
 import type { DotNhapHoc } from '@/services/DaoTao/DotNhapHoc/typings';
 
@@ -17,11 +17,14 @@ export const buildStep1Payload = async (
 	values: Record<string, any>,
 	documentRows: DotNhapHoc.IGiayToCanNopNhapHoc[] = [],
 ): Promise<TStep1Payload> => {
+	const uploadOptions = { scope: EFileScope.PUBLIC, module: 'nhap-hoc', returnValue: 'url' as const };
 	const [urlMatTruocCccd, urlMatSauCccd, urlDinhKemVanDeSucKhoe, urlPassportAttachment] = await Promise.all([
-		buildUpLoadFile(values, 'frontIdCard'),
-		buildUpLoadFile(values, 'backIdCard'),
-		values.hasHealthProblem === true ? buildUpLoadFile(values, 'healthProblemAttachment') : Promise.resolve(undefined),
-		buildUpLoadFile(values, 'passportAttachment'),
+		buildUpLoadFileMultipart(values, 'frontIdCard', uploadOptions),
+		buildUpLoadFileMultipart(values, 'backIdCard', uploadOptions),
+		values.hasHealthProblem === true
+			? buildUpLoadFileMultipart(values, 'healthProblemAttachment', uploadOptions)
+			: Promise.resolve(undefined),
+		buildUpLoadFileMultipart(values, 'passportAttachment', uploadOptions),
 	]);
 	// The mockup has a single "Passport Attachment" upload covering both the passport page and the visa stamp,
 	// so the same file URL is sent for both urlDinhKemHoChieu and visa.urlDinhKemVisa.
@@ -34,7 +37,7 @@ export const buildStep1Payload = async (
 				.filter((row) => row.id)
 				.map(async (row) => ({
 					id: row.id as string,
-					urlFile: (await buildUpLoadFile(values, `document_${row.id}`)) ?? undefined,
+					urlFile: (await buildUpLoadFileMultipart(values, `document_${row.id}`, uploadOptions)) ?? undefined,
 				})),
 		)
 	).filter((item) => item.urlFile);

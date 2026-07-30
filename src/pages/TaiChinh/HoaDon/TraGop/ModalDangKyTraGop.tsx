@@ -4,7 +4,7 @@ import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { checkEligibleTraGop, postYeuCauTraGop } from '@/services/TaiChinh/TraGop';
 import { EHinhThucHoTro } from '@/services/TaiChinh/TraGop/constant';
 import type { TraGop } from '@/services/TaiChinh/TraGop/typing';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { inputFormat, inputParse } from '@/utils/utils';
@@ -66,7 +66,11 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 
 		try {
 			setSubmitting(true);
-			const taiLieuDinhKem = await buildUpLoadMultiFile(values, 'taiLieuDinhKem');
+			const taiLieuDinhKem = await buildUpLoadMultiFileMultipart(values, 'taiLieuDinhKem', {
+				scope: EFileScope.PUBLIC,
+				module: 'tra-gop',
+				returnValue: 'url',
+			});
 
 			const payload: TraGop.IYeuCauPayload = {
 				billId: bill._id,
@@ -312,7 +316,7 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 						)}
 
 						<Form.Item name='taiLieuDinhKem' label={intl.formatMessage({ id: 'taichinh.tragop.modal.dinhkem.label' })}>
-							<UploadFile maxCount={5} />
+							<UploadFile maxCount={5} isPrivate />
 						</Form.Item>
 
 						<Form.Item

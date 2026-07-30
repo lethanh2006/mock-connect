@@ -1,5 +1,5 @@
 import UploadFile from '@/components/Upload/UploadFile';
-import { buildUpLoadFile } from '@/services/uploadFile';
+import { buildUpLoadFileMultipart, EFileScope } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Form, Modal, Segmented } from 'antd';
@@ -22,7 +22,11 @@ const ModalCapNhatAnhNhanDien = (props: { visible: boolean; setVisible: (val: bo
 	const onFinish = async (values: any) => {
 		if (!!values.faceRegImgUrl && typeof values.faceRegImgUrl !== 'string') {
 			setFormSubmiting(true);
-			await buildUpLoadFile(values, 'faceRegImgUrl')
+			await buildUpLoadFileMultipart(values, 'faceRegImgUrl', {
+				scope: EFileScope.PUBLIC,
+				module: 'khuon-mat',
+				returnValue: 'url',
+			})
 				.then((faceRegImgUrl) => (values.faceRegImgUrl = faceRegImgUrl))
 				.catch(() => (values.faceRegImgUrl = null))
 				.finally(() => setFormSubmiting(false));
@@ -87,7 +91,7 @@ const ModalCapNhatAnhNhanDien = (props: { visible: boolean; setVisible: (val: bo
 					label={intl.formatMessage({ id: 'thongtincanhan.khuonmat.image' })}
 					rules={[...rules.required, ...rules.fileRequired]}
 				>
-					{segmentValue === 'upload' ? <UploadFile isAvatar resize /> : <WebcamNhanDienKhuonMat />}
+					{segmentValue === 'upload' ? <UploadFile isAvatar resize isPrivate /> : <WebcamNhanDienKhuonMat />}
 				</Form.Item>
 
 				<div className='form-footer'>

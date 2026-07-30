@@ -1,6 +1,6 @@
 import ExpandText from '@/components/ExpandText';
 import type { BinhLuan } from '@/services/HocTap/DienDan/BinhLuan/typing';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import { formatDateTime } from '@/utils/formatDate';
 import { createTextLinks } from '@/utils/utils';
 import DOMPurify from 'dompurify';
@@ -75,7 +75,11 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 			if (!values?.noiDung) {
 				return;
 			}
-			const fileDinhKem = await buildUpLoadMultiFile(values, 'fileDinhKem');
+			const fileDinhKem = await buildUpLoadMultiFileMultipart(values, 'fileDinhKem', {
+				scope: EFileScope.PUBLIC,
+				module: 'dien-dan',
+				returnValue: 'url',
+			});
 			const payload = {
 				...values,
 				baiDangId: idBaiDang,

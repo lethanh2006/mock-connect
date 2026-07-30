@@ -2,7 +2,7 @@ import { Button, Form, Row, message } from 'antd';
 import FormRender from './FormRender';
 import { useEffect, useState } from 'react';
 import { useModel, useIntl } from 'umi';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import type { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
 
 const FormTable = (props: {
@@ -37,7 +37,11 @@ const FormTable = (props: {
 					for (const item in values) {
 						const value = values[item];
 						if (value?.fileList?.length) {
-							values[item] = await buildUpLoadMultiFile(values, item);
+							values[item] = await buildUpLoadMultiFileMultipart(values, item, {
+								scope: EFileScope.PUBLIC,
+								module: 'quy-trinh',
+								returnValue: 'url',
+							});
 						}
 					}
 

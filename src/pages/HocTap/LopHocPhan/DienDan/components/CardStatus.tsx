@@ -212,7 +212,7 @@ const CardStatus = (props: IProps) => {
 					)}
 					{data?.fileDinhKem && (
 						<div style={{ marginTop: 8 }}>
-							<BoxFile url={data?.fileDinhKem} />
+							<BoxFile url={data?.fileDinhKem} isPrivate />
 						</div>
 					)}
 

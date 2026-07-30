@@ -1,5 +1,5 @@
 import { ELoaiNoiSinh } from '@/services/DaoTao/SinhVien/constants';
-import { buildUpLoadFile } from '@/services/uploadFile';
+import { buildUpLoadFileMultipart, EFileScope } from '@/services/uploadFile';
 import type { TStep2Payload, TThongTinTruongCap3 } from './typing';
 
 const buildDiem = (values: Record<string, any>, grade: string) => ({
@@ -35,7 +35,11 @@ export const buildStep2Payload = async (values: Record<string, any>): Promise<TS
 	const isTransferred = values.transferredHighSchool === true;
 	const isPursuingDegree = values.pursuingDegree === true;
 
-	const urlFileMinhChung = await buildUpLoadFile(values, 'certificateAttachment');
+	const urlFileMinhChung = await buildUpLoadFileMultipart(values, 'certificateAttachment', {
+		scope: EFileScope.PUBLIC,
+		module: 'nhap-hoc',
+		returnValue: 'url',
+	});
 
 	return {
 		doiTuongUuTienTuyenSinh: values.priorityCategory,

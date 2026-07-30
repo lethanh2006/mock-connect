@@ -240,7 +240,7 @@ const AcademicInformationStep = ({
 				</Col>
 				<Col span={24} md={12}>
 					<Form.Item name='certificateAttachment' label={intl.formatMessage({ id: 'global.enrollmentDeclaration.academic.certificateAttachment' })} rules={[...rules.fileRequired]}>
-						<UploadFile buttonDescription={intl.formatMessage({ id: 'global.enrollmentDeclaration.academic.chooseFile' })} maxCount={1} otherProps={{ className: styles.uploadButton }} />
+						<UploadFile buttonDescription={intl.formatMessage({ id: 'global.enrollmentDeclaration.academic.chooseFile' })} maxCount={1} otherProps={{ className: styles.uploadButton }} isPrivate />
 					</Form.Item>
 				</Col>
 			</Row>
