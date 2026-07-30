@@ -1,4 +1,4 @@
-import type { ETrangThaiPhienTraGop, ETrangThaiTraGopBill } from './constant';
+import type { EHinhThucHoTro, ETrangThaiPhienTraGop, ETrangThaiTraGopBill } from './constant';
 
 declare module TraGop {
 	export interface ICheckEligible {
@@ -12,8 +12,14 @@ declare module TraGop {
 
 	export interface IYeuCauPayload {
 		billId: string;
-		soLanTraGopYeuCau: number;
-		lyDo: string;
+		hinhThucHoTro: EHinhThucHoTro;
+		soLanTraGopYeuCau?: number;
+		ngayGiaHanYeuCau?: string;
+		college?: string;
+		tongTienHocBongHoTro?: number;
+		lyDo?: string;
+		deXuatLoTrinhThanhToan?: string;
+		camKet?: boolean;
 		taiLieuDinhKem?: string[];
 	}
 
