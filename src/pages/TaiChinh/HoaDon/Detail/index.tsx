@@ -59,6 +59,8 @@ type InvoiceCardProps = {
 	combinedTotal?: number;
 	/** Số tiền hóa đơn hiện tại (bill gốc) — chỉ truyền cho card của virtualBill để lên breakdown gộp */
 	currentBillAmount?: number;
+	/** Tên đợt thu của hóa đơn hiện tại (bill gốc) — dùng làm nhãn dòng breakdown cho dễ hiểu thay vì text tĩnh */
+	currentTermLabel?: string;
 	/** Số tiền ưu đãi thực tế — lấy từ giao dịch DISCOUNT cuối cùng của virtualBill */
 	discountAmount?: number;
 	onViewDetail: () => void;
@@ -80,6 +82,7 @@ const InvoiceCard = ({
 	discountPercent,
 	combinedTotal,
 	currentBillAmount,
+	currentTermLabel,
 	discountAmount,
 	onViewDetail,
 	onViewPdf,
@@ -94,17 +97,45 @@ const InvoiceCard = ({
 	const statusColor = EMauTrangThaiThanhToanTable[bill.status];
 	const statusLabel = intl.formatMessage({ id: `taichinh.hoadon.status.${bill.status}` });
 
+	const showDangKyTraGop =
+		!isVirtual &&
+		!!onDangKyTraGop &&
+		bill.status !== EMaTrangThaiThanhToan.DA_THANH_TOAN_DU &&
+		(!bill.trangThaiTraGop || bill.trangThaiTraGop === ETrangThaiTraGopBill.TU_CHOI);
+	const showTienDoTraGop =
+		!isVirtual &&
+		!!onTienDoTraGop &&
+		(bill.trangThaiTraGop === ETrangThaiTraGopBill.DANG_TRA_GOP ||
+			bill.trangThaiTraGop === ETrangThaiTraGopBill.DA_HOAN_THANH_TRA_GOP);
+
 	return (
 		<div className={`invoice-detail-card${isVirtual ? ' invoice-detail-card--virtual' : ''}`}>
+			<Space size={2} className='invoice-detail-card__quick-actions'>
+				<ButtonExtend
+					size='small'
+					type='text'
+					icon={<EyeOutlined />}
+					onClick={onViewDetail}
+					tooltip={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemchitiet' })}
+				/>
+				<ButtonExtend
+					size='small'
+					type='text'
+					icon={<FilePdfOutlined />}
+					loading={pdfLoading}
+					onClick={onViewPdf}
+					tooltip={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemhuongdan' })}
+				/>
+			</Space>
 			<Space size={6} className='invoice-detail-card__chip'>
 				<Tag color={isVirtual ? 'gold' : 'blue'} style={{ margin: 0 }}>
 					{isVirtual
-						? intl.formatMessage({ id: 'taichinh.hoadon.virtualBill.earlyPayment' })
-						: intl.formatMessage({ id: 'taichinh.hoadon.detail.currentTermChip' })}
+						? intl.formatMessage({ id: 'taichinh.hoadon.detail.recommendedBadge' })
+						: intl.formatMessage({ id: 'taichinh.hoadon.detail.optionBadge' })}
 				</Tag>
 				{isVirtual && !!discountPercent && (
 					<Tag color='error' style={{ margin: 0, fontWeight: 700 }}>
-						−{discountPercent}%
+						{intl.formatMessage({ id: 'taichinh.hoadon.detail.saveBadge' }, { percent: discountPercent })}
 					</Tag>
 				)}
 			</Space>
@@ -124,7 +155,9 @@ const InvoiceCard = ({
 							})}
 						</Text>
 						<Space size={8}>
-							<Text strong>{bill.ngayHetHanThanhToan ? dayjs(bill.ngayHetHanThanhToan).format('DD/MM/YYYY') : '-'}</Text>
+							<Text strong>
+								{bill.ngayHetHanThanhToan ? dayjs(bill.ngayHetHanThanhToan).format('DD/MM/YYYY') : '-'}
+							</Text>
 							{renderDeadlineBadge(intl, bill.ngayHetHanThanhToan)}
 						</Space>
 					</div>
@@ -144,36 +177,46 @@ const InvoiceCard = ({
 			</div>
 
 			{isVirtual ? (
-				<>
-					<div className='invoice-detail-card__amount-zone'>
-						<Text type='secondary' style={{ fontSize: 11.5 }}>
-							{intl.formatMessage({ id: 'taichinh.hoadon.detail.combinedTotalLabel' })}
-						</Text>
-						<div className='invoice-detail-card__combo-breakdown'>
-							<div className='invoice-detail-card__combo-row'>
-								<span>{intl.formatMessage({ id: 'taichinh.hoadon.detail.currentTermChip' })}</span>
-								<span>{currencyFormat(currentBillAmount ?? 0)} VND</span>
-							</div>
-							<span className='invoice-detail-card__combo-op'>+</span>
-							<div className='invoice-detail-card__combo-row'>
-								<span>{intl.formatMessage({ id: 'taichinh.hoadon.virtualBill.earlyPayment' })}</span>
-								<span>{currencyFormat(bill.balance ?? 0)} VND</span>
-							</div>
-							<div className='invoice-detail-card__combo-row invoice-detail-card__combo-row--total'>
-								<span>{intl.formatMessage({ id: 'taichinh.hoadon.detail.totalAmountLabel' })}</span>
-								<span>{currencyFormat(combinedTotal ?? 0)} VND</span>
-							</div>
+				<div className='invoice-detail-card__amount-zone'>
+					<Text type='secondary' style={{ fontSize: 11.5 }}>
+						{intl.formatMessage({ id: 'taichinh.hoadon.detail.combinedTotalLabel' })}
+					</Text>
+					<div className='invoice-detail-card__combo-breakdown'>
+						<div className='invoice-detail-card__combo-row'>
+							<span>{currentTermLabel || intl.formatMessage({ id: 'taichinh.hoadon.detail.currentTermChip' })}</span>
+							<span>{currencyFormat(currentBillAmount ?? 0)} VND</span>
+						</div>
+						<span className='invoice-detail-card__combo-op'>+</span>
+						<div className='invoice-detail-card__combo-row'>
+							<span>
+								{bill.dotThu?.tenHocKy || intl.formatMessage({ id: 'taichinh.hoadon.virtualBill.earlyPayment' })}
+							</span>
+							<span>{currencyFormat((bill.balance ?? 0) + (discountAmount ?? 0))} VND</span>
+						</div>
+						{!!discountAmount && (
+							<>
+								<div className='invoice-detail-card__combo-divider' />
+								<div className='invoice-detail-card__combo-row'>
+									<span>{intl.formatMessage({ id: 'taichinh.hoadon.detail.subtotalLabel' })}</span>
+									<span>{currencyFormat((combinedTotal ?? 0) + discountAmount)} VND</span>
+								</div>
+								<div className='invoice-detail-card__combo-row invoice-detail-card__combo-row--discount'>
+									<span>
+										{intl.formatMessage(
+											{ id: 'taichinh.hoadon.detail.annualDiscountLabel' },
+											{ percent: discountPercent },
+										)}
+									</span>
+									<span>−{currencyFormat(discountAmount)} VND</span>
+								</div>
+							</>
+						)}
+						<div className='invoice-detail-card__combo-row invoice-detail-card__combo-row--total'>
+							<span>{intl.formatMessage({ id: 'taichinh.hoadon.detail.totalAmountLabel' })}</span>
+							<span>{currencyFormat(combinedTotal ?? 0)} VND</span>
 						</div>
 					</div>
-					{!!discountAmount && (
-						<div className='invoice-detail-card__discount-line'>
-							{intl.formatMessage(
-								{ id: 'taichinh.hoadon.detail.discountAmountLine' },
-								{ amount: `${currencyFormat(discountAmount)} VND`, discountPercent: `${discountPercent}%` },
-							)}
-						</div>
-					)}
-				</>
+				</div>
 			) : (
 				<div className='invoice-detail-card__amount-zone'>
 					<div className='invoice-detail-card__combo-row invoice-detail-card__combo-row--total'>
@@ -190,7 +233,7 @@ const InvoiceCard = ({
 								{
 									date: bill.ngayHetHanThanhToan ? dayjs(bill.ngayHetHanThanhToan).format('DD/MM/YYYY') : '-',
 								},
-						  )
+							)
 						: intl.formatMessage({ id: 'taichinh.hoadon.detail.optionalNote' })}
 				</Text>
 			)}
@@ -208,13 +251,12 @@ const InvoiceCard = ({
 				</Collapse>
 			)}
 
-			<Space wrap className='invoice-detail-card__actions'>
+			<div className='invoice-detail-card__actions'>
 				{onPayNow &&
 					(() => {
 						const isDisabled = payDisabled ?? disableThanhToan(bill);
 						return (
 							<ButtonExtend
-								size='small'
 								type='primary'
 								className='invoice-detail-card__pay-btn'
 								icon={<DollarOutlined />}
@@ -226,38 +268,21 @@ const InvoiceCard = ({
 							</ButtonExtend>
 						);
 					})()}
-				<ButtonExtend
-					size='small'
-					type='text'
-					icon={<EyeOutlined />}
-					onClick={onViewDetail}
-					tooltip={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemchitiet' })}
-				/>
-				<ButtonExtend
-					size='small'
-					type='text'
-					icon={<FilePdfOutlined />}
-					loading={pdfLoading}
-					onClick={onViewPdf}
-					tooltip={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemhuongdan' })}
-				/>
-				{!isVirtual &&
-					bill.status !== EMaTrangThaiThanhToan.DA_THANH_TOAN_DU &&
-					(!bill.trangThaiTraGop || bill.trangThaiTraGop === ETrangThaiTraGopBill.TU_CHOI) &&
-					onDangKyTraGop && (
-						<ButtonExtend size='small' icon={<ScheduleOutlined />} onClick={onDangKyTraGop}>
-							{intl.formatMessage({ id: 'taichinh.tragop.tooltip.dangky' })}
-						</ButtonExtend>
-					)}
-				{!isVirtual &&
-					(bill.trangThaiTraGop === ETrangThaiTraGopBill.DANG_TRA_GOP ||
-						bill.trangThaiTraGop === ETrangThaiTraGopBill.DA_HOAN_THANH_TRA_GOP) &&
-					onTienDoTraGop && (
-						<ButtonExtend size='small' icon={<FieldTimeOutlined />} onClick={onTienDoTraGop}>
-							{intl.formatMessage({ id: 'taichinh.tragop.tooltip.tiendo' })}
-						</ButtonExtend>
-					)}
-			</Space>
+				{(showDangKyTraGop || showTienDoTraGop) && (
+					<Space size={4} wrap className='invoice-detail-card__secondary-actions'>
+						{showDangKyTraGop && (
+							<ButtonExtend size='small' icon={<ScheduleOutlined />} onClick={onDangKyTraGop}>
+								{intl.formatMessage({ id: 'taichinh.tragop.tooltip.dangky' })}
+							</ButtonExtend>
+						)}
+						{showTienDoTraGop && (
+							<ButtonExtend size='small' icon={<FieldTimeOutlined />} onClick={onTienDoTraGop}>
+								{intl.formatMessage({ id: 'taichinh.tragop.tooltip.tiendo' })}
+							</ButtonExtend>
+						)}
+					</Space>
+				)}
+			</div>
 		</div>
 	);
 };
@@ -459,6 +484,7 @@ const HoaDonDetailPage = () => {
 								discountPercent={uuDaiPercent}
 								combinedTotal={combinedTotal}
 								currentBillAmount={bill.balance ?? 0}
+								currentTermLabel={bill.dotThu?.tenHocKy}
 								discountAmount={discountAmount}
 								onViewDetail={() => handleViewDetail(virtualBill)}
 								onViewPdf={() => handleViewPdf(virtualBill)}

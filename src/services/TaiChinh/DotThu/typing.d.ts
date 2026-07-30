@@ -4,6 +4,7 @@ declare module DotThuTaiChinh {
 	export interface IRecord {
 		_id: string;
 		tenDot: string; // 'string';
+		tenHocKy: string;
 		thoiGianBatDau: string; // '2023-03-02T08:12:50.994Z';
 		thoiGianKetThuc: string; //'2023-03-02T08:12:50.994Z';
 		daRelease: boolean;

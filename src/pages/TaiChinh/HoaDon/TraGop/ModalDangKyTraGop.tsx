@@ -161,11 +161,7 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 								</Form.Item>
 							</Col>
 							<Col span={12}>
-								<Form.Item
-									name='soDienThoai'
-									label={intl.formatMessage({ id: 'taichinh.tragop.modal.sdt.label' })}
-									rules={[...rules.required]}
-								>
+								<Form.Item name='soDienThoai' label={intl.formatMessage({ id: 'taichinh.tragop.modal.sdt.label' })}>
 									<Input disabled />
 								</Form.Item>
 							</Col>
@@ -211,19 +207,7 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 						<Form.Item
 							name='lyDo'
 							label={intl.formatMessage({ id: 'taichinh.tragop.modal.lydo.label' })}
-							rules={[
-								...rules.required,
-								{
-									validator: (_, value) => {
-										if (countWords(value) > MAX_SO_TU_LY_DO) {
-											return Promise.reject(
-												intl.formatMessage({ id: 'taichinh.tragop.modal.lydo.maxwords' }, { max: MAX_SO_TU_LY_DO }),
-											);
-										}
-										return Promise.resolve();
-									},
-								},
-							]}
+							rules={[...rules.required, ...rules.length(200)]}
 						>
 							<Input.TextArea rows={3} placeholder={intl.formatMessage({ id: 'taichinh.tragop.modal.lydo.place' })} />
 						</Form.Item>
