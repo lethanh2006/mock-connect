@@ -57,7 +57,7 @@ export default {
 	'taichinh.hoadon.detail.optionalNote': 'Khoản này chưa đến hạn — đây là lựa chọn thêm để đóng sớm và nhận ưu đãi.',
 	'taichinh.hoadon.detail.combinedTotalLabel': 'Tổng thanh toán nếu chọn cả 2 hóa đơn',
 	'taichinh.hoadon.detail.totalAmountLabel': 'Tổng tiền',
-	'taichinh.hoadon.detail.discountAmountLine': 'Đã bao gồm ưu đãi −{amount}',
+	'taichinh.hoadon.detail.discountAmountLine': 'Đã bao gồm ưu đãi {discountPercent} − {amount}',
 	'taichinh.hoadon.detail.viewBreakdown': 'Xem chi tiết khoản mục',
 	'taichinh.hoadon.detail.payBothButton': 'Thanh toán cả 2',
 	'taichinh.hoadon.detail.needHelp': 'Cần hỗ trợ? Liên hệ Phòng Tài chính.',
@@ -294,7 +294,8 @@ export default {
 	'taichinh.tragop.modal.hinhthuc.tragop': 'Trả góp',
 	'taichinh.tragop.modal.hinhthuc.tramuon': 'Gia hạn nộp muộn',
 	'taichinh.tragop.modal.lotrinh.label': 'Đề xuất lộ trình thanh toán',
-	'taichinh.tragop.modal.lotrinh.place': 'Ví dụ: Đợt 1 (01/09/2026): 30%, Đợt 2 (01/10/2026): 35%, Đợt 3 (01/11/2026): 35%',
+	'taichinh.tragop.modal.lotrinh.place':
+		'Ví dụ: Đợt 1 (01/09/2026): 30%, Đợt 2 (01/10/2026): 35%, Đợt 3 (01/11/2026): 35%',
 	'taichinh.tragop.modal.giahan.label': 'Ngày đề nghị gia hạn',
 	'taichinh.tragop.modal.giahan.place': 'Chọn ngày đề nghị gia hạn',
 	'taichinh.tragop.modal.dinhkem.label': 'Tài liệu đính kèm (nếu có)',

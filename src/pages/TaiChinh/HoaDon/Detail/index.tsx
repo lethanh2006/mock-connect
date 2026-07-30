@@ -3,8 +3,8 @@ import PageCard from '@/components/PageCard';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { getExportBillUrl } from '@/services/TaiChinh/HoaDon';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETransactionType } from '@/services/TaiChinh/constant';
 import { EMauTrangThaiTraGopBill, ETrangThaiTraGopBill } from '@/services/TaiChinh/TraGop/constant';
+import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETransactionType } from '@/services/TaiChinh/constant';
 import { currencyFormat } from '@/utils/utils';
 import {
 	ArrowLeftOutlined,
@@ -15,9 +15,9 @@ import {
 	ScheduleOutlined,
 } from '@ant-design/icons';
 import { Button, Col, Collapse, Empty, Modal, Progress, Row, Skeleton, Space, Tag, Typography } from 'antd';
-import type { IntlShape } from 'react-intl';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
+import type { IntlShape } from 'react-intl';
 import { history, useIntl, useModel, useParams } from 'umi';
 import { disableThanhToan } from '..';
 import ModalThanhToan from '../ThanhToan/ModalThanhToan';
@@ -123,9 +123,7 @@ const InvoiceCard = ({
 						})}
 					</Text>
 					<Space size={8}>
-						<Text strong>
-							{bill.ngayHetHanThanhToan ? dayjs(bill.ngayHetHanThanhToan).format('DD/MM/YYYY') : '-'}
-						</Text>
+						<Text strong>{bill.ngayHetHanThanhToan ? dayjs(bill.ngayHetHanThanhToan).format('DD/MM/YYYY') : '-'}</Text>
 						{renderDeadlineBadge(intl, bill.ngayHetHanThanhToan)}
 					</Space>
 				</div>
@@ -169,7 +167,7 @@ const InvoiceCard = ({
 						<div className='invoice-detail-card__discount-line'>
 							{intl.formatMessage(
 								{ id: 'taichinh.hoadon.detail.discountAmountLine' },
-								{ amount: `${currencyFormat(discountAmount)} VND` },
+								{ amount: `${currencyFormat(discountAmount)} VND`, discountPercent: `${discountPercent}%` },
 							)}
 						</div>
 					)}
@@ -212,9 +210,7 @@ const InvoiceCard = ({
 								className='invoice-detail-card__pay-btn'
 								icon={<DollarOutlined />}
 								disabled={isDisabled}
-								tooltip={
-									isDisabled ? intl.formatMessage({ id: 'taichinh.hoadon.tooltip.ngoaithoihan' }) : undefined
-								}
+								tooltip={isDisabled ? intl.formatMessage({ id: 'taichinh.hoadon.tooltip.ngoaithoihan' }) : undefined}
 								onClick={onPayNow}
 							>
 								{intl.formatMessage({ id: payLabelId ?? 'taichinh.thanhtoan.button.thanhtoan' })}

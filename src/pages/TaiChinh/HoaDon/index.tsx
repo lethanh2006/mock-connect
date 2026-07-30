@@ -66,7 +66,6 @@ export const disableThanhToan = (rec?: HoaDon.IRecord): boolean => {
 	return false;
 };
 
-
 const HoaDonPage = () => {
 	const intl = useIntl();
 	const {
@@ -222,7 +221,7 @@ const HoaDonPage = () => {
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.dotthu' }),
 			dataIndex: 'idDotThu',
 			width: 180,
-			render: (_val, rec: BillTableRecord) => <div>{rec.dotThu?.tenDot}</div>,
+			render: (_val, rec: BillTableRecord) => <div>{rec.dotThu?.tenHocKy}</div>,
 			filterType: 'customselect',
 			filterCustomSelect: <SelectDotThu multiple />,
 		},
