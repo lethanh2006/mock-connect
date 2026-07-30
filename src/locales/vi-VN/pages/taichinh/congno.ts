@@ -48,7 +48,6 @@ export default {
 	'taichinh.hoadon.tab.paid': 'Đã thanh toán',
 	'taichinh.hoadon.action.paySelected': 'Thanh toán cho ({count}) hóa đơn',
 	'taichinh.hoadon.virtualBill.earlyPayment': 'Thanh toán sớm',
-	'taichinh.hoadon.virtualBill.discount.title': 'Ưu đãi thanh toán trước {percent}%',
 	'taichinh.hoadon.virtualBill.discount.description':
 		'Chọn và thanh toán cùng lúc cả 2 hóa đơn để được giảm ngay {percent}% trên tổng số tiền phải nộp.',
 
@@ -56,8 +55,11 @@ export default {
 	'taichinh.hoadon.detail.currentTermChip': 'Hóa đơn hiện tại',
 	'taichinh.hoadon.detail.discountDeadline': 'Hạn ưu đãi',
 	'taichinh.hoadon.detail.optionalNote': 'Khoản này chưa đến hạn — đây là lựa chọn thêm để đóng sớm và nhận ưu đãi.',
+	'taichinh.hoadon.detail.combinedTotalLabel': 'Tổng thanh toán nếu chọn cả 2 hóa đơn',
+	'taichinh.hoadon.detail.totalAmountLabel': 'Tổng tiền',
+	'taichinh.hoadon.detail.discountAmountLine': 'Đã bao gồm ưu đãi −{amount}',
 	'taichinh.hoadon.detail.viewBreakdown': 'Xem chi tiết khoản mục',
-	'taichinh.hoadon.detail.selectAtLeastOne': 'Chọn ít nhất 1 hóa đơn để thanh toán',
+	'taichinh.hoadon.detail.payBothButton': 'Thanh toán cả 2',
 	'taichinh.hoadon.detail.needHelp': 'Cần hỗ trợ? Liên hệ Phòng Tài chính.',
 	'taichinh.hoadon.detail.notFound': 'Không tìm thấy hóa đơn',
 

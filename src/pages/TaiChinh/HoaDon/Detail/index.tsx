@@ -3,17 +3,18 @@ import PageCard from '@/components/PageCard';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { getExportBillUrl } from '@/services/TaiChinh/HoaDon';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable } from '@/services/TaiChinh/constant';
+import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETransactionType } from '@/services/TaiChinh/constant';
 import { EMauTrangThaiTraGopBill, ETrangThaiTraGopBill } from '@/services/TaiChinh/TraGop/constant';
 import { currencyFormat } from '@/utils/utils';
 import {
 	ArrowLeftOutlined,
+	DollarOutlined,
 	EyeOutlined,
 	FieldTimeOutlined,
 	FilePdfOutlined,
 	ScheduleOutlined,
 } from '@ant-design/icons';
-import { Button, Checkbox, Col, Collapse, Empty, Modal, Progress, Row, Skeleton, Space, Tag, Typography } from 'antd';
+import { Button, Col, Collapse, Empty, Modal, Progress, Row, Skeleton, Space, Tag, Typography } from 'antd';
 import type { IntlShape } from 'react-intl';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
@@ -54,10 +55,20 @@ type InvoiceCardProps = {
 	isVirtual?: boolean;
 	/** % ưu đãi thanh toán sớm — chỉ truyền cho card của virtualBill */
 	discountPercent?: number;
-	checked: boolean;
-	onToggle: (checked: boolean) => void;
+	/** Tổng tiền nếu thanh toán cả 2 hóa đơn cùng lúc — chỉ truyền cho card của virtualBill */
+	combinedTotal?: number;
+	/** Số tiền hóa đơn hiện tại (bill gốc) — chỉ truyền cho card của virtualBill để lên breakdown gộp */
+	currentBillAmount?: number;
+	/** Số tiền ưu đãi thực tế — lấy từ giao dịch DISCOUNT cuối cùng của virtualBill */
+	discountAmount?: number;
 	onViewDetail: () => void;
 	onViewPdf: () => void;
+	/** Card hiện tại: thanh toán riêng đúng hóa đơn này. Card virtualBill: thanh toán gộp cả 2. */
+	onPayNow?: () => void;
+	/** Nhãn nút thanh toán — mặc định "Thanh toán ngay", card virtualBill truyền "Thanh toán cả 2" */
+	payLabelId?: string;
+	/** Ghi đè trạng thái disable của nút thanh toán (card virtualBill cần disable theo CẢ 2 hóa đơn) */
+	payDisabled?: boolean;
 	pdfLoading?: boolean;
 	onDangKyTraGop?: () => void;
 	onTienDoTraGop?: () => void;
@@ -67,10 +78,14 @@ const InvoiceCard = ({
 	bill,
 	isVirtual,
 	discountPercent,
-	checked,
-	onToggle,
+	combinedTotal,
+	currentBillAmount,
+	discountAmount,
 	onViewDetail,
 	onViewPdf,
+	onPayNow,
+	payLabelId,
+	payDisabled,
 	pdfLoading,
 	onDangKyTraGop,
 	onTienDoTraGop,
@@ -81,11 +96,6 @@ const InvoiceCard = ({
 
 	return (
 		<div className={`invoice-detail-card${isVirtual ? ' invoice-detail-card--virtual' : ''}`}>
-			<Checkbox
-				className='invoice-detail-card__checkbox'
-				checked={checked}
-				onChange={(e) => onToggle(e.target.checked)}
-			/>
 			<Space size={6} className='invoice-detail-card__chip'>
 				<Tag color={isVirtual ? 'gold' : 'blue'} style={{ margin: 0 }}>
 					{isVirtual
@@ -133,9 +143,45 @@ const InvoiceCard = ({
 				)}
 			</div>
 
-			<div className='invoice-detail-card__amount'>
-				{currencyFormat(bill.balance ?? 0)} <span>VND</span>
-			</div>
+			{isVirtual ? (
+				<>
+					<div className='invoice-detail-card__amount-zone'>
+						<Text type='secondary' style={{ fontSize: 11.5 }}>
+							{intl.formatMessage({ id: 'taichinh.hoadon.detail.combinedTotalLabel' })}
+						</Text>
+						<div className='invoice-detail-card__combo-breakdown'>
+							<div className='invoice-detail-card__combo-row'>
+								<span>{intl.formatMessage({ id: 'taichinh.hoadon.detail.currentTermChip' })}</span>
+								<span>{currencyFormat(currentBillAmount ?? 0)} VND</span>
+							</div>
+							<span className='invoice-detail-card__combo-op'>+</span>
+							<div className='invoice-detail-card__combo-row'>
+								<span>{intl.formatMessage({ id: 'taichinh.hoadon.virtualBill.earlyPayment' })}</span>
+								<span>{currencyFormat(bill.balance ?? 0)} VND</span>
+							</div>
+							<div className='invoice-detail-card__combo-row invoice-detail-card__combo-row--total'>
+								<span>{intl.formatMessage({ id: 'taichinh.hoadon.detail.totalAmountLabel' })}</span>
+								<span>{currencyFormat(combinedTotal ?? 0)} VND</span>
+							</div>
+						</div>
+					</div>
+					{!!discountAmount && (
+						<div className='invoice-detail-card__discount-line'>
+							{intl.formatMessage(
+								{ id: 'taichinh.hoadon.detail.discountAmountLine' },
+								{ amount: `${currencyFormat(discountAmount)} VND` },
+							)}
+						</div>
+					)}
+				</>
+			) : (
+				<div className='invoice-detail-card__amount-zone'>
+					<div className='invoice-detail-card__combo-row invoice-detail-card__combo-row--total'>
+						<span>{intl.formatMessage({ id: 'taichinh.hoadon.detail.totalAmountLabel' })}</span>
+						<span>{currencyFormat(bill.balance ?? 0)} VND</span>
+					</div>
+				</div>
+			)}
 			{isVirtual && (
 				<Text type='secondary' className='invoice-detail-card__optional-note'>
 					{intl.formatMessage({ id: 'taichinh.hoadon.detail.optionalNote' })}
@@ -156,12 +202,40 @@ const InvoiceCard = ({
 			)}
 
 			<Space wrap className='invoice-detail-card__actions'>
-				<ButtonExtend size='small' icon={<EyeOutlined />} onClick={onViewDetail}>
-					{intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemchitiet' })}
-				</ButtonExtend>
-				<ButtonExtend size='small' icon={<FilePdfOutlined />} loading={pdfLoading} onClick={onViewPdf}>
-					{intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemhuongdan' })}
-				</ButtonExtend>
+				{onPayNow &&
+					(() => {
+						const isDisabled = payDisabled ?? disableThanhToan(bill);
+						return (
+							<ButtonExtend
+								size='small'
+								type='primary'
+								className='invoice-detail-card__pay-btn'
+								icon={<DollarOutlined />}
+								disabled={isDisabled}
+								tooltip={
+									isDisabled ? intl.formatMessage({ id: 'taichinh.hoadon.tooltip.ngoaithoihan' }) : undefined
+								}
+								onClick={onPayNow}
+							>
+								{intl.formatMessage({ id: payLabelId ?? 'taichinh.thanhtoan.button.thanhtoan' })}
+							</ButtonExtend>
+						);
+					})()}
+				<ButtonExtend
+					size='small'
+					type='text'
+					icon={<EyeOutlined />}
+					onClick={onViewDetail}
+					tooltip={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemchitiet' })}
+				/>
+				<ButtonExtend
+					size='small'
+					type='text'
+					icon={<FilePdfOutlined />}
+					loading={pdfLoading}
+					onClick={onViewPdf}
+					tooltip={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemhuongdan' })}
+				/>
 				{!isVirtual &&
 					bill.status !== EMaTrangThaiThanhToan.DA_THANH_TOAN_DU &&
 					(!bill.trangThaiTraGop || bill.trangThaiTraGop === ETrangThaiTraGopBill.TU_CHOI) &&
@@ -195,7 +269,6 @@ const HoaDonDetailPage = () => {
 		useModel('taichinh.hoadon');
 	const [bill, setBill] = useState<HoaDon.IRecord | undefined>(undefined);
 
-	const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 	const [paymentMode, setPaymentMode] = useState<'single' | 'multi'>('single');
 	const [billsForPayment, setBillsForPayment] = useState<HoaDon.IRecord[]>([]);
 	const [initialPaymentAmount, setInitialPaymentAmount] = useState<number | undefined>(undefined);
@@ -228,11 +301,6 @@ const HoaDonDetailPage = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [identityCode]);
 
-	useEffect(() => {
-		if (!bill?._id) return;
-		setSelectedIds(new Set([bill._id, ...(bill.virtualBill ? [bill.virtualBill._id] : [])]));
-	}, [bill?._id, bill?.virtualBill?._id]);
-
 	const virtualBill = bill?.virtualBill;
 	const uuDaiPercent = bill?.dotThu?.uuDaiThanhToanTruocKy ?? 0;
 
@@ -241,47 +309,48 @@ const HoaDonDetailPage = () => {
 		[bill, virtualBill],
 	);
 
+	// Tổng tiền nếu thanh toán gộp cả 2 hóa đơn cùng lúc.
+	const combinedTotal = useMemo(() => groupBills.reduce((sum, item) => sum + (item.balance ?? 0), 0), [groupBills]);
+	// Số tiền ưu đãi THỰC lấy từ giao dịch loại DISCOUNT cuối cùng của virtualBill
+	// (không tự ước tính theo %, vì backend đã ghi nhận đúng số tiền đã áp dụng).
+	const discountAmount = useMemo(() => {
+		const discountTransactions = (virtualBill?.transactions ?? []).filter(
+			(item) => item.type === ETransactionType.DISCOUNT,
+		);
+		const lastDiscount = discountTransactions[discountTransactions.length - 1];
+		return Math.abs(lastDiscount?.amount ?? 0);
+	}, [virtualBill]);
+
 	// "Tổng cần thanh toán" của nhóm chỉ tính hóa đơn hiện tại (khoản thực sự đến hạn) —
 	// hóa đơn virtualBill (đóng sớm kỳ tới) là một lựa chọn thêm, không phải khoản đang nợ.
 	const totalBalance = bill?.balance ?? 0;
 	const totalPaid = bill?.amountPaid ?? 0;
-	const selectedBills = useMemo(
-		() => groupBills.filter((item) => selectedIds.has(item._id)),
-		[groupBills, selectedIds],
-	);
-	const selectedTotal = useMemo(
-		() => selectedBills.reduce((sum, item) => sum + (item.balance ?? 0), 0),
-		[selectedBills],
-	);
-	const payDisabled = selectedBills.length === 0 || selectedBills.every((item) => disableThanhToan(item));
+	const payBothDisabled = !virtualBill || disableThanhToan(bill) || disableThanhToan(virtualBill);
 
-	const handleToggle = (id: string, checked: boolean) => {
-		setSelectedIds((prev) => {
-			const next = new Set(prev);
-			if (checked) next.add(id);
-			else next.delete(id);
-			return next;
-		});
-	};
-
-	const handlePayNow = () => {
-		if (!selectedBills.length) return;
-		setRecord(selectedBills[0]);
+	/** Thanh toán gộp cả 2 hóa đơn (hóa đơn hiện tại + hóa đơn đóng sớm) cùng lúc */
+	const handlePayBoth = () => {
+		if (!bill || !virtualBill) return;
+		setRecord(bill);
 		setInitialPaymentAmount(undefined);
 		setLockPaymentAmount(false);
-		if (selectedBills.length > 1) {
-			setPaymentMode('multi');
-			setBillsForPayment(selectedBills);
-		} else {
-			setPaymentMode('single');
-			setBillsForPayment([]);
-		}
+		setPaymentMode('multi');
+		setBillsForPayment([bill, virtualBill]);
 		setVisibleModalThanhToan(true);
 	};
 
 	const handleViewDetail = (rec: HoaDon.IRecord) => {
 		setRecord(rec);
 		setVisibleModalDetail(true);
+	};
+
+	/** Thanh toán ngay cho đúng 1 hóa đơn của card đó, không phụ thuộc checkbox đang chọn */
+	const handlePaySingle = (rec: HoaDon.IRecord) => {
+		setRecord(rec);
+		setInitialPaymentAmount(undefined);
+		setLockPaymentAmount(false);
+		setPaymentMode('single');
+		setBillsForPayment([]);
+		setVisibleModalThanhToan(true);
 	};
 
 	const handleViewPdf = async (rec: HoaDon.IRecord) => {
@@ -359,31 +428,13 @@ const HoaDonDetailPage = () => {
 					/>
 				</div>
 
-				{virtualBill && uuDaiPercent > 0 && (
-					<div className='invoice-group-detail__ticket'>
-						<div className='invoice-group-detail__ticket-badge'>−{uuDaiPercent}%</div>
-						<div>
-							<div className='invoice-group-detail__ticket-title'>
-								{intl.formatMessage({ id: 'taichinh.hoadon.virtualBill.discount.title' }, { percent: uuDaiPercent })}
-							</div>
-							<div className='invoice-group-detail__ticket-desc'>
-								{intl.formatMessage(
-									{ id: 'taichinh.hoadon.virtualBill.discount.description' },
-									{ percent: uuDaiPercent },
-								)}
-							</div>
-						</div>
-					</div>
-				)}
-
 				<Row gutter={[16, 16]} className='invoice-group-detail__cards'>
 					<Col xs={24} md={virtualBill ? 12 : 24}>
 						<InvoiceCard
 							bill={bill}
-							checked={selectedIds.has(bill._id)}
-							onToggle={(checked) => handleToggle(bill._id, checked)}
 							onViewDetail={() => handleViewDetail(bill)}
 							onViewPdf={() => handleViewPdf(bill)}
+							onPayNow={() => handlePaySingle(bill)}
 							pdfLoading={pdfLoadingId === bill._id}
 							onDangKyTraGop={() => {
 								setBillTraGop(bill);
@@ -401,40 +452,19 @@ const HoaDonDetailPage = () => {
 								bill={virtualBill}
 								isVirtual
 								discountPercent={uuDaiPercent}
-								checked={selectedIds.has(virtualBill._id)}
-								onToggle={(checked) => handleToggle(virtualBill._id, checked)}
+								combinedTotal={combinedTotal}
+								currentBillAmount={bill.balance ?? 0}
+								discountAmount={discountAmount}
 								onViewDetail={() => handleViewDetail(virtualBill)}
 								onViewPdf={() => handleViewPdf(virtualBill)}
+								onPayNow={handlePayBoth}
+								payLabelId='taichinh.hoadon.detail.payBothButton'
+								payDisabled={payBothDisabled}
 								pdfLoading={pdfLoadingId === virtualBill._id}
 							/>
 						</Col>
 					)}
 				</Row>
-
-				<div className='invoice-group-detail__pay-bar'>
-					<div>
-						<div className='invoice-group-detail__pay-count'>
-							{selectedIds.size === 0
-								? intl.formatMessage({ id: 'taichinh.hoadon.detail.selectAtLeastOne' })
-								: intl.formatMessage({ id: 'taichinh.hoadon.action.paySelected' }, { count: selectedIds.size })}
-						</div>
-						<div className='invoice-group-detail__pay-total'>{currencyFormat(selectedTotal)} VND</div>
-					</div>
-					<ButtonExtend
-						type='primary'
-						size='large'
-						disabled={payDisabled}
-						onClick={handlePayNow}
-						notHideText
-						tooltip={
-							selectedBills.length > 0 && payDisabled
-								? intl.formatMessage({ id: 'taichinh.hoadon.tooltip.ngoaithoihan' })
-								: undefined
-						}
-					>
-						{intl.formatMessage({ id: 'taichinh.thanhtoan.button.thanhtoan' })}
-					</ButtonExtend>
-				</div>
 
 				<Text type='secondary' className='invoice-group-detail__footnote'>
 					{intl.formatMessage({ id: 'taichinh.hoadon.detail.needHelp' })}

@@ -47,7 +47,6 @@ export default {
 	'taichinh.hoadon.tab.paid': 'Paid',
 	'taichinh.hoadon.action.paySelected': 'Pay ({count}) invoices',
 	'taichinh.hoadon.virtualBill.earlyPayment': 'Early payment',
-	'taichinh.hoadon.virtualBill.discount.title': '{percent}% early payment discount',
 	'taichinh.hoadon.virtualBill.discount.description':
 		'Select and pay both invoices together to receive an immediate {percent}% discount on the total amount due.',
 
@@ -55,8 +54,11 @@ export default {
 	'taichinh.hoadon.detail.currentTermChip': 'Current invoice',
 	'taichinh.hoadon.detail.discountDeadline': 'Discount deadline',
 	'taichinh.hoadon.detail.optionalNote': "Not due yet — this is an optional early payment to unlock the discount.",
+	'taichinh.hoadon.detail.combinedTotalLabel': 'Total if you pay both invoices',
+	'taichinh.hoadon.detail.totalAmountLabel': 'Total',
+	'taichinh.hoadon.detail.discountAmountLine': 'Already includes a −{amount} discount',
 	'taichinh.hoadon.detail.viewBreakdown': 'View item breakdown',
-	'taichinh.hoadon.detail.selectAtLeastOne': 'Select at least 1 invoice to pay',
+	'taichinh.hoadon.detail.payBothButton': 'Pay both',
 	'taichinh.hoadon.detail.needHelp': 'Need help? Contact the Finance Office.',
 	'taichinh.hoadon.detail.notFound': 'Invoice not found',
 	'taichinh.thanhtoan.title': 'Payment Information',
