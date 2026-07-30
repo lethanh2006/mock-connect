@@ -84,7 +84,7 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 				</div>
 			)}
 
-			<div className='gioi-thieu-section'>
+			<div>
 				<Row gutter={[16, 16]}>
 					<Col span={24} md={12}>
 						<div className='thong-tin-header'>

@@ -7,7 +7,7 @@ import { useIntl } from 'umi';
 
 const SelectDonViHanhChinh = (props: {
 	form: FormInstance<any>;
-	suffix?: 'NoiSinh' | 'ThuongTru' | 'QueQuan' | 'KhaiBao' | 'NguoiThan';
+	suffix?: 'NoiSinh' | 'ThuongTru' | 'QueQuan' | 'KhaiBao' | 'NguoiThan' | (string & {});
 	listTinh?: DonViHanhChinh.IRecord[];
 	hasSoNha?: boolean;
 	disabled?: boolean;
@@ -21,6 +21,13 @@ const SelectDonViHanhChinh = (props: {
 	initialValue?: DonViHanhChinh.IDataInit;
 	hasLabel?: boolean;
 	keyValue?: keyof DonViHanhChinh.IRecord;
+	/** Override the default (Vietnamese, i18n) labels/placeholders — e.g. for an English-only form */
+	labelTinh?: string;
+	placeholderTinh?: string;
+	labelXaPhuong?: string;
+	placeholderXaPhuong?: string;
+	labelSoNha?: string;
+	placeholderSoNha?: string;
 }) => {
 	const intl = useIntl();
 	const {
@@ -33,6 +40,12 @@ const SelectDonViHanhChinh = (props: {
 		hideXaPhuong,
 		hasLabel,
 		keyValue = 'tenDonVi',
+		labelTinh,
+		placeholderTinh,
+		labelXaPhuong,
+		placeholderXaPhuong,
+		labelSoNha,
+		placeholderSoNha,
 	} = props;
 	const [idTinh, setIdTinh] = useState<string | undefined>(props?.initialValue?.tinhTp);
 	// const [idHuyen, setIdHuyen] = useState<string | undefined>(props?.initialValue?.quanHuyen);
@@ -77,15 +90,15 @@ const SelectDonViHanhChinh = (props: {
 	return (
 		<Row gutter={[12, 0]}>
 			{!hideTinh && (
-				<Col span={12}>
+				<Col xs={24} md={hideXaPhuong ? 24 : 12}>
 					<Form.Item
 						name={suffix ? 'tinhTp' + suffix : 'tinhTp'}
-						label={hasLabel ? intl.formatMessage({ id: 'donvihanhchinh.tp' }) : undefined}
+						label={hasLabel ? (labelTinh ?? intl.formatMessage({ id: 'donvihanhchinh.tp' })) : undefined}
 						initialValue={props.initialValue?.tinhTp}
 						rules={props.notRequiredTinh === true ? [] : [...rules.required]}
 					>
 						<Select
-							placeholder={intl.formatMessage({ id: 'donvihanhchinh.tp.place' })}
+							placeholder={placeholderTinh ?? intl.formatMessage({ id: 'donvihanhchinh.tp.place' })}
 							options={listTinh?.map((item) => ({
 								key: item.ma,
 								value: item[keyValue],
@@ -98,7 +111,7 @@ const SelectDonViHanhChinh = (props: {
 						/>
 					</Form.Item>
 
-					<Form.Item name={suffix ? 'maTinhTp' + suffix : 'maTinhTp'} />
+					<Form.Item name={suffix ? 'maTinhTp' + suffix : 'maTinhTp'} noStyle />
 				</Col>
 			)}
 			{/* {!hideQuanHuyen && (
@@ -126,15 +139,15 @@ const SelectDonViHanhChinh = (props: {
 			)} */}
 
 			{!hideXaPhuong && (
-				<Col span={12}>
+				<Col xs={24} md={hideTinh ? 24 : 12}>
 					<Form.Item
 						initialValue={props.initialValue?.xaPhuong}
 						name={suffix ? 'xaPhuong' + suffix : 'xaPhuong'}
 						rules={props.notRequiredXaPhuong === true ? [] : [...rules.required]}
-						label={hasLabel ? intl.formatMessage({ id: 'donvihanhchinh.xa' }) : undefined}
+						label={hasLabel ? (labelXaPhuong ?? intl.formatMessage({ id: 'donvihanhchinh.xa' })) : undefined}
 					>
 						<Select
-							placeholder={intl.formatMessage({ id: 'donvihanhchinh.xa.place' })}
+							placeholder={placeholderXaPhuong ?? intl.formatMessage({ id: 'donvihanhchinh.xa.place' })}
 							allowClear
 							showSearch
 							options={(listXa ?? []).map((item) => ({
@@ -147,7 +160,7 @@ const SelectDonViHanhChinh = (props: {
 						/>
 					</Form.Item>
 
-					<Form.Item name={suffix ? 'maXaPhuong' + suffix : 'maXaPhuong'} />
+					<Form.Item name={suffix ? 'maXaPhuong' + suffix : 'maXaPhuong'} noStyle />
 				</Col>
 			)}
 			{hasSoNha ? (
@@ -156,9 +169,9 @@ const SelectDonViHanhChinh = (props: {
 						name={suffix ? 'soNhaTenDuong' + suffix : 'soNhaTenDuong'}
 						initialValue={props.initialValue?.soNhaTenDuong}
 						rules={[...(props.notRequiredDiaChiCuThe ? [] : rules.required), ...rules.text, ...rules.length(250)]}
-						label={hasLabel ? intl.formatMessage({ id: 'donvihanhchinh.sonha' }) : undefined}
+						label={hasLabel ? (labelSoNha ?? intl.formatMessage({ id: 'donvihanhchinh.sonha' })) : undefined}
 					>
-						<Input placeholder={intl.formatMessage({ id: 'donvihanhchinh.sonha.place' })} />
+						<Input placeholder={placeholderSoNha ?? intl.formatMessage({ id: 'donvihanhchinh.sonha.place' })} />
 					</Form.Item>
 				</Col>
 			) : null}

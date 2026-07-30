@@ -15,12 +15,19 @@ import type {
 	ETrangThaiThanhVienGiaDinh,
 	EViTriViecLam,
 } from './constant';
-import type { ETrangThaiChungChiSinhVen, EVaiTroSvLhc } from './constants';
+import type { EnrollmentStatus, ETrangThaiChungChiSinhVen, EVaiTroSvLhc } from './constants';
 
 declare module SinhVien {
 	export interface IRecord {
 		_id: string;
 		hoKhauThuongTru: any;
+		/** Nơi ở hiện tại — khai báo trong bước 1 của form nhập học */
+		noiOHienTai?: TDiaChi;
+		enrollmentStatus: EnrollmentStatus
+		/** Bước nhập học đang/đã hoàn thành, tối thiểu là 1 */
+		enrollmentStep: number
+		/** Các trường bổ sung khai báo riêng cho hồ sơ nhập học, không thuộc hồ sơ sinh viên gốc */
+		hoSoNhapHoc?: THoSoNhapHoc;
 		dotNhapHocId: string | null;
 		dotNhapHoc?: DotNhapHoc.IRecord;
 		ssoId: string;
@@ -31,10 +38,12 @@ declare module SinhVien {
 		ma: string;
 		ten: string;
 		firstName: string;
+		middleName: string;
 		lastName: string;
 		gioiTinh: EGioiTinh;
 
 		quocTich: string;
+		maQuocTich?: string;
 		danToc: string;
 		tonGiao: string;
 		ngaySinh: string;
@@ -42,11 +51,13 @@ declare module SinhVien {
 		noiCapCccd: string;
 		ngayCapCccd: string;
 		soDienThoai: string;
+		maVungDienThoai?: string;
 		email: string;
 		doiTuong: EDoiTuongLopHanhChinh;
 
 		maCSDT: string;
 		csdt?: CoSoDaoTao.IRecord;
+
 		// soDienThoai2: string;
 		// email2: string;
 		// nguoiLienLac: string;
@@ -55,6 +66,7 @@ declare module SinhVien {
 		loaiNoiSinh: ELoaiNoiSinh;
 		quocGiaNoiSinh: string;
 		tinhTpNoiSinh: string;
+		maTinhTpNoiSinh?: string;
 		// quanHuyenNoiSinh: string;
 		// xaPhuongNoiSinh: string;
 
@@ -82,6 +94,7 @@ declare module SinhVien {
 		chiNhanhNganHang: string;
 
 		loaiKhuyetTat?: string;
+		maLoaiKhuyetTat?: string;
 		ghiChuYTe?: string;
 		canNang: number;
 		chieuCao: number;
@@ -186,6 +199,42 @@ declare module SinhVien {
 		tenXaPhuong: string;
 		diaChi?: string;
 	};
+
+	/** Các trường chỉ dùng riêng cho khai báo nhập học, không thuộc hồ sơ sinh viên gốc */
+	export type THoSoNhapHoc = {
+		chuTaiKhoanNganHang?: string;
+		coVanDeSucKhoe?: boolean;
+		urlDinhKemVanDeSucKhoe?: string;
+		isRegisterFreeDormitory?: boolean;
+		soHoChieu?: string;
+		urlDinhKemHoChieu?: string;
+		visa?: {
+			loaiVisa?: string;
+			ngayCap?: string;
+			ngayHetHan?: string;
+			coQuanCap?: string;
+			noiCap?: string;
+			urlDinhKemVisa?: string;
+		};
+		danhSachGiayToNhapHoc?: {
+			id: string;
+			urlFile?: string;
+		}[];
+		maBuuChinh?: string;
+		nhomMau?: string;
+		urlMatTruocCccd?: string;
+		urlMatSauCccd?: string;
+		firstGenStudent?: boolean;
+		adjustmentNeeds?: string[];
+		adjustmentOthersText?: string;
+		alreadyHadCheckup?: boolean;
+		healthCheckupAttachment?: string;
+		hasInsurance?: boolean;
+		healthInsuranceNumber?: string;
+		healthInsuranceAttachment?: string;
+		isRegisterDormitory?: boolean;
+	};
+
 
 	export interface INoiTruSinhVien {
 		_id: string;

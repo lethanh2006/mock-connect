@@ -173,11 +173,11 @@ const AvatarDropdown = () => {
 				label: item?.dataPartition?.name ?? item?.dataPartition?.ma,
 				style: isActive
 					? {
-							backgroundColor: activeBgColor,
-							borderLeft: `3px solid ${activeColor}`,
-							color: activeColor,
-							fontWeight: 'bold',
-						}
+						backgroundColor: activeBgColor,
+						borderLeft: `3px solid ${activeColor}`,
+						color: activeColor,
+						fontWeight: 'bold',
+					}
 					: undefined,
 				onClick: () => {
 					localStorage.setItem('partitionCode', code);

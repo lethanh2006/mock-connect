@@ -3,6 +3,7 @@ declare module HocKy {
 		_id: string;
 		ma: string;
 		ten: string;
+		tenTiengAnh: string;
 		soThuTu: number;
 		namHocId: string;
 		namHoc?: NamHoc.IRecord;

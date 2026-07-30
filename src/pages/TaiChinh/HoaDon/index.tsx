@@ -6,8 +6,8 @@ import { EOperatorType } from '@/components/Table/constant';
 import { type IColumn } from '@/components/Table/typing';
 import { getExportBillUrl } from '@/services/TaiChinh/HoaDon';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable } from '@/services/TaiChinh/constant';
 import { EMauTrangThaiTraGopBill, ETrangThaiTraGopBill } from '@/services/TaiChinh/TraGop/constant';
+import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import {
 	EyeOutlined,
@@ -583,7 +583,9 @@ const HoaDonPage = () => {
 					checkStrictly: true,
 					getCheckboxProps: (rec: BillTableRecord) => ({
 						disabled: Boolean(
-							rec._isKtxDepositNotice || rec.transactions?.some((transaction) => transaction.isKtxDeposit === true),
+							rec._isVirtualBillNotice ||
+							rec._isKtxDepositNotice ||
+							rec.transactions?.some((transaction) => transaction.isKtxDeposit === true),
 						),
 					}),
 					onChange: (selectedRowKeys: Key[]) => {
