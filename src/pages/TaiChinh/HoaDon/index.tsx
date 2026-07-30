@@ -221,7 +221,7 @@ const HoaDonPage = () => {
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.dotthu' }),
 			dataIndex: 'idDotThu',
 			width: 180,
-			render: (_val, rec: BillTableRecord) => <div>{rec.dotThu?.tenHocKy}</div>,
+			render: (_val, rec: BillTableRecord) => <div>{rec.dotThu?.tenDot}</div>,
 			filterType: 'customselect',
 			filterCustomSelect: <SelectDotThu multiple />,
 		},
