@@ -14,7 +14,7 @@ import {
 	FilePdfOutlined,
 	ScheduleOutlined,
 } from '@ant-design/icons';
-import { Button, Col, Collapse, Empty, Modal, Progress, Row, Skeleton, Space, Tag, Typography } from 'antd';
+import { Alert, Button, Col, Collapse, Empty, Modal, Progress, Row, Skeleton, Space, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
 import type { IntlShape } from 'react-intl';
@@ -59,6 +59,8 @@ type InvoiceCardProps = {
 	combinedTotal?: number;
 	/** Số tiền hóa đơn hiện tại (bill gốc) — chỉ truyền cho card của virtualBill để lên breakdown gộp */
 	currentBillAmount?: number;
+	/** Số tiền đã thanh toán trước đó của hóa đơn hiện tại (bill gốc) — dùng để chú thích rõ currentBillAmount chỉ là phần còn lại, tránh hiểu nhầm là tổng gốc khi user đã trả một phần */
+	currentBillPaidAmount?: number;
 	/** Tên đợt thu của hóa đơn hiện tại (bill gốc) — dùng làm nhãn dòng breakdown cho dễ hiểu thay vì text tĩnh */
 	currentTermLabel?: string;
 	/** Số tiền ưu đãi thực tế — lấy từ giao dịch DISCOUNT cuối cùng của virtualBill */
@@ -82,6 +84,7 @@ const InvoiceCard = ({
 	discountPercent,
 	combinedTotal,
 	currentBillAmount,
+	currentBillPaidAmount,
 	currentTermLabel,
 	discountAmount,
 	onViewDetail,
@@ -139,12 +142,20 @@ const InvoiceCard = ({
 					</Tag>
 				)}
 			</Space>
-			<Title level={5} style={{ margin: '8px 0 0' }}>
-				{bill.identityCode}
-			</Title>
-			<Text type='secondary' style={{ fontSize: 12.5 }}>
-				{bill.dotThu?.tenDot}
-			</Text>
+			{isVirtual ? (
+				<Title level={5} style={{ margin: '8px 0 0' }}>
+					{intl.formatMessage({ id: 'taichinh.hoadon.detail.fullYearLabel' })}
+				</Title>
+			) : (
+				<>
+					<Title level={5} style={{ margin: '8px 0 0' }}>
+						{bill.identityCode}
+					</Title>
+					<Text type='secondary' style={{ fontSize: 12.5 }}>
+						{bill.dotThu?.tenDot}
+					</Text>
+				</>
+			)}
 
 			<div className='invoice-detail-card__meta'>
 				{!(isVirtual && !!discountPercent) && (
@@ -186,6 +197,18 @@ const InvoiceCard = ({
 							<span>{currentTermLabel || intl.formatMessage({ id: 'taichinh.hoadon.detail.currentTermChip' })}</span>
 							<span>{currencyFormat(currentBillAmount ?? 0)} VND</span>
 						</div>
+						{!!currentBillPaidAmount && (
+							<div className='invoice-detail-card__paid-note'>
+								<div className='invoice-detail-card__paid-note-row'>
+									<span>{intl.formatMessage({ id: 'taichinh.hoadon.detail.currentBillPaidLabel' })}</span>
+									<span>{currencyFormat(currentBillPaidAmount)} VND</span>
+								</div>
+								<div className='invoice-detail-card__paid-note-row'>
+									<span>{intl.formatMessage({ id: 'taichinh.hoadon.detail.currentBillTotalLabel' })}</span>
+									<span>{currencyFormat((currentBillAmount ?? 0) + currentBillPaidAmount)} VND</span>
+								</div>
+							</div>
+						)}
 						<span className='invoice-detail-card__combo-op'>+</span>
 						<div className='invoice-detail-card__combo-row'>
 							<span>
@@ -357,14 +380,18 @@ const HoaDonDetailPage = () => {
 	const totalPaid = bill?.amountPaid ?? 0;
 	const payBothDisabled = !virtualBill || disableThanhToan(bill) || disableThanhToan(virtualBill);
 
-	/** Thanh toán gộp cả 2 hóa đơn (hóa đơn hiện tại + hóa đơn đóng sớm) cùng lúc */
+	/**
+	 * Thanh toán gộp cả 2 hóa đơn (hóa đơn hiện tại + hóa đơn đóng sớm) cùng lúc.
+	 * Nếu hóa đơn hiện tại đã thanh toán đủ (balance = 0) thì không đưa vào danh sách
+	 * gửi cho modal thanh toán — tránh hiển thị/gửi thanh toán 1 khoản đã xong 0đ.
+	 */
 	const handlePayBoth = () => {
 		if (!bill || !virtualBill) return;
 		setRecord(bill);
 		setInitialPaymentAmount(undefined);
 		setLockPaymentAmount(false);
 		setPaymentMode('multi');
-		setBillsForPayment([bill, virtualBill]);
+		setBillsForPayment((bill.balance ?? 0) > 0 ? [bill, virtualBill] : [virtualBill]);
 		setVisibleModalThanhToan(true);
 	};
 
@@ -458,6 +485,15 @@ const HoaDonDetailPage = () => {
 					/>
 				</div>
 
+				{bill.status !== EMaTrangThaiThanhToan.DA_THANH_TOAN_DU && (
+					<Alert
+						type='info'
+						showIcon
+						className='invoice-group-detail__partial-note'
+						message={intl.formatMessage({ id: 'taichinh.hoadon.detail.partialPaymentNote' })}
+					/>
+				)}
+
 				<Row gutter={[16, 16]} className='invoice-group-detail__cards'>
 					<Col xs={24} md={virtualBill ? 12 : 24}>
 						<InvoiceCard
@@ -484,6 +520,7 @@ const HoaDonDetailPage = () => {
 								discountPercent={uuDaiPercent}
 								combinedTotal={combinedTotal}
 								currentBillAmount={bill.balance ?? 0}
+								currentBillPaidAmount={bill.amountPaid ?? 0}
 								currentTermLabel={bill.dotThu?.tenHocKy}
 								discountAmount={discountAmount}
 								onViewDetail={() => handleViewDetail(virtualBill)}

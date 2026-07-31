@@ -67,6 +67,11 @@ export default {
 	'taichinh.hoadon.detail.payBothButton': 'Thanh toán trọn năm',
 	'taichinh.hoadon.detail.needHelp': 'Cần hỗ trợ? Liên hệ Phòng Tài chính.',
 	'taichinh.hoadon.detail.notFound': 'Không tìm thấy hóa đơn',
+	'taichinh.hoadon.detail.partialPaymentNote':
+		'Bạn không cần thanh toán toàn bộ trong một lần — có thể thanh toán từng phần, số tiền còn lại sẽ tiếp tục hiển thị ở đây cho đến khi đủ.',
+	'taichinh.hoadon.detail.fullYearLabel': 'Thanh toán cả năm',
+	'taichinh.hoadon.detail.currentBillPaidLabel': 'Đã thanh toán',
+	'taichinh.hoadon.detail.currentBillTotalLabel': 'Tổng hóa đơn',
 
 	'taichinh.thanhtoan.title': 'Thông tin thanh toán',
 	'taichinh.thanhtoan.modal.success': 'Thanh toán thành công!',

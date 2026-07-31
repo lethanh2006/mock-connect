@@ -66,6 +66,11 @@ export default {
 	'taichinh.hoadon.detail.payBothButton': 'Pay Full Year',
 	'taichinh.hoadon.detail.needHelp': 'Need help? Contact the Finance Office.',
 	'taichinh.hoadon.detail.notFound': 'Invoice not found',
+	'taichinh.hoadon.detail.partialPaymentNote':
+		"You don't have to pay the full amount at once — partial payments are accepted, and the remaining balance will keep showing here until fully paid.",
+	'taichinh.hoadon.detail.fullYearLabel': 'Full Year Payment',
+	'taichinh.hoadon.detail.currentBillPaidLabel': 'Already paid',
+	'taichinh.hoadon.detail.currentBillTotalLabel': 'Invoice total',
 	'taichinh.thanhtoan.title': 'Payment Information',
 	'taichinh.thanhtoan.modal.success': 'Payment successful!',
 	'taichinh.thanhtoan.tab.chitiet': 'Details',
