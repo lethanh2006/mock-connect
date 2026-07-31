@@ -2,7 +2,7 @@ import MyDatePicker from '@/components/MyDatePicker';
 import UploadFile from '@/components/Upload/UploadFile';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { checkEligibleTraGop, postYeuCauTraGop } from '@/services/TaiChinh/TraGop';
-import { EHinhThucHoTro } from '@/services/TaiChinh/TraGop/constant';
+import { EHinhThucHoTro, ETrangThaiDuyetYeuCau } from '@/services/TaiChinh/TraGop/constant';
 import type { TraGop } from '@/services/TaiChinh/TraGop/typing';
 import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
@@ -33,6 +33,9 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 	const [submitting, setSubmitting] = useState(false);
 	const [eligibleData, setEligibleData] = useState<TraGop.ICheckEligible | undefined>(undefined);
 
+	const existingYeuCau = bill?.yeuCauTraGop;
+	const isEditing = existingYeuCau?.trangThaiDuyet === ETrangThaiDuyetYeuCau.REQUEST_CHANGE;
+
 	useEffect(() => {
 		if (!visible || !bill?._id) {
 			setEligibleData(undefined);
@@ -57,7 +60,20 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 			college: recSinhVien?.nganh?.tenDonViPhuTrach ?? '',
 			soTienPhaiNop: eligibleData.tongTien,
 		});
-	}, [visible, eligibleData?.eligible, eligibleData?.tongTien, recSinhVien?._id]);
+
+		if (existingYeuCau) {
+			form.setFieldsValue({
+				hinhThucHoTro: existingYeuCau.hinhThucHoTro,
+				soLanTraGopYeuCau: existingYeuCau.soLanTraGopYeuCau,
+				deXuatLoTrinhThanhToan: existingYeuCau.deXuatLoTrinhThanhToan,
+				ngayGiaHanYeuCau: existingYeuCau.ngayGiaHanYeuCau ? dayjs(existingYeuCau.ngayGiaHanYeuCau) : undefined,
+				lyDo: existingYeuCau.lyDo,
+				tongTienHocBongHoTro: existingYeuCau.tongTienHocBongHoTro,
+				taiLieuDinhKem: existingYeuCau.taiLieuDinhKem,
+				camKet: existingYeuCau.camKet,
+			});
+		}
+	}, [visible, eligibleData?.eligible, eligibleData?.tongTien, existingYeuCau, recSinhVien?._id]);
 
 	const minNgayGiaHan = bill?.ngayHetHanThanhToan ? dayjs.max(dayjs(), dayjs(bill.ngayHetHanThanhToan)) : dayjs();
 
@@ -90,7 +106,9 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 			}
 
 			await postYeuCauTraGop(payload);
-			message.success(intl.formatMessage({ id: 'taichinh.tragop.modal.success' }));
+			message.success(
+				intl.formatMessage({ id: isEditing ? 'taichinh.tragop.modal.successEdit' : 'taichinh.tragop.modal.success' }),
+			);
 			onSuccess?.();
 			onClose();
 		} catch {
@@ -109,7 +127,7 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 			width={1000}
 			centered
 			styles={{ body: { maxHeight: '85vh', overflowY: 'auto', overflowX: 'hidden', paddingRight: 8 } }}
-			title={intl.formatMessage({ id: 'taichinh.tragop.modal.title' })}
+			title={intl.formatMessage({ id: isEditing ? 'taichinh.tragop.modal.titleEdit' : 'taichinh.tragop.modal.title' })}
 		>
 			<Spin spinning={loadingCheck}>
 				{!loadingCheck && eligibleData?.eligible === false && (
@@ -330,7 +348,7 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 								{intl.formatMessage({ id: 'global.button.huy' })}
 							</Button>
 							<Button type='primary' htmlType='submit' loading={submitting} disabled={!camKet}>
-								{intl.formatMessage({ id: 'taichinh.tragop.modal.guidangky' })}
+								{intl.formatMessage({ id: isEditing ? 'taichinh.tragop.modal.capnhat' : 'taichinh.tragop.modal.guidangky' })}
 							</Button>
 						</div>
 					</Form>
