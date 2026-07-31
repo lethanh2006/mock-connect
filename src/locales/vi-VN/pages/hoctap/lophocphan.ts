@@ -314,6 +314,7 @@ export default {
 
 	'lophocphan.withdraw.title': 'Đơn xin rút học phần',
 	'lophocphan.withdraw.confirm': 'Xác nhận',
+	'lophocphan.withdraw.success': 'Yêu cầu rút học phần đã được xử lý thành công.',
 	'lophocphan.withdraw.step.01': 'Bước 01',
 	'lophocphan.withdraw.step.02': 'Bước 02',
 	'lophocphan.withdraw.step.policy': 'Quy định rút học phần',

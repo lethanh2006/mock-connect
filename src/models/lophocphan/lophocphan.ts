@@ -11,6 +11,7 @@ import { ipDaoTao } from '@/utils/ip';
 import { message } from 'antd';
 import _ from 'lodash';
 import { useState } from 'react';
+import { getIntl } from 'umi';
 
 export default () => {
 	const objInit = useInitModel<LopHocPhan.IRecord>('lop-hoc-phan', undefined, undefined, ipDaoTao, {
@@ -307,7 +308,7 @@ export default () => {
 		setFormSubmiting(true);
 		try {
 			const res = await postWithdraw(payload);
-			message.success('Lưu thành công');
+			message.success(getIntl().formatMessage({ id: 'lophocphan.withdraw.success' }));
 
 			return res.data;
 		} catch (er) {
