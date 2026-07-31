@@ -16,7 +16,7 @@ import {
 	ScheduleOutlined,
 	UnorderedListOutlined,
 } from '@ant-design/icons';
-import { Alert, Empty, Modal, Tabs, Tag, Tooltip, notification } from 'antd';
+import { Alert, Empty, Modal, Tabs, Tag, notification } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState, type Key, type ReactNode } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -65,7 +65,6 @@ export const disableThanhToan = (rec?: HoaDon.IRecord): boolean => {
 	if (rec?.status === EMaTrangThaiThanhToan.DONG || rec?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU) return true;
 	return false;
 };
-
 
 const HoaDonPage = () => {
 	const intl = useIntl();
@@ -182,39 +181,36 @@ const HoaDonPage = () => {
 			dataIndex: 'identityCode',
 			align: 'center',
 			filterType: 'string',
-			width: 120,
+			width: 140,
 			render: (val, rec: BillTableRecord) => {
 				const hasDiscount = Boolean(rec.virtualBill);
 				const uuDaiThanhToanTruocKy = rec.dotThu?.uuDaiThanhToanTruocKy ?? 0;
 
-				const content = (
+				return (
 					<div
-						style={{ display: 'inline-flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}
+						style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, cursor: 'pointer' }}
 						onClick={(e) => {
 							e.stopPropagation();
 							history.push(`/finance/tuition-billing/${rec.identityCode}`);
 						}}
 					>
-						<span className='text-primary fw500'>{val}</span>
+						<div style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+							<span className='text-primary fw500'>{val}</span>
+							{hasDiscount && (
+								<Tag color='error' style={{ margin: 0, fontSize: 10, lineHeight: '15px', padding: '0 4px' }}>
+									-{uuDaiThanhToanTruocKy}%
+								</Tag>
+							)}
+						</div>
 						{hasDiscount && (
-							<Tag color='error' style={{ margin: 0, fontSize: 10, lineHeight: '15px', padding: '0 4px' }}>
-								-{uuDaiThanhToanTruocKy}%
-							</Tag>
+							<div style={{ fontSize: 10.5, lineHeight: 1.3, color: '#cf1322', textAlign: 'center' }}>
+								{intl.formatMessage(
+									{ id: 'taichinh.hoadon.column.discountHint' },
+									{ percent: uuDaiThanhToanTruocKy },
+								)}
+							</div>
 						)}
 					</div>
-				);
-
-				if (!hasDiscount) return content;
-
-				return (
-					<Tooltip
-						title={intl.formatMessage(
-							{ id: 'taichinh.hoadon.virtualBill.discount.description' },
-							{ percent: uuDaiThanhToanTruocKy },
-						)}
-					>
-						{content}
-					</Tooltip>
 				);
 			},
 		},
