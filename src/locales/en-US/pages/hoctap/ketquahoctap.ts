@@ -115,4 +115,6 @@ export default {
 	'ketquahoctap.maytinh.form.label': 'Expected grade after retake / improvement (10-point scale)',
 	'ketquahoctap.maytinh.form.placeholder': 'Enter expected grade',
 	'ketquahoctap.maytinh.common.ok': 'Confirm',
+	'ketquahoctap.ketquahocky.diemquydoi_tooltip': 'Transferred Grade',
+	'ketquahoctap.ketquahocky.hoclai_tooltip': 'Retake',
 };

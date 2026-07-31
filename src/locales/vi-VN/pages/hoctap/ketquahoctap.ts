@@ -118,4 +118,6 @@ export default {
 	'ketquahoctap.ketquahocky.trungbinhhocky10': 'Trung bình học kỳ (hệ 10)',
 	'ketquahoctap.ketquahocky.tinchino': 'Số tín chỉ nợ học kỳ',
 	'ketquahoctap.ketquahocky.trungbinhtichluy10': 'TBC tích lũy (hệ 10)',
+	'ketquahoctap.ketquahocky.diemquydoi_tooltip': 'Điểm quy đổi',
+	'ketquahoctap.ketquahocky.hoclai_tooltip': 'Học lại',
 };
