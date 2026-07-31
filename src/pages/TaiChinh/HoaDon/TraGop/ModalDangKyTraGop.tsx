@@ -54,7 +54,7 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 			email: recSinhVien?.email,
 			ma: recSinhVien?.ma,
 			soDienThoai: recSinhVien?.soDienThoai,
-			college: recSinhVien?.nganh?.maDonVi ?? '',
+			college: recSinhVien?.nganh?.tenDonViPhuTrach ?? '',
 			soTienPhaiNop: eligibleData.tongTien,
 		});
 	}, [visible, eligibleData?.eligible, eligibleData?.tongTien, recSinhVien?._id]);
@@ -171,12 +171,7 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 							</Col>
 						</Row>
 
-						<Form.Item
-							name='college'
-							label={intl.formatMessage({ id: 'taichinh.tragop.modal.college.label' })}
-							extra={recSinhVien?.nganh?.tenDonViPhuTrach ?? ''}
-							rules={[...rules.required]}
-						>
+						<Form.Item name='college' label={intl.formatMessage({ id: 'taichinh.tragop.modal.college.label' })}>
 							<Input disabled />
 						</Form.Item>
 

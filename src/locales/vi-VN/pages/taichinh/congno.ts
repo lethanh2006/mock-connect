@@ -290,7 +290,7 @@ export default {
 	'taichinh.tragop.modal.email.label': 'Email',
 	'taichinh.tragop.modal.mssv.label': 'Mã số sinh viên',
 	'taichinh.tragop.modal.sdt.label': 'Số điện thoại',
-	'taichinh.tragop.modal.college.label': 'Trường/Viện',
+	'taichinh.tragop.modal.college.label': 'Viện',
 	'taichinh.tragop.modal.tonghocbong.label': 'Tổng học bổng, hỗ trợ tài chính đã nhận',
 	'taichinh.tragop.modal.tonghocbong.place': 'Nhập số tiền',
 	'taichinh.tragop.modal.sotienphainop.label': 'Số tiền cần thanh toán',
