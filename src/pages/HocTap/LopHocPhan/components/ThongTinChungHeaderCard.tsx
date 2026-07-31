@@ -98,6 +98,7 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 						tooltip={intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.withdraw' })}
 						icon={<LogoutOutlined />}
 						onClick={() => setVisibleWithdraw(true)}
+						style={{ background: '#fff1f0', borderColor: '#fff1f0', color: '#cf1322' }}
 					/>
 				</Space>
 			</Flex>

@@ -54,7 +54,7 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 			email: recSinhVien?.email,
 			ma: recSinhVien?.ma,
 			soDienThoai: recSinhVien?.soDienThoai,
-			college: recSinhVien?.khoaSinhVien?.ma ?? recSinhVien?.maKhoaSinhVien,
+			college: recSinhVien?.nganh?.tenDonViPhuTrach ?? '',
 			soTienPhaiNop: eligibleData.tongTien,
 		});
 	}, [visible, eligibleData?.eligible, eligibleData?.tongTien, recSinhVien?._id]);
@@ -165,22 +165,13 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 								</Form.Item>
 							</Col>
 							<Col span={12}>
-								<Form.Item
-									name='soDienThoai'
-									label={intl.formatMessage({ id: 'taichinh.tragop.modal.sdt.label' })}
-									rules={[...rules.required]}
-								>
+								<Form.Item name='soDienThoai' label={intl.formatMessage({ id: 'taichinh.tragop.modal.sdt.label' })}>
 									<Input disabled />
 								</Form.Item>
 							</Col>
 						</Row>
 
-						<Form.Item
-							name='college'
-							label={intl.formatMessage({ id: 'taichinh.tragop.modal.college.label' })}
-							extra={recSinhVien?.khoaSinhVien?.ten}
-							rules={[...rules.required]}
-						>
+						<Form.Item name='college' label={intl.formatMessage({ id: 'taichinh.tragop.modal.college.label' })}>
 							<Input disabled />
 						</Form.Item>
 
