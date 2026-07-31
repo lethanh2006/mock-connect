@@ -1,6 +1,7 @@
 export default {
 	'taichinh.hoadon.title': 'Tuition & Billing',
 	'taichinh.hoadon.column.identityCode': 'Invoice code',
+	'taichinh.hoadon.column.discountHint': 'Pay full year, save {percent}%',
 	'taichinh.hoadon.column.dotthu': 'Billing Period',
 	'taichinh.hoadon.column.khoanthu': 'Payment Details',
 	'taichinh.hoadon.column.trangthai': 'Status',
