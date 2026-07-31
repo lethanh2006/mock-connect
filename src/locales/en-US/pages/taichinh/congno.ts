@@ -272,10 +272,13 @@ export default {
 	'taichinh.tragop.status.DA_HOAN_THANH_TRA_GOP': 'Installment completed',
 
 	'taichinh.tragop.tooltip.dangky': 'Register for installment payment',
+	'taichinh.tragop.tooltip.xemsua': 'View/edit installment request',
 	'taichinh.tragop.tooltip.tiendo': 'View installment progress',
 
 	'taichinh.tragop.modal.title': 'Register for installment payment',
+	'taichinh.tragop.modal.titleEdit': 'Edit installment request',
 	'taichinh.tragop.modal.success': 'Installment request submitted successfully, please wait for staff approval',
+	'taichinh.tragop.modal.successEdit': 'Installment request updated successfully',
 	'taichinh.tragop.modal.khongdudieukien': 'This invoice is not eligible for installment payment',
 	'taichinh.tragop.modal.tongtien': 'Invoice total: {tongTien}',
 	'taichinh.tragop.modal.hoten.label': 'Full name',
@@ -306,6 +309,7 @@ export default {
 		'I understand that the University will rely on the information I have provided in this form, and I accept full responsibility for any inaccuracies or omissions',
 	'taichinh.tragop.modal.camket.required': 'You must confirm this statement before submitting your request',
 	'taichinh.tragop.modal.guidangky': 'Submit request',
+	'taichinh.tragop.modal.capnhat': 'Update request',
 
 	'taichinh.tragop.tiendo.title': 'Installment progress for invoice {identityCode}',
 	'taichinh.tragop.tiendo.summary.label': 'Installment progress',
