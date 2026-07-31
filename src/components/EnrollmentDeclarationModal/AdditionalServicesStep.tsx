@@ -355,134 +355,134 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 				</div>
 
 				<Spin spinning={kskLoading}>
-				{isKskRegistered ? (
-					<Fragment>
-						<div className={styles.dormitoryInfoAlert}>
-							<InfoCircleFilled className={styles.infoIcon} />
-							<div className={styles.infoText}>
-								{isKskExternal
-									? intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskExemptionAlert' })
-									: intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskRegisteredSchoolAlert' })}
-							</div>
-						</div>
-
-						<div className={styles.dormitoryExemptionCard}>
-							<div className={styles.dormitoryExemptionHeader}>
-								<div className={styles.dormitoryExemptionTitle}>
-									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskTitle' })}
+					{isKskRegistered ? (
+						<Fragment>
+							<div className={styles.dormitoryInfoAlert}>
+								<InfoCircleFilled className={styles.infoIcon} />
+								<div className={styles.infoText}>
+									{isKskExternal
+										? intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskExemptionAlert' })
+										: intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskRegisteredSchoolAlert' })}
 								</div>
-								<div className={styles.dormitoryExemptionTagWrap}>
-									<div className={styles.dormitoryExemptionSubDate}>
-										{intl.formatMessage(
-											{ id: 'global.enrollmentDeclaration.additional.submittedDate' },
-											{ date: formattedKskSubmittedDate },
-										)}
+							</div>
+
+							<div className={styles.dormitoryExemptionCard}>
+								<div className={styles.dormitoryExemptionHeader}>
+									<div className={styles.dormitoryExemptionTitle}>
+										{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskTitle' })}
+									</div>
+									<div className={styles.dormitoryExemptionTagWrap}>
+										<div className={styles.dormitoryExemptionSubDate}>
+											{intl.formatMessage(
+												{ id: 'global.enrollmentDeclaration.additional.submittedDate' },
+												{ date: formattedKskSubmittedDate },
+											)}
+										</div>
 									</div>
 								</div>
+								<div className={styles.dormitoryExemptionBody}>
+									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskBody' })}
+								</div>
 							</div>
-							<div className={styles.dormitoryExemptionBody}>
-								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskBody' })}
+
+							<Button disabled block icon={<FormOutlined />} className={styles.actionButton}>
+								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskRegisteredBtn' })}
+							</Button>
+
+							<div className={styles.dormitoryUnavailableNote}>
+								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskUnavailableNote' })}
 							</div>
-						</div>
-
-						<Button disabled block icon={<FormOutlined />} className={styles.actionButton}>
-							{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskRegisteredBtn' })}
-						</Button>
-
-						<div className={styles.dormitoryUnavailableNote}>
-							{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.kskUnavailableNote' })}
-						</div>
-					</Fragment>
-				) : (
-					<Fragment>
-						<div className={styles.warningBox}>
-							<WarningFilled className={styles.warningIcon} />
-							<div className={styles.warningContent}>
-								<div>{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthCheckupLine1' })}</div>
-								<div>{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthCheckupLine2' })}</div>
-							</div>
-						</div>
-
-						{!kskHasActivePeriod && (
-							<div className={styles.warningBox} style={{ marginTop: 8 }}>
+						</Fragment>
+					) : (
+						<Fragment>
+							<div className={styles.warningBox}>
 								<WarningFilled className={styles.warningIcon} />
 								<div className={styles.warningContent}>
-									<div>{intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.banner.khongCoDot' })}</div>
+									<div>{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthCheckupLine1' })}</div>
+									<div>{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthCheckupLine2' })}</div>
 								</div>
 							</div>
-						)}
 
-						<Row gutter={[16, 16]}>
-							<Col span={24} md={12}>
-								<div
-									className={`${styles.checkupOptionCard} ${Boolean(alreadyHadCheckup) === false ? styles.active : ''}`}
-									onClick={handleSelectHealthDangKy}
-								>
-									<div className={styles.checkupOptionTitle}>
-										{intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.choiceModal.chuaKham.title' })}
-									</div>
-									<div className={styles.checkupOptionDesc}>
-										{intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.choiceModal.chuaKham.desc' })}
-									</div>
-									<div className={styles.checkupOptionAction}>
-										<Button
-											type='primary'
-											loading={loadingDangKyKham}
-											disabled={!kskHasActivePeriod}
-											onClick={(e) => {
-												e.stopPropagation();
-												handleSelectHealthDangKy();
-											}}
-										>
-											{intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.choiceModal.chuaKham.button' })}
-										</Button>
+							{!kskHasActivePeriod && (
+								<div className={styles.warningBox} style={{ marginTop: 8 }}>
+									<WarningFilled className={styles.warningIcon} />
+									<div className={styles.warningContent}>
+										<div>{intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.banner.khongCoDot' })}</div>
 									</div>
 								</div>
-							</Col>
+							)}
 
-							<Col span={24} md={12}>
-								<div
-									className={`${styles.checkupOptionCard} ${alreadyHadCheckup === true ? styles.active : ''}`}
-									onClick={handleSelectHealthMien}
+							<Row gutter={[16, 16]}>
+								<Col span={24} md={12}>
+									<div
+										className={`${styles.checkupOptionCard} ${Boolean(alreadyHadCheckup) === false ? styles.active : ''}`}
+										onClick={handleSelectHealthDangKy}
+									>
+										<div className={styles.checkupOptionTitle}>
+											{intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.choiceModal.chuaKham.title' })}
+										</div>
+										<div className={styles.checkupOptionDesc}>
+											{intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.choiceModal.chuaKham.desc' })}
+										</div>
+										<div className={styles.checkupOptionAction}>
+											<Button
+												type='primary'
+												loading={loadingDangKyKham}
+												disabled={!kskHasActivePeriod}
+												onClick={(e) => {
+													e.stopPropagation();
+													handleSelectHealthDangKy();
+												}}
+											>
+												{intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.choiceModal.chuaKham.button' })}
+											</Button>
+										</div>
+									</div>
+								</Col>
+
+								<Col span={24} md={12}>
+									<div
+										className={`${styles.checkupOptionCard} ${alreadyHadCheckup === true ? styles.active : ''}`}
+										onClick={handleSelectHealthMien}
+									>
+										<div className={styles.checkupOptionTitle}>
+											{intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.choiceModal.daKham.title' })}
+										</div>
+										<div className={styles.checkupOptionDesc}>
+											{intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.choiceModal.daKham.desc' })}
+										</div>
+										<div className={styles.checkupOptionAction}>
+											<Button
+												type={alreadyHadCheckup === true ? 'primary' : 'default'}
+												disabled={!kskHasActivePeriod}
+												onClick={(e) => {
+													e.stopPropagation();
+													handleSelectHealthMien();
+												}}
+											>
+												{intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.choiceModal.daKham.button' })}
+											</Button>
+										</div>
+									</div>
+								</Col>
+							</Row>
+
+							{/* {alreadyHadCheckup === true && (
+								<Form.Item
+									name='healthCheckupAttachment'
+									label={intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthCheckupAttachment' })}
+									rules={[...rules.fileRequired]}
+									style={{ marginTop: 16, marginBottom: 0 }}
 								>
-									<div className={styles.checkupOptionTitle}>
-										{intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.choiceModal.daKham.title' })}
-									</div>
-									<div className={styles.checkupOptionDesc}>
-										{intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.choiceModal.daKham.desc' })}
-									</div>
-									<div className={styles.checkupOptionAction}>
-										<Button
-											type={alreadyHadCheckup === true ? 'primary' : 'default'}
-											disabled={!kskHasActivePeriod}
-											onClick={(e) => {
-												e.stopPropagation();
-												handleSelectHealthMien();
-											}}
-										>
-											{intl.formatMessage({ id: 'kiemtrasuckhoe.dangky.choiceModal.daKham.button' })}
-										</Button>
-									</div>
-								</div>
-							</Col>
-						</Row>
-
-						{alreadyHadCheckup === true && (
-							<Form.Item
-								name='healthCheckupAttachment'
-								label={intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthCheckupAttachment' })}
-								rules={[...rules.fileRequired]}
-								style={{ marginTop: 16, marginBottom: 0 }}
-							>
-								<UploadFile
-									buttonDescription={intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.uploadButton' })}
-									maxCount={1}
-									otherProps={{ className: styles.uploadButton }}
-								/>
-							</Form.Item>
-						)}
-					</Fragment>
-				)}
+									<UploadFile
+										buttonDescription={intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.uploadButton' })}
+										maxCount={1}
+										otherProps={{ className: styles.uploadButton }}
+									/>
+								</Form.Item>
+							)} */}
+						</Fragment>
+					)}
 				</Spin>
 			</div>
 
@@ -498,126 +498,126 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 				</div>
 
 				<Spin spinning={bhytLoading}>
-				{isBhytRegistered ? (
-					<Fragment>
-						<div className={styles.dormitoryInfoAlert}>
-							<InfoCircleFilled className={styles.infoIcon} />
-							<div className={styles.infoText}>
-								{isBhytExternal
-									? intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytExemptionAlert' })
-									: intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytRegisteredSchoolAlert' })}
-							</div>
-						</div>
-
-						<div className={styles.dormitoryExemptionCard}>
-							<div className={styles.dormitoryExemptionHeader}>
-								<div className={styles.dormitoryExemptionTitle}>
-									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytTitle' })}
+					{isBhytRegistered ? (
+						<Fragment>
+							<div className={styles.dormitoryInfoAlert}>
+								<InfoCircleFilled className={styles.infoIcon} />
+								<div className={styles.infoText}>
+									{isBhytExternal
+										? intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytExemptionAlert' })
+										: intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytRegisteredSchoolAlert' })}
 								</div>
-								<div className={styles.dormitoryExemptionTagWrap}>
-									{isBhytExternal && (
-										<Tag className={styles.dormitoryExemptionTag}>
-											{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.pendingApproval' })}
-										</Tag>
-									)}
-									<div className={styles.dormitoryExemptionSubDate}>
-										{intl.formatMessage(
-											{ id: 'global.enrollmentDeclaration.additional.submittedDate' },
-											{ date: formattedBhytSubmittedDate },
+							</div>
+
+							<div className={styles.dormitoryExemptionCard}>
+								<div className={styles.dormitoryExemptionHeader}>
+									<div className={styles.dormitoryExemptionTitle}>
+										{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytTitle' })}
+									</div>
+									<div className={styles.dormitoryExemptionTagWrap}>
+										{isBhytExternal && (
+											<Tag className={styles.dormitoryExemptionTag}>
+												{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.pendingApproval' })}
+											</Tag>
 										)}
+										<div className={styles.dormitoryExemptionSubDate}>
+											{intl.formatMessage(
+												{ id: 'global.enrollmentDeclaration.additional.submittedDate' },
+												{ date: formattedBhytSubmittedDate },
+											)}
+										</div>
 									</div>
 								</div>
-							</div>
-							<div className={styles.dormitoryExemptionBody}>
-								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytBody' })}
-							</div>
-						</div>
-
-						<Button disabled block icon={<SafetyCertificateOutlined />} className={styles.actionButton}>
-							{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytRegisteredBtn' })}
-						</Button>
-
-						<div className={styles.dormitoryUnavailableNote}>
-							{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytUnavailableNote' })}
-						</div>
-					</Fragment>
-				) : (
-					<Fragment>
-						<div className={styles.warningBox}>
-							<WarningFilled className={styles.warningIcon} />
-							<div className={styles.warningContent}>
-								<div className={styles.warningTitle}>
-									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthInsuranceTitle' })}
+								<div className={styles.dormitoryExemptionBody}>
+									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytBody' })}
 								</div>
-								<div>{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthInsuranceLine1' })}</div>
-								<div>{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthInsuranceLine2' })}</div>
 							</div>
-						</div>
 
-						{!bhytHasActivePeriod && (
-							<div className={styles.warningBox} style={{ marginTop: 8 }}>
+							<Button disabled block icon={<SafetyCertificateOutlined />} className={styles.actionButton}>
+								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytRegisteredBtn' })}
+							</Button>
+
+							<div className={styles.dormitoryUnavailableNote}>
+								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.bhytUnavailableNote' })}
+							</div>
+						</Fragment>
+					) : (
+						<Fragment>
+							<div className={styles.warningBox}>
 								<WarningFilled className={styles.warningIcon} />
 								<div className={styles.warningContent}>
-									<div>{intl.formatMessage({ id: 'baohiemyte.dangky.banner.khongCoDot' })}</div>
+									<div className={styles.warningTitle}>
+										{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthInsuranceTitle' })}
+									</div>
+									<div>{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthInsuranceLine1' })}</div>
+									<div>{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthInsuranceLine2' })}</div>
 								</div>
 							</div>
-						)}
 
-						<Row gutter={[16, 16]}>
-							<Col span={24} md={12}>
-								<div
-									className={`${styles.checkupOptionCard} ${Boolean(hasInsurance) === false ? styles.active : ''}`}
-									onClick={handleSelectInsuranceDangKy}
-								>
-									<div className={styles.checkupOptionTitle}>
-										{intl.formatMessage({ id: 'baohiemyte.dangky.choiceModal.khongCoBHYT.title' })}
-									</div>
-									<div className={styles.checkupOptionDesc}>
-										{intl.formatMessage({ id: 'baohiemyte.dangky.choiceModal.khongCoBHYT.desc' })}
-									</div>
-									<div className={styles.checkupOptionAction}>
-										<Button
-											type='primary'
-											disabled={!bhytHasActivePeriod}
-											onClick={(e) => {
-												e.stopPropagation();
-												handleSelectInsuranceDangKy();
-											}}
-										>
-											{intl.formatMessage({ id: 'baohiemyte.dangky.choiceModal.khongCoBHYT.button' })}
-										</Button>
+							{!bhytHasActivePeriod && (
+								<div className={styles.warningBox} style={{ marginTop: 8 }}>
+									<WarningFilled className={styles.warningIcon} />
+									<div className={styles.warningContent}>
+										<div>{intl.formatMessage({ id: 'baohiemyte.dangky.banner.khongCoDot' })}</div>
 									</div>
 								</div>
-							</Col>
+							)}
 
-							<Col span={24} md={12}>
-								<div
-									className={`${styles.checkupOptionCard} ${hasInsurance === true ? styles.active : ''}`}
-									onClick={handleSelectInsuranceMien}
-								>
-									<div className={styles.checkupOptionTitle}>
-										{intl.formatMessage({ id: 'baohiemyte.dangky.choiceModal.daCoBHYT.title' })}
+							<Row gutter={[16, 16]}>
+								<Col span={24} md={12}>
+									<div
+										className={`${styles.checkupOptionCard} ${Boolean(hasInsurance) === false ? styles.active : ''}`}
+										onClick={handleSelectInsuranceDangKy}
+									>
+										<div className={styles.checkupOptionTitle}>
+											{intl.formatMessage({ id: 'baohiemyte.dangky.choiceModal.khongCoBHYT.title' })}
+										</div>
+										<div className={styles.checkupOptionDesc}>
+											{intl.formatMessage({ id: 'baohiemyte.dangky.choiceModal.khongCoBHYT.desc' })}
+										</div>
+										<div className={styles.checkupOptionAction}>
+											<Button
+												type='primary'
+												disabled={!bhytHasActivePeriod}
+												onClick={(e) => {
+													e.stopPropagation();
+													handleSelectInsuranceDangKy();
+												}}
+											>
+												{intl.formatMessage({ id: 'baohiemyte.dangky.choiceModal.khongCoBHYT.button' })}
+											</Button>
+										</div>
 									</div>
-									<div className={styles.checkupOptionDesc}>
-										{intl.formatMessage({ id: 'baohiemyte.dangky.choiceModal.daCoBHYT.desc' })}
-									</div>
-									<div className={styles.checkupOptionAction}>
-										<Button
-											type={hasInsurance === true ? 'primary' : 'default'}
-											disabled={!bhytHasActivePeriod}
-											onClick={(e) => {
-												e.stopPropagation();
-												handleSelectInsuranceMien();
-											}}
-										>
-											{intl.formatMessage({ id: 'baohiemyte.dangky.choiceModal.daCoBHYT.button' })}
-										</Button>
-									</div>
-								</div>
-							</Col>
-						</Row>
+								</Col>
 
-						{hasInsurance === true && (
+								<Col span={24} md={12}>
+									<div
+										className={`${styles.checkupOptionCard} ${hasInsurance === true ? styles.active : ''}`}
+										onClick={handleSelectInsuranceMien}
+									>
+										<div className={styles.checkupOptionTitle}>
+											{intl.formatMessage({ id: 'baohiemyte.dangky.choiceModal.daCoBHYT.title' })}
+										</div>
+										<div className={styles.checkupOptionDesc}>
+											{intl.formatMessage({ id: 'baohiemyte.dangky.choiceModal.daCoBHYT.desc' })}
+										</div>
+										<div className={styles.checkupOptionAction}>
+											<Button
+												type={hasInsurance === true ? 'primary' : 'default'}
+												disabled={!bhytHasActivePeriod}
+												onClick={(e) => {
+													e.stopPropagation();
+													handleSelectInsuranceMien();
+												}}
+											>
+												{intl.formatMessage({ id: 'baohiemyte.dangky.choiceModal.daCoBHYT.button' })}
+											</Button>
+										</div>
+									</div>
+								</Col>
+							</Row>
+
+							{/* {hasInsurance === true && (
 							<Row gutter={16} style={{ marginTop: 16 }}>
 								<Col span={24} md={12}>
 									<Form.Item
@@ -642,9 +642,9 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 									</Form.Item>
 								</Col>
 							</Row>
-						)}
-					</Fragment>
-				)}
+						)} */}
+						</Fragment>
+					)}
 				</Spin>
 			</div>
 
@@ -660,107 +660,107 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 				</div>
 
 				<Spin spinning={ktxLoading}>
-				{isRegisterFreeDormitory ? (
-					<Fragment>
-						<div className={styles.dormitoryInfoAlert}>
-							<InfoCircleFilled className={styles.infoIcon} />
-							<div className={styles.infoText}>
-								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryExemptionAlert' })}
-							</div>
-						</div>
-
-						<div className={styles.dormitoryExemptionCard}>
-							<div className={styles.dormitoryExemptionHeader}>
-								<div className={styles.dormitoryExemptionTitle}>
-									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryExemptionTitle' })}
-								</div>
-								<div className={styles.dormitoryExemptionTagWrap}>
-									<Tag className={styles.dormitoryExemptionTag}>
-										{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.pendingApproval' })}
-									</Tag>
+					{isRegisterFreeDormitory ? (
+						<Fragment>
+							<div className={styles.dormitoryInfoAlert}>
+								<InfoCircleFilled className={styles.infoIcon} />
+								<div className={styles.infoText}>
+									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryExemptionAlert' })}
 								</div>
 							</div>
-							<div className={styles.dormitoryExemptionBody}>
-								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryExemptionBody' })}
-							</div>
-						</div>
 
-						<Form.Item name='isRegisterDormitory' valuePropName='checked' style={{ marginBottom: 0 }}>
-							<Button disabled block icon={<BankOutlined />} className={styles.actionButton}>
-								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.applyDormitory' })}
-							</Button>
-						</Form.Item>
-
-						<div className={styles.dormitoryUnavailableNote}>
-							{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryUnavailableNote' })}
-						</div>
-					</Fragment>
-				) : isDormitoryRegistered ? (
-					<Fragment>
-						<div className={styles.dormitoryInfoAlert}>
-							<InfoCircleFilled className={styles.infoIcon} />
-							<div className={styles.infoText}>
-								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryRegisteredAlert' })}
-							</div>
-						</div>
-
-						<div className={styles.dormitoryExemptionCard}>
-							<div className={styles.dormitoryExemptionHeader}>
-								<div className={styles.dormitoryExemptionTitle}>
-									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryRegisteredTitle' })}
-								</div>
-								<div className={styles.dormitoryExemptionTagWrap}>
-									<div className={styles.dormitoryExemptionSubDate}>
-										{intl.formatMessage(
-											{ id: 'global.enrollmentDeclaration.additional.submittedDate' },
-											{ date: formattedKtxSubmittedDate },
-										)}
+							<div className={styles.dormitoryExemptionCard}>
+								<div className={styles.dormitoryExemptionHeader}>
+									<div className={styles.dormitoryExemptionTitle}>
+										{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryExemptionTitle' })}
+									</div>
+									<div className={styles.dormitoryExemptionTagWrap}>
+										<Tag className={styles.dormitoryExemptionTag}>
+											{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.pendingApproval' })}
+										</Tag>
 									</div>
 								</div>
-							</div>
-							<div className={styles.dormitoryExemptionBody}>
-								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryRegisteredBody' })}
-							</div>
-						</div>
-
-						<Form.Item name='isRegisterDormitory' valuePropName='checked' style={{ marginBottom: 0 }}>
-							<Button disabled block icon={<BankOutlined />} className={styles.actionButton}>
-								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.appliedDormitory' })}
-							</Button>
-						</Form.Item>
-					</Fragment>
-				) : (
-					<Fragment>
-						<div className={styles.warningBox}>
-							<WarningFilled className={styles.warningIcon} />
-							<div className={styles.warningContent}>
-								<div>{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryTitle' })}</div>
-							</div>
-						</div>
-
-						{!hasActiveKtxPeriod && (
-							<div className={styles.warningBox} style={{ marginTop: 8 }}>
-								<WarningFilled className={styles.warningIcon} />
-								<div className={styles.warningContent}>
-									<div>{intl.formatMessage({ id: 'kytucxa.dangky.empty.noDotDangKy' })}</div>
+								<div className={styles.dormitoryExemptionBody}>
+									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryExemptionBody' })}
 								</div>
 							</div>
-						)}
 
-						<Form.Item name='isRegisterDormitory' valuePropName='checked' style={{ marginBottom: 0 }}>
-							<Button
-								type='primary'
-								block
-								icon={<BankOutlined />}
-								className={styles.actionButton}
-								disabled={!hasActiveKtxPeriod}
-								onClick={handleOpenHousingModal}
-							>
-								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.applyDormitory' })}
-							</Button>
-						</Form.Item>
-					</Fragment>
-				)}
+							<Form.Item name='isRegisterDormitory' valuePropName='checked' style={{ marginBottom: 0 }}>
+								<Button disabled block icon={<BankOutlined />} className={styles.actionButton}>
+									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.applyDormitory' })}
+								</Button>
+							</Form.Item>
+
+							<div className={styles.dormitoryUnavailableNote}>
+								{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryUnavailableNote' })}
+							</div>
+						</Fragment>
+					) : isDormitoryRegistered ? (
+						<Fragment>
+							<div className={styles.dormitoryInfoAlert}>
+								<InfoCircleFilled className={styles.infoIcon} />
+								<div className={styles.infoText}>
+									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryRegisteredAlert' })}
+								</div>
+							</div>
+
+							<div className={styles.dormitoryExemptionCard}>
+								<div className={styles.dormitoryExemptionHeader}>
+									<div className={styles.dormitoryExemptionTitle}>
+										{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryRegisteredTitle' })}
+									</div>
+									<div className={styles.dormitoryExemptionTagWrap}>
+										<div className={styles.dormitoryExemptionSubDate}>
+											{intl.formatMessage(
+												{ id: 'global.enrollmentDeclaration.additional.submittedDate' },
+												{ date: formattedKtxSubmittedDate },
+											)}
+										</div>
+									</div>
+								</div>
+								<div className={styles.dormitoryExemptionBody}>
+									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryRegisteredBody' })}
+								</div>
+							</div>
+
+							<Form.Item name='isRegisterDormitory' valuePropName='checked' style={{ marginBottom: 0 }}>
+								<Button disabled block icon={<BankOutlined />} className={styles.actionButton}>
+									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.appliedDormitory' })}
+								</Button>
+							</Form.Item>
+						</Fragment>
+					) : (
+						<Fragment>
+							<div className={styles.warningBox}>
+								<WarningFilled className={styles.warningIcon} />
+								<div className={styles.warningContent}>
+									<div>{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryTitle' })}</div>
+								</div>
+							</div>
+
+							{!hasActiveKtxPeriod && (
+								<div className={styles.warningBox} style={{ marginTop: 8 }}>
+									<WarningFilled className={styles.warningIcon} />
+									<div className={styles.warningContent}>
+										<div>{intl.formatMessage({ id: 'kytucxa.dangky.empty.noDotDangKy' })}</div>
+									</div>
+								</div>
+							)}
+
+							<Form.Item name='isRegisterDormitory' valuePropName='checked' style={{ marginBottom: 0 }}>
+								<Button
+									type='primary'
+									block
+									icon={<BankOutlined />}
+									className={styles.actionButton}
+									disabled={!hasActiveKtxPeriod}
+									onClick={handleOpenHousingModal}
+								>
+									{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.applyDormitory' })}
+								</Button>
+							</Form.Item>
+						</Fragment>
+					)}
 				</Spin>
 			</div>
 
@@ -794,7 +794,7 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 				}
 				open={formDangKyBhytModalOpen}
 				onCancel={() => setFormDangKyBhytModalOpen(false)}
-				width={800}
+				width={900}
 				footer={null}
 			>
 				<FormDangKyBHYT

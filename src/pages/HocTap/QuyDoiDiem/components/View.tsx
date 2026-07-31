@@ -84,7 +84,7 @@ const ViewPhieuQuyDoiDiem = (props: { visible: boolean; setVisible: (val: boolea
 				}
 				onCancel={() => setVisibleFormFile(false)}
 			>
-				<PreviewFile file={record?.urlsMinhChung ?? []} />
+				<PreviewFile file={record?.urlsMinhChung ?? []} isPrivate />
 			</ModalExpandable>
 		</Modal>
 	);

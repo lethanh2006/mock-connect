@@ -1,6 +1,6 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { QuyTrinh } from '@/services/FormDong/QuyTrinh/typing';
-import { buildUpLoadFile, getFileById } from '@/services/uploadFile';
+import { buildUpLoadFileMultipart, EFileScope, getFileById } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { FILE_EXTENSIONS, validateUploadFileList } from '@/utils/fileValidation';
 import { removeVietnameseTones, resetFieldsForm } from '@/utils/utils';
@@ -48,7 +48,11 @@ const FormThemMoiMauDon = () => {
 
 		const arr = record?.danhSachFormKhaiBao ? [...record?.danhSachFormKhaiBao] : [];
 
-		const resUploadFile = await buildUpLoadFile(values, 'fileId', undefined, true);
+		const resUploadFile = await buildUpLoadFileMultipart(values, 'fileId', {
+			scope: EFileScope.PUBLIC,
+			module: 'diem-ren-luyen',
+			returnResponse: true,
+		});
 		const payload: QuyTrinh.IMauDon = {
 			...recordMauDon,
 			...values,
@@ -135,6 +139,7 @@ const FormThemMoiMauDon = () => {
 						otherProps={{
 							showUploadList: { showDownloadIcon: false },
 						}}
+						isPrivate
 					/>
 				</Form.Item>
 

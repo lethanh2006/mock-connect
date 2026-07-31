@@ -106,7 +106,7 @@ const getDocumentColumns = (intl: IntlShape): ColumnsType<DotNhapHoc.IGiayToCanN
 		width: 160,
 		render: (_, row) => (
 			<Form.Item name={`document_${row.id}`} noStyle>
-				<UploadFile buttonSize='small' buttonDescription={intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.uploadButton' })} maxCount={1} />
+				<UploadFile buttonSize='small' buttonDescription={intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.uploadButton' })} maxCount={1} isPrivate />
 			</Form.Item>
 		),
 	},
@@ -267,12 +267,12 @@ const PersonalInformationStep = ({
 					<Fragment>
 						<Col span={24} md={12}>
 							<Form.Item name='frontIdCard' label={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.frontIdCard' })} rules={[...rules.fileRequired]}>
-								<UploadFile buttonDescription={intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.uploadButton' })} maxCount={1} otherProps={{ className: styles.uploadButton }} />
+								<UploadFile buttonDescription={intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.uploadButton' })} maxCount={1} otherProps={{ className: styles.uploadButton }} isPrivate />
 							</Form.Item>
 						</Col>
 						<Col span={24} md={12}>
 							<Form.Item name='backIdCard' label={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.backIdCard' })} rules={[...rules.fileRequired]}>
-								<UploadFile buttonDescription={intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.uploadButton' })} maxCount={1} otherProps={{ className: styles.uploadButton }} />
+								<UploadFile buttonDescription={intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.uploadButton' })} maxCount={1} otherProps={{ className: styles.uploadButton }} isPrivate />
 							</Form.Item>
 						</Col>
 					</Fragment>
@@ -315,7 +315,7 @@ const PersonalInformationStep = ({
 						</Col>
 						<Col span={24} md={8}>
 							<Form.Item name='passportAttachment' label={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.passportAttachment' })} rules={[...rules.fileRequired]}>
-								<UploadFile buttonDescription={intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.uploadButton' })} maxCount={1} otherProps={{ className: styles.uploadButton }} />
+								<UploadFile buttonDescription={intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.uploadButton' })} maxCount={1} otherProps={{ className: styles.uploadButton }} isPrivate />
 							</Form.Item>
 							{/* <div className={styles.uploadHelperText}>{intl.formatMessage({ id: 'global.enrollmentDeclaration.field.passportAttachmentHelper' })}</div> */}
 						</Col>

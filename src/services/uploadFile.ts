@@ -41,6 +41,12 @@ export const getUploadedFileUrl = (file: any) => {
 	return file?.response?.file?.url ?? file?.response?.url ?? file?.url ?? null;
 };
 
+const withProxyParam = (url: string | null | undefined): string | null => {
+	if (!url) return url ?? null;
+	if (/[?&]proxy=/.test(url)) return url;
+	return url.includes('?') ? `${url}&proxy=1` : `${url}?proxy=1`;
+};
+
 const getFilename = (file: Blob): string => {
 	return (file as File)?.name || 'upload';
 };
@@ -195,8 +201,10 @@ export const buildUpLoadFileMultipart = async (
 	fieldName: string,
 	options?: TUploadRequestOptions & { returnResponse?: boolean; returnValue?: TUploadMultipartValueType },
 ): Promise<string | null | any> => {
-	if (typeof values?.[fieldName] === 'string') return values[fieldName];
-
+	if (typeof values?.[fieldName] === 'string') {
+		const value = values[fieldName];
+		return options?.returnValue === 'url' ? withProxyParam(value) : value;
+	}
 	const file = values?.[fieldName]?.fileList?.[0];
 	if (!file) return null;
 
@@ -209,7 +217,7 @@ export const buildUpLoadFileMultipart = async (
 	}
 
 	const uploadedFileId = getUploadedFileId(file);
-	if (uploadedFileId) return options?.returnValue === 'url' ? getUploadedFileUrl(file) : uploadedFileId;
+	if (uploadedFileId) return options?.returnValue === 'url' ? withProxyParam(getUploadedFileUrl(file)) : uploadedFileId;
 
 	if (!file?.originFileObj) {
 		throw new Error('File has not been uploaded successfully. Please upload again.');
@@ -227,7 +235,7 @@ export const buildUpLoadFileMultipart = async (
 	return options?.returnResponse
 		? response
 		: options?.returnValue === 'url'
-			? (response?.data?.data?.file?.url ?? response?.data?.data?.url ?? null)
+			? withProxyParam(response?.data?.data?.file?.url ?? response?.data?.data?.url ?? null)
 			: (response?.data?.data?.file?._id ?? response?.data?.data?._id ?? response?.data?.data?.url ?? null);
 };
 
@@ -236,8 +244,12 @@ export const buildUpLoadMultiFileMultipart = async (
 	fieldName: string,
 	options?: TUploadRequestOptions & { returnValue?: TUploadMultipartValueType },
 ): Promise<string[] | null> => {
-	if (Array.isArray(values?.[fieldName])) return values[fieldName];
-
+	if (Array.isArray(values?.[fieldName])) {
+		const value = values[fieldName];
+		return options?.returnValue === 'url'
+			? (value.map((v: string) => withProxyParam(v)).filter(Boolean) as string[])
+			: value;
+	}
 	const fileList = values?.[fieldName]?.fileList;
 	if (!Array.isArray(fileList) || !fileList.length) return null;
 

@@ -4,7 +4,7 @@ import SelectChungChi from '@/pages/DaoTao/ChungChi/Select';
 import { ETrangThaiChungChiSinhVen } from '@/services/DaoTao/SinhVien/constants';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EPhuongThucTinhDiem } from '@/services/DaoTao/constant';
-import { buildUpLoadFile } from '@/services/uploadFile';
+import { buildUpLoadFileMultipart, EFileScope } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Col, Form, Input, InputNumber, Row, Select } from 'antd';
@@ -41,7 +41,11 @@ const FormChungChiSinhVien = (props: any) => {
 
 	const onFinish = async (values: SinhVien.IChungChiSinhVien) => {
 		setFormSubmiting(true);
-		const urlMinhChung = await buildUpLoadFile(values, 'urlMinhChung').finally(() => setFormSubmiting(false));
+		const urlMinhChung = await buildUpLoadFileMultipart(values, 'urlMinhChung', {
+			scope: EFileScope.PUBLIC,
+			module: 'chung-chi-tot-nghiep',
+			returnValue: 'url',
+		}).finally(() => setFormSubmiting(false));
 		values.urlMinhChung = urlMinhChung;
 
 		if (edit) {
@@ -134,7 +138,7 @@ const FormChungChiSinhVien = (props: any) => {
 							label={intl.formatMessage({ id: 'chungchitotnghiep.formitem.label.minhchung' })}
 							rules={[...rules.required]}
 						>
-							<UploadFile resize maxCount={1} accept='image/*, .docx, .doc, .xls, .xlsx, .pdf' />
+							<UploadFile resize maxCount={1} accept='image/*, .docx, .doc, .xls, .xlsx, .pdf' isPrivate />
 						</Form.Item>
 					</Col>
 				</Row>

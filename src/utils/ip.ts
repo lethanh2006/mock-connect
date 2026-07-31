@@ -21,8 +21,8 @@ const ipKhaoThi = getConnectTarget('not-deployed/khao-thi');
 const ipThuVien = getConnectTarget('not-deployed/thu-vien'); // ip dev
 const ipChatbot = getConnectTarget('not-deployed/chatbot-api');
 const ipCCT = getConnectTarget('co-curriculum'); // ip dev
-const ipFile = ipRoot + 'file/file';
-const ipFileMultiPart = ipRoot + 'file/file';
+const ipFile = ipRoot + 'file';
+const ipFileMultiPart = ipRoot + 'file';
 
 // const ipCCT = 'http://192.168.1.38:3010'; // ip dev
 const ipCsvc = ipRoot + 'csvc';
@@ -46,15 +46,18 @@ const oneSignalClient = APP_CONFIG_ONE_SIGNAL_ID;
 const moodleEndpoint = APP_CONFIG_MOODLE_ENDPOINT;
 
 export {
-	ipFileMultiPart,
-	currentRole, financeApiClientId, ip3,
+	currentRole,
+	financeApiClientId,
+	ip3,
 	ipCCT,
 	ipChatbot,
 	ipConnect,
 	ipCore,
 	ipCsvc,
 	ipDaoTao,
-	ipFile, ipKhaoThi,
+	ipFile,
+	ipFileMultiPart,
+	ipKhaoThi,
 	ipNewsWP,
 	ipNhanSu,
 	ipNotif,
@@ -70,6 +73,5 @@ export {
 	oneSignalRole,
 	qldtApiClientId,
 	replaceRole,
-	sentryDSN
+	sentryDSN,
 };
-

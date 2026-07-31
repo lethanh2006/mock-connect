@@ -1,10 +1,22 @@
-import { buildUpLoadFile } from '@/services/uploadFile';
+import { buildUpLoadFileMultipart, EFileScope } from '@/services/uploadFile';
 import type { TStep4Payload } from './typing';
 
 export const buildStep4Payload = async (values: Record<string, any>): Promise<TStep4Payload> => {
 	const [urlCheckup, urlInsurance] = await Promise.all([
-		values.alreadyHadCheckup ? buildUpLoadFile(values, 'healthCheckupAttachment') : Promise.resolve(undefined),
-		values.hasInsurance ? buildUpLoadFile(values, 'healthInsuranceAttachment') : Promise.resolve(undefined),
+		values.alreadyHadCheckup
+			? buildUpLoadFileMultipart(values, 'healthCheckupAttachment', {
+					scope: EFileScope.PUBLIC,
+					module: 'nhap-hoc',
+					returnValue: 'url',
+				})
+			: Promise.resolve(undefined),
+		values.hasInsurance
+			? buildUpLoadFileMultipart(values, 'healthInsuranceAttachment', {
+					scope: EFileScope.PUBLIC,
+					module: 'nhap-hoc',
+					returnValue: 'url',
+				})
+			: Promise.resolve(undefined),
 	]);
 
 	const id1 = values.alreadyHadCheckup ? urlCheckup || 'CHECKUP_DONE' : 'CHECKUP_REGISTER';

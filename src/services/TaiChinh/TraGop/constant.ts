@@ -1,3 +1,8 @@
+export enum EHinhThucHoTro {
+	TRA_GOP = 'TRA_GOP',
+	TRA_MUON = 'TRA_MUON',
+}
+
 export enum ETrangThaiTraGopBill {
 	CHO_DUYET = 'CHO_DUYET',
 	DANG_TRA_GOP = 'DANG_TRA_GOP',
