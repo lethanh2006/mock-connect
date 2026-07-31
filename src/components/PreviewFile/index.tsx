@@ -26,12 +26,11 @@ type TFrameProps = {
 
 const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	const intl = useIntl();
-	const { file, style = {}, children, ip = ip3, isFileId, tenFile, isPrivate } = props;
-
+	const { file, style = {}, children, ip = ip3, isFileId, tenFile } = props;
+	const privateFile = true
 	const isValidStringArray = (value: any): value is string[] => {
 		return Array.isArray(value) && value.every((item) => typeof item === 'string');
 	};
-
 	const isValidSingleString = typeof file === 'string';
 
 	if (file && !isValidSingleString && !isValidStringArray(file)) {
@@ -41,7 +40,6 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 			</div>
 		);
 	}
-
 	const [frameData, setFrameData] = useState<TFrameProps>();
 	const [loading, setLoading] = useState(false);
 	const [currentFileIndex, setCurrentFileIndex] = useState(0);
@@ -113,7 +111,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 				const fileRouteBase = getFileRouteBase(ip);
 				frame.url = getProxiedFileUrl(
 					fileInfo?.url ??
-						(!isFileId ? srcUrl : `${fileRouteBase}/${idFile}/${encodeURIComponent(fileInfo?.name ?? 'file')}`),
+					(!isFileId ? srcUrl : `${fileRouteBase}/${idFile}/${encodeURIComponent(fileInfo?.name ?? 'file')}`),
 				);
 				frame.name = fileInfo?.name;
 
@@ -126,7 +124,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 				frame.type = getFileType(getFileExtension(srcUrl) ?? '') || EDinhDangFile.UNKNOWN;
 			}
 
-			if (isPrivate) {
+			if (privateFile) {
 				// Nếu là file riêng tư thì phải lấy src có token mới xem được
 				frame.data = (await getFileContent(frame.url))?.data;
 			}
@@ -308,7 +306,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 						/>
 					</div>
 				) : frameData?.type !== EDinhDangFile.UNKNOWN && !!frameData?.src ? (
-					isPrivate ? (
+					privateFile ? (
 						<div className='preview-error'>
 							<p>This document is protected and cannot be previewed directly via Office Online.</p>
 							<Button type='primary' icon={<DownloadOutlined />} onClick={handleDownloadOrView}>

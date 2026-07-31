@@ -4,7 +4,7 @@ import { userUpdateBuoc } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
 import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
 import { getDataDefaultV2 } from '@/services/QuyTrinh/MauDon/maudon';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import { formatDate } from '@/utils/formatDate';
 import rules from '@/utils/rules';
 import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
@@ -44,7 +44,11 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 			for (const item of allowedFieldKeys) {
 				const value = uploadValues[item];
 				if (value?.fileList?.length) {
-					uploadValues[item] = await buildUpLoadMultiFile(uploadValues, item);
+					uploadValues[item] = await buildUpLoadMultiFileMultipart(uploadValues, item, {
+						scope: EFileScope.PUBLIC,
+						module: 'quy-trinh',
+						returnValue: 'url',
+					});
 				}
 			}
 

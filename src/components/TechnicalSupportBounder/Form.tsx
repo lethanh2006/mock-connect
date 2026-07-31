@@ -1,5 +1,5 @@
 import { ELoaiPhanHoi } from '@/services/TienIch/PhanHoi/constant';
-import { buildUpLoadFile } from '@/services/uploadFile';
+import { buildUpLoadFileMultipart, EFileScope } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Form, Input } from 'antd';
@@ -20,7 +20,11 @@ const FormPostIssue = (props: { visible: boolean; setVisible: (val: boolean) => 
 	const onFinish = async (values: any) => {
 		if (!!values.urlPhanAnh && typeof values.urlPhanAnh !== 'string') {
 			setFormSubmiting(true);
-			await buildUpLoadFile(values, 'urlPhanAnh')
+			await buildUpLoadFileMultipart(values, 'urlPhanAnh', {
+				scope: EFileScope.PUBLIC,
+				module: 'phan-hoi',
+				returnValue: 'url',
+			})
 				.then((urlPhanAnh) => (values.urlPhanAnh = urlPhanAnh))
 				.catch(() => (values.urlPhanAnh = null))
 				.finally(() => setFormSubmiting(false));
@@ -51,7 +55,7 @@ const FormPostIssue = (props: { visible: boolean; setVisible: (val: boolean) => 
 					/>
 				</Form.Item>
 
-				<FormItemUrlOrUpload form={form} field='urlPhanAnh' />
+				<FormItemUrlOrUpload form={form} field='urlPhanAnh' isPrivate />
 
 				<div className='form-footer'>
 					<Button loading={formSubmiting} htmlType='submit' type='primary'>

@@ -4,7 +4,7 @@ import { useIntl, useModel } from 'umi';
 import FormRender from './FormRender';
 // import TableThanhVien from './TableThanhVien';
 import { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
 import { resetFieldsForm, sanitizeObject } from '@/utils/utils';
 
@@ -39,7 +39,11 @@ const PreviewForm = (props: { isView?: boolean; getData: any; mode: 'quytrinh' |
 		for (const item in formValues) {
 			const value = formValues[item];
 			if (value?.fileList?.length) {
-				formValues[item] = await buildUpLoadMultiFile(formValues, item);
+				formValues[item] = await buildUpLoadMultiFileMultipart(formValues, item, {
+					scope: EFileScope.PUBLIC,
+					module: 'diem-ren-luyen',
+					returnValue: 'url',
+				});
 			}
 		}
 	};
