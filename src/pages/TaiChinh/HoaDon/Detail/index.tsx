@@ -3,12 +3,13 @@ import PageCard from '@/components/PageCard';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { getExportBillUrl } from '@/services/TaiChinh/HoaDon';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import { EMauTrangThaiTraGopBill, ETrangThaiTraGopBill } from '@/services/TaiChinh/TraGop/constant';
+import { EMauTrangThaiTraGopBill, ETrangThaiDuyetYeuCau, ETrangThaiTraGopBill } from '@/services/TaiChinh/TraGop/constant';
 import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETransactionType } from '@/services/TaiChinh/constant';
 import { currencyFormat } from '@/utils/utils';
 import {
 	ArrowLeftOutlined,
 	DollarOutlined,
+	EditOutlined,
 	EyeOutlined,
 	FieldTimeOutlined,
 	FilePdfOutlined,
@@ -105,6 +106,10 @@ const InvoiceCard = ({
 		!!onDangKyTraGop &&
 		bill.status !== EMaTrangThaiThanhToan.DA_THANH_TOAN_DU &&
 		(!bill.trangThaiTraGop || bill.trangThaiTraGop === ETrangThaiTraGopBill.TU_CHOI);
+	const showSuaYeuCau =
+		!isVirtual &&
+		!!onDangKyTraGop &&
+		bill.yeuCauTraGop?.trangThaiDuyet === ETrangThaiDuyetYeuCau.REQUEST_CHANGE;
 	const showTienDoTraGop =
 		!isVirtual &&
 		!!onTienDoTraGop &&
@@ -291,11 +296,17 @@ const InvoiceCard = ({
 							</ButtonExtend>
 						);
 					})()}
-				{(showDangKyTraGop || showTienDoTraGop) && (
+				{(showDangKyTraGop || showSuaYeuCau || showTienDoTraGop) && (
 					<Space size={4} wrap className='invoice-detail-card__secondary-actions'>
-						{showDangKyTraGop && (
-							<ButtonExtend size='small' icon={<ScheduleOutlined />} onClick={onDangKyTraGop}>
-								{intl.formatMessage({ id: 'taichinh.tragop.tooltip.dangky' })}
+						{(showDangKyTraGop || showSuaYeuCau) && (
+							<ButtonExtend
+								size='small'
+								icon={showSuaYeuCau ? <EditOutlined /> : <ScheduleOutlined />}
+								onClick={onDangKyTraGop}
+							>
+								{intl.formatMessage({
+									id: showSuaYeuCau ? 'taichinh.tragop.tooltip.xemsua' : 'taichinh.tragop.tooltip.dangky',
+								})}
 							</ButtonExtend>
 						)}
 						{showTienDoTraGop && (

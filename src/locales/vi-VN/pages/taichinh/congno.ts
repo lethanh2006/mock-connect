@@ -280,10 +280,13 @@ export default {
 	'taichinh.tragop.status.DA_HOAN_THANH_TRA_GOP': 'Đã hoàn thành trả góp',
 
 	'taichinh.tragop.tooltip.dangky': 'Đăng ký trả góp',
+	'taichinh.tragop.tooltip.xemsua': 'Xem/Sửa yêu cầu trả góp',
 	'taichinh.tragop.tooltip.tiendo': 'Xem tiến độ trả góp',
 
 	'taichinh.tragop.modal.title': 'Đăng ký trả góp hóa đơn',
+	'taichinh.tragop.modal.titleEdit': 'Sửa đơn đăng ký trả góp',
 	'taichinh.tragop.modal.success': 'Gửi yêu cầu đăng ký trả góp thành công, vui lòng chờ Chuyên viên duyệt',
+	'taichinh.tragop.modal.successEdit': 'Cập nhật yêu cầu trả góp thành công',
 	'taichinh.tragop.modal.khongdudieukien': 'Hóa đơn này không đủ điều kiện để đăng ký trả góp',
 	'taichinh.tragop.modal.tongtien': 'Tổng tiền hóa đơn: {tongTien}',
 	'taichinh.tragop.modal.hoten.label': 'Họ và tên',
@@ -314,6 +317,7 @@ export default {
 		'Tôi hiểu rằng Nhà trường sẽ căn cứ vào các thông tin tôi đã cung cấp trong biểu mẫu này, và tôi xin chịu hoàn toàn trách nhiệm nếu có bất kỳ sai sót hoặc thiếu sót nào',
 	'taichinh.tragop.modal.camket.required': 'Bạn cần xác nhận nội dung trên để có thể gửi đăng ký',
 	'taichinh.tragop.modal.guidangky': 'Gửi đăng ký',
+	'taichinh.tragop.modal.capnhat': 'Cập nhật yêu cầu',
 
 	'taichinh.tragop.tiendo.title': 'Tiến độ trả góp hóa đơn {identityCode}',
 	'taichinh.tragop.tiendo.summary.label': 'Tiến độ các đợt trả góp',

@@ -10,6 +10,14 @@ export enum ETrangThaiTraGopBill {
 	DA_HOAN_THANH_TRA_GOP = 'DA_HOAN_THANH_TRA_GOP',
 }
 
+/** Trạng thái duyệt của riêng 1 đơn yêu cầu trả góp (IYeuCau.trangThaiDuyet) — khác domain với ETrangThaiTraGopBill (trạng thái trả góp của bill) */
+export enum ETrangThaiDuyetYeuCau {
+	PENDING = 'PENDING',
+	APPROVED = 'APPROVED',
+	REJECTED = 'REJECTED',
+	REQUEST_CHANGE = 'REQUEST_CHANGE',
+}
+
 export enum ETrangThaiPhienTraGop {
 	UNPAID = 'UNPAID',
 	PAID = 'PAID',

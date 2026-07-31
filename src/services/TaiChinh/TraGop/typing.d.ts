@@ -1,4 +1,4 @@
-import type { EHinhThucHoTro, ETrangThaiPhienTraGop, ETrangThaiTraGopBill } from './constant';
+import type { EHinhThucHoTro, ETrangThaiDuyetYeuCau, ETrangThaiPhienTraGop } from './constant';
 
 declare module TraGop {
 	export interface ICheckEligible {
@@ -30,9 +30,16 @@ declare module TraGop {
 		userSsoId: string;
 		userCode: string;
 		userFullname: string;
-		soLanTraGopYeuCau: number;
+		hinhThucHoTro?: EHinhThucHoTro;
+		soLanTraGopYeuCau?: number;
+		ngayGiaHanYeuCau?: string;
+		college?: string;
+		tongTienHocBongHoTro?: number;
 		lyDo: string;
-		trangThaiDuyet: ETrangThaiTraGopBill;
+		deXuatLoTrinhThanhToan?: string;
+		camKet?: boolean;
+		taiLieuDinhKem?: string[];
+		trangThaiDuyet: ETrangThaiDuyetYeuCau;
 		createdAt: string;
 	}
 
