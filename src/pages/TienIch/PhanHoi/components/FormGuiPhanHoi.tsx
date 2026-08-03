@@ -37,7 +37,7 @@ const FormGuiPhanHoi = (props: any) => {
 		try {
 			setFormSubmiting(true);
 			const urlPhanAnh = await buildUpLoadMultiFileMultipart(values, 'urlPhanAnh', {
-				scope: EFileScope.PUBLIC,
+				scope: EFileScope.INTERNAL,
 				module: 'phan-hoi',
 				returnValue: 'url',
 			});

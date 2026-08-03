@@ -21,7 +21,7 @@ const FormPostIssue = (props: { visible: boolean; setVisible: (val: boolean) => 
 		if (!!values.urlPhanAnh && typeof values.urlPhanAnh !== 'string') {
 			setFormSubmiting(true);
 			await buildUpLoadFileMultipart(values, 'urlPhanAnh', {
-				scope: EFileScope.PUBLIC,
+				scope: EFileScope.INTERNAL,
 				module: 'phan-hoi',
 				returnValue: 'url',
 			})

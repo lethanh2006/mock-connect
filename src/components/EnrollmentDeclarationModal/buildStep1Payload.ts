@@ -1,7 +1,7 @@
+import type { DotNhapHoc } from '@/services/DaoTao/DotNhapHoc/typings';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { buildUpLoadFileMultipart, EFileScope } from '@/services/uploadFile';
 import type { TStep1Payload } from './typing';
-import type { DotNhapHoc } from '@/services/DaoTao/DotNhapHoc/typings';
 
 const buildDiaChi = (values: Record<string, any>, suffix: string): SinhVien.TDiaChi => ({
 	maTP: values[`maTinhTp${suffix}`],
@@ -17,7 +17,7 @@ export const buildStep1Payload = async (
 	values: Record<string, any>,
 	documentRows: DotNhapHoc.IGiayToCanNopNhapHoc[] = [],
 ): Promise<TStep1Payload> => {
-	const uploadOptions = { scope: EFileScope.PUBLIC, module: 'nhap-hoc', returnValue: 'url' as const };
+	const uploadOptions = { scope: EFileScope.INTERNAL, module: 'nhap-hoc', returnValue: 'url' as const };
 	const [urlMatTruocCccd, urlMatSauCccd, urlDinhKemVanDeSucKhoe, urlPassportAttachment] = await Promise.all([
 		buildUpLoadFileMultipart(values, 'frontIdCard', uploadOptions),
 		buildUpLoadFileMultipart(values, 'backIdCard', uploadOptions),
@@ -83,13 +83,13 @@ export const buildStep1Payload = async (
 		urlDinhKemHoChieu: urlDinhKemHoChieu ?? undefined,
 		visa: hasVisa
 			? {
-				loaiVisa: values.visaType,
-				ngayCap: values.visaIssueDate,
-				ngayHetHan: values.visaExpiryDate,
-				coQuanCap: values.visaIssuingAuthority,
-				noiCap: values.visaPlaceOfIssue,
-				urlDinhKemVisa: urlDinhKemVisa ?? undefined,
-			}
+					loaiVisa: values.visaType,
+					ngayCap: values.visaIssueDate,
+					ngayHetHan: values.visaExpiryDate,
+					coQuanCap: values.visaIssuingAuthority,
+					noiCap: values.visaPlaceOfIssue,
+					urlDinhKemVisa: urlDinhKemVisa ?? undefined,
+				}
 			: undefined,
 		danhSachGiayToNhapHoc,
 		firstGenStudent: values.firstGenStudent,

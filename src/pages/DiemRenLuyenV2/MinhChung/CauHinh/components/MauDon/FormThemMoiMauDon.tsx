@@ -1,10 +1,10 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { QuyTrinh } from '@/services/FormDong/QuyTrinh/typing';
 import { buildUpLoadFileMultipart, EFileScope, getFileById } from '@/services/uploadFile';
-import rules from '@/utils/rules';
 import { FILE_EXTENSIONS, validateUploadFileList } from '@/utils/fileValidation';
+import rules from '@/utils/rules';
 import { removeVietnameseTones, resetFieldsForm } from '@/utils/utils';
-import { Button, Card, Form, Input, Select, message } from 'antd';
+import { Button, Card, Form, Input, message, Select } from 'antd';
 import fileDownload from 'js-file-download';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
@@ -49,7 +49,7 @@ const FormThemMoiMauDon = () => {
 		const arr = record?.danhSachFormKhaiBao ? [...record?.danhSachFormKhaiBao] : [];
 
 		const resUploadFile = await buildUpLoadFileMultipart(values, 'fileId', {
-			scope: EFileScope.PUBLIC,
+			scope: EFileScope.INTERNAL,
 			module: 'diem-ren-luyen',
 			returnResponse: true,
 		});

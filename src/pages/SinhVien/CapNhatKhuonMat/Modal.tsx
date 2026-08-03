@@ -23,7 +23,7 @@ const ModalCapNhatAnhNhanDien = (props: { visible: boolean; setVisible: (val: bo
 		if (!!values.faceRegImgUrl && typeof values.faceRegImgUrl !== 'string') {
 			setFormSubmiting(true);
 			await buildUpLoadFileMultipart(values, 'faceRegImgUrl', {
-				scope: EFileScope.PUBLIC,
+				scope: EFileScope.INTERNAL,
 				module: 'khuon-mat',
 				returnValue: 'url',
 			})

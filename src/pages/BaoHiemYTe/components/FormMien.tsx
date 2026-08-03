@@ -99,17 +99,17 @@ const FormMienBHYT = ({ record, isView, edit, onCancel, getData }: IProps) => {
 			const [insuranceValidFrom, insuranceValidTo] = values.hanBaoHiemRange || [];
 			const [uploadedPassportImageFileId, uploadedVisaImageFileId, uploadedProofFileId] = await Promise.all([
 				buildUpLoadFileMultipart(values, 'passportImageFileId', {
-					scope: EFileScope.PUBLIC,
+					scope: EFileScope.INTERNAL,
 					module: 'bao-hiem-y-te',
 					returnValue: 'url',
 				}),
 				buildUpLoadFileMultipart(values, 'visaImageFileId', {
-					scope: EFileScope.PUBLIC,
+					scope: EFileScope.INTERNAL,
 					module: 'bao-hiem-y-te',
 					returnValue: 'url',
 				}),
 				buildUpLoadFileMultipart(values, 'proofFileId', {
-					scope: EFileScope.PUBLIC,
+					scope: EFileScope.INTERNAL,
 					module: 'bao-hiem-y-te',
 					returnValue: 'url',
 				}),

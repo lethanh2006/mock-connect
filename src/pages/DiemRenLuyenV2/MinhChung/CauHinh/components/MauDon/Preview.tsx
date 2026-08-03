@@ -40,7 +40,7 @@ const PreviewForm = (props: { isView?: boolean; getData: any; mode: 'quytrinh' |
 			const value = formValues[item];
 			if (value?.fileList?.length) {
 				formValues[item] = await buildUpLoadMultiFileMultipart(formValues, item, {
-					scope: EFileScope.PUBLIC,
+					scope: EFileScope.INTERNAL,
 					module: 'diem-ren-luyen',
 					returnValue: 'url',
 				});
@@ -49,7 +49,13 @@ const PreviewForm = (props: { isView?: boolean; getData: any; mode: 'quytrinh' |
 	};
 
 	return (
-		<Card title={props.mode === 'loaihinh' ? `${!edit ? intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.themmoi' }) : intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.chinhsua' })} ${record?.ten}` : record?.ten}>
+		<Card
+			title={
+				props.mode === 'loaihinh'
+					? `${!edit ? intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.themmoi' }) : intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.chinhsua' })} ${record?.ten}`
+					: record?.ten
+			}
+		>
 			<Form
 				labelCol={{ span: 24 }}
 				form={form}

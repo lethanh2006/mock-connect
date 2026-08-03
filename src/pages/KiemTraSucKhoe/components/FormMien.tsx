@@ -70,7 +70,7 @@ const FormMienKiemTraSucKhoe = ({ record, isView, edit, onCancel, getData }: IPr
 		setFormSubmiting(true);
 		try {
 			const proofFileIds = ((await buildUpLoadMultiFileMultipart(values, 'proofFileIds', {
-				scope: EFileScope.PUBLIC,
+				scope: EFileScope.INTERNAL,
 				module: 'kham-suc-khoe',
 				returnValue: 'url',
 			})) ?? []) as string[];
