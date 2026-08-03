@@ -39,7 +39,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 		try {
 			setFormSubmiting(true);
 			const urlImg = await buildUpLoadFileMultipart(values, 'anhDaiDienUrl', {
-				scope: EFileScope.PUBLIC,
+				scope: EFileScope.INTERNAL,
 				module: 'sinh-vien',
 				returnValue: 'url',
 			}).catch(console.log);

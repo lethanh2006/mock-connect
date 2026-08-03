@@ -1,5 +1,4 @@
 import UploadFile from '@/components/Upload/UploadFile';
-import DOMPurify from 'dompurify';
 import {
 	colorTrangThaiNopBaiTap,
 	ETrangThaiNopBaiTap,
@@ -13,6 +12,7 @@ import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import { resetFieldsForm } from '@/utils/utils';
 import { Alert, Button, Col, Descriptions, Divider, Form, Input, Row, Spin, Tag, Tooltip } from 'antd';
+import DOMPurify from 'dompurify';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import BoxFile from '../../DienDan/components/BoxFile';
@@ -141,7 +141,7 @@ const FormBaiTap = (props: any) => {
 
 	const onFinish = async (values: any) => {
 		const urlImages = await buildUpLoadMultiFileMultipart(values, 'urlImages', {
-			scope: EFileScope.PUBLIC,
+			scope: EFileScope.INTERNAL,
 			module: 'bai-tap',
 			returnValue: 'url',
 		});

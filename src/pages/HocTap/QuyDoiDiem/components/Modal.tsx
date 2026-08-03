@@ -40,7 +40,7 @@ const ModalQuyDoiDiem = (props: {
 	const onFinish = async (values: QuyDoiDiem.IQuyDoiDiemSinhVien) => {
 		setFormSubmiting(true);
 		const urlsMinhChung = await buildUpLoadMultiFileMultipart(values, 'urlsMinhChung', {
-			scope: EFileScope.PUBLIC,
+			scope: EFileScope.INTERNAL,
 			module: 'quy-doi-diem',
 			returnValue: 'url',
 		});

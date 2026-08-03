@@ -3,9 +3,9 @@ import type { BinhLuan } from '@/services/HocTap/DienDan/BinhLuan/typing';
 import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import { formatDateTime } from '@/utils/formatDate';
 import { createTextLinks } from '@/utils/utils';
-import DOMPurify from 'dompurify';
 import { CheckCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Form, Input, Popconfirm, Popover } from 'antd';
+import DOMPurify from 'dompurify';
 import { nanoid } from 'nanoid';
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useModel } from 'umi';
@@ -76,7 +76,7 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 				return;
 			}
 			const fileDinhKem = await buildUpLoadMultiFileMultipart(values, 'fileDinhKem', {
-				scope: EFileScope.PUBLIC,
+				scope: EFileScope.INTERNAL,
 				module: 'dien-dan',
 				returnValue: 'url',
 			});

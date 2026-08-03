@@ -5,14 +5,14 @@ export const buildStep4Payload = async (values: Record<string, any>): Promise<TS
 	const [urlCheckup, urlInsurance] = await Promise.all([
 		values.alreadyHadCheckup
 			? buildUpLoadFileMultipart(values, 'healthCheckupAttachment', {
-					scope: EFileScope.PUBLIC,
+					scope: EFileScope.INTERNAL,
 					module: 'nhap-hoc',
 					returnValue: 'url',
 				})
 			: Promise.resolve(undefined),
 		values.hasInsurance
 			? buildUpLoadFileMultipart(values, 'healthInsuranceAttachment', {
-					scope: EFileScope.PUBLIC,
+					scope: EFileScope.INTERNAL,
 					module: 'nhap-hoc',
 					returnValue: 'url',
 				})

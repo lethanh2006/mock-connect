@@ -56,12 +56,12 @@ const FormThongBao = (props: any) => {
 		try {
 			FormWaiting('Đang xử lý dữ liệu');
 			const imageUrl = await buildUpLoadFileMultipart(values, 'imageUrl', {
-				scope: EFileScope.PUBLIC,
+				scope: EFileScope.INTERNAL,
 				module: 'thong-bao',
 				returnValue: 'url',
 			});
 			const taiLieuDinhKem = await buildUpLoadMultiFileMultipart(values, 'taiLieuDinhKem', {
-				scope: EFileScope.PUBLIC,
+				scope: EFileScope.INTERNAL,
 				module: 'thong-bao',
 				returnValue: 'url',
 			});

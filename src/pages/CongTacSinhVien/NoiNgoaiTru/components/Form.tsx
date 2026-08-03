@@ -46,7 +46,7 @@ const FormKhaiBao = (props: any) => {
 
 	const onFinish = async (values: any) => {
 		const urlTaiLieu = await buildUpLoadFileMultipart(values, 'urlAnhThe', {
-			scope: EFileScope.PUBLIC,
+			scope: EFileScope.INTERNAL,
 			module: 'noi-ngoai-tru',
 			returnValue: 'url',
 		});
