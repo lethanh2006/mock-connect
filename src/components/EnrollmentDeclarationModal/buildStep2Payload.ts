@@ -36,7 +36,7 @@ export const buildStep2Payload = async (values: Record<string, any>): Promise<TS
 	const isPursuingDegree = values.pursuingDegree === true;
 
 	const urlFileMinhChung = await buildUpLoadFileMultipart(values, 'certificateAttachment', {
-		scope: EFileScope.PUBLIC,
+		scope: EFileScope.INTERNAL,
 		module: 'nhap-hoc',
 		returnValue: 'url',
 	});

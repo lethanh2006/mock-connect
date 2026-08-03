@@ -43,7 +43,7 @@ const FormKhaiBao = (props: { getData?: () => void; mode: 'sinhvien' | 'bancansu
 				const value = valuesForm[item];
 				if (value?.fileList?.length) {
 					valuesForm[item] = await buildUpLoadMultiFileMultipart(valuesForm, item, {
-						scope: EFileScope.PUBLIC,
+						scope: EFileScope.INTERNAL,
 						module: 'diem-ren-luyen',
 						returnValue: 'url',
 					});

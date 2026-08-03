@@ -42,7 +42,7 @@ const FormChungChiSinhVien = (props: any) => {
 	const onFinish = async (values: SinhVien.IChungChiSinhVien) => {
 		setFormSubmiting(true);
 		const urlMinhChung = await buildUpLoadFileMultipart(values, 'urlMinhChung', {
-			scope: EFileScope.PUBLIC,
+			scope: EFileScope.INTERNAL,
 			module: 'chung-chi-tot-nghiep',
 			returnValue: 'url',
 		}).finally(() => setFormSubmiting(false));

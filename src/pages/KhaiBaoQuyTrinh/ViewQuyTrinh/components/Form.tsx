@@ -45,7 +45,7 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 				const value = uploadValues[item];
 				if (value?.fileList?.length) {
 					uploadValues[item] = await buildUpLoadMultiFileMultipart(uploadValues, item, {
-						scope: EFileScope.PUBLIC,
+						scope: EFileScope.INTERNAL,
 						module: 'quy-trinh',
 						returnValue: 'url',
 					});
