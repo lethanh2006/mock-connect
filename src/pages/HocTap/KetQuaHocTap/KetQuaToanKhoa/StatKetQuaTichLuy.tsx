@@ -40,23 +40,21 @@ const StatKetQuaTichLuySinhVien = (props: { maKhoaNganh?: string }) => {
 					</Typography.Text>
 				</div>
 			),
-			// value: record.trungBinhTichLuyToanKhoaThang4 ?? '--',
-			value: '--',
+			value: record.trungBinhTichLuyToanKhoaThang4 ?? '--',
 			valueColor: 'var(--color-primary)',
 			backgroundColor: '#f3f7fb',
 		},
 		{
 			title: intl.formatMessage({ id: 'ketquahoctap.summary.totalCredits' }),
-			// value: (
-			// 	<span style={{ whiteSpace: 'nowrap' }}>
-			// 		{tongTinChi}
-			// 		<Typography.Text type='secondary' style={{ fontSize: 16, fontWeight: 400 }}>
-			// 			{' '}
-			// 			/{tongTinChiToanKhoa}
-			// 		</Typography.Text>
-			// 	</span>
-			// ),
-			value: '--',
+			value: (
+				<span style={{ whiteSpace: 'nowrap' }}>
+					{tongTinChi}
+					<Typography.Text type='secondary' style={{ fontSize: 16, fontWeight: 400 }}>
+						{' '}
+						/{tongTinChiToanKhoa}
+					</Typography.Text>
+				</span>
+			),
 			valueColor: 'var(--color-primary)',
 			backgroundColor: '#f3f7fb',
 		},

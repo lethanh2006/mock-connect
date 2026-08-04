@@ -54,7 +54,6 @@ export default [
 			{
 				name: 'LopHocPhan',
 				path: 'lop-tin-chi',
-				hideInMenu: true,
 				routes: [
 					{
 						path: '',
