@@ -1,10 +1,10 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { YeuCauNghiHoc } from '@/services/DaoTao/YeuCauNghiHoc/typing';
 import { buildUpLoadFileMultipart, EFileScope } from '@/services/uploadFile';
+import { formatDate } from '@/utils/formatDate';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Descriptions, Form, Input, Modal } from 'antd';
-import { formatDate } from '@/utils/formatDate';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -24,7 +24,7 @@ const ModalXinNghi = (props: { visible: boolean; onClose: () => void }) => {
 		try {
 			setFormSubmiting(true);
 			const urlMinhChung = await buildUpLoadFileMultipart(values, 'urlMinhChung', {
-				scope: EFileScope.PUBLIC,
+				scope: EFileScope.INTERNAL,
 				module: 'yeu-cau-nghi-hoc',
 				returnValue: 'url',
 			});

@@ -8,7 +8,7 @@ import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { inputFormat, inputParse } from '@/utils/utils';
-import { Alert, Button, Checkbox, Col, Empty, Form, Input, InputNumber, Modal, Radio, Row, Spin, message } from 'antd';
+import { Alert, Button, Checkbox, Col, Empty, Form, Input, InputNumber, message, Modal, Radio, Row, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -83,7 +83,7 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 		try {
 			setSubmitting(true);
 			const taiLieuDinhKem = await buildUpLoadMultiFileMultipart(values, 'taiLieuDinhKem', {
-				scope: EFileScope.PUBLIC,
+				scope: EFileScope.INTERNAL,
 				module: 'tra-gop',
 				returnValue: 'url',
 			});
@@ -348,7 +348,9 @@ const ModalDangKyTraGop: React.FC<ModalDangKyTraGopProps> = ({ visible, bill, on
 								{intl.formatMessage({ id: 'global.button.huy' })}
 							</Button>
 							<Button type='primary' htmlType='submit' loading={submitting} disabled={!camKet}>
-								{intl.formatMessage({ id: isEditing ? 'taichinh.tragop.modal.capnhat' : 'taichinh.tragop.modal.guidangky' })}
+								{intl.formatMessage({
+									id: isEditing ? 'taichinh.tragop.modal.capnhat' : 'taichinh.tragop.modal.guidangky',
+								})}
 							</Button>
 						</div>
 					</Form>

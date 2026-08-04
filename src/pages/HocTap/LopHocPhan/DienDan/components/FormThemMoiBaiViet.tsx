@@ -34,7 +34,7 @@ const FormThemMoiBaiViet = (props: IProps) => {
 	const onFinish = async (values: any) => {
 		setFormSubmiting(true);
 		const fileDinhKem = await buildUpLoadMultiFileMultipart(values, 'fileDinhKem', {
-			scope: EFileScope.PUBLIC,
+			scope: EFileScope.INTERNAL,
 			module: 'dien-dan',
 			returnValue: 'url',
 		});
