@@ -7,7 +7,7 @@ import { ELoaiDanhMucChung } from '@/services/FormDong/DanhMuc/constants';
 import { EKieuDuLieu, ETextDisplay, MapKeyNameTextDisplay } from '@/services/FormDong/LoaiHinh/constants';
 import type { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
 import { LoaiDefaultValue } from '@/services/FormDong/QuyTrinh/constants';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { removeVietnameseTones } from '@/utils/utils';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
@@ -19,6 +19,7 @@ import {
 	Form,
 	Input,
 	InputNumber,
+	message,
 	Modal,
 	Popconfirm,
 	Popover,
@@ -27,7 +28,6 @@ import {
 	Select,
 	Space,
 	Tooltip,
-	message,
 } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
@@ -82,7 +82,12 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 			return;
 		}
 
-		const danhSachFileDinhKem = (await buildUpLoadMultiFile(values, 'danhSachFileDinhKem')) || [];
+		const danhSachFileDinhKem =
+			(await buildUpLoadMultiFileMultipart(values, 'danhSachFileDinhKem', {
+				scope: EFileScope.INTERNAL,
+				module: 'diem-ren-luyen',
+				returnValue: 'url',
+			})) || [];
 
 		if (editCauHinh && recordCauHinh) {
 			const index = recordMauDon.cauHinhLoaiHinh.map((item: { ma: any }) => item.ma).indexOf(recordCauHinh.ma);
@@ -98,7 +103,11 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 				],
 			});
 		}
-		message.success(editCauHinh ? intl.formatMessage({ id: 'diemrenluyen.cauhinh.thongbao.suathanhcong' }) : intl.formatMessage({ id: 'diemrenluyen.cauhinh.thongbao.themthanhcong' }));
+		message.success(
+			editCauHinh
+				? intl.formatMessage({ id: 'diemrenluyen.cauhinh.thongbao.suathanhcong' })
+				: intl.formatMessage({ id: 'diemrenluyen.cauhinh.thongbao.themthanhcong' }),
+		);
 		if (isContinue) {
 			form.resetFields();
 		} else props.onCancel();
@@ -188,7 +197,13 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 	].includes(kieuDuLieu);
 
 	return (
-		<Card title={(editCauHinh ? intl.formatMessage({ id: 'diemrenluyen.cauhinh.form.chinhsua' }) : intl.formatMessage({ id: 'diemrenluyen.cauhinh.form.themmoi' }))}>
+		<Card
+			title={
+				editCauHinh
+					? intl.formatMessage({ id: 'diemrenluyen.cauhinh.form.chinhsua' })
+					: intl.formatMessage({ id: 'diemrenluyen.cauhinh.form.themmoi' })
+			}
+		>
 			<Form
 				onValuesChange={(changedValues, values) => {
 					setFormValues(values);
@@ -197,10 +212,18 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 				form={form}
 				layout='vertical'
 			>
-				<Form.Item name='ma' label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.ma' })} rules={[...rules.required, ...rules.text]}>
+				<Form.Item
+					name='ma'
+					label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.ma' })}
+					rules={[...rules.required, ...rules.text]}
+				>
 					<Input placeholder={intl.formatMessage({ id: 'diemrenluyen.cauhinh.placeholder.ma' })} />
 				</Form.Item>
-				<Form.Item name='ten' label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.ten' })} rules={[...rules.required, ...rules.text]}>
+				<Form.Item
+					name='ten'
+					label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.ten' })}
+					rules={[...rules.required, ...rules.text]}
+				>
 					<Input
 						autoFocus
 						onChange={(e) => {
@@ -230,7 +253,11 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 					</Form.Item>
 				)}
 				{kieuDuLieu === EKieuDuLieu.DOAN_VAN_BAN && (
-					<Form.Item rules={[...rules.requiredHtml]} name='customDefaultValue' label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.doanvanban' })}>
+					<Form.Item
+						rules={[...rules.requiredHtml]}
+						name='customDefaultValue'
+						label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.doanvanban' })}
+					>
 						<TinyEditor height={350} />
 					</Form.Item>
 				)}
@@ -246,7 +273,11 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 				{loaiMacDinh === LoaiDefaultValue.LAY_TU_KHAI_BAO && (
 					<Row gutter={[12, 0]}>
 						<Col span={12}>
-							<Form.Item name='maFormLayDefaultValue' label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.laytukhaibao' })} rules={[...rules.required]}>
+							<Form.Item
+								name='maFormLayDefaultValue'
+								label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.laytukhaibao' })}
+								rules={[...rules.required]}
+							>
 								<Select
 									onChange={() => {
 										form.setFieldsValue({
@@ -287,11 +318,19 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 				<Form.Item name='readonly' valuePropName='checked'>
 					<Checkbox>{intl.formatMessage({ id: 'diemrenluyen.cauhinh.chidoc' })}</Checkbox>
 				</Form.Item>
-				<Form.Item name='ghiChu' label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.ghichu' })} rules={[...rules.text]}>
+				<Form.Item
+					name='ghiChu'
+					label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.ghichu' })}
+					rules={[...rules.text]}
+				>
 					<Input.TextArea placeholder={intl.formatMessage({ id: 'diemrenluyen.cauhinh.placeholder.ghichu' })} />
 				</Form.Item>
 
-				<Form.Item name='kieuDuLieu' label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.kieudulieu' })} rules={[...rules.required]}>
+				<Form.Item
+					name='kieuDuLieu'
+					label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.kieudulieu' })}
+					rules={[...rules.required]}
+				>
 					<Select
 						onChange={(val) => setKieuDuLieu(val)}
 						options={Object.values(EKieuDuLieu).map((item) => ({ label: item, value: item }))}
@@ -300,7 +339,11 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 				</Form.Item>
 				<Row gutter={[12, 0]}>
 					<Col span={isAvailableDangMang ? 8 : 12}>
-						<Form.Item name='batBuoc' label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.batbuoc' })} rules={[...rules.required]}>
+						<Form.Item
+							name='batBuoc'
+							label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.batbuoc' })}
+							rules={[...rules.required]}
+						>
 							<Radio.Group
 								options={[
 									{ value: true, label: intl.formatMessage({ id: 'diemrenluyen.maudon.co' }) },
@@ -312,7 +355,11 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 
 					{isAvailableDangMang && (
 						<Col span={isAvailableDangMang ? 8 : 12}>
-							<Form.Item name='laDangMang' label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.nhapnhieugiatri' })} rules={[...rules.required]}>
+							<Form.Item
+								name='laDangMang'
+								label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.nhapnhieugiatri' })}
+								rules={[...rules.required]}
+							>
 								<Radio.Group
 									options={[
 										{ value: true, label: intl.formatMessage({ id: 'diemrenluyen.maudon.co' }) },
@@ -324,14 +371,22 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 					)}
 					<Col span={isAvailableDangMang ? 8 : 12}>
 						<Form.Item name='colspan' label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.chieurong' })}>
-							<InputNumber style={{ width: '100%' }} min={0} max={24} placeholder={intl.formatMessage({ id: 'diemrenluyen.maudon.placeholder.nhap' })} />
+							<InputNumber
+								style={{ width: '100%' }}
+								min={0}
+								max={24}
+								placeholder={intl.formatMessage({ id: 'diemrenluyen.maudon.placeholder.nhap' })}
+							/>
 						</Form.Item>
 					</Col>
 				</Row>
 				{kieuDuLieu === EKieuDuLieu.FILE && (
 					<>
-						<Form.Item name='danhSachFileDinhKem' label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.filedinhkem' })}>
-							<UploadFile maxCount={5} />
+						<Form.Item
+							name='danhSachFileDinhKem'
+							label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.filedinhkem' })}
+						>
+							<UploadFile maxCount={5} isPrivate />
 						</Form.Item>
 						<Form.Item name='ghiChuFileDinhKem' label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.ghichufile' })}>
 							<Input placeholder={intl.formatMessage({ id: 'diemrenluyen.cauhinh.placeholder.ghichufile' })} />
@@ -447,7 +502,10 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 					</Form.Item>
 				)} */}
 
-				<Form.Item name='truongThongTinLienQuan' label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.truongthongtinlienquan' })}>
+				<Form.Item
+					name='truongThongTinLienQuan'
+					label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.truongthongtinlienquan' })}
+				>
 					<Select
 						allowClear
 						onChange={(val) => {
@@ -474,13 +532,19 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 					/>
 				</Form.Item>
 
-				<Form.Item name='truongLayDuLieu' label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.truonglaydulieu' })} rules={[...rules.text]}>
+				<Form.Item
+					name='truongLayDuLieu'
+					label={intl.formatMessage({ id: 'diemrenluyen.cauhinh.truonglaydulieu' })}
+					rules={[...rules.text]}
+				>
 					<Input placeholder={intl.formatMessage({ id: 'diemrenluyen.cauhinh.truonglaydulieu' })} />
 				</Form.Item>
 
 				<div className='form-footer'>
 					<Button loading={formSubmiting} htmlType='submit' type='primary'>
-						{!editCauHinh ? intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.themmoi' }) : intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.luulai' })}
+						{!editCauHinh
+							? intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.themmoi' })
+							: intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.luulai' })}
 					</Button>
 					{!editCauHinh && (
 						<Button
@@ -495,7 +559,9 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 							{intl.formatMessage({ id: 'diemrenluyen.cauhinh.button.themmoivatieptuc' })}
 						</Button>
 					)}
-					<Button onClick={() => props.onCancel()}>{intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.huy' })}</Button>
+					<Button onClick={() => props.onCancel()}>
+						{intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.huy' })}
+					</Button>
 				</div>
 			</Form>
 			<Modal

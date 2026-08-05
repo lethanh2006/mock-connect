@@ -1,9 +1,9 @@
-import { Button, Form, Row, message } from 'antd';
-import FormRender from './FormRender';
-import { useEffect, useState } from 'react';
-import { useModel, useIntl } from 'umi';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import type { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
+import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
+import { Button, Form, message, Row } from 'antd';
+import { useEffect, useState } from 'react';
+import { useIntl, useModel } from 'umi';
+import FormRender from './FormRender';
 
 const FormTable = (props: {
 	cauHinh: LoaiHinh.TruongThongTin | LoaiHinh.Cot;
@@ -37,7 +37,11 @@ const FormTable = (props: {
 					for (const item in values) {
 						const value = values[item];
 						if (value?.fileList?.length) {
-							values[item] = await buildUpLoadMultiFile(values, item);
+							values[item] = await buildUpLoadMultiFileMultipart(values, item, {
+								scope: EFileScope.INTERNAL,
+								module: 'quy-trinh',
+								returnValue: 'url',
+							});
 						}
 					}
 
@@ -65,7 +69,11 @@ const FormTable = (props: {
 							},
 						});
 					}
-					message.success(props.edit ? intl.formatMessage({ id: 'diemrenluyen.cauhinh.thongbao.suathanhcong' }) : intl.formatMessage({ id: 'diemrenluyen.cauhinh.thongbao.themthanhcong' }));
+					message.success(
+						props.edit
+							? intl.formatMessage({ id: 'diemrenluyen.cauhinh.thongbao.suathanhcong' })
+							: intl.formatMessage({ id: 'diemrenluyen.cauhinh.thongbao.themthanhcong' }),
+					);
 					props.onCancel();
 				}}
 			>
@@ -83,10 +91,14 @@ const FormTable = (props: {
 				<div className='form-footer'>
 					{!props?.isView && (
 						<Button htmlType='submit' type='primary'>
-							{!props.edit ? intl.formatMessage({ id: 'global.table.index.button.themmoi' }) : intl.formatMessage({ id: 'global.button.luulai' })}
+							{!props.edit
+								? intl.formatMessage({ id: 'global.table.index.button.themmoi' })
+								: intl.formatMessage({ id: 'global.button.luulai' })}
 						</Button>
 					)}
-					{!props?.isView && <Button onClick={() => props.onCancel()}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>}
+					{!props?.isView && (
+						<Button onClick={() => props.onCancel()}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
+					)}
 				</div>
 			</Form>
 			{props?.isView && (

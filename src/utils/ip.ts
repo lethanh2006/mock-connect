@@ -1,8 +1,8 @@
 import { AppModules, EModuleKey } from '@/services/base/constant';
 
 const ipRoot = APP_CONFIG_IP_ROOT; // ip dev
-const ipRootWithSlash = ipRoot.replace(/\/?$/, '/');
-const ipConnect = ipRootWithSlash + 'connect';
+const ipRootWithSlash = ipRoot.replace(/\/?$/, '');
+const ipConnect = ipRootWithSlash;
 const getConnectTarget = (target: string) => `${ipConnect}/${target}`;
 
 const ip3 = ipConnect; // ip dev
@@ -11,7 +11,7 @@ const ip3 = ipConnect; // ip dev
 const ipNotif = getConnectTarget('notification'); // ip dev
 // const ipDaoTao = ipRoot + 'qldt'; // ip dev
 const ipDaoTao = getConnectTarget('qldt'); // ip dev
-// const ipDaoTao = 'http://192.168.1.149:3001'; // ip dev
+// const ipDaoTao = 'http://172.16.8.55:3999'; // ip dev
 
 // const ipDaoTao = 'http://192.168.1.80:3001'; // ip dev
 const ipNhanSu = getConnectTarget('tcns');
@@ -21,7 +21,9 @@ const ipKhaoThi = getConnectTarget('not-deployed/khao-thi');
 const ipThuVien = getConnectTarget('not-deployed/thu-vien'); // ip dev
 const ipChatbot = getConnectTarget('not-deployed/chatbot-api');
 const ipCCT = getConnectTarget('co-curriculum'); // ip dev
-const ipFile = getConnectTarget('file');
+const ipFile = ipRoot + 'file';
+const ipFileMultiPart = ipRoot + 'file';
+
 // const ipCCT = 'http://192.168.1.38:3010'; // ip dev
 const ipCsvc = ipRoot + 'csvc';
 
@@ -44,14 +46,18 @@ const oneSignalClient = APP_CONFIG_ONE_SIGNAL_ID;
 const moodleEndpoint = APP_CONFIG_MOODLE_ENDPOINT;
 
 export {
-	currentRole, financeApiClientId, ip3,
+	currentRole,
+	financeApiClientId,
+	ip3,
 	ipCCT,
 	ipChatbot,
 	ipConnect,
 	ipCore,
 	ipCsvc,
 	ipDaoTao,
-	ipFile, ipKhaoThi,
+	ipFile,
+	ipFileMultiPart,
+	ipKhaoThi,
 	ipNewsWP,
 	ipNhanSu,
 	ipNotif,
@@ -67,6 +73,5 @@ export {
 	oneSignalRole,
 	qldtApiClientId,
 	replaceRole,
-	sentryDSN
+	sentryDSN,
 };
-

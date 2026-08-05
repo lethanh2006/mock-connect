@@ -4,7 +4,7 @@ import { useIntl, useModel } from 'umi';
 import FormRender from './FormRender';
 // import TableThanhVien from './TableThanhVien';
 import { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
 import { resetFieldsForm } from '@/utils/utils';
 
@@ -39,13 +39,23 @@ const FormGiaoNopSanPham = (props: { isView?: boolean; getData: any; mode: 'quyt
 		for (const item in formValues) {
 			const value = formValues[item];
 			if (value?.fileList?.length) {
-				formValues[item] = await buildUpLoadMultiFile(formValues, item);
+				formValues[item] = await buildUpLoadMultiFileMultipart(formValues, item, {
+					scope: EFileScope.INTERNAL,
+					module: 'diem-ren-luyen',
+					returnValue: 'url',
+				});
 			}
 		}
 	};
 
 	return (
-		<Card title={props.mode === 'loaihinh' ? `${!edit ? intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.themmoi' }) : intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.chinhsua' })} ${record?.ten}` : record?.ten}>
+		<Card
+			title={
+				props.mode === 'loaihinh'
+					? `${!edit ? intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.themmoi' }) : intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.chinhsua' })} ${record?.ten}`
+					: record?.ten
+			}
+		>
 			<Form
 				labelCol={{ span: 24 }}
 				form={form}

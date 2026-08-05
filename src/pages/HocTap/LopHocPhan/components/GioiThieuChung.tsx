@@ -40,8 +40,8 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 
 	return (
 		<>
-			<div className='gioi-thieu-section'>
-				<Divider orientation='left' className='divider-big-title' dashed>
+			<div>
+				<Divider size='small' orientation='left' className='divider-big-title' dashed>
 					{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieuchung' })}
 				</Divider>
 
@@ -77,9 +77,15 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 				) : null} */}
 			</div>
 
-			<div className='gioi-thieu-section'>
+			<div>
 				<div className='thong-tin-header'>
-					<Divider orientation='left' className='divider-big-title' dashed style={{ margin: 0, flex: 1, minWidth: 0 }}>
+					<Divider
+						size='small'
+						orientation='left'
+						className='divider-big-title'
+						dashed
+						style={{ margin: 0, flex: 1, minWidth: 0 }}
+					>
 						{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.muctieu' })}
 					</Divider>
 					<a onClick={() => onShowDeCuong('0')}>
@@ -101,11 +107,12 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 				)}
 			</div>
 
-			<div className='gioi-thieu-section'>
+			<div>
 				<Row gutter={[16, 16]}>
 					<Col span={24} md={24}>
 						<div className='thong-tin-header'>
 							<Divider
+								size='small'
 								orientation='left'
 								className='divider-big-title'
 								dashed

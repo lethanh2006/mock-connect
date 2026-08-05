@@ -6,6 +6,8 @@ type AuthImageProps = {
 	src?: string;
 	fallback?: string;
 	alt?: string;
+	width?: React.CSSProperties['width'];
+	height?: React.CSSProperties['height'];
 	style?: React.CSSProperties;
 	className?: string;
 	isDetail?: boolean;
@@ -14,7 +16,17 @@ type AuthImageProps = {
 
 const cache = new Map<string, string>();
 
-const AuthImage: React.FC<AuthImageProps> = ({ src, fallback = '', alt = '', className, isDetail, style, preview }) => {
+const AuthImage: React.FC<AuthImageProps> = ({
+	src,
+	fallback = '',
+	alt = '',
+	width,
+	height,
+	className,
+	isDetail,
+	style,
+	preview,
+}) => {
 	const [imgSrc, setImgSrc] = useState<string>(fallback);
 
 	useEffect(() => {
@@ -59,6 +71,8 @@ const AuthImage: React.FC<AuthImageProps> = ({ src, fallback = '', alt = '', cla
 			<Image
 				src={imgSrc}
 				alt={alt}
+				width={width}
+				height={height}
 				className={className}
 				style={style}
 				preview={preview ? { ...preview, src: imgSrc } : undefined}
@@ -66,7 +80,7 @@ const AuthImage: React.FC<AuthImageProps> = ({ src, fallback = '', alt = '', cla
 		);
 	}
 
-	return <img src={imgSrc} alt={alt} className={className} style={style} />;
+	return <img src={imgSrc} alt={alt} width={width} height={height} className={className} style={style} />;
 };
 
 export default AuthImage;

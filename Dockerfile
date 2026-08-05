@@ -1,17 +1,27 @@
 # 1. For build React app
-ARG BUILD_BASE_IMAGE=node:22-alpine
+ARG BUILD_BASE_IMAGE=jfrog.vinsmartfuture.tech/vsf-shared-docker-virtual/node:22-alpine
+ARG NGINX_BASE_IMAGE=jfrog.vinsmartfuture.tech/vsf-shared-docker-virtual/nginx:alpine-slim
 FROM ${BUILD_BASE_IMAGE} AS build
 
 # Set working directory
 WORKDIR /app
 
 COPY package.json yarn.lock /app/
-RUN if [ ! -d node_modules ] || [ ! -f /opt/build-base.yarn.lock ] || ! cmp -s yarn.lock /opt/build-base.yarn.lock; then yarn install --frozen-lockfile && yarn cache clean; fi
+RUN --mount=type=secret,id=jfrog_token,required=false \
+    sed -i \
+      -e 's#https://registry.yarnpkg.com#https://registry.npmjs.org#g' \
+      -e 's#https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz#https://jfrog.vinsmartfuture.tech/artifactory/vsf-shared-generic-remote-sheetjs/xlsx-0.20.3/xlsx-0.20.3.tgz#g' \
+      package.json yarn.lock && \
+    test -s /run/secrets/jfrog_token || { echo "Missing jfrog_token BuildKit secret."; exit 1; } && \
+    npm_token="$(cat /run/secrets/jfrog_token)" && \
+    printf 'always-auth=true\n//jfrog.vinsmartfuture.tech/:_authToken=%s\n_authToken=%s\n' "$npm_token" "$npm_token" > .npmrc && \
+    if [ ! -d node_modules ] || [ ! -f /opt/build-base.yarn.lock ] || ! cmp -s yarn.lock /opt/build-base.yarn.lock; then yarn install --frozen-lockfile && yarn cache clean; fi; \
+    rc=$?; rm -f .npmrc; exit $rc
 
 COPY . /app
 RUN yarn build && rm -rf node_modules
 
-FROM nginx:alpine-slim
+FROM ${NGINX_BASE_IMAGE}
 COPY --from=build /app/.nginx/nginx.conf /etc/nginx/conf.d/default.conf
 COPY docker-entrypoint.d/10-runtime-config.sh /docker-entrypoint.d/10-runtime-config.sh
 RUN chmod +x /docker-entrypoint.d/10-runtime-config.sh

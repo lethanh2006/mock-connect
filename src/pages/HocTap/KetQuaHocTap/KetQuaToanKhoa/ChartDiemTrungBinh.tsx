@@ -1,5 +1,6 @@
 import LineChart from '@/components/Chart/LineChart';
 import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
+import { getLocalizedName } from '@/utils/localeName';
 import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -50,7 +51,7 @@ const ChartDiemTrungBinh = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 						showDuplicates: true,
 						maxHeight: 90,
 						formatter: (value: any) => {
-							return value?.ten || value;
+							return getLocalizedName(value, String(value ?? '')) ?? '';
 						},
 					},
 				},

@@ -7,7 +7,7 @@ import { getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
 import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import { EGioiTinh } from '@/services/DaoTao/constant';
 import { ELoaiNoiSinh, TenLoaiNoiSinh } from '@/services/DaoTao/SinhVien/constants';
-import { buildUpLoadFile } from '@/services/uploadFile';
+import { buildUpLoadFileMultipart, EFileScope } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { Button, Col, Collapse, Divider, Form, Input, InputNumber, message, Row, Select } from 'antd';
 import { useEffect, useState } from 'react';
@@ -38,7 +38,11 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 
 		try {
 			setFormSubmiting(true);
-			const urlImg = await buildUpLoadFile(values, 'anhDaiDienUrl').catch(console.log);
+			const urlImg = await buildUpLoadFileMultipart(values, 'anhDaiDienUrl', {
+				scope: EFileScope.INTERNAL,
+				module: 'sinh-vien',
+				returnValue: 'url',
+			}).catch(console.log);
 			setFormSubmiting(false);
 			const payload = { ...values, anhDaiDienUrl: urlImg };
 			putModel('me', payload, getThongTinCuaToiModel).then(() => {
@@ -59,7 +63,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 			<Row gutter={[12, 0]}>
 				<Col span={24} sm={9} lg={6} style={{ display: 'flex', justifyContent: 'center' }}>
 					<Form.Item className='alignUploadCenter' name='anhDaiDienUrl' label={''}>
-						<UploadFile otherProps={{ style: { textAlign: 'center' } }} isAvatar resize />
+						<UploadFile otherProps={{ style: { textAlign: 'center' } }} isAvatar resize isPrivate />
 					</Form.Item>
 				</Col>
 

@@ -247,7 +247,7 @@ const FormRender = (props: {
 
 		case EKieuDuLieu.FILE:
 			rule = [...(cauHinh.batBuoc ? rules.fileRequired : [])];
-			component = <UploadFile maxCount={cauHinh.laDangMang ? 5 : 1} accept='image/*, .pdf, .doc, .docx, .png, .jpg' />;
+			component = <UploadFile maxCount={cauHinh.laDangMang ? 5 : 1} accept='image/*, .pdf, .doc, .docx, .png, .jpg' isPrivate />;
 			break;
 
 		case EKieuDuLieu.TABLE:

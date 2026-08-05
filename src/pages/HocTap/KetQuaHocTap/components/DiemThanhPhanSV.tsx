@@ -8,6 +8,7 @@ import { Button, Modal, Select, Space, Tag, Tooltip, Typography } from 'antd';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import DiemChuMarks from './DiemChuMarks';
 import ModalChiTietDiem from './ModalChiTietDiem';
 
 interface DataType extends LopHocPhan.IDiemHpSvHk {
@@ -56,12 +57,9 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				title += intl.formatMessage(
 					{ id: 'ketquahoctap.diemtp.semester.summary' },
 					{
-						// gpa: kqhk.trungBinhHocKyThang4 ?? '--',
-						gpa: '--',
-						// earned: kqhk.tongSoTinChiHocKy ?? '--',
-						earned: '--',
-						// cumulative: kqhk.tongSoTinChiTichLuyToanKhoa ?? '--',
-						cumulative: '--',
+						gpa: kqhk.trungBinhHocKyThang4 ?? '--',
+						earned: kqhk.tongSoTinChiHocKy ?? '--',
+						cumulative: kqhk.tongSoTinChiTichLuyToanKhoa ?? '--',
 					},
 				);
 			}
@@ -279,9 +277,18 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				filterData: Object.values(ELoaiDiemChu),
 				render: (val, rec) => (
 					<>
-						<Tag color={ColorDiemChu?.[val as ELoaiDiemChu]}>{val === ELoaiDiemChu.CHUA_DU_DU_LIEU ? '--' : val}</Tag>{' '}
-						{rec?.isCongNhanQuyDoiDiem && (
-							<Tooltip title={intl.formatMessage({ id: 'ketquahoctap.diemtp.convertedScore' })}>(R)</Tooltip>
+						<Tag color={ColorDiemChu?.[val as ELoaiDiemChu]}>{val === ELoaiDiemChu.CHUA_DU_DU_LIEU ? '--' : val}</Tag>
+						{!isSemesterRow(rec) && (
+							<DiemChuMarks
+								diemChu={rec.diemChu}
+								isQuyDoi={rec.isCongNhanQuyDoiDiem}
+								soLanHoc={maKhoaNganh ? rec.infoKhoaNganh?.[maKhoaNganh]?.soLanHoc : undefined}
+								quyDoiExtra={
+									rec.coTichLuyQuyDoi
+										? ` - ${intl.formatMessage({ id: 'lophocphan.id.ketqua.tichluy' })}`
+										: undefined
+								}
+							/>
 						)}
 					</>
 				),
@@ -319,7 +326,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 		};
 
 		return cols;
-	}, [danhSachDauDiem, handleShowHocPhan, intl]);
+	}, [danhSachDauDiem, handleShowHocPhan, intl, maKhoaNganh]);
 
 	return (
 		<>

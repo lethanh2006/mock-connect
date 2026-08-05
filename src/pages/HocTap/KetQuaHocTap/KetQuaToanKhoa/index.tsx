@@ -21,8 +21,8 @@ const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string; loadData?: boolea
 					<StatKetQuaTichLuySinhVien maKhoaNganh={maKhoaNganh} />
 					{/* <Divider orientation='left' dashed className='divider-big-title'>
 						{intl.formatMessage({ id: 'ketquahoctap.chart.creditStatistics' })}
-					</Divider>
-					<Carousel pauseOnDotsHover style={{ marginTop: 12 }} autoplay>
+					</Divider> */}
+					{/* <Carousel pauseOnDotsHover style={{ marginTop: 12 }} autoplay>
 						<div>
 							<div style={{ marginBottom: 8 }}>
 								<ChartSoTinChi />
