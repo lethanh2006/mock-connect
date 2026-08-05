@@ -221,20 +221,19 @@ const ModalDanKyKTX = (props: {
 				},
 			};
 
+		try {
 			await sinhVienDangKyKTXModel(data as any, getData);
 
 			handleClose();
 
 			setVisibleDangKyThanhCong(true);
-		
-	}
-		catch(error){
+		} catch (error) {
 			if (!getBeErrorMessage(error)) {
-					message.error(intl.formatMessage({ id: 'kytucxa.dangky.message.loiKhongXacDinh' }));
-				}
-				getData?.();
+				message.error(intl.formatMessage({ id: 'kytucxa.dangky.message.loiKhongXacDinh' }));
+			}
+			getData?.();
 		}
-	}
+	};
 
 	return (
 		<>

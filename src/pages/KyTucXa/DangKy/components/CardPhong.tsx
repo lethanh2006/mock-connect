@@ -96,6 +96,7 @@ const CardPhong = ({
 						src={anhPhong}
 						alt={intl.formatMessage({ id: 'kytucxa.dangky.card.imageAlt' }, { maPhong: room?.ma ?? '' })}
 						className='room-card__image'
+						loading={'lazy'}
 					/>
 
 					<Tag className='room-card__slot-tag'>
