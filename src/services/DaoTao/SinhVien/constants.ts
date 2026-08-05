@@ -91,3 +91,8 @@ export const TenSoLanNhapCanhVisa: Record<SoLanNhapCanhVisa, string> = {
 	[SoLanNhapCanhVisa.DOUBLE]: 'thongtincanhan.form.thongtinvisa.solannhapcanh.double',
 	[SoLanNhapCanhVisa.MULTIPLE]: 'thongtincanhan.form.thongtinvisa.solannhapcanh.multiple',
 };
+
+export enum EnrollmentStatus {
+	ADMITTED = "Admitted",
+	ENROLLED = "Enrolled",
+}

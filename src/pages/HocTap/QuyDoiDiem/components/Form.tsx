@@ -412,7 +412,7 @@ const FormQuyDoiDiem = (props: { form: FormInstance; isHocPhan?: boolean }) => {
 						label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.fileminhchung' })}
 						rules={[...rules.required]}
 					>
-						<UploadFile resize maxCount={5} />
+						<UploadFile resize maxCount={5} isPrivate />
 					</Form.Item>
 				</Col>
 			) : (

@@ -34,6 +34,10 @@ import vanbanhuongdan from './tienichkhac/vanbanhuongdan';
 import xemsau from './tienichkhac/xemsau';
 import tintuc from './tintuc';
 import trangchu from './trangchu';
+import kiemtrasuckhoeDangKy from './kiemtrasuckhoe/dangky';
+import kiemtrasuckhoeMien from './kiemtrasuckhoe/mien';
+import baohiemyteDangKy from './baohiemyte/dangky';
+import baohiemyteMien from './baohiemyte/mien';
 
 export default {
 	...login,
@@ -73,7 +77,10 @@ export default {
 	...activity,
 	...kytucxa,
 	...detaikhcn,
-
+	...kiemtrasuckhoeDangKy,
+	...kiemtrasuckhoeMien,
+	...baohiemyteDangKy,
+	...baohiemyteMien,
 	'pages.trangchu.title': 'PHÂN HỆ CỔNG SINH VIÊN',
 	'pages.trangchu.subtitle': 'HỆ THỐNG ĐẠI HỌC SỐ',
 	'pages.gioithieu.title': 'GIỚI THIỆU',

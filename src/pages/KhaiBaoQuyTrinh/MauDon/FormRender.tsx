@@ -280,6 +280,7 @@ const FormRender = (props: {
 					otherProps={{
 						showUploadList: { showDownloadIcon: false },
 					}}
+					isPrivate
 				/>
 			);
 			break;

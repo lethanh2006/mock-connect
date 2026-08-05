@@ -16,8 +16,10 @@ import './components/style.less';
 import ViewGhiChuDangKyTinChi from './components/ViewGhiChuDangKyTinChi';
 import { buildDanhSachLopHienThi, getSoTinChiToiDa, tinhTongHocPhanDangKy, tinhTongTinChi } from './utils';
 
-// const RECAPTCHA_SITE_KEY = APP_CONFIG_RECAPTCHA_SITE_KEY;
-const RECAPTCHA_SITE_KEY: string = "undefined";
+const RECAPTCHA_SITE_KEY =
+	typeof APP_CONFIG_RECAPTCHA_SITE_KEY !== 'undefined' && APP_CONFIG_RECAPTCHA_SITE_KEY
+		? APP_CONFIG_RECAPTCHA_SITE_KEY
+		: '';
 
 const DangKyTinChiPage = () => {
 	const intl = useIntl();

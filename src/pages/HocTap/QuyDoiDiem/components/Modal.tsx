@@ -1,7 +1,7 @@
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import { ELoaiHocPhanMinhChung, EMinhChungQuyDoiDiem, ETrangThaiHocPhanQuyDoi } from '@/services/HocTap/constant';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Descriptions, Form, Modal } from 'antd';
 import { useEffect } from 'react';
@@ -39,7 +39,11 @@ const ModalQuyDoiDiem = (props: {
 
 	const onFinish = async (values: QuyDoiDiem.IQuyDoiDiemSinhVien) => {
 		setFormSubmiting(true);
-		const urlsMinhChung = await buildUpLoadMultiFile(values, 'urlsMinhChung');
+		const urlsMinhChung = await buildUpLoadMultiFileMultipart(values, 'urlsMinhChung', {
+			scope: EFileScope.INTERNAL,
+			module: 'quy-doi-diem',
+			returnValue: 'url',
+		});
 		setFormSubmiting(false);
 
 		const data = {

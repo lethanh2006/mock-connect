@@ -1,9 +1,10 @@
+import AuthImage from '@/components/Image/AuthImage';
 import ModalExpandable from '@/components/Table/ModalExpandable';
+import { ETrangThaiThanhToanKTX } from '@/services/KyTucXa/PhieuDangKy/constant';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
-import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { CheckOutlined, ColumnWidthOutlined } from '@ant-design/icons';
-import { Button, Col, Image, message, Row, Typography } from 'antd';
+import { Button, Col, message, Row, Typography } from 'antd';
 import { useIntl, useModel } from 'umi';
 import '../style.less';
 import {
@@ -30,7 +31,9 @@ const ChiTietPhong = (props: {
 	const room = phong?.room;
 	const lichSuPhong = phong && getLichSuDangKyTheoPhong ? getLichSuDangKyTheoPhong(phong) : recLichSu;
 	const daCoLichSuPhongDangKy =
-		!!lichSuPhong?.formDon?._id && lichSuPhong?.trangThaiThanhToan !== EMaTrangThaiThanhToan.DONG;
+		!!lichSuPhong?.formDon?._id &&
+		lichSuPhong?.trangThaiThanhToan !== ETrangThaiThanhToanKTX.DONG &&
+		lichSuPhong?.trangThaiThanhToan !== ETrangThaiThanhToanKTX.HUY;
 
 	const laPhongDaDangKy = phong && isPhongDaDangKy ? isPhongDaDangKy(phong) : false;
 	const images = getAnhPhongHienThi(phong);
@@ -39,8 +42,9 @@ const ChiTietPhong = (props: {
 	const soSlotConLai = getSoChoConLai(phong);
 	const daHetCho = getDaHetCho(phong);
 	const trangThaiThanhToan = lichSuPhong?.trangThaiThanhToan;
-	const daThanhToanXong = trangThaiThanhToan === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU;
-	const daQuaHanThanhToan = trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
+	const daThanhToanXong = trangThaiThanhToan === ETrangThaiThanhToanKTX.DA_HOAN_THANH_COC;
+	const daQuaHanThanhToan =
+		trangThaiThanhToan === ETrangThaiThanhToanKTX.DONG || trangThaiThanhToan === ETrangThaiThanhToanKTX.HUY;
 	const hienThiNhuDaDangKy = laPhongDaDangKy && !daQuaHanThanhToan;
 	const khongChoDangKy = !hienThiNhuDaDangKy && (daHetCho || daCoLichSuPhongDangKy || daCoLichSuDangKy);
 	const buttonText = hienThiNhuDaDangKy
@@ -82,12 +86,13 @@ const ChiTietPhong = (props: {
 				className={['room-gallery', images.length <= 1 ? 'room-gallery-single' : undefined].filter(Boolean).join(' ')}
 			>
 				<div>
-					<Image
+					<AuthImage
 						src={images?.[0]}
 						alt='room-main'
 						width='100%'
 						height={372}
 						style={{ objectFit: 'cover' }}
+						isDetail
 						preview={{
 							mask: intl.formatMessage({ id: 'kytucxa.dangky.chitiet.xemAnh' }),
 						}}
@@ -97,12 +102,13 @@ const ChiTietPhong = (props: {
 				<div className='room-gallery-side'>
 					{images?.slice(1, 5).map((src: string, index: number) => (
 						<div key={index}>
-							<Image
+							<AuthImage
 								src={src}
 								alt={`room-${index}`}
 								width='100%'
 								height={182}
 								style={{ objectFit: 'cover' }}
+								isDetail
 								preview={{
 									mask: intl.formatMessage({ id: 'kytucxa.dangky.chitiet.xemAnh' }),
 								}}
@@ -132,7 +138,7 @@ const ChiTietPhong = (props: {
 							return (
 								<Col span={8} key={label}>
 									<span className='utility-item'>
-										{image ? <img className='utility-item__image' src={image} alt={label} /> : <CheckOutlined />}
+										{image ? <AuthImage className='utility-item__image' src={image} alt={label} /> : <CheckOutlined />}
 										<span>{label}</span>
 									</span>
 								</Col>

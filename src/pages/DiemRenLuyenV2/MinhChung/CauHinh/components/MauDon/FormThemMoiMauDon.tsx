@@ -1,10 +1,10 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { QuyTrinh } from '@/services/FormDong/QuyTrinh/typing';
-import { buildUpLoadFile, getFileById } from '@/services/uploadFile';
-import rules from '@/utils/rules';
+import { buildUpLoadFileMultipart, EFileScope, getFileById } from '@/services/uploadFile';
 import { FILE_EXTENSIONS, validateUploadFileList } from '@/utils/fileValidation';
+import rules from '@/utils/rules';
 import { removeVietnameseTones, resetFieldsForm } from '@/utils/utils';
-import { Button, Card, Form, Input, Select, message } from 'antd';
+import { Button, Card, Form, Input, message, Select } from 'antd';
 import fileDownload from 'js-file-download';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
@@ -48,7 +48,11 @@ const FormThemMoiMauDon = () => {
 
 		const arr = record?.danhSachFormKhaiBao ? [...record?.danhSachFormKhaiBao] : [];
 
-		const resUploadFile = await buildUpLoadFile(values, 'fileId', undefined, true);
+		const resUploadFile = await buildUpLoadFileMultipart(values, 'fileId', {
+			scope: EFileScope.INTERNAL,
+			module: 'diem-ren-luyen',
+			returnResponse: true,
+		});
 		const payload: QuyTrinh.IMauDon = {
 			...recordMauDon,
 			...values,
@@ -135,6 +139,7 @@ const FormThemMoiMauDon = () => {
 						otherProps={{
 							showUploadList: { showDownloadIcon: false },
 						}}
+						isPrivate
 					/>
 				</Form.Item>
 

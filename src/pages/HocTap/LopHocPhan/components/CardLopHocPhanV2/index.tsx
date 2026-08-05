@@ -1,16 +1,14 @@
-import { EGioiTinh } from '@/services/DaoTao/constant';
 import {
 	colorTrangThaiCardLopHp,
 	ETrangThaiCardLopHp,
 	labelTrangThaiCardLopHp,
 } from '@/services/DaoTao/LopHocPhan/constant';
-import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
+import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import dayjs from '@/utils/dayjs';
 import { getPublicAssetPath } from '@/utils/path';
-import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Card, Flex, Tag, Typography } from 'antd';
 import { useMemo } from 'react';
-import { history, useIntl, useModel } from 'umi';
+import { history, useIntl } from 'umi';
 import './style.less';
 
 const { Text } = Typography;
@@ -24,19 +22,21 @@ type CardLopHocPhanV2Props = {
 const CardLopHocPhanV2 = ({ lop, isHienTai, isKeTiep }: CardLopHocPhanV2Props) => {
 	const intl = useIntl();
 	const t = (id: string) => intl.formatMessage({ id });
-	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 
 	const maLop = String(lop?.ten || lop?.maLop || '--');
 	const maHocPhan = String(lop?.maHocPhan || '--');
 	const tenHocPhan = lop?.hocPhan?.ten || lop?.ten || '--';
 	const soTinChi = lop?.hocPhan?.soTinChi;
-	const sinhVienList: Partial<SinhVien.IRecord>[] = lop?.sinhVienList ?? [];
+	const nhanSuList: LopHocPhan.IRecordNhanSuLopHP[] = lop?.nhanSuList ?? [];
 
-	const getSinhVienAvatar = (sv: Partial<SinhVien.IRecord>) =>
-		sv.anhDaiDienUrl || getPublicAssetPath(`images/${sv.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`);
+	const getNhanSuAvatar = (item: LopHocPhan.IRecordNhanSuLopHP) =>
+		item.nhanSu?.urlAnhDaiDien ||
+		getPublicAssetPath(`images/${item.nhanSu?.gioiTinh === 'Nữ' ? 'teacher-female.svg' : 'teacher-male.svg'}`);
 
-	const myAvatarUrl = recSinhVien?.anhDaiDienUrl ? getPublicAssetPath(recSinhVien?.anhDaiDienUrl) : null;
-	const myName = recSinhVien?.ten;
+	const getNhanSuName = (item: LopHocPhan.IRecordNhanSuLopHP) =>
+		item.nhanSu?.hoTen ||
+		(item.nhanSu?.ten ? [item.nhanSu.hoDem, item.nhanSu.ten].filter(Boolean).join(' ') : item.tenNhanSu) ||
+		'';
 
 	const status = useMemo(() => {
 		if (isHienTai) return ETrangThaiCardLopHp.HIEN_TAI;
@@ -97,7 +97,7 @@ const CardLopHocPhanV2 = ({ lop, isHienTai, isKeTiep }: CardLopHocPhanV2Props) =
 
 				<Flex justify='space-between' align='center' className='card-lhp-v2__footer'>
 					<span>{soTinChi != null ? `${soTinChi} ${t('lophocphan.tin-chi')}` : `-- ${t('lophocphan.tin-chi')}`}</span>
-					{sinhVienList.length > 0 ? (
+					{nhanSuList.length > 0 ? (
 						<Avatar.Group
 							size={24}
 							max={{
@@ -105,22 +105,20 @@ const CardLopHocPhanV2 = ({ lop, isHienTai, isKeTiep }: CardLopHocPhanV2Props) =
 								popover: { trigger: 'click' },
 							}}
 						>
-							{sinhVienList.map((sv, index) => (
-								<Avatar key={sv._id ?? sv.ma ?? index} src={getSinhVienAvatar(sv)} alt={sv.ten}>
-									{!sv.anhDaiDienUrl && sv.ten ? sv.ten.slice(0, 1).toUpperCase() : null}
-								</Avatar>
-							))}
+							{nhanSuList.map((item, index) => {
+								const name = getNhanSuName(item);
+								return (
+									<Avatar
+										key={item._id ?? item.nhanSuSsoId ?? item.maNhanSu ?? index}
+										src={getNhanSuAvatar(item)}
+										alt={name}
+									>
+										{!item.nhanSu?.urlAnhDaiDien && name ? name.slice(0, 1).toUpperCase() : null}
+									</Avatar>
+								);
+							})}
 						</Avatar.Group>
-					) : (
-						<Avatar
-							size={24}
-							src={myAvatarUrl || undefined}
-							icon={!myAvatarUrl ? <UserOutlined /> : undefined}
-							alt={myName || 'avatar'}
-						>
-							{!myAvatarUrl && myName ? myName.slice(0, 1).toUpperCase() : null}
-						</Avatar>
-					)}
+					) : null}
 				</Flex>
 			</Card>
 		</div>

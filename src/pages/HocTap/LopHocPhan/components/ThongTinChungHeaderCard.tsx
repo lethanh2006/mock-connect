@@ -1,3 +1,4 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import { primaryColor } from '@/services/base/constant';
 import {
 	colorTrangThaiCardLopHp,
@@ -6,7 +7,7 @@ import {
 } from '@/services/DaoTao/LopHocPhan/constant';
 import { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
 import dayjs from '@/utils/dayjs';
-import { ArrowLeftOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, InfoCircleOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Card, Descriptions, Flex, Space, Tag, Tooltip, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { Link, useAccess, useIntl, useModel, useNavigate } from 'umi';
@@ -19,7 +20,7 @@ const { Title, Text } = Typography;
 const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 	const intl = useIntl();
 	const { cctFilter } = useAccess();
-	const { record } = useModel('lophocphan.lophocphan');
+	const { loading, record } = useModel('lophocphan.lophocphan');
 	const [selectedGiangVien, setSelectedGiangVien] = useState<ToChucNhanSu.INhanSu>();
 	const [visibleGvDetailModal, setVisibleGvDetailModal] = useState(false);
 	const [visibleWithdraw, setVisibleWithdraw] = useState(false);
@@ -93,13 +94,12 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 							{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.hoctructuyen' })} <ExportOutlined />
 						</a>
 					) : null} */}
-					{/* {cctFilter?.() && (
-						<ButtonExtend
-							tooltip={intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.withdraw' })}
-							icon={<LogoutOutlined />}
-							onClick={() => setVisibleWithdraw(true)}
-						/>
-					)} */}
+					<ButtonExtend
+						tooltip={intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.withdraw' })}
+						icon={<LogoutOutlined />}
+						onClick={() => setVisibleWithdraw(true)}
+						style={{ background: '#fff1f0', borderColor: '#fff1f0', color: '#cf1322' }}
+					/>
 				</Space>
 			</Flex>
 

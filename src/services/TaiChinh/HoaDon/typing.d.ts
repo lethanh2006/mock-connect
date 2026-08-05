@@ -1,4 +1,6 @@
 import type { DotThuTaiChinh } from '../DotThu/typing';
+import type { ETrangThaiTraGopBill } from '../TraGop/constant';
+import type { TraGop } from '../TraGop/typing';
 import type { UuDaiThanhToan } from '../UuDaiThanhToan/typing';
 import type { EMaTrangThaiThanhToan, ETransactionStatus, ETransactionType } from '../constant';
 
@@ -36,6 +38,15 @@ declare module HoaDon {
 
 		ghiChu?: string;
 		virtualBill?: HoaDon.IRecord
+
+		/** Hóa đơn đã được duyệt cho trả góp hay chưa */
+		isTraGop?: boolean;
+		/** Trạng thái của yêu cầu/tiến trình trả góp (nếu có) */
+		trangThaiTraGop?: ETrangThaiTraGopBill;
+		/** Số lần trả góp tối đa hóa đơn này được phép đăng ký */
+		maxSoLanTraGop?: number;
+		/** Đơn yêu cầu trả góp đã nộp cho hóa đơn này (nếu có) — dùng để pre-fill form khi bị yêu cầu chỉnh sửa */
+		yeuCauTraGop?: TraGop.IYeuCau;
 	}
 
 	interface IKhachHang {
