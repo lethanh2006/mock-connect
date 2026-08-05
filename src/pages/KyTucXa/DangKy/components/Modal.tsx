@@ -93,6 +93,35 @@ const getThongTinSinhVienForm = (sinhVien?: SinhVien.IRecord): Partial<PhieuDang
 	emergencyContacts: getNguoiLienHeKhanCap(sinhVien),
 });
 
+const TRUONG_THONG_TIN_SINH_VIEN = [
+	'fullName',
+	'studentId',
+	'dateOfBirth',
+	'gender',
+	'email',
+	'phoneNumber',
+	'program',
+	'college',
+	'identityNumber',
+	'dateOfIssue',
+	'placeOfIssue',
+	'nationality',
+	'permanentHomeAddress',
+] as const;
+
+type TTruongThongTinSinhVien = (typeof TRUONG_THONG_TIN_SINH_VIEN)[number];
+
+const TRUONG_BUOC_THONG_TIN_CHUNG = [...TRUONG_THONG_TIN_SINH_VIEN, 'emergencyContacts'];
+
+const isKhongCoThongTin = (value: unknown) =>
+	value === undefined || value === null || (typeof value === 'string' && !value.trim());
+
+const getTruongSinhVienDuocSua = (thongTinSinhVien: Partial<PhieuDangKyKTX.IDangKy>) =>
+	TRUONG_THONG_TIN_SINH_VIEN.reduce<Partial<Record<TTruongThongTinSinhVien, boolean>>>((result, field) => {
+		result[field] = isKhongCoThongTin(thongTinSinhVien[field]);
+		return result;
+	}, {});
+
 const ModalDanKyKTX = (props: {
 	getData?: () => void;
 	daCoLichSuDangKy?: boolean;
@@ -102,6 +131,8 @@ const ModalDanKyKTX = (props: {
 	const { getData, daCoLichSuDangKy, isView, initialStep = 0 } = props;
 	const intl = useIntl();
 	const [form] = Form.useForm();
+	const daDongYThongTinChung = Form.useWatch('checkbox1', form);
+	const daDongYChinhSach = Form.useWatch('checkbox2', form);
 
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { visibleDangKy, setVisibleDangKy, record: recPhong } = useModel('kytucxa.phong');
@@ -110,6 +141,9 @@ const ModalDanKyKTX = (props: {
 
 	const [currentStep, setCurrentStep] = useState<number>(0);
 	const [visibleDangKyThanhCong, setVisibleDangKyThanhCong] = useState<boolean>(false);
+	const [truongSinhVienDuocSua, setTruongSinhVienDuocSua] = useState<Partial<Record<TTruongThongTinSinhVien, boolean>>>(
+		{},
+	);
 
 	const steps = [
 		intl.formatMessage({ id: 'kytucxa.dangky.modal.step.thongTinChung' }),
@@ -121,6 +155,7 @@ const ModalDanKyKTX = (props: {
 	useEffect(() => {
 		if (visibleDangKy && isView) {
 			setCurrentStep(Math.min(initialStep, lastStep));
+			setTruongSinhVienDuocSua({});
 			form.setFieldsValue({
 				...recPhieuDangKy?.formDon,
 				checkbox1: true,
@@ -130,19 +165,22 @@ const ModalDanKyKTX = (props: {
 		}
 
 		if (visibleDangKy && recSinhVien) {
-			form.setFieldsValue(getThongTinSinhVienForm(recSinhVien));
+			const thongTinSinhVien = getThongTinSinhVienForm(recSinhVien);
+			form.setFieldsValue(thongTinSinhVien);
+			setTruongSinhVienDuocSua(getTruongSinhVienDuocSua(thongTinSinhVien));
 		}
 	}, [visibleDangKy, isView, initialStep, lastStep, recSinhVien?._id, recPhieuDangKy?._id]);
 
 	const handleClose = () => {
 		form.resetFields();
 		setCurrentStep(0);
+		setTruongSinhVienDuocSua({});
 		setVisibleDangKy(false);
 	};
 
 	const handleNext = async () => {
 		try {
-			await form.validateFields();
+			await form.validateFields(TRUONG_BUOC_THONG_TIN_CHUNG);
 			setCurrentStep(1);
 		} catch (error) {
 			console.error(error);
@@ -166,18 +204,22 @@ const ModalDanKyKTX = (props: {
 			return;
 		}
 
-		const values = form.getFieldsValue(true) as PhieuDangKyKTX.IDangKy & { checkbox1?: boolean; checkbox2?: boolean };
-		const maPhong = recPhong?.room?.ma ?? recPhong?.roomId;
-		const { checkbox1: _checkbox1, checkbox2: _checkbox2, ...formValues } = values;
+		try {
+			const values = (await form.validateFields()) as PhieuDangKyKTX.IDangKy & {
+				checkbox1?: boolean;
+				checkbox2?: boolean;
+			};
+			const maPhong = recPhong?.room?.ma ?? recPhong?.roomId;
+			const { checkbox1: _checkbox1, checkbox2: _checkbox2, ...formValues } = values;
 
-		const data = {
-			maDotId: recDot?._id,
-			maPhong,
-			form: {
-				...formValues,
-				agreedToPolicy: true,
-			},
-		};
+			const data = {
+				maDotId: recDot?._id,
+				maPhong,
+				form: {
+					...formValues,
+					agreedToPolicy: true,
+				},
+			};
 
 		try {
 			await sinhVienDangKyKTXModel(data as any, getData);
@@ -219,7 +261,7 @@ const ModalDanKyKTX = (props: {
 					/>
 
 					<div style={{ display: currentStep === 0 ? 'block' : 'none' }}>
-						<FormDangKyKTX form={form} disabled={isView} />
+						<FormDangKyKTX form={form} disabled={isView} truongSinhVienDuocSua={truongSinhVienDuocSua} />
 					</div>
 
 					<div style={{ display: currentStep === 1 ? 'block' : 'none' }}>
@@ -251,7 +293,7 @@ const ModalDanKyKTX = (props: {
 							</>
 						) : currentStep === 0 ? (
 							<>
-								<Button htmlType='button' type='primary' onClick={handleNext}>
+								<Button htmlType='button' type='primary' disabled={!daDongYThongTinChung} onClick={handleNext}>
 									{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.next' })}
 								</Button>
 
@@ -261,7 +303,13 @@ const ModalDanKyKTX = (props: {
 							</>
 						) : (
 							<>
-								<Button htmlType='button' type='primary' loading={formSubmiting} onClick={handleSubmit}>
+								<Button
+									htmlType='button'
+									type='primary'
+									disabled={!daDongYChinhSach}
+									loading={formSubmiting}
+									onClick={handleSubmit}
+								>
 									{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.submit' })}
 								</Button>
 

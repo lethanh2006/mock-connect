@@ -1,8 +1,13 @@
+import AuthImage from '@/components/Image/AuthImage';
+import {
+	ETrangThaiThanhToanKTX,
+	ETrangThaiThanhToanKTXColor,
+	ETrangThaiThanhToanKTXI18n,
+} from '@/services/KyTucXa/PhieuDangKy/constant';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
-import { EMaTrangThaiThanhToan, ETrangThaiThanhToanKtxI18n } from '@/services/TaiChinh/constant';
 import { CheckCircleFilled, ColumnWidthOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Image, Row, Space, Tag, Typography } from 'antd';
+import { Button, Card, Col, Row, Space, Tag, Typography } from 'antd';
 import { useIntl, useModel } from 'umi';
 import '../style.less';
 import {
@@ -24,19 +29,6 @@ interface CardPhongProps {
 	onDangKy?: (phong: Phong.IChinhSachPhongRecord) => void;
 }
 
-const getPaymentTag = (status: EMaTrangThaiThanhToan | undefined, intl: any) => {
-	if (!status) return <Tag>--</Tag>;
-
-	const messageId = ETrangThaiThanhToanKtxI18n[status];
-	if (!messageId) return <Tag>--</Tag>;
-
-	return (
-		<Tag className={`room-card__payment-tag room-card__payment-tag--${status}`}>
-			{intl.formatMessage({ id: messageId })}
-		</Tag>
-	);
-};
-
 const CardPhong = ({
 	phong,
 	lichSuDangKy,
@@ -47,6 +39,7 @@ const CardPhong = ({
 	onDangKy,
 }: CardPhongProps) => {
 	const intl = useIntl();
+	const t = (id: string) => intl.formatMessage({ id });
 	const { record: recLichSu } = useModel('kytucxa.phieudangky');
 	const lichSuPhong = lichSuDangKy ?? recLichSu;
 	const room = phong.room;
@@ -58,8 +51,9 @@ const CardPhong = ({
 	const tienIchHienThi = tienIch.slice(0, 3);
 
 	const trangThaiThanhToan = lichSuPhong?.trangThaiThanhToan;
-	const daThanhToanXong = trangThaiThanhToan === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU;
-	const daQuaHanThanhToan = trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
+	const daThanhToanXong = trangThaiThanhToan === ETrangThaiThanhToanKTX.DA_HOAN_THANH_COC;
+	const daQuaHanThanhToan =
+		trangThaiThanhToan === ETrangThaiThanhToanKTX.DONG || trangThaiThanhToan === ETrangThaiThanhToanKTX.HUY;
 	const hienThiNhuDaDangKy = laPhongDaDangKy && !daQuaHanThanhToan;
 
 	const khongChoDangKy = !hienThiNhuDaDangKy && (daHetCho || daCoLichSuDangKy);
@@ -71,6 +65,26 @@ const CardPhong = ({
 			? intl.formatMessage({ id: 'kytucxa.dangky.card.button.full' })
 			: intl.formatMessage({ id: 'kytucxa.dangky.card.button.dangKy' });
 
+	const renderTrangThaiThanhToan = (value?: string) => {
+		const paymentStatus = value as ETrangThaiThanhToanKTX;
+		const intlId = ETrangThaiThanhToanKTXI18n[paymentStatus];
+		return (
+			<Tag
+				style={{
+					maxWidth: 90,
+					overflow: 'hidden',
+					textOverflow: 'ellipsis',
+					whiteSpace: 'nowrap',
+					display: 'inline-block',
+				}}
+				title={(intlId && t(intlId)) || '--'}
+				color={ETrangThaiThanhToanKTXColor[paymentStatus] ?? 'default'}
+			>
+				{(intlId && t(intlId)) || '--'}
+			</Tag>
+		);
+	};
+
 	return (
 		<Card
 			className={['room-card', hienThiNhuDaDangKy ? 'room-card--registered' : undefined].filter(Boolean).join(' ')}
@@ -78,10 +92,9 @@ const CardPhong = ({
 			onClick={() => onXemChiTiet?.(phong)}
 			cover={
 				<div className='room-card__image-wrap'>
-					<Image
+					<AuthImage
 						src={anhPhong}
 						alt={intl.formatMessage({ id: 'kytucxa.dangky.card.imageAlt' }, { maPhong: room?.ma ?? '' })}
-						preview={false}
 						className='room-card__image'
 						loading={'lazy'}
 					/>
@@ -143,7 +156,7 @@ const CardPhong = ({
 
 			<div className='room-card__footer'>
 				{hienThiNhuDaDangKy ? (
-					getPaymentTag(trangThaiThanhToan, intl)
+					renderTrangThaiThanhToan()
 				) : (
 					<Typography.Text className='room-card__price' strong>
 						{formatGiaPhong(room?.giaPhong, room?.donViTienTe, intl)}
