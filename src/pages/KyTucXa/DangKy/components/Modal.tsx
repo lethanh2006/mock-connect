@@ -221,7 +221,6 @@ const ModalDanKyKTX = (props: {
 				},
 			};
 
-		try {
 			await sinhVienDangKyKTXModel(data as any, getData);
 
 			handleClose();
