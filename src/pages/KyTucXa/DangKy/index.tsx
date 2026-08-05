@@ -1,8 +1,8 @@
 import PageCard from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
+import { ETrangThaiThanhToanKTX } from '@/services/KyTucXa/PhieuDangKy/constant';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
-import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { formatDateTime } from '@/utils/formatDate';
 import { getPublicAssetPath } from '@/utils/path';
 import { FileDoneOutlined, InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
@@ -27,7 +27,9 @@ const getLichSuDangKyKeys = (lichSu?: PhieuDangKyKTX.IRecord) =>
 		.filter(Boolean)
 		.map((item) => String(item));
 
-const laLichSuDaDong = (lichSu?: PhieuDangKyKTX.IRecord) => lichSu?.trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
+const laLichSuDaDong = (lichSu?: PhieuDangKyKTX.IRecord) =>
+	lichSu?.trangThaiThanhToan === ETrangThaiThanhToanKTX.DONG ||
+	lichSu?.trangThaiThanhToan === ETrangThaiThanhToanKTX.HUY;
 
 const coFormDonDangKy = (lichSu?: PhieuDangKyKTX.IRecord) => !!lichSu?.formDon?._id && !laLichSuDaDong(lichSu);
 

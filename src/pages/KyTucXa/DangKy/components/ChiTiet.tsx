@@ -1,8 +1,8 @@
 import AuthImage from '@/components/Image/AuthImage';
 import ModalExpandable from '@/components/Table/ModalExpandable';
+import { ETrangThaiThanhToanKTX } from '@/services/KyTucXa/PhieuDangKy/constant';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
-import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { CheckOutlined, ColumnWidthOutlined } from '@ant-design/icons';
 import { Button, Col, message, Row, Typography } from 'antd';
 import { useIntl, useModel } from 'umi';
@@ -31,7 +31,9 @@ const ChiTietPhong = (props: {
 	const room = phong?.room;
 	const lichSuPhong = phong && getLichSuDangKyTheoPhong ? getLichSuDangKyTheoPhong(phong) : recLichSu;
 	const daCoLichSuPhongDangKy =
-		!!lichSuPhong?.formDon?._id && lichSuPhong?.trangThaiThanhToan !== EMaTrangThaiThanhToan.DONG;
+		!!lichSuPhong?.formDon?._id &&
+		lichSuPhong?.trangThaiThanhToan !== ETrangThaiThanhToanKTX.DONG &&
+		lichSuPhong?.trangThaiThanhToan !== ETrangThaiThanhToanKTX.HUY;
 
 	const laPhongDaDangKy = phong && isPhongDaDangKy ? isPhongDaDangKy(phong) : false;
 	const images = getAnhPhongHienThi(phong);
@@ -40,8 +42,9 @@ const ChiTietPhong = (props: {
 	const soSlotConLai = getSoChoConLai(phong);
 	const daHetCho = getDaHetCho(phong);
 	const trangThaiThanhToan = lichSuPhong?.trangThaiThanhToan;
-	const daThanhToanXong = trangThaiThanhToan === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU;
-	const daQuaHanThanhToan = trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
+	const daThanhToanXong = trangThaiThanhToan === ETrangThaiThanhToanKTX.DA_HOAN_THANH_COC;
+	const daQuaHanThanhToan =
+		trangThaiThanhToan === ETrangThaiThanhToanKTX.DONG || trangThaiThanhToan === ETrangThaiThanhToanKTX.HUY;
 	const hienThiNhuDaDangKy = laPhongDaDangKy && !daQuaHanThanhToan;
 	const khongChoDangKy = !hienThiNhuDaDangKy && (daHetCho || daCoLichSuPhongDangKy || daCoLichSuDangKy);
 	const buttonText = hienThiNhuDaDangKy
