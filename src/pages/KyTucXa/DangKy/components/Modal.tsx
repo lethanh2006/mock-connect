@@ -43,6 +43,14 @@ const mapMoiQuanHeKhanCap = (loaiThanhVien?: string) => {
 	return loaiThanhVien ? 'Other' : undefined;
 };
 
+// axios (utils/axios.ts) đã tự hiện notification cho lỗi có message từ BE.
+// Hàm này chỉ dùng để phát hiện case BE không trả về message gì để bổ sung thông báo chung.
+const getBeErrorMessage = (error: any): string | undefined =>
+	error?.response?.data?.detail?.message ||
+	error?.response?.data?.message ||
+	error?.response?.data?.detail?.exception?.message ||
+	undefined;
+
 const getNguoiLienHeKhanCap = (sinhVien?: SinhVien.IRecord): PhieuDangKyKTX.INguoiThan[] => {
 	const thanhVienGiaDinh = sinhVien?.thanhVienGiaDinh ?? [];
 	const danhSachLienHe = thanhVienGiaDinh
@@ -171,11 +179,18 @@ const ModalDanKyKTX = (props: {
 			},
 		};
 
-		await sinhVienDangKyKTXModel(data as any, getData);
+		try {
+			await sinhVienDangKyKTXModel(data as any, getData);
 
-		handleClose();
+			handleClose();
 
-		setVisibleDangKyThanhCong(true);
+			setVisibleDangKyThanhCong(true);
+		} catch (error) {
+			if (!getBeErrorMessage(error)) {
+				message.error(intl.formatMessage({ id: 'kytucxa.dangky.message.loiKhongXacDinh' }));
+			}
+			getData?.();
+		}
 	};
 
 	return (

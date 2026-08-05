@@ -11,6 +11,7 @@ export default {
 	'kytucxa.dangky.alert.thoiGianDangKy': 'Đăng ký {tenDot} mở từ {tuNgay} đến {denNgay}.',
 	'kytucxa.dangky.alert.daCoLichSu': 'Bạn đã có lịch sử đăng ký trong đợt này nên không thể đăng ký thêm.',
 	'kytucxa.dangky.message.daCoLichSu': 'Bạn đã có lịch sử đăng ký ký túc xá.',
+	'kytucxa.dangky.message.loiKhongXacDinh': 'Đã có lỗi xảy ra, vui lòng thử lại sau.',
 	'kytucxa.dangky.filter.sucChua.placeholder': 'Chọn sức chứa',
 	'kytucxa.dangky.filter.sucChua.option1': 'Từ 3 đến 6',
 	'kytucxa.dangky.filter.sucChua.option2': 'Từ 6 đến 12',
