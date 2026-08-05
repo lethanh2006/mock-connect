@@ -5,6 +5,7 @@ export enum EMaTrangThaiThanhToan {
 	CHUA_HOAN_THANH_COC = 'deposit_pending',
 	DA_HOAN_THANH_COC = 'deposit_paid',
 	DONG = 'closed',
+	HUY = 'Hủy',
 }
 
 export enum ETrangThaiDuyetKTX {
@@ -26,6 +27,7 @@ export const ETrangThaiThanhToan: any = {
 	[EMaTrangThaiThanhToan.CHUA_HOAN_THANH_COC]: 'Chưa hoàn thành cọc',
 	[EMaTrangThaiThanhToan.DA_HOAN_THANH_COC]: 'Đã hoàn thành cọc',
 	[EMaTrangThaiThanhToan.DONG]: 'Đóng',
+	[EMaTrangThaiThanhToan.HUY]: 'Đóng',
 };
 
 export const EMauTrangThaiThanhToanTable = {
@@ -35,6 +37,7 @@ export const EMauTrangThaiThanhToanTable = {
 	[EMaTrangThaiThanhToan.CHUA_HOAN_THANH_COC]: 'rgb(250, 140, 22)',
 	[EMaTrangThaiThanhToan.DA_HOAN_THANH_COC]: 'rgb(24, 144, 255)',
 	[EMaTrangThaiThanhToan.DONG]: undefined,
+	[EMaTrangThaiThanhToan.HUY]: undefined,
 };
 
 export const ETrangThaiThanhToanKtxI18n: Record<EMaTrangThaiThanhToan, string> = {
@@ -44,6 +47,7 @@ export const ETrangThaiThanhToanKtxI18n: Record<EMaTrangThaiThanhToan, string> =
 	[EMaTrangThaiThanhToan.CHUA_HOAN_THANH_COC]: 'kytucxa.lichsu.status.depositPending',
 	[EMaTrangThaiThanhToan.DA_HOAN_THANH_COC]: 'kytucxa.lichsu.status.depositPaid',
 	[EMaTrangThaiThanhToan.DONG]: 'kytucxa.lichsu.status.closed',
+	[EMaTrangThaiThanhToan.HUY]: 'kytucxa.lichsu.status.closed',
 };
 
 //Giao dịch

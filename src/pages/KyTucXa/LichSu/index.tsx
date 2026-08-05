@@ -55,7 +55,9 @@ const getChinhSachPhongChiTiet = (record?: PhieuDangKyKTX.IRecord) => {
 const getRoomFromChinhSachPhong = (record?: PhieuDangKyKTX.IRecord) => getChinhSachPhong(record)?.room ?? record?.phong;
 
 const getPaymentStatusColor = (status?: EMaTrangThaiThanhToan) =>
-	status === EMaTrangThaiThanhToan.DONG ? 'purple' : EMauTrangThaiThanhToanTable[status as EMaTrangThaiThanhToan];
+	status === EMaTrangThaiThanhToan.DONG || status === EMaTrangThaiThanhToan.HUY
+		? 'purple'
+		: EMauTrangThaiThanhToanTable[status as EMaTrangThaiThanhToan];
 
 const LichSuaKTX = () => {
 	const intl = useIntl();
@@ -103,6 +105,7 @@ const LichSuaKTX = () => {
 	const handleDelete = (record: PhieuDangKyKTX.IRecord) => {
 		const canDelete =
 			record?.trangThaiThanhToan === EMaTrangThaiThanhToan.DONG ||
+			record?.trangThaiThanhToan === EMaTrangThaiThanhToan.HUY ||
 			record?.trangThaiThanhToan === EMaTrangThaiThanhToan.CHUA_THANH_TOAN;
 
 		if (!canDelete) return;
@@ -213,7 +216,9 @@ const LichSuaKTX = () => {
 			fixed: 'right',
 			render: (_val, rec) => {
 				const isPaid = rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU;
-				const isClosed = rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
+				const isClosed =
+					rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.DONG ||
+					rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.HUY;
 				const isUnpaid = rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.CHUA_THANH_TOAN;
 				const isUndeposit = rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.CHUA_HOAN_THANH_COC;
 				const canDelete = isClosed || isUnpaid || isUndeposit;

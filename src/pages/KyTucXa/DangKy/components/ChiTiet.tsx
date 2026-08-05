@@ -30,7 +30,9 @@ const ChiTietPhong = (props: {
 	const room = phong?.room;
 	const lichSuPhong = phong && getLichSuDangKyTheoPhong ? getLichSuDangKyTheoPhong(phong) : recLichSu;
 	const daCoLichSuPhongDangKy =
-		!!lichSuPhong?.formDon?._id && lichSuPhong?.trangThaiThanhToan !== EMaTrangThaiThanhToan.DONG;
+		!!lichSuPhong?.formDon?._id &&
+		lichSuPhong?.trangThaiThanhToan !== EMaTrangThaiThanhToan.DONG &&
+		lichSuPhong?.trangThaiThanhToan !== EMaTrangThaiThanhToan.HUY;
 
 	const laPhongDaDangKy = phong && isPhongDaDangKy ? isPhongDaDangKy(phong) : false;
 	const images = getAnhPhongHienThi(phong);
@@ -40,7 +42,8 @@ const ChiTietPhong = (props: {
 	const daHetCho = getDaHetCho(phong);
 	const trangThaiThanhToan = lichSuPhong?.trangThaiThanhToan;
 	const daThanhToanXong = trangThaiThanhToan === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU;
-	const daQuaHanThanhToan = trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
+	const daQuaHanThanhToan =
+		trangThaiThanhToan === EMaTrangThaiThanhToan.DONG || trangThaiThanhToan === EMaTrangThaiThanhToan.HUY;
 	const hienThiNhuDaDangKy = laPhongDaDangKy && !daQuaHanThanhToan;
 	const khongChoDangKy = !hienThiNhuDaDangKy && (daHetCho || daCoLichSuPhongDangKy || daCoLichSuDangKy);
 	const buttonText = hienThiNhuDaDangKy

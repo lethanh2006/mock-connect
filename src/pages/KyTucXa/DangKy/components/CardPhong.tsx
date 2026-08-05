@@ -59,7 +59,8 @@ const CardPhong = ({
 
 	const trangThaiThanhToan = lichSuPhong?.trangThaiThanhToan;
 	const daThanhToanXong = trangThaiThanhToan === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU;
-	const daQuaHanThanhToan = trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
+	const daQuaHanThanhToan =
+		trangThaiThanhToan === EMaTrangThaiThanhToan.DONG || trangThaiThanhToan === EMaTrangThaiThanhToan.HUY;
 	const hienThiNhuDaDangKy = laPhongDaDangKy && !daQuaHanThanhToan;
 
 	const khongChoDangKy = !hienThiNhuDaDangKy && (daHetCho || daCoLichSuDangKy);
