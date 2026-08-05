@@ -53,7 +53,7 @@ export const usePersonalInfo = (
 		studentCode: studentRegistration?.studentCode ?? recordSinhVien?.ma,
 		studentNgaySinh: studentRegistration?.ngaySinh ?? recordSinhVien?.ngaySinh,
 		studentCccd: studentRegistration?.cccd ?? recordSinhVien?.cccd,
-		studentNationality: studentRegistration?.nationality ?? recordSinhVien?.quocTich,
+		studentNationality: hasNationalityData ? (isVN ? EBhytNationality.VIETNAM : EBhytNationality.FOREIGN) : undefined,
 		studentGioiTinh: studentRegistration?.gioiTinh ?? recordSinhVien?.gioiTinh,
 		studentKhoa: recordSinhVien?.khoaSinhVien?.ten ?? studentRegistration?.khoa,
 		studentNganh: recordSinhVien?.nganh?.ten ?? studentRegistration?.nganh,
