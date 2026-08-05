@@ -209,6 +209,20 @@ const DangKyKyTucXa = () => {
 		[getLichSuDangKyTheoPhong],
 	);
 
+	// const handlePaginationChange = (newPage: number, newPageSize: number) => {
+	// 	if (newPageSize !== limit) {
+	// 		setPage(1);
+	// 		setLimit(newPageSize);
+	// 	} else {
+	// 		setPage(newPage);
+	// 	}
+	// };
+	//
+	// const handlePageSizeChange = (_current: number, size: number) => {
+	// 	setPage(1);
+	// 	setLimit(size);
+	// };
+
 	if (!recDot?._id) {
 		return (
 			<PageCard title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}>
@@ -335,25 +349,44 @@ const DangKyKyTucXa = () => {
 
 			<Spin spinning={loading || loadingLichSu}>
 				{danhSachHienThi?.length ? (
-					<Row gutter={[12, 12]}>
-						{danhSachHienThi.map((phong) => {
-							const lichSuDangKy = getLichSuDangKyTheoPhong(phong);
+					<>
+						<Row gutter={[12, 12]}>
+							{danhSachHienThi.map((phong) => {
+								const lichSuDangKy = getLichSuDangKyTheoPhong(phong);
 
-							return (
-								<Col key={phong._id} xs={24} md={12} xl={8} className='room-list-col'>
-									<CardPhong
-										phong={phong}
-										lichSuDangKy={lichSuDangKy}
-										daCoLichSuDangKy={daCoLichSuDangKy}
-										laPhongDaDangKy={isPhongDaDangKy(phong)}
-										onOpenLichSuDangKy={handleOpenLichSuDangKy}
-										onXemChiTiet={handleXemChiTiet}
-										onDangKy={handleDangKy}
-									/>
-								</Col>
-							);
-						})}
-					</Row>
+								return (
+									<Col key={phong._id} xs={24} md={12} xl={8} className='room-list-col'>
+										<CardPhong
+											phong={phong}
+											lichSuDangKy={lichSuDangKy}
+											daCoLichSuDangKy={daCoLichSuDangKy}
+											laPhongDaDangKy={isPhongDaDangKy(phong)}
+											onOpenLichSuDangKy={handleOpenLichSuDangKy}
+											onXemChiTiet={handleXemChiTiet}
+											onDangKy={handleDangKy}
+										/>
+									</Col>
+								);
+							})}
+						</Row>
+
+						{/*{total > 0 && (*/}
+						{/*	<div className='pagination-container'>*/}
+						{/*		<Pagination*/}
+						{/*			current={page}*/}
+						{/*			pageSize={limit}*/}
+						{/*			total={total}*/}
+						{/*			onChange={handlePaginationChange}*/}
+						{/*			onShowSizeChange={handlePageSizeChange}*/}
+						{/*			pageSizeOptions={['5', '10', '20', '50']}*/}
+						{/*			showSizeChanger={false}*/}
+						{/*			disabled={loading || loadingLichSu}*/}
+						{/*			size='default'*/}
+						{/*			className='pagination'*/}
+						{/*		/>*/}
+						{/*	</div>*/}
+						{/*)}*/}
+					</>
 				) : (
 					<Empty
 						style={{ marginTop: 32, marginBottom: 32 }}
