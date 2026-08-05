@@ -6,7 +6,7 @@ import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { formatDateTime } from '@/utils/formatDate';
 import { getPublicAssetPath } from '@/utils/path';
 import { FileDoneOutlined, InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Alert, Button, Col, Empty, Flex, Input, message, Pagination, Row, Select, Space, Spin } from 'antd';
+import { Alert, Button, Col, Empty, Flex, Input, message, Row, Select, Space, Spin } from 'antd';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -15,6 +15,7 @@ import SelectToaNhaKTX from '../ToaNha/Select';
 import CardPhong from './components/CardPhong';
 import ChiTietPhong from './components/ChiTiet';
 import ModalDanKyKTX from './components/Modal';
+import { getSoChoConLai } from './utils';
 
 const { Search } = Input;
 
@@ -47,8 +48,6 @@ const DangKyKyTucXa = () => {
 		page,
 		limit,
 		setPage,
-		setLimit,
-		total,
 		handleView,
 		setVisibleDangKy,
 		loading,
@@ -104,7 +103,7 @@ const DangKyKyTucXa = () => {
 
 	const getData = () => {
 		if (recDot?._id && !recDot?.isMienKyTucXa) {
-			getModel({ maDotId: recDot?._id }, undefined, undefined, undefined, undefined, 'ktx/chinh-sach-phong/page');
+			getModel({ maDotId: recDot?._id }, undefined, undefined, undefined, 300, 'ktx/chinh-sach-phong/page');
 		}
 	};
 
@@ -157,7 +156,11 @@ const DangKyKyTucXa = () => {
 				const aDaDangKy = coFormDonDangKy(getLichSuDangKyTheoPhong(a));
 				const bDaDangKy = coFormDonDangKy(getLichSuDangKyTheoPhong(b));
 
-				return Number(bDaDangKy) - Number(aDaDangKy);
+				if (aDaDangKy !== bDaDangKy) {
+					return Number(bDaDangKy) - Number(aDaDangKy);
+				}
+
+				return getSoChoConLai(b) - getSoChoConLai(a);
 			}),
 		[danhSach, getLichSuDangKyTheoPhong],
 	);
@@ -206,19 +209,19 @@ const DangKyKyTucXa = () => {
 		[getLichSuDangKyTheoPhong],
 	);
 
-	const handlePaginationChange = (newPage: number, newPageSize: number) => {
-		if (newPageSize !== limit) {
-			setPage(1);
-			setLimit(newPageSize);
-		} else {
-			setPage(newPage);
-		}
-	};
-
-	const handlePageSizeChange = (_current: number, size: number) => {
-		setPage(1);
-		setLimit(size);
-	};
+	// const handlePaginationChange = (newPage: number, newPageSize: number) => {
+	// 	if (newPageSize !== limit) {
+	// 		setPage(1);
+	// 		setLimit(newPageSize);
+	// 	} else {
+	// 		setPage(newPage);
+	// 	}
+	// };
+	//
+	// const handlePageSizeChange = (_current: number, size: number) => {
+	// 	setPage(1);
+	// 	setLimit(size);
+	// };
 
 	if (!recDot?._id) {
 		return (
@@ -367,22 +370,22 @@ const DangKyKyTucXa = () => {
 							})}
 						</Row>
 
-						{total > 0 && (
-							<div className='pagination-container'>
-								<Pagination
-									current={page}
-									pageSize={limit}
-									total={total}
-									onChange={handlePaginationChange}
-									onShowSizeChange={handlePageSizeChange}
-									pageSizeOptions={['5', '10', '20', '50']}
-									showSizeChanger={false}
-									disabled={loading || loadingLichSu}
-									size='default'
-									className='pagination'
-								/>
-							</div>
-						)}
+						{/*{total > 0 && (*/}
+						{/*	<div className='pagination-container'>*/}
+						{/*		<Pagination*/}
+						{/*			current={page}*/}
+						{/*			pageSize={limit}*/}
+						{/*			total={total}*/}
+						{/*			onChange={handlePaginationChange}*/}
+						{/*			onShowSizeChange={handlePageSizeChange}*/}
+						{/*			pageSizeOptions={['5', '10', '20', '50']}*/}
+						{/*			showSizeChanger={false}*/}
+						{/*			disabled={loading || loadingLichSu}*/}
+						{/*			size='default'*/}
+						{/*			className='pagination'*/}
+						{/*		/>*/}
+						{/*	</div>*/}
+						{/*)}*/}
 					</>
 				) : (
 					<Empty
