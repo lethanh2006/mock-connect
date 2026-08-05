@@ -2,10 +2,7 @@ export enum EMaTrangThaiThanhToan {
 	CHUA_THANH_TOAN = 'open',
 	CHUA_THANH_TOAN_DU = 'underpaid',
 	DA_THANH_TOAN_DU = 'paid',
-	CHUA_HOAN_THANH_COC = 'deposit_pending',
-	DA_HOAN_THANH_COC = 'deposit_paid',
 	DONG = 'closed',
-	HUY = 'Hủy',
 }
 
 export enum ETrangThaiDuyetKTX {
@@ -24,30 +21,21 @@ export const ETrangThaiThanhToan: any = {
 	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN]: 'Chưa thanh toán',
 	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU]: 'Chưa thanh toán đủ',
 	[EMaTrangThaiThanhToan.DA_THANH_TOAN_DU]: 'Đã thanh toán đủ',
-	[EMaTrangThaiThanhToan.CHUA_HOAN_THANH_COC]: 'Chưa hoàn thành cọc',
-	[EMaTrangThaiThanhToan.DA_HOAN_THANH_COC]: 'Đã hoàn thành cọc',
 	[EMaTrangThaiThanhToan.DONG]: 'Đóng',
-	[EMaTrangThaiThanhToan.HUY]: 'Đóng',
 };
 
 export const EMauTrangThaiThanhToanTable = {
 	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN]: 'rgb(220, 53, 69)',
 	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU]: 'rgb(255, 215, 34)',
 	[EMaTrangThaiThanhToan.DA_THANH_TOAN_DU]: 'rgb(0, 128, 16)',
-	[EMaTrangThaiThanhToan.CHUA_HOAN_THANH_COC]: 'rgb(250, 140, 22)',
-	[EMaTrangThaiThanhToan.DA_HOAN_THANH_COC]: 'rgb(24, 144, 255)',
 	[EMaTrangThaiThanhToan.DONG]: undefined,
-	[EMaTrangThaiThanhToan.HUY]: undefined,
 };
 
 export const ETrangThaiThanhToanKtxI18n: Record<EMaTrangThaiThanhToan, string> = {
 	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN]: 'kytucxa.lichsu.status.unpaid',
 	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU]: 'kytucxa.lichsu.status.underpaid',
 	[EMaTrangThaiThanhToan.DA_THANH_TOAN_DU]: 'kytucxa.lichsu.status.paid',
-	[EMaTrangThaiThanhToan.CHUA_HOAN_THANH_COC]: 'kytucxa.lichsu.status.depositPending',
-	[EMaTrangThaiThanhToan.DA_HOAN_THANH_COC]: 'kytucxa.lichsu.status.depositPaid',
 	[EMaTrangThaiThanhToan.DONG]: 'kytucxa.lichsu.status.closed',
-	[EMaTrangThaiThanhToan.HUY]: 'kytucxa.lichsu.status.closed',
 };
 
 //Giao dịch

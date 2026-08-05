@@ -1,10 +1,10 @@
-import type { EMaTrangThaiThanhToan } from '../../TaiChinh/constant';
 import { Phong } from '../Phong/typing';
+import { ETrangThaiThanhToanKTX } from './constant';
 
 declare module PhieuDangKyKTX {
 	export interface IRecord {
 		_id: string;
-		trangThaiThanhToan?: EMaTrangThaiThanhToan;
+		trangThaiThanhToan?: ETrangThaiThanhToanKTX;
 		maDotId?: string;
 		maPhong?: string;
 		nguoiTaoMa?: string;

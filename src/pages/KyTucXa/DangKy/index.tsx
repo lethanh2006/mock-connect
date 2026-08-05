@@ -27,8 +27,7 @@ const getLichSuDangKyKeys = (lichSu?: PhieuDangKyKTX.IRecord) =>
 		.filter(Boolean)
 		.map((item) => String(item));
 
-const laLichSuDaDong = (lichSu?: PhieuDangKyKTX.IRecord) =>
-	lichSu?.trangThaiThanhToan === EMaTrangThaiThanhToan.DONG || lichSu?.trangThaiThanhToan === EMaTrangThaiThanhToan.HUY;
+const laLichSuDaDong = (lichSu?: PhieuDangKyKTX.IRecord) => lichSu?.trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
 
 const coFormDonDangKy = (lichSu?: PhieuDangKyKTX.IRecord) => !!lichSu?.formDon?._id && !laLichSuDaDong(lichSu);
 

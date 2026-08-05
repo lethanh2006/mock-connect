@@ -90,9 +90,18 @@ const FormItemNguoiThanKTX = (props: {
 			case 'Other':
 				return intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.relationship.other' });
 			default:
-				return value || '--';
+				return value;
 		}
 	};
+
+	// Các trường bắt buộc theo isDuThongTinLienHeKhanCap: hiển thị cảnh báo rõ ràng khi thiếu,
+	// tránh nhầm lẫn với các trường tùy chọn (SĐT phụ, email) cũng hiển thị "--" khi trống.
+	const renderRequiredField = (val?: string) =>
+		val ? (
+			val
+		) : (
+			<span style={{ color: '#ff4d4f' }}>{intl.formatMessage({ id: 'kytucxa.dangky.card.chuaCapNhat' })}</span>
+		);
 
 	//Nếu là khối trống default -> thêm mới, nếu đã có data nhưng thiếu -> edit mode
 	const onEdit = (rec: any) => {
@@ -122,17 +131,19 @@ const FormItemNguoiThanKTX = (props: {
 			title: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.name' }),
 			dataIndex: 'emergencyContactName',
 			width: 190,
+			render: (val) => renderRequiredField(val),
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.relationship' }),
 			dataIndex: 'emergencyRelationship',
 			width: 160,
-			render: (val) => getRelationshipLabel(val),
+			render: (val) => renderRequiredField(getRelationshipLabel(val)),
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.primaryPhone' }),
 			dataIndex: 'emergencyContactNumber',
 			width: 170,
+			render: (val) => renderRequiredField(val),
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.secondaryPhone' }),
@@ -150,7 +161,7 @@ const FormItemNguoiThanKTX = (props: {
 			title: intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.address' }),
 			dataIndex: 'address',
 			width: 260,
-			render: (val) => val || '--',
+			render: (val) => renderRequiredField(val),
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.action' }),
