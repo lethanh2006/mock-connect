@@ -87,7 +87,7 @@ export const colorTransactionType: Record<ETransactionType, string> = {
 	[ETransactionType.DEPOSIT]: 'green',
 	[ETransactionType.WITHDRAW]: 'yellow',
 	[ETransactionType.INTERNAL]: 'purple',
-	[ETransactionType.REFUND]: 'default',
+	[ETransactionType.REFUND]: 'default',	
 };
 
 export enum ETransactionPaymentType {

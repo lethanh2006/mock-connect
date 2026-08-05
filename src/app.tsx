@@ -8,6 +8,7 @@ import React from 'react'; // Bổ sung import React
 import type { RunTimeLayoutConfig } from 'umi';
 import { getIntl, history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
+import EnrollmentPrompt from './components/EnrollmentPrompt';
 import ErrorBoundary from './components/ErrorBoundary';
 import { OIDCBounder } from './components/OIDCBounder';
 import { unCheckPermissionPaths } from './components/OIDCBounder/constant';
@@ -20,8 +21,8 @@ import NotFoundContent from './pages/exception/404';
 import { AppModules } from './services/base/constant';
 import type { IInitialState } from './services/base/typing';
 import './styles/global.less';
-import { hasModulePermission } from './utils/keycloakRoles';
 import { currentRole, financeApiClientId, qldtApiClientId, replaceRole } from './utils/ip';
+import { hasModulePermission } from './utils/keycloakRoles';
 
 export function rootContainer(container: React.ReactNode) {
 	return (
@@ -112,7 +113,10 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 				<OIDCBounder>
 					<ErrorBoundary>
 						<TechnicalSupportBounder>
-							<OneSignalBounder>{dom}</OneSignalBounder>
+							<OneSignalBounder>
+								<EnrollmentPrompt />
+								{dom}
+							</OneSignalBounder>
 						</TechnicalSupportBounder>
 					</ErrorBoundary>
 				</OIDCBounder>

@@ -11,7 +11,7 @@ import {
 	TenVaiTroKhaoSat,
 } from '@/services/ThongBao/constant';
 import { type ThongBao } from '@/services/ThongBao/typing';
-import { buildUpLoadFile, buildUpLoadMultiFile } from '@/services/uploadFile';
+import { buildUpLoadFileMultipart, buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import { currentRole } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
@@ -55,8 +55,16 @@ const FormThongBao = (props: any) => {
 		setFormSubmiting(true);
 		try {
 			FormWaiting('Đang xử lý dữ liệu');
-			const imageUrl = await buildUpLoadFile(values, 'imageUrl');
-			const taiLieuDinhKem = await buildUpLoadMultiFile(values, 'taiLieuDinhKem');
+			const imageUrl = await buildUpLoadFileMultipart(values, 'imageUrl', {
+				scope: EFileScope.INTERNAL,
+				module: 'thong-bao',
+				returnValue: 'url',
+			});
+			const taiLieuDinhKem = await buildUpLoadMultiFileMultipart(values, 'taiLieuDinhKem', {
+				scope: EFileScope.INTERNAL,
+				module: 'thong-bao',
+				returnValue: 'url',
+			});
 			values.imageUrl = imageUrl;
 			values.taiLieuDinhKem = taiLieuDinhKem;
 			setFormSubmiting(false);

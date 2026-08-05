@@ -11,7 +11,7 @@ const KetQuaHocTap = () => {
 
 	return (
 		<PageCard
-			title={intl.formatMessage({ id: 'menu.Academic.GradesTranscript' })}
+			title={intl.formatMessage({ id: 'menu.HocTap.GradesTranscript' })}
 			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
 		>
 			<KetQuaToanKhoaSinhVien maKhoaNganh={maKhoaNganh} loadData={false} />

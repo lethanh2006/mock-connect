@@ -51,25 +51,26 @@ export default [
 		name: 'HocTap',
 		icon: 'BookOutlined',
 		routes: [
-			// {
-			// 	name: 'LopHocPhan',
-			// 	path: 'lop-tin-chi',
-			// 	routes: [
-			// 		{
-			// 			path: '',
-			// 			hideInMenu: true,
-			// 			component: 'HocTap/LopHocPhan',
-			// 			exact: true,
-			// 		},
-			// 		{
-			// 			name: 'LopHocPhan',
-			// 			path: ':id',
-			// 			component: 'HocTap/LopHocPhan/$id',
-			// 			hideInMenu: true,
-			// 			exact: true,
-			// 		},
-			// 	],
-			// },
+			{
+				name: 'LopHocPhan',
+				path: 'lop-tin-chi',
+				hideInMenu: true,
+				routes: [
+					{
+						path: '',
+						hideInMenu: true,
+						component: 'HocTap/LopHocPhan',
+						exact: true,
+					},
+					{
+						name: 'LopHocPhan',
+						path: ':id',
+						component: 'HocTap/LopHocPhan/$id',
+						hideInMenu: true,
+						exact: true,
+					},
+				],
+			},
 			{
 				path: 'dang-ky-tin-chi',
 				name: 'CourseRegistration',
@@ -178,54 +179,65 @@ export default [
 			},
 		],
 	},
-	// {
-	// 	path: '/student-support',
-	// 	name: 'StudentSupport',
-	// 	icon: 'CustomerServiceOutlined',
-	// 	routes: [
-	// 		// {
-	// 		// 	path: 'registrar-services',
-	// 		// 	name: 'RegistrarServices',
-	// 		// 	routes: [
-	// 		// 		{
-	// 		// 			path: 'registration',
-	// 		// 			name: 'Registration',
-	// 		// 			component: 'New/Registration',
-	// 		// 		},
-	// 		// 		{
-	// 		// 			path: 'history',
-	// 		// 			name: 'History',
-	// 		// 			component: 'New/History',
-	// 		// 		},
-	// 		// 	],
-	// 		// },
-	// 		{
-	// 			path: 'health-clinic',
-	// 			name: 'HealthClinic',
-	// 			component: 'BaoHiemYTe',
-	// 		},
-	// 		// {
-	// 		// 	path: 'mental-health',
-	// 		// 	name: 'MentalHealth',
-	// 		// 	component: 'New/MentalHealth',
-	// 		// },
-	// 		// {
-	// 		// 	path: 'work-study',
-	// 		// 	name: 'WorkStudy',
-	// 		// 	component: 'New/WorkStudy',
-	// 		// },
-	// 		// {
-	// 		// 	path: 'international',
-	// 		// 	name: 'International',
-	// 		// 	component: 'New/International',
-	// 		// },
-	// 		// {
-	// 		// 	path: 'IT-support',
-	// 		// 	name: 'ITSupport',
-	// 		// 	component: 'New/ITSupport',
-	// 		// },
-	// 	],
-	// },
+	{
+		path: '/student-support',
+		name: 'StudentSupport',
+		icon: 'CustomerServiceOutlined',
+		routes: [
+			// {
+			// 	path: 'registrar-services',
+			// 	name: 'RegistrarServices',
+			// 	routes: [
+			// 		{
+			// 			path: 'registration',
+			// 			name: 'Registration',
+			// 			component: 'New/Registration',
+			// 		},
+			// 		{
+			// 			path: 'history',
+			// 			name: 'History',
+			// 			component: 'New/History',
+			// 		},
+			// 	],
+			// },
+			{
+				path: 'health-clinic',
+				name: 'HealthClinic',
+				routes: [
+					{
+						path: 'health-insurance',
+						name: 'HealthInsurance',
+						component: 'BaoHiemYTe',
+					},
+					{
+						path: 'health-checkup',
+						name: 'HealthCheckup',
+						component: 'KiemTraSucKhoe',
+					},
+				],
+			},
+			// {
+			// 	path: 'mental-health',
+			// 	name: 'MentalHealth',
+			// 	component: 'New/MentalHealth',
+			// },
+			// {
+			// 	path: 'work-study',
+			// 	name: 'WorkStudy',
+			// 	component: 'New/WorkStudy',
+			// },
+			// {
+			// 	path: 'international',
+			// 	name: 'International',
+			// 	component: 'New/International',
+			// },
+			// {
+			// 	path: 'IT-support',
+			// 	name: 'ITSupport',
+			// 	component: 'New/ITSupport',
+			// },
+		],
+	},
 	{
 		path: '/campus-life',
 		name: 'CampusLife',
@@ -374,6 +386,13 @@ export default [
 				path: 'tuition-billing',
 				name: 'TuitionBilling',
 				component: 'TaiChinh/HoaDon',
+			},
+			{
+				path: 'tuition-billing/:identityCode',
+				name: 'TuitionBillingDetail',
+				component: 'TaiChinh/HoaDon/Detail',
+				hideInMenu: true,
+				exact: true,
 			},
 			// {
 			// 	path: 'payment-tracking',

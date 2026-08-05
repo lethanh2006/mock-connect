@@ -18,6 +18,10 @@ export interface ModalThanhToanProps {
     onSuccess?: () => void;
     mode?: 'single' | 'multi';
     bills?: HoaDon.IRecord[];
+    /** Số tiền muốn thanh toán ban đầu (VD: thanh toán 1 đợt trả góp), mặc định là số tiền còn lại của hóa đơn */
+    initialAmount?: number;
+    /** Không cho sửa số tiền thanh toán (VD: thanh toán 1 đợt trả góp thì số tiền phải cố định) */
+    lockAmount?: boolean;
 }
 
 /** Props cho PaymentMethodList */
@@ -39,6 +43,8 @@ export interface PaymentDetailProps {
     loading?: boolean;
     mode: 'single' | 'multi';
     bills?: HoaDon.IRecord[];
+    initialAmount?: number;
+    lockAmount?: boolean;
 }
 
 /** Props cho InvoiceForm */

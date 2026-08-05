@@ -4,7 +4,7 @@ import SelectDonViHanhChinhTheoTen from '@/pages/Core/DonViHanhChinh/SelectTheoT
 import { EPhanLoaiCuTru, ETrangThaiKhaiBaoNoiNgoaiTru } from '@/services/CongTacSinhVien/NoiNgoaiTru/constant';
 import { getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
 import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
-import { buildUpLoadFile } from '@/services/uploadFile';
+import { buildUpLoadFileMultipart, EFileScope } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Col, Form, Input, Radio, Row, Select } from 'antd';
@@ -45,7 +45,11 @@ const FormKhaiBao = (props: any) => {
 	}, []);
 
 	const onFinish = async (values: any) => {
-		const urlTaiLieu = await buildUpLoadFile(values, 'urlAnhThe');
+		const urlTaiLieu = await buildUpLoadFileMultipart(values, 'urlAnhThe', {
+			scope: EFileScope.INTERNAL,
+			module: 'noi-ngoai-tru',
+			returnValue: 'url',
+		});
 		const data = {
 			...values,
 			dotKhaiBaoId: recKhaiBao?.dotKhaiBaoId,
@@ -111,7 +115,7 @@ const FormKhaiBao = (props: any) => {
 					<Col xs={24}>
 						<Col md={8}>
 							<Form.Item name='urlAnhThe' label='Ảnh chân dung' rules={[...rules.required, ...rules.fileRequired]}>
-								<UploadFile isAvatarSmall resize />
+								<UploadFile isAvatarSmall resize isPrivate />
 							</Form.Item>
 						</Col>
 					</Col>

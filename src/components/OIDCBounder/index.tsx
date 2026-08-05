@@ -108,7 +108,7 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 				// Persist minimal initial state so reload won't lose permissions immediately
 				try {
 					sessionStorage.setItem('initialState', JSON.stringify(tmpInitialState));
-				} catch (e) {}
+				} catch (e) { }
 
 				// Use setTimeout to ensure state update is completed before setting permissionLoading to false
 				setTimeout(() => {
@@ -138,13 +138,13 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 					message: intl.formatMessage({ id: 'global.OIDCBounder.message' }),
 					description: intl.formatMessage({ id: 'global.OIDCBounder.description' }),
 				});
-				history.replace('/student/user/login');
+				history.replace(`${getPublicAssetPath('user/login')}`);
 			} finally {
 				loginInProgressRef.current = false;
 			}
 		} else {
 			loginInProgressRef.current = false;
-			history.replace('/student/user/login');
+			history.replace(`${getPublicAssetPath('user/login')}`);
 		}
 	};
 

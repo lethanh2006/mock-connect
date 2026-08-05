@@ -32,6 +32,8 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 	loading,
 	mode,
 	bills,
+	initialAmount,
+	lockAmount,
 }) => {
 	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
@@ -70,7 +72,9 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 		};
 		fetchThongTinHoaDon();
 	}, [invoiceCode]);
-	const [soTienMuonThanhToan, setSoTienMuonThanhToan] = useState<number | null>(bill?.soTienConLai ?? null);
+	const [soTienMuonThanhToan, setSoTienMuonThanhToan] = useState<number | null>(
+		initialAmount ?? bill?.soTienConLai ?? null,
+	);
 	const [guiThongTinHoaDon, setGuiThongTinHoaDon] = useState(false);
 	const [invoiceForm] = Form.useForm<ThongTinHoaDon>();
 	const userFullname =
@@ -270,7 +274,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 							</div>
 							<InputNumber
 								style={{ width: '100%' }}
-								disabled={isKtxDeposit}
+								disabled={isKtxDeposit || lockAmount}
 								placeholder={intl.formatMessage({ id: 'taichinh.thanhtoan.modal.nhapsotienthanhtoan' })}
 								value={soTienMuonThanhToan}
 								onChange={(value) => setSoTienMuonThanhToan(value)}

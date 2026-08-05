@@ -13,9 +13,28 @@ const SelectDiaChiHoSoFormItem = (props: {
 	listTinh?: DonViHanhChinh.IRecord[];
 	hasSoNha?: boolean;
 	required?: boolean;
+	/** Override the default (Vietnamese, i18n) labels/placeholders — e.g. for an English-only form */
+	labelTinh?: string;
+	placeholderTinh?: string;
+	labelXaPhuong?: string;
+	placeholderXaPhuong?: string;
+	labelSoNha?: string;
+	placeholderSoNha?: string;
 }) => {
 	const intl = useIntl();
-	const { value, onChange, listTinh, hasSoNha, required } = props;
+	const {
+		value,
+		onChange,
+		listTinh,
+		hasSoNha,
+		required,
+		labelTinh,
+		placeholderTinh,
+		labelXaPhuong,
+		placeholderXaPhuong,
+		labelSoNha,
+		placeholderSoNha,
+	} = props;
 	const [listHuyen, setListHuyen] = useState<DonViHanhChinh.IRecord[]>([]);
 	const [listXa, setListXa] = useState<DonViHanhChinh.IRecord[]>([]);
 
@@ -52,9 +71,12 @@ const SelectDiaChiHoSoFormItem = (props: {
 	return (
 		<Row gutter={[12, 0]}>
 			<Col span={12} md={hasSoNha ? 8 : 12}>
-				<Form.Item label={intl.formatMessage({ id: 'donvihanhchinh.tp' })} rules={required ? [...rules.required] : []}>
+				<Form.Item
+					label={labelTinh ?? intl.formatMessage({ id: 'donvihanhchinh.tp' })}
+					rules={required ? [...rules.required] : []}
+				>
 					<Select
-						placeholder={intl.formatMessage({ id: 'donvihanhchinh.tp.place' })}
+						placeholder={placeholderTinh ?? intl.formatMessage({ id: 'donvihanhchinh.tp.place' })}
 						options={listTinh?.map((item) => ({
 							key: item.ma,
 							value: item.ma,
@@ -87,9 +109,12 @@ const SelectDiaChiHoSoFormItem = (props: {
 				</Form.Item>
 			</Col> */}
 			<Col span={12} md={hasSoNha ? 8 : 12}>
-				<Form.Item label={intl.formatMessage({ id: 'donvihanhchinh.xa' })} rules={required ? [...rules.required] : []}>
+				<Form.Item
+					label={labelXaPhuong ?? intl.formatMessage({ id: 'donvihanhchinh.xa' })}
+					rules={required ? [...rules.required] : []}
+				>
 					<Select
-						placeholder={intl.formatMessage({ id: 'donvihanhchinh.xa.place' })}
+						placeholder={placeholderXaPhuong ?? intl.formatMessage({ id: 'donvihanhchinh.xa.place' })}
 						allowClear
 						showSearch
 						options={(listXa ?? []).map((item) => ({
@@ -107,11 +132,11 @@ const SelectDiaChiHoSoFormItem = (props: {
 			{hasSoNha ? (
 				<Col span={12} md={hasSoNha ? 8 : 24}>
 					<Form.Item
-						label={intl.formatMessage({ id: 'donvihanhchinh.sonha' })}
+						label={labelSoNha ?? intl.formatMessage({ id: 'donvihanhchinh.sonha' })}
 						rules={[...rules.text, ...rules.length(250)]}
 					>
 						<Input
-							placeholder={intl.formatMessage({ id: 'donvihanhchinh.sonha.place' })}
+							placeholder={placeholderSoNha ?? intl.formatMessage({ id: 'donvihanhchinh.sonha.place' })}
 							value={value?.diaChi}
 							onChange={(e) => onChangeDiaChi(e.target.value)}
 						/>

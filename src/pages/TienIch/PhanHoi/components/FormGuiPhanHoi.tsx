@@ -2,7 +2,7 @@ import UploadFile from '@/components/Upload/UploadFile';
 import SelectDonVi from '@/pages/ToChucNhanSu/DonVi/Select';
 import { ELoaiPhanHoi } from '@/services/TienIch/PhanHoi/constant';
 import { type PhanHoi } from '@/services/TienIch/PhanHoi/typing';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Form, Input } from 'antd';
@@ -36,7 +36,11 @@ const FormGuiPhanHoi = (props: any) => {
 	const onFinish = async (values: PhanHoi.IRecord) => {
 		try {
 			setFormSubmiting(true);
-			const urlPhanAnh = await buildUpLoadMultiFile(values, 'urlPhanAnh');
+			const urlPhanAnh = await buildUpLoadMultiFileMultipart(values, 'urlPhanAnh', {
+				scope: EFileScope.INTERNAL,
+				module: 'phan-hoi',
+				returnValue: 'url',
+			});
 			values.urlPhanAnh = urlPhanAnh;
 			setFormSubmiting(false);
 
@@ -90,7 +94,7 @@ const FormGuiPhanHoi = (props: any) => {
 					<Input.TextArea rows={4} placeholder={intl.formatMessage({ id: 'phanhoi.form.noidung.place' })} />
 				</Form.Item>
 				<Form.Item name='urlPhanAnh' label={intl.formatMessage({ id: 'phanhoi.form.dinhkem.label' })}>
-					<UploadFile maxCount={5} />
+					<UploadFile maxCount={5} isPrivate />
 				</Form.Item>
 
 				<div className='form-footer'>

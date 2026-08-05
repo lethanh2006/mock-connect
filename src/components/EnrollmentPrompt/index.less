@@ -1,0 +1,167 @@
+.enrollmentPrompt {
+	:global(.ant-modal-content) {
+		padding: 0;
+		overflow: hidden;
+		border-radius: 18px;
+	}
+
+	:global(.ant-modal-content .ant-modal-body) {
+		padding: 0 !important;
+	}
+}
+
+.topBar {
+	height: 8px;
+	background: linear-gradient(90deg, #003087 0%, #E67E22 50%, #FDC700 100%);
+}
+
+.topHeader {
+	display: flex;
+	justify-content: flex-end;
+	padding: 10px 16px 0;
+	margin-bottom: -20px;
+}
+
+.content {
+	padding: 28px 32px 24px;
+	text-align: center;
+	color: #333;
+}
+
+.logo {
+	display: block;
+	width: 100px;
+	max-height: 100px;
+	object-fit: contain;
+	margin: 0 auto 16px;
+}
+
+.congratulations {
+	display: inline-block;
+	padding: 3px 11px;
+	border-radius: 999px;
+	background: #f1f9e9;
+	color: #57a443;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.content h1 {
+	max-width: 380px;
+	margin: 14px auto 14px;
+	font-size: 24px;
+	line-height: 1.28;
+	font-weight: 700;
+}
+
+.brand {
+	color: #285797;
+}
+
+.description {
+	max-width: 400px;
+	margin: 0 auto;
+	color: #777;
+	font-size: 14px;
+	line-height: 1.5;
+
+	strong {
+		color: #333;
+		font-weight: 700;
+	}
+}
+
+.divider {
+	margin: 20px 0;
+	border-top: 1px solid #eee;
+}
+
+.nextSteps {
+	padding: 16px 18px;
+	border: 1px solid #d7e8ff;
+	border-radius: 10px;
+	background: #f7fbff;
+	text-align: left;
+}
+
+.nextSteps h2 {
+	margin: 0 0 12px;
+	color: #275694;
+	font-size: 15px;
+	font-weight: 700;
+}
+
+.nextSteps ol {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	counter-reset: step;
+}
+
+.nextSteps li {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-top: 10px;
+	font-size: 14px;
+	line-height: 1.35;
+}
+
+.nextSteps li::before {
+	display: inline-flex;
+	flex: 0 0 24px;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	background: #285797;
+	color: #fff;
+	font-size: 13px;
+	font-weight: 700;
+	counter-increment: step;
+	content: counter(step);
+}
+
+.startButton {
+	height: 44px;
+	margin-top: 20px;
+	border-radius: 5px;
+	background: #285797;
+	font-size: 15px;
+	font-weight: 700;
+}
+
+.estimatedTime {
+	margin: 14px 0 0;
+	color: #888;
+	font-size: 13px;
+}
+
+@media (max-width: 576px) {
+	.enrollmentPrompt {
+		max-width: calc(100vw - 32px);
+	}
+
+	.content {
+		padding: 22px 18px 20px;
+	}
+
+	.logo {
+		width: 80px;
+		margin-bottom: 14px;
+	}
+
+	.content h1 {
+		font-size: 20px;
+	}
+
+	.description,
+	.nextSteps li {
+		font-size: 13px;
+	}
+
+	.nextSteps {
+		padding: 14px 14px;
+	}
+}

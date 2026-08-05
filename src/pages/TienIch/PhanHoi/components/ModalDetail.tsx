@@ -105,7 +105,7 @@ const ModalDetailPhanhoi = () => {
 					}
 					onCancel={() => setVisibleFormFile(false)}
 				>
-					<PreviewFile file={filePhanHoi} />
+					<PreviewFile file={filePhanHoi} isPrivate />
 				</ModalExpandable>
 			) : null}
 

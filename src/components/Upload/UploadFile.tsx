@@ -63,7 +63,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 		if (customBeforeUpload) {
 			return customBeforeUpload(file, fileList);
 		}
-		return false;
+		return Boolean(restOtherProps?.customRequest);
 	};
 
 	const uploadSecurityProps: Pick<UploadProps, 'beforeUpload' | 'accept'> = {
@@ -227,15 +227,14 @@ const UploadFile: React.FC<TUploadProps> = ({
 					disabled={isDisabled}
 					customRequest={({ onSuccess }) => setTimeout(() => onSuccess && onSuccess('ok'), 0)}
 					listType='picture-card'
-					className={`avatar-uploader ${
-						isAvatarSmall
+					className={`avatar-uploader ${isAvatarSmall
 							? 'avatar-small'
 							: isLandscapeAvatar
 								? 'avatar-landscape'
 								: isWidescreen
 									? 'avatar-widescreen'
 									: undefined
-					}`}
+						}`}
 					fileList={fileList}
 					onChange={handleChange}
 					style={{ width: '100%' }}
@@ -245,32 +244,32 @@ const UploadFile: React.FC<TUploadProps> = ({
 					itemRender={
 						isPrivate
 							? (originNode, file, currFileList, actions) => {
-									if (file.url || file.preview) {
-										return (
-											<div
-												className='ant-upload-item-custom'
-												style={{ position: 'relative', width: '100%', height: '100%' }}
-											>
-												<AuthImage
-													src={file.url || file.preview}
-													style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-												/>
+								if (file.url || file.preview) {
+									return (
+										<div
+											className='ant-upload-item-custom'
+											style={{ position: 'relative', width: '100%', height: '100%' }}
+										>
+											<AuthImage
+												src={file.url || file.preview}
+												style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+											/>
 
-												{!isDisabled && (
-													<div className='ant-upload-list-item-actions-custom'>
-														<span onClick={() => handlePreviewImage(file)}>
-															<EyeOutlined style={{ color: '#fff', marginRight: 12 }} />
-														</span>
-														<span onClick={() => actions.remove()}>
-															<DeleteOutlined style={{ color: '#fff' }} />
-														</span>
-													</div>
-												)}
-											</div>
-										);
-									}
-									return originNode;
+											{!isDisabled && (
+												<div className='ant-upload-list-item-actions-custom'>
+													<span onClick={() => handlePreviewImage(file)}>
+														<EyeOutlined style={{ color: '#fff', marginRight: 12 }} />
+													</span>
+													<span onClick={() => actions.remove()}>
+														<DeleteOutlined style={{ color: '#fff' }} />
+													</span>
+												</div>
+											)}
+										</div>
+									);
 								}
+								return originNode;
+							}
 							: undefined
 					}
 					{...restOtherProps}

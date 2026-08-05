@@ -117,8 +117,11 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 			trangThaiDacBiet === TrangThaiDonDangKyHocVuot.DA_DUYET ||
 			trangThaiDacBiet === TrangThaiDonDangKyHocDuThinh.DA_DUYET;
 		const thongTinDuyet = rec?.dkVuotTinChiLop ?? rec?.dangKyHocDuThinh;
-		const hasThongTinDuyet =
-			isApproved && !!(thongTinDuyet?.nguoiDuyet || thongTinDuyet?.thoiGianDuyet || thongTinDuyet?.ghiChuDuyet);
+		const hasThongTinDuyet = !!(
+			thongTinDuyet?.nguoiDuyet ||
+			thongTinDuyet?.thoiGianDuyet ||
+			thongTinDuyet?.ghiChuDuyet
+		);
 
 		const statusI18nId = isVuotTin
 			? trangThaiDonDangKyHocVuotText[trangThaiVuotTin as TrangThaiDonDangKyHocVuot]

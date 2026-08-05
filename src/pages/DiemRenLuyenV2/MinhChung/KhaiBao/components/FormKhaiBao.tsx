@@ -1,6 +1,6 @@
 import { ETrangThaiTiepNhanMinhChung } from '@/services/DiemRenLuyenV2/MinhChung/KhaiBao/constants';
 import { EKieuDuLieu, ETextDisplay } from '@/services/FormDong/LoaiHinh/constants';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Col, Divider, Form, Row, Select } from 'antd';
@@ -42,7 +42,11 @@ const FormKhaiBao = (props: { getData?: () => void; mode: 'sinhvien' | 'bancansu
 			for (const item in valuesForm) {
 				const value = valuesForm[item];
 				if (value?.fileList?.length) {
-					valuesForm[item] = await buildUpLoadMultiFile(valuesForm, item);
+					valuesForm[item] = await buildUpLoadMultiFileMultipart(valuesForm, item, {
+						scope: EFileScope.INTERNAL,
+						module: 'diem-ren-luyen',
+						returnValue: 'url',
+					});
 				}
 			}
 			Object.keys(valuesForm).map((item) => {

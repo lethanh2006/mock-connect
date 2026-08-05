@@ -71,7 +71,7 @@ export default () => {
 			maKyThi: string;
 			maHocPhan: string;
 		},
-		scope: EFileScope = EFileScope.PUBLIC,
+		scope: EFileScope = EFileScope.INTERNAL,
 	): Promise<string[]> => {
 		if (formSubmiting) return Promise.reject('form submitting');
 		setFormSubmiting(true);
