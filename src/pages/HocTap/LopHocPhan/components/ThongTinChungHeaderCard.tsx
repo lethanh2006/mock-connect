@@ -10,7 +10,7 @@ import dayjs from '@/utils/dayjs';
 import { ArrowLeftOutlined, InfoCircleOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Card, Descriptions, Flex, Space, Tag, Tooltip, Typography } from 'antd';
 import { useMemo, useState } from 'react';
-import { Link, useIntl, useModel, useNavigate } from 'umi';
+import { Link, useAccess, useIntl, useModel, useNavigate } from 'umi';
 import ModalThongTinGiangVien from './ModalGiangVien';
 import ModalWithdraw from './ModalWithdraw';
 import './style.less';
@@ -19,7 +19,8 @@ const { Title, Text } = Typography;
 
 const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 	const intl = useIntl();
-	const { record } = useModel('lophocphan.lophocphan');
+	const { cctFilter } = useAccess();
+	const { loading, record } = useModel('lophocphan.lophocphan');
 	const [selectedGiangVien, setSelectedGiangVien] = useState<ToChucNhanSu.INhanSu>();
 	const [visibleGvDetailModal, setVisibleGvDetailModal] = useState(false);
 	const [visibleWithdraw, setVisibleWithdraw] = useState(false);

@@ -153,6 +153,8 @@ export default {
 	'menu.StudentSupport.RegistrarServices.Registration': 'Đăng ký dịch vụ',
 	'menu.StudentSupport.RegistrarServices.History': 'Lịch sử',
 	'menu.StudentSupport.HealthClinic': 'Y tế & Chăm sóc sức khỏe',
+	'menu.StudentSupport.HealthClinic.HealthInsurance': 'Bảo hiểm y tế',
+	'menu.StudentSupport.HealthClinic.HealthCheckup': 'Kiểm tra sức khỏe',
 	'menu.StudentSupport.MentalHealth': 'Sức khỏe tinh thần',
 	'menu.StudentSupport.WorkStudy': 'Cơ hội vừa học vừa làm',
 	'menu.StudentSupport.International': 'Hỗ trợ sinh viên quốc tế',

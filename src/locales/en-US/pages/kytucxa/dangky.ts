@@ -12,6 +12,7 @@ export default {
 	'kytucxa.dangky.alert.daCoLichSu':
 		'You already have a registration history for this period, so you cannot register again.',
 	'kytucxa.dangky.message.daCoLichSu': 'You already have a dormitory registration history.',
+	'kytucxa.dangky.message.loiKhongXacDinh': 'Something went wrong, please try again later.',
 	'kytucxa.dangky.filter.sucChua.placeholder': 'Select capacity',
 	'kytucxa.dangky.filter.sucChua.option1': 'From 3 to 6',
 	'kytucxa.dangky.filter.sucChua.option2': 'From 6 to 12',
@@ -54,7 +55,6 @@ export default {
 	'kytucxa.dangky.modal.step.thongTinChung': 'General Information',
 	'kytucxa.dangky.modal.step.liabilityWaiver': 'Student Liability Release and Waiver',
 	'kytucxa.dangky.modal.step.checkInPrep': 'Check-in Prep',
-	'kytucxa.dangky.modal.step.paymentInformation': 'Payment Information',
 	'kytucxa.dangky.modal.success.title': 'Registration Successful! Welcome to VinUni Dormitory',
 	'kytucxa.dangky.modal.button.next': 'Next',
 	'kytucxa.dangky.modal.button.previous': 'Previous',

@@ -1,9 +1,9 @@
-import { Button, Form, Row, message } from 'antd';
-import FormRender from './FormRender';
+import { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
+import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
+import { Button, Form, message, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
-import { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
+import FormRender from './FormRender';
 
 const FormTable = (props: {
 	cauHinh: LoaiHinh.TruongThongTin | LoaiHinh.Cot;
@@ -37,7 +37,11 @@ const FormTable = (props: {
 					for (const item in values) {
 						const value = values[item];
 						if (value?.fileList?.length) {
-							values[item] = await buildUpLoadMultiFile(values, item);
+							values[item] = await buildUpLoadMultiFileMultipart(values, item, {
+								scope: EFileScope.INTERNAL,
+								module: 'diem-ren-luyen',
+								returnValue: 'url',
+							});
 						}
 					}
 
@@ -65,7 +69,11 @@ const FormTable = (props: {
 							},
 						});
 					}
-					message.success(props.edit ? intl.formatMessage({ id: 'diemrenluyen.cauhinh.thongbao.suathanhcong' }) : intl.formatMessage({ id: 'diemrenluyen.cauhinh.thongbao.themthanhcong' }));
+					message.success(
+						props.edit
+							? intl.formatMessage({ id: 'diemrenluyen.cauhinh.thongbao.suathanhcong' })
+							: intl.formatMessage({ id: 'diemrenluyen.cauhinh.thongbao.themthanhcong' }),
+					);
 					props.onCancel();
 				}}
 			>
@@ -77,15 +85,23 @@ const FormTable = (props: {
 				<div className='form-footer'>
 					{!props?.isView && (
 						<Button htmlType='submit' type='primary'>
-							{!props.edit ? intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.themmoi' }) : intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.luulai' })}
+							{!props.edit
+								? intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.themmoi' })
+								: intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.luulai' })}
 						</Button>
 					)}
-					{!props?.isView && <Button onClick={() => props.onCancel()}>{intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.huy' })}</Button>}
+					{!props?.isView && (
+						<Button onClick={() => props.onCancel()}>
+							{intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.huy' })}
+						</Button>
+					)}
 				</div>
 			</Form>
 			{props?.isView && (
 				<div style={{ display: 'flex', justifyContent: 'center' }}>
-					<Button onClick={() => props.onCancel()}>{intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.huy' })}</Button>
+					<Button onClick={() => props.onCancel()}>
+						{intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.huy' })}
+					</Button>
 				</div>
 			)}
 		</>

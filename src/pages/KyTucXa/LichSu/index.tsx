@@ -3,19 +3,19 @@ import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
+import {
+	ETrangThaiThanhToanKTX,
+	ETrangThaiThanhToanKTXColor,
+	ETrangThaiThanhToanKTXI18n,
+} from '@/services/KyTucXa/PhieuDangKy/constant';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
-import {
-	EMaTrangThaiThanhToan,
-	EMauTrangThaiThanhToanTable,
-	ETrangThaiThanhToanKtxI18n,
-} from '@/services/TaiChinh/constant';
 import { formatDate } from '@/utils/formatDate';
 import { tienVietNam } from '@/utils/utils';
 import { DeleteOutlined, DollarCircleOutlined } from '@ant-design/icons';
 import { Button, Empty, Popconfirm, Tag } from 'antd';
 import { useEffect, useState } from 'react';
-import { useIntl, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 import ChiTietPhong from '../DangKy/components/ChiTiet';
 import ModalDanKyKTX from '../DangKy/components/Modal';
 
@@ -54,21 +54,18 @@ const getChinhSachPhongChiTiet = (record?: PhieuDangKyKTX.IRecord) => {
 
 const getRoomFromChinhSachPhong = (record?: PhieuDangKyKTX.IRecord) => getChinhSachPhong(record)?.room ?? record?.phong;
 
-const getPaymentStatusColor = (status?: EMaTrangThaiThanhToan) =>
-	status === EMaTrangThaiThanhToan.DONG ? 'purple' : EMauTrangThaiThanhToanTable[status as EMaTrangThaiThanhToan];
-
 const LichSuaKTX = () => {
 	const intl = useIntl();
+	const t = (id: string) => intl.formatMessage({ id });
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { getByIdModel: getDotDangKy, record: recDot, setRecord: setRecDot } = useModel('kytucxa.dotdangky');
-	const { getModel, page, limit, deleteModel, handleEdit, setRecord } = useModel('kytucxa.phieudangky');
+	const { getModel, page, limit, deleteModel, setRecord } = useModel('kytucxa.phieudangky');
 	const {
 		setRecord: setRecPhong,
 		setVisibleForm: setVisibleChiTietPhong,
 		setVisibleDangKy,
 	} = useModel('kytucxa.phong');
 	const [initialModalStep, setInitialModalStep] = useState<number>(0);
-	const getPaymentStatusLabel = (status?: EMaTrangThaiThanhToan) => (status ? ETrangThaiThanhToanKtxI18n[status] : '');
 
 	useEffect(() => {
 		if (recHocKy?.ma)
@@ -100,19 +97,8 @@ const LichSuaKTX = () => {
 		style: { cursor: 'pointer' },
 	});
 
-	const handleDelete = (record: PhieuDangKyKTX.IRecord) => {
-		const canDelete =
-			record?.trangThaiThanhToan === EMaTrangThaiThanhToan.DONG ||
-			record?.trangThaiThanhToan === EMaTrangThaiThanhToan.CHUA_THANH_TOAN;
-
-		if (!canDelete) return;
-
-		deleteModel(`me/${record?._id}`, getData);
-	};
-
-	const handleOpenPayment = (record: PhieuDangKyKTX.IRecord) => {
-		setInitialModalStep(3);
-		handleEdit(record);
+	const handleOpenPayment = () => {
+		history.push('/finance/tuition-billing');
 	};
 
 	const handleViewPhong = (record: PhieuDangKyKTX.IRecord) => {
@@ -122,6 +108,31 @@ const LichSuaKTX = () => {
 		setRecPhong(chinhSachPhong);
 		setVisibleChiTietPhong(true);
 	};
+
+	const renderTrangThaiThanhToan = (value?: string) => {
+		const paymentStatus = value as ETrangThaiThanhToanKTX;
+		const intlId = ETrangThaiThanhToanKTXI18n[paymentStatus];
+		return (
+			<Tag
+				style={{
+					maxWidth: 90,
+					overflow: 'hidden',
+					textOverflow: 'ellipsis',
+					whiteSpace: 'nowrap',
+					display: 'inline-block',
+				}}
+				title={(intlId && t(intlId)) || '--'}
+				color={ETrangThaiThanhToanKTXColor[paymentStatus] ?? 'default'}
+			>
+				{(intlId && t(intlId)) || '--'}
+			</Tag>
+		);
+	};
+
+	const trangThaiThanhToanOptions = Object.values(ETrangThaiThanhToanKTX).map((value) => ({
+		value,
+		label: ETrangThaiThanhToanKTXI18n[value] ? t(ETrangThaiThanhToanKTXI18n[value]) : '--',
+	}));
 
 	const columns: IColumn<PhieuDangKyKTX.IRecord>[] = [
 		{
@@ -171,7 +182,8 @@ const LichSuaKTX = () => {
 			onCell,
 			render: (_val, rec) => {
 				const chinhSachPhong = getChinhSachPhong(rec) as
-					(Phong.IChinhSachPhongRecord & { giaPhong?: number }) | undefined;
+					| (Phong.IChinhSachPhongRecord & { giaPhong?: number })
+					| undefined;
 
 				return tienVietNam(chinhSachPhong?.giaPhong ?? getRoomFromChinhSachPhong(rec)?.giaPhong ?? 0);
 			},
@@ -195,15 +207,10 @@ const LichSuaKTX = () => {
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.paymentStatus' }),
 			dataIndex: 'trangThaiThanhToan',
 			sortable: true,
-			width: 150,
-			render: (val: EMaTrangThaiThanhToan) => (
-				<Tag color={getPaymentStatusColor(val)}>{intl.formatMessage({ id: getPaymentStatusLabel(val) })}</Tag>
-			),
+			width: 120,
+			render: renderTrangThaiThanhToan,
 			filterType: 'select',
-			filterData: Object.values(EMaTrangThaiThanhToan).map((item) => ({
-				value: item,
-				label: intl.formatMessage({ id: getPaymentStatusLabel(item) }),
-			})),
+			filterData: trangThaiThanhToanOptions,
 			onCell,
 			fixed: 'right',
 		},
@@ -213,27 +220,28 @@ const LichSuaKTX = () => {
 			width: 100,
 			fixed: 'right',
 			render: (_val, rec) => {
-				const isPaid = rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU;
-				const isClosed = rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
-				const isUnpaid = rec?.trangThaiThanhToan === EMaTrangThaiThanhToan.CHUA_THANH_TOAN;
-				const canDelete = isClosed || isUnpaid;
+				const canDelete = [
+					ETrangThaiThanhToanKTX.CHUA_HOAN_THANH_COC,
+					ETrangThaiThanhToanKTX.DONG,
+					ETrangThaiThanhToanKTX.HUY,
+				].includes(rec?.trangThaiThanhToan as ETrangThaiThanhToanKTX);
 
 				return (
 					<>
-						{!isPaid && !isClosed ? (
+						{rec?.trangThaiThanhToan === ETrangThaiThanhToanKTX.CHUA_HOAN_THANH_COC ? (
 							<ButtonExtend
 								type='link'
 								tooltip={intl.formatMessage({ id: 'kytucxa.lichsu.tooltip.thanhToan' })}
 								onClick={(event) => {
 									event.stopPropagation();
-									handleOpenPayment(rec);
+									handleOpenPayment();
 								}}
 								icon={<DollarCircleOutlined />}
 							/>
 						) : null}
 
 						<Popconfirm
-							onConfirm={() => handleDelete(rec)}
+							onConfirm={() => deleteModel(`me/${rec?._id}`, getData)}
 							title={intl.formatMessage({ id: 'kytucxa.danhmucchung.xacnhanxoa' })}
 							placement='topRight'
 							disabled={!canDelete}
@@ -273,7 +281,7 @@ const LichSuaKTX = () => {
 
 			<ModalDanKyKTX isView initialStep={initialModalStep} />
 
-			<ChiTietPhong daCoLichSuDangKy />
+			<ChiTietPhong daCoLichSuDangKy chiHienThiNutDong />
 		</PageCard>
 	);
 };

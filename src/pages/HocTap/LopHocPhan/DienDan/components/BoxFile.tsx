@@ -30,9 +30,10 @@ const BoxFileWrapper = styled.div`
 
 type BoxFileProps = {
 	url: string | string[];
+	isPrivate?: boolean;
 };
 
-const BoxFile = ({ url }: BoxFileProps) => {
+const BoxFile = ({ url, isPrivate }: BoxFileProps) => {
 	const [visibleFormFile, setVisibleFormFile] = useState(false);
 	const [currentFile, setCurrentFile] = useState<string | null>(null);
 
@@ -92,7 +93,7 @@ const BoxFile = ({ url }: BoxFileProps) => {
 					setCurrentFile(null);
 				}}
 			>
-				{currentFile && <PreviewFile file={currentFile} />}
+				{currentFile && <PreviewFile file={currentFile} isPrivate={isPrivate} />}
 				<div className='form-footer'>
 					<Button
 						onClick={() => {

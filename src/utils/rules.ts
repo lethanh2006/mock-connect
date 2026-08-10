@@ -177,6 +177,13 @@ const createRules = () => {
 			},
 		] as Rule[],
 
+		phoneOnlyDigits: [
+			{
+				pattern: /^\d+$/,
+				message: 'Phone number must contain digits only without spaces or special characters',
+			},
+		] as Rule[],
+
 		ngaySinh: [
 			{
 				validator: (__, value, callback) => {
