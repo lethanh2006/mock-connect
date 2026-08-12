@@ -48,6 +48,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			hocKyTen: string | undefined,
 			kqhk?: {
 				trungBinhHocKyThang4?: number | null;
+				trungBinhHocKyAll?: number | null;
 				tongSoTinChiHocKy?: number | null;
 				tongSoTinChiTichLuyToanKhoa?: number | null;
 			},
@@ -57,7 +58,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				title += intl.formatMessage(
 					{ id: 'ketquahoctap.diemtp.semester.summary' },
 					{
-						gpa: kqhk.trungBinhHocKyThang4 ?? '--',
+						gpa: kqhk?.trungBinhHocKyAll ?? kqhk?.trungBinhHocKyThang4 ?? '--',
 						earned: kqhk.tongSoTinChiHocKy ?? '--',
 						cumulative: kqhk.tongSoTinChiTichLuyToanKhoa ?? '--',
 					},
@@ -284,9 +285,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 								isQuyDoi={rec.isCongNhanQuyDoiDiem}
 								soLanHoc={maKhoaNganh ? rec.infoKhoaNganh?.[maKhoaNganh]?.soLanHoc : undefined}
 								quyDoiExtra={
-									rec.coTichLuyQuyDoi
-										? ` - ${intl.formatMessage({ id: 'lophocphan.id.ketqua.tichluy' })}`
-										: undefined
+									rec.coTichLuyQuyDoi ? ` - ${intl.formatMessage({ id: 'lophocphan.id.ketqua.tichluy' })}` : undefined
 								}
 							/>
 						)}

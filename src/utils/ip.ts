@@ -1,8 +1,8 @@
 import { AppModules, EModuleKey } from '@/services/base/constant';
 
 const ipRoot = APP_CONFIG_IP_ROOT; // ip dev
-const ipRootWithSlash = ipRoot.replace(/\/?$/, '/');
-const ipConnect = ipRootWithSlash + 'connect';
+const ipRootWithSlash = ipRoot.replace(/\/?$/, '');
+const ipConnect = ipRootWithSlash;
 const getConnectTarget = (target: string) => `${ipConnect}/${target}`;
 
 const ip3 = ipConnect; // ip dev
@@ -73,6 +73,5 @@ export {
 	oneSignalRole,
 	qldtApiClientId,
 	replaceRole,
-	sentryDSN
+	sentryDSN,
 };
-
