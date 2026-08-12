@@ -1,6 +1,6 @@
 include:
   - project: 'vsf-qtvhgd/vinuni/digital-university/devsecops/gitops-dev'
-    ref: feature/frontend-vwa-centralize-templates
+    ref: master
     file: '.gitlab/templates/frontend-vwa.gitlab-ci.yml'
   - project: 'vsf-qtvhgd/vinuni/digital-university/devsecops/gitops-prod'
     ref: master
