@@ -468,7 +468,7 @@ const HoaDonPage = () => {
 						onClick={async () => {
 							try {
 								setLoadingPdfMap((prev) => ({ ...prev, [rec._id]: true }));
-								const url = await getExportBillUrl(rec.identityCode);
+								const url = await getExportBillUrl(rec?.virtualBill?.identityCode ?? rec.identityCode);
 								if (url) {
 									setPdfUrl(url);
 									setVisibleModalPDF(true);
