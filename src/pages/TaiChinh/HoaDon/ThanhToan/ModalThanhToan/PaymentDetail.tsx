@@ -100,11 +100,13 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 			? method.loaiLePhiThanhToanMacDinh === 'TIEN'
 				? Number(method.giaTriLePhiThanhToanMacDinh ?? 0)
 				: method?.mucPhiDichVuToiDa != null
-					? Math.min(
-							(soTienThanhToanTong * (Number(method?.giaTriLePhiThanhToanMacDinh) ?? 0)) / 100,
-							Number(method.mucPhiDichVuToiDa),
+					? Math.floor(
+							Math.min(
+								(soTienThanhToanTong * (Number(method?.giaTriLePhiThanhToanMacDinh) ?? 0)) / 100,
+								Number(method.mucPhiDichVuToiDa),
+							),
 						)
-					: (soTienThanhToanTong * (Number(method?.giaTriLePhiThanhToanMacDinh) ?? 0)) / 100
+					: Math.floor((soTienThanhToanTong * (Number(method?.giaTriLePhiThanhToanMacDinh) ?? 0)) / 100)
 			: 0;
 	}, [soTienThanhToanTong, method]);
 
