@@ -87,7 +87,7 @@ export default defineConfig({
 
 	jsMinifier: 'terser',
 	exportStatic: {},
-	headScripts: [{ src: `${appBasePath}env.js` }],
+	headScripts: [{ src: `${appBasePath}runtime-config/env.js` }],
 
 	define: appConfigDefines,
 
