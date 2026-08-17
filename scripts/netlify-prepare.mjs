@@ -7,9 +7,9 @@ const root = path.resolve(scriptDir, '..');
 const dist = path.join(root, 'dist');
 const studentDir = path.join(dist, 'student');
 
-// Docker receives the runtime config from a ConfigMap at runtime. Netlify is
-// a static host with no such mount, so we bake the same globals in here at
-// build time from Netlify's own env vars.
+// Docker receives runtime APP_CONFIG_* values from the Kubernetes ConfigMap.
+// Netlify is a static host, so it generates the same runtime-config/env.js file
+// from Netlify's APP_CONFIG_* variables when the site is built.
 function parseEnvFile(content) {
 	const result = {};
 	for (const line of content.split('\n')) {
@@ -30,17 +30,15 @@ function parseEnvFile(content) {
 	return result;
 }
 
-const envFilePath = path.join(root, '.env');
-const envFileValues = fse.existsSync(envFilePath)
-	? parseEnvFile(await fse.readFile(envFilePath, 'utf8'))
-	: {};
+let envFileValues = {};
+try {
+	envFileValues = parseEnvFile(await fse.readFile(path.join(root, '.env'), 'utf8'));
+} catch {
+	// Production/static builds are intentionally not dependent on committed .env files.
+}
 
 const appConfig = {};
-const appConfigKeys = new Set([
-	...Object.keys(envFileValues),
-	...Object.keys(process.env).filter((key) => key.startsWith('APP_CONFIG_')),
-]);
-for (const key of appConfigKeys) {
+for (const key of new Set([...Object.keys(envFileValues), ...Object.keys(process.env)])) {
 	if (!key.startsWith('APP_CONFIG_')) continue;
 	appConfig[key] = process.env[key] ?? envFileValues[key] ?? '';
 }
@@ -54,10 +52,8 @@ const envJsLines = [
 	'',
 ];
 
-const envJs = envJsLines.join('\n');
-await fse.writeFile(path.join(dist, 'env.js'), envJs);
 await fse.ensureDir(path.join(dist, 'runtime-config'));
-await fse.writeFile(path.join(dist, 'runtime-config', 'env.js'), envJs);
+await fse.writeFile(path.join(dist, 'runtime-config/env.js'), envJsLines.join('\n'));
 
 await fse.remove(studentDir);
 await fse.ensureDir(studentDir);
