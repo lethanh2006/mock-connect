@@ -6,7 +6,6 @@ FROM ${BUILD_BASE_IMAGE} AS build
 
 WORKDIR /app
 COPY package.json yarn.lock /app/
-
 RUN --mount=type=secret,id=jfrog_token,required=true \
     sed -i \
       -e 's#https://registry.yarnpkg.com#https://registry.npmjs.org#g' \
