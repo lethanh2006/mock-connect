@@ -435,4 +435,5 @@ export default {
 	'lophocphan.id.decuong.chuandaura.noidung': 'Nội dung',
 	'lophocphan.id.decuong.chuandaura.diemnl': 'Điểm NL tối thiểu',
 	'lophocphan.id.decuong.chuandaura.ghichu': 'Ghi chú',
+	'daotao.hocky.select': 'Chọn học kỳ',
 };
