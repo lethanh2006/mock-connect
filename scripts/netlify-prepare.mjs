@@ -7,10 +7,9 @@ const root = path.resolve(scriptDir, '..');
 const dist = path.join(root, 'dist');
 const studentDir = path.join(dist, 'student');
 
-// Docker bakes real APP_CONFIG_* values into env.js at container startup
-// (docker-entrypoint.d/10-runtime-config.sh). Netlify is a static host with
-// no such entrypoint, so we bake the same globals in here at build time,
-// from Netlify's own env vars falling back to the committed .env defaults.
+// Docker receives the runtime config from a ConfigMap at runtime. Netlify is
+// a static host with no such mount, so we bake the same globals in here at
+// build time from Netlify's own env vars.
 function parseEnvFile(content) {
 	const result = {};
 	for (const line of content.split('\n')) {
@@ -31,12 +30,19 @@ function parseEnvFile(content) {
 	return result;
 }
 
-const envFileValues = parseEnvFile(await fse.readFile(path.join(root, '.env'), 'utf8'));
+const envFilePath = path.join(root, '.env');
+const envFileValues = fse.existsSync(envFilePath)
+	? parseEnvFile(await fse.readFile(envFilePath, 'utf8'))
+	: {};
 
 const appConfig = {};
-for (const key of Object.keys(envFileValues)) {
+const appConfigKeys = new Set([
+	...Object.keys(envFileValues),
+	...Object.keys(process.env).filter((key) => key.startsWith('APP_CONFIG_')),
+]);
+for (const key of appConfigKeys) {
 	if (!key.startsWith('APP_CONFIG_')) continue;
-	appConfig[key] = process.env[key] ?? envFileValues[key];
+	appConfig[key] = process.env[key] ?? envFileValues[key] ?? '';
 }
 
 const envJsLines = [
@@ -48,7 +54,10 @@ const envJsLines = [
 	'',
 ];
 
-await fse.writeFile(path.join(dist, 'env.js'), envJsLines.join('\n'));
+const envJs = envJsLines.join('\n');
+await fse.writeFile(path.join(dist, 'env.js'), envJs);
+await fse.ensureDir(path.join(dist, 'runtime-config'));
+await fse.writeFile(path.join(dist, 'runtime-config', 'env.js'), envJs);
 
 await fse.remove(studentDir);
 await fse.ensureDir(studentDir);

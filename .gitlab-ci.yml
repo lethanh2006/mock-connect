@@ -1,9 +1,9 @@
 include:
-  - project: 'vsf-qtvhgd/vinuni/digital-university/devsecops/gitops-dev'
-    ref: master
+  - project: 'vsf-qtvhgd/vinuni/shared/gitlab-template'
+    ref: main
     file: '.gitlab/templates/frontend-vwa.gitlab-ci.yml'
-  - project: 'vsf-qtvhgd/vinuni/digital-university/devsecops/gitops-prod'
-    ref: master
+  - project: 'vsf-qtvhgd/vinuni/shared/gitlab-template'
+    ref: main
     file: '.gitlab/templates/frontend-vwa-prod.gitlab-ci.yml'
     rules:
       - if: '$CI_COMMIT_TAG =~ /^release_.+/ || $CI_COMMIT_TAG =~ /^build_base_prod.*/'
@@ -13,15 +13,21 @@ variables:
   APP_NAME: "dhs-slink-web"
   RESOURCE_GROUP_PREFIX: "vwa-connect"
   CCP_IMAGE_REPO: "vsf-qtvhgd-vuni-docker-dhs"
+  CCP_IMAGE_REPO_PROD: "vsf-qtvhgd-vuni-docker-dhs"
+  ENABLE_CCP_BUILD: "1"
+  ENABLE_CCP_BUILD_PROD: "1"
   ENABLE_SIT_PIPELINE: "1"
   ENABLE_SIT_DEPLOY: "1"
   JFROG_IMAGE_PULL_SECRET: "dhs-jfrog-registry"
+  PROD_IMAGE_PULL_SECRET: "dhs-jfrog-registry"
   ENABLE_ECR_CREDENTIAL_HELPER: "0"
   DEV_IMAGE_REPOSITORY: "${JFROG_REGISTRY}/${CCP_IMAGE_REPO}/${APP_NAME}"
   DEV_UPDATE_IMAGE_REPOSITORY: "${JFROG_REGISTRY}/${CCP_IMAGE_REPO}/${APP_NAME}"
-  PROD_IMAGE_REPOSITORY: "${JFROG_REGISTRY}/${JFROG_IMAGE_REPO}/${APP_NAME}"
-  DEV_BUILD_CACHE_REPO: "${JFROG_REGISTRY}/${JFROG_IMAGE_REPO}/${APP_NAME}-build-cache"
-  PROD_BUILD_CACHE_REPO: "${JFROG_REGISTRY}/${JFROG_IMAGE_REPO}/${APP_NAME}-prod-build-cache"
+  PROD_IMAGE_REPOSITORY: "${JFROG_REGISTRY}/${CCP_IMAGE_REPO_PROD}/${APP_NAME}"
+  PROD_UPDATE_IMAGE_REPOSITORY: "${JFROG_REGISTRY}/${CCP_IMAGE_REPO_PROD}/${APP_NAME}"
+  DEV_BUILD_CACHE_REPO: "${JFROG_REGISTRY}/${CCP_IMAGE_REPO}/${APP_NAME}-build-cache"
+  PROD_BUILD_CACHE_REPO: "${JFROG_REGISTRY}/${CCP_IMAGE_REPO_PROD}/${APP_NAME}-prod-build-cache"
+  PROD_BUILD_BASE_IMAGE: "${JFROG_REGISTRY}/${CCP_IMAGE_REPO_PROD}/${APP_NAME}:build-base-prod"
   BUILD_BASE_IMAGE_NAME: "vwa-connect"
   # CCP dockerize publishes the immutable short-SHA tag without environment suffixes.
   UAT_IMAGE_TAG_SUFFIX: ""
