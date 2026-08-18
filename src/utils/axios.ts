@@ -74,6 +74,10 @@ const axios = axios1.create({
 // Add a request interceptor
 axios.interceptors.request.use(
 	(config) => {
+		const isExcluded = excludedPaths.some((path) => config.url?.startsWith(path));
+		if (!isExcluded) {
+			config.headers?.set('X-VinUni-Client-App', 'web-connect');
+		}
 		/**
 		 * Chuyển sang xử lý access_token with OIDC auth ở Technical Support
 		 */
@@ -88,7 +92,6 @@ axios.interceptors.request.use(
 			config.headers.set('Accept-Language', getAcceptLanguage());
 		}
 
-		const isExcluded = excludedPaths.some((path) => config.url?.startsWith(path));
 		// if (!isExcluded && !config.url?.includes('wp-json')) {
 		// 	const hasHeader = Object.prototype.hasOwnProperty.call(config.headers, 'x-data-partition-code');
 
