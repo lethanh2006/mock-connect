@@ -24,6 +24,8 @@ RUN yarn build && rm -rf node_modules
 
 FROM ${NGINX_BASE_IMAGE}
 COPY --from=build /app/.nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/docker-entrypoint.d/10-runtime-config.sh /docker-entrypoint.d/10-runtime-config.sh
+RUN chmod +x /docker-entrypoint.d/10-runtime-config.sh
 WORKDIR /var/www/website
 RUN rm -rf ./*
 COPY --from=build /app/dist .
