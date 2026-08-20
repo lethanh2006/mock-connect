@@ -6,6 +6,7 @@ import { App } from 'antd';
 import 'dayjs/locale/vi';
 import React from 'react'; // Bổ sung import React
 import type { RunTimeLayoutConfig } from 'umi';
+import './observability/otel';
 import { getIntl, history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 import EnrollmentPrompt from './components/EnrollmentPrompt';
