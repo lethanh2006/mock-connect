@@ -35,7 +35,7 @@ const getSampleRatio = (value: string | undefined) => {
 const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const getOriginPatterns = (config: RuntimeConfig) => {
-	const origins = new Set<string>();
+	const origins = new Set<string>([window.location.origin]);
 
 	for (const root of [config.APP_CONFIG_IP_ROOT, config.APP_CONFIG_IP_ROOT_API]) {
 		if (!root) continue;
