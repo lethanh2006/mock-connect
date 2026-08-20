@@ -1,10 +1,4 @@
-import {
-	EOnepayCard,
-	EOnepayIntegrationType,
-	titleLoaiPhuongThucThanhToan,
-	titleOnepayCard,
-	titleOnepayIntegrationType,
-} from '@/services/TaiChinh/KenhThanhToan/constants';
+import { titleLoaiPhuongThucThanhToan } from '@/services/TaiChinh/KenhThanhToan/constants';
 import { KenhThanhToan } from '@/services/TaiChinh/KenhThanhToan/typing';
 import { Image, Spin } from 'antd';
 import clsx from 'clsx';
@@ -16,15 +10,7 @@ import type { PaymentMethodListProps } from './typing';
 const PaymentMethodList: React.FC<PaymentMethodListProps> = ({ methods, selectedMethod, onChange, loading }) => {
 	const intl = useIntl();
 
-	const getKenhThanhToanByPhuongThucTT = (method: KenhThanhToan.IRecord) => {
-		if (method.phuongThucThanhToan === 'ONEPAY') {
-			if (method.onepayIntegrationType === EOnepayIntegrationType.PAYCOLLECT) {
-				return titleOnepayIntegrationType[EOnepayIntegrationType.PAYCOLLECT];
-			}
-			return titleOnepayCard?.[method?.onepayCard as EOnepayCard] ?? method.tenNganHang ?? method.code;
-		}
-		return method.tenNganHang ?? method.code;
-	};
+	const getPaymentChannelName = (method: KenhThanhToan.IRecord) => method.tenNganHang || method.code;
 
 	const groupedMethods = methods.reduce(
 		(acc, method) => {
@@ -72,7 +58,7 @@ const PaymentMethodList: React.FC<PaymentMethodListProps> = ({ methods, selected
 											}}
 										/>
 									)}
-									{getKenhThanhToanByPhuongThucTT(method)}
+									{getPaymentChannelName(method)}
 								</div>
 							))}
 						</div>
