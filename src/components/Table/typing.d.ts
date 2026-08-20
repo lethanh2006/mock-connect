@@ -154,6 +154,9 @@ export type TableBaseProps<T extends object = any> = {
 	/** Danh sách các text trước nút Tải lại */
 	otherExtra?: JSX.Element[];
 
+	/** Nội dung hiển thị bên trái footer pagination của bảng */
+	tableFooterExtra?: React.ReactNode;
+
 	/** Biến lưu dữ liệu trong model, Mặc định: danhSach */
 	dataState?: string;
 
