@@ -421,4 +421,5 @@ export default {
 	'lophocphan.id.decuong.chuandaura.noidung': 'Content',
 	'lophocphan.id.decuong.chuandaura.diemnl': 'Minimum competency score',
 	'lophocphan.id.decuong.chuandaura.ghichu': 'Notes',
+	'daotao.hocky.select': 'Select semester',
 };

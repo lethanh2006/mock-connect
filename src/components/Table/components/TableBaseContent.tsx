@@ -301,6 +301,16 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		);
 	};
 
+	const tableContent = rowSortable ? (
+		<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+			<SortableContext items={tableData.map((item) => item.key)} strategy={verticalListSortingStrategy}>
+				{renderTable()}
+			</SortableContext>
+		</DndContext>
+	) : (
+		renderTable()
+	);
+
 	const mainContent = (
 		<div className='table-base'>
 			{props.children}
@@ -308,15 +318,10 @@ export const TableBaseContent = (props: TableBaseProps) => {
 			<TableHeader />
 
 			<ConfigProvider>
-				{rowSortable ? (
-					<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-						<SortableContext items={tableData.map((item) => item.key)} strategy={verticalListSortingStrategy}>
-							{renderTable()}
-						</SortableContext>
-					</DndContext>
-				) : (
-					renderTable()
-				)}
+				<div className={props.tableFooterExtra ? 'table-base__footer-wrap' : undefined}>
+					{tableContent}
+					{props.tableFooterExtra ? <div className='table-base__footer-extra'>{props.tableFooterExtra}</div> : null}
+				</div>
 			</ConfigProvider>
 		</div>
 	);

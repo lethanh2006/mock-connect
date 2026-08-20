@@ -24,11 +24,13 @@ import {
 	trangThaiDonDangKyHocVuotColor,
 	trangThaiDonDangKyHocVuotText,
 } from '@/services/DaoTao/DkVuotTinChi/constant';
+import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Descriptions, Modal, Popconfirm, Popover, Select, Space, Tag } from 'antd';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAccess, useIntl, useModel } from 'umi';
 import {
 	buildLopDangKy,
@@ -53,6 +55,9 @@ type DangKyLopHocPhanProps = {
 	onReload?: () => void | Promise<unknown>;
 };
 
+const isLopThucHanhCon = (rec: LopHocPhan.IRecord) =>
+	!!rec.tenCha || rec.loai === ELoaiLopHocPhan.THUC_HANH || !!rec.soThuTuNhom;
+
 const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onReload }: DangKyLopHocPhanProps) => {
 	const intl = useIntl();
 	const { cctFilter } = useAccess();
@@ -73,11 +78,27 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 	const { settings } = useModel('tienich.caidat');
 	// const { danhSach: danhSachLopHanhChinh } = useModel('daotao.lophanhchinh');
 	const [expandedLopHocPhan, setExpandedLopHocPhan] = useState<string[]>([]);
+
 	const allLoaiDangKy = useMemo(() => {
-		const all = Object.values(ELoaiDangKyTheoLop);
-		if (!khoaNganhMe?.khoaNganhPhu?.ma) return all.filter((item) => item !== ELoaiDangKyTheoLop.KHOA_NGANH_2);
-		return all;
-	}, [khoaNganhMe?.khoaNganhPhu?.ma]);
+		const { boLocTatCa, boLocKhoaNganh, boLocLopHanhChinh } = dotDangKyHienTai ?? {};
+		const hasBoLoc = [boLocTatCa, boLocKhoaNganh, boLocLopHanhChinh].some(Boolean);
+		const byFlag: Partial<Record<ELoaiDangKyTheoLop, boolean | undefined>> = {
+			[ELoaiDangKyTheoLop.TAT_CA]: boLocTatCa,
+			[ELoaiDangKyTheoLop.KHOA_NGANH]: boLocKhoaNganh,
+			[ELoaiDangKyTheoLop.KHOA_NGANH_2]: boLocKhoaNganh,
+			[ELoaiDangKyTheoLop.LOP_HANH_CHINH]: boLocLopHanhChinh,
+		};
+
+		return Object.values(ELoaiDangKyTheoLop).filter((item) => {
+			if (item === ELoaiDangKyTheoLop.KHOA_NGANH_2 && !khoaNganhMe?.khoaNganhPhu?.ma) return false;
+			return !hasBoLoc || !!byFlag[item];
+		});
+	}, [khoaNganhMe?.khoaNganhPhu?.ma, dotDangKyHienTai]);
+
+	useEffect(() => {
+		if (!allLoaiDangKy.length) return;
+		if (!loaiDangKy || !allLoaiDangKy.includes(loaiDangKy)) setLoaiDangKy(allLoaiDangKy[0]);
+	}, [allLoaiDangKy, loaiDangKy, setLoaiDangKy]);
 
 	const [visibleDangKyNgay, setVisibleDangKyNgay] = useState<boolean>(false);
 	const [isVuotTin, setIsVuotTin] = useState<boolean>(false);
@@ -85,6 +106,11 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
 	const dangKyNgay: boolean = true;
 	const coDotDangKyTinChi = !!dotDangKyHienTai?._id && dotDangKyHienTai.maHocKy === recHocKy?.ma;
+	const dangTrongThoiGian =
+		dotDangKyHienTai?.thoiGianBatDau &&
+		dotDangKyHienTai?.thoiGianKetThuc &&
+		dayjs().isAfter(dayjs(dotDangKyHienTai.thoiGianBatDau).subtract(1, 'second')) &&
+		dayjs().isBefore(dayjs(dotDangKyHienTai.thoiGianKetThuc).add(1, 'second'));
 	const tableDependencies = useMemo(
 		() => [coDotDangKyTinChi ? dotDangKyHienTai?._id : null, loaiDangKy],
 		[coDotDangKyTinChi, dotDangKyHienTai?._id, loaiDangKy],
@@ -92,6 +118,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 
 	const getData = () => {
 		if (!coDotDangKyTinChi || !recHocKy?.ma || !dotDangKyHienTai?._id) return;
+		if (!loaiDangKy || !allLoaiDangKy.includes(loaiDangKy)) return;
 
 		return sinhVienGetLopDangKyTheoHocPhanModel(
 			recHocKy.ma,
@@ -252,6 +279,8 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 	};
 
 	const handleDangKy = (lopVuaChon: LopHocPhan.IRecord, isWaitList = false, vuotTin = false) => {
+		if (!loaiDangKy) return;
+
 		const dangKyRoiMap = getDangKyRoiMap(lopVuaChon.maHocPhan, danhSachLopDangKy);
 		if (
 			!lopVuaChon.children?.length &&
@@ -394,19 +423,12 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 			width: 150,
 			align: 'center',
 			filterType: 'string',
-			render: (val, rec) => val ?? rec?.ten,
-			// 	{
-			// 	return (
-			// 		<a
-			// 		// onClick={(e) => {
-			// 		// 	e.stopPropagation();
-			// 		// 	handleXemDeCuong(val, rec?.ten);
-			// 		// }}
-			// 		>
-			// 			{val ?? rec?.ten}
-			// 		</a>
-			// 	);
-			// },
+			render: (val, rec) => (
+				<Space size={4}>
+					<span>{val ?? rec?.ten}</span>
+					{isLopThucHanhCon(rec) ? <Tag className='tag-lop-lab'>Lab</Tag> : null}
+				</Space>
+			),
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.giangvien' }),
@@ -512,7 +534,10 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 				const hetCho = rec.siSoToiDa - (rec.siSo ?? 0) <= 0;
 				const vuotSoTinChi =
 					!hetCho && isVuotSoTinChiToiDa(rec, danhSachLopHienThi, danhSachLopDktc, tongTinChi, soTinChiToiDa);
-				const disabled = getDisabledDangKy(rec) || !coDotDangKyTinChi;
+				const khongChoDangKyDacBiet =
+					dotDangKyHienTai?.choPhepDangKyDuThinh !== true && dotDangKyHienTai?.choPhepDangKyVuotTinChi !== true;
+				const disabled =
+					getDisabledDangKy(rec) || !coDotDangKyTinChi || !dangTrongThoiGian || (vuotSoTinChi && khongChoDangKyDacBiet);
 				const isChuaDangKy = lopDangKy?.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY;
 				const disabledDelete =
 					(lopDangKy?.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
@@ -585,9 +610,13 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 							type='primary'
 							disabled={disabled}
 							tooltip={
-								vuotSoTinChi
-									? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin' })
-									: undefined
+								!dangTrongThoiGian
+									? intl.formatMessage({
+											id: 'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi',
+										})
+									: vuotSoTinChi
+										? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin' })
+										: undefined
 							}
 							onClick={(e) => {
 								e.stopPropagation();
@@ -622,6 +651,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 					scroll={{ y: 600 }}
 					otherProps={{
 						rowKey: 'ten',
+						rowClassName: (rec: LopHocPhan.IRecord) => (isLopThucHanhCon(rec) ? 'row-lop-lab' : ''),
 						expandable: {
 							expandRowByClick: true,
 							indentSize: 0,
@@ -645,6 +675,18 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 						/>,
 					]}
 					emptyText={intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.table.empty.khongcolop' })}
+					tableFooterExtra={
+						<div className='lop-legend'>
+							<span className='lop-legend__item'>
+								<span className='lop-legend__box' />
+								{intl.formatMessage({ id: 'lophocphan.loaihinhhoctap.lythuyet' })}
+							</span>
+							<span className='lop-legend__item'>
+								<Tag className='tag-lop-lab'>Lab</Tag>
+								{intl.formatMessage({ id: 'lophocphan.loaihinhhoctap.thuchanh' })}
+							</span>
+						</div>
+					}
 				/>
 			</div>
 

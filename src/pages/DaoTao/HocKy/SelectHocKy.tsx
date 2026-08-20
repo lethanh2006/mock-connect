@@ -1,6 +1,7 @@
+import { getLocalizedName } from '@/utils/localeName';
 import { Select } from 'antd';
 import React, { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useModel, useIntl } from 'umi';
 
 /**
  * Secect Căn cứ pháp lý để cho vào FormItem
@@ -17,6 +18,7 @@ const SelectHocKy = (props: {
 	/** Nếu căn cứ từ lớp hành chính thì chỉ lọc những HK có `sinh viên học kỳ`, còn ko mặc định sẽ lấy toàn bộ học kỳ theo `Khóa ngành` */
 	fromLhc?: boolean;
 	selectLatest?: boolean;
+	placeholder?: string;
 }) => {
 	const {
 		value,
@@ -29,7 +31,9 @@ const SelectHocKy = (props: {
 		disabled,
 		fromLhc = false,
 		selectLatest,
+		placeholder,
 	} = props;
+	const intl = useIntl();
 	const { danhSach, getAllModel, loading, setRecord, record, danhSachHkLhc, setDanhSach, setDanhSachHkLhc } =
 		useModel('daotao.hocky');
 	const danhSachHienThi = fromLhc ? danhSachHkLhc : danhSach;
@@ -80,11 +84,11 @@ const SelectHocKy = (props: {
 			options={danhSachHienThi.map((item) => ({
 				key: item._id,
 				value: selectMa ? item.ma : item._id,
-				label: `${item.ten}`,
+				label: getLocalizedName(item),
 			}))}
 			showSearch
 			optionFilterProp='label'
-			placeholder='Chọn học kỳ'
+			placeholder={placeholder ?? intl.formatMessage({ id: 'daotao.hocky.select' })}
 			allowClear={allowClear ?? false}
 			style={{ width: '100%', ...style }}
 			loading={loading}

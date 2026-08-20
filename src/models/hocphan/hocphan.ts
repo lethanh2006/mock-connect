@@ -7,7 +7,7 @@ import { useState } from 'react';
 export default () => {
 	const objInit = useInitModel<HocPhan.IRecord>('hoc-phan', undefined, undefined, ipDaoTao);
 	const { getModel } = objInit;
-	const [loaiDangKy, setLoaiDangKy] = useState<ELoaiDangKyTheoLop>(ELoaiDangKyTheoLop.TAT_CA);
+	const [loaiDangKy, setLoaiDangKy] = useState<ELoaiDangKyTheoLop>();
 
 	const getHocPhanDKHPModel = (maHocKy: string, condition?: any, otherQuery?: any) =>
 		getModel(
