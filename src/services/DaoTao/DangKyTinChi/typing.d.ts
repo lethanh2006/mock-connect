@@ -30,6 +30,13 @@ declare module DangKyTinChi {
 		allowHocVuot: boolean;
 		allowChuaTheoTienTrinh: boolean;
 		allowNgoaiChuongTrinh: boolean;
+
+		choPhepDangKyVuotTinChi?: boolean;
+		choPhepDangKyDuThinh?: boolean;
+
+		boLocTatCa?: boolean;
+		boLocKhoaNganh?: boolean;
+		boLocLopHanhChinh?: boolean;
 	}
 
 	export interface IPhieuDangKy {

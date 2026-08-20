@@ -28,7 +28,7 @@ import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { formatDateTime } from '@/utils/formatDate';
 import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Descriptions, Modal, Popconfirm, Popover, Select, Space, Tag } from 'antd';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAccess, useIntl, useModel } from 'umi';
 import {
 	buildLopDangKy,
@@ -73,11 +73,27 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 	const { settings } = useModel('tienich.caidat');
 	// const { danhSach: danhSachLopHanhChinh } = useModel('daotao.lophanhchinh');
 	const [expandedLopHocPhan, setExpandedLopHocPhan] = useState<string[]>([]);
+
 	const allLoaiDangKy = useMemo(() => {
-		const all = Object.values(ELoaiDangKyTheoLop);
-		if (!khoaNganhMe?.khoaNganhPhu?.ma) return all.filter((item) => item !== ELoaiDangKyTheoLop.KHOA_NGANH_2);
-		return all;
-	}, [khoaNganhMe?.khoaNganhPhu?.ma]);
+		const { boLocTatCa, boLocKhoaNganh, boLocLopHanhChinh } = dotDangKyHienTai ?? {};
+		const hasBoLoc = [boLocTatCa, boLocKhoaNganh, boLocLopHanhChinh].some(Boolean);
+		const byFlag: Partial<Record<ELoaiDangKyTheoLop, boolean | undefined>> = {
+			[ELoaiDangKyTheoLop.TAT_CA]: boLocTatCa,
+			[ELoaiDangKyTheoLop.KHOA_NGANH]: boLocKhoaNganh,
+			[ELoaiDangKyTheoLop.KHOA_NGANH_2]: boLocKhoaNganh,
+			[ELoaiDangKyTheoLop.LOP_HANH_CHINH]: boLocLopHanhChinh,
+		};
+
+		return Object.values(ELoaiDangKyTheoLop).filter((item) => {
+			if (item === ELoaiDangKyTheoLop.KHOA_NGANH_2 && !khoaNganhMe?.khoaNganhPhu?.ma) return false;
+			return !hasBoLoc || !!byFlag[item];
+		});
+	}, [khoaNganhMe?.khoaNganhPhu?.ma, dotDangKyHienTai]);
+
+	useEffect(() => {
+		if (!allLoaiDangKy.length) return;
+		if (!loaiDangKy || !allLoaiDangKy.includes(loaiDangKy)) setLoaiDangKy(allLoaiDangKy[0]);
+	}, [allLoaiDangKy, loaiDangKy, setLoaiDangKy]);
 
 	const [visibleDangKyNgay, setVisibleDangKyNgay] = useState<boolean>(false);
 	const [isVuotTin, setIsVuotTin] = useState<boolean>(false);
@@ -92,6 +108,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 
 	const getData = () => {
 		if (!coDotDangKyTinChi || !recHocKy?.ma || !dotDangKyHienTai?._id) return;
+		if (!loaiDangKy || !allLoaiDangKy.includes(loaiDangKy)) return;
 
 		return sinhVienGetLopDangKyTheoHocPhanModel(
 			recHocKy.ma,
@@ -252,6 +269,8 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 	};
 
 	const handleDangKy = (lopVuaChon: LopHocPhan.IRecord, isWaitList = false, vuotTin = false) => {
+		if (!loaiDangKy) return;
+
 		const dangKyRoiMap = getDangKyRoiMap(lopVuaChon.maHocPhan, danhSachLopDangKy);
 		if (
 			!lopVuaChon.children?.length &&
