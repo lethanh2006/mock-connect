@@ -7,6 +7,7 @@ import { XMLHttpRequestInstrumentation } from '@opentelemetry/instrumentation-xm
 import { resourceFromAttributes } from '@opentelemetry/resources';
 import {
 	BatchSpanProcessor,
+	ParentBasedSampler,
 	TraceIdRatioBasedSampler,
 	WebTracerProvider,
 } from '@opentelemetry/sdk-trace-web';
@@ -78,7 +79,9 @@ const initializeBrowserOtel = () => {
 			'service.version': config.APP_CONFIG_APP_VERSION ?? 'unknown',
 			'vinuni.client_app': CLIENT_APP,
 		}),
-		sampler: new TraceIdRatioBasedSampler(getSampleRatio(config.APP_CONFIG_OTEL_SAMPLE_RATIO)),
+		sampler: new ParentBasedSampler({
+			root: new TraceIdRatioBasedSampler(getSampleRatio(config.APP_CONFIG_OTEL_SAMPLE_RATIO)),
+		}),
 		spanProcessors: [
 			new BatchSpanProcessor(exporter, {
 				maxExportBatchSize: 64,

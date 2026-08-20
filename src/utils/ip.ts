@@ -21,11 +21,11 @@ const ipKhaoThi = getConnectTarget('not-deployed/khao-thi');
 const ipThuVien = getConnectTarget('not-deployed/thu-vien'); // ip dev
 const ipChatbot = getConnectTarget('not-deployed/chatbot-api');
 const ipCCT = getConnectTarget('co-curriculum'); // ip dev
-const ipFile = ipRoot + 'file';
-const ipFileMultiPart = ipRoot + 'file';
+const ipFile = getConnectTarget('file');
+const ipFileMultiPart = getConnectTarget('file');
 
 // const ipCCT = 'http://192.168.1.38:3010'; // ip dev
-const ipCsvc = ipRoot + 'csvc';
+const ipCsvc = getConnectTarget('csvc');
 
 const ipNewsWP = APP_CONFIG_URL_LANDING;
 
