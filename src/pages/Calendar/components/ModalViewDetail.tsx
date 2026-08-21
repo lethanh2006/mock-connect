@@ -165,7 +165,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 					key='course-registration'
 					type='primary'
 					onClick={() => {
-						history.push('/academic/course-registration');
+						history.push('/hoc-tap/dang-ky-tin-chi');
 					}}
 				>
 					{intl.formatMessage({ id: 'lichsukien.chitiet.dangky_tinchi' })}
