@@ -1,11 +1,11 @@
 import EnrollmentDeclarationModal from '@/components/EnrollmentDeclarationModal';
 import LocaleSwitch from '@/components/RightContent/LocaleSwitch';
+import { EnrollmentStatus, ETrangThaiGiayToNhapHoc } from '@/services/DaoTao/SinhVien/constants';
 import { getPublicAssetPath } from '@/utils/path';
 import { Button, Modal } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import styles from './index.less';
-import { EnrollmentStatus } from '@/services/DaoTao/SinhVien/constants';
 
 type EnrollmentPromptProps = {
 	onStartEnrollment?: () => void;
@@ -20,6 +20,15 @@ const EnrollmentPrompt = ({ onStartEnrollment }: EnrollmentPromptProps) => {
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const isAdmitted = recSinhVien?.enrollmentStatus === EnrollmentStatus.ADMITTED;
 	const [declarationOpen, setDeclarationOpen] = useState(false);
+
+	useEffect(() => {
+		const isDocumentsRevision =
+			recSinhVien?.enrollmentStatus === EnrollmentStatus.ENROLLED &&
+			!!recSinhVien?.hoSoNhapHoc?.danhSachGiayToNhapHoc?.some(
+				(item) => item.trangThai === ETrangThaiGiayToNhapHoc.KHONG_DUYET,
+			);
+		if (isDocumentsRevision) setDeclarationOpen(true);
+	}, [recSinhVien]);
 
 	const handleStartEnrollment = () => {
 		setDeclarationOpen(true);
@@ -83,11 +92,7 @@ const EnrollmentPrompt = ({ onStartEnrollment }: EnrollmentPromptProps) => {
 						{intl.formatMessage(
 							{ id: 'global.enrollmentPrompt.estimatedTime' },
 							{
-								time: (
-									<strong>
-										{intl.formatMessage({ id: 'global.enrollmentPrompt.estimatedTimeValue' })}
-									</strong>
-								),
+								time: <strong>{intl.formatMessage({ id: 'global.enrollmentPrompt.estimatedTimeValue' })}</strong>,
 							},
 						)}
 					</p>

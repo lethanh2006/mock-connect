@@ -1,3 +1,4 @@
+import { CERTIFICATE_TYPE_OTHER } from '@/pages/DaoTao/ChungChi/Select';
 import { ELoaiNoiSinh } from '@/services/DaoTao/SinhVien/constants';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 
@@ -110,8 +111,14 @@ export const buildStep2InitialValues = (sinhVien?: SinhVien.IRecord): Record<str
 		...buildGradeFields('11', grade11),
 		...buildGradeFields('12', grade12),
 
-		certificateType: tiengAnh?.loaiChungChi,
+		certificateType: tiengAnh?.isChungChiKhac ? CERTIFICATE_TYPE_OTHER : tiengAnh?.loaiChungChi,
+		certificateTypeOther: tiengAnh?.isChungChiKhac ? tiengAnh?.loaiChungChi : undefined,
+		isChungChiKhac: !!tiengAnh?.isChungChiKhac,
 		certificateScore: tiengAnh?.diemChungChi,
+		diemNghe: tiengAnh?.diemNghe,
+		diemNoi: tiengAnh?.diemNoi,
+		diemDoc: tiengAnh?.diemDoc,
+		diemViet: tiengAnh?.diemViet,
 		certificateIssueDate: tiengAnh?.ngayCapChungChi,
 		certificateIssuer: tiengAnh?.noiCapChungChi,
 		certificateAttachment: tiengAnh?.urlFileMinhChung,

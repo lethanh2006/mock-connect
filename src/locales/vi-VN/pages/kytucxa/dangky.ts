@@ -1,4 +1,20 @@
 export default {
+	'kytucxa.dangky.exempt.pendingAlert': 'Đơn đề nghị miễn đăng ký Ký túc xá của bạn hiện đang được xét duyệt.',
+	'kytucxa.dangky.exempt.approvedAlert': 'Đơn đề nghị miễn đăng ký Ký túc xá của bạn đã được phê duyệt.',
+	'kytucxa.dangky.exempt.applicationTitle': 'Đơn xin miễn ở Ký túc xá',
+	'kytucxa.dangky.exempt.pending': 'Chờ duyệt',
+	'kytucxa.dangky.exempt.approved': 'Đã duyệt',
+	'kytucxa.dangky.exempt.rejected': 'Không duyệt',
+	'kytucxa.dangky.exempt.approvedDate': 'Duyệt ngày {ngay}',
+	'kytucxa.dangky.exempt.approver': 'Người duyệt: {nguoiDuyet}',
+	'kytucxa.dangky.exempt.submittedAt': 'Thời gian gửi',
+	'kytucxa.dangky.exempt.reviewedAt': 'Thời gian phê duyệt',
+	'kytucxa.dangky.exempt.approverLabel': 'Người phê duyệt',
+	'kytucxa.dangky.exempt.rejectionReason': 'Lý do từ chối',
+	'kytucxa.dangky.exempt.pendingMessage': 'Bạn sẽ được thông báo sau khi có kết quả xét duyệt. Đăng ký Ký túc xá không khả dụng trong thời gian đơn đang được xét duyệt.',
+	'kytucxa.dangky.exempt.approvedMessage': 'Bạn không cần thực hiện đăng ký Ký túc xá trong đợt này.',
+	'kytucxa.dangky.exempt.rejectedAlert': 'Đơn đề nghị miễn đăng ký Ký túc xá của bạn đã bị từ chối.',
+	'kytucxa.dangky.exempt.rejectedMessage': 'Bạn cần thực hiện đăng ký Ký túc xá trong đợt đăng ký này.',
 	//Page Header
 	'kytucxa.dangky.title': 'Đăng ký ký túc xá',
 
@@ -83,7 +99,7 @@ export default {
 	'kytucxa.dangky.form.field.phoneNumber': 'Số điện thoại',
 	'kytucxa.dangky.form.field.phoneNumber.placeholder': 'Nhập số điện thoại',
 	'kytucxa.dangky.form.field.program': 'Chương trình học',
-	'kytucxa.dangky.form.field.college': 'Khoa/Trường',
+	'kytucxa.dangky.form.field.college': 'Đơn vị',
 	'kytucxa.dangky.form.field.identityNumber': 'Số CCCD / Hộ chiếu',
 	'kytucxa.dangky.form.field.identityNumber.placeholder': 'Nhập số CCCD / Hộ chiếu',
 	'kytucxa.dangky.form.field.dateOfIssue': 'Ngày cấp',
@@ -124,6 +140,9 @@ export default {
 	'kytucxa.dangky.nguoithan.relationship.father': 'Bố',
 	'kytucxa.dangky.nguoithan.relationship.mother': 'Mẹ',
 	'kytucxa.dangky.nguoithan.relationship.guardian': 'Người giám hộ',
+	'kytucxa.dangky.nguoithan.relationship.sibling': 'Anh/Chị/Em',
+	'kytucxa.dangky.nguoithan.relationship.child': 'Con',
+	'kytucxa.dangky.nguoithan.relationship.spouse': 'Vợ/Chồng',
 	'kytucxa.dangky.nguoithan.relationship.other': 'Khác',
 
 	//Form Chinh Sach (Step 2)

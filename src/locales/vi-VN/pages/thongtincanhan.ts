@@ -52,6 +52,7 @@ export default {
 	'thongtincanhan.hoso.permanentAddress': 'Địa chỉ thường trú',
 	'thongtincanhan.hoso.postalCode': 'Mã bưu chính',
 	'thongtincanhan.hoso.academicInfo': 'Thông tin học vụ',
+	'thongtincanhan.hoso.documents': 'Hồ sơ, giấy tờ',
 	'thongtincanhan.hoso.trainingProgram': 'Chương trình đào tạo',
 	'thongtincanhan.hoso.college': 'Đơn vị phụ trách',
 	'thongtincanhan.hoso.cohortMajor': 'Khóa - Ngành',

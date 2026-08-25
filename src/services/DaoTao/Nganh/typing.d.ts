@@ -28,6 +28,7 @@ declare module NganhDaoTao {
 
 		maDonVi?: string;
 		tenDonViPhuTrach?: string;
+		tenDonViVietTat?: string;
 		donVi?: ToChucNhanSu.IDonVi;
 
 		createdAt?: string;

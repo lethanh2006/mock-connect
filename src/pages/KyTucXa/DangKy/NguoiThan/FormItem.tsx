@@ -87,6 +87,12 @@ const FormItemNguoiThanKTX = (props: {
 				return intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.relationship.mother' });
 			case 'Guardian':
 				return intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.relationship.guardian' });
+			case 'Sibling':
+				return intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.relationship.sibling' });
+			case 'Child':
+				return intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.relationship.child' });
+			case 'Spouse':
+				return intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.relationship.spouse' });
 			case 'Other':
 				return intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.relationship.other' });
 			default:

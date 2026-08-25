@@ -11,9 +11,10 @@ const SelectDanToc = (props: {
 	multiple?: boolean;
 	loadData?: boolean;
 	allowClear?: boolean;
+	disabled?: boolean;
 }) => {
 	const intl = useIntl();
-	const { value, onChange, multiple, loadData, allowClear } = props;
+	const { value, onChange, multiple, loadData, allowClear, disabled } = props;
 	const { danhSach, getAllModel } = useModel('core.dantoc');
 
 	useEffect(() => {
@@ -25,6 +26,7 @@ const SelectDanToc = (props: {
 			mode={multiple ? 'multiple' : undefined}
 			value={value}
 			allowClear={allowClear}
+			disabled={disabled}
 			onChange={onChange}
 			options={danhSach.map((item) => ({
 				key: item._id,

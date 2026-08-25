@@ -22,8 +22,16 @@ const ChiTietPhong = (props: {
 	isPhongDaDangKy?: (phong: Phong.IChinhSachPhongRecord) => boolean;
 	onOpenLichSuDangKy?: (phong: Phong.IChinhSachPhongRecord, initialStep?: number) => void;
 	chiHienThiNutDong?: boolean;
+	khoaDangKy?: boolean;
 }) => {
-	const { daCoLichSuDangKy, getLichSuDangKyTheoPhong, isPhongDaDangKy, onOpenLichSuDangKy, chiHienThiNutDong } = props;
+	const {
+		daCoLichSuDangKy,
+		getLichSuDangKyTheoPhong,
+		isPhongDaDangKy,
+		onOpenLichSuDangKy,
+		chiHienThiNutDong,
+		khoaDangKy,
+	} = props;
 	const intl = useIntl();
 	const { visibleForm, setVisibleForm, record, setVisibleDangKy } = useModel('kytucxa.phong');
 	const { record: recLichSu } = useModel('kytucxa.phieudangky');
@@ -46,7 +54,7 @@ const ChiTietPhong = (props: {
 	const daQuaHanThanhToan =
 		trangThaiThanhToan === ETrangThaiThanhToanKTX.DONG || trangThaiThanhToan === ETrangThaiThanhToanKTX.HUY;
 	const hienThiNhuDaDangKy = laPhongDaDangKy && !daQuaHanThanhToan;
-	const khongChoDangKy = !hienThiNhuDaDangKy && (daHetCho || daCoLichSuPhongDangKy || daCoLichSuDangKy);
+	const khongChoDangKy = !hienThiNhuDaDangKy && (khoaDangKy || daHetCho || daCoLichSuPhongDangKy || daCoLichSuDangKy);
 	const buttonText = hienThiNhuDaDangKy
 		? daThanhToanXong
 			? intl.formatMessage({ id: 'kytucxa.dangky.card.button.seeMore' })
@@ -56,6 +64,8 @@ const ChiTietPhong = (props: {
 			: intl.formatMessage({ id: 'kytucxa.dangky.card.button.dangKy' });
 
 	const handleDangKy = () => {
+		if (khoaDangKy) return;
+
 		if (daCoLichSuPhongDangKy || (!lichSuPhong && daCoLichSuDangKy)) {
 			message.warning(intl.formatMessage({ id: 'kytucxa.dangky.message.daCoLichSu' }));
 			return;

@@ -3,6 +3,7 @@ export default {
 	'kytucxa.lichsu.title': 'Phiếu đăng ký',
 
 	//Table Columns
+	'kytucxa.lichsu.column.registrationPeriod': 'Tên đợt',
 	'kytucxa.lichsu.column.floor': 'Tầng',
 	'kytucxa.lichsu.column.roomCode': 'Mã phòng',
 	'kytucxa.lichsu.column.apartmentType': 'Loại phòng',

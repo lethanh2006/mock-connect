@@ -57,7 +57,6 @@ export default [
 				routes: [
 					{
 						path: '',
-						hideInMenu: true,
 						component: 'HocTap/LopHocPhan',
 						exact: true,
 					},
@@ -393,6 +392,11 @@ export default [
 				hideInMenu: true,
 				exact: true,
 			},
+			// {
+			// 	path: 'wallet',
+			// 	name: 'Wallet',
+			// 	component: 'TaiChinh/Vi',
+			// },
 			// {
 			// 	path: 'payment-tracking',
 			// 	name: 'PaymentTracking',
@@ -1047,4 +1051,5 @@ export default [
 		component: 'exception/404',
 		layout: false,
 	},
+
 ];

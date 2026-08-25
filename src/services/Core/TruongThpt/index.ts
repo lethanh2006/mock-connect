@@ -6,5 +6,5 @@ export async function getTinhTpTruongThpt() {
 }
 
 export async function getTruongThptTheoTinh(maTinhTP: string) {
-	return axios.get(`${ipCore}/truong-thpt/maTinhTP/${maTinhTP}`);
+	return axios.get(`${ipCore}/truong-thpt/maTinhTP/${maTinhTP}`, { data: { silent: true } });
 }

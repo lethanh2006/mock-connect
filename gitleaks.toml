@@ -1,0 +1,13 @@
+title = "Gitleaks configuration"
+
+[allowlist]
+description = "Files intentionally excluded from secret scanning"
+targetRules = ["generic-api-key"]
+paths = [
+  '''(^|/)\.sentryclirc$''',
+  '''(^|/)src/components/TinyEditor/index\.tsx$''',
+  '''(^|/)src/pages/HocTap/DangKyTinChi/components/ModalDangKy\.tsx$''',
+  '''(^|/)src/pages/HocTap/DangKyTinChi/index\.tsx$''',
+  '''(^|/)src/pages/user/Login/index\.tsx$''',
+
+]

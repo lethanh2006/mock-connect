@@ -25,7 +25,8 @@ const ipFile = ipRoot + 'file';
 const ipFileMultiPart = ipRoot + 'file';
 
 // const ipCCT = 'http://192.168.1.38:3010'; // ip dev
-const ipCsvc = ipRoot + 'csvc';
+// const ipCsvc = ipRoot + 'csvc';
+const ipCsvc = getConnectTarget("csvc");
 
 const ipNewsWP = APP_CONFIG_URL_LANDING;
 
@@ -73,5 +74,6 @@ export {
 	oneSignalRole,
 	qldtApiClientId,
 	replaceRole,
-	sentryDSN,
+	sentryDSN
 };
+

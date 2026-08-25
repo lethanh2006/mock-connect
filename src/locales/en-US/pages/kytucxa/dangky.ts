@@ -1,4 +1,21 @@
 export default {
+	'kytucxa.dangky.exempt.pendingAlert': 'Your exemption request is currently under review.',
+	'kytucxa.dangky.exempt.approvedAlert': 'Your housing registration exemption request has been approved.',
+	'kytucxa.dangky.exempt.applicationTitle': 'Dormitory Exemption Application',
+	'kytucxa.dangky.exempt.pending': 'Pending For Approval',
+	'kytucxa.dangky.exempt.approved': 'Approved',
+	'kytucxa.dangky.exempt.rejected': 'Rejected',
+	'kytucxa.dangky.exempt.approvedDate': 'Approved {ngay}',
+	'kytucxa.dangky.exempt.approver': 'Approved by: {nguoiDuyet}',
+	'kytucxa.dangky.exempt.submittedAt': 'Submission Time',
+	'kytucxa.dangky.exempt.reviewedAt': 'Review Time',
+	'kytucxa.dangky.exempt.approverLabel': 'Approver',
+	'kytucxa.dangky.exempt.rejectionReason': 'Rejection Reason',
+	'kytucxa.dangky.exempt.pendingMessage': 'You will be notified once a decision has been made. Dormitory registration is unavailable while your exemption request is under review.',
+	'kytucxa.dangky.exempt.approvedMessage':
+		'You are not required to register for on-campus housing during this registration period.',
+	'kytucxa.dangky.exempt.rejectedAlert': 'Your exemption request has been rejected.',
+	'kytucxa.dangky.exempt.rejectedMessage': 'Please proceed with dormitory registration during the current registration period.',
 	//Page Header
 	'kytucxa.dangky.title': 'Dormitory Registration',
 
@@ -85,7 +102,7 @@ export default {
 	'kytucxa.dangky.form.field.phoneNumber': 'Phone Number',
 	'kytucxa.dangky.form.field.phoneNumber.placeholder': 'Enter Phone Number',
 	'kytucxa.dangky.form.field.program': 'Program',
-	'kytucxa.dangky.form.field.college': 'College',
+	'kytucxa.dangky.form.field.college': 'Department',
 	'kytucxa.dangky.form.field.identityNumber': 'ID or Passport No.',
 	'kytucxa.dangky.form.field.identityNumber.placeholder': 'Enter ID or Passport No.',
 	'kytucxa.dangky.form.field.dateOfIssue': 'Date of issue',
@@ -127,6 +144,9 @@ export default {
 	'kytucxa.dangky.nguoithan.relationship.father': 'Father',
 	'kytucxa.dangky.nguoithan.relationship.mother': 'Mother',
 	'kytucxa.dangky.nguoithan.relationship.guardian': 'Guardian',
+	'kytucxa.dangky.nguoithan.relationship.sibling': 'Sibling',
+	'kytucxa.dangky.nguoithan.relationship.child': 'Child',
+	'kytucxa.dangky.nguoithan.relationship.spouse': 'Spouse',
 	'kytucxa.dangky.nguoithan.relationship.other': 'Other',
 
 	//Form Chinh Sach (Step 2)

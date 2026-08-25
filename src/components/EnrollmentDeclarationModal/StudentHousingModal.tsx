@@ -1,12 +1,13 @@
 import { EOperatorType } from '@/components/Table/constant';
-import SelectDanhMucChungKTX from '@/pages/KyTucXa/DanhMucChung/Select';
 import CardPhong from '@/pages/KyTucXa/DangKy/components/CardPhong';
 import ChiTietPhong from '@/pages/KyTucXa/DangKy/components/ChiTiet';
 import ModalDanKyKTX from '@/pages/KyTucXa/DangKy/components/Modal';
+import SelectDanhMucChungKTX from '@/pages/KyTucXa/DanhMucChung/Select';
 import SelectToaNhaKTX from '@/pages/KyTucXa/ToaNha/Select';
+import { ETrangThaiMinhChung } from '@/services/KyTucXa/MienKyTucXa/constants';
+import { ETrangThaiThanhToanKTX } from '@/services/KyTucXa/PhieuDangKy/constant';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
-import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { formatDateTime } from '@/utils/formatDate';
 import { getPublicAssetPath } from '@/utils/path';
 import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
@@ -25,7 +26,9 @@ const getLichSuDangKyKeys = (lichSu?: PhieuDangKyKTX.IRecord) =>
 		.filter(Boolean)
 		.map((item) => String(item));
 
-const laLichSuDaDong = (lichSu?: PhieuDangKyKTX.IRecord) => lichSu?.trangThaiThanhToan === EMaTrangThaiThanhToan.DONG;
+const laLichSuDaDong = (lichSu?: PhieuDangKyKTX.IRecord) =>
+	lichSu?.trangThaiThanhToan === ETrangThaiThanhToanKTX.DONG ||
+	lichSu?.trangThaiThanhToan === ETrangThaiThanhToanKTX.HUY;
 
 const coFormDonDangKy = (lichSu?: PhieuDangKyKTX.IRecord) => !!lichSu?.formDon?._id && !laLichSuDaDong(lichSu);
 
@@ -72,6 +75,10 @@ const StudentHousingModal = ({ open, onClose, onSelectSuccess }: StudentHousingM
 
 	const [isViewDangKy, setIsViewDangKy] = useState<boolean>(false);
 	const [initialModalStep, setInitialModalStep] = useState<number>(0);
+	const khoaDangKy =
+		recDot?.isMienKyTucXa &&
+		(recDot?.trangThaiMinhChungMien === ETrangThaiMinhChung.CHO_DUYET ||
+			recDot?.trangThaiMinhChungMien === ETrangThaiMinhChung.DA_DUYET);
 
 	useEffect(() => {
 		if (!open) return;
@@ -81,7 +88,7 @@ const StudentHousingModal = ({ open, onClose, onSelectSuccess }: StudentHousingM
 	}, [open]);
 
 	const getLichSuDangKyData = async () => {
-		if (!recDot?._id || recDot?.isMienKyTucXa) {
+		if (!recDot?._id) {
 			setRecLichSu(undefined);
 			return;
 		}
@@ -105,10 +112,10 @@ const StudentHousingModal = ({ open, onClose, onSelectSuccess }: StudentHousingM
 
 	useEffect(() => {
 		if (open) getLichSuDangKyData();
-	}, [open, recDot?._id, recDot?.isMienKyTucXa]);
+	}, [open, recDot?._id]);
 
 	const getData = () => {
-		if (recDot?._id && !recDot?.isMienKyTucXa) {
+		if (recDot?._id) {
 			getModel({ maDotId: recDot?._id }, undefined, undefined, undefined, undefined, 'ktx/chinh-sach-phong/page');
 		}
 	};
@@ -121,7 +128,7 @@ const StudentHousingModal = ({ open, onClose, onSelectSuccess }: StudentHousingM
 
 	useEffect(() => {
 		if (open) getData();
-	}, [open, page, limit, filters, recDot?._id, recDot?.isMienKyTucXa]);
+	}, [open, page, limit, filters, recDot?._id]);
 
 	const handleFilterChange = useCallback(
 		(fieldPath: string[], value: any, operator = EOperatorType.EQUAL) => {
@@ -173,6 +180,8 @@ const StudentHousingModal = ({ open, onClose, onSelectSuccess }: StudentHousingM
 	};
 
 	const handleDangKy = (phong: Phong.IChinhSachPhongRecord) => {
+		if (khoaDangKy) return;
+
 		if (coFormDonDangKy(recLichSu)) {
 			message.warning(intl.formatMessage({ id: 'kytucxa.dangky.message.daCoLichSu' }));
 			return;
@@ -223,11 +232,7 @@ const StudentHousingModal = ({ open, onClose, onSelectSuccess }: StudentHousingM
 		<Modal
 			open={open}
 			onCancel={onClose}
-			title={
-				<span style={{ fontSize: 18, fontWeight: 700, color: '#134d8b' }}>
-					Student Housing
-				</span>
-			}
+			title={<span style={{ fontSize: 18, fontWeight: 700, color: '#134d8b' }}>Student Housing</span>}
 			width={1200}
 			centered
 			footer={null}
@@ -326,6 +331,7 @@ const StudentHousingModal = ({ open, onClose, onSelectSuccess }: StudentHousingM
 											onOpenLichSuDangKy={handleOpenLichSuDangKy}
 											onXemChiTiet={handleXemChiTiet}
 											onDangKy={handleDangKy}
+											khoaDangKy={khoaDangKy}
 										/>
 									</Col>
 								);
@@ -362,6 +368,7 @@ const StudentHousingModal = ({ open, onClose, onSelectSuccess }: StudentHousingM
 				getLichSuDangKyTheoPhong={getLichSuDangKyTheoPhong}
 				isPhongDaDangKy={isPhongDaDangKy}
 				onOpenLichSuDangKy={handleOpenLichSuDangKy}
+				khoaDangKy={khoaDangKy}
 			/>
 			<ModalDanKyKTX
 				getData={handleDangKyThanhCong}

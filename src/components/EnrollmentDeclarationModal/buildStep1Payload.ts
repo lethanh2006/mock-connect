@@ -1,3 +1,4 @@
+import { isGiayToVisibleForNationality } from '@/services/DaoTao/DotNhapHoc/constant';
 import type { DotNhapHoc } from '@/services/DaoTao/DotNhapHoc/typings';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { buildUpLoadFileMultipart, EFileScope } from '@/services/uploadFile';
@@ -13,28 +14,16 @@ const buildDiaChi = (values: Record<string, any>, suffix: string): SinhVien.TDia
 	diaChi: values[`soNhaTenDuong${suffix}`] ?? '',
 });
 
-export const buildStep1Payload = async (
+const uploadOptions = { scope: EFileScope.INTERNAL, module: 'nhap-hoc', returnValue: 'url' as const };
+
+export const buildGiayToPayload = async (
 	values: Record<string, any>,
 	documentRows: DotNhapHoc.IGiayToCanNopNhapHoc[] = [],
-): Promise<TStep1Payload> => {
-	const uploadOptions = { scope: EFileScope.INTERNAL, module: 'nhap-hoc', returnValue: 'url' as const };
-	const [urlMatTruocCccd, urlMatSauCccd, urlDinhKemVanDeSucKhoe, urlPassportAttachment] = await Promise.all([
-		buildUpLoadFileMultipart(values, 'frontIdCard', uploadOptions),
-		buildUpLoadFileMultipart(values, 'backIdCard', uploadOptions),
-		values.hasHealthProblem === true
-			? buildUpLoadFileMultipart(values, 'healthProblemAttachment', uploadOptions)
-			: Promise.resolve(undefined),
-		buildUpLoadFileMultipart(values, 'passportAttachment', uploadOptions),
-	]);
-	// The mockup has a single "Passport Attachment" upload covering both the passport page and the visa stamp,
-	// so the same file URL is sent for both urlDinhKemHoChieu and visa.urlDinhKemVisa.
-	const urlDinhKemHoChieu = urlPassportAttachment;
-	const urlDinhKemVisa = urlPassportAttachment;
-
+) => {
 	const danhSachGiayToNhapHoc = (
 		await Promise.all(
 			documentRows
-				.filter((row) => row.id)
+				.filter((row) => row.id && isGiayToVisibleForNationality(row.doiTuongApDung, values.nationality))
 				.map(async (row) => ({
 					id: row.id as string,
 					urlFile: (await buildUpLoadFileMultipart(values, `document_${row.id}`, uploadOptions)) ?? undefined,
@@ -42,7 +31,31 @@ export const buildStep1Payload = async (
 		)
 	).filter((item) => item.urlFile);
 
-	const hasVisa = Boolean(values.passportNumber || values.visaType);
+	return { danhSachGiayToNhapHoc };
+};
+
+export const buildStep1Payload = async (
+	values: Record<string, any>,
+	documentRows: DotNhapHoc.IGiayToCanNopNhapHoc[] = [],
+): Promise<TStep1Payload> => {
+	const [urlMatTruocCccd, urlMatSauCccd, urlDinhKemVanDeSucKhoe, urlPassportAttachment, anhDaiDienUrl] =
+		await Promise.all([
+			buildUpLoadFileMultipart(values, 'frontIdCard', uploadOptions),
+			buildUpLoadFileMultipart(values, 'backIdCard', uploadOptions),
+			values.hasHealthProblem === true
+				? buildUpLoadFileMultipart(values, 'healthProblemAttachment', uploadOptions)
+				: Promise.resolve(undefined),
+			buildUpLoadFileMultipart(values, 'passportAttachment', uploadOptions),
+			buildUpLoadFileMultipart(values, 'anhDaiDienUrl', uploadOptions),
+		]);
+	// The mockup has a single "Passport Attachment" upload covering both the passport page and the visa stamp,
+	// so the same file URL is sent for both urlDinhKemHoChieu and visa.urlDinhKemVisa.
+	const urlDinhKemHoChieu = urlPassportAttachment;
+	const urlDinhKemVisa = urlPassportAttachment;
+
+	const { danhSachGiayToNhapHoc } = await buildGiayToPayload(values, documentRows);
+
+	const hasVisa = Boolean(values.passportNumber || values.visaType || values.visaNumber);
 
 	return {
 		firstName: values.firstName,
@@ -79,21 +92,24 @@ export const buildStep1Payload = async (
 		coVanDeSucKhoe: values.hasHealthProblem,
 		urlDinhKemVanDeSucKhoe: urlDinhKemVanDeSucKhoe ?? undefined,
 		isRegisterFreeDormitory: values.hasHealthProblem === true ? Boolean(values.isRegisterFreeDormitory) : undefined,
-		soHoChieu: values.passportNumber,
+		passportNumber: values.passportNumber,
 		urlDinhKemHoChieu: urlDinhKemHoChieu ?? undefined,
 		visa: hasVisa
 			? {
-					loaiVisa: values.visaType,
-					ngayCap: values.visaIssueDate,
-					ngayHetHan: values.visaExpiryDate,
-					coQuanCap: values.visaIssuingAuthority,
-					noiCap: values.visaPlaceOfIssue,
-					urlDinhKemVisa: urlDinhKemVisa ?? undefined,
-				}
+				tenQuocGia: values.tenQuocGia,
+				soHieuVisa: values.visaNumber,
+				loaiVisa: values.visaType,
+				ngayCap: values.visaIssueDate,
+				ngayHetHan: values.visaExpiryDate,
+				coQuanCap: values.visaIssuingAuthority,
+				noiCap: values.visaPlaceOfIssue,
+				urlDinhKemVisa: urlDinhKemVisa ?? undefined,
+			}
 			: undefined,
 		danhSachGiayToNhapHoc,
 		firstGenStudent: values.firstGenStudent,
 		adjustmentNeeds: values.adjustmentNeeds,
 		adjustmentOthersText: values.adjustmentNeeds?.includes('others') ? values.adjustmentOthersText : undefined,
+		anhDaiDienUrl: anhDaiDienUrl ?? undefined,
 	};
 };

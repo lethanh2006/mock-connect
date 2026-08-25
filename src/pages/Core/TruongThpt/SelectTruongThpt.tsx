@@ -1,7 +1,8 @@
 import { getTruongThptTheoTinh } from '@/services/Core/TruongThpt';
+import { DANH_SACH_TRUONG_THPT } from '@/services/Core/TruongThpt/truongThpt';
 import rules from '@/utils/rules';
 import { Col, Form, Input, Row, Select, type FormInstance } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 /** Cascading Tỉnh/TP + Trường THPT select, dùng cho khối "Thông tin học tập THPT" của form nhập học */
 const SelectTruongThpt = (props: {
@@ -28,7 +29,7 @@ const SelectTruongThpt = (props: {
 		let isCurrentProvince = true;
 		getTruongThptTheoTinh(provinceCode)
 			.then((res) => {
-				if (isCurrentProvince) setListTruong(res.data.data);
+				if (isCurrentProvince) setListTruong(res.data.data ?? []);
 			})
 			.catch(() => {
 				if (isCurrentProvince) setListTruong([]);
@@ -39,17 +40,50 @@ const SelectTruongThpt = (props: {
 		};
 	}, [provinceCode]);
 
+	const fallbackSchools = useMemo(
+		() =>
+			provinceCode
+				? DANH_SACH_TRUONG_THPT.filter((item) => item.maTinhTP === provinceCode)
+				: DANH_SACH_TRUONG_THPT,
+		[provinceCode],
+	);
+
+	const schools = listTruong.length ? listTruong : fallbackSchools;
+
+	const selectedSchoolId = useMemo(
+		() =>
+			(listTruong.length
+				? listTruong.find((item) => item.maTruong === schoolCode)
+				: DANH_SACH_TRUONG_THPT.find(
+						(item) => item.maTruong === schoolCode && (!provinceCode || item.maTinhTP === provinceCode),
+					)
+			)?._id,
+		[listTruong, provinceCode, schoolCode],
+	);
+
 	const onChangeProvince = (provinceName?: string) => {
-		const provinceCode = listTinh?.find((item) => item.tenTinhTP === provinceName)?.maTinhTP;
+		const nextProvinceCode = listTinh?.find((item) => item.tenTinhTP === provinceName)?.maTinhTP;
 		form.setFieldsValue({
-			[`maTinhTpTruong${suffix}`]: provinceCode,
+			[`maTinhTpTruong${suffix}`]: nextProvinceCode,
 			[`hsName${suffix}`]: undefined,
 			[`hsSchoolCode${suffix}`]: undefined,
 		});
 	};
 
-	const onChangeSchool = (_: string, opt: any) => {
-		form.setFieldsValue({ [`hsSchoolCode${suffix}`]: opt?.key });
+	const onChangeSchool = (schoolId?: string) => {
+		const school =
+			schools.find((item) => item._id === schoolId) ?? DANH_SACH_TRUONG_THPT.find((item) => item._id === schoolId);
+		const province = listTinh?.find((item) => item.maTinhTP === school?.maTinhTP);
+		form.setFieldsValue({
+			[`hsName${suffix}`]: school?.tenTruong,
+			[`hsSchoolCode${suffix}`]: school?.maTruong,
+			...(school
+				? {
+						[`maTinhTpTruong${suffix}`]: school.maTinhTP,
+						[`tinhTpTruong${suffix}`]: province?.tenTinhTP ?? school.tenTinhTP,
+					}
+				: {}),
+		});
 	};
 
 	return (
@@ -70,14 +104,20 @@ const SelectTruongThpt = (props: {
 				</Form.Item>
 			</Col>
 			<Col span={24} md={12}>
-				<Form.Item name={`hsName${suffix}`} label={labelTruong ?? 'High School Name'} rules={[...rules.required]}>
+				<Form.Item name={`hsName${suffix}`} hidden rules={[...rules.required]}>
+					<Input />
+				</Form.Item>
+				<Form.Item label={labelTruong ?? 'High School Name'} required>
 					<Select
 						placeholder={placeholderTruong ?? 'Enter content'}
-						options={listTruong?.map((item) => ({ key: item.maTruong, value: item.tenTruong, label: item.tenTruong }))}
+						value={selectedSchoolId}
+						options={schools.map((item) => ({
+							value: item._id,
+							label: `${item.tenTruong} (${item.tenTinhTP})`,
+						}))}
 						allowClear
 						showSearch
 						optionFilterProp='label'
-						notFoundContent={!provinceCode ? 'Select a province first' : undefined}
 						onChange={onChangeSchool}
 					/>
 				</Form.Item>

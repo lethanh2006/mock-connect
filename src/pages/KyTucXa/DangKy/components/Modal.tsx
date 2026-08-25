@@ -7,7 +7,7 @@ import { history, useIntl, useModel } from 'umi';
 import { chuanHoaDanhSachLienHeKhanCap } from '../NguoiThan/FormItem';
 import '../style.less';
 import CheckInPrepContent from './CheckInPrepContent';
-import FormDangKyKTX from './Form';
+import FormDangKyKTX, { FIELD_NATIONALITY } from './Form';
 import FormChinhSachKTX from './FormChinhSach';
 
 const getTenSinhVien = (sinhVien?: SinhVien.IRecord) =>
@@ -40,6 +40,9 @@ const mapMoiQuanHeKhanCap = (loaiThanhVien?: string) => {
 	if (loaiThanhVien === 'Bố') return 'Father';
 	if (loaiThanhVien === 'Mẹ') return 'Mother';
 	if (loaiThanhVien === 'Người giám hộ') return 'Guardian';
+	if (loaiThanhVien === 'Anh/Chị/Em') return 'Sibling';
+	if (loaiThanhVien === 'Con') return 'Child';
+	if (loaiThanhVien === 'Vợ/Chồng') return 'Spouse';
 	return loaiThanhVien ? 'Other' : undefined;
 };
 
@@ -76,22 +79,32 @@ const getNguoiLienHeKhanCap = (sinhVien?: SinhVien.IRecord): PhieuDangKyKTX.INgu
 		.map((item, index) => ({ ...item, index: index + 1 }));
 };
 
-const getThongTinSinhVienForm = (sinhVien?: SinhVien.IRecord): Partial<PhieuDangKyKTX.IDangKy> => ({
-	fullName: getTenSinhVien(sinhVien),
-	studentId: sinhVien?.ma,
-	dateOfBirth: sinhVien?.ngaySinh,
-	gender: sinhVien?.gioiTinh,
-	email: sinhVien?.email || sinhVien?.ssoId,
-	phoneNumber: sinhVien?.soDienThoai,
-	program: sinhVien?.chuyenNganh?.ten || sinhVien?.nganh?.tenTiengAnh || sinhVien?.nganh?.ten,
-	college: sinhVien?.nganh?.tenVietTat || sinhVien?.nganh?.tenDonViPhuTrach || sinhVien?.khoaNganh?.ten,
-	identityNumber: sinhVien?.cccd,
-	dateOfIssue: sinhVien?.ngayCapCccd,
-	placeOfIssue: sinhVien?.noiCapCccd,
-	nationality: sinhVien?.quocTich,
-	permanentHomeAddress: getDiaChiThuongTru(sinhVien),
-	emergencyContacts: getNguoiLienHeKhanCap(sinhVien),
-});
+const getThongTinSinhVienForm = (sinhVien?: SinhVien.IRecord): Partial<PhieuDangKyKTX.IDangKy> => {
+	const normalized = (sinhVien?.quocTich ?? '').toLowerCase().trim();
+	const hasNationalityData = !!normalized;
+	const isVNFromData = normalized.includes('viet') || normalized.includes('việt');
+
+	return {
+		fullName: getTenSinhVien(sinhVien),
+		studentId: sinhVien?.ma,
+		dateOfBirth: sinhVien?.ngaySinh,
+		gender: sinhVien?.gioiTinh,
+		email: sinhVien?.email || sinhVien?.ssoId,
+		phoneNumber: sinhVien?.soDienThoai,
+		program: sinhVien?.chuyenNganh?.ten || sinhVien?.nganh?.tenTiengAnh || sinhVien?.nganh?.ten,
+		college: sinhVien?.nganh?.tenDonViPhuTrach || sinhVien?.nganh?.tenVietTat || sinhVien?.khoaNganh?.ten,
+		identityNumber: sinhVien?.cccd ?? sinhVien?.passportNumber,
+		dateOfIssue: sinhVien?.ngayCapCccd,
+		placeOfIssue: sinhVien?.noiCapCccd,
+		nationality: hasNationalityData
+			? isVNFromData
+				? FIELD_NATIONALITY.VIET_NAM
+				: FIELD_NATIONALITY.QUOC_TE
+			: undefined,
+		permanentHomeAddress: getDiaChiThuongTru(sinhVien),
+		emergencyContacts: getNguoiLienHeKhanCap(sinhVien),
+	};
+};
 
 const TRUONG_THONG_TIN_SINH_VIEN = [
 	'fullName',

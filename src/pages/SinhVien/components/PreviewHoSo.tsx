@@ -1,15 +1,19 @@
+import AuthImage from '@/components/Image/AuthImage';
+import TableStaticData from '@/components/Table/TableStaticData';
+import type { IColumn } from '@/components/Table/typing';
 import { colorTrangThaiHocSv, genderMessageIds, trangThaiHocSv } from '@/services/DaoTao/constant';
+import { EGiayToCanNopType } from '@/services/DaoTao/DotNhapHoc/constant';
 import { placeOfBirthTypeMessageIds } from '@/services/DaoTao/SinhVien/constants';
 import { formatDate } from '@/utils/formatDate';
 import { getPublicAssetPath } from '@/utils/path';
-import { formatPhoneNumber } from '@/utils/utils';
-import { Card, Col, Divider, Flex, Image, Row, Spin, Tag, Typography } from 'antd';
-// import { Card, Descriptions, Divider, Flex, Image, Spin, Splitter, Typography } from 'antd';
-import { useEffect, type ReactNode } from 'react';
+import { getSafeHref } from '@/utils/security';
+import { formatPhoneNumber, getNameFile } from '@/utils/utils';
+import { CheckCircleFilled } from '@ant-design/icons';
+import { Card, Col, Divider, Flex, Row, Spin, Tag, Typography } from 'antd';
+import { Fragment, useEffect, useMemo, type ReactNode } from 'react';
 import { getLocale, useIntl, useModel } from 'umi';
-// import { useMediaQuery } from 'react-responsive';
 
-const { Text, Title } = Typography;
+const { Text, Title, Link } = Typography;
 
 const SectionTitle = ({ title }: { title: string }) => (
 	<Divider orientation='left' dashed className='divider-big-title'>
@@ -91,12 +95,111 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 	const getLocalizedName = (value: any) =>
 		locale === 'vi-VN' ? (value?.ten ?? value?.tenTiengAnh) : (value?.tenTiengAnh ?? value?.ten);
 
+	const documentRows = useMemo(() => {
+		type TGiayTo = {
+			id?: string;
+			ten: string;
+			huongDan: string;
+			urlFileHuongDan: string;
+			soLuong: number;
+			type: EGiayToCanNopType[];
+			required?: boolean;
+		};
+
+		const templates: TGiayTo[] = record?.dotNhapHoc?.danhSachGiayToNhapHoc ?? [];
+		const uploadedMap = new Map(
+			(record?.hoSoNhapHoc?.danhSachGiayToNhapHoc ?? []).map((item) => [item.id, item.urlFile]),
+		);
+
+		return templates.map((item) => ({
+			...item,
+			urlFile: item.id ? uploadedMap.get(item.id) : undefined,
+		}));
+	}, [record?.dotNhapHoc?.danhSachGiayToNhapHoc, record?.hoSoNhapHoc?.danhSachGiayToNhapHoc]);
+
+	const documentColumns: IColumn<(typeof documentRows)[number]>[] = useMemo(
+		() => [
+			{
+				title: intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.name' }),
+				dataIndex: 'ten',
+				width: 180,
+			},
+			{
+				title: intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.quantity' }),
+				dataIndex: 'soLuong',
+				width: 90,
+				align: 'center',
+			},
+			{
+				title: intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.required' }),
+				dataIndex: 'required',
+				width: 90,
+				align: 'center',
+				render: (required?: boolean) => (required ? <CheckCircleFilled style={{ color: '#57a443' }} /> : null),
+			},
+			{
+				title: intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.type' }),
+				dataIndex: 'type',
+				width: 120,
+				render: (type?: EGiayToCanNopType[]) =>
+					type?.map((item) => (
+						<div key={item}>
+							{item === EGiayToCanNopType.BAN_MEM
+								? intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.typeSoft' })
+								: intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.typeHard' })}
+						</div>
+					)),
+			},
+			{
+				title: intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.notes' }),
+				dataIndex: 'huongDan',
+				width: 180,
+				render: (huongDan: string | undefined, row: (typeof documentRows)[number]) => {
+					const href = getSafeHref(row.urlFileHuongDan);
+
+					return (
+						<Fragment>
+							{huongDan}
+							{href && (
+								<div>
+									<a href={href} target='_blank' rel='noreferrer'>
+										{intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.viewSample' })}
+									</a>
+								</div>
+							)}
+						</Fragment>
+					);
+				},
+			},
+			{
+				title: intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.attachment' }),
+				dataIndex: 'urlFile',
+				width: 160,
+				render: (_urlFile: string | undefined, row: (typeof documentRows)[number]) => {
+					const href = getSafeHref(row.urlFile);
+					return href ? (
+						<Link href={href} target='_blank' rel='noreferrer'>
+							{getNameFile(row.urlFile!)}
+						</Link>
+					) : (
+						'--'
+					);
+				},
+			},
+		],
+		[intl],
+	);
+
 	const leftPanel = (
 		<Card variant='borderless'>
 			<div className='sv-profile-summary'>
 				<Flex vertical align='center' gap={8}>
 					<div className='avatar-container'>
-						<Image src={record?.anhDaiDienUrl ?? getPublicAssetPath('/metadata.png')} />
+						<AuthImage
+							src={record?.anhDaiDienUrl ?? undefined}
+							fallback={getPublicAssetPath('/metadata.png')}
+							style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+						/>
 					</div>
 					<Title level={4} className='sv-profile-name'>
 						{record?.ten ?? '--'}
@@ -286,6 +389,17 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 						)
 					: null}
 			</div>
+
+			<SectionTitle title={intl.formatMessage({ id: 'thongtincanhan.hoso.documents' })} />
+			<TableStaticData
+				columns={documentColumns}
+				data={documentRows}
+				size='small'
+				addStt
+				globalSearch={false}
+				columnSetting={false}
+				otherProps={{ pagination: false }}
+			/>
 		</Card>
 	);
 

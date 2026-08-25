@@ -187,6 +187,7 @@ export default {
 	'menu.ResearchInnovation.ResearchPathway': 'Lộ trình nghiên cứu (ĐH → ThS → TS)',
 	'menu.Finance': 'Tài chính',
 	'menu.Finance.TuitionBilling': 'Học phí & Hóa đơn',
+	'menu.Finance.Wallet': 'Ví của tôi',
 	'menu.Finance.PaymentTracking': 'Theo dõi thanh toán',
 	'menu.Finance.Scholarship': 'Học bổng / Hỗ trợ tài chính',
 	'menu.Finance.FinancialPlanning': 'Lập kế hoạch tài chính',

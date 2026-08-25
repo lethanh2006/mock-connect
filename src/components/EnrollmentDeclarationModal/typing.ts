@@ -35,9 +35,11 @@ export type TStep1Payload = {
 	coVanDeSucKhoe: boolean;
 	urlDinhKemVanDeSucKhoe?: string;
 	isRegisterFreeDormitory?: boolean;
-	soHoChieu?: string;
+	passportNumber?: string;
 	urlDinhKemHoChieu?: string;
 	visa?: {
+		tenQuocGia?: string;
+		soHieuVisa?: string;
 		loaiVisa?: string;
 		ngayCap?: string;
 		ngayHetHan?: string;
@@ -52,6 +54,7 @@ export type TStep1Payload = {
 	firstGenStudent: boolean;
 	adjustmentNeeds?: string[];
 	adjustmentOthersText?: string;
+	anhDaiDienUrl?: string;
 };
 
 export type TThongTinTruongCap3 = {
@@ -98,7 +101,12 @@ export type TStep2Payload = {
 	};
 	thongTinChungChiTiengAnh?: {
 		loaiChungChi?: string;
+		isChungChiKhac?: boolean;
 		diemChungChi?: string;
+		diemNghe?: string;
+		diemNoi?: string;
+		diemDoc?: string;
+		diemViet?: string;
 		ngayCapChungChi?: string;
 		noiCapChungChi?: string;
 		urlFileMinhChung?: string;
@@ -149,5 +157,3 @@ export type TStep4Payload = {
 	healthInsuranceAttachment?: string;
 	isRegisterDormitory?: boolean;
 };
-
-

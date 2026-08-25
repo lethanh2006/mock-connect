@@ -1,7 +1,6 @@
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { colorTrangThaiSinhVienQuyDoiDiem, type ETrangThaiPhieuQuyDoiDiem } from '@/services/HocTap/constant';
-import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { Button, Col, Descriptions, Modal, Row, Space, Tag } from 'antd';
 import { useState } from 'react';

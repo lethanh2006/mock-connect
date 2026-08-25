@@ -3,6 +3,7 @@ export default {
 	'kytucxa.lichsu.title': 'Registration Records',
 
 	//Table Columns
+	'kytucxa.lichsu.column.registrationPeriod': 'Registration Period',
 	'kytucxa.lichsu.column.floor': 'Floor',
 	'kytucxa.lichsu.column.roomCode': 'Room Code',
 	'kytucxa.lichsu.column.apartmentType': 'Apartment Type',

@@ -108,7 +108,7 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 				// Persist minimal initial state so reload won't lose permissions immediately
 				try {
 					sessionStorage.setItem('initialState', JSON.stringify(tmpInitialState));
-				} catch (e) { }
+				} catch (e) {}
 
 				// Use setTimeout to ensure state update is completed before setting permissionLoading to false
 				setTimeout(() => {
@@ -129,7 +129,7 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 					}
 					history.replace('/403');
 				} else {
-					if (window.location.pathname === '/' || window.location.pathname === '/student/user/login')
+					if (window.location.pathname === '/' || window.location.pathname === getPublicAssetPath('user/login'))
 						redirectLocation();
 				}
 			} catch {
