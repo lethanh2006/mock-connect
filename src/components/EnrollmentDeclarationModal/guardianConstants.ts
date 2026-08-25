@@ -1,34 +1,24 @@
 /**
- * Exact values per api-nhap-hoc-sinh-vien.md § 4 (`LoaiThanhVienGiaDinh`) — this list is wider than the
- * existing `ELoaiThanhVienGiaDinh` enum in src/services/DaoTao/SinhVien/constants.ts (which is missing
- * Con/Vợ/Chồng), so it's defined locally to stay in sync with the backend contract for this wizard.
+ * Values per api-nhap-hoc-sinh-vien.md § 4 (`LoaiThanhVienGiaDinh`), kept in sync with the
+ * `ELoaiThanhVienGiaDinh` enum in src/services/DaoTao/SinhVien/constants.ts. Defined locally
+ * since this wizard also needs i18n label mapping (`getFamilyRelationshipOptions`).
  */
 export const FAMILY_RELATIONSHIP_OPTIONS = [
 	{ value: 'Bố', label: 'Father' },
 	{ value: 'Mẹ', label: 'Mother' },
 	{ value: 'Người giám hộ', label: 'Guardian' },
-	{ value: 'Anh trai', label: 'Older Brother' },
-	{ value: 'Chị gái', label: 'Older Sister' },
-	{ value: 'Em trai', label: 'Younger Brother' },
-	{ value: 'Em gái', label: 'Younger Sister' },
-	{ value: 'Người liên hệ', label: 'Contact Person' },
+	{ value: 'Anh/Chị/Em', label: 'Sister/Brother' },
 	{ value: 'Con', label: 'Child' },
-	{ value: 'Vợ', label: 'Wife' },
-	{ value: 'Chồng', label: 'Husband' },
+	{ value: 'Vợ/Chồng', label: 'Spouse' },
 ];
 
 export const getFamilyRelationshipOptions = (intl: any) => [
 	{ value: 'Bố', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.father' }) },
 	{ value: 'Mẹ', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.mother' }) },
 	{ value: 'Người giám hộ', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.guardian' }) },
-	{ value: 'Anh trai', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.olderBrother' }) },
-	{ value: 'Chị gái', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.olderSister' }) },
-	{ value: 'Em trai', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.youngerBrother' }) },
-	{ value: 'Em gái', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.youngerSister' }) },
-	{ value: 'Người liên hệ', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.contactPerson' }) },
+	{ value: 'Anh/Chị/Em', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.siblings' }) },
 	{ value: 'Con', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.child' }) },
-	{ value: 'Vợ', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.wife' }) },
-	{ value: 'Chồng', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.husband' }) },
+	{ value: 'Vợ/Chồng', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.relationship.spouse' }) },
 ];
 
 export const TRAINING_LEVEL_OPTIONS = [
@@ -42,13 +32,18 @@ export const TRAINING_LEVEL_OPTIONS = [
 
 export const getTrainingLevelOptions = (intl: any) => [
 	{ value: 'High School', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.trainingLevel.highSchool' }) },
-	{ value: 'Undergraduate', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.trainingLevel.undergraduate' }) },
+	{
+		value: 'Undergraduate',
+		label: intl.formatMessage({ id: 'global.enrollmentDeclaration.trainingLevel.undergraduate' }),
+	},
 	{ value: 'Graduate', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.trainingLevel.graduate' }) },
-	{ value: 'Postgraduate', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.trainingLevel.postgraduate' }) },
+	{
+		value: 'Postgraduate',
+		label: intl.formatMessage({ id: 'global.enrollmentDeclaration.trainingLevel.postgraduate' }),
+	},
 	{ value: 'Doctorate', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.trainingLevel.doctorate' }) },
 	{ value: 'Other', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.trainingLevel.other' }) },
 ];
-
 
 export const getLiabilityWaiverIntro = (intl: any): string =>
 	intl.formatMessage({ id: 'global.enrollmentDeclaration.guardian.waiverIntro' });
@@ -97,4 +92,3 @@ export const STUDENT_DECLARATION_ITEMS = [
 	'I understand that VinUniversity may be required to disclose my personal information and information about my studies to related competent authorities as part of its legal obligations',
 	"I hereby consent to providing my personal information to VinUniversity and consent to VinUniversity using and processing my personal data for the purposes of my enrollment and studies at VinUni and operations of VinUni in accordance with the Personal Data Protection Policy as published on VinUniversity's official website (www.vinuni.edu.vn)",
 ];
-

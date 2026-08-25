@@ -25,6 +25,7 @@ export default {
 	'ketquahoctap.ketquahocky.trinhdo.namthu3': 'Năm ba',
 	'ketquahoctap.ketquahocky.trinhdo.namthu4': 'Năm bốn',
 	'ketquahoctap.ketquahocky.trinhdo.namthu5': 'Năm năm',
+	'ketquahoctap.ketquahocky.trinhdo.namthu6': 'Năm sáu',
 	'ketquahoctap.ketquahocky.hocluc.xuatsac': 'Xuất sắc',
 	'ketquahoctap.ketquahocky.hocluc.gioi': 'Giỏi',
 	'ketquahoctap.ketquahocky.hocluc.kha': 'Khá',

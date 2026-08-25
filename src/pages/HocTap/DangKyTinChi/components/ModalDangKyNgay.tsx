@@ -108,9 +108,7 @@ const ModalDangKyNgayContent = ({
 							showIcon
 							message={intl.formatMessage(
 								{
-									id: isVuotTin
-										? 'dangkytinchi.dangkyngay.modal.vuottin.alert'
-										: 'dangkytinchi.dangkyngay.modal.alert',
+									id: isVuotTin ? 'dangkytinchi.dangkyngay.modal.vuottin.alert' : 'dangkytinchi.dangkyngay.modal.alert',
 								},
 								{ b: (chunks) => <b>{chunks}</b> },
 							)}

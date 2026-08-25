@@ -28,11 +28,9 @@ export enum ELoaiThanhVienGiaDinh {
 	BO = 'Bố',
 	ME = 'Mẹ',
 	NGUOI_GIAM_HO = 'Người giám hộ',
-	ANH = 'Anh trai',
-	CHI = 'Chị gái',
-	EM_TRAI = 'Em trai',
-	EM_GAI = 'Em gái',
-	NGUOI_LIEN_HE = 'Người liên hệ',
+	ANH_CHI_EM = 'Anh/Chị/Em',
+	CON = 'Con',
+	VO_CHONG = 'Vợ/Chồng',
 }
 
 export enum ELoaiThoiHanChungChi {
@@ -93,6 +91,24 @@ export const TenSoLanNhapCanhVisa: Record<SoLanNhapCanhVisa, string> = {
 };
 
 export enum EnrollmentStatus {
-	ADMITTED = "Admitted",
-	ENROLLED = "Enrolled",
+	ADMITTED = 'Admitted',
+	ENROLLED = 'Enrolled',
 }
+
+export enum ETrangThaiGiayToNhapHoc {
+	CHO_DUYET = 'CHO_DUYET',
+	DA_DUYET = 'DA_DUYET',
+	KHONG_DUYET = 'KHONG_DUYET',
+}
+
+export const nameTrangThaiGiayToNhapHoc: Record<ETrangThaiGiayToNhapHoc, string> = {
+	[ETrangThaiGiayToNhapHoc.CHO_DUYET]: 'global.enrollmentDeclaration.docTable.status.CHO_DUYET',
+	[ETrangThaiGiayToNhapHoc.DA_DUYET]: 'global.enrollmentDeclaration.docTable.status.DA_DUYET',
+	[ETrangThaiGiayToNhapHoc.KHONG_DUYET]: 'global.enrollmentDeclaration.docTable.status.KHONG_DUYET',
+};
+
+export const colorTrangThaiGiayToNhapHoc: Record<ETrangThaiGiayToNhapHoc, string> = {
+	[ETrangThaiGiayToNhapHoc.CHO_DUYET]: 'blue',
+	[ETrangThaiGiayToNhapHoc.DA_DUYET]: 'green',
+	[ETrangThaiGiayToNhapHoc.KHONG_DUYET]: 'red',
+};

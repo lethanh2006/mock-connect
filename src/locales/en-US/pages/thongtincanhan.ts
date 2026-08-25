@@ -50,6 +50,7 @@ export default {
 	'thongtincanhan.hoso.permanentAddress': 'Permanent address',
 	'thongtincanhan.hoso.postalCode': 'Postal Code',
 	'thongtincanhan.hoso.academicInfo': 'Academic Information',
+	'thongtincanhan.hoso.documents': 'Documents',
 	'thongtincanhan.hoso.trainingProgram': 'Program Name',
 	'thongtincanhan.hoso.college': 'College',
 	'thongtincanhan.hoso.cohortMajor': 'Cohort - Major',

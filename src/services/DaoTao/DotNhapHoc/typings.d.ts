@@ -4,6 +4,7 @@ import type { QuyetDinh } from '@/services/DanhMucHeThong/QuyetDinh/typing';
 import type { ELoaiQuyetDinh } from '@/services/DanhMucHeThong/constant';
 import type { HocKy } from '@/services/HocKy/HocKy/typing';
 import type { EGiayToCanNopType } from './constant';
+import type { ETrangThaiGiayToNhapHoc } from '@/services/DaoTao/SinhVien/constants';
 
 declare module DotNhapHoc {
 	export interface IRecord {
@@ -37,6 +38,10 @@ declare module DotNhapHoc {
 		soLuong: number;
 		type: EGiayToCanNopType[];
 		required?: boolean;
+		doiTuongApDung?: string[];
+		trangThai?: ETrangThaiGiayToNhapHoc;
+		ghiChu?: string;
+		urlFile?: string;
 	}
 
 	export interface ISinhVienDotNhapHoc {

@@ -1,6 +1,8 @@
 import { Select } from 'antd';
-import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useEffect, useMemo } from 'react';
+import { useIntl, useModel } from 'umi';
+
+export const CERTIFICATE_TYPE_OTHER = 'OTHER';
 
 /**
  * Secect Căn cứ pháp lý để cho vào FormItem
@@ -15,18 +17,55 @@ const SelectChungChi = (props: {
 	placeholder?: string;
 	hasDefault?: boolean;
 	selectMa?: boolean;
+	hasOther?: boolean;
+	onlyNgoaiNgu?: boolean;
 	style?: React.CSSProperties;
 }) => {
-	const { value, onChange, multiple, allowClear, placeholder, disabled, hasDefault, selectMa, style } = props;
+	const intl = useIntl();
+	const {
+		value,
+		onChange,
+		multiple,
+		allowClear,
+		placeholder,
+		disabled,
+		hasDefault,
+		selectMa,
+		hasOther,
+		onlyNgoaiNgu,
+		style,
+	} = props;
 	const { danhSach, getAllModel } = useModel('daotao.chungchi');
 
 	useEffect(() => {
 		getAllModel(undefined, undefined, { choPhepDangKy: true }).then((data) => {
+			const filtered = onlyNgoaiNgu ? data.filter((item) => item.loaiChungChi?.isNgoaiNgu) : data;
 			// Nếu chưa chọn giá trị và (sau khi thêm mới hoặc data chỉ có 1 phần tử)
 			// Thì chọn phần tử đầu tiên
-			if (hasDefault && data.length === 1 && !!onChange) onChange(selectMa ? data[0].ma : data[0]._id);
+			if (hasDefault && filtered.length === 1 && !!onChange) onChange(selectMa ? filtered[0].ma : filtered[0]._id);
 		});
 	}, []);
+
+	const options = useMemo(() => {
+		const filtered = onlyNgoaiNgu ? danhSach.filter((item) => item.loaiChungChi?.isNgoaiNgu) : danhSach;
+		const list = filtered.map((item) => ({
+			key: item._id,
+			value: selectMa ? item.ma : item._id,
+			label: `${item?.ten} - ${item.loaiChungChi?.ten ?? ''}${
+				item.loaiChungChi?.isNgoaiNgu ? ` - ${item.ngonNgu?.ten ?? item.maNgonNgu}` : ''
+			}`,
+		}));
+
+		if (hasOther) {
+			list.push({
+				key: CERTIFICATE_TYPE_OTHER,
+				value: CERTIFICATE_TYPE_OTHER,
+				label: intl.formatMessage({ id: 'global.enrollmentDeclaration.academic.certificateType.other' }),
+			});
+		}
+
+		return list;
+	}, [danhSach, hasOther, intl, onlyNgoaiNgu, selectMa]);
 
 	return (
 		<Select
@@ -35,13 +74,7 @@ const SelectChungChi = (props: {
 			allowClear={allowClear}
 			value={value}
 			onChange={onChange}
-			options={danhSach.map((item) => ({
-				key: item._id,
-				value: selectMa ? item.ma : item._id,
-				label: `${item?.ten} - ${item.loaiChungChi?.ten ?? ''}${
-					item.loaiChungChi?.isNgoaiNgu ? ` - ${item.ngonNgu?.ten ?? item.maNgonNgu}` : ''
-				}`,
-			}))}
+			options={options}
 			showSearch
 			optionFilterProp='label'
 			placeholder={placeholder ?? 'Chọn chứng chỉ'}

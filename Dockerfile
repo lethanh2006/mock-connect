@@ -29,4 +29,7 @@ RUN chmod +x /docker-entrypoint.d/10-runtime-config.sh
 WORKDIR /var/www/website
 RUN rm -rf ./*
 COPY --from=build /app/dist .
+
+USER nginx
+
 CMD ["nginx", "-g", "daemon off;"]

@@ -2,9 +2,9 @@ import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
 import type { LopHanhChinh } from '@/services/HocTap/LopHanhChinh/typing';
 import type { DotXetTotNghiep } from '@/services/HocTap/XetTotNghiep/typing';
 import type { EDoiTuongLopHanhChinh } from '@/services/HocTap/constant';
+import { type ELoaiDiemChu } from '@/services/KetQuaHocTap/constant';
 import type { ChungChi } from '../ChungChi/typing';
 import type { ChuongTrinhDaoTao } from '../ChuongTrinhDaoTao/typing';
-import { type ELoaiDiemChu } from '@/services/KetQuaHocTap/constant';
 import { type ETrangThaiHocSv } from '../constant';
 import type {
 	EGioiTinh,
@@ -15,7 +15,7 @@ import type {
 	ETrangThaiThanhVienGiaDinh,
 	EViTriViecLam,
 } from './constant';
-import type { EnrollmentStatus, ETrangThaiChungChiSinhVen, EVaiTroSvLhc } from './constants';
+import type { EnrollmentStatus, ETrangThaiChungChiSinhVen, ETrangThaiGiayToNhapHoc, EVaiTroSvLhc } from './constants';
 
 declare module SinhVien {
 	export interface IRecord {
@@ -23,9 +23,9 @@ declare module SinhVien {
 		hoKhauThuongTru: any;
 		/** Nơi ở hiện tại — khai báo trong bước 1 của form nhập học */
 		noiOHienTai?: TDiaChi;
-		enrollmentStatus: EnrollmentStatus
+		enrollmentStatus: EnrollmentStatus;
 		/** Bước nhập học đang/đã hoàn thành, tối thiểu là 1 */
-		enrollmentStep: number
+		enrollmentStep: number;
 		/** Các trường bổ sung khai báo riêng cho hồ sơ nhập học, không thuộc hồ sơ sinh viên gốc */
 		hoSoNhapHoc?: THoSoNhapHoc;
 		dotNhapHocId: string | null;
@@ -53,6 +53,10 @@ declare module SinhVien {
 		soDienThoai: string;
 		maVungDienThoai?: string;
 		email: string;
+		postalCode?: string;
+		applicationId?: string;
+		appilicationNo?: string;
+		passportNumber?: string;
 		doiTuong: EDoiTuongLopHanhChinh;
 
 		maCSDT: string;
@@ -200,15 +204,27 @@ declare module SinhVien {
 		diaChi?: string;
 	};
 
+	export type TGiayToCanNopNhapHocSinhVien = {
+		id: string;
+		urlFile?: string;
+		trangThai?: ETrangThaiGiayToNhapHoc;
+		ghiChu?: string;
+		nguoiDuyet?: string;
+		ngayDuyet?: string;
+		ngayNop?: string;
+	};
+
 	/** Các trường chỉ dùng riêng cho khai báo nhập học, không thuộc hồ sơ sinh viên gốc */
 	export type THoSoNhapHoc = {
 		chuTaiKhoanNganHang?: string;
 		coVanDeSucKhoe?: boolean;
 		urlDinhKemVanDeSucKhoe?: string;
 		isRegisterFreeDormitory?: boolean;
-		soHoChieu?: string;
 		urlDinhKemHoChieu?: string;
+		passportNumber?: string;
 		visa?: {
+			tenQuocGia?: string;
+			soHieuVisa?: string;
 			loaiVisa?: string;
 			ngayCap?: string;
 			ngayHetHan?: string;
@@ -216,10 +232,7 @@ declare module SinhVien {
 			noiCap?: string;
 			urlDinhKemVisa?: string;
 		};
-		danhSachGiayToNhapHoc?: {
-			id: string;
-			urlFile?: string;
-		}[];
+		danhSachGiayToNhapHoc?: TGiayToCanNopNhapHocSinhVien[];
 		maBuuChinh?: string;
 		nhomMau?: string;
 		urlMatTruocCccd?: string;
@@ -234,7 +247,6 @@ declare module SinhVien {
 		healthInsuranceAttachment?: string;
 		isRegisterDormitory?: boolean;
 	};
-
 
 	export interface INoiTruSinhVien {
 		_id: string;

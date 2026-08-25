@@ -1,6 +1,7 @@
+import { DANH_SACH_QUOC_TICH } from '@/services/Core/QuocTich/danhSach';
+import { getLocalizedName } from '@/utils/localeName';
 import { Select } from 'antd';
-import { useEffect } from 'react';
-import { useIntl, useModel } from 'umi';
+import { useIntl } from 'umi';
 
 /**
  * Secect Căn cứ pháp lý để cho vào FormItem
@@ -13,28 +14,23 @@ const SelectQuocTich = (props: {
 	allowClear?: boolean;
 	placeholder?: string;
 	selectTen?: boolean;
+	disabled?: boolean;
 }) => {
 	const intl = useIntl();
-	const { value, onChange, multiple, loadData, allowClear, placeholder, selectTen } = props;
-	const { danhSach, getAllModel } = useModel('core.quoctich');
-
-	useEffect(() => {
-		if (loadData !== false) getAllModel();
-	}, []);
+	const { value, onChange, multiple, allowClear, placeholder, selectTen, disabled } = props;
 
 	return (
 		<Select
 			mode={multiple ? 'multiple' : undefined}
 			value={value}
 			allowClear={allowClear}
+			disabled={disabled}
 			onChange={onChange}
-			options={
-				danhSach?.map((item) => ({
-					key: item._id,
-					value: selectTen ? item.tenQuocTich : item._id,
-					label: `${item.tenQuocTich} - ${item.ma}`,
-				}))
-			}
+			options={DANH_SACH_QUOC_TICH.map((item) => ({
+				key: item.ma,
+				value: selectTen ? item.tenQuocTich : item.ma,
+				label: `${getLocalizedName(item, item.tenQuocTich, item.tenQuocTichEn)} - ${item.ma}`,
+			}))}
 			showSearch
 			optionFilterProp='label'
 			placeholder={placeholder ?? intl.formatMessage({ id: 'thongtincanhan.form.quoctich.place' })}

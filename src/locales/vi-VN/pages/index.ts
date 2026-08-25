@@ -27,6 +27,7 @@ import syllabus from './syllabus';
 import congno from './taichinh/congno';
 import lichsugiaodich from './taichinh/lichsugiaodich';
 import uudaithanhtoan from './taichinh/uudaithanhtoan';
+import visinhvien from './taichinh/visinhvien';
 import thongbao from './thongbao';
 import thongtincanhan from './thongtincanhan';
 import cauhoithuonggap from './tienichkhac/cauhoithuonggap';
@@ -62,6 +63,7 @@ export default {
 	...congno,
 	...lichsugiaodich,
 	...uudaithanhtoan,
+	...visinhvien,
 	...dangky,
 	...lichsu,
 	...dangkynhucau,

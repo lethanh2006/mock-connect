@@ -34,6 +34,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 	hasPreviewFile = true,
 	isWidescreen,
 	isPrivate,
+	placeholderSrc,
 	...props
 }) => {
 	const intl = useIntl();
@@ -41,6 +42,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 	const [fileList, setFileList] = useState<any[]>();
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
+	const [previewName, setPreviewName] = useState<string>();
 	const resizeProps: TResizeProps | undefined = typeof resize === 'boolean' ? {} : resize;
 	const showImage = isAvatar || isAvatarSmall || isLandscapeAvatar || isWidescreen;
 	const { beforeUpload: customBeforeUpload, accept: otherAccept, ...restOtherProps } = otherProps ?? {};
@@ -175,9 +177,27 @@ const UploadFile: React.FC<TUploadProps> = ({
 
 	/** Xem trước file */
 	const handlePreviewFile = async (file: TFileProps) => {
-		const safeUrl = getSafeHref(file.url);
-		if (safeUrl) {
+		if (file.url) {
+			const safeUrl = getSafeHref(file.url);
+			if (!safeUrl) return;
+			setPreviewName(getNameFile(file.name || safeUrl));
 			setPreviewImage(safeUrl);
+			setPreviewOpen(true);
+			return;
+		}
+
+		// File vừa chọn (chưa upload) — chưa có url remote
+		if (file.originFileObj) {
+			const objectUrl = URL.createObjectURL(file.originFileObj as Blob);
+			setPreviewName(file.name || (file.originFileObj as File).name);
+			setPreviewImage(objectUrl);
+			setPreviewOpen(true);
+			return;
+		}
+
+		if (file.preview) {
+			setPreviewName(file.name ? getNameFile(file.name) : undefined);
+			setPreviewImage(file.preview);
 			setPreviewOpen(true);
 		}
 	};
@@ -227,14 +247,15 @@ const UploadFile: React.FC<TUploadProps> = ({
 					disabled={isDisabled}
 					customRequest={({ onSuccess }) => setTimeout(() => onSuccess && onSuccess('ok'), 0)}
 					listType='picture-card'
-					className={`avatar-uploader ${isAvatarSmall
+					className={`avatar-uploader ${
+						isAvatarSmall
 							? 'avatar-small'
 							: isLandscapeAvatar
 								? 'avatar-landscape'
 								: isWidescreen
 									? 'avatar-widescreen'
 									: undefined
-						}`}
+					}`}
 					fileList={fileList}
 					onChange={handleChange}
 					style={{ width: '100%' }}
@@ -244,38 +265,45 @@ const UploadFile: React.FC<TUploadProps> = ({
 					itemRender={
 						isPrivate
 							? (originNode, file, currFileList, actions) => {
-								if (file.url || file.preview) {
-									return (
-										<div
-											className='ant-upload-item-custom'
-											style={{ position: 'relative', width: '100%', height: '100%' }}
-										>
-											<AuthImage
-												src={file.url || file.preview}
-												style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-											/>
+									if (file.url || file.preview) {
+										return (
+											<div
+												className='ant-upload-item-custom'
+												style={{ position: 'relative', width: '100%', height: '100%' }}
+											>
+												<AuthImage
+													src={file.url || file.preview}
+													style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+												/>
 
-											{!isDisabled && (
-												<div className='ant-upload-list-item-actions-custom'>
-													<span onClick={() => handlePreviewImage(file)}>
-														<EyeOutlined style={{ color: '#fff', marginRight: 12 }} />
-													</span>
-													<span onClick={() => actions.remove()}>
-														<DeleteOutlined style={{ color: '#fff' }} />
-													</span>
-												</div>
-											)}
-										</div>
-									);
+												{!isDisabled && (
+													<div className='ant-upload-list-item-actions-custom'>
+														<span onClick={() => handlePreviewImage(file)}>
+															<EyeOutlined style={{ color: '#fff', marginRight: 12 }} />
+														</span>
+														<span onClick={() => actions.remove()}>
+															<DeleteOutlined style={{ color: '#fff' }} />
+														</span>
+													</div>
+												)}
+											</div>
+										);
+									}
+									return originNode;
 								}
-								return originNode;
-							}
 							: undefined
 					}
 					{...restOtherProps}
 					{...uploadSecurityProps}
 				>
-					{!isDisabled && !fileList?.length ? (
+					{!fileList?.length ? (
+						placeholderSrc ? (
+							<AuthImage
+								src={undefined}
+								fallback={placeholderSrc}
+								style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+							/>
+						) : !isDisabled ? (
 						<div
 							style={{
 								display: 'flex',
@@ -289,6 +317,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 								{buttonDescription || intl.formatMessage({ id: 'global.uploadfile.text1' })}
 							</div>
 						</div>
+						) : null
 					) : null}
 				</Upload>
 				<Extra />
@@ -328,9 +357,10 @@ const UploadFile: React.FC<TUploadProps> = ({
 				onChange={handleChange}
 				style={{ width: '100%' }}
 				multiple={maxCount > 1}
-				onPreview={hasPreviewFile ? handlePreviewFile : undefined}
 				{...restOtherProps}
 				{...uploadSecurityProps}
+				// Đặt sau spread để không bị otherProps ghi đè — thiếu onPreview thì ant mở href (URL + proxy) tab mới
+				onPreview={hasPreviewFile ? handlePreviewFile : restOtherProps?.onPreview}
 			>
 				{!isDisabled ? (
 					<Button size={buttonSize || 'small'} icon={<UploadOutlined />}>
@@ -346,12 +376,26 @@ const UploadFile: React.FC<TUploadProps> = ({
 					width={1200}
 					open={previewOpen}
 					footer={null}
-					onCancel={() => setPreviewOpen(false)}
+					onCancel={() => {
+						setPreviewOpen(false);
+						if (previewImage.startsWith('blob:')) URL.revokeObjectURL(previewImage);
+						setPreviewImage('');
+						setPreviewName(undefined);
+					}}
 				>
-					<PreviewFile file={previewImage} {...props.previewFileProps} isPrivate={isPrivate} />
+					<PreviewFile file={previewImage} tenFile={previewName} {...props.previewFileProps} isPrivate={isPrivate} />
 
 					<div className='form-footer'>
-						<Button onClick={() => setPreviewOpen(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
+						<Button
+							onClick={() => {
+								setPreviewOpen(false);
+								if (previewImage.startsWith('blob:')) URL.revokeObjectURL(previewImage);
+								setPreviewImage('');
+								setPreviewName(undefined);
+							}}
+						>
+							{intl.formatMessage({ id: 'global.button.dong' })}
+						</Button>
 					</div>
 				</ModalExpandable>
 			)}

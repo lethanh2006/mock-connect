@@ -1,14 +1,23 @@
-import UploadFile from '@/components/Upload/UploadFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import FormDangKyBHYT from '@/pages/BaoHiemYTe/components/FormDangKy';
 import FormMienBHYT from '@/pages/BaoHiemYTe/components/FormMien';
 import FormMienKiemTraSucKhoe from '@/pages/KiemTraSucKhoe/components/FormMien';
-import { EDeclarationType as EBhytDeclarationType, isRegisteredDeclarationType as isBhytDeclarationTypeRegistered } from '@/services/BaoHiemYTe/constant';
+import {
+	EDeclarationType as EBhytDeclarationType,
+	EBhytNationality,
+	isRegisteredDeclarationType as isBhytDeclarationTypeRegistered,
+} from '@/services/BaoHiemYTe/constant';
 import type { BaoHiemYTe } from '@/services/BaoHiemYTe/typing';
-import { EDeclarationType as EKskDeclarationType, isRegisteredDeclarationType as isKskDeclarationTypeRegistered } from '@/services/KiemTraSucKhoe/constant';
+import {
+	EDeclarationType as EKskDeclarationType,
+	EKtscNationality,
+	isRegisteredDeclarationType as isKskDeclarationTypeRegistered,
+} from '@/services/KiemTraSucKhoe/constant';
 import type { KiemTraSucKhoe } from '@/services/KiemTraSucKhoe/typing';
+import { getMienKyTucXaMe } from '@/services/KyTucXa/MienKyTucXa';
+import { MienKyTucXaTrangThaiColors, MienKyTucXaTrangThaiLabelIds } from '@/services/KyTucXa/MienKyTucXa/constants';
+import type { MienKyTucXa } from '@/services/KyTucXa/MienKyTucXa/typing';
 import { formatDate } from '@/utils/formatDate';
-import rules from '@/utils/rules';
 import {
 	BankOutlined,
 	FormOutlined,
@@ -23,14 +32,15 @@ import { getLocale, useIntl, useModel } from 'umi';
 import styles from './index.less';
 import StudentHousingModal from './StudentHousingModal';
 
-const enterContentText = 'Enter content';
-
-const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
+const AdditionalServicesStep = ({ form, maNamHoc }: { form: FormInstance<any>; maNamHoc?: string }) => {
 	const intl = useIntl();
 
 	// Models KiemTraSucKhoe
-	const { getByIdModel: getKskPeriod, postSinhVienDangKyKhamModel, formSubmiting: loadingDangKyKham } =
-		useModel('kiemtrasuckhoe.dotdangky');
+	const {
+		getByIdModel: getKskPeriod,
+		postSinhVienDangKyKhamModel,
+		formSubmiting: loadingDangKyKham,
+	} = useModel('kiemtrasuckhoe.dotdangky');
 
 	// Models BaoHiemYTe
 	const { getByIdModel: getBhytPeriod } = useModel('baohiemyte.dotdangky');
@@ -40,6 +50,18 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 	const { getModel: getLichSuDangKyKtx } = useModel('kytucxa.phieudangky');
 
 	const { record: recordSinhVien } = useModel('sinhvien.sinhvien');
+
+	// Same VIETNAM/FOREIGN derivation as usePersonalInfo.ts, so BHYT/KSK payloads submitted from this
+	// wizard use the same nationality enum value as the dedicated BHYT/KSK registration forms.
+	const rawNationality = recordSinhVien?.quocTich;
+	const normalizedNationality = (rawNationality ?? '').toLowerCase().trim();
+	const isVNNationality = normalizedNationality.includes('viet') || normalizedNationality.includes('việt');
+	// Hàm dùng chung để suy ra enum quốc tịch (BHYT/KSK dùng chung 1 pattern VIETNAM/FOREIGN),
+	// tránh lặp lại điều kiện isVNNationality cho từng bên.
+	const toNationalityEnum = <T extends string>(vietnam: T, foreign: T): T | undefined =>
+		rawNationality ? (isVNNationality ? vietnam : foreign) : undefined;
+	const bhytNationality = toNationalityEnum(EBhytNationality.VIETNAM, EBhytNationality.FOREIGN);
+	const kskNationality = toNationalityEnum(EKtscNationality.VIETNAM, EKtscNationality.FOREIGN);
 
 	const alreadyHadCheckup: boolean | undefined = Form.useWatch('alreadyHadCheckup', form);
 	const hasInsurance: boolean | undefined = Form.useWatch('hasInsurance', form);
@@ -62,6 +84,7 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 	const [bhytHasActivePeriod, setBhytHasActivePeriod] = useState(false);
 	const [ktxPeriod, setKtxPeriod] = useState<any>(undefined);
 	const [ktxRegistration, setKtxRegistration] = useState<any>(undefined);
+	const [mienKtxRecord, setMienKtxRecord] = useState<MienKyTucXa.IRecord | undefined>(undefined);
 
 	const [kskLoading, setKskLoading] = useState(true);
 	const [bhytLoading, setBhytLoading] = useState(true);
@@ -69,6 +92,7 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 
 	const fetchKtxRegistration = async () => {
 		setKtxLoading(true);
+
 		try {
 			const dotRes: any = await getDotDangKyKtx('me/one', false);
 			const dot = dotRes?.data ?? dotRes;
@@ -76,26 +100,33 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 
 			if (!dot?._id || dot?.isMienKyTucXa) {
 				setKtxRegistration(undefined);
-				return;
+			} else {
+				const lichSuRes: any = await getLichSuDangKyKtx(
+					{ maDotId: dot._id },
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					'me/page',
+					undefined,
+					false,
+				);
+				setKtxRegistration(lichSuRes?.[0]);
 			}
-
-			const lichSuRes: any = await getLichSuDangKyKtx(
-				{ maDotId: dot._id },
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				'me/page',
-				undefined,
-				false,
-			);
-			setKtxRegistration(lichSuRes?.[0]);
 		} catch {
 			setKtxPeriod(undefined);
 			setKtxRegistration(undefined);
-		} finally {
-			setKtxLoading(false);
 		}
+
+		try {
+			const mienKtxRes: any = await getMienKyTucXaMe(maNamHoc);
+			const mienKtxData: MienKyTucXa.IRecord | undefined = mienKtxRes?.data?.data ?? mienKtxRes?.data ?? undefined;
+			setMienKtxRecord(mienKtxData);
+		} catch {
+			setMienKtxRecord(undefined);
+		}
+
+		setKtxLoading(false);
 	};
 
 	const fetchKskRegistration = async () => {
@@ -135,7 +166,7 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 	const hasActiveKtxPeriod = Boolean(ktxPeriod?._id);
 
 	const handleOpenHousingModal = () => {
-		if (isRegisterFreeDormitory) {
+		if (isDormitoryExempted) {
 			message.warning(intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryUnavailableNote' }));
 			return;
 		}
@@ -169,10 +200,11 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 					studentId: (recordSinhVien as any)?.ssoId,
 					studentCode: recordSinhVien?.ma,
 					periodId: period._id,
-					fullName: recordSinhVien?.ten || [recordSinhVien?.firstName, recordSinhVien?.lastName].filter(Boolean).join(' '),
+					fullName:
+						recordSinhVien?.ten || [recordSinhVien?.firstName, recordSinhVien?.lastName].filter(Boolean).join(' '),
 					ngaySinh: (recordSinhVien as any)?.ngaySinh,
 					cccd: recordSinhVien?.cccd,
-					nationality: recordSinhVien?.quocTich,
+					nationality: kskNationality,
 					gioiTinh: recordSinhVien?.gioiTinh,
 					khoa: (recordSinhVien as any)?.khoaSinhVien?.ten,
 					nganh: recordSinhVien?.nganh?.ten,
@@ -204,11 +236,12 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 					...res.period,
 					periodId: res.period._id,
 					student: {
-						fullName: student.fullName || [recordSinhVien?.firstName, recordSinhVien?.lastName].filter(Boolean).join(' '),
+						fullName:
+							student.fullName || [recordSinhVien?.firstName, recordSinhVien?.lastName].filter(Boolean).join(' '),
 						studentCode: student.studentCode || recordSinhVien?.ma,
 						ngaySinh: student.ngaySinh,
 						cccd: student.cccd || recordSinhVien?.cccd,
-						nationality: student.nationality || recordSinhVien?.quocTich,
+						nationality: student.nationality || kskNationality,
 						gioiTinh: student.gioiTinh || recordSinhVien?.gioiTinh,
 						khoa: student.khoa,
 						nganh: student.nganh,
@@ -243,11 +276,12 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 					...res.period,
 					periodId: res.period._id,
 					student: {
-						fullName: student.fullName || [recordSinhVien?.firstName, recordSinhVien?.lastName].filter(Boolean).join(' '),
+						fullName:
+							student.fullName || [recordSinhVien?.firstName, recordSinhVien?.lastName].filter(Boolean).join(' '),
 						studentCode: student.studentCode || recordSinhVien?.ma,
 						ngaySinh: student.ngaySinh,
 						cccd: student.cccd || recordSinhVien?.cccd,
-						nationality: student.nationality || recordSinhVien?.quocTich,
+						nationality: student.nationality || bhytNationality,
 						gioiTinh: student.gioiTinh || recordSinhVien?.gioiTinh,
 						khoa: student.khoa,
 						nganh: student.nganh,
@@ -277,11 +311,12 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 					...res.period,
 					periodId: res.period._id,
 					student: {
-						fullName: student.fullName || [recordSinhVien?.firstName, recordSinhVien?.lastName].filter(Boolean).join(' '),
+						fullName:
+							student.fullName || [recordSinhVien?.firstName, recordSinhVien?.lastName].filter(Boolean).join(' '),
 						studentCode: student.studentCode || recordSinhVien?.ma,
 						ngaySinh: student.ngaySinh,
 						cccd: student.cccd || recordSinhVien?.cccd,
-						nationality: student.nationality || recordSinhVien?.quocTich,
+						nationality: student.nationality || bhytNationality,
 						gioiTinh: student.gioiTinh || recordSinhVien?.gioiTinh,
 						khoa: student.khoa,
 						nganh: student.nganh,
@@ -310,10 +345,18 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 
 	const isKtxActuallyRegistered = Boolean(ktxRegistration?.formDon?._id);
 	const isDormitoryRegistered = Boolean(isRegisterDormitory) && isKtxActuallyRegistered;
-
+	const mienKtxStatus = mienKtxRecord?.trangThaiMinhChung;
+	// isRegisterFreeDormitory chỉ là cờ ở form Step 1; nếu đợt hiện tại không có đơn miễn thực tế
+	// (vd. không có đợt, hoặc chưa nộp được đơn) thì không nên hiển thị khối "đang xin miễn".
+	const isDormitoryExempted = Boolean(isRegisterFreeDormitory) && Boolean(mienKtxStatus);
 
 	const formattedKtxSubmittedDate = formatDate(
 		ktxRegistration?.createdAt || (ktxRegistration as any)?.createdAtTime || new Date(),
+		getLocale().startsWith('vi') ? 'DD/MM/YYYY' : 'DD MMM YYYY',
+	);
+
+	const formattedMienKtxSubmittedDate = formatDate(
+		mienKtxRecord?.createdAt || new Date(),
 		getLocale().startsWith('vi') ? 'DD/MM/YYYY' : 'DD MMM YYYY',
 	);
 
@@ -326,6 +369,16 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 		bhytRegistration?.createdAt || new Date(),
 		getLocale().startsWith('vi') ? 'DD/MM/YYYY' : 'DD MMM YYYY',
 	);
+
+	const isKskComplete = isKskRegistered || (!kskLoading && !kskHasActivePeriod);
+	const isBhytComplete = isBhytRegistered || (!bhytLoading && !bhytHasActivePeriod);
+	const isKtxComplete = isDormitoryExempted || isDormitoryRegistered || (!ktxLoading && !hasActiveKtxPeriod);
+	const isAdditionalServicesComplete =
+		!kskLoading && !bhytLoading && !ktxLoading && isKskComplete && isBhytComplete && isKtxComplete;
+
+	useEffect(() => {
+		form.setFieldsValue({ additionalServicesComplete: isAdditionalServicesComplete });
+	}, [form, isAdditionalServicesComplete]);
 
 	return (
 		<Fragment>
@@ -340,6 +393,9 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 			    If the wizard resumes straight into a later step, Step 1 never mounts, so the field is
 			    never registered and Form.useWatch here would get stuck at undefined without this. */}
 			<Form.Item name='isRegisterFreeDormitory' hidden>
+				<Input />
+			</Form.Item>
+			<Form.Item name='additionalServicesComplete' hidden>
 				<Input />
 			</Form.Item>
 
@@ -549,8 +605,12 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 									<div className={styles.warningTitle}>
 										{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthInsuranceTitle' })}
 									</div>
-									<div>{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthInsuranceLine1' })}</div>
-									<div>{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthInsuranceLine2' })}</div>
+									<div>
+										{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthInsuranceLine1' })}
+									</div>
+									<div>
+										{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.healthInsuranceLine2' })}
+									</div>
 								</div>
 							</div>
 
@@ -660,7 +720,7 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 				</div>
 
 				<Spin spinning={ktxLoading}>
-					{isRegisterFreeDormitory ? (
+					{isDormitoryExempted ? (
 						<Fragment>
 							<div className={styles.dormitoryInfoAlert}>
 								<InfoCircleFilled className={styles.infoIcon} />
@@ -675,9 +735,22 @@ const AdditionalServicesStep = ({ form }: { form: FormInstance<any> }) => {
 										{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.dormitoryExemptionTitle' })}
 									</div>
 									<div className={styles.dormitoryExemptionTagWrap}>
-										<Tag className={styles.dormitoryExemptionTag}>
-											{intl.formatMessage({ id: 'global.enrollmentDeclaration.additional.pendingApproval' })}
+										<Tag
+											className={styles.dormitoryExemptionTag}
+											style={mienKtxStatus ? MienKyTucXaTrangThaiColors[mienKtxStatus] : undefined}
+										>
+											{intl.formatMessage({
+												id: mienKtxStatus
+													? MienKyTucXaTrangThaiLabelIds[mienKtxStatus]
+													: 'global.enrollmentDeclaration.additional.pendingApproval',
+											})}
 										</Tag>
+										<div className={styles.dormitoryExemptionSubDate}>
+											{intl.formatMessage(
+												{ id: 'global.enrollmentDeclaration.additional.submittedDate' },
+												{ date: formattedMienKtxSubmittedDate },
+											)}
+										</div>
 									</div>
 								</div>
 								<div className={styles.dormitoryExemptionBody}>

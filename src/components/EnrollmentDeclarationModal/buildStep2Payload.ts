@@ -1,6 +1,10 @@
+import { CERTIFICATE_TYPE_OTHER } from '@/pages/DaoTao/ChungChi/Select';
 import { ELoaiNoiSinh } from '@/services/DaoTao/SinhVien/constants';
 import { buildUpLoadFileMultipart, EFileScope } from '@/services/uploadFile';
 import type { TStep2Payload, TThongTinTruongCap3 } from './typing';
+
+const toOptionalString = (value: unknown): string | undefined =>
+	value === undefined || value === null || value === '' ? undefined : String(value);
 
 const buildDiem = (values: Record<string, any>, grade: string) => ({
 	diemToan: values[`diemToan_${grade}`],
@@ -49,12 +53,12 @@ export const buildStep2Payload = async (values: Record<string, any>): Promise<TS
 		coBangDaiHoc: isPursuingDegree,
 		thongTinDaiHoc: isPursuingDegree
 			? {
-					tenTruongDaiHoc: values.universityName,
-					tenNganhHoc: values.universityMajor,
-					trinhDoHocVan: values.universityDegreeLevel,
-					tuNgay: values.universityFromDate,
-					denNgay: values.universityToDate,
-				}
+				tenTruongDaiHoc: values.universityName,
+				tenNganhHoc: values.universityMajor,
+				trinhDoHocVan: values.universityDegreeLevel,
+				tuNgay: values.universityFromDate,
+				denNgay: values.universityToDate,
+			}
 			: undefined,
 		thongTinHocTapTHPT: {
 			noiHoc: isDomestic ? ELoaiNoiSinh.TRONG_NUOC : ELoaiNoiSinh.NUOC_NGOAI,
@@ -71,12 +75,20 @@ export const buildStep2Payload = async (values: Record<string, any>): Promise<TS
 		},
 		thongTinChungChiTiengAnh: values.certificateType
 			? {
-					loaiChungChi: values.certificateType,
-					diemChungChi: values.certificateScore,
-					ngayCapChungChi: values.certificateIssueDate,
-					noiCapChungChi: values.certificateIssuer,
-					urlFileMinhChung: urlFileMinhChung ?? undefined,
-				}
+				loaiChungChi:
+					values.certificateType === CERTIFICATE_TYPE_OTHER
+						? values.certificateTypeOther
+						: values.certificateType,
+				isChungChiKhac: values.certificateType === CERTIFICATE_TYPE_OTHER,
+				diemChungChi: toOptionalString(values.certificateScore),
+				diemNghe: toOptionalString(values.diemNghe),
+				diemNoi: toOptionalString(values.diemNoi),
+				diemDoc: toOptionalString(values.diemDoc),
+				diemViet: toOptionalString(values.diemViet),
+				ngayCapChungChi: values.certificateIssueDate,
+				noiCapChungChi: values.certificateIssuer,
+				urlFileMinhChung: urlFileMinhChung ?? undefined,
+			}
 			: undefined,
 	};
 };

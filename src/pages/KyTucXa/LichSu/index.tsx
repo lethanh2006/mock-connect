@@ -2,7 +2,6 @@ import PageCard from '@/components/PageCard';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
-import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import {
 	ETrangThaiThanhToanKTX,
 	ETrangThaiThanhToanKTXColor,
@@ -11,10 +10,9 @@ import {
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { formatDate } from '@/utils/formatDate';
-import { tienVietNam } from '@/utils/utils';
 import { DeleteOutlined, DollarCircleOutlined } from '@ant-design/icons';
-import { Button, Empty, Popconfirm, Tag } from 'antd';
-import { useEffect, useState } from 'react';
+import { Button, Popconfirm, Tag } from 'antd';
+import { useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import ChiTietPhong from '../DangKy/components/ChiTiet';
 import ModalDanKyKTX from '../DangKy/components/Modal';
@@ -57,8 +55,6 @@ const getRoomFromChinhSachPhong = (record?: PhieuDangKyKTX.IRecord) => getChinhS
 const LichSuaKTX = () => {
 	const intl = useIntl();
 	const t = (id: string) => intl.formatMessage({ id });
-	const { record: recHocKy } = useModel('daotao.hocky');
-	const { getByIdModel: getDotDangKy, record: recDot, setRecord: setRecDot } = useModel('kytucxa.dotdangky');
 	const { getModel, page, limit, deleteModel, setRecord } = useModel('kytucxa.phieudangky');
 	const {
 		setRecord: setRecPhong,
@@ -67,25 +63,8 @@ const LichSuaKTX = () => {
 	} = useModel('kytucxa.phong');
 	const [initialModalStep, setInitialModalStep] = useState<number>(0);
 
-	useEffect(() => {
-		if (recHocKy?.ma)
-			getDotDangKy('me/one', true, {
-				condition: { maHocKy: recHocKy?.ma },
-			}).then((res: any) => setRecDot(res?.data));
-	}, [recHocKy?.ma]);
-
 	const getData = () => {
-		if (recDot?._id)
-			getModel(
-				{
-					maDotId: recDot?._id,
-				},
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				'me/page',
-			);
+		getModel(undefined, undefined, undefined, undefined, undefined, 'me/page');
 	};
 
 	const onCell = (record: PhieuDangKyKTX.IRecord) => ({
@@ -115,7 +94,7 @@ const LichSuaKTX = () => {
 		return (
 			<Tag
 				style={{
-					maxWidth: 90,
+					maxWidth: 180,
 					overflow: 'hidden',
 					textOverflow: 'ellipsis',
 					whiteSpace: 'nowrap',
@@ -135,6 +114,12 @@ const LichSuaKTX = () => {
 	}));
 
 	const columns: IColumn<PhieuDangKyKTX.IRecord>[] = [
+		{
+			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.registrationPeriod' }),
+			width: 220,
+			onCell,
+			render: (_val, rec) => rec?.dotDangKy?.tenDot || '--',
+		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.floor' }),
 			width: 90,
@@ -177,22 +162,10 @@ const LichSuaKTX = () => {
 			},
 		},
 		{
-			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.price' }),
-			width: 160,
-			onCell,
-			render: (_val, rec) => {
-				const chinhSachPhong = getChinhSachPhong(rec) as
-					| (Phong.IChinhSachPhongRecord & { giaPhong?: number })
-					| undefined;
-
-				return tienVietNam(chinhSachPhong?.giaPhong ?? getRoomFromChinhSachPhong(rec)?.giaPhong ?? 0);
-			},
-		},
-		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.moveInDate' }),
 			dataIndex: 'thoiGianChuyenVao',
 			width: 150,
-			render: (_val) => _val && formatDate(_val),
+			render: (_val) => _val && formatDate(_val, 'MM/YYYY'),
 			onCell,
 		},
 		{
@@ -200,14 +173,14 @@ const LichSuaKTX = () => {
 			dataIndex: 'thoiGianChuyenRa',
 			sortable: true,
 			width: 150,
-			render: (_val) => _val && formatDate(_val),
+			render: (_val) => _val && formatDate(_val, 'MM/YYYY'),
 			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.column.paymentStatus' }),
 			dataIndex: 'trangThaiThanhToan',
 			sortable: true,
-			width: 120,
+			width: 180,
 			render: renderTrangThaiThanhToan,
 			filterType: 'select',
 			filterData: trangThaiThanhToanOptions,
@@ -263,21 +236,15 @@ const LichSuaKTX = () => {
 
 	return (
 		<PageCard title={intl.formatMessage({ id: 'kytucxa.lichsu.title' })}>
-			<FilterHocKy isSetHocKy style={{ marginBottom: 12 }} />
-
-			{recDot?._id ? (
-				<TableBase
-					getData={getData}
-					columns={columns}
-					dependencies={[page, limit, recDot?._id]}
-					modelName='kytucxa.phieudangky'
-					title={intl.formatMessage({ id: 'kytucxa.lichsu.title' })}
-					buttons={{ create: false }}
-					hideCard
-				/>
-			) : (
-				<Empty description={intl.formatMessage({ id: 'kytucxa.dangky.empty.noDotDangKy' })} />
-			)}
+			<TableBase
+				getData={getData}
+				columns={columns}
+				dependencies={[page, limit]}
+				modelName='kytucxa.phieudangky'
+				title={intl.formatMessage({ id: 'kytucxa.lichsu.title' })}
+				buttons={{ create: false }}
+				hideCard
+			/>
 
 			<ModalDanKyKTX isView initialStep={initialModalStep} />
 

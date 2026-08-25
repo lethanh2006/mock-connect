@@ -1,8 +1,108 @@
 @room-primary: #134d8b;
 @room-accent: #d9b160;
 
+.exemption-banner {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	margin-bottom: 12px;
+	padding: 10px 14px;
+	border: 1px solid;
+	border-radius: 4px;
+}
+
+.exemption-banner__main {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 8px 16px;
+}
+
+.exemption-banner__tag {
+	flex: 0 0 auto;
+	margin: 0;
+	font-weight: 600;
+}
+
+.exemption-banner__meta {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 4px 20px;
+}
+
+.exemption-banner__meta-item {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.exemption-banner__meta-label {
+	color: #737373;
+	font-size: 13px;
+	white-space: nowrap;
+}
+
+.exemption-banner__meta-value {
+	color: #262626;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.exemption-banner__rejection {
+	display: flex;
+	align-items: baseline;
+	gap: 6px;
+	padding-top: 4px;
+	border-top: 1px dashed rgb(0 0 0 / 8%);
+
+	.exemption-banner__meta-value {
+		word-break: break-word;
+	}
+}
+
+.exemption-banner__action-message {
+	padding-top: 6px;
+	border-top: 1px dashed rgb(0 0 0 / 8%);
+	color: #595959;
+	font-size: 12px;
+	font-style: italic;
+	font-weight: 700;
+}
+
+@media (max-width: 576px) {
+	.exemption-banner__meta {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 4px;
+	}
+}
+
 .room-list-col {
 	display: flex;
+}
+
+.room-list-col--enter {
+	animation: room-card-enter 0.28s ease-out both;
+}
+
+.room-list-load-more {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 48px;
+}
+
+@keyframes room-card-enter {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .room-card {
@@ -393,46 +493,172 @@
 	}
 }
 
-.pagination-container {
-	margin-top: 12px;
-	display: flex;
-	justify-content: center;
+.room-exemption-alert {
+	margin-bottom: 24px;
+	font-size: 16px;
+	line-height: 1.55;
+}
 
-	.pagination {
-		margin-top: 16px;
+.room-exemption-summary {
+	margin-bottom: 12px;
+	padding: 12px;
+	background: #f0f7ff;
+	border: 1px solid #d6e4f2;
+	border-radius: 4px;
+}
+
+.room-exemption-summary__status {
+	margin-bottom: 12px;
+
+	.ant-tag {
+		margin: 0;
+		font-weight: 600;
 	}
 }
 
-.room-exempt-state {
+.room-exemption-summary__grid {
 	display: flex;
-	min-height: 480px;
-	padding-top: 78px;
-	align-items: center;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.room-exemption-summary__item {
+	display: flex;
+	flex: 1 1 calc(33.333% - 12px);
 	flex-direction: column;
-	background: #fff;
-}
+	gap: 4px;
+	min-width: 180px;
 
-.room-exempt-state__icon {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 92px;
-	height: 92px;
-	margin-bottom: 16px;
-	color: #cfd6e4;
-	font-size: 50px;
-	background: #f3f5fa;
-	border-radius: 50%;
+	span {
+		color: #737373;
+		font-size: 14px;
+		line-height: 1.5715;
+	}
 
-	.anticon {
-		transform: translateY(1px);
+	strong {
+		color: #333;
+		font-size: 14px;
+		font-weight: 600;
+		line-height: 1.5715;
+		word-break: break-word;
 	}
 }
 
-.room-exempt-state__text {
-	color: #333;
+.room-exemption-summary__item--full {
+	flex-basis: 100%;
+}
+
+.room-exemption-card {
+	overflow: hidden;
+	border: 1px solid #e5e7eb;
+	border-radius: 6px;
+	box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+}
+
+.room-exemption-card__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+	min-height: 168px;
+	padding: 28px 34px;
+	color: #fff;
 	font-weight: 700;
-	font-size: 18px;
-	line-height: 24px;
-	text-align: center;
+	font-size: 22px;
+	background: #31568d;
+}
+
+.room-exemption-card__status {
+	display: flex;
+	align-items: flex-end;
+	flex-direction: column;
+	gap: 14px;
+	font-weight: 400;
+}
+
+.room-exemption-card__badge {
+	padding: 4px 10px;
+	font-size: 15px;
+	line-height: 1.2;
+	border-radius: 2px;
+}
+
+.room-exemption-card__badge--pending {
+	color: #a16b00;
+	background: #fff7df;
+}
+
+.room-exemption-card__badge--approved {
+	color: #237804;
+	background: #f6ffed;
+}
+
+.room-exemption-card__date {
+	color: #d9e3f2;
+	font-size: 15px;
+}
+
+.room-exemption-card__body {
+	padding: 28px 34px;
+	color: #595959;
+	font-size: 17px;
+	line-height: 1.5;
+}
+
+.room-exemption-details {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 12px;
+	margin-top: 20px;
+	padding: 14px;
+	background: #f6faff;
+	border: 1px solid #d6e4f2;
+	border-radius: 4px;
+}
+
+.room-exemption-details__item {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 0;
+	font-size: 14px;
+
+	span {
+		color: #595959;
+	}
+
+	strong {
+		color: #262626;
+		font-weight: 600;
+		word-break: break-word;
+	}
+}
+
+.room-exemption-details__item--full {
+	grid-column: 1 / -1;
+}
+
+@media (max-width: 576px) {
+	.room-exemption-summary__item {
+		flex-basis: 100%;
+	}
+
+	.room-exemption-card__header {
+		align-items: flex-start;
+		flex-direction: column;
+		min-height: auto;
+		padding: 22px;
+	}
+
+	.room-exemption-card__status {
+		align-items: flex-start;
+	}
+
+	.room-exemption-card__body {
+		padding: 22px;
+	}
+
+	.room-exemption-details {
+		grid-template-columns: 1fr;
+	}
 }

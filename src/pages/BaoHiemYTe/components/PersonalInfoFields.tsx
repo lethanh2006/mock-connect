@@ -72,7 +72,7 @@ const PersonalInfoFields = ({ info }: IProps) => {
 			</Col>
 			<Col span={24} md={12}>
 				<Form.Item
-					rules={[...rules.required, ...rules.text, ...rules.soDienThoai]}
+					rules={[...rules.required, ...rules.text]}
 					name='phone'
 					label={t('baohiemyte.dangky.soDienThoai')}
 				>

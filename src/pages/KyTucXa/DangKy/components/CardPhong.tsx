@@ -27,6 +27,7 @@ interface CardPhongProps {
 	onOpenLichSuDangKy?: (phong: Phong.IChinhSachPhongRecord, initialStep?: number) => void;
 	onXemChiTiet?: (phong: Phong.IChinhSachPhongRecord) => void;
 	onDangKy?: (phong: Phong.IChinhSachPhongRecord) => void;
+	khoaDangKy?: boolean;
 }
 
 const CardPhong = ({
@@ -37,6 +38,7 @@ const CardPhong = ({
 	onOpenLichSuDangKy,
 	onXemChiTiet,
 	onDangKy,
+	khoaDangKy,
 }: CardPhongProps) => {
 	const intl = useIntl();
 	const t = (id: string) => intl.formatMessage({ id });
@@ -56,7 +58,7 @@ const CardPhong = ({
 		trangThaiThanhToan === ETrangThaiThanhToanKTX.DONG || trangThaiThanhToan === ETrangThaiThanhToanKTX.HUY;
 	const hienThiNhuDaDangKy = laPhongDaDangKy && !daQuaHanThanhToan;
 
-	const khongChoDangKy = !hienThiNhuDaDangKy && (daHetCho || daCoLichSuDangKy);
+	const khongChoDangKy = !hienThiNhuDaDangKy && (khoaDangKy || daHetCho || daCoLichSuDangKy);
 	const buttonText = hienThiNhuDaDangKy
 		? daThanhToanXong
 			? intl.formatMessage({ id: 'kytucxa.dangky.card.button.seeMore' })
@@ -96,7 +98,6 @@ const CardPhong = ({
 						src={anhPhong}
 						alt={intl.formatMessage({ id: 'kytucxa.dangky.card.imageAlt' }, { maPhong: room?.ma ?? '' })}
 						className='room-card__image'
-						loading={'lazy'}
 					/>
 
 					<Tag className='room-card__slot-tag'>
