@@ -12,6 +12,7 @@ type AuthImageProps = {
 	className?: string;
 	isDetail?: boolean;
 	preview?: any;
+	onError?: () => void;
 };
 
 const cache = new Map<string, string>();
@@ -39,6 +40,7 @@ const AuthImage: React.FC<AuthImageProps> = ({
 	isDetail,
 	style,
 	preview,
+	onError,
 }) => {
 	const [imgSrc, setImgSrc] = useState<string>(fallback);
 
@@ -119,7 +121,7 @@ const AuthImage: React.FC<AuthImageProps> = ({
 		);
 	}
 
-	return <img src={imgSrc} alt={alt} width={width} height={height} className={className} style={style} />;
+	return <img src={imgSrc} alt={alt} width={width} height={height} className={className} style={style} onError={onError} />;
 };
 
 export default AuthImage;

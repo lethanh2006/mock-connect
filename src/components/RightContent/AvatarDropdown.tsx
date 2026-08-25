@@ -9,6 +9,7 @@ import { ItemType } from 'antd/es/menu/interface';
 import { rgba } from 'polished';
 import { useEffect, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
+import AuthImage from '../Image/AuthImage';
 import { OIDCBounder } from '../OIDCBounder';
 import { EOperatorType } from '../Table/constant';
 import styles from './index.less';
@@ -238,7 +239,11 @@ const AvatarDropdown = () => {
 					<div className={styles.avatarWrapper}>
 						<Avatar
 							className={styles.avatar}
-							src={!!avatarUrl ? <img src={avatarUrl} /> : undefined}
+							src={
+								!!avatarUrl ? (
+									<AuthImage src={avatarUrl} alt='avatar' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+								) : undefined
+							}
 							icon={!avatarUrl ? (lastNameChar ?? <UserOutlined />) : undefined}
 							alt='avatar'
 						/>

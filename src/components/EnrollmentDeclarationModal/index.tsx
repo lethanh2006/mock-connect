@@ -261,6 +261,8 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 										<UploadFile
 											isAvatar
 											isPrivate
+											maxCount={1}
+											hasPreviewFile
 											accept='image/*'
 											placeholderSrc={getPublicAssetPath('/metadata.png')}
 											disabled={isDocumentsRevision || currentStep !== 0}

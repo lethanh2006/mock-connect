@@ -43,6 +43,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
 	const [previewName, setPreviewName] = useState<string>();
+	const [placeholderLoadError, setPlaceholderLoadError] = useState(false);
 	const resizeProps: TResizeProps | undefined = typeof resize === 'boolean' ? {} : resize;
 	const showImage = isAvatar || isAvatarSmall || isLandscapeAvatar || isWidescreen;
 	const { beforeUpload: customBeforeUpload, accept: otherAccept, ...restOtherProps } = otherProps ?? {};
@@ -105,10 +106,16 @@ const UploadFile: React.FC<TUploadProps> = ({
 		}
 		// Object of antd file upload
 		else {
-			files = fileListProp || (value && value.fileList) || [];
+			files = (fileListProp || (value && value.fileList) || []).filter(
+				(file: { status?: string }) => file?.status !== 'removed',
+			);
 			setFileList(files);
 		}
 	}, [value, fileListProp]);
+
+	useEffect(() => {
+		setPlaceholderLoadError(false);
+	}, [placeholderSrc]);
 
 	/** Resize Hình ảnh */
 	const resizeImages = (files: TFileProps[]): TFileProps[] => {
@@ -144,7 +151,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 	};
 
 	const handleChange = (val: any) => {
-		let files = val.fileList as TFileProps[];
+		let files = (val.fileList as TFileProps[]).filter((file) => file?.status !== 'removed');
 		const findLargeFile = files?.some((file) => file.size && file.size / 1024 / 1024 > maxFileSize);
 		if (findLargeFile) {
 			message.error(intl.formatMessage({ id: 'global.uploadfile.error.mb' }, { maxFileSize: maxFileSize }));
@@ -297,26 +304,28 @@ const UploadFile: React.FC<TUploadProps> = ({
 					{...uploadSecurityProps}
 				>
 					{!fileList?.length ? (
-						placeholderSrc ? (
+						placeholderSrc && !placeholderLoadError ? (
 							<AuthImage
 								src={undefined}
 								fallback={placeholderSrc}
+								alt='placeholder'
 								style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+								onError={() => setPlaceholderLoadError(true)}
 							/>
 						) : !isDisabled ? (
-						<div
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-								justifyContent: 'center',
-								flexDirection: 'column',
-							}}
-						>
-							<PlusOutlined />
-							<div className='ant-upload-text'>
-								{buttonDescription || intl.formatMessage({ id: 'global.uploadfile.text1' })}
+							<div
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+									flexDirection: 'column',
+								}}
+							>
+								<PlusOutlined />
+								<div className='ant-upload-text'>
+									{buttonDescription || intl.formatMessage({ id: 'global.uploadfile.text1' })}
+								</div>
 							</div>
-						</div>
 						) : null
 					) : null}
 				</Upload>
