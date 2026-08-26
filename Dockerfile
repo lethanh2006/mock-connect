@@ -23,6 +23,14 @@ COPY . /app
 RUN yarn build && rm -rf node_modules
 
 FROM ${NGINX_BASE_IMAGE}
+RUN mkdir -p \
+      /tmp/nginx/client_temp \
+      /tmp/nginx/proxy_temp \
+      /tmp/nginx/fastcgi_temp \
+      /tmp/nginx/uwsgi_temp \
+      /tmp/nginx/scgi_temp \
+    && chown -R nginx:nginx /tmp/nginx \
+    && sed -i 's|^pid .*|pid /tmp/nginx/nginx.pid;|' /etc/nginx/nginx.conf
 COPY --from=build /app/.nginx/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/docker-entrypoint.d/10-runtime-config.sh /docker-entrypoint.d/10-runtime-config.sh
 RUN chmod +x /docker-entrypoint.d/10-runtime-config.sh
