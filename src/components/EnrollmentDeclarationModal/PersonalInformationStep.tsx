@@ -1,4 +1,5 @@
 import MyDatePicker from '@/components/MyDatePicker';
+import ExpandText from '@/components/ExpandText';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import UploadFile from '@/components/Upload/UploadFile';
@@ -153,9 +154,10 @@ const getDocumentColumns = (intl: IntlShape, form: FormInstance): IColumn<DotNha
 		title: intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.guide' }),
 		dataIndex: 'huongDan',
 		width: 180,
+		render: (huongDan?: string) => (huongDan ? <ExpandText ellipsis={{ rows: 2 }}>{huongDan}</ExpandText> : null),
 	},
 	{
-		title: intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.notes' }),
+		title: intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.guideFile' }),
 		dataIndex: 'urlFileHuongDan',
 		width: 160,
 		render: (urlFileHuongDan: string | undefined) =>
@@ -179,6 +181,7 @@ const getDocumentColumns = (intl: IntlShape, form: FormInstance): IColumn<DotNha
 		title: intl.formatMessage({ id: 'global.enrollmentDeclaration.docTable.attachment' }),
 		key: 'attachment',
 		width: 200,
+		fixed: 'right',
 		render: (_, row) => <DocumentUploadCell row={row} form={form} intl={intl} />,
 	},
 ];

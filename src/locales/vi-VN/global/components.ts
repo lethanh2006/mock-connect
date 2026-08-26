@@ -334,6 +334,7 @@ export default {
 	'global.enrollmentDeclaration.docTable.required': 'Bắt buộc',
 	'global.enrollmentDeclaration.docTable.type': 'Loại',
 	'global.enrollmentDeclaration.docTable.notes': 'Ghi chú',
+	'global.enrollmentDeclaration.docTable.guideFile': 'Tệp hướng dẫn',
 	'global.enrollmentDeclaration.docTable.guide': 'Hướng dẫn',
 	'global.enrollmentDeclaration.docTable.status': 'Trạng thái',
 	'global.enrollmentDeclaration.docTable.viewSample': 'Xem mẫu',

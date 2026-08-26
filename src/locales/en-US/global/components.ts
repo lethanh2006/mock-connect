@@ -334,6 +334,7 @@ export default {
 	'global.enrollmentDeclaration.docTable.required': 'Required',
 	'global.enrollmentDeclaration.docTable.type': 'Type',
 	'global.enrollmentDeclaration.docTable.notes': 'Notes',
+	'global.enrollmentDeclaration.docTable.guideFile': 'Guide File',
 	'global.enrollmentDeclaration.docTable.guide': 'Guide',
 	'global.enrollmentDeclaration.docTable.status': 'Status',
 	'global.enrollmentDeclaration.docTable.viewSample': 'View sample',
