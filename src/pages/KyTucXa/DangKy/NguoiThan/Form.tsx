@@ -180,6 +180,7 @@ const FormNguoiThanKTX = (props: {
 						name='emergencyEmail'
 						label={intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.email' })}
 						rules={[
+							...rules.required,
 							...rules.text,
 							...rules.email,
 							...rules.length(255),
