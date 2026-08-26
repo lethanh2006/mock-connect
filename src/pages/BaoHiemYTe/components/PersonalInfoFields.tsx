@@ -71,7 +71,7 @@ const PersonalInfoFields = ({ info }: IProps) => {
 				</Form.Item>
 			</Col>
 			<Col span={24} md={12}>
-				<Form.Item rules={[...rules.text]} name='phone' label={t('baohiemyte.dangky.soDienThoai')}>
+				<Form.Item rules={[...rules.required, ...rules.text]} name='phone' label={t('baohiemyte.dangky.soDienThoai')}>
 					<Input disabled={info.isPersonalFieldDisabled(info.studentPhone)} />
 				</Form.Item>
 			</Col>

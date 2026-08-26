@@ -10,7 +10,6 @@ import FormItemNguoiThanKTX, {
 	SO_LIEN_HE_KHAN_CAP_MAC_DINH,
 } from '../NguoiThan/FormItem';
 
-
 type TTruongThongTinSinhVien = keyof Pick<
 	PhieuDangKyKTX.IDangKy,
 	| 'fullName'
@@ -31,7 +30,6 @@ export enum FIELD_NATIONALITY {
 	VIET_NAM = 'Việt Nam',
 	QUOC_TE = 'Quốc tế',
 }
-
 
 const FormDangKyKTX = (props: {
 	form: FormInstance;
@@ -135,7 +133,7 @@ const FormDangKyKTX = (props: {
 				<Form.Item
 					name='phoneNumber'
 					label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.phoneNumber' })}
-					rules={[...rules.required, ...rules.soDienThoai]}
+					rules={[...rules.required]}
 				>
 					<Input
 						placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.field.phoneNumber.placeholder' })}
