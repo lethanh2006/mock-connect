@@ -16,6 +16,19 @@ type AuthImageProps = {
 
 const cache = new Map<string, string>();
 
+const SAFE_RASTER_IMAGE_TYPES = new Set([
+	'image/avif',
+	'image/bmp',
+	'image/gif',
+	'image/jpeg',
+	'image/png',
+	'image/webp',
+]);
+
+const SAFE_RASTER_DATA_URL_PATTERN = /^data:image\/(?:avif|bmp|gif|jpe?g|png|webp);base64,[a-z0-9+/=\s]+$/i;
+
+const isSafeRasterImage = (blob: Blob) => SAFE_RASTER_IMAGE_TYPES.has(blob.type.toLowerCase());
+
 const AuthImage: React.FC<AuthImageProps> = ({
 	src,
 	fallback = '',
@@ -35,13 +48,37 @@ const AuthImage: React.FC<AuthImageProps> = ({
 			return;
 		}
 
+		const loadLocalImage = async () => {
+			if (SAFE_RASTER_DATA_URL_PATTERN.test(src)) {
+				setImgSrc(src);
+				return;
+			}
+
+			if (!src.startsWith('blob:')) return;
+
+			try {
+				const blob = await fetch(src).then((response) => response.blob());
+				if (isMounted && isSafeRasterImage(blob)) setImgSrc(src);
+				else if (isMounted) setImgSrc(fallback);
+			} catch {
+				if (isMounted) setImgSrc(fallback);
+			}
+		};
+
+		let isMounted = true;
+		if (src.startsWith('blob:') || src.startsWith('data:')) {
+			loadLocalImage();
+			return () => {
+				isMounted = false;
+			};
+		}
+
 		if (cache.has(src)) {
 			setImgSrc(cache.get(src)!);
 			return;
 		}
 
 		let objectUrl: string | undefined;
-		let isMounted = true;
 
 		const fetchImage = async () => {
 			try {
@@ -49,6 +86,8 @@ const AuthImage: React.FC<AuthImageProps> = ({
 					responseType: 'blob',
 					data: { silent: true },
 				});
+
+				if (!isSafeRasterImage(res.data)) throw new Error('Unsupported image type');
 
 				objectUrl = URL.createObjectURL(res.data);
 				cache.set(src, objectUrl);

@@ -155,7 +155,8 @@ export function chuanHoaTen(ten: any) {
  */
 export function getNameFile(url: string): string {
 	if (typeof url !== 'string') return 'Đường dẫn không đúng';
-	return decodeURI(url.split('/')?.at(-1) ?? '');
+	const path = url.split('?')[0].split('#')[0];
+	return decodeURI(path.split('/')?.at(-1) ?? '');
 }
 
 export function renderFileListUrl(url: string) {
@@ -226,8 +227,23 @@ export function getFileType(mimeType: string) {
 			'ppt',
 			'pptx',
 		],
-		[EDinhDangFile.PDF]: ['application/pdf'],
-		[EDinhDangFile.IMAGE]: ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'],
+		[EDinhDangFile.PDF]: ['application/pdf', 'pdf'],
+		[EDinhDangFile.IMAGE]: [
+			'image/png',
+			'image/jpeg',
+			'image/jpg',
+			'image/gif',
+			'image/webp',
+			'image/svg+xml',
+			'image/bmp',
+			'png',
+			'jpeg',
+			'jpg',
+			'gif',
+			'webp',
+			'svg',
+			'bmp',
+		],
 		[EDinhDangFile.VIDEO]: ['video/mp4', 'video/avi', 'video/mpeg'],
 		[EDinhDangFile.AUDIO]: ['audio/mpeg', 'audio/wav', 'audio/ogg'],
 		[EDinhDangFile.TEXT]: ['text/plain', 'text/csv', 'text/html'],

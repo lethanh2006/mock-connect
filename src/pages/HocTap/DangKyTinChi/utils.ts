@@ -43,9 +43,9 @@ export const buildDanhSachLopHienThi = (danhSachLopDangKy: DangKyTinChi.ILopDang
 		.map((item) =>
 			item.maHocPhan && hocPhanCoLopThucHanh.has(item.maHocPhan)
 				? {
-						...item,
-						maHoaLichHoc: maHoaLichHocTheoHocPhan[item.maHocPhan] ?? [],
-					}
+					...item,
+					maHoaLichHoc: maHoaLichHocTheoHocPhan[item.maHocPhan] ?? [],
+				}
 				: item,
 		);
 };

@@ -3,7 +3,7 @@ import type { IFileInfo } from '@/services/base/typing';
 import { getFileContent, getFileInfo, getFileRouteBase } from '@/services/uploadFile';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
-import { openSafeUrl } from '@/utils/security';
+import { getSafeHref, openSafeUrl } from '@/utils/security';
 import { getFileType, getNameFile } from '@/utils/utils';
 import { DownloadOutlined, FileSearchOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Empty, message, Spin } from 'antd';
@@ -24,10 +24,13 @@ type TFrameProps = {
 	data?: ArrayBuffer;
 };
 
+/** File vừa chọn ở máy, chưa upload lên server */
+const isLocalObjectUrl = (url?: string) => !!url && (url.startsWith('blob:') || url.startsWith('data:'));
+
 const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	const intl = useIntl();
-	const { file, style = {}, children, ip = ip3, isFileId, tenFile } = props;
-	const privateFile = true
+	const { file, style = {}, children, ip = ip3, isFileId, tenFile, isPrivate } = props;
+
 	const isValidStringArray = (value: any): value is string[] => {
 		return Array.isArray(value) && value.every((item) => typeof item === 'string');
 	};
@@ -86,13 +89,21 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	};
 
 	const getIframeSrc = (type: EDinhDangFile, fileUrl?: string) => {
-		if (!fileUrl) return '';
+		if (isLocalObjectUrl(fileUrl)) {
+			return type === EDinhDangFile.PDF || type === EDinhDangFile.IMAGE ? fileUrl : undefined;
+		}
+
+		const safeFileUrl = getSafeHref(fileUrl);
+		if (!safeFileUrl) return undefined;
+		if (type === EDinhDangFile.PDF || type === EDinhDangFile.IMAGE) {
+			return safeFileUrl;
+		}
+
 		const officeFileType = [EDinhDangFile.WORD, EDinhDangFile.EXCEL, EDinhDangFile.POWERPOINT];
 		if (type && officeFileType.includes(type)) {
-			return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileUrl)}`;
-		} else {
-			return fileUrl;
+			return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(safeFileUrl)}`;
 		}
+		return undefined;
 	};
 
 	const getFileDataFromUrl = async (srcUrl: string) => {
@@ -102,16 +113,16 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 			type: EDinhDangFile.UNKNOWN,
 		};
 
+		setLoading(true);
 		try {
 			// Nếu có thông tin id file thì get thông tin chi tiết
 			if (idFile) {
-				setLoading(true);
 				const result = await getFileInfo(idFile, ip);
 				const fileInfo: IFileInfo = result?.data?.data;
 				const fileRouteBase = getFileRouteBase(ip);
 				frame.url = getProxiedFileUrl(
 					fileInfo?.url ??
-					(!isFileId ? srcUrl : `${fileRouteBase}/${idFile}/${encodeURIComponent(fileInfo?.name ?? 'file')}`),
+						(!isFileId ? srcUrl : `${fileRouteBase}/${idFile}/${encodeURIComponent(fileInfo?.name ?? 'file')}`),
 				);
 				frame.name = fileInfo?.name;
 
@@ -121,10 +132,15 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 					EDinhDangFile.UNKNOWN;
 			} else {
 				frame.url = getProxiedFileUrl(srcUrl);
-				frame.type = getFileType(getFileExtension(srcUrl) ?? '') || EDinhDangFile.UNKNOWN;
+				// blob:/data: không chứa phần mở rộng => phải đoán kiểu file theo tên gốc của file vừa chọn
+				const localName = isLocalObjectUrl(srcUrl) ? fileNameList[currentFileIndex] : undefined;
+				frame.type = getFileType(getFileExtension(localName || srcUrl) ?? '') || EDinhDangFile.UNKNOWN;
+				if (localName) frame.name = localName;
 			}
 
-			if (privateFile) {
+			// Chỉ PDF mới cần buffer (PDFViewerV2). Ảnh do AuthImage tự tải kèm token, tải ở đây sẽ gọi API 2 lần.
+			// File local đã nằm sẵn trong trình duyệt, gọi lại qua axios (kèm token) chỉ gây lỗi.
+			if (isPrivate && frame.type === EDinhDangFile.PDF && !isLocalObjectUrl(frame.url)) {
 				// Nếu là file riêng tư thì phải lấy src có token mới xem được
 				frame.data = (await getFileContent(frame.url))?.data;
 			}
@@ -149,27 +165,40 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 		};
 
 		fetchFileType();
-	}, [fileList, currentFileIndex]);
+	}, [fileList, fileNameList, currentFileIndex]);
 
-	const isDownloadableUrl = (url: string): boolean => {
+	/** Trình xem online chỉ phục vụ hiển thị, tải trực tiếp sẽ bị CORS chặn */
+	const isViewerOnlyUrl = (url: string): boolean => {
 		const blockedSources = ['view.officeapps.live.com', 'docs.google.com/document'];
-		if (blockedSources.some((domain) => url.includes(domain))) return false;
-
-		const downloadableExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'zip'];
-		const ext = url.split('.').pop()?.split('?')[0]?.toLowerCase() ?? '';
-		return downloadableExtensions.includes(ext);
+		return blockedSources.some((domain) => url.includes(domain));
 	};
 
 	const handleDownloadOrView = async () => {
 		if (!frameData?.url) return;
 
+		// openSafeUrl chặn blob:/data: nên file local phải đọc thẳng từ object URL
+		if (isLocalObjectUrl(frameData.url)) {
+			try {
+				const response = await fetch(frameData.url);
+				fileDownload(await response.blob(), frameData.name || getNameFile(frameData.url));
+			} catch (error) {
+				console.error('Error downloading file:', error);
+			}
+			return;
+		}
+
+		if (isViewerOnlyUrl(frameData.url)) {
+			openSafeUrl(frameData.url);
+			return;
+		}
+
+		// Tải qua axios để giữ token, URL proxy của gateway không dùng được ở tab mới
 		try {
 			const response = await axios.get(frameData.url, {
 				responseType: 'blob',
 			});
 
-			const blob = response.data;
-			fileDownload(blob, getNameFile(frameData.url));
+			fileDownload(response.data, frameData.name || getNameFile(frameData.url));
 		} catch (error) {
 			console.error('Error downloading file:', error);
 			openSafeUrl(frameData.url);
@@ -211,7 +240,10 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 		return frameData?.name ?? '--';
 	};
 
-	if (loading) {
+	// Chưa có frameData nghĩa là chưa biết kiểu file, hiển thị luôn "không hỗ trợ" sẽ nháy sai ở lần paint đầu
+	const isPreparing = (Array.isArray(file) ? file.length > 0 : !!file) && !frameData;
+
+	if (loading || isPreparing) {
 		return (
 			<div className='preview-loading' style={style}>
 				<Spin size='large' />
@@ -306,22 +338,32 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 						/>
 					</div>
 				) : frameData?.type !== EDinhDangFile.UNKNOWN && !!frameData?.src ? (
-					privateFile ? (
+					isPrivate || isLocalObjectUrl(frameData?.url) ? (
 						<div className='preview-error'>
-							<p>This document is protected and cannot be previewed directly via Office Online.</p>
+							<p>
+								{isLocalObjectUrl(frameData?.url)
+									? 'This document is only available on your device and cannot be previewed via Office Online.'
+									: 'This document is protected and cannot be previewed directly via Office Online.'}
+							</p>
 							<Button type='primary' icon={<DownloadOutlined />} onClick={handleDownloadOrView}>
 								Download to view
 							</Button>
 						</div>
 					) : (
-						<iframe src={frameData?.src} className='preview-iframe' />
+						<iframe
+							src={frameData.src}
+							title={frameData.name || 'File preview'}
+							className='preview-iframe'
+							sandbox='allow-scripts allow-forms allow-popups allow-downloads'
+							referrerPolicy='no-referrer'
+						/>
 					)
 				) : (
 					<div className='preview-error'>
 						<p className='preview-error-message'>
 							<strong>{intl.formatMessage({ id: 'global.previewfile.thongbao' })}</strong>
 						</p>
-						{!!frameData?.src && <p className='preview-error-url'>Đường dẫn: {frameData?.src}</p>}
+						{!!frameData?.name && <p className='preview-error-url'>{frameData.name}</p>}
 						{!!frameData?.url && (
 							<ButtonExtend
 								notHideText

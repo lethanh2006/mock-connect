@@ -5,7 +5,7 @@ import type { TPreviewFileProps } from '../PreviewFile/typing';
 
 export type TUploadProps = {
 	fileList?: any;
-	value?: string | string[] | null | { fileList: UpFile[]; [key: string]: any };
+	value?: string | string[] | null | { fileList: UpFile[];[key: string]: any };
 	onChange?: (val: { fileList: any[] | null }) => void;
 	maxCount?: number;
 	/** Có kéo thả Dragger không? */
@@ -31,6 +31,9 @@ export type TUploadProps = {
 
 	/** Gợi ý thêm lúc nhập liệu, thêm vào sau input, bên dưới số file tối đa */
 	extra?: string;
+
+	/** Ảnh mặc định khi chưa có file (avatar) */
+	placeholderSrc?: string;
 
 	/** Có thể dùng `disabled` này hoặc trong `otherProps` */
 	disabled?: boolean;

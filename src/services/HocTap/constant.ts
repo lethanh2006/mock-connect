@@ -4,6 +4,7 @@ export enum ETrinhDoKqhtHocKy {
 	NAM_THU_3 = 'Năm thứ ba',
 	NAM_THU_4 = 'Năm thứ bốn',
 	NAM_THU_5 = 'Năm thứ năm',
+	NAM_THU_6 = 'Năm thứ sáu',
 }
 
 export enum ELoaiHocLuc {
@@ -22,6 +23,7 @@ export const mapTrinhDoKqhtHocKy: Record<ETrinhDoKqhtHocKy, string> = {
 	[ETrinhDoKqhtHocKy.NAM_THU_3]: 'ketquahoctap.ketquahocky.trinhdo.namthu3',
 	[ETrinhDoKqhtHocKy.NAM_THU_4]: 'ketquahoctap.ketquahocky.trinhdo.namthu4',
 	[ETrinhDoKqhtHocKy.NAM_THU_5]: 'ketquahoctap.ketquahocky.trinhdo.namthu5',
+	[ETrinhDoKqhtHocKy.NAM_THU_6]: 'ketquahoctap.ketquahocky.trinhdo.namthu6',
 };
 
 export const mapLoaiHocLuc: Record<ELoaiHocLuc, string> = {

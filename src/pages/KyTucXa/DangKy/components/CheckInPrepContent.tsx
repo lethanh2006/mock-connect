@@ -39,10 +39,19 @@ const CheckInPrepContent = () => {
 				<strong>4. Check-in Information</strong>
 			</p>
 			<ul>
-				<li>Date: 11:14 24/04/2025</li>
-				<li>Location: B123 - BUILDING B - 4 TO 6-BED APARTMENT</li>
-				<li>Hours: 08:00 - 17:00, Monday to Friday</li>
-				<li>Contact: residential@vinuni.edu.vn | [phone number]</li>
+				<li>Check in: 29/9/2026</li>
+				<li>
+					<strong>Location:</strong> <strong>JA Building</strong> / <strong>JB Building</strong> (assigned building)
+				</li>
+				<li>
+					If you have any questions or need assistance, please visit the <strong>SAM Office (Room I116)</strong> during office hours.
+				</li>
+				<li>
+					<strong>Hours:</strong> 08:00–17:00, Monday to Friday
+				</li>
+				<li>
+					<strong>Contact:</strong> residential@vinuni.edu.vn.
+				</li>
 			</ul>
 
 			<p>

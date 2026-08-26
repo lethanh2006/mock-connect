@@ -4,6 +4,7 @@ import ModalExpandable from '@/components/Table/ModalExpandable';
 import { type IColumn } from '@/components/Table/typing';
 import {
 	EDeclarationType,
+	EKtscNationality,
 	EKtscReviewStatus,
 	KtscPaymentStatus,
 	paymentStatusColor,
@@ -151,6 +152,14 @@ const SinhVienDangKyKiemTraSucKhoe = () => {
 		const newRecord = toNewRegistrationRecord(currentInfo);
 		if (!newRecord?.periodId) return;
 
+		const normalizedNationality = ((recordSinhVien as any)?.quocTich ?? '').toLowerCase().trim();
+		const isVNNationality = normalizedNationality.includes('viet') || normalizedNationality.includes('việt');
+		const kskNationality = (recordSinhVien as any)?.quocTich
+			? isVNNationality
+				? EKtscNationality.VIETNAM
+				: EKtscNationality.FOREIGN
+			: undefined;
+
 		const payload: KiemTraSucKhoe.ISinhVienDangKy = {
 			ssoId: (recordSinhVien as any)?.ssoId,
 			studentId: (recordSinhVien as any)?.ssoId,
@@ -159,11 +168,11 @@ const SinhVienDangKyKiemTraSucKhoe = () => {
 			fullName: (recordSinhVien as any)?.ten,
 			ngaySinh: (recordSinhVien as any)?.ngaySinh,
 			cccd: (recordSinhVien as any)?.cccd,
-			nationality: (recordSinhVien as any)?.quocTich,
+			nationality: kskNationality,
 			gioiTinh: (recordSinhVien as any)?.gioiTinh,
-			khoa: (recordSinhVien as any)?.khoaSinhVien?.ten,
+			khoa: (recordSinhVien as any)?.nganh?.tenDonViPhuTrach ?? recordSinhVien?.nganh?.tenDonViVietTat,
 			nganh: (recordSinhVien as any)?.nganh?.ten,
-			maKhoa: (recordSinhVien as any)?.maKhoaSinhVien,
+			maKhoa: (recordSinhVien as any)?.nganh?.maDonVi,
 			maNganh: (recordSinhVien as any)?.maNganh,
 			phone: (recordSinhVien as any)?.soDienThoai,
 			email: (recordSinhVien as any)?.email,

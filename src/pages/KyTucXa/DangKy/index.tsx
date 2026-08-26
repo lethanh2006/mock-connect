@@ -1,23 +1,26 @@
 import PageCard from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
+import { ETrangThaiMinhChung } from '@/services/KyTucXa/MienKyTucXa/constants';
 import { ETrangThaiThanhToanKTX } from '@/services/KyTucXa/PhieuDangKy/constant';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { formatDateTime } from '@/utils/formatDate';
 import { getPublicAssetPath } from '@/utils/path';
-import { FileDoneOutlined, InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Alert, Button, Col, Empty, Flex, Input, message, Row, Select, Space, Spin } from 'antd';
 import _ from 'lodash';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import SelectDanhMucChungKTX from '../DanhMucChung/Select';
 import SelectToaNhaKTX from '../ToaNha/Select';
 import CardPhong from './components/CardPhong';
 import ChiTietPhong from './components/ChiTiet';
+import ExemptionBanner from './components/ExemptionBanner';
 import ModalDanKyKTX from './components/Modal';
 import { getSoChoConLai } from './utils';
 
 const { Search } = Input;
+const SO_PHONG_MOI_LAN_HIEN_THI = 12;
 
 const getPhongDangKyKeys = (phong?: Phong.IChinhSachPhongRecord) =>
 	[phong?._id, phong?.roomId, phong?.room?._id, phong?.room?.ma].filter(Boolean).map((item) => String(item));
@@ -42,22 +45,40 @@ const laLichSuCuaPhong = (phong?: Phong.IChinhSachPhongRecord, lichSu?: PhieuDan
 	return phongKeys.some((key) => lichSuKeys.includes(key));
 };
 
+const getPhongDaDangKy = (lichSu?: PhieuDangKyKTX.IRecord) => {
+	const phong = lichSu?.phong;
+	const chinhSachPhong = (phong as (Phong.IRecord & { chinhSachPhong?: Phong.IChinhSachPhongRecord }) | undefined)
+		?.chinhSachPhong;
+
+	if (chinhSachPhong) {
+		return {
+			...chinhSachPhong,
+			room: chinhSachPhong.room ?? phong,
+		};
+	}
+
+	if (!phong) return undefined;
+
+	return {
+		_id: `registered-${lichSu?._id ?? phong._id}`,
+		maDotId: lichSu?.maDotId ?? '',
+		roomId: phong._id,
+		room: phong,
+	} as Phong.IChinhSachPhongRecord;
+};
+
+const laCungPhong = (phongA?: Phong.IChinhSachPhongRecord, phongB?: Phong.IChinhSachPhongRecord) => {
+	if (!phongA || !phongB) return false;
+
+	const phongAKeys = getPhongDangKyKeys(phongA);
+	const phongBKeys = getPhongDangKyKeys(phongB);
+	return phongAKeys.some((key) => phongBKeys.includes(key));
+};
+
 const DangKyKyTucXa = () => {
 	const intl = useIntl();
-	const {
-		getModel,
-		danhSach,
-		page,
-		limit,
-		setPage,
-		handleView,
-		setVisibleDangKy,
-		loading,
-		setVisibleForm,
-		setRecord,
-		setFilters,
-		filters,
-	} = useModel('kytucxa.phong');
+	const { getModel, danhSach, handleView, setVisibleDangKy, loading, setVisibleForm, setRecord, setFilters, filters } =
+		useModel('kytucxa.phong');
 	const { getByIdModel: getDotDangKy, record: recDot, setRecord: setRecDot } = useModel('kytucxa.dotdangky');
 	const {
 		getModel: getLichSuDangKy,
@@ -67,6 +88,15 @@ const DangKyKyTucXa = () => {
 	} = useModel('kytucxa.phieudangky');
 	const [isViewDangKy, setIsViewDangKy] = useState<boolean>(false);
 	const [initialModalStep, setInitialModalStep] = useState<number>(0);
+	const [soPhongHienThi, setSoPhongHienThi] = useState(SO_PHONG_MOI_LAN_HIEN_THI);
+	const [dangTaiThemPhong, setDangTaiThemPhong] = useState(false);
+	const loadMoreRef = useRef<HTMLDivElement>(null);
+	const trangThaiMienKtx = recDot?.trangThaiMinhChungMien;
+	const laDonMienDangXuLy =
+		trangThaiMienKtx === ETrangThaiMinhChung.CHO_DUYET || trangThaiMienKtx === ETrangThaiMinhChung.DA_DUYET;
+	const dangMienKtx = recDot?.isMienKyTucXa && laDonMienDangXuLy;
+	const coThongTinPheDuyet =
+		trangThaiMienKtx === ETrangThaiMinhChung.DA_DUYET || trangThaiMienKtx === ETrangThaiMinhChung.TU_CHOI;
 
 	//Get đợt đăng ký
 	useEffect(() => {
@@ -77,7 +107,7 @@ const DangKyKyTucXa = () => {
 
 	//Get lịch sử đăng ký
 	const getLichSuDangKyData = async () => {
-		if (!recDot?._id || recDot?.isMienKyTucXa) {
+		if (!recDot?._id) {
 			setRecLichSu(undefined);
 			return;
 		}
@@ -101,10 +131,10 @@ const DangKyKyTucXa = () => {
 
 	useEffect(() => {
 		getLichSuDangKyData();
-	}, [recDot?._id, recDot?.isMienKyTucXa]);
+	}, [recDot?._id]);
 
 	const getData = () => {
-		if (recDot?._id && !recDot?.isMienKyTucXa) {
+		if (recDot?._id) {
 			getModel({ maDotId: recDot?._id }, undefined, undefined, undefined, 300, 'ktx/chinh-sach-phong/page');
 		}
 	};
@@ -116,7 +146,7 @@ const DangKyKyTucXa = () => {
 
 	useEffect(() => {
 		getData();
-	}, [page, limit, filters, recDot?._id, recDot?.isMienKyTucXa]);
+	}, [filters, recDot?._id]);
 
 	const handleFilterChange = useCallback(
 		(fieldPath: string[], value: any, operator = EOperatorType.EQUAL) => {
@@ -133,9 +163,8 @@ const DangKyKyTucXa = () => {
 				}
 				return newFilters;
 			});
-			setPage(1);
 		},
-		[setFilters, setPage],
+		[setFilters],
 	);
 
 	const searchTenPhong = useMemo(
@@ -152,26 +181,66 @@ const DangKyKyTucXa = () => {
 		[recLichSu],
 	);
 
-	const danhSachHienThi = useMemo(
-		() =>
-			[...(danhSach ?? [])].sort((a, b) => {
-				const aDaDangKy = coFormDonDangKy(getLichSuDangKyTheoPhong(a));
-				const bDaDangKy = coFormDonDangKy(getLichSuDangKyTheoPhong(b));
+	const danhSachHienThi = useMemo(() => {
+		const phongDaDangKy = coFormDonDangKy(recLichSu) ? getPhongDaDangKy(recLichSu) : undefined;
+		const danhSachPhong = [...(danhSach ?? [])];
 
-				if (aDaDangKy !== bDaDangKy) {
-					return Number(bDaDangKy) - Number(aDaDangKy);
-				}
+		// API phòng khả dụng có thể không trả về phòng đã hết chỗ sau khi sinh viên đăng ký.
+		// Bổ sung từ lịch sử để sinh viên luôn thấy phòng của mình ở vị trí đầu tiên.
+		if (phongDaDangKy && !danhSachPhong.some((phong) => laCungPhong(phong, phongDaDangKy))) {
+			danhSachPhong.unshift(phongDaDangKy);
+		}
 
-				return getSoChoConLai(b) - getSoChoConLai(a);
-			}),
-		[danhSach, getLichSuDangKyTheoPhong],
-	);
+		return danhSachPhong.sort((a, b) => {
+			const aDaDangKy = coFormDonDangKy(getLichSuDangKyTheoPhong(a));
+			const bDaDangKy = coFormDonDangKy(getLichSuDangKyTheoPhong(b));
+
+			if (aDaDangKy !== bDaDangKy) {
+				return Number(bDaDangKy) - Number(aDaDangKy);
+			}
+
+			return getSoChoConLai(b) - getSoChoConLai(a);
+		});
+	}, [danhSach, getLichSuDangKyTheoPhong, recLichSu]);
+
+	useEffect(() => {
+		setSoPhongHienThi(SO_PHONG_MOI_LAN_HIEN_THI);
+	}, [danhSachHienThi]);
+
+	const taiThemPhong = useCallback(() => {
+		if (dangTaiThemPhong || soPhongHienThi >= danhSachHienThi.length) return;
+
+		setDangTaiThemPhong(true);
+		window.setTimeout(() => {
+			setSoPhongHienThi((current) => Math.min(current + SO_PHONG_MOI_LAN_HIEN_THI, danhSachHienThi.length));
+			setDangTaiThemPhong(false);
+		}, 180);
+	}, [dangTaiThemPhong, danhSachHienThi.length, soPhongHienThi]);
+
+	useEffect(() => {
+		const loadMoreElement = loadMoreRef.current;
+		if (!loadMoreElement || soPhongHienThi >= danhSachHienThi.length) return undefined;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0]?.isIntersecting) taiThemPhong();
+			},
+			{ rootMargin: '240px' },
+		);
+		observer.observe(loadMoreElement);
+
+		return () => observer.disconnect();
+	}, [danhSachHienThi.length, soPhongHienThi, taiThemPhong]);
+
+	const danhSachPhongDangHienThi = danhSachHienThi.slice(0, soPhongHienThi);
 
 	const handleXemChiTiet = (phong: Phong.IChinhSachPhongRecord) => {
 		handleView(phong);
 	};
 
 	const handleDangKy = (phong: Phong.IChinhSachPhongRecord) => {
+		if (dangMienKtx) return;
+
 		if (coFormDonDangKy(recLichSu)) {
 			message.warning(intl.formatMessage({ id: 'kytucxa.dangky.message.daCoLichSu' }));
 			return;
@@ -211,20 +280,6 @@ const DangKyKyTucXa = () => {
 		[getLichSuDangKyTheoPhong],
 	);
 
-	// const handlePaginationChange = (newPage: number, newPageSize: number) => {
-	// 	if (newPageSize !== limit) {
-	// 		setPage(1);
-	// 		setLimit(newPageSize);
-	// 	} else {
-	// 		setPage(newPage);
-	// 	}
-	// };
-	//
-	// const handlePageSizeChange = (_current: number, size: number) => {
-	// 	setPage(1);
-	// 	setLimit(size);
-	// };
-
 	if (!recDot?._id) {
 		return (
 			<PageCard title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}>
@@ -233,21 +288,10 @@ const DangKyKyTucXa = () => {
 		);
 	}
 
-	if (recDot?.isMienKyTucXa) {
-		return (
-			<PageCard title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}>
-				<div className='room-exempt-state'>
-					<div className='room-exempt-state__icon'>
-						<FileDoneOutlined />
-					</div>
-					<div className='room-exempt-state__text'>{intl.formatMessage({ id: 'kytucxa.dangky.exempt.message' })}</div>
-				</div>
-			</PageCard>
-		);
-	}
-
 	return (
 		<PageCard title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}>
+			{recDot?.isMienKyTucXa && <ExemptionBanner recDot={recDot} coThongTinPheDuyet={coThongTinPheDuyet} />}
+
 			<Flex justify='space-between' align='center' style={{ marginBottom: 8 }}>
 				<Space wrap>
 					<Search
@@ -353,11 +397,18 @@ const DangKyKyTucXa = () => {
 				{danhSachHienThi?.length ? (
 					<>
 						<Row gutter={[12, 12]}>
-							{danhSachHienThi.map((phong) => {
+							{danhSachPhongDangHienThi.map((phong, index) => {
 								const lichSuDangKy = getLichSuDangKyTheoPhong(phong);
 
 								return (
-									<Col key={phong._id} xs={24} md={12} xl={8} className='room-list-col'>
+									<Col
+										key={phong._id}
+										xs={24}
+										md={12}
+										xl={8}
+										className='room-list-col room-list-col--enter'
+										style={{ animationDelay: `${(index % SO_PHONG_MOI_LAN_HIEN_THI) * 35}ms` }}
+									>
 										<CardPhong
 											phong={phong}
 											lichSuDangKy={lichSuDangKy}
@@ -366,28 +417,17 @@ const DangKyKyTucXa = () => {
 											onOpenLichSuDangKy={handleOpenLichSuDangKy}
 											onXemChiTiet={handleXemChiTiet}
 											onDangKy={handleDangKy}
+											khoaDangKy={dangMienKtx}
 										/>
 									</Col>
 								);
 							})}
 						</Row>
-
-						{/*{total > 0 && (*/}
-						{/*	<div className='pagination-container'>*/}
-						{/*		<Pagination*/}
-						{/*			current={page}*/}
-						{/*			pageSize={limit}*/}
-						{/*			total={total}*/}
-						{/*			onChange={handlePaginationChange}*/}
-						{/*			onShowSizeChange={handlePageSizeChange}*/}
-						{/*			pageSizeOptions={['5', '10', '20', '50']}*/}
-						{/*			showSizeChanger={false}*/}
-						{/*			disabled={loading || loadingLichSu}*/}
-						{/*			size='default'*/}
-						{/*			className='pagination'*/}
-						{/*		/>*/}
-						{/*	</div>*/}
-						{/*)}*/}
+						{soPhongHienThi < danhSachHienThi.length ? (
+							<div ref={loadMoreRef} className='room-list-load-more'>
+								<Spin size='small' spinning={dangTaiThemPhong} />
+							</div>
+						) : null}
 					</>
 				) : (
 					<Empty
@@ -403,6 +443,7 @@ const DangKyKyTucXa = () => {
 				getLichSuDangKyTheoPhong={getLichSuDangKyTheoPhong}
 				isPhongDaDangKy={isPhongDaDangKy}
 				onOpenLichSuDangKy={handleOpenLichSuDangKy}
+				khoaDangKy={dangMienKtx}
 			/>
 			<ModalDanKyKTX
 				getData={handleDangKyThanhCong}

@@ -10,6 +10,7 @@ import FormItemNguoiThanKTX, {
 	SO_LIEN_HE_KHAN_CAP_MAC_DINH,
 } from '../NguoiThan/FormItem';
 
+
 type TTruongThongTinSinhVien = keyof Pick<
 	PhieuDangKyKTX.IDangKy,
 	| 'fullName'
@@ -26,6 +27,11 @@ type TTruongThongTinSinhVien = keyof Pick<
 	| 'nationality'
 	| 'permanentHomeAddress'
 >;
+export enum FIELD_NATIONALITY {
+	VIET_NAM = 'Việt Nam',
+	QUOC_TE = 'Quốc tế',
+}
+
 
 const FormDangKyKTX = (props: {
 	form: FormInstance;
@@ -211,8 +217,12 @@ const FormDangKyKTX = (props: {
 				>
 					<Radio.Group disabled={isDisabled('nationality')}>
 						<Space direction='horizontal'>
-							<Radio value='Việt Nam'>{intl.formatMessage({ id: 'kytucxa.dangky.form.field.nationality.vn' })}</Radio>
-							<Radio value='Quốc tế'>{intl.formatMessage({ id: 'kytucxa.dangky.form.field.nationality.intl' })}</Radio>
+							<Radio value={FIELD_NATIONALITY.VIET_NAM}>
+								{intl.formatMessage({ id: 'kytucxa.dangky.form.field.nationality.vn' })}
+							</Radio>
+							<Radio value={FIELD_NATIONALITY.QUOC_TE}>
+								{intl.formatMessage({ id: 'kytucxa.dangky.form.field.nationality.intl' })}
+							</Radio>
 						</Space>
 					</Radio.Group>
 				</Form.Item>

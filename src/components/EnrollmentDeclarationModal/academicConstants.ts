@@ -18,11 +18,3 @@ export const PRIORITY_AREA_OPTIONS = [
 	{ value: 'KV2-NT', label: 'KV2-NT' },
 	{ value: 'KV3', label: 'KV3' },
 ];
-
-export const ENGLISH_CERTIFICATE_TYPE_OPTIONS = [
-	{ value: 'IELTS', label: 'IELTS' },
-	{ value: 'TOEFL iBT', label: 'TOEFL iBT' },
-	{ value: 'TOEIC', label: 'TOEIC' },
-	{ value: 'Cambridge English', label: 'Cambridge English' },
-	{ value: 'Other', label: 'Other' },
-];

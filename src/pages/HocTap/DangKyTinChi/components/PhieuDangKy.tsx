@@ -11,17 +11,17 @@ import {
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import {
-	loaiDangKyVuotTinI18n,
-	TrangThaiDonDangKyHocVuot,
-	trangThaiDonDangKyHocVuotColor,
-	trangThaiDonDangKyHocVuotText,
-} from '@/services/DaoTao/DkVuotTinChi/constant';
-import {
 	loaiDangKyDuThinhI18n,
 	TrangThaiDonDangKyHocDuThinh,
 	trangThaiDonDangKyHocDuThinhColor,
 	trangThaiDonDangKyHocDuThinhText,
 } from '@/services/DaoTao/DkDuThinh/constant';
+import {
+	loaiDangKyVuotTinI18n,
+	TrangThaiDonDangKyHocVuot,
+	trangThaiDonDangKyHocVuotColor,
+	trangThaiDonDangKyHocVuotText,
+} from '@/services/DaoTao/DkVuotTinChi/constant';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
@@ -233,7 +233,11 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 					trangThaiDacBiet === TrangThaiDonDangKyHocVuot.DA_DUYET ||
 					trangThaiDacBiet === TrangThaiDonDangKyHocDuThinh.DA_DUYET;
 				const thongTinDuyet = rec?.dkVuotTinChiLop ?? rec?.dangKyHocDuThinh;
-				const hasThongTinDuyet = !!(thongTinDuyet?.nguoiDuyet || thongTinDuyet?.thoiGianDuyet || thongTinDuyet?.ghiChuDuyet);
+				const hasThongTinDuyet = !!(
+					thongTinDuyet?.nguoiDuyet ||
+					thongTinDuyet?.thoiGianDuyet ||
+					thongTinDuyet?.ghiChuDuyet
+				);
 
 				const statusI18nId = isVuotTin
 					? trangThaiDonDangKyHocVuotText[trangThaiVuotTin as TrangThaiDonDangKyHocVuot]
@@ -294,9 +298,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 							</>
 						) : (
 							<Tag color={ColorTrangThaiDangKyTinChi[val as ETrangThaiDangKyTinChi]}>
-								{trangThaiThuongI18nId
-									? intl.formatMessage({ id: trangThaiThuongI18nId })
-									: (val ?? '--')}
+								{trangThaiThuongI18nId ? intl.formatMessage({ id: trangThaiThuongI18nId }) : (val ?? '--')}
 							</Tag>
 						)}
 						{rec?.isWaitlist && (

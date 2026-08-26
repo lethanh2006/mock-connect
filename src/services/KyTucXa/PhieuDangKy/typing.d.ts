@@ -6,6 +6,7 @@ declare module PhieuDangKyKTX {
 		_id: string;
 		trangThaiThanhToan?: ETrangThaiThanhToanKTX;
 		maDotId?: string;
+		dotDangKy?: DotDangKyKTX.IRecord;
 		maPhong?: string;
 		nguoiTaoMa?: string;
 		nguoiTaoSsoId?: string;
