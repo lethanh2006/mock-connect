@@ -214,7 +214,7 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 			onCancel={onClose}
 			closable={false}
 			footer={null}
-			width={1400}
+			width='80vw'
 			styles={{ body: { padding: '0 16px 16px' } }}
 			title={
 				<Space align='center' style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -261,6 +261,8 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 										<UploadFile
 											isAvatar
 											isPrivate
+											maxCount={1}
+											hasPreviewFile
 											accept='image/*'
 											placeholderSrc={getPublicAssetPath('/metadata.png')}
 											disabled={isDocumentsRevision || currentStep !== 0}

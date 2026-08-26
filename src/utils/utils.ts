@@ -378,10 +378,10 @@ export const range = (start: number, end: number) => {
 export const disabledRangeTime = (current: dayjs.Dayjs, type: 'start' | 'end', hour: string, minute: string) => {
 	return current && current.format('DDMMYYYY') === dayjsLib().format('DDMMYYYY')
 		? {
-				disabledHours: () => range(0, Number(hour)),
-				disabledMinutes: () => range(0, hour === current.format('HH') ? Number(minute) : 0),
-				disabledSeconds: () => [55, 56],
-			}
+			disabledHours: () => range(0, Number(hour)),
+			disabledMinutes: () => range(0, hour === current.format('HH') ? Number(minute) : 0),
+			disabledSeconds: () => [55, 56],
+		}
 		: {};
 };
 
@@ -812,7 +812,10 @@ export const getFileIdFromValue = (value: string) => {
 
 export const isFileUrl = (value: string) => /^https?:\/\//.test(value) || value?.includes('/file/');
 
+const isLocalPreviewUrl = (value: string) => value.startsWith('blob:') || value.startsWith('data:');
+
 export const getPreviewUrl = async (value: string) => {
+	if (!value || isLocalPreviewUrl(value)) return value;
 	const fileId = getFileIdFromValue(value);
 	if (!fileId && isFileUrl(value)) return value;
 	const id = fileId ?? value;

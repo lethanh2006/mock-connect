@@ -10,8 +10,8 @@ import {
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { formatDate } from '@/utils/formatDate';
-import { DeleteOutlined, DollarCircleOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Tag } from 'antd';
+import { DollarCircleOutlined } from '@ant-design/icons';
+import { Button, Tag } from 'antd';
 import { useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import ChiTietPhong from '../DangKy/components/ChiTiet';
@@ -213,7 +213,7 @@ const LichSuaKTX = () => {
 							/>
 						) : null}
 
-						<Popconfirm
+						{/* <Popconfirm
 							onConfirm={() => deleteModel(`me/${rec?._id}`, getData)}
 							title={intl.formatMessage({ id: 'kytucxa.danhmucchung.xacnhanxoa' })}
 							placement='topRight'
@@ -227,7 +227,7 @@ const LichSuaKTX = () => {
 								onClick={(event) => event.stopPropagation()}
 								icon={<DeleteOutlined />}
 							/>
-						</Popconfirm>
+						</Popconfirm> */}
 					</>
 				);
 			},
