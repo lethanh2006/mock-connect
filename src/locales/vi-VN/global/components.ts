@@ -375,6 +375,8 @@ export default {
 	'global.enrollmentDeclaration.academic.country': 'Quốc gia',
 	'global.enrollmentDeclaration.academic.provinceCity': 'Tỉnh/Thành phố',
 	'global.enrollmentDeclaration.academic.highSchoolName': 'Tên trường THPT',
+	'global.enrollmentDeclaration.academic.highSchoolNameHint':
+		'Nếu không tìm thấy trong danh sách, vui lòng nhập chính xác tên trường để lưu dưới dạng trường ngoài danh mục.',
 	'global.enrollmentDeclaration.academic.priorityCategory': 'Đối tượng ưu tiên',
 	'global.enrollmentDeclaration.academic.priorityArea': 'Khu vực ưu tiên',
 	'global.enrollmentDeclaration.academic.graduationYear': 'Năm tốt nghiệp',

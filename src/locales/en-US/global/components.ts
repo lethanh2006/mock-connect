@@ -377,6 +377,8 @@ export default {
 	'global.enrollmentDeclaration.academic.country': 'Country',
 	'global.enrollmentDeclaration.academic.provinceCity': 'Province/City',
 	'global.enrollmentDeclaration.academic.highSchoolName': 'High School Name',
+	'global.enrollmentDeclaration.academic.highSchoolNameHint':
+		'If you cannot find your school in the list, please enter the exact school name to save it as an out-of-catalog school.',
 	'global.enrollmentDeclaration.academic.priorityCategory': 'Priority Category',
 	'global.enrollmentDeclaration.academic.priorityArea': 'Priority Area',
 	'global.enrollmentDeclaration.academic.graduationYear': 'Graduation Year',
