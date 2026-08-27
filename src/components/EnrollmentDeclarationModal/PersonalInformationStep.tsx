@@ -296,6 +296,7 @@ const PersonalInformationStep = ({
 						>
 							<Select
 								placeholder={enterContentText}
+								disabled
 								options={[
 									{ value: 'Nam', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.gender.male' }) },
 									{ value: 'Nữ', label: intl.formatMessage({ id: 'global.enrollmentDeclaration.gender.female' }) },
