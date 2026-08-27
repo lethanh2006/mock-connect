@@ -1,5 +1,5 @@
-import MyDatePicker from '@/components/MyDatePicker';
 import ExpandText from '@/components/ExpandText';
+import MyDatePicker from '@/components/MyDatePicker';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import UploadFile from '@/components/Upload/UploadFile';
@@ -14,6 +14,7 @@ import { EGiayToCanNopType, isGiayToVisibleForNationality } from '@/services/Dao
 import type { DotNhapHoc } from '@/services/DaoTao/DotNhapHoc/typings';
 import {
 	colorTrangThaiGiayToNhapHoc,
+	ELoaiNoiSinh,
 	ETrangThaiGiayToNhapHoc,
 	nameTrangThaiGiayToNhapHoc,
 } from '@/services/DaoTao/SinhVien/constants';
@@ -200,6 +201,7 @@ const PersonalInformationStep = ({
 	const nationality: string | undefined = Form.useWatch('nationality', form);
 	const maQuocTich: string | undefined = Form.useWatch('maQuocTich', form);
 	const hasHealthProblem: boolean | undefined = Form.useWatch('hasHealthProblem', form);
+	const placeOfBirthType: ELoaiNoiSinh | undefined = Form.useWatch('loaiNoiSinh', form);
 	const isForeignNational = isForeignNationalityText(nationality);
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const documentRows = useMemo(() => {
@@ -230,6 +232,16 @@ const PersonalInformationStep = ({
 		const found = DANH_SACH_QUOC_TICH.find((item) => item.tenQuocTich === nationality);
 		form.setFieldsValue({ maQuocTich: found?.ma });
 	}, [nationality, form]);
+
+	useEffect(() => {
+		if (placeOfBirthType === ELoaiNoiSinh.NUOC_NGOAI) {
+			form.setFieldsValue({ tinhTpNoiSinh: undefined, maTinhTpNoiSinh: undefined });
+			return;
+		}
+		if (placeOfBirthType === ELoaiNoiSinh.TRONG_NUOC) {
+			form.setFieldsValue({ maTinhTpNoiSinh: undefined, quocGiaNoiSinh: undefined });
+		}
+	}, [placeOfBirthType, form]);
 
 	const handleSameAsResidence = (checked: boolean) => {
 		if (!checked) return;
@@ -561,15 +573,51 @@ const PersonalInformationStep = ({
 						<div className={styles.subLabel}>
 							{intl.formatMessage({ id: 'global.enrollmentDeclaration.section.placeOfBirth' })}
 						</div>
-						<SelectDonViHanhChinh
-							form={form}
-							listTinh={listTinh}
-							suffix='NoiSinh'
-							hideXaPhuong
-							hasLabel
-							labelTinh={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.provinceCity' })}
-							placeholderTinh={enterContentText}
-						/>
+						<Row gutter={[12, 0]}>
+							<Col span={24} md={8}>
+								<Form.Item
+									name='loaiNoiSinh'
+									label={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.placeOfBirthType' })}
+									rules={[...rules.required]}
+								>
+									<Radio.Group>
+										{Object.values(ELoaiNoiSinh).map((value) => (
+											<Radio key={value} value={value}>
+												{intl.formatMessage({
+													id:
+														value === ELoaiNoiSinh.TRONG_NUOC
+															? 'global.enrollmentDeclaration.field.placeOfBirthType.domestic'
+															: 'global.enrollmentDeclaration.field.placeOfBirthType.foreign',
+												})}
+											</Radio>
+										))}
+									</Radio.Group>
+								</Form.Item>
+							</Col>
+							{placeOfBirthType === ELoaiNoiSinh.NUOC_NGOAI ? (
+								<Col span={24} md={24}>
+									<Form.Item
+										name='quocGiaNoiSinh'
+										label={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.placeOfBirthForeign' })}
+										rules={[...rules.required, ...rules.text, ...rules.length(250)]}
+									>
+										<Input placeholder={enterContentText} style={{ width: '100%' }} />
+									</Form.Item>
+								</Col>
+							) : (
+								<Col span={24} md={24}>
+									<SelectDonViHanhChinh
+										form={form}
+										listTinh={listTinh}
+										suffix='NoiSinh'
+										hideXaPhuong
+										hasLabel
+										labelTinh={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.provinceCity' })}
+										placeholderTinh={enterContentText}
+									/>
+								</Col>
+							)}
+						</Row>
 
 						<div className={styles.subLabel}>
 							{intl.formatMessage({ id: 'global.enrollmentDeclaration.section.placeOfResidence' })}
