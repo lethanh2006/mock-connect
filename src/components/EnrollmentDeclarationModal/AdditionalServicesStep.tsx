@@ -65,7 +65,6 @@ const AdditionalServicesStep = ({ form, maNamHoc }: { form: FormInstance<any>; m
 
 	const alreadyHadCheckup: boolean | undefined = Form.useWatch('alreadyHadCheckup', form);
 	const hasInsurance: boolean | undefined = Form.useWatch('hasInsurance', form);
-	const isRegisterDormitory: boolean | undefined = Form.useWatch('isRegisterDormitory', form);
 	// Khai báo ở step 1 (Thông tin cá nhân) khi có vấn đề sức khỏe: xin miễn ở ký túc xá.
 	const isRegisterFreeDormitory: boolean | undefined = Form.useWatch('isRegisterFreeDormitory', form);
 
@@ -84,6 +83,7 @@ const AdditionalServicesStep = ({ form, maNamHoc }: { form: FormInstance<any>; m
 	const [bhytHasActivePeriod, setBhytHasActivePeriod] = useState(false);
 	const [ktxPeriod, setKtxPeriod] = useState<any>(undefined);
 	const [ktxRegistration, setKtxRegistration] = useState<any>(undefined);
+	const [hasKtxRegistrationHistory, setHasKtxRegistrationHistory] = useState(false);
 	const [mienKtxRecord, setMienKtxRecord] = useState<MienKyTucXa.IRecord | undefined>(undefined);
 
 	const [kskLoading, setKskLoading] = useState(true);
@@ -100,6 +100,7 @@ const AdditionalServicesStep = ({ form, maNamHoc }: { form: FormInstance<any>; m
 
 			if (!dot?._id || dot?.isMienKyTucXa) {
 				setKtxRegistration(undefined);
+				setHasKtxRegistrationHistory(false);
 			} else {
 				const lichSuRes: any = await getLichSuDangKyKtx(
 					{ maDotId: dot._id },
@@ -111,11 +112,14 @@ const AdditionalServicesStep = ({ form, maNamHoc }: { form: FormInstance<any>; m
 					undefined,
 					false,
 				);
-				setKtxRegistration(lichSuRes?.[0]);
+				const lichSuList = Array.isArray(lichSuRes) ? lichSuRes : [];
+				setHasKtxRegistrationHistory(lichSuList.length > 0);
+				setKtxRegistration(lichSuList[0]);
 			}
 		} catch {
 			setKtxPeriod(undefined);
 			setKtxRegistration(undefined);
+			setHasKtxRegistrationHistory(false);
 		}
 
 		try {
@@ -343,8 +347,8 @@ const AdditionalServicesStep = ({ form, maNamHoc }: { form: FormInstance<any>; m
 		? bhytRegistration.declarationType === EBhytDeclarationType.DA_CO_BEN_NGOAI
 		: hasInsurance === true;
 
-	const isKtxActuallyRegistered = Boolean(ktxRegistration?.formDon?._id);
-	const isDormitoryRegistered = Boolean(isRegisterDormitory) && isKtxActuallyRegistered;
+	const isKtxActuallyRegistered = hasKtxRegistrationHistory;
+	const isDormitoryRegistered = isKtxActuallyRegistered;
 	const mienKtxStatus = mienKtxRecord?.trangThaiMinhChung;
 	// isRegisterFreeDormitory chỉ là cờ ở form Step 1; nếu đợt hiện tại không có đơn miễn thực tế
 	// (vd. không có đợt, hoặc chưa nộp được đơn) thì không nên hiển thị khối "đang xin miễn".

@@ -143,7 +143,6 @@ const FormNguoiThanKTX = (props: {
 						dependencies={['secondaryContactNumber']}
 						rules={[
 							...rules.required,
-							...rules.soDienThoai,
 							getDuplicateRule(
 								'emergencyContactNumber',
 								intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.primaryPhone' }),
