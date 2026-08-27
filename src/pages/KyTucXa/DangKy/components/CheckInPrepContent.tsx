@@ -39,12 +39,13 @@ const CheckInPrepContent = () => {
 				<strong>4. Check-in Information</strong>
 			</p>
 			<ul>
-				<li>Check in: 29/9/2026</li>
+				<li>Check in: 11, 12/9/2026</li>
 				<li>
 					<strong>Location:</strong> <strong>JA Building</strong> / <strong>JB Building</strong> (assigned building)
 				</li>
 				<li>
-					If you have any questions or need assistance, please visit the <strong>SAM Office (Room I116)</strong> during office hours.
+					If you have any questions or need assistance, please visit the <strong>SAM Office (Room I116)</strong> during
+					office hours.
 				</li>
 				<li>
 					<strong>Hours:</strong> 08:00–17:00, Monday to Friday

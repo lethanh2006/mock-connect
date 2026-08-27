@@ -267,7 +267,7 @@ const PersonalInformationStep = ({
 						<Form.Item
 							name='firstName'
 							label={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.firstName' })}
-							rules={[...rules.required, ...rules.ten]}
+							rules={[...rules.required]}
 						>
 							<Input placeholder={enterContentText} disabled />
 						</Form.Item>
@@ -276,7 +276,6 @@ const PersonalInformationStep = ({
 						<Form.Item
 							name='middleName'
 							label={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.middleName' })}
-							rules={[...rules.ten]}
 						>
 							<Input placeholder={enterContentText} disabled />
 						</Form.Item>
@@ -285,7 +284,7 @@ const PersonalInformationStep = ({
 						<Form.Item
 							name='lastName'
 							label={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.lastName' })}
-							rules={[...rules.required, ...rules.ten]}
+							rules={[...rules.required]}
 						>
 							<Input placeholder={enterContentText} disabled />
 						</Form.Item>
@@ -685,7 +684,6 @@ const PersonalInformationStep = ({
 						<Form.Item
 							name='accountHolderName'
 							label={intl.formatMessage({ id: 'global.enrollmentDeclaration.field.accountHolderName' })}
-							rules={[...rules.ten]}
 						>
 							<Input placeholder={enterContentText} />
 						</Form.Item>
