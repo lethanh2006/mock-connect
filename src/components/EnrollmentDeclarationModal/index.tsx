@@ -58,13 +58,8 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 	const contentRef = useRef<HTMLDivElement>(null);
 	const bodyRef = useRef<HTMLDivElement>(null);
 	const maNamHocRef = useRef(undefined);
-<<<<<<< HEAD
-
-	const additionalServicesComplete = Form.useWatch('additionalServicesComplete', form);
-=======
 	const additionalServicesComplete = Form.useWatch('additionalServicesComplete', form);
 
->>>>>>> bb400ee4cb8b3298361673112d8e852a3281965b
 	const isDocumentsRevision =
 		recSinhVien?.enrollmentStatus === EnrollmentStatus.ENROLLED &&
 		!!recSinhVien?.hoSoNhapHoc?.danhSachGiayToNhapHoc?.some(

@@ -83,10 +83,7 @@ const AdditionalServicesStep = ({ form, maNamHoc }: { form: FormInstance<any>; m
 	const [bhytHasActivePeriod, setBhytHasActivePeriod] = useState(false);
 	const [ktxPeriod, setKtxPeriod] = useState<any>(undefined);
 	const [ktxRegistration, setKtxRegistration] = useState<any>(undefined);
-<<<<<<< HEAD
-=======
 	const [hasKtxRegistrationHistory, setHasKtxRegistrationHistory] = useState(false);
->>>>>>> bb400ee4cb8b3298361673112d8e852a3281965b
 	const [mienKtxRecord, setMienKtxRecord] = useState<MienKyTucXa.IRecord | undefined>(undefined);
 
 	const [kskLoading, setKskLoading] = useState(true);
@@ -103,10 +100,7 @@ const AdditionalServicesStep = ({ form, maNamHoc }: { form: FormInstance<any>; m
 
 			if (!dot?._id || dot?.isMienKyTucXa) {
 				setKtxRegistration(undefined);
-<<<<<<< HEAD
-=======
 				setHasKtxRegistrationHistory(false);
->>>>>>> bb400ee4cb8b3298361673112d8e852a3281965b
 			} else {
 				const lichSuRes: any = await getLichSuDangKyKtx(
 					{ maDotId: dot._id },
@@ -118,21 +112,14 @@ const AdditionalServicesStep = ({ form, maNamHoc }: { form: FormInstance<any>; m
 					undefined,
 					false,
 				);
-<<<<<<< HEAD
-				setKtxRegistration(lichSuRes?.[0]);
-=======
 				const lichSuList = Array.isArray(lichSuRes) ? lichSuRes : [];
 				setHasKtxRegistrationHistory(lichSuList.length > 0);
 				setKtxRegistration(lichSuList[0]);
->>>>>>> bb400ee4cb8b3298361673112d8e852a3281965b
 			}
 		} catch {
 			setKtxPeriod(undefined);
 			setKtxRegistration(undefined);
-<<<<<<< HEAD
-=======
 			setHasKtxRegistrationHistory(false);
->>>>>>> bb400ee4cb8b3298361673112d8e852a3281965b
 		}
 
 		try {
@@ -360,13 +347,8 @@ const AdditionalServicesStep = ({ form, maNamHoc }: { form: FormInstance<any>; m
 		? bhytRegistration.declarationType === EBhytDeclarationType.DA_CO_BEN_NGOAI
 		: hasInsurance === true;
 
-<<<<<<< HEAD
-	const isKtxActuallyRegistered = Boolean(ktxRegistration?.formDon?._id);
-	const isDormitoryRegistered = Boolean(isRegisterDormitory) && isKtxActuallyRegistered;
-=======
 	const isKtxActuallyRegistered = hasKtxRegistrationHistory;
 	const isDormitoryRegistered = isKtxActuallyRegistered;
->>>>>>> bb400ee4cb8b3298361673112d8e852a3281965b
 	const mienKtxStatus = mienKtxRecord?.trangThaiMinhChung;
 	// isRegisterFreeDormitory chỉ là cờ ở form Step 1; nếu đợt hiện tại không có đơn miễn thực tế
 	// (vd. không có đợt, hoặc chưa nộp được đơn) thì không nên hiển thị khối "đang xin miễn".
