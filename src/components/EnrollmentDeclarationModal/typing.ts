@@ -1,3 +1,4 @@
+import type { ELoaiNoiSinh } from '@/services/DaoTao/SinhVien/constants';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 
 export type TStep1Payload = {
@@ -16,8 +17,10 @@ export type TStep1Payload = {
 	maQuocTich: string;
 	danToc: string;
 	tonGiao: string;
-	tinhTpNoiSinh: string;
-	maTinhTpNoiSinh: string;
+	loaiNoiSinh: ELoaiNoiSinh;
+	quocGiaNoiSinh?: string;
+	tinhTpNoiSinh?: string;
+	maTinhTpNoiSinh?: string;
 	noiOHienTai: SinhVien.TDiaChi;
 	hoKhauThuongTru: SinhVien.TDiaChi;
 	tenNganHang: string;

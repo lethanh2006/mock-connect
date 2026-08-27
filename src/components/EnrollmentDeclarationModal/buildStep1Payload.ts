@@ -1,5 +1,6 @@
 import { isGiayToVisibleForNationality } from '@/services/DaoTao/DotNhapHoc/constant';
 import type { DotNhapHoc } from '@/services/DaoTao/DotNhapHoc/typings';
+import { ELoaiNoiSinh } from '@/services/DaoTao/SinhVien/constants';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { buildUpLoadFileMultipart, EFileScope } from '@/services/uploadFile';
 import type { TStep1Payload } from './typing';
@@ -38,6 +39,7 @@ export const buildStep1Payload = async (
 	values: Record<string, any>,
 	documentRows: DotNhapHoc.IGiayToCanNopNhapHoc[] = [],
 ): Promise<TStep1Payload> => {
+	const isForeignBirthPlace = values.loaiNoiSinh === ELoaiNoiSinh.NUOC_NGOAI;
 	const [urlMatTruocCccd, urlMatSauCccd, urlDinhKemVanDeSucKhoe, urlPassportAttachment, anhDaiDienUrl] =
 		await Promise.all([
 			buildUpLoadFileMultipart(values, 'frontIdCard', uploadOptions),
@@ -73,8 +75,10 @@ export const buildStep1Payload = async (
 		maQuocTich: values.maQuocTich,
 		danToc: values.ethnicity,
 		tonGiao: values.religion,
-		tinhTpNoiSinh: values.tinhTpNoiSinh,
-		maTinhTpNoiSinh: values.maTinhTpNoiSinh,
+		loaiNoiSinh: values.loaiNoiSinh,
+		tinhTpNoiSinh: isForeignBirthPlace ? undefined : values.tinhTpNoiSinh,
+		quocGiaNoiSinh: isForeignBirthPlace ? values.quocGiaNoiSinh : undefined,
+		maTinhTpNoiSinh: isForeignBirthPlace ? undefined : values.maTinhTpNoiSinh,
 		noiOHienTai: buildDiaChi(values, 'KhaiBao'),
 		hoKhauThuongTru: buildDiaChi(values, 'ThuongTru'),
 		tenNganHang: values.bank,
