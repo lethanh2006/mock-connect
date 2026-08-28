@@ -2,6 +2,7 @@ import { DANH_SACH_TRUONG_THPT } from '@/services/Core/TruongThpt/truongThpt';
 import rules from '@/utils/rules';
 import { AutoComplete, Col, Form, Input, Row, Select, type FormInstance } from 'antd';
 import { useMemo } from 'react';
+import { useIntl } from 'umi';
 
 const normalizeSearchText = (value?: string) =>
 	(value ?? '')
@@ -21,6 +22,7 @@ const SelectTruongThpt = (props: {
 	placeholderTruong?: string;
 }) => {
 	const { form, suffix = '', listTinh, labelTinh, placeholderTinh, labelTruong, placeholderTruong } = props;
+	const intl = useIntl();
 
 	const provinceCode = Form.useWatch(`maTinhTpTruong${suffix}`, form);
 	const schoolCode = Form.useWatch(`hsSchoolCode${suffix}`, form);
@@ -118,6 +120,7 @@ const SelectTruongThpt = (props: {
 					name={`hsName${suffix}`}
 					label={labelTruong ?? 'High School Name'}
 					rules={[...rules.required, ...rules.text]}
+					extra={intl.formatMessage({ id: 'global.enrollmentDeclaration.academic.highSchoolNameHint' })}
 				>
 					<AutoComplete
 						placeholder={placeholderTruong ?? 'Enter content'}
