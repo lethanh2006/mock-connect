@@ -1,6 +1,6 @@
 import { getPublicAssetPath } from '@/utils/path';
 import { Tooltip } from 'antd';
-import { unChatMessagerSupportPaths } from '../constant';
+import { unMessengerSupportPaths } from '../constant';
 
 const PanpageHoTro = () => {
 	const path = APP_CONFIG_HO_TRO_KY_THUAT;
@@ -8,7 +8,7 @@ const PanpageHoTro = () => {
 	if (!path) return null;
 	return (
 		<>
-			{!unChatMessagerSupportPaths.includes(window.location.pathname) ? (
+			{!unMessengerSupportPaths.includes(window.location.pathname) ? (
 				<>
 					<Tooltip title='Fanpage Messenger' placement='topLeft'>
 						<img

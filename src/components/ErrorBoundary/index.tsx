@@ -10,17 +10,6 @@ class ErrorBoundary extends React.Component<MyProps, MyState> {
 		this.state = { error: '', errorInfo: null };
 	}
 
-	componentDidMount(): void {
-		// FIXME: Fix sentry
-		// if (process.env.NODE_ENV !== 'development' && !!sentryDSN)
-		// 	Sentry.init({
-		// 		dsn: sentryDSN,
-		// 		integrations: [new Sentry.BrowserTracing()],
-		// 		tracesSampleRate: 0.2,
-		// 		release: currentRole,
-		// 	});
-	}
-
 	componentDidCatch(error: any, errorInfo: any) {
 		// Catch errors in any components below and re-render with error message
 		this.setState({

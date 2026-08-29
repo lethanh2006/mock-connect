@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { history } from 'umi';
 import PanpageHoTro from './FanpageHoTro';
 import FormPostIssue from './Form';
-import { unChatBotSupportPaths, unTechnicalSupportPaths } from './constant';
+import { unTechnicalSupportPaths } from './constant';
 
 const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 	const intl = useIntl();
@@ -36,13 +36,6 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 					>
 						<FormPostIssue setVisible={setVisible} visible={visible} />
 					</Modal>
-				</>
-			) : null}
-
-			{!unChatBotSupportPaths.includes(window.location.pathname) ? (
-				<>
-					{/* <ChatbotOverlayV2 /> */}
-					{/* <ChatbotOverlay /> */}
 				</>
 			) : null}
 		</>

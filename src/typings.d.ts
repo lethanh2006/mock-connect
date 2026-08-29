@@ -18,8 +18,6 @@ declare let ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION: 'site' | undefine
 declare const REACT_APP_ENV: 'test' | 'dev' | 'pre' | false;
 
 declare const APP_CONFIG_IP_ROOT: string;
-declare const APP_CONFIG_ONE_SIGNAL_ID: string;
-declare const APP_CONFIG_SENTRY_DSN: string;
 declare const APP_CONFIG_KEYCLOAK_AUTHORITY: string;
 declare const APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID: string;
 declare const APP_CONFIG_APP_VERSION: string;
@@ -54,6 +52,5 @@ declare const APP_CONFIG_URL_KY_SO: string;
 
 declare const APP_CONFIG_MOODLE_ENDPOINT: string;
 declare const APP_CONFIG_RECAPTCHA_SITE_KEY: string;
-declare const APP_CONFIG_CHATBOT_PASSWORD: string;
 declare const APP_CONFIG_URL_HUONG_DAN_DANG_KY_TIN_CHI: string;
 declare const APP_CONFIG_TIN_TUC_WP_CATEGORY: number;

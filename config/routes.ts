@@ -970,12 +970,6 @@ export default [
 	// 	icon: 'BellOutlined',
 	// },
 	// {
-	// 	name: 'ChatBot',
-	// 	path: 'chat-bot',
-	// 	component: './ChatBot',
-	// 	icon: 'RobotOutlined',
-	// },
-	// {
 	// 	name: 'KhaiBaoSucKhoe',
 	// 	icon: 'HeartOutlined',
 	// 	path: '/khai-bao-suc-khoe',
@@ -1010,28 +1004,6 @@ export default [
 	// 	],
 	// },
 
-	{
-		path: '/notification',
-		routes: [
-			{
-				path: 'subscribe',
-				exact: true,
-				component: 'ThongBao/Subscribe',
-			},
-			{
-				path: 'check',
-				exact: true,
-				component: 'ThongBao/Check',
-			},
-			{
-				path: '',
-				exact: true,
-				component: 'ThongBao/NotifOneSignal',
-			},
-		],
-		layout: false,
-		hideInMenu: true,
-	},
 	{
 		path: '/',
 		redirect: '/dashboard',

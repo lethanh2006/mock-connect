@@ -93,13 +93,6 @@ const CardSuKienSapToi = () => {
 											{currentEvent.loaiSuKien}
 										</Tag>
 
-										{currentEvent?.isQRDangKy && (
-											<Tag color={currentEvent?.isDangKy ? 'green' : 'red'} style={{ fontSize: 11 }}>
-												{currentEvent?.isDangKy
-													? intl.formatMessage({ id: 'trangchu.sukien.tag.dadangky' })
-													: intl.formatMessage({ id: 'trangchu.sukien.tag.chuadangky' })}
-											</Tag>
-										)}
 									</Space>
 								</div>
 							</div>

@@ -1,7 +1,6 @@
 import axios from '@/utils/axios';
 import {
 	ip3,
-	ipNotif,
 	keycloakClientID,
 	keycloakTokenEndpoint,
 	keycloakUserInfoEndpoint,
@@ -35,14 +34,6 @@ export async function refreshAccesssToken(payload: { refreshToken: string }) {
 		headers: { 'content-type': 'application/x-www-form-urlencoded' },
 		data: queryString.stringify(data),
 	});
-}
-
-export async function initOneSignal(payload: { playerId: string }) {
-	return axios.put(`${ipNotif}/one-signal/user`, payload);
-}
-
-export async function deleteOneSignal(data: { playerId: any }) {
-	return axios.delete(`${ipNotif}/one-signal/user`, { data });
 }
 
 // Cài đặt

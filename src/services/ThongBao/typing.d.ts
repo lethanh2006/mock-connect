@@ -44,7 +44,6 @@ declare module ThongBao {
 
 		userList: IUser[];
 
-		oneSignalData?: string | null;
 		urlFile?: string[] | null;
 
 		dataPartitionCode: string;

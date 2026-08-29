@@ -92,21 +92,21 @@ axios.interceptors.request.use(
 			config.headers.set('Accept-Language', getAcceptLanguage());
 		}
 
-		// if (!isExcluded && !config.url?.includes('wp-json')) {
-		// 	const hasHeader = Object.prototype.hasOwnProperty.call(config.headers, 'x-data-partition-code');
+		if (!isExcluded) {
+			const hasHeader = Object.prototype.hasOwnProperty.call(config.headers, 'x-data-partition-code');
 
-		// 	if (hasHeader) {
-		// 		const value = config.headers['x-data-partition-code'];
-		// 		if (value === null || value === undefined) {
-		// 			delete config.headers['x-data-partition-code'];
-		// 		}
-		// 	} else {
-		// 		const partitionCode = localStorage.getItem('partitionCode');
-		// 		if (partitionCode) {
-		// 			config.headers['x-data-partition-code'] = partitionCode;
-		// 		}
-		// 	}
-		// }
+			if (hasHeader) {
+				const value = config.headers['x-data-partition-code'];
+				if (value === null || value === undefined) {
+					delete config.headers['x-data-partition-code'];
+				}
+			} else {
+				const partitionCode = localStorage.getItem('partitionCode');
+				if (partitionCode) {
+					config.headers['x-data-partition-code'] = partitionCode;
+				}
+			}
+		}
 		return config;
 	},
 	(error) => Promise.reject(error),

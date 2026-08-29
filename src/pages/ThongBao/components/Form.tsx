@@ -116,16 +116,9 @@ const FormThongBao = (props: any) => {
 		<Card title={`${edit ? 'Chỉnh sửa' : 'Thêm mới'} ${title?.toLowerCase()}`}>
 			<Form layout='vertical' onFinish={onFinish} form={form}>
 				<Row gutter={[12, 0]}>
-					{notiType === NotificationType.ONESIGNAL && (
-						<Col span={24} md={6}>
-							<Form.Item name='imageUrl' label='Ảnh đại diện'>
-								<UploadFile isAvatarSmall />
-							</Form.Item>
-						</Col>
-					)}
-					<Col span={24} md={notiType === NotificationType.ONESIGNAL ? 18 : 24}>
+					<Col span={24} md={24}>
 						<Row gutter={[12, 0]}>
-							<Col span={notiType === NotificationType.ONESIGNAL ? 24 : 12}>
+							<Col span={12}>
 								<Form.Item
 									name='title'
 									label='Tiêu đề'
@@ -152,7 +145,7 @@ const FormThongBao = (props: any) => {
 					<Col span={24} md={8}>
 						<Form.Item
 							name='receiverType'
-							label={notiType === NotificationType.ONESIGNAL ? 'Đối tượng nhận thông báo' : 'Đối tượng nhận email'}
+							label='Đối tượng nhận email'
 							rules={[...rules.required]}
 						>
 							<Select
@@ -263,7 +256,7 @@ const FormThongBao = (props: any) => {
 						<Form.Item
 							name='content'
 							label={
-								notiType === NotificationType.ONESIGNAL ? 'Nội dung chi tiết thông báo' : 'Nội dung chi tiết email'
+								'Nội dung chi tiết email'
 							}
 							rules={[...rules.requiredHtml]}
 						>

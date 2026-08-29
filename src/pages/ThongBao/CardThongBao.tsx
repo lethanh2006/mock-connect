@@ -9,12 +9,11 @@ import { type ThongBao } from '@/services/ThongBao/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime, getDateFormat } from '@/utils/formatDate';
 import { currentRole } from '@/utils/ip';
-import { DeleteOutlined, EyeOutlined, LeftOutlined, PlusCircleOutlined, RightOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Popconfirm, Segmented, Space } from 'antd';
+import { EyeOutlined, LeftOutlined, PlusCircleOutlined, RightOutlined } from '@ant-design/icons';
+import { Button, DatePicker, Segmented, Space } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import news from '../../assets/new6.gif';
-import { kiemTraPhanVung } from '../../utils/constants';
 import Form from './components/Form';
 import CardFormThongBaoTuyChinh from './ThongBaoTuyChinh/CardForm';
 import ViewThongBao from './ViewThongBao/CardView';
@@ -28,7 +27,6 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 		setRecord,
 		record,
 		getModel,
-		deleteModel,
 		setSortTime,
 		setVisibleThongBaoDanhSach,
 		setRecordThongBaoDanhSach,
@@ -111,7 +109,6 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 			width: 150,
 			render: (val, recordVal) => recordVal?.tagEmail?.ten,
 			onCell,
-			hide: notiType === NotificationType.ONESIGNAL,
 		},
 		{
 			title: 'Mô tả',
@@ -152,8 +149,6 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 			width: 90,
 			fixed: 'right',
 			render: (recordThongBao: ThongBao.IRecord) => {
-				const isPhanVung = kiemTraPhanVung(recordThongBao?.dataPartitionCode ?? null);
-
 				return (
 					<>
 						<ButtonExtend
@@ -165,23 +160,6 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 							type='link'
 							icon={<EyeOutlined />}
 						/>
-						{notiType === NotificationType.ONESIGNAL ? (
-							<Popconfirm
-								onConfirm={() => {
-									deleteModel(recordThongBao._id, getData);
-								}}
-								title='Bạn có chắc chắn muốn xóa?'
-							>
-								<ButtonExtend
-									tooltip='Xóa'
-									disabled={activeKey === 'tu_dong' || !isPhanVung}
-									shape='circle'
-									type='link'
-									danger
-									icon={<DeleteOutlined />}
-								/>
-							</Popconfirm>
-						) : null}
 					</>
 				);
 			},
@@ -246,7 +224,7 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 			</Space>
 
 			<TableBase
-				title={notiType === NotificationType.ONESIGNAL ? 'Thông báo' : 'Gửi Email'}
+				title='Gửi Email'
 				columns={columns}
 				modelName='thongbao.thongbao'
 				widthDrawer={1000}

@@ -1,7 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import dayjs from '@/utils/dayjs';
 import { inputFormat } from '@/utils/utils';
-import { CustomerServiceOutlined, EyeOutlined, FieldTimeOutlined, ReloadOutlined } from '@ant-design/icons';
+import { EyeOutlined, FieldTimeOutlined, ReloadOutlined } from '@ant-design/icons';
 import {
 	Badge,
 	Card,
@@ -149,13 +149,6 @@ const MuonTraSachPage = () => {
 						<Space wrap>
 							<ButtonExtend size='small' icon={<FieldTimeOutlined />} onClick={() => setVisibleSetting(true)}>
 								Thời gian ra vào thư viện
-							</ButtonExtend>
-							<ButtonExtend
-								size='small'
-								icon={<CustomerServiceOutlined />}
-								onClick={() => window.open('https://slink-chatbot.ript.vn/admin/chatbot', '_blank')}
-							>
-								Tìm kiếm tài liệu thông minh
 							</ButtonExtend>
 						</Space>
 					</Col>

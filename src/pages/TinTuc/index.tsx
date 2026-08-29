@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import './components/styles.less';
 import TinTucSlinkPage from './Slink';
-import TinTucWpPage from './Wordpress';
 
 const TinTucPage = () => {
 	const intl = useIntl();
@@ -18,12 +17,9 @@ const TinTucPage = () => {
 		record: recChuDe,
 	} = useModel('tintuc.chude');
 	const { setPage } = useModel('tintuc.tintuc');
-	const { setPage: setPageWP } = useModel('tintuc.tintucwp');
 	const { getAllModel } = useModel('tienich.xemsau');
 	const hash = window.location.hash.slice(1, 25);
 	const [tabActive, setTabActive] = useState<string>('all');
-
-	const isWp = recChuDe?.isTinTucWP || (tabActive === 'all' && danhSachChuDe?.find((item) => item?.isTinTucWP));
 
 	//Xem sau
 	const getData = () => {
@@ -42,8 +38,7 @@ const TinTucPage = () => {
 		});
 	}, []);
 
-	const main = () =>
-		isWp ? <TinTucWpPage tabActive={tabActive} getData={getData} /> : <TinTucSlinkPage tabActive={tabActive} />;
+	const main = () => <TinTucSlinkPage tabActive={tabActive} getData={getData} />;
 
 	const menus = [
 		{
@@ -73,7 +68,6 @@ const TinTucPage = () => {
 						onChange={(key) => {
 							setTabActive(key);
 							setChuDe(danhSachChuDe.find((item) => item._id === key));
-							setPageWP(1);
 							setPage(1);
 						}}
 					/>

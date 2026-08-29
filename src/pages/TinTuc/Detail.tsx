@@ -5,47 +5,27 @@ import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import './components/styles.less';
 import ChiTietTinSlink from './Slink/ChiTietTinTuc';
-import ChiTietTinTucWpPage from './Wordpress/ChiTietTinTuc';
 
 const ChiTietTinTucPage = () => {
 	const intl = useIntl();
-	const { getByIdModel, record: recChuDe } = useModel('tintuc.chude');
-	const { getByIdModel: getIdTinTucWP, setRecord: setRecordWP } = useModel('tintuc.tintucwp');
 	const { getByIdModel: getIdTinTucSlink, setRecord: setRecordSlink } = useModel('tintuc.tintuc');
 	const { location } = window;
 
-	const { _id: idWordPess, id: idSlink, cat: idChuDe } = queryString.parse(location.search);
-	const isTinTucWP = !!idWordPess;
+	const { id: idSlink } = queryString.parse(location.search);
 
 	const fetchData = async () => {
-		if (isTinTucWP) {
-			// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-			idChuDe && !recChuDe?._id
-				? getByIdModel(idChuDe as string, true).then((res) => {
-						if (res) {
-							getIdTinTucWP(idWordPess as string, undefined, res?.linkWP).then(() => {
-								window.scrollTo({ top: 0, behavior: 'smooth' });
-							});
-						}
-					})
-				: getIdTinTucWP(idWordPess as string, undefined, recChuDe?.linkWP ?? APP_CONFIG_URL_LANDING).then(() => {
-						window.scrollTo({ top: 0, behavior: 'smooth' });
-					});
-		} else {
-			getIdTinTucSlink(idSlink as string).then(() => {
-				window.scrollTo({ top: 0, behavior: 'smooth' });
-			});
-		}
+		getIdTinTucSlink(idSlink as string).then(() => {
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		});
 	};
 
 	useEffect(() => {
 		fetchData();
 
 		return () => {
-			setRecordWP(undefined);
 			setRecordSlink(undefined);
 		};
-	}, [idWordPess, idSlink]);
+	}, [idSlink]);
 
 	return (
 		<Card
@@ -55,8 +35,7 @@ const ChiTietTinTucPage = () => {
 				</span>
 			}
 		>
-			{/* Điều chỉnh để hiển thị component theo loại tin tức */}
-			{isTinTucWP ? <ChiTietTinTucWpPage /> : <ChiTietTinSlink />}
+			<ChiTietTinSlink />
 		</Card>
 	);
 };

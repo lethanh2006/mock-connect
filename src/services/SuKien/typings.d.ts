@@ -53,9 +53,6 @@ declare module SuKien {
 		thoiGianKetThuc?: string;
 		thoiGianBatDauDangKy?: string;
 		thoiGianKetThucDangKy?: string;
-		isQRDangKy?: boolean;
-		isDangKy?: any;
-		isQRThamGia?: boolean;
 		batBuocKhaoSatDangKy?: boolean;
 		batBuocKhaoSatThamGia?: boolean;
 		idKhaoSatDangKy?: string;

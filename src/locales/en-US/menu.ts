@@ -68,7 +68,6 @@ export default {
 	'menu.KhaoSatTrucTuyen': 'Online Surveys',
 	'menu.CuocThi': 'Competitions',
 	'menu.ThongBao': 'Announcements',
-	'menu.ChatBot': 'Ask Amin',
 
 	'menu.TienIch': 'Other Utilities',
 	'menu.TienIch.VanBanHuongDan': 'Guidelines & Documents',

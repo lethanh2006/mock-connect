@@ -41,7 +41,6 @@ export const ColorLoaiDoiTuongThongBao: Partial<Record<EReceiverType, string>> =
 };
 
 export enum NotificationType {
-	ONESIGNAL = 'OneSignalService', //Thông báo thường
 	EMAIL = 'Email', //Thông báo email
 	ALL = 'All', //Thông báo tất cả
 }

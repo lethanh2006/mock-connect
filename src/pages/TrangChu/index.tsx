@@ -77,7 +77,6 @@ const TrangChu = () => {
 						</Col> */}
 							<Col span={24}>{/* <VaoRaThuVienDashboardCard /> */}</Col>
 							<Col span={24}>
-								{/* <ChatbotBanner /> */}
 								{/* <ThongKeMuonSachCard /> */}
 							</Col>
 						</Row>

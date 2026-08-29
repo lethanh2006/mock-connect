@@ -13,7 +13,6 @@ import EnrollmentPrompt from './components/EnrollmentPrompt';
 import ErrorBoundary from './components/ErrorBoundary';
 import { OIDCBounder } from './components/OIDCBounder';
 import { unCheckPermissionPaths } from './components/OIDCBounder/constant';
-import OneSignalBounder from './components/OneSignalBounder';
 import HeaderContentPage from './components/RightContent/Header';
 import TechnicalSupportBounder from './components/TechnicalSupportBounder';
 import ConfigBounder from './components/TechnicalSupportBounder/ConfigBounder';
@@ -114,10 +113,8 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 				<OIDCBounder>
 					<ErrorBoundary>
 						<TechnicalSupportBounder>
-							<OneSignalBounder>
-								<EnrollmentPrompt />
-								{dom}
-							</OneSignalBounder>
+							<EnrollmentPrompt />
+							{dom}
 						</TechnicalSupportBounder>
 					</ErrorBoundary>
 				</OIDCBounder>
