@@ -110,7 +110,6 @@
     "react-stickynode": "^5.0.2",
     "react-to-print": "^3.0.5",
     "react-webcam": "^7.2.0",
-    "socket.io-client": "^4.8.1",
     "styled-components": "^6.1.15",
     "tinymce": "^7.9.3",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
@@ -155,7 +154,6 @@
     "picomatch": ">=4.0.4",
     "yaml": ">=2.8.3",
     "follow-redirects": ">=1.16.0",
-    "socket.io-parser": ">=4.2.7",
     "immer": ">=9.0.21",
     "vite": ">=8.0.16",
     "axios": ">=1.16.0",
