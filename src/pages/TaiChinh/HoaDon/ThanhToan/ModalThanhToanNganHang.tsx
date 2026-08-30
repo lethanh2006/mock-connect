@@ -1,10 +1,10 @@
 import { ESettingKey, unitName } from '@/services/base/constant';
+import { getBankQr } from '@/services/TaiChinh/GiaoDich';
 import { ELoaiHinhThucThanhToan } from '@/services/TaiChinh/HinhThucThanhToan/constant';
 import dayjs from '@/utils/dayjs';
-import { ipTaiChinh } from '@/utils/ip';
 import { removeVietnameseTones } from '@/utils/utils';
-import { Col, Empty, Modal, Row, Space } from 'antd';
-import { useEffect } from 'react';
+import { Col, Empty, Modal, Row, Space, Spin } from 'antd';
+import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
 const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) => {
@@ -12,31 +12,21 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 	const { visible, onOk } = props;
 	const { record } = useModel('taichinh.giaodich');
 	const { record: recDotThu } = useModel('taichinh.dotthu');
-	const { getByKeyModel, settings } = useModel('tienich.caidat');
+	const { settings } = useModel('tienich.caidat');
 	const { getAllModel: getHinhThuc, defaultHinhThuc } = useModel('taichinh.hinhthucthanhtoan');
-	const { initialState } = useModel('@@initialState');
-	// thông tin người nộp tiền
-	const userFullname =
-		record?.userFullname ??
-		(initialState?.currentUser?.family_name
-			? `${initialState.currentUser.family_name} ${initialState.currentUser?.given_name ?? ''}`
-			: initialState?.currentUser?.name);
-	const userCode = record?.userCode ?? initialState?.currentUser?.preferred_username ?? '';
-	/** Nội dung chuyển khoản */
-	const addInfo = removeVietnameseTones(
-		`${userCode ?? ''} ${userFullname ?? ''} ${record?.name ?? 'Nộp tiền'}`,
-	).toUpperCase();
+	const [qrImageUrl, setQrImageUrl] = useState<string>();
+	const [qrLoading, setQrLoading] = useState(false);
 
 	// Thông tin thanh toán từ cài đặt
 	const { tienToTaiKhoan, maNganHang, urlHuongDanThanhToan } = settings[ESettingKey.THONG_TIN_THANH_TOAN] ?? {};
 	/** Hình thức thanh toán cuối cùng, theo thứ tự ưu tiên: Kênh từ Đợt thu => Kênh mặc định => Thông tin ở Setting */
 	const hinhThucFinal = recDotThu?.kenhThanhToan ??
 		defaultHinhThuc ?? {
-		loaiKenhThanhToan: ELoaiHinhThucThanhToan.DONG,
-		maNganHangVNPay: maNganHang,
-		tienToSTK: tienToTaiKhoan,
-		huongDanThanhToan: urlHuongDanThanhToan,
-	};
+			loaiKenhThanhToan: ELoaiHinhThucThanhToan.DONG,
+			maNganHangVNPay: maNganHang,
+			tienToSTK: tienToTaiKhoan,
+			huongDanThanhToan: urlHuongDanThanhToan,
+		};
 	/** Tên ngân hàng: Lấy từ Hình thức hoặc Tên trường */
 	const unitInfo = removeVietnameseTones(hinhThucFinal.tenNganHang ?? unitName).toUpperCase();
 
@@ -56,6 +46,43 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 		if (!defaultHinhThuc) getHinhThuc();
 	}, []);
 
+	useEffect(() => {
+		let cancelled = false;
+		let objectUrl: string | undefined;
+		setQrImageUrl(undefined);
+
+		if (!visible || !record?.identityCode || nganHangBaoTri) {
+			setQrLoading(false);
+			return () => undefined;
+		}
+
+		setQrLoading(true);
+		getBankQr(record.identityCode)
+			.then(({ data }) => {
+				if (cancelled) return;
+				const blob = data instanceof Blob ? data : new Blob([data], { type: 'image/png' });
+				objectUrl = URL.createObjectURL(blob);
+				setQrImageUrl(objectUrl);
+			})
+			.catch(() => {
+				if (!cancelled) setQrImageUrl(undefined);
+			})
+			.finally(() => {
+				if (!cancelled) setQrLoading(false);
+			});
+
+		return () => {
+			cancelled = true;
+			if (objectUrl) URL.revokeObjectURL(objectUrl);
+		};
+	}, [visible, record?.identityCode, nganHangBaoTri]);
+
+	const renderQr = () => {
+		if (qrLoading) return <Spin />;
+		if (!qrImageUrl) return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Chưa thể tạo mã QR' />;
+		return <img style={{ maxWidth: '100%' }} src={qrImageUrl} alt='QR thanh toán' />;
+	};
+
 	const renderLopThuong = () => (
 		<Row gutter={[12, 12]}>
 			<Col span={24}>{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.moTaChung' })}</Col>
@@ -65,19 +92,7 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 					<b>
 						<u>{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.qrTitle' })}:</u>
 					</b>
-					{hinhThucFinal.loaiKenhThanhToan === ELoaiHinhThucThanhToan.CO_DINH &&
-						hinhThucFinal.maNganHangVNPay &&
-						hinhThucFinal.soTaiKhoanThanhToanCoDinh ? (
-						<img
-							style={{ maxWidth: '100%' }}
-							src={`https://img.vietqr.io/image/${hinhThucFinal.maNganHangVNPay}-${hinhThucFinal.soTaiKhoanThanhToanCoDinh}-compact2.png?amount=${record?.amount}&addInfo=${addInfo}&accountName=${unitInfo}`}
-						/>
-					) : hinhThucFinal.maNganHangVNPay && hinhThucFinal.tienToSTK ? (
-						<img
-							style={{ maxWidth: '100%' }}
-							src={`https://img.vietqr.io/image/${hinhThucFinal.maNganHangVNPay}-${hinhThucFinal.tienToSTK}${record?.identityCode}-compact2.png?amount=${record?.amount}&addInfo=${addInfo}&accountName=${unitInfo}`}
-						/>
-					) : null}
+					{renderQr()}
 					<i>{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.qrNote' })}</i>
 				</Space>
 			</Col>
