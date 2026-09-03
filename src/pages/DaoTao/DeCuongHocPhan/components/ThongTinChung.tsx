@@ -3,6 +3,7 @@ import ModalExpandable from '@/components/Table/ModalExpandable';
 import { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { Button, Descriptions, Divider } from 'antd';
+import DOMPurify from 'dompurify';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -140,10 +141,10 @@ const ThongTinChungPage = (props: { khoiChuongTrinh?: any }) => {
 					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(record?.chuanDauRa ?? '--') }} />
 				</Collapse.Panel>
 				{/* <Collapse.Panel header='Nội dung tóm tắt' key='2'>
-					<div dangerouslySetInnerHTML={{ __html: record?.noiDungTomTat ?? '--' }} />
+					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(record?.noiDungTomTat ?? '--') }} />
 				</Collapse.Panel>
 				<Collapse.Panel header='Nội dung chi tiết' key='3'>
-					<div dangerouslySetInnerHTML={{ __html: record?.noiDungChiTiet ?? '--' }} />
+					<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(record?.noiDungChiTiet ?? '--') }} />
 				</Collapse.Panel> */}
 			{/* </Collapse> */}
 

@@ -1,10 +1,11 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
+import { getPublicAssetPath } from '@/utils/path';
 import { Button } from 'antd';
 import { useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { useReactToPrint } from 'react-to-print';
 import styles from './styles.less';
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = getPublicAssetPath('pdf.worker.min.mjs');
 
 const PDFViewer = (props: { data: any; pagination?: boolean; scale?: number }) => {
 	const [numPages, setNumPages] = useState(0);

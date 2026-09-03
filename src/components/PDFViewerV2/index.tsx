@@ -2,7 +2,10 @@ import { SpecialZoomLevel, Viewer, Worker, type ViewerProps } from '@react-pdf-v
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+import { getPublicAssetPath } from '@/utils/path';
 import { useEffect, useRef, useState } from 'react';
+
+const LOCAL_PDF_WORKER = getPublicAssetPath('vendor/pdfjs-dist-signature/pdf.worker.js');
 
 interface PDFViewerProps extends Omit<ViewerProps, 'fileUrl'> {
 	/**
@@ -79,7 +82,7 @@ const PDFViewerV2 = ({
 
 	return (
 		<div ref={viewerRef} style={{ height: heightProps ?? height }}>
-			<Worker workerUrl='https://unpkg.com/@react-pdf-viewer/pdfjs-dist-signature@2.5.207/build/pdf.worker.js'>
+			<Worker workerUrl={LOCAL_PDF_WORKER}>
 				<Viewer
 					fileUrl={fileUrl}
 					defaultScale={defaultScale}

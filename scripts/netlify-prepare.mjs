@@ -30,6 +30,11 @@ function parseEnvFile(content) {
 	return result;
 }
 
+const publicAppConfigKeyPattern = /^APP_CONFIG_(APP_VERSION|BASE_PATH|CO_QUAN_CHU_QUAN|DON_VI_BAN_GIAM_DOC|HIGHLIGHT_COLOR|INIT_[A-Z0-9_]+|IP_ROOT(?:_API|_BY_HOST)?|KEYCLOAK_AUTHORITY|KE_HOACH_NAM_HIGHLIGHT_TUAN|KHOAN_THU_HOC_PHI|NGUON_THU_CO_DINH|PREFIX_OF_KEYCLOAK_CLIENT_ID|PRIMARY_COLOR|SO_TIN_CHI_HOC_KY_(?:MIN|MAX)|TEN_TRUONG(?:_VIET_TAT_TIENG_ANH)?|TIEN_TO_TRUONG|TITLE_[A-Z0-9_]+|URL_[A-Z0-9_]+)$/;
+const sensitiveAppConfigKeyPattern = /(^|_)(TOKEN|PASSWORD|SECRET|PRIVATE_KEY|CREDENTIAL|API_KEY|ENCRYPTION_KEY|SIGNING_KEY)(_|$)/;
+const isPublicAppConfigKey = (key) =>
+	publicAppConfigKeyPattern.test(key) && !sensitiveAppConfigKeyPattern.test(key);
+
 let envFileValues = {};
 try {
 	envFileValues = parseEnvFile(await fse.readFile(path.join(root, '.env'), 'utf8'));
@@ -39,7 +44,7 @@ try {
 
 const appConfig = {};
 for (const key of new Set([...Object.keys(envFileValues), ...Object.keys(process.env)])) {
-	if (!key.startsWith('APP_CONFIG_')) continue;
+	if (!isPublicAppConfigKey(key)) continue;
 	appConfig[key] = process.env[key] ?? envFileValues[key] ?? '';
 }
 
