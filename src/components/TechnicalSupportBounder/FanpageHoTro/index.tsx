@@ -3,7 +3,7 @@ import { Tooltip } from 'antd';
 import { unMessengerSupportPaths } from '../constant';
 
 const PanpageHoTro = () => {
-	const path = APP_CONFIG_HO_TRO_KY_THUAT;
+	const path = typeof APP_CONFIG_HO_TRO_KY_THUAT !== 'undefined' ? APP_CONFIG_HO_TRO_KY_THUAT : '';
 
 	if (!path) return null;
 	return (
