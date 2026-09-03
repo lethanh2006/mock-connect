@@ -1,4 +1,5 @@
 import axios from '@/utils/axios';
+import { getFileIdFromValue, getPreviewUrl } from '@/utils/utils';
 import { Image } from 'antd';
 import { useEffect, useState } from 'react';
 
@@ -50,6 +51,9 @@ const AuthImage: React.FC<AuthImageProps> = ({
 			return;
 		}
 
+		const isProxyFileUrl = src.includes('/file/') && /[?&]proxy=1(?:&|$)/.test(src);
+		const shouldResolveFileUrl = !isProxyFileUrl && (!!getFileIdFromValue(src) || src.includes('/file/'));
+
 		const loadLocalImage = async () => {
 			if (SAFE_RASTER_DATA_URL_PATTERN.test(src)) {
 				setImgSrc(src);
@@ -75,16 +79,25 @@ const AuthImage: React.FC<AuthImageProps> = ({
 			};
 		}
 
-		if (cache.has(src)) {
-			setImgSrc(cache.get(src)!);
-			return;
+		if (!shouldResolveFileUrl && !/^https?:\/\//.test(src)) {
+			setImgSrc(src);
+			return () => {
+				isMounted = false;
+			};
 		}
 
 		let objectUrl: string | undefined;
 
 		const fetchImage = async () => {
 			try {
-				const res = await axios.get(src, {
+				const resolvedSrc = shouldResolveFileUrl ? await getPreviewUrl(src) : src;
+
+				if (cache.has(resolvedSrc)) {
+					if (isMounted) setImgSrc(cache.get(resolvedSrc)!);
+					return;
+				}
+
+				const res = await axios.get(resolvedSrc, {
 					responseType: 'blob',
 					data: { silent: true },
 				});
@@ -92,7 +105,7 @@ const AuthImage: React.FC<AuthImageProps> = ({
 				if (!isSafeRasterImage(res.data)) throw new Error('Unsupported image type');
 
 				objectUrl = URL.createObjectURL(res.data);
-				cache.set(src, objectUrl);
+				cache.set(resolvedSrc, objectUrl);
 
 				if (isMounted) setImgSrc(objectUrl);
 			} catch {
@@ -121,7 +134,9 @@ const AuthImage: React.FC<AuthImageProps> = ({
 		);
 	}
 
-	return <img src={imgSrc} alt={alt} width={width} height={height} className={className} style={style} onError={onError} />;
+	return (
+		<img src={imgSrc} alt={alt} width={width} height={height} className={className} style={style} onError={onError} />
+	);
 };
 
 export default AuthImage;
