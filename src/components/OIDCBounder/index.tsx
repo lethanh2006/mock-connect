@@ -2,14 +2,13 @@ import { useAuthActions } from '@/hooks/useAuthActions';
 import { getUserInfo } from '@/services/base/api';
 import { AppModules, EModuleKey } from '@/services/base/constant';
 import { type Login } from '@/services/base/typing';
-import axios from '@/utils/axios';
+import axios, { registerOidcSilentRenew } from '@/utils/axios';
 import { currentRole, financeApiClientId, qldtApiClientId, replaceRole } from '@/utils/ip';
 import type { AuthorizedRolesByClient } from '@/utils/keycloakRoles';
 import { getKeycloakRoleContext, hasModulePermission } from '@/utils/keycloakRoles';
-import { oidcConfig } from '@/utils/oidcConfig';
+import { getOidcRedirectUri, oidcConfig } from '@/utils/oidcConfig';
 import { getAppBasePath, getPublicAssetPath } from '@/utils/path';
 import { notification } from 'antd';
-import queryString from 'query-string';
 import { useEffect, useRef, type FC } from 'react';
 import { AuthProvider, hasAuthParams, useAuth } from 'react-oidc-context';
 import { history, useIntl, useModel } from 'umi';
@@ -57,23 +56,30 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 	const isUnauth = unAuthPaths.some((path) => window.location.pathname.includes(path));
 	const authTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const loginInProgressRef = useRef(false);
+	const reauthenticationInProgressRef = useRef(false);
 
 	const handleAxios = (access_token: string) => {
 		axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
 	};
 
 	const redirectLocation = () => {
-		// Loại bỏ các Auth params
-		const { code, iss, session_state, state, ...other } = queryString.parse(window.location.search);
-		let newSearch = Object.keys(other)
-			.map((key) => `${key}=${other[key]}`)
-			.join('&');
-		if (newSearch) newSearch = '?' + newSearch;
+		const url = new URL(getOidcRedirectUri());
 		const pathname =
 			window.location.pathname === '/' || window.location.pathname === `${getPublicAssetPath('user/login')}`
 				? '/dashboard'
 				: window.location.pathname;
-		window.history.replaceState({}, document.title, `${pathname}${newSearch}${window.location.hash}`);
+		window.history.replaceState({}, document.title, `${pathname}${url.search}${url.hash}`);
+	};
+
+	const redirectToSignin = () => {
+		if (reauthenticationInProgressRef.current || isUnauth || hasAuthParams()) return;
+
+		reauthenticationInProgressRef.current = true;
+		void auth.removeUser().finally(() => {
+			void auth.signinRedirect().catch(() => {
+				reauthenticationInProgressRef.current = false;
+			});
+		});
 	};
 
 	const handleLogin = async () => {
@@ -149,6 +155,18 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 	};
 
 	useEffect(() => {
+		const renewAccessToken = async () => {
+			const user = await auth.signinSilent();
+			if (!user?.access_token) return undefined;
+
+			handleAxios(user.access_token);
+			return user.access_token;
+		};
+
+		return registerOidcSilentRenew(renewAccessToken);
+	}, [auth]);
+
+	useEffect(() => {
 		// Nếu đang cập nhật thì bật cái này lên
 		// history.replace('/hold-on');
 		// return;
@@ -194,6 +212,22 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 	}, [auth.user?.access_token]);
 
 	useEffect(() => {
+		const handleAccessTokenExpired = () => redirectToSignin();
+		const handleSilentRenewError = () => {
+			// Keep a still-valid token available during transient renew failures. If it
+			// expires, the accessTokenExpired event above will re-authenticate the user.
+			if (auth.user?.expired) redirectToSignin();
+		};
+		const removeAccessTokenExpired = auth.events.addAccessTokenExpired(handleAccessTokenExpired);
+		const removeSilentRenewError = auth.events.addSilentRenewError(handleSilentRenewError);
+
+		return () => {
+			removeAccessTokenExpired();
+			removeSilentRenewError();
+		};
+	}, [auth, isUnauth]);
+
+	useEffect(() => {
 		OIDCBounderHandlers = actions;
 	}, [actions]);
 
@@ -209,7 +243,7 @@ export const OIDCBounder: FC<{ children: React.ReactElement }> & { getActions: (
 			redirect_uri={
 				window.location.pathname.includes('/user')
 					? `${window.location.origin}${getAppBasePath()}`
-					: window.location.href
+					: getOidcRedirectUri()
 			}
 		>
 			<OIDCBounder_ {...props} />

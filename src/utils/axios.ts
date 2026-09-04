@@ -1,37 +1,38 @@
-// import { refreshAccesssToken } from '@/services/ant-design-pro/api';
 import '@ant-design/v5-patch-for-react-19';
 import { notification } from 'antd';
-import axios1 from 'axios';
-// import { history } from 'umi';
+import axios1, { type InternalAxiosRequestConfig } from 'axios';
 import qs from 'qs';
 import { getIntl, getLocale } from 'umi';
 import { excludedPaths } from './constants';
 import data from './data';
+import { keycloakTokenEndpoint } from './ip';
 
-// function routeLogin(errorCode: string) {
-//   // notification.warning({
-//   //   message: 'Vui lòng đăng nhập lại',
-//   //   description: data.error[errorCode],
-//   // });
-//   // localStorage.clear();
-//   history.replace({
-//     pathname: '/user/login',
-//   });
-// }
+type RetryableRequestConfig = InternalAxiosRequestConfig & { _retry?: boolean };
+type OidcSilentRenewHandler = () => Promise<string | undefined>;
 
-// for multiple request
-// let isRefreshing = false;
-// let failedQueue: any[] = [];
-// const processQueue = (error: any, token: any = null) => {
-//   failedQueue.forEach((prom) => {
-//     if (error) {
-//       prom.reject(error);
-//     } else {
-//       prom.resolve(token);
-//     }
-//   });
-//   failedQueue = [];
-// };
+let oidcSilentRenewHandler: OidcSilentRenewHandler | null = null;
+let oidcSilentRenewPromise: Promise<string | undefined> | null = null;
+
+/** Register the OIDC context callback used to renew a token after an API 401. */
+export const registerOidcSilentRenew = (handler: OidcSilentRenewHandler) => {
+	const previousHandler = oidcSilentRenewHandler;
+	oidcSilentRenewHandler = handler;
+
+	return () => {
+		if (oidcSilentRenewHandler === handler) oidcSilentRenewHandler = previousHandler;
+	};
+};
+
+const renewAccessToken = () => {
+	if (!oidcSilentRenewHandler) return Promise.resolve(undefined);
+	if (!oidcSilentRenewPromise) {
+		oidcSilentRenewPromise = oidcSilentRenewHandler().finally(() => {
+			oidcSilentRenewPromise = null;
+		});
+	}
+
+	return oidcSilentRenewPromise;
+};
 
 /** Chuẩn hóa locale (vi-VN, en-US, …) thành giá trị Accept-Language ở BE. */
 const getAcceptLanguage = (): 'en' | 'vi' => (getLocale().startsWith('vi') ? 'vi' : 'en');
@@ -117,7 +118,28 @@ axios.interceptors.response.use(
 	(response) =>
 		// Do something with response data
 		response,
-	(error) => {
+	async (error) => {
+		const originalRequest = error?.config as RetryableRequestConfig | undefined;
+		const isTokenRequest = originalRequest?.url?.startsWith(keycloakTokenEndpoint);
+
+		if (error?.response?.status === 401 && originalRequest && !originalRequest._retry && !isTokenRequest) {
+			originalRequest._retry = true;
+
+			try {
+				const accessToken = await renewAccessToken();
+				if (accessToken) {
+					if (typeof originalRequest.headers?.set === 'function') {
+						originalRequest.headers.set('Authorization', `Bearer ${accessToken}`);
+					} else if (originalRequest.headers) {
+						originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+					}
+					return axios(originalRequest);
+				}
+			} catch {
+				// The OIDC event handler will redirect to sign-in when the token is expired.
+			}
+		}
+
 		let er = error?.response?.data;
 		// Convert response data to JSON
 		if ((error?.response?.config?.responseType as string)?.toLowerCase() === 'arraybuffer') {
@@ -125,10 +147,12 @@ axios.interceptors.response.use(
 			er = JSON.parse(decoder.decode(er));
 		}
 
-		const originalRequest = error.config;
 		let originData = originalRequest?.data;
 		if (typeof originData === 'string') originData = JSON.parse(originData);
 		if (typeof originData !== 'object' || !Object.keys(originData ?? {}).includes('silent') || !originData?.silent) {
+			const hasAuthorizationHeader = Boolean(
+				originalRequest?.headers?.get?.('Authorization') || originalRequest?.headers?.Authorization,
+			);
 			const descriptionError = Array.isArray(er?.detail?.exception?.response?.message)
 				? er?.detail?.exception?.response?.message?.join(', ')
 				: // Sequelize validation Errors
@@ -150,66 +174,14 @@ axios.interceptors.response.use(
 
 				case 401:
 					// Nếu có access token (có thể access token hết hạn) thì mới cảnh báo
-					if (originalRequest?.headers?.Authorization) {
+					if (hasAuthorizationHeader) {
 						notification.error({
 							message: getMessage('error.401.title', { code: '104' }),
 							description: getMessage('error.401.description'),
 							key: 'error401',
 						});
 					}
-					if (originalRequest._retry) break;
 					break;
-				// return routeLogin('Unauthorize');
-
-				///////////////////////////////////////////////////////////////////
-				// Tobe removed, token refreshing is handled by OIDC context
-				///////////////////////////////////////////////////////////////////
-				// const refreshToken = localStorage.getItem('refreshToken');
-				// if (!refreshToken || error?.response?.config?.data?.includes('refresh')) {
-				//   return routeLogin(error?.response?.data?.errorCode);
-				// }
-				// if (error?.response?.config?.data?.includes('grant_type')) return;
-
-				// if (isRefreshing) {
-				//   // Nếu đang có 1 cái refresh thì thêm request này vào queue;
-				//   return new Promise((resolve, reject) => {
-				//     failedQueue.push({ resolve, reject });
-				//   })
-				//     .then((token) => {
-				//       // gán lại token mới cho request này rồi gửi lại nó
-				//       originalRequest.headers.Authorization = 'Bearer ' + token;
-				//       return axios(originalRequest);
-				//     })
-				//     .catch((err) => {
-				//       return Promise.reject(err);
-				//     });
-				// }
-
-				// originalRequest._retry = true;
-				// isRefreshing = true; // Request đầu tiên bị lỗi => call refresh token => isRefreshing
-
-				// return new Promise((resolve, reject) => {
-				//   refreshAccesssToken({ refreshToken })
-				//     .then((response) => {
-				//       // Lưu token mới vào localStorage
-				//       localStorage.setItem('token', response?.data?.access_token);
-				//       localStorage.setItem('refreshToken', response?.data?.refresh_token);
-				//       // Set lại token cho axios
-				//       axios.defaults.headers.common.Authorization = `Bearer ${response?.data?.access_token}`;
-				//       originalRequest.headers.Authorization = `Bearer ${response?.data?.access_token}`;
-				//       processQueue(null, response?.data?.access_token); // Chạy lại các request ở trong queue với token mới
-				//       resolve(axios(originalRequest)); // Gửi lại request đầu tiên
-				//     })
-				//     .catch((err) => {
-				//       // Nếu get refresh cũng lỗi => refresh hết hạn => logout
-				//       processQueue(err, null);
-				//       reject(err);
-				//       routeLogin(error?.response?.data?.errorCode);
-				//     })
-				//     .then(() => {
-				//       isRefreshing = false;
-				//     });
-				// });
 
 				case 403:
 				case 405:
