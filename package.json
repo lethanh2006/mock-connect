@@ -173,7 +173,7 @@
     "@babel/runtime": "7.29.7",
     "send": ">=0.19.0",
     "browserslist": ">=4.28.7",
-    "decode-uri-component": ">=0.5.0",
+    "decode-uri-component": "0.2.2",
     "tinymce": "7.9.3",
     "ws": ">=8.21.0",
     "**/elliptic": "npm:@soatok/elliptic-to-noble@9999.0.0"
@@ -198,6 +198,7 @@
     "ws": ">=8.21.0",
     "less": "4.9.1",
     "browserslist": ">=4.28.7",
-    "decode-uri-component": ">=0.5.0"
-  }
+    "decode-uri-component": "0.2.2"
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

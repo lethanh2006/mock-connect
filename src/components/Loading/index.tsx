@@ -1,21 +1,18 @@
 import { DeleteOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import { useAuth } from 'react-oidc-context';
 import { useIntl } from 'umi';
 import './style.less';
 
 const LoadingPage = () => {
 	const intl = useIntl();
-	const auth = useAuth();
 
 	const onClearCache = () => {
 		try {
-			auth.removeUser();
+			localStorage.clear();
+			sessionStorage.clear();
 		} catch (error) {
 			console.error('Error occurred while removing user:', error);
 		} finally {
-			localStorage.clear();
-			sessionStorage.clear();
 			window.location.href = '/';
 			window.location.reload();
 		}
