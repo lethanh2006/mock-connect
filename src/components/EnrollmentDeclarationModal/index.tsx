@@ -235,11 +235,6 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 									<Form.Item
 										name='anhDaiDienUrl'
 										className={styles.avatarUpload}
-										extra={
-											isAvatarRequired
-												? intl.formatMessage({ id: 'global.enrollmentDeclaration.avatar.hoverHint' })
-												: undefined
-										}
 										rules={
 											isAvatarRequired
 												? [
@@ -266,6 +261,11 @@ const EnrollmentDeclarationModal = ({ open, onClose }: EnrollmentDeclarationModa
 											accept='image/*'
 											placeholderSrc={getPublicAssetPath('/metadata.png')}
 											disabled={isDocumentsRevision || currentStep !== 0}
+											extra={
+												isAvatarRequired
+													? intl.formatMessage({ id: 'global.enrollmentDeclaration.avatar.hoverHint' })
+													: undefined
+											}
 										/>
 									</Form.Item>
 									{isAvatarRequired && (
