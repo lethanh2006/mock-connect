@@ -121,8 +121,17 @@ axios.interceptors.response.use(
 	async (error) => {
 		const originalRequest = error?.config as RetryableRequestConfig | undefined;
 		const isTokenRequest = originalRequest?.url?.startsWith(keycloakTokenEndpoint);
+		const hasAuthorizationHeader = Boolean(
+			originalRequest?.headers?.get?.('Authorization') || originalRequest?.headers?.Authorization,
+		);
 
-		if (error?.response?.status === 401 && originalRequest && !originalRequest._retry && !isTokenRequest) {
+		if (
+			error?.response?.status === 401 &&
+			originalRequest &&
+			hasAuthorizationHeader &&
+			!originalRequest._retry &&
+			!isTokenRequest
+		) {
 			originalRequest._retry = true;
 
 			try {
@@ -150,9 +159,6 @@ axios.interceptors.response.use(
 		let originData = originalRequest?.data;
 		if (typeof originData === 'string') originData = JSON.parse(originData);
 		if (typeof originData !== 'object' || !Object.keys(originData ?? {}).includes('silent') || !originData?.silent) {
-			const hasAuthorizationHeader = Boolean(
-				originalRequest?.headers?.get?.('Authorization') || originalRequest?.headers?.Authorization,
-			);
 			const descriptionError = Array.isArray(er?.detail?.exception?.response?.message)
 				? er?.detail?.exception?.response?.message?.join(', ')
 				: // Sequelize validation Errors

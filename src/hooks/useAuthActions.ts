@@ -3,19 +3,32 @@ import { useAuth } from 'react-oidc-context';
 import { useModel } from 'umi';
 
 export const useAuthActions = () => {
-	const { initialState, setInitialState } = useModel('@@initialState');
+	const { setInitialState } = useModel('@@initialState');
 	const auth = useAuth();
 
+	const clearClientAuthState = () => {
+		sessionStorage.removeItem('initialState');
+		localStorage.removeItem('partitionCode');
+		setInitialState((prev) => ({
+			...prev,
+			currentUser: undefined,
+			authorizedPermissions: [],
+			authorizedRoles: [],
+			authorizedRolesByClient: {},
+			realmRoles: [],
+			permissionLoading: true,
+		}));
+	};
+
 	const handleLogout = () => {
-		auth
+		clearClientAuthState();
+		void auth
 			.signoutRedirect({
 				post_logout_redirect_uri: window.location.origin + getPublicAssetPath('user/login'),
 				id_token_hint: auth.user?.id_token,
 			})
-			.then(() => {
-				sessionStorage.clear();
-				localStorage.clear();
-				setInitialState({ ...initialState, currentUser: undefined });
+			.catch(() => {
+				void auth.removeUser();
 			});
 	};
 

@@ -9,7 +9,7 @@ import { getKeycloakRoleContext, hasModulePermission } from '@/utils/keycloakRol
 import { getOidcRedirectUri, oidcConfig } from '@/utils/oidcConfig';
 import { getAppBasePath, getPublicAssetPath } from '@/utils/path';
 import { notification } from 'antd';
-import { useEffect, useRef, type FC } from 'react';
+import { useEffect, useRef, type FC, type ReactNode } from 'react';
 import { AuthProvider, hasAuthParams, useAuth } from 'react-oidc-context';
 import { history, useIntl, useModel } from 'umi';
 import LoadingPage from '../Loading';
@@ -234,9 +234,7 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 	return <>{(auth.isLoading || initialState?.permissionLoading) && !isUnauth ? <LoadingPage /> : children}</>;
 };
 
-export const OIDCBounder: FC<{ children: React.ReactElement }> & { getActions: () => typeof OIDCBounderHandlers } = (
-	props,
-) => {
+export const OIDCProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	return (
 		<AuthProvider
 			{...oidcConfig}
@@ -246,9 +244,17 @@ export const OIDCBounder: FC<{ children: React.ReactElement }> & { getActions: (
 					: getOidcRedirectUri()
 			}
 		>
-			<OIDCBounder_ {...props} />
+			{children}
 		</AuthProvider>
 	);
 };
+
+export const OIDCBounder: FC<{ children: React.ReactElement }> & { getActions: () => typeof OIDCBounderHandlers } = (
+	props,
+) => (
+	<OIDCProvider>
+		<OIDCBounder_ {...props} />
+	</OIDCProvider>
+);
 
 OIDCBounder.getActions = () => OIDCBounderHandlers;

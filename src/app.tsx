@@ -11,7 +11,7 @@ import { getIntl, history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 import EnrollmentPrompt from './components/EnrollmentPrompt';
 import ErrorBoundary from './components/ErrorBoundary';
-import { OIDCBounder } from './components/OIDCBounder';
+import { OIDCBounder_, OIDCProvider } from './components/OIDCBounder';
 import { unCheckPermissionPaths } from './components/OIDCBounder/constant';
 import HeaderContentPage from './components/RightContent/Header';
 import TechnicalSupportBounder from './components/TechnicalSupportBounder';
@@ -27,7 +27,11 @@ import { hasModulePermission } from './utils/keycloakRoles';
 export function rootContainer(container: React.ReactNode) {
 	return (
 		<ConfigBounder>
-			<App>{container}</App>
+			<App>
+				<OIDCProvider>
+					<>{container}</>
+				</OIDCProvider>
+			</App>
 		</ConfigBounder>
 	);
 }
@@ -55,11 +59,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 	const intl = getIntl();
 	return {
 		unAccessible: (
-			<OIDCBounder>
+			<OIDCBounder_>
 				<TechnicalSupportBounder>
 					<NotAccessible />
 				</TechnicalSupportBounder>
-			</OIDCBounder>
+			</OIDCBounder_>
 		),
 		noFound: <NotFoundContent />,
 		// rightContentRender: () => <RightContent />,
@@ -110,14 +114,14 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 		childrenRender: (dom) => {
 			const isDashboard = /\/dashboard\/?$/.test(window.location.pathname);
 			const content = (
-				<OIDCBounder>
+				<OIDCBounder_>
 					<ErrorBoundary>
 						<TechnicalSupportBounder>
 							<EnrollmentPrompt />
 							{dom}
 						</TechnicalSupportBounder>
 					</ErrorBoundary>
-				</OIDCBounder>
+				</OIDCBounder_>
 			);
 
 			if (initialState?.settings?.layout === 'side') {

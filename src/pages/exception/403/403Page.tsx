@@ -1,5 +1,5 @@
 import Footer from '@/components/Footer';
-import { OIDCBounder } from '@/components/OIDCBounder';
+import { OIDCBounder, OIDCBounder_ } from '@/components/OIDCBounder';
 import { landingUrl } from '@/services/base/constant';
 import { currentRole, financeApiClientId, qldtApiClientId } from '@/utils/ip';
 import { hasModulePermission } from '@/utils/keycloakRoles';
@@ -20,7 +20,7 @@ const NotAccessible = () => {
 	const onLogout = (): void => OIDCBounder?.getActions()?.dangXuat();
 
 	return (
-		<OIDCBounder>
+		<OIDCBounder_>
 			<div
 				style={{
 					minHeight: '100vh',
@@ -51,7 +51,7 @@ const NotAccessible = () => {
 
 				<Footer />
 			</div>
-		</OIDCBounder>
+		</OIDCBounder_>
 	);
 };
 export default NotAccessible;
