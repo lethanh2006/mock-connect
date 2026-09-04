@@ -16,7 +16,13 @@ export default () => {
 		setLoading(true);
 		try {
 			const response = await getThongBao({ page, limit });
-			const list = response?.data?.data?.result ?? [];
+			const list = (response?.data?.data?.result ?? []).map((item: any): ThongBao.IRecord => ({
+				...item,
+				_id: item.id ?? item._id,
+				content: item.body ?? item.content,
+				description: item.description ?? item.body,
+				read: item.isRead ?? item.read,
+			}));
 			if (page === 1) setDanhSach(list);
 			else setDanhSach([...danhSach, ...list]);
 			setUnread(response?.data?.data?.unread ?? 0);

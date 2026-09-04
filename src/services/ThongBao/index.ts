@@ -2,12 +2,24 @@ import axios from '@/utils/axios';
 import { ipNotif } from '@/utils/ip';
 import { buildFormData } from '@/utils/utils';
 
+const notificationCenterBase = `${ipNotif}/api/v1`;
+
 export async function postReceiver(payload: any, params: { page: number; limit: number }) {
 	return axios.post(`${ipNotif}/notification/receiver/page`, payload, { params });
 }
 
 export async function readNotification(payload: { type: 'ONE' | 'ALL'; notificationId?: any }) {
-	return axios.post(`${ipNotif}/notification/read`, payload);
+	if (payload.type === 'ALL') {
+		return axios.patch(`${notificationCenterBase}/me/notifications/read-all`);
+	}
+
+	if (!payload.notificationId) {
+		throw new Error('notificationId is required when marking one notification as read');
+	}
+
+	return axios.patch(
+		`${notificationCenterBase}/me/notifications/${encodeURIComponent(String(payload.notificationId))}/read`,
+	);
 }
 export async function thongKeNotification() {
 	return axios.get(`${ipNotif}/notification/thong-ke`);
@@ -53,7 +65,12 @@ export async function getThongBao(payload: {
 	condition?: any;
 	sort?: { createdAt: 1 | -1 };
 }) {
-	return axios.get(`${ipNotif}/notification/me/page`, { params: payload });
+	return axios.get(`${notificationCenterBase}/me/notifications`, {
+		params: {
+			page: payload.page,
+			limit: payload.limit,
+		},
+	});
 }
 
 export async function getReceiver(
