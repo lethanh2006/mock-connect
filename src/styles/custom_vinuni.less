@@ -99,6 +99,28 @@ body {
 	color: inherit !important;
 }
 
+// Nút bấm primary của @vinuni/ui (variant="default") và token text-ds-always-light-primary
+// Đảm bảo chữ và icon luôn hiển thị màu trắng (#ffffff), không bị reset antd ghi đè.
+.text-ds-always-light-primary,
+[data-slot='button'][data-variant='default'] {
+	color: #ffffff !important;
+
+	&:hover,
+	&:focus,
+	&:active {
+		color: #ffffff !important;
+	}
+
+	svg {
+		color: #ffffff !important;
+		fill: currentColor !important;
+	}
+
+	span {
+		color: inherit !important;
+	}
+}
+
 .ant-form-item-label > label {
 	font-weight: 600 !important;
 }
