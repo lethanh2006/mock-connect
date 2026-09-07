@@ -85,7 +85,7 @@ const NoticeIcon: React.FC<NoticeIconProps> = ({
 					tooltip={intl.formatMessage({ id: 'app.header.notice', defaultMessage: 'Thông báo' })}
 					badge={count ? (count < 100 ? count : '99+') : undefined}
 				>
-					<IconBell />
+					<IconBell size={22} />
 				</SidebarDockItem>
 			</span>
 		</HeaderDropdown>

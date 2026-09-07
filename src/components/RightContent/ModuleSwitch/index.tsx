@@ -11,7 +11,7 @@ const ModuleSwitch = () => {
 		<HeaderDropdown placement='bottomRight' content={<ModuleView />}>
 			<span className='module-switch-trigger'>
 				<SidebarDockItem tooltip={intl.formatMessage({ id: 'app.header.appdrawer', defaultMessage: 'Danh sách chức năng' })}>
-					<Icon9SquareGrid />
+					<Icon9SquareGrid size={22} />
 				</SidebarDockItem>
 			</span>
 		</HeaderDropdown>

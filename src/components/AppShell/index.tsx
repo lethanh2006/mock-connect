@@ -122,7 +122,7 @@ const NavMenuGroupItem = ({ node, pathname }: { node: NavNode; pathname: string 
 						<span>{intl.formatMessage({ id: node.localeId, defaultMessage: node.name })}</span>
 						<IconChervolDown
 							aria-hidden
-							className={open ? 'ml-auto size-4! shrink-0' : 'ml-auto size-4! shrink-0 -rotate-90'}
+							className={`app-shell-chevron ${open ? 'open' : ''}`}
 						/>
 					</SidebarMenuButton>
 				</Collapsible.Trigger>
@@ -171,7 +171,7 @@ const NavSubGroup = ({ node, pathname }: { node: NavNode; pathname: string }) =>
 							<span>{intl.formatMessage({ id: node.localeId, defaultMessage: node.name })}</span>
 							<IconChervolDown
 								aria-hidden
-								className={open ? 'ml-auto size-4! shrink-0' : 'ml-auto size-4! shrink-0 -rotate-90'}
+								className={`app-shell-chevron ${open ? 'open' : ''}`}
 							/>
 						</button>
 					</SidebarMenuSubButton>
@@ -209,7 +209,7 @@ const AppShell = ({ children }: { children: ReactNode }) => {
 			<SidebarDockViews>
 				<SidebarDock>
 					<SidebarDockBrand />
-					<SidebarDockNav>
+					<SidebarDockNav className='app-shell-dock-nav'>
 						<SidebarDockToggle />
 						<NoticeIconView />
 						<ModuleSwitch />
