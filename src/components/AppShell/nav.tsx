@@ -1,4 +1,4 @@
-import { IconFolder, IconRoofedHouse } from '@vinuni/ui';
+import { IconFolder, IconRoofedHouse } from '@/components/Icons';
 import type { ComponentType, ReactNode } from 'react';
 import routes from '../../../config/routes';
 

@@ -1,4 +1,4 @@
-import { IconPlus, IconXmark } from '@vinuni/ui';
+import { IconPlus, IconXmark } from '@/components/Icons';
 import { Button, Card, Checkbox, Form, Select, Space } from 'antd';
 import { useMemo } from 'react';
 import { useIntl } from 'umi';
@@ -64,7 +64,7 @@ const FilterGroup = (props: RowFilterProps) => {
 					<ButtonExtend
 						type='text'
 						size='small'
-						icon={<IconXmark size={14} />}
+						icon={<IconXmark />}
 						onClick={onRemove}
 						danger
 						tooltip={intl.formatMessage({ id: 'global.table.customfilter.button.xoanhomdieukien' })}
@@ -95,7 +95,7 @@ const FilterGroup = (props: RowFilterProps) => {
 							<Button
 								type='dashed'
 								size='small'
-								icon={<IconPlus size={14} />}
+								icon={<IconPlus />}
 								onClick={() => {
 									const rawField = fieldsFilterable[0];
 									let firstAvailableField = '';

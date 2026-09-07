@@ -9,7 +9,7 @@ import { type ThongBao } from '@/services/ThongBao/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime, getDateFormat } from '@/utils/formatDate';
 import { currentRole } from '@/utils/ip';
-import { DeleteOutlined, EyeOutlined, LeftOutlined, PlusCircleOutlined, RightOutlined } from '@ant-design/icons';
+import { IconChervolLeft, IconChervolRight, IconEye, IconPlus, IconTrash } from '@/components/Icons';
 import { Button, DatePicker, Popconfirm, Segmented, Space } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -163,7 +163,7 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 								setVisible(true);
 							}}
 							type='link'
-							icon={<EyeOutlined />}
+							icon={<IconEye />}
 						/>
 						{notiType === NotificationType.ONESIGNAL ? (
 							<Popconfirm
@@ -178,7 +178,7 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 									shape='circle'
 									type='link'
 									danger
-									icon={<DeleteOutlined />}
+									icon={<IconTrash />}
 								/>
 							</Popconfirm>
 						) : null}
@@ -209,13 +209,13 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 				{type === 'WEEK' && (
 					<Space>
 						<Button onClick={() => setStartDate(startDate.subtract(7, 'day'))}>
-							<LeftOutlined /> Tuần trước
+							<IconChervolLeft style={{ marginRight: 4, verticalAlign: 'middle' }} /> Tuần trước
 						</Button>
 						<span>
 							Tuần: {startDay} - {endDay}
 						</span>
 						<Button onClick={() => setStartDate(startDate.add(7, 'day'))}>
-							Tuần sau <RightOutlined />
+							Tuần sau <IconChervolRight style={{ marginLeft: 4, verticalAlign: 'middle' }} />
 						</Button>
 						<a onClick={() => setStartDate(dayjs().startOf('week'))}>Tuần này</a>
 					</Space>
@@ -267,7 +267,7 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 									setIsView(false);
 									setVisibleForm(true);
 								}}
-								icon={<PlusCircleOutlined />}
+								icon={<IconPlus />}
 								type='primary'
 								notHideText
 								tooltip='Thêm mới dữ liệu'

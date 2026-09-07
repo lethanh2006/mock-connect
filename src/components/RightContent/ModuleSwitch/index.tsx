@@ -1,4 +1,4 @@
-import { Icon9SquareGrid, SidebarDockItem } from '@vinuni/ui';
+import { Icon9SquareGrid, SidebarDockItem } from '@/components/Icons';
 import { useIntl } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
 import ModuleView from './ModuleView';

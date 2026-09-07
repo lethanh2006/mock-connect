@@ -1,6 +1,6 @@
 import { type ThongBao } from '@/services/ThongBao/typing';
 import dayjs from '@/utils/dayjs';
-import { IconArrowDown } from '@vinuni/ui';
+import { IconArrowDown } from '@/components/Icons';
 import { Avatar, Divider, List, Skeleton } from 'antd';
 import classNames from 'classnames';
 
@@ -88,7 +88,7 @@ const NoticeList: React.FC<NoticeIconTabProps> = ({
 							onViewMore?.();
 						}}
 					>
-						<IconArrowDown size={14} /> {viewMoreText}
+						<IconArrowDown /> {viewMoreText}
 					</Link>
 				</div>
 			) : null}

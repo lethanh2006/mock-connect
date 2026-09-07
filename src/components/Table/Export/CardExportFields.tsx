@@ -1,4 +1,4 @@
-import { Card, CardContent, CardTitle, IconButton, IconTrash } from '@vinuni/ui';
+import { Card, CardContent, CardTitle, IconButton, IconTrash } from '@/components/Icons';
 import { useIntl } from 'umi';
 import TableStaticData from '../TableStaticData';
 import { type IColumn, type TExportField } from '../typing';

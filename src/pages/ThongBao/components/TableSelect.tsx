@@ -3,7 +3,7 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
 import { EReceiverType, EVaiTroKhaoSat } from '@/services/ThongBao/constant';
 import { type ThongBao } from '@/services/ThongBao/typing';
-import { ImportOutlined } from '@ant-design/icons';
+import { IconUpload } from '@/components/Icons';
 import { Checkbox, Col, Empty, Row } from 'antd';
 import _ from 'lodash';
 import { Key, useEffect, useState } from 'react';
@@ -164,7 +164,7 @@ const TableSelectUser = (props: {
 							),
 							<ButtonExtend
 								key='import'
-								icon={<ImportOutlined />}
+								icon={<IconUpload />}
 								onClick={() => setVisibleImport(true)}
 								type='default'
 								size='small'

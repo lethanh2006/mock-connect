@@ -6,7 +6,7 @@ import {
 	moduleTapChiKhoaHoc,
 } from '@/services/base/constant';
 import type { Login } from '@/services/base/typing';
-import { IconDoubleHumanCard } from '@vinuni/ui';
+import { IconDoubleHumanCard } from '@/components/Icons';
 import { Col, Row } from 'antd';
 import { useIntl, useModel } from 'umi';
 import './style.less';

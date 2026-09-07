@@ -13,7 +13,7 @@ import {
 	TableRow,
 	TableSelectionCell,
 	TableSortButton,
-} from '@vinuni/ui';
+} from '@/components/Icons';
 import { Empty, Spin } from 'antd';
 import _ from 'lodash';
 import React, { useEffect, useMemo, useRef } from 'react';

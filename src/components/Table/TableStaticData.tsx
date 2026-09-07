@@ -21,7 +21,7 @@ import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from '@vinuni/ui';
+} from '@/components/Icons';
 import { AutoComplete, Button as AntdButton, Input, Table, Tooltip as AntdTooltip, type InputRef } from 'antd';
 import classNames from 'classnames';
 import _ from 'lodash';
@@ -228,7 +228,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				);
 			},
 
-			filterIcon: (filtered: boolean) => <IconMagnifyingglass size={14} className={filtered ? 'text-primary' : undefined} />,
+			filterIcon: (filtered: boolean) => <IconMagnifyingglass className={filtered ? 'text-primary' : undefined} />,
 			onFilter: (value: any, record: any) =>
 				typeof dataIndex === 'string'
 					? record[dataIndex]?.toString()?.toLowerCase()?.includes(value.toLowerCase())
@@ -488,7 +488,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 						size={size}
 						icon={
 							<AntdTooltip title={globalSearchTooltip}>
-								<IconMagnifyingglass size={14} />
+								<IconMagnifyingglass />
 							</AntdTooltip>
 						}
 					/>

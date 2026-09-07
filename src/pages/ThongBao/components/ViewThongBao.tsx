@@ -4,7 +4,7 @@ import { type ThongBao } from '@/services/ThongBao/typing';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { currentRole } from '@/utils/ip';
 import { getNameFile, sanitizeObject } from '@/utils/utils';
-import { CalendarOutlined, UserOutlined } from '@ant-design/icons';
+import { IconCalendar, IconHuman } from '@/components/Icons';
 import { Avatar, Button, Card, Col, Divider, Row } from 'antd';
 import { history } from 'umi';
 import './style.less';
@@ -55,8 +55,9 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 				description={
 					<>
 						<div style={{ marginBottom: 8 }}>{record?.description}</div>
-						<UserOutlined /> {record?.senderName ?? ''} <Divider type='vertical' />
-						<CalendarOutlined /> {formatDateTime(record?.createdAt)}
+						<IconHuman style={{ verticalAlign: 'middle' }} /> {record?.senderName ?? ''}{' '}
+						<Divider type='vertical' />
+						<IconCalendar style={{ verticalAlign: 'middle' }} /> {formatDateTime(record?.createdAt)}
 					</>
 				}
 			/>

@@ -11,7 +11,7 @@ import {
 	IconDoor01,
 	IconEarth,
 	IconLogoMicrosoft,
-} from '@vinuni/ui';
+} from '@/components/Icons';
 import { Spin } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';

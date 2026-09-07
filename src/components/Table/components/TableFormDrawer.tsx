@@ -1,4 +1,4 @@
-import { Drawer, DrawerContent, IconButton, IconXmark } from '@vinuni/ui';
+import { Drawer, DrawerContent, IconButton, IconXmark } from '@/components/Icons';
 import React from 'react';
 import { useTableContext } from './TableContext';
 

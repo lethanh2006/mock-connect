@@ -1,6 +1,6 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
-import { IconPen, IconTrash } from '@vinuni/ui';
+import { IconPen, IconTrash } from '@/components/Icons';
 import { Button, Popconfirm, Tooltip } from 'antd';
 import { formatDateTime } from '@/utils/formatDate';
 import { useModel } from 'umi';
@@ -47,7 +47,7 @@ const ChucVuPage = () => {
       render: (record: ChucVu.IRecord) => (
         <>
           <Tooltip title="Chỉnh sửa">
-            <Button onClick={() => handleEdit(record)} type="link" icon={<IconPen size={16} />} />
+            <Button onClick={() => handleEdit(record)} type="link" icon={<IconPen />} />
           </Tooltip>
           <Tooltip title="Xóa">
             <Popconfirm
@@ -55,7 +55,7 @@ const ChucVuPage = () => {
               title="Bạn có chắc chắn muốn xóa chức vụ này?"
               placement="topLeft"
             >
-              <Button danger type="link" icon={<IconTrash size={16} />} />
+              <Button danger type="link" icon={<IconTrash />} />
             </Popconfirm>
           </Tooltip>
         </>

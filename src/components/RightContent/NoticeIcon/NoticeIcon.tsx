@@ -1,6 +1,6 @@
 import readAll from '@/assets/read-all.svg';
 import reLoad from '@/assets/refresh.svg';
-import { IconBell, SidebarDockItem } from '@vinuni/ui';
+import { IconBell, SidebarDockItem } from '@/components/Icons';
 import { Link, useIntl } from '@umijs/max';
 import { Space, Tooltip } from 'antd';
 import useMergedState from 'rc-util/es/hooks/useMergedState';

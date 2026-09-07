@@ -1,6 +1,6 @@
 import NotAccessible from '@/pages/exception/403';
 import { useIntl } from '@umijs/max';
-import { IconWrench01 } from '@vinuni/ui';
+import { IconWrench01 } from '@/components/Icons';
 import { FloatButton, Modal } from 'antd';
 import { useMemo, useState } from 'react';
 import { matchRoutes, useAccess, useAppData, useLocation, useModel } from 'umi';

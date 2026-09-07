@@ -1,6 +1,6 @@
 import Footer from '@/components/Footer';
 import { landingUrl } from '@/services/base/constant';
-import { GlobalOutlined } from '@ant-design/icons';
+import { IconEarth } from '@/components/Icons';
 import { history, useIntl } from '@umijs/max';
 import { Button, Result } from 'antd';
 import { useEffect } from 'react';
@@ -29,7 +29,7 @@ const DangCapNhatPage = () => {
 				style={{ background: 'none' }}
 				subTitle={intl.formatMessage({ id: 'pages.exception.updating.subtitle' })}
 				extra={
-					<Button type='primary' href={landingUrl} icon={<GlobalOutlined />} className='not-underline'>
+					<Button type='primary' href={landingUrl} icon={<IconEarth />} className='not-underline'>
 						{intl.formatMessage({ id: 'pages.exception.portal' })}
 					</Button>
 				}

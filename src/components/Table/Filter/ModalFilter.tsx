@@ -1,4 +1,4 @@
-import { Icon3SquarePlusmark, IconPlus, IconQuestionCircle } from '@vinuni/ui';
+import { Icon3SquarePlusmark, IconPlus, IconQuestionCircle } from '@/components/Icons';
 import { Button, Descriptions, Form, Modal, Space, Tooltip, Typography } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'umi';
@@ -187,7 +187,7 @@ const ModalFilter = () => {
 							<Text strong>
 								{intl.formatMessage({ id: 'global.table.customfilter.dieukien', defaultMessage: 'Conditions' })}{' '}
 							</Text>
-							<IconQuestionCircle size={14} style={{ color: '#999' }} />
+							<IconQuestionCircle style={{ color: '#999' }} />
 						</Tooltip>
 						<Text strong>:</Text>
 					</div>
@@ -264,7 +264,7 @@ const ModalFilter = () => {
 										block
 										type='dashed'
 										disabled={!fieldsFilterable.length}
-										icon={<IconPlus size={14} />}
+										icon={<IconPlus />}
 										onClick={() => {
 											const rawField = fieldsFilterable[0];
 											let firstAvailableField = '';
@@ -292,7 +292,7 @@ const ModalFilter = () => {
 										type='dashed'
 										block
 										disabled={!fieldsFilterable.length}
-										icon={<Icon3SquarePlusmark size={14} />}
+										icon={<Icon3SquarePlusmark />}
 										onClick={() => {
 											add({
 												operator: 'and',

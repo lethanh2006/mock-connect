@@ -1,4 +1,4 @@
-import { IconTrash } from '@vinuni/ui';
+import { IconTrash } from '@/components/Icons';
 import { Button } from 'antd';
 import { useAuth } from 'react-oidc-context';
 import { useIntl } from 'umi';
@@ -36,7 +36,7 @@ const LoadingPage = () => {
 				{/* <Button icon={<HomeOutlined />} type='primary' onClick={() => (window.location.href = '/')}>
 					Về trang chủ
 				</Button> */}
-				<Button type='link' danger icon={<IconTrash size={16} />} onClick={onClearCache}>
+				<Button type='link' danger icon={<IconTrash />} onClick={onClearCache}>
 					{intl.formatMessage({ id: 'global.loading.xoabonhodiem' })}
 				</Button>
 			</div>

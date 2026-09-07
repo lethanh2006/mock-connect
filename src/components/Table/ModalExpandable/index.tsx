@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, IconArrowdownSquare, IconButton, IconXmark } from '@vinuni/ui';
+import { Dialog, DialogContent, IconArrowdownSquare, IconButton, IconXmark } from '@/components/Icons';
 import classNames from 'classnames';
 import { useState } from 'react';
 import './style.less';

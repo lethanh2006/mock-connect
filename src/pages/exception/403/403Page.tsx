@@ -2,7 +2,7 @@ import Footer from '@/components/Footer';
 import { OIDCBounder } from '@/components/OIDCBounder';
 import { landingUrl } from '@/services/base/constant';
 import { currentRole } from '@/utils/ip';
-import { GlobalOutlined, LogoutOutlined } from '@ant-design/icons';
+import { IconDoor01, IconEarth } from '@/components/Icons';
 import { Button, Result } from 'antd';
 import { useEffect } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -38,10 +38,14 @@ const NotAccessible = () => {
 					subTitle={intl.formatMessage({ id: 'pages.exception.403.subtitle' })}
 					extra={
 						<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-							<Button type='primary' onClick={() => (window.location.href = landingUrl)} icon={<GlobalOutlined />}>
+							<Button
+								type='primary'
+								onClick={() => (window.location.href = landingUrl)}
+								icon={<IconEarth />}
+							>
 								{intl.formatMessage({ id: 'pages.exception.portal' })}
 							</Button>
-							<Button icon={<LogoutOutlined />} onClick={onLogout}>
+							<Button icon={<IconDoor01 />} onClick={onLogout}>
 								{intl.formatMessage({ id: 'pages.exception.logout' })}
 							</Button>
 						</div>

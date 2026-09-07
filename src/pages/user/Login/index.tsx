@@ -4,7 +4,7 @@ import { adminlogin, getUserInfo } from '@/services/base/api';
 import { keycloakAuthority } from '@/utils/ip';
 import { getPublicAssetPath } from '@/utils/path';
 import rules from '@/utils/rules';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { IconHuman, IconLockClose } from '@/components/Icons';
 import { Button, Form, Input, Tabs, message } from 'antd';
 import React, { useState } from 'react';
 // import Recaptcha from 'react-recaptcha';
@@ -126,7 +126,7 @@ const Login: React.FC = () => {
 											id: 'pages.login.username.placeholder',
 											defaultMessage: 'Nhập tên đăng nhập',
 										})}
-										prefix={<UserOutlined className={styles.prefixIcon} />}
+										prefix={<IconHuman className={styles.prefixIcon} />}
 										size='large'
 									/>
 								</Form.Item>
@@ -136,7 +136,7 @@ const Login: React.FC = () => {
 											id: 'pages.login.password.placeholder',
 											defaultMessage: 'Nhập mật khẩu',
 										})}
-										prefix={<LockOutlined className={styles.prefixIcon} />}
+										prefix={<IconLockClose className={styles.prefixIcon} />}
 										size='large'
 									/>
 								</Form.Item>

@@ -1,4 +1,4 @@
-import { IconFilter, IconMagnifyingglass, Popover, PopoverContent, PopoverTrigger, SearchInput, SelectPopover } from '@vinuni/ui';
+import { IconFilter, IconMagnifyingglass, Popover, PopoverContent, PopoverTrigger, SearchInput, SelectPopover } from '@/components/Icons';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
 import { EOperatorType } from '../constant';
@@ -32,7 +32,7 @@ const StringFilterPopover: React.FC<ColumnFilterPopoverProps> = ({ column, getFi
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
 				<button type='button' className='column-filter-trigger-button' onClick={(e) => e.stopPropagation()}>
-					<IconMagnifyingglass size={14} className={currentValue ? 'text-primary' : undefined} />
+					<IconMagnifyingglass className={currentValue ? 'text-primary' : undefined} />
 				</button>
 			</PopoverTrigger>
 			<PopoverContent align='start' style={{ width: 240, padding: 8 }} onClick={(e) => e.stopPropagation()}>
@@ -72,7 +72,7 @@ const SelectFilterPopover: React.FC<ColumnFilterPopoverProps> = ({ column, getFi
 			onValueChange={(values) => onFilter(column.dataIndex, values)}
 		>
 			<button type='button' className='column-filter-trigger-button' onClick={(e) => e.stopPropagation()}>
-				<IconFilter size={14} className={currentValues.length ? 'text-primary' : undefined} />
+				<IconFilter className={currentValues.length ? 'text-primary' : undefined} />
 			</button>
 		</SelectPopover>
 	);
@@ -89,7 +89,7 @@ const CustomSelectFilterPopover: React.FC<ColumnFilterPopoverProps> = ({ column,
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
 				<button type='button' className='column-filter-trigger-button' onClick={(e) => e.stopPropagation()}>
-					<IconFilter size={14} className={currentValues.length ? 'text-primary' : undefined} />
+					<IconFilter className={currentValues.length ? 'text-primary' : undefined} />
 				</button>
 			</PopoverTrigger>
 			<PopoverContent align='start' style={{ width: 300, padding: 8 }} onClick={(e) => e.stopPropagation()}>

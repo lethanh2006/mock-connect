@@ -6,7 +6,7 @@ import { EVaiTroKhaoSat, TenVaiTroKhaoSat } from '@/services/ThongBao/constant';
 import { currentRole } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { DownloadOutlined } from '@ant-design/icons';
+import { IconDownload } from '@/components/Icons';
 import { Button, Col, Form, Input, Row, Select, Space } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect } from 'react';
@@ -82,7 +82,7 @@ const FormThongBaoTuyChinh = (props: any) => {
 							<Space>
 								<span>Danh sách người nhận thông báo</span>
 
-								<Button icon={<DownloadOutlined />} type='link' onClick={onDownloadTemplate}>
+								<Button icon={<IconDownload />} type='link' onClick={onDownloadTemplate}>
 									Tải tập tin mẫu
 								</Button>
 							</Space>

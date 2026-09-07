@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons';
+import { IconPlus } from '@/components/Icons';
 import { Button, Modal, Select } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -47,7 +47,7 @@ const SelectChucVu = (props: {
 
       {hasCreate !== false ? (
         <>
-          <Button icon={<PlusOutlined />} onClick={onAddNew} />
+          <Button icon={<IconPlus />} onClick={onAddNew} />
           <Modal
             visible={visibleForm}
             bodyStyle={{ padding: 0 }}

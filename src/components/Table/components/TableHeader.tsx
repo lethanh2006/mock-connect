@@ -15,7 +15,7 @@ import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from '@vinuni/ui';
+} from '@/components/Icons';
 import { AutoComplete } from 'antd';
 import classNames from 'classnames';
 import { debounce } from 'lodash';

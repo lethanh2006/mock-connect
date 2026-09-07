@@ -31,7 +31,7 @@ import {
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
 	SidebarProvider,
-} from '@vinuni/ui';
+} from '@/components/Icons';
 import { Collapsible } from 'radix-ui';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { forwardRef, useEffect, useMemo, useState } from 'react';

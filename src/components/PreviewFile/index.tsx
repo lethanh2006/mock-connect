@@ -11,7 +11,7 @@ import {
 	IconDownload,
 	IconMagnifyingglass,
 	IconOpenrectagleToprightarrow,
-} from '@vinuni/ui';
+} from '@/components/Icons';
 import { Button, Empty, message, Spin } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
@@ -231,7 +231,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 							<ButtonExtend
 								type='link'
 								disabled={currentFileIndex === 0}
-								icon={<IconChervolLeft size={16} />}
+								icon={<IconChervolLeft />}
 								onClick={handlePrev}
 							/>
 							<span>
@@ -240,7 +240,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 							<ButtonExtend
 								type='link'
 								disabled={currentFileIndex === fileList.length - 1}
-								icon={<IconChervolRight size={16} />}
+								icon={<IconChervolRight />}
 								onClick={handleNext}
 							/>
 						</div>
@@ -252,13 +252,13 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 								<ButtonExtend
 									type='link'
 									tooltip={intl.formatMessage({ id: 'global.previewfile.button.taixuong' })}
-									icon={<IconDownload size={16} />}
+									icon={<IconDownload />}
 									onClick={handleDownloadOrView}
 								/>
 								<ButtonExtend
 									type='link'
 									tooltip={intl.formatMessage({ id: 'global.previewfile.button.saochep' })}
-									icon={<Icon2SquareCopy size={16} />}
+									icon={<Icon2SquareCopy />}
 									onClick={handleCopy}
 								/>
 							</>
@@ -268,7 +268,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 							<ButtonExtend
 								type='link'
 								tooltip={intl.formatMessage({ id: 'global.previewfile.button.morong' })}
-								icon={<IconOpenrectagleToprightarrow size={16} />}
+								icon={<IconOpenrectagleToprightarrow />}
 								onClick={() => window.open(frameData?.src, '_blank')}
 							/>
 						)}
@@ -304,7 +304,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 					isPrivate ? (
 						<div className='preview-error'>
 							<p>This document is protected and cannot be previewed directly via Office Online.</p>
-							<Button type='primary' icon={<IconDownload size={16} />} onClick={handleDownloadOrView}>
+							<Button type='primary' icon={<IconDownload />} onClick={handleDownloadOrView}>
 								Download to view
 							</Button>
 						</div>
@@ -322,7 +322,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 								notHideText
 								type='link'
 								tooltip={intl.formatMessage({ id: 'global.previewfile.button.taixuong' })}
-								icon={<IconMagnifyingglass size={16} />}
+								icon={<IconMagnifyingglass />}
 								onClick={handleDownloadOrView}
 							>
 								{intl.formatMessage({ id: 'global.previewfile.button.taixuong' })}

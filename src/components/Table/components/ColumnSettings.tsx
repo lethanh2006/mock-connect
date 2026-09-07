@@ -1,7 +1,7 @@
 import { closestCenter, DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Button, Checkbox, Icon6DotGridVertical, IconGear, Popover, PopoverContent, PopoverTrigger, Separator } from '@vinuni/ui';
+import { Button, Checkbox, Icon6DotGridVertical, IconGear, Popover, PopoverContent, PopoverTrigger, Separator } from '@/components/Icons';
 import { Popconfirm } from 'antd';
 import React from 'react';
 import { useIntl } from 'umi';
@@ -32,7 +32,7 @@ const SortableItem = ({ id, label, visible, onToggle }: SortableItemProps) => {
 			style={style}
 			className={isDragging ? 'column-settings-item is-dragging' : 'column-settings-item'}
 		>
-			<Icon6DotGridVertical {...attributes} {...listeners} className='column-settings-handle' size={16} />
+			<Icon6DotGridVertical {...attributes} {...listeners} className='column-settings-handle' />
 			<label className='column-settings-checkbox-label'>
 				<Checkbox size='sm' checked={visible} onCheckedChange={() => onToggle(id)} />
 				<span className='column-settings-label'>{label}</span>

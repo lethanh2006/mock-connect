@@ -1,7 +1,7 @@
 import ExpandText from '@/components/ExpandText';
 import dayjs from '@/utils/dayjs';
 import { formatDate, getDateFormat } from '@/utils/formatDate';
-import { Button, Checkbox, IconArrowLeft, IconQuestionCircle } from '@vinuni/ui';
+import { Button, Checkbox, IconArrowLeft, IconQuestionCircle } from '@/components/Icons';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import TableStaticData from '../TableStaticData';

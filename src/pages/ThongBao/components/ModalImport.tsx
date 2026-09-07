@@ -2,7 +2,7 @@ import UploadFile from '@/components/Upload/UploadFile';
 import { dowLoadBieuMauNguoiNhan } from '@/services/ThongBao';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { DownloadOutlined } from '@ant-design/icons';
+import { IconDownload } from '@/components/Icons';
 import { Button, Col, Form, Modal, Row } from 'antd';
 import fileDownload from 'js-file-download';
 import _ from 'lodash';
@@ -63,7 +63,7 @@ const ModalImport = (props: {
 					<Col span={24} style={{ textAlign: 'center', marginTop: 8 }}>
 						<i>Sử dụng tập dữ liệu mẫu để việc xử lý được thực hiện nhanh chóng và chính xác</i>
 						<br />
-						<Button icon={<DownloadOutlined />} type='link' onClick={onDownloadTemplate}>
+						<Button icon={<IconDownload />} type='link' onClick={onDownloadTemplate}>
 							Tải tập tin mẫu
 						</Button>
 					</Col>

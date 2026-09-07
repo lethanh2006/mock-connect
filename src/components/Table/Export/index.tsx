@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, IconDownload } from '@vinuni/ui';
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, IconDownload } from '@/components/Icons';
 import { Empty, Spin } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';

@@ -1,6 +1,6 @@
 import { useAuthActions } from '@/hooks/useAuthActions';
 import { tenTruongVietTatTiengAnh } from '@/services/base/constant';
-import { DeleteOutlined } from '@ant-design/icons';
+import { IconTrash } from '@/components/Icons';
 import { Button } from 'antd';
 import { useAuth } from 'react-oidc-context';
 
@@ -24,7 +24,7 @@ const LoginWithKeycloak = () => {
 		return (
 			<div>
 				Có lỗi xảy ra... <pre>{auth.error.message}</pre>
-				<Button icon={<DeleteOutlined />} onClick={onClearCache} type='link'>
+				<Button icon={<IconTrash />} onClick={onClearCache} type='link'>
 					Xóa bộ nhớ đệm
 				</Button>
 			</div>

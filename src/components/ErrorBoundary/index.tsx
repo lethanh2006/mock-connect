@@ -1,4 +1,4 @@
-import { IconRoofedHouse, IconRotateArrow } from '@vinuni/ui';
+import { IconRoofedHouse, IconRotateArrow } from '@/components/Icons';
 import { Button, Result } from 'antd';
 import React from 'react';
 import { history } from 'umi';
@@ -52,7 +52,7 @@ class ErrorBoundary extends React.Component<MyProps, MyState> {
 									window.location.reload();
 								}}
 								key='1'
-								icon={<IconRoofedHouse size={16} />}
+								icon={<IconRoofedHouse />}
 							>
 								Về trang chủ
 							</Button>,
@@ -60,7 +60,7 @@ class ErrorBoundary extends React.Component<MyProps, MyState> {
 								key='buy'
 								onClick={() => window.location.reload()}
 								type='primary'
-								icon={<IconRotateArrow size={16} />}
+								icon={<IconRotateArrow />}
 							>
 								Tải lại trang
 							</Button>,

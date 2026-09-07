@@ -1,4 +1,4 @@
-import { HomeOutlined } from '@ant-design/icons';
+import { IconRoofedHouse } from '@/components/Icons';
 import { Button, Result } from 'antd';
 import { history, useIntl } from 'umi';
 
@@ -12,7 +12,7 @@ const NotFoundContent = () => {
 			style={{ background: 'none' }}
 			subTitle={intl.formatMessage({ id: 'pages.exception.404.subtitle' })}
 			extra={
-				<Button type='primary' onClick={() => history.push('/')} icon={<HomeOutlined />}>
+				<Button type='primary' onClick={() => history.push('/')} icon={<IconRoofedHouse />}>
 					{intl.formatMessage({ id: 'pages.exception.backhome' })}
 				</Button>
 			}

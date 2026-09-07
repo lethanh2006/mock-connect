@@ -7,7 +7,7 @@ import {
 	validateFileBlob,
 } from '@/utils/fileValidation';
 import rules from '@/utils/rules';
-import { IconArrowRight, IconDownload, IconXmark } from '@vinuni/ui';
+import { IconArrowRight, IconDownload, IconXmark } from '@/components/Icons';
 import { Button, Col, Form, InputNumber, Row, Select, Space, message } from 'antd';
 import fileDownload from 'js-file-download';
 import { pick } from 'lodash';
@@ -216,7 +216,7 @@ const ChooseFileImport = (props: { onChange: () => void; onCancel: any; getTempl
 					<Col span={24} style={{ textAlign: 'center', marginTop: 8 }}>
 						<i>{intl.formatMessage({ id: 'global.table.import.choose.sudungtapdulieu' })}</i>
 						<br />
-						<Button icon={<IconDownload size={14} />} type='link' onClick={onDownloadTemplate}>
+						<Button icon={<IconDownload />} type='link' onClick={onDownloadTemplate}>
 							{intl.formatMessage({ id: 'global.table.import.choose.button.taitaptin' })}
 						</Button>
 					</Col>
@@ -224,12 +224,12 @@ const ChooseFileImport = (props: { onChange: () => void; onCancel: any; getTempl
 
 				<Col span={24}>
 					<Space style={{ marginTop: 12, justifyContent: 'space-between', width: '100%' }}>
-						<Button onClick={() => onCancel()} icon={<IconXmark size={14} />}>
+						<Button onClick={() => onCancel()} icon={<IconXmark />}>
 							{intl.formatMessage({ id: 'global.table.import.choose.button.huy' })}
 						</Button>
 						<Button htmlType='submit' type='primary'>
 							{intl.formatMessage({ id: 'global.table.import.choose.button.tieptheo' })}{' '}
-							<IconArrowRight size={14} style={{ marginLeft: 6 }} />
+							<IconArrowRight style={{ marginLeft: 6 }} />
 						</Button>
 					</Space>
 				</Col>

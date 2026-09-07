@@ -1,7 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { getDateTimeFormat } from '@/utils/formatDate';
 import rules from '@/utils/rules';
-import { Icon3SquarePlusmark, IconXmark } from '@vinuni/ui';
+import { Icon3SquarePlusmark, IconXmark } from '@/components/Icons';
 import { Card, Checkbox, Col, Form, Input, InputNumber, Row, Select, Space } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'umi';
@@ -246,7 +246,7 @@ const FilterItem = (props: RowFilterProps) => {
 								<ButtonExtend
 									type='text'
 									size='small'
-									icon={<Icon3SquarePlusmark size={14} />}
+									icon={<Icon3SquarePlusmark />}
 									onClick={() => {
 										const newGroupValue = {
 											active: currentFilter.active !== false,
@@ -263,7 +263,7 @@ const FilterItem = (props: RowFilterProps) => {
 								<ButtonExtend
 									type='text'
 									size='small'
-									icon={<IconXmark size={14} />}
+									icon={<IconXmark />}
 									onClick={onRemove}
 									danger
 									tooltip={intl.formatMessage({ id: 'global.table.customfilter.button.xoadieukien' })}
