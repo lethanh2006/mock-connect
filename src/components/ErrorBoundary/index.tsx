@@ -1,4 +1,4 @@
-import { HomeOutlined, ReloadOutlined } from '@ant-design/icons';
+import { IconRoofedHouse, IconRotateArrow } from '@vinuni/ui';
 import { Button, Result } from 'antd';
 import React from 'react';
 import { history } from 'umi';
@@ -52,11 +52,16 @@ class ErrorBoundary extends React.Component<MyProps, MyState> {
 									window.location.reload();
 								}}
 								key='1'
-								icon={<HomeOutlined />}
+								icon={<IconRoofedHouse size={16} />}
 							>
 								Về trang chủ
 							</Button>,
-							<Button key='buy' onClick={() => window.location.reload()} type='primary' icon={<ReloadOutlined />}>
+							<Button
+								key='buy'
+								onClick={() => window.location.reload()}
+								type='primary'
+								icon={<IconRotateArrow size={16} />}
+							>
 								Tải lại trang
 							</Button>,
 						]}

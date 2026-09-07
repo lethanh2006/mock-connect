@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
+import { IconArrowLeft, IconArrowRight } from '@vinuni/ui';
 import { Button } from 'antd';
 import { useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -43,7 +43,7 @@ const PDFViewer = (props: { data: any; pagination?: boolean; scale?: number }) =
 			<div>
 				{props.pagination && (
 					<Button disabled={pageNumber === 1} onClick={() => setPageNumber(pageNumber - 1)} className={styles.prev}>
-						<ArrowLeftOutlined /> Trước
+						<IconArrowLeft size={16} /> <span>Trước</span>
 					</Button>
 				)}
 				<div>
@@ -68,7 +68,7 @@ const PDFViewer = (props: { data: any; pagination?: boolean; scale?: number }) =
 						onClick={() => setPageNumber(pageNumber + 1)}
 						className={styles.next}
 					>
-						Sau <ArrowRightOutlined />
+						<span>Sau</span> <IconArrowRight size={16} />
 					</Button>
 				)}
 			</div>

@@ -1,6 +1,6 @@
 import NotAccessible from '@/pages/exception/403';
-import { ToolOutlined } from '@ant-design/icons';
 import { useIntl } from '@umijs/max';
+import { IconWrench01 } from '@vinuni/ui';
 import { FloatButton, Modal } from 'antd';
 import { useMemo, useState } from 'react';
 import { matchRoutes, useAccess, useAppData, useLocation, useModel } from 'umi';
@@ -48,7 +48,7 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 						tooltip={intl.formatMessage({ id: 'global.technical.title' })}
 						onClick={() => setVisible(true)}
 						type='primary'
-						icon={<ToolOutlined />}
+						icon={<IconWrench01 size={18} />}
 					/>
 
 					<Modal
