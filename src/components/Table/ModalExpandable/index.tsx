@@ -38,7 +38,18 @@ const ModalExpandable = (props: ModalExpandableProps) => {
 				className={classNames('modal-expandable', { 'modal-full': isFull }, className)}
 				style={
 					isFull
-						? { width: '100vw', maxWidth: '100vw', height: '100vh', maxHeight: '100vh', borderRadius: 0 }
+						? {
+								width: '100vw',
+								maxWidth: '100vw',
+								height: '100vh',
+								maxHeight: '100vh',
+								borderRadius: 0,
+								inset: 0,
+								top: 0,
+								left: 0,
+								transform: 'none',
+								translate: 'none',
+						  }
 						: { width: width ?? 600, maxWidth: 'calc(100vw - 2rem)' }
 				}
 				onInteractOutside={(e) => {
