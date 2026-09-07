@@ -6,7 +6,7 @@ import {
 	moduleTapChiKhoaHoc,
 } from '@/services/base/constant';
 import type { Login } from '@/services/base/typing';
-import { UserSwitchOutlined } from '@ant-design/icons';
+import { IconDoubleHumanCard } from '@vinuni/ui';
 import { Col, Row } from 'antd';
 import { useIntl, useModel } from 'umi';
 import './style.less';
@@ -43,7 +43,7 @@ const ModuleView = () => {
 									{value?.icon ? (
 										<img src={`${AppModules[EModuleKey.CORE].url}modules/${value.icon}`} />
 									) : (
-										<UserSwitchOutlined />
+										<IconDoubleHumanCard size={36} className='module-icon' />
 									)}
 									<span className='module-name'>{intl.formatMessage({ id: value?.title ?? name })}</span>
 								</div>
@@ -58,7 +58,7 @@ const ModuleView = () => {
 									{mod.icon ? (
 										<img src={`${AppModules[EModuleKey.CORE].url}modules/${mod.icon}`} />
 									) : (
-										<UserSwitchOutlined />
+										<IconDoubleHumanCard size={36} className='module-icon' />
 									)}
 									<span className='module-name'>{intl.formatMessage({ id: mod.title })}</span>
 								</div>

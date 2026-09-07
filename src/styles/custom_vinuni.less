@@ -21,6 +21,9 @@
 	--vin-color-primary-300: var(--color-official-300);
 	--vin-color-primary-bg: var(--color-official-500);
 
+	--color-primary: var(--vin-color-primary);
+	--color-primary-bg: var(--vin-color-primary-bg);
+
 	--color-accent-100: #0087c3;
 	--color-accent-200: #4890bd;
 	--color-accent-300: #a7c4d2;
@@ -104,6 +107,23 @@ body {
 	color: var(--form-label-required-mark-color) !important;
 	visibility: visible !important;
 	content: '*' !important;
+}
+
+.ant-upload-drag-icon {
+	display: flex !important;
+	width: 100% !important;
+	justify-content: center !important;
+	align-items: center !important;
+	text-align: center !important;
+	margin: 0 auto 16px auto !important;
+
+	svg,
+	.vui-icon,
+	.anticon {
+		display: inline-block !important;
+		color: var(--vin-color-primary, #c72127) !important;
+		margin: 0 auto !important;
+	}
 }
 
 // =============================================================================

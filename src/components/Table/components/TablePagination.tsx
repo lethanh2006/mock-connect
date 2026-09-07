@@ -65,6 +65,7 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
 					<PaginationItem>
 						<PaginationPrevious
 							href='#!'
+							size='sm'
 							aria-disabled={page <= 1}
 							style={page <= 1 ? { opacity: 0.5, pointerEvents: 'none' } : undefined}
 							onClick={(e) => {
@@ -83,6 +84,7 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
 							<PaginationItem key={token}>
 								<PaginationLink
 									href='#!'
+									size='sm'
 									isActive={token === page}
 									onClick={(e) => {
 										e.preventDefault();
@@ -98,6 +100,7 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
 					<PaginationItem>
 						<PaginationNext
 							href='#!'
+							size='sm'
 							aria-disabled={page >= totalPages}
 							style={page >= totalPages ? { opacity: 0.5, pointerEvents: 'none' } : undefined}
 							onClick={(e) => {

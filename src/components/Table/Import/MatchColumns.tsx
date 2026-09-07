@@ -1,5 +1,5 @@
 import rules from '@/utils/rules';
-import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
+import { IconArrowLeft, IconArrowRight } from '@vinuni/ui';
 import { Button, Col, Form, Row, Select, Space } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -58,11 +58,12 @@ const MatchColumns = (props: { onChange: () => void; onBack: any; importHeaders:
 
 				<Col span={24}>
 					<Space style={{ marginTop: 12, justifyContent: 'space-between', width: '100%' }}>
-						<Button onClick={() => onBack()} icon={<ArrowLeftOutlined />}>
+						<Button onClick={() => onBack()} icon={<IconArrowLeft size={14} />}>
 							{intl.formatMessage({ id: 'global.table.import.math.button.quaylai' })}
 						</Button>
 						<Button htmlType='submit' type='primary'>
-							{intl.formatMessage({ id: 'global.table.import.math.button.tieptheo' })} <ArrowRightOutlined />
+							{intl.formatMessage({ id: 'global.table.import.math.button.tieptheo' })}{' '}
+							<IconArrowRight size={14} style={{ marginLeft: 6 }} />
 						</Button>
 					</Space>
 				</Col>

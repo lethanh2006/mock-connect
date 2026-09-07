@@ -1,5 +1,5 @@
 import { genExcelFile } from '@/utils/utils';
-import { ArrowLeftOutlined, CheckCircleOutlined, DownloadOutlined, SaveOutlined } from '@ant-design/icons';
+import { IconArrowLeft, IconCheck, IconCheckCircle, IconDownload } from '@vinuni/ui';
 import { Button, Col, Collapse, Popconfirm, Row, Space, Spin, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -122,7 +122,7 @@ const ValidateDataImport = (props: {
 				{importResponses.length ? (
 					<ButtonExtend
 						size='small'
-						icon={<DownloadOutlined />}
+						icon={<IconDownload size={14} />}
 						onClick={() => genExcelFile(transformDataToExcelFormat(), 'Kết quả Import.xlsx')}
 						loading={formSubmiting}
 					>
@@ -160,7 +160,7 @@ const ValidateDataImport = (props: {
 							align='center'
 							className='text-success'
 						>
-							<CheckCircleOutlined style={{ fontSize: 24 }} />
+							<IconCheckCircle size={24} />
 							<span className='fw500' style={{ fontSize: 18 }}>
 								{intl.formatMessage(
 									{ id: 'global.table.import.result' },
@@ -236,7 +236,7 @@ const ValidateDataImport = (props: {
 
 			<Col span={24}>
 				<Space style={{ marginTop: 12, justifyContent: 'space-between', width: '100%' }}>
-					<Button onClick={() => onBack()} icon={<ArrowLeftOutlined />}>
+					<Button onClick={() => onBack()} icon={<IconArrowLeft size={14} />}>
 						{intl.formatMessage({ id: 'global.table.import.math.button.quaylai' })}
 					</Button>
 
@@ -260,7 +260,7 @@ const ValidateDataImport = (props: {
 								htmlType='submit'
 								type='primary'
 								loading={formSubmiting}
-								icon={<SaveOutlined />}
+								icon={<IconCheck size={14} />}
 								// disabled={isError || !!errorCount}
 							>
 								{intl.formatMessage({ id: 'global.table.import.validate.button.luudulieu' })}

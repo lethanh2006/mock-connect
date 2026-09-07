@@ -1,4 +1,4 @@
-import { DownOutlined } from '@ant-design/icons';
+import { IconChervolDown } from '@vinuni/ui';
 import { Button, Card, Space, Tree } from 'antd';
 import { useIntl } from 'umi';
 import { type TExportField } from '../typing';
@@ -47,7 +47,7 @@ const CardChooseFields = (props: {
 			<div style={{ maxHeight: 385, overflowY: 'scroll', border: '1px solid #f0f0f0' }}>
 				<Tree
 					treeData={treeData}
-					switcherIcon={<DownOutlined />}
+					switcherIcon={<IconChervolDown size={14} />}
 					checkable
 					checkedKeys={fields.filter((item) => item.selected).map((item) => item._id)}
 					onCheck={(keys) => {

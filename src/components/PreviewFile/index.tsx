@@ -5,13 +5,13 @@ import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { getFileType, getNameFile } from '@/utils/utils';
 import {
-	CopyOutlined,
-	DownloadOutlined,
-	ExpandOutlined,
-	FileSearchOutlined,
-	LeftOutlined,
-	RightOutlined,
-} from '@ant-design/icons';
+	Icon2SquareCopy,
+	IconChervolLeft,
+	IconChervolRight,
+	IconDownload,
+	IconMagnifyingglass,
+	IconOpenrectagleToprightarrow,
+} from '@vinuni/ui';
 import { Button, Empty, message, Spin } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
@@ -231,7 +231,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 							<ButtonExtend
 								type='link'
 								disabled={currentFileIndex === 0}
-								icon={<LeftOutlined />}
+								icon={<IconChervolLeft size={16} />}
 								onClick={handlePrev}
 							/>
 							<span>
@@ -240,7 +240,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 							<ButtonExtend
 								type='link'
 								disabled={currentFileIndex === fileList.length - 1}
-								icon={<RightOutlined />}
+								icon={<IconChervolRight size={16} />}
 								onClick={handleNext}
 							/>
 						</div>
@@ -252,13 +252,13 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 								<ButtonExtend
 									type='link'
 									tooltip={intl.formatMessage({ id: 'global.previewfile.button.taixuong' })}
-									icon={<DownloadOutlined />}
+									icon={<IconDownload size={16} />}
 									onClick={handleDownloadOrView}
 								/>
 								<ButtonExtend
 									type='link'
 									tooltip={intl.formatMessage({ id: 'global.previewfile.button.saochep' })}
-									icon={<CopyOutlined />}
+									icon={<Icon2SquareCopy size={16} />}
 									onClick={handleCopy}
 								/>
 							</>
@@ -268,7 +268,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 							<ButtonExtend
 								type='link'
 								tooltip={intl.formatMessage({ id: 'global.previewfile.button.morong' })}
-								icon={<ExpandOutlined />}
+								icon={<IconOpenrectagleToprightarrow size={16} />}
 								onClick={() => window.open(frameData?.src, '_blank')}
 							/>
 						)}
@@ -304,7 +304,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 					isPrivate ? (
 						<div className='preview-error'>
 							<p>This document is protected and cannot be previewed directly via Office Online.</p>
-							<Button type='primary' icon={<DownloadOutlined />} onClick={handleDownloadOrView}>
+							<Button type='primary' icon={<IconDownload size={16} />} onClick={handleDownloadOrView}>
 								Download to view
 							</Button>
 						</div>
@@ -322,7 +322,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 								notHideText
 								type='link'
 								tooltip={intl.formatMessage({ id: 'global.previewfile.button.taixuong' })}
-								icon={<FileSearchOutlined />}
+								icon={<IconMagnifyingglass size={16} />}
 								onClick={handleDownloadOrView}
 							>
 								{intl.formatMessage({ id: 'global.previewfile.button.taixuong' })}

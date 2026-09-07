@@ -143,8 +143,26 @@
 	transition: all 0.3s;
 	cursor: default;
 
-	span {
+	span,
+	svg {
 		cursor: pointer;
 		font-size: 16px;
+	}
+}
+
+.ant-upload-drag-icon {
+	display: flex !important;
+	width: 100% !important;
+	justify-content: center !important;
+	align-items: center !important;
+	text-align: center !important;
+	margin: 0 auto 16px auto !important;
+
+	svg,
+	.vui-icon,
+	.anticon {
+		display: inline-block !important;
+		color: var(--vin-color-primary, #c72127) !important;
+		margin: 0 auto !important;
 	}
 }

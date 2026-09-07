@@ -1,7 +1,7 @@
 import { isAllowedFile, parseAcceptString, validateFileBlob } from '@/utils/fileValidation';
 import { getSafeHref } from '@/utils/security';
 import { blobToBase64, getNameFile } from '@/utils/utils';
-import { DeleteOutlined, EyeOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { IconEye, IconPlus, IconTrash, IconUpload } from '@vinuni/ui';
 import type { UploadProps } from 'antd';
 import { Button, Image, Upload, message } from 'antd';
 import type { RcFile } from 'antd/es/upload';
@@ -209,8 +209,18 @@ const UploadFile: React.FC<TUploadProps> = ({
 			>
 				{!isDisabled ? (
 					<>
-						<p className='ant-upload-drag-icon'>
-							<UploadOutlined />
+						<p
+							className='ant-upload-drag-icon'
+							style={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+								width: '100%',
+								marginBottom: 16,
+								color: 'var(--vin-color-primary, #c72127)',
+							}}
+						>
+							<IconUpload size={48} style={{ color: 'inherit' }} />
 						</p>
 						<p className='ant-upload-text'>{intl.formatMessage({ id: 'global.uploadfile.text' })}</p>
 						<p className='ant-upload-hint'>{buttonDescription}</p>
@@ -259,10 +269,10 @@ const UploadFile: React.FC<TUploadProps> = ({
 												{!isDisabled && (
 													<div className='ant-upload-list-item-actions-custom'>
 														<span onClick={() => handlePreviewImage(file)}>
-															<EyeOutlined style={{ color: '#fff', marginRight: 12 }} />
+															<IconEye size={18} style={{ color: '#fff', marginRight: 12 }} />
 														</span>
 														<span onClick={() => actions.remove()}>
-															<DeleteOutlined style={{ color: '#fff' }} />
+															<IconTrash size={18} style={{ color: '#fff' }} />
 														</span>
 													</div>
 												)}
@@ -285,7 +295,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 								flexDirection: 'column',
 							}}
 						>
-							<PlusOutlined />
+							<IconPlus size={20} />
 							<div className='ant-upload-text'>
 								{buttonDescription || intl.formatMessage({ id: 'global.uploadfile.text1' })}
 							</div>
@@ -334,7 +344,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 				{...uploadSecurityProps}
 			>
 				{!isDisabled ? (
-					<Button size={buttonSize || 'small'} icon={<UploadOutlined />}>
+					<Button size={buttonSize || 'small'} icon={<IconUpload size={16} />}>
 						{buttonDescription || intl.formatMessage({ id: 'global.uploadfile.button.chontep' }, { maxFileSize })}
 					</Button>
 				) : null}

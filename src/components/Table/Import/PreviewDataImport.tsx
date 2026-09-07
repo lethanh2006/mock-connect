@@ -5,8 +5,8 @@ import { Button, Checkbox, IconArrowLeft, IconQuestionCircle } from '@vinuni/ui'
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import TableStaticData from '../TableStaticData';
-import './style.less';
 import type { IColumn, TImportHeader } from '../typing';
+import './style.less';
 
 const PreviewDataImport = (props: {
 	onChange: () => void;

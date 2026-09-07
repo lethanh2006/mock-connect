@@ -1,13 +1,13 @@
-import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
+import { IconPlus, IconXmark } from '@vinuni/ui';
 import { Button, Card, Checkbox, Form, Select, Space } from 'antd';
 import { useMemo } from 'react';
 import { useIntl } from 'umi';
+import ButtonExtend from '../ButtonExtend';
 import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
 import { useFilterFields } from '../hooks/useFilterFields';
 import { type RowFilterProps } from '../typing';
 import RowFilter from './RowFilter';
-import ButtonExtend from '../ButtonExtend';
 
 const FilterGroup = (props: RowFilterProps) => {
 	const intl = useIntl();
@@ -64,7 +64,7 @@ const FilterGroup = (props: RowFilterProps) => {
 					<ButtonExtend
 						type='text'
 						size='small'
-						icon={<CloseOutlined />}
+						icon={<IconXmark size={14} />}
 						onClick={onRemove}
 						danger
 						tooltip={intl.formatMessage({ id: 'global.table.customfilter.button.xoanhomdieukien' })}
@@ -95,7 +95,7 @@ const FilterGroup = (props: RowFilterProps) => {
 							<Button
 								type='dashed'
 								size='small'
-								icon={<PlusOutlined />}
+								icon={<IconPlus size={14} />}
 								onClick={() => {
 									const rawField = fieldsFilterable[0];
 									let firstAvailableField = '';

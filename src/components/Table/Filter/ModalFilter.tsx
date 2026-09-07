@@ -1,4 +1,4 @@
-import { PlusOutlined, PlusSquareOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { Icon3SquarePlusmark, IconPlus, IconQuestionCircle } from '@vinuni/ui';
 import { Button, Descriptions, Form, Modal, Space, Tooltip, Typography } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'umi';
@@ -70,8 +70,7 @@ const ModalFilter = () => {
 		}
 
 		const formatScalarValue = (item: any): string => {
-			if (item.value === null || item.value === undefined)
-				return '-';
+			if (item.value === null || item.value === undefined) return '-';
 
 			if (typeof item.valueLabel === 'string') return item.valueLabel;
 			if (typeof item.valueLabel === 'object' && item.valueLabel[String(item.value)])
@@ -188,7 +187,7 @@ const ModalFilter = () => {
 							<Text strong>
 								{intl.formatMessage({ id: 'global.table.customfilter.dieukien', defaultMessage: 'Conditions' })}{' '}
 							</Text>
-							<QuestionCircleOutlined style={{ fontSize: 12, color: '#999' }} />
+							<IconQuestionCircle size={14} style={{ color: '#999' }} />
 						</Tooltip>
 						<Text strong>:</Text>
 					</div>
@@ -265,7 +264,7 @@ const ModalFilter = () => {
 										block
 										type='dashed'
 										disabled={!fieldsFilterable.length}
-										icon={<PlusOutlined />}
+										icon={<IconPlus size={14} />}
 										onClick={() => {
 											const rawField = fieldsFilterable[0];
 											let firstAvailableField = '';
@@ -293,7 +292,7 @@ const ModalFilter = () => {
 										type='dashed'
 										block
 										disabled={!fieldsFilterable.length}
-										icon={<PlusSquareOutlined />}
+										icon={<Icon3SquarePlusmark size={14} />}
 										onClick={() => {
 											add({
 												operator: 'and',

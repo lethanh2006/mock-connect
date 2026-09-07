@@ -1,7 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { getDateTimeFormat } from '@/utils/formatDate';
 import rules from '@/utils/rules';
-import { CloseOutlined, PlusSquareOutlined } from '@ant-design/icons';
+import { Icon3SquarePlusmark, IconXmark } from '@vinuni/ui';
 import { Card, Checkbox, Col, Form, Input, InputNumber, Row, Select, Space } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'umi';
@@ -196,14 +196,14 @@ const FilterItem = (props: RowFilterProps) => {
 						</Col>
 
 						{!!currentFilter.operator &&
-							currentFilter.operator !== EOperatorType.NULL &&
-							currentFilter.operator !== EOperatorType.NOT_NULL ? (
+						currentFilter.operator !== EOperatorType.NULL &&
+						currentFilter.operator !== EOperatorType.NOT_NULL ? (
 							<>
 								<Col
 									span={24}
 									md={
 										currentFilter.operator === EOperatorType.BETWEEN ||
-											currentFilter.operator === EOperatorType.NOT_BETWEEN
+										currentFilter.operator === EOperatorType.NOT_BETWEEN
 											? 12
 											: 24
 									}
@@ -211,7 +211,7 @@ const FilterItem = (props: RowFilterProps) => {
 									<Form.Item
 										name={
 											currentFilter.operator === EOperatorType.INCLUDE ||
-												currentFilter.operator === EOperatorType.NOT_INCLUDE
+											currentFilter.operator === EOperatorType.NOT_INCLUDE
 												? [...namePath, 'values']
 												: [...namePath, 'values', 0]
 										}
@@ -224,7 +224,7 @@ const FilterItem = (props: RowFilterProps) => {
 								</Col>
 
 								{currentFilter.operator === EOperatorType.BETWEEN ||
-									currentFilter.operator === EOperatorType.NOT_BETWEEN ? (
+								currentFilter.operator === EOperatorType.NOT_BETWEEN ? (
 									<Col span={24} md={12}>
 										<Form.Item
 											name={[...namePath, 'values', 1]}
@@ -246,7 +246,7 @@ const FilterItem = (props: RowFilterProps) => {
 								<ButtonExtend
 									type='text'
 									size='small'
-									icon={<PlusSquareOutlined />}
+									icon={<Icon3SquarePlusmark size={14} />}
 									onClick={() => {
 										const newGroupValue = {
 											active: currentFilter.active !== false,
@@ -263,7 +263,7 @@ const FilterItem = (props: RowFilterProps) => {
 								<ButtonExtend
 									type='text'
 									size='small'
-									icon={<CloseOutlined />}
+									icon={<IconXmark size={14} />}
 									onClick={onRemove}
 									danger
 									tooltip={intl.formatMessage({ id: 'global.table.customfilter.button.xoadieukien' })}

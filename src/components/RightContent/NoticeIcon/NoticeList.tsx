@@ -1,6 +1,6 @@
 import { type ThongBao } from '@/services/ThongBao/typing';
 import dayjs from '@/utils/dayjs';
-import { ArrowDownOutlined } from '@ant-design/icons';
+import { IconArrowDown } from '@vinuni/ui';
 import { Avatar, Divider, List, Skeleton } from 'antd';
 import classNames from 'classnames';
 
@@ -88,7 +88,7 @@ const NoticeList: React.FC<NoticeIconTabProps> = ({
 							onViewMore?.();
 						}}
 					>
-						<ArrowDownOutlined /> {viewMoreText}
+						<IconArrowDown size={14} /> {viewMoreText}
 					</Link>
 				</div>
 			) : null}
