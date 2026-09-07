@@ -2,15 +2,21 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import { primaryColor } from '@/services/base/constant';
 import { inputFormat } from '@/utils/utils';
 import {
-	ExportOutlined,
-	FilterOutlined,
-	FilterTwoTone,
-	ImportOutlined,
-	PlusCircleOutlined,
-	ReloadOutlined,
-	SearchOutlined,
-} from '@ant-design/icons';
-import { AutoComplete, Button, Input, Popover, Tooltip } from 'antd';
+	IconDownload,
+	IconFilter,
+	IconMagnifyingglass,
+	IconPlus,
+	IconRotateArrow,
+	IconUpload,
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+	SearchInput,
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from '@vinuni/ui';
+import { AutoComplete } from 'antd';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -41,6 +47,7 @@ export const TableHeader: React.FC = () => {
 		selectedIds,
 		handleDeleteMany,
 		hasFilter,
+		columns: rawColumns,
 		finalColumns,
 		filters,
 		setFilters,
@@ -75,15 +82,17 @@ export const TableHeader: React.FC = () => {
 
 	//#region Global Search Logic
 
+	const targetColumns = useMemo(() => rawColumns || finalColumns || [], [rawColumns, finalColumns]);
+
 	const searchableColumns = useMemo(() => {
-		const flatColumns = finalColumns.map((item) => (item.children?.length ? [item, ...item.children] : [item])).flat();
+		const flatColumns = targetColumns.map((item) => (item.children?.length ? [item, ...item.children] : [item])).flat();
 
 		const seen = new Set<string>();
 		return flatColumns
 			.filter((item) => {
 				const isDefaultSearchable = item?.filterType === 'string';
 				const enableGlobalSearch = item?.enableGlobalSearch ?? isDefaultSearchable;
-				return enableGlobalSearch && item?.dataIndex && item.dataIndex !== 'index';
+				return enableGlobalSearch && item?.dataIndex && item.dataIndex !== 'index' && item?.hide !== true;
 			})
 			.reduce(
 				(result, item) => {
@@ -95,7 +104,7 @@ export const TableHeader: React.FC = () => {
 				},
 				[] as Array<{ field: any; title?: any }>,
 			);
-	}, [finalColumns]);
+	}, [targetColumns]);
 
 	const searchableFieldKeys = useMemo(
 		() => new Set(searchableColumns.map((item) => JSON.stringify(item.field))),
@@ -233,14 +242,16 @@ export const TableHeader: React.FC = () => {
 			onSelect={handleGlobalSearchTrigger}
 			onChange={(val) => setGlobalSearchText(val)}
 		>
-			<Input.Search
+			<SearchInput
 				ref={searchInputRef}
+				variant='tiled'
 				className='global-search'
-				size={size}
-				allowClear
+				size={size === 'large' ? 'large' : size === 'small' ? 'small' : 'medium'}
+				clearable
 				value={globalSearchText}
 				placeholder={globalSearchPlaceholder}
 				autoFocus={minimized}
+				title={globalSearchTooltip}
 				style={
 					minimized
 						? { width: 250 }
@@ -248,27 +259,17 @@ export const TableHeader: React.FC = () => {
 							? { borderColor: primaryColor, outline: '1px solid ' + primaryColor, borderRadius: 4 }
 							: undefined
 				}
-				enterButton={
-					<Button
-						loading={loading}
-						icon={
-							<Tooltip title={globalSearchTooltip}>
-								<SearchOutlined />
-							</Tooltip>
-						}
-					/>
-				}
-				onSearch={handleGlobalSearchTrigger}
+				onKeyDown={(e) => {
+					if (e.key === 'Enter') handleGlobalSearchTrigger((e.target as HTMLInputElement).value);
+				}}
+				onClear={() => {
+					debounceSearch.cancel();
+					handleGlobalSearchTrigger('');
+				}}
 				onChange={(e) => {
-					if (e.type === 'click') {
-						debounceSearch.cancel();
-						setGlobalSearchText('');
-						handleGlobalSearchTrigger('');
-					} else {
-						const val = e.target.value;
-						setGlobalSearchText(val);
-						debounceSearch(val);
-					}
+					const val = e.target.value;
+					setGlobalSearchText(val);
+					debounceSearch(val);
 				}}
 			/>
 		</AutoComplete>
@@ -287,7 +288,7 @@ export const TableHeader: React.FC = () => {
 					<ButtonExtend
 						size={size}
 						onClick={onCreate}
-						icon={<PlusCircleOutlined />}
+						icon={<IconPlus />}
 						className='btn-add'
 						type='primary'
 						tooltip={intl.formatMessage({ id: 'global.table.index.button.themmoi.tooltip' })}
@@ -299,7 +300,7 @@ export const TableHeader: React.FC = () => {
 				{btnImport && (
 					<ButtonExtend
 						size={size}
-						icon={<ImportOutlined />}
+						icon={<IconUpload />}
 						onClick={() => setVisibleImport?.(true)}
 						className='btn-import'
 					>
@@ -309,7 +310,7 @@ export const TableHeader: React.FC = () => {
 				{btnExport && (
 					<ButtonExtend
 						size={size}
-						icon={<ExportOutlined />}
+						icon={<IconDownload />}
 						onClick={() => setVisibleExport?.(true)}
 						className='btn-export'
 					>
@@ -323,7 +324,7 @@ export const TableHeader: React.FC = () => {
 				{btnReload && (
 					<ButtonExtend
 						size={size}
-						icon={<ReloadOutlined />}
+						icon={<IconRotateArrow />}
 						onClick={onReload}
 						loading={loading}
 						className='btn-reload'
@@ -354,16 +355,10 @@ export const TableHeader: React.FC = () => {
 					<ButtonExtend
 						className='btn-filter'
 						size={size}
-						icon={
-							findFiltersInColumns(finalColumns, filters)?.length ? (
-								<FilterTwoTone twoToneColor={primaryColor} />
-							) : (
-								<FilterOutlined />
-							)
-						}
+						icon={<IconFilter />}
 						onClick={() => setVisibleFilter?.(true)}
 						tooltip={intl.formatMessage({ id: 'global.table.index.button.boloc.tooltip' })}
-						style={findFiltersInColumns(finalColumns, filters)?.length ? { borderColor: primaryColor } : undefined}
+						style={findFiltersInColumns(targetColumns, filters)?.length ? { borderColor: primaryColor } : undefined}
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.boloc' })}
 					</ButtonExtend>
@@ -371,15 +366,20 @@ export const TableHeader: React.FC = () => {
 
 				{canShowGlobalSearch ? (
 					isMinimize ? (
-						<Popover content={renderGlobalSearch(isMinimize)} trigger='click' placement='bottom'>
-							<ButtonExtend
-								className='btn-minimize-search'
-								size={size}
-								loading={loading}
-								tooltip={globalSearchTooltip}
-								icon={<SearchOutlined />}
-								style={globalSearchText ? { borderColor: primaryColor, color: primaryColor } : undefined}
-							/>
+						<Popover>
+							<PopoverTrigger asChild>
+								<ButtonExtend
+									className='btn-minimize-search'
+									size={size}
+									loading={loading}
+									tooltip={globalSearchTooltip}
+									icon={<IconMagnifyingglass />}
+									style={globalSearchText ? { borderColor: primaryColor, color: primaryColor } : undefined}
+								/>
+							</PopoverTrigger>
+							<PopoverContent align='end' style={{ padding: 8, width: 280 }}>
+								{renderGlobalSearch(isMinimize)}
+							</PopoverContent>
 						</Popover>
 					) : (
 						renderGlobalSearch(isMinimize)
@@ -387,10 +387,13 @@ export const TableHeader: React.FC = () => {
 				) : null}
 
 				{!hideTotal && (
-					<Tooltip title={intl.formatMessage({ id: 'global.table.index.button.tongso.tooltip' })}>
-						<div className={classNames({ total: true, small: size === 'small' })}>
-							{intl.formatMessage({ id: 'global.table.index.button.tongso' })}:<span>{inputFormat(total || 0)}</span>
-						</div>
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<div className={classNames({ total: true, small: size === 'small' })}>
+								{intl.formatMessage({ id: 'global.table.index.button.tongso' })}:<span>{inputFormat(total || 0)}</span>
+							</div>
+						</TooltipTrigger>
+						<TooltipContent>{intl.formatMessage({ id: 'global.table.index.button.tongso.tooltip' })}</TooltipContent>
 					</Tooltip>
 				)}
 

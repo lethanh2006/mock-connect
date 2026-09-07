@@ -11,6 +11,7 @@
 			align-items: center;
 			flex-wrap: wrap;
 			gap: 8px;
+			align-items: center;
 		}
 
 		.extra {
@@ -21,8 +22,14 @@
 			justify-content: flex-end;
 
 			.global-search {
-				width: 250px;
+				width: 260px;
 				max-width: 100%;
+
+				&.has-value {
+					border-color: var(--color-primary);
+					outline: 1px solid var(--color-primary);
+					border-radius: 4px;
+				}
 			}
 
 			.total {
@@ -123,9 +130,24 @@
 }
 
 .column-settings-popover {
+	padding: 0;
+
 	.ant-popover-inner {
 		padding: 0;
 	}
+}
+
+.column-settings-checkbox-label {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	cursor: pointer;
+}
+
+.column-settings-footer-actions {
+	display: flex;
+	gap: 8px;
+	justify-content: flex-end;
 }
 
 .column-settings-content {
@@ -236,6 +258,71 @@
 	z-index: 1001;
 	background: #fafafa;
 	border: 1px solid #ccc;
+}
+
+.table-header-cell-title {
+	min-width: 0;
+}
+
+.table-header-cell-label {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	min-width: 0;
+	width: 100%;
+
+	&.align-end {
+		justify-content: flex-end;
+	}
+
+	&:not(.align-end) {
+		justify-content: flex-start;
+	}
+}
+
+.table-header-cell-filter {
+	flex-shrink: 0;
+}
+
+.table-pagination-extra {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.column-filter-trigger-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	padding: 2px;
+}
+
+.table-pagination-bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+}
+
+.column-select-filter-row {
+	display: flex;
+	gap: 4px;
+}
+
+.column-select-filter-control {
+	width: 300px;
+}
+
+.sortable-table-row {
+	cursor: grab;
+
+	&.is-dragging {
+		background: #fafafa;
+	}
 }
 
 .row-dragging td {

@@ -1,5 +1,4 @@
-import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Card } from 'antd';
+import { Card, CardContent, CardTitle, IconButton, IconTrash } from '@vinuni/ui';
 import { useIntl } from 'umi';
 import TableStaticData from '../TableStaticData';
 import { type IColumn, type TExportField } from '../typing';
@@ -20,12 +19,13 @@ const CardExportFields = (props: { fields: TExportField[]; setFields: (val: TExp
 			align: 'center',
 			hide: true,
 			render: (val, rec) => (
-				<Button
-					icon={<DeleteOutlined />}
-					type='link'
-					danger
+				<IconButton
+					label={intl.formatMessage({ id: 'global.button.xoa', defaultMessage: 'Xoá' })}
+					variant='ghost'
 					onClick={() => setFields(fields.map((item) => (item._id === rec._id ? { ...item, selected: false } : item)))}
-				/>
+				>
+					<IconTrash />
+				</IconButton>
 			),
 		},
 	];
@@ -39,21 +39,22 @@ const CardExportFields = (props: { fields: TExportField[]; setFields: (val: TExp
 	};
 
 	return (
-		<Card
-			title={intl.formatMessage({ id: 'global.table.export.field.title' })}
-			variant='borderless'
-			className='card-borderless'
-		>
-			<TableStaticData
-				columns={columns}
-				data={fields.filter((item) => item.selected)}
-				size='small'
-				addStt
-				columnSetting={false}
-				rowSortable
-				onSortEnd={onSortEnd}
-				otherProps={{ scroll: { y: 380 }, pagination: false }}
-			/>
+		<Card>
+			<CardTitle style={{ padding: '12px 16px 0' }}>
+				{intl.formatMessage({ id: 'global.table.export.field.title' })}
+			</CardTitle>
+			<CardContent>
+				<TableStaticData
+					columns={columns}
+					data={fields.filter((item) => item.selected)}
+					size='small'
+					addStt
+					columnSetting={false}
+					rowSortable
+					onSortEnd={onSortEnd}
+					otherProps={{ scroll: { y: 380 }, pagination: false }}
+				/>
+			</CardContent>
 		</Card>
 	);
 };

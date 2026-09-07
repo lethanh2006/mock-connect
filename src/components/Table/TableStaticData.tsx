@@ -1,25 +1,31 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { primaryColor } from '@/services/base/constant';
-import { MenuOutlined, PlusCircleOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import {
-	AutoComplete,
 	Button,
 	Card,
-	ConfigProvider,
+	CardContent,
+	CardTitle,
 	Drawer,
-	Empty,
-	Input,
+	DrawerContent,
+	Icon6DotGridVertical,
+	IconFilter,
+	IconMagnifyingglass,
+	IconPlus,
+	IconRotateArrow,
 	Popover,
-	Table,
+	PopoverContent,
+	PopoverTrigger,
 	Tooltip,
-	type InputRef,
-} from 'antd';
+	TooltipContent,
+	TooltipTrigger,
+} from '@vinuni/ui';
+import { AutoComplete, Button as AntdButton, Input, Table, Tooltip as AntdTooltip, type InputRef } from 'antd';
 import classNames from 'classnames';
 import _ from 'lodash';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useMediaQuery } from 'react-responsive';
 import { useIntl, useModel } from 'umi';
@@ -47,6 +53,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		data,
 		children,
 		hasCreate,
+		createDisabled,
 		hasTotal,
 		rowSortable,
 		resizable,
@@ -80,9 +87,11 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 			.flat();
 
 		return (
-			flattenColumns?.filter(
-				(item: IColumn<any>) => item?.filterType === 'string' && item?.dataIndex && item.dataIndex !== 'index',
-			) ?? []
+			flattenColumns?.filter((item: IColumn<any>) => {
+				const isDefaultSearchable = item?.filterType === 'string';
+				const enableGlobalSearch = item?.enableGlobalSearch ?? isDefaultSearchable;
+				return enableGlobalSearch && item?.dataIndex && item.dataIndex !== 'index' && item?.hide !== true;
+			}) ?? []
 		);
 	}, [props.columns]);
 
@@ -219,7 +228,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				);
 			},
 
-			filterIcon: (filtered: boolean) => <SearchOutlined className={filtered ? 'text-primary' : undefined} />,
+			filterIcon: (filtered: boolean) => <IconMagnifyingglass size={14} className={filtered ? 'text-primary' : undefined} />,
 			onFilter: (value: any, record: any) =>
 				typeof dataIndex === 'string'
 					? record[dataIndex]?.toString()?.toLowerCase()?.includes(value.toLowerCase())
@@ -252,10 +261,62 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					? { key: item, value: item, text: item }
 					: { key: item.value, value: item.value, text: item.label },
 			),
-			onFilter: (value: any, record: any) => record[dataIndex]?.indexOf(value) === 0,
+			onFilter: (value: any, record: any) => {
+				const recordValue = _.get(record, dataIndex);
+
+				if (typeof recordValue === 'boolean') {
+					return recordValue === value;
+				}
+
+				if (Array.isArray(recordValue)) {
+					return recordValue.includes(value);
+				}
+
+				return recordValue?.toString?.().indexOf(value?.toString?.()) === 0;
+			},
 			filterSearch: true,
 		};
 	}, []);
+
+	const getColumnSelectProps = useCallback(
+		(dataIndex: any, filterCustomSelect?: JSX.Element): Partial<IColumn<unknown>> => {
+			if (!filterCustomSelect) return {};
+
+			return {
+				filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => (
+					<div className='column-search-box' onKeyDown={(e) => e.stopPropagation()}>
+						<div className='column-select-filter-row'>
+							<div className='column-select-filter-control'>
+								{React.cloneElement(filterCustomSelect, {
+									value: selectedKeys,
+									onChange: (value: any) => {
+										const nextValue = Array.isArray(value) ? value : value ? [value] : [];
+										setSelectedKeys(nextValue);
+									},
+									style: { width: '100%' },
+								})}
+							</div>
+							<Button variant='default' icon={<IconFilter />} onClick={() => confirm()} />
+						</div>
+					</div>
+				),
+				onFilter: (value: any, record: any) => {
+					const recordValue = _.get(record, dataIndex);
+
+					if (typeof recordValue === 'boolean') {
+						return recordValue === value;
+					}
+
+					if (Array.isArray(recordValue)) {
+						return recordValue.includes(value);
+					}
+
+					return recordValue?.toString?.().indexOf(value?.toString?.()) === 0;
+				},
+			};
+		},
+		[],
+	);
 
 	const baseColumns = useMemo(() => {
 		return props.columns?.map((item: IColumn<any>) => ({
@@ -265,7 +326,9 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				? getColumnSearchProps(item.dataIndex, item.title, item.render)
 				: item?.filterType === 'select'
 					? getFilterColumnProps(item.dataIndex, item.filterData)
-					: undefined),
+					: item?.filterType === 'customselect'
+						? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
+						: undefined),
 			...(item?.sortable && {
 				sorter: (a: any, b: any) => {
 					const aValue = _.get(a, item?.dataIndex ?? '', undefined);
@@ -280,7 +343,9 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					? getColumnSearchProps(child.dataIndex, item.title, item.render)
 					: child?.filterType === 'select'
 						? getFilterColumnProps(child.dataIndex, child.filterData)
-						: undefined),
+						: child?.filterType === 'customselect'
+							? getColumnSelectProps(child.dataIndex, child.filterCustomSelect)
+							: undefined),
 				...(child?.sortable && {
 					sorter: (a: any, b: any) =>
 						child.customSort
@@ -291,7 +356,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				}),
 			})),
 		}));
-	}, [props.columns, resizable, getColumnSearchProps, getFilterColumnProps]);
+	}, [props.columns, resizable, getColumnSearchProps, getFilterColumnProps, getColumnSelectProps]);
 
 	const { processedColumns } = useApplyColumnSettings({
 		columns: baseColumns,
@@ -318,8 +383,11 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							<span>{val}</span>
 
 							{phanVungHienTai?._id && (
-								<Tooltip title={phanVungHienTai?.name}>
-									<div className='cornerTriangle' style={{ backgroundColor: maMau, top: size === 'small' ? -4 : -8 }} />
+								<Tooltip>
+									<TooltipTrigger asChild>
+										<div className='cornerTriangle' style={{ backgroundColor: maMau, top: size === 'small' ? -4 : -8 }} />
+									</TooltipTrigger>
+									<TooltipContent>{phanVungHienTai?.name}</TooltipContent>
 								</Tooltip>
 							)}
 						</div>
@@ -333,7 +401,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				width: 30,
 				align: 'center',
 				fixed: 'left',
-				render: () => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />,
+				render: () => <Icon6DotGridVertical style={{ cursor: 'grab', color: '#999' }} />,
 			} as any);
 
 		return cols;
@@ -357,10 +425,17 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 			...rowProps.style,
 			transform: CSS.Transform.toString(transform),
 			transition,
-			cursor: 'grab',
-			...(isDragging ? { background: '#fafafa' } : {}),
 		};
-		return <tr {...rowProps} ref={setNodeRef} style={style} {...attributes} {...listeners} />;
+		return (
+			<tr
+				{...rowProps}
+				ref={setNodeRef}
+				style={style}
+				className={classNames(rowProps.className, 'sortable-table-row', { 'is-dragging': isDragging })}
+				{...attributes}
+				{...listeners}
+			/>
+		);
 	};
 
 	const renderTable = () => {
@@ -402,29 +477,19 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		>
 			<Input.Search
 				ref={searchInputRef}
-				className='global-search'
+				className={classNames('global-search', { 'has-value': !!globalSearchText })}
 				size={size}
 				allowClear
 				value={globalSearchText}
 				placeholder={globalSearchPlaceholder}
 				autoFocus={minimized}
-				style={
-					globalSearchText
-						? {
-								width: 260,
-								borderColor: primaryColor,
-								outline: '1px solid ' + primaryColor,
-								borderRadius: 4,
-							}
-						: { width: 260 }
-				}
 				enterButton={
-					<Button
+					<AntdButton
 						size={size}
 						icon={
-							<Tooltip title={globalSearchTooltip}>
-								<SearchOutlined />
-							</Tooltip>
+							<AntdTooltip title={globalSearchTooltip}>
+								<IconMagnifyingglass size={14} />
+							</AntdTooltip>
 						}
 					/>
 				}
@@ -456,8 +521,9 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							onClick={() => {
 								if (setShowEdit) setShowEdit(true);
 							}}
-							icon={<PlusCircleOutlined />}
+							icon={<IconPlus />}
 							type='primary'
+							disabled={createDisabled}
 							size={size}
 							tooltip={intl.formatMessage({ id: 'global.tablestatic.button.themmoi.tooltip' })}
 						>
@@ -470,7 +536,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					{!!props.onReload ? (
 						<ButtonExtend
 							size={size}
-							icon={<ReloadOutlined />}
+							icon={<IconRotateArrow />}
 							onClick={() => (props.onReload ? props.onReload() : null)}
 							loading={props.loading}
 							className='btn-reload'
@@ -488,14 +554,19 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 
 					{canShowGlobalSearch ? (
 						isMinimize ? (
-							<Popover content={renderGlobalSearch(isMinimize)} trigger='click' placement='bottom'>
-								<ButtonExtend
-									className='btn-minimize-search no-print'
-									size={size}
-									tooltip={globalSearchTooltip}
-									icon={<SearchOutlined />}
-									style={globalSearchText ? { borderColor: primaryColor, color: primaryColor } : undefined}
-								/>
+							<Popover>
+								<PopoverTrigger asChild>
+									<ButtonExtend
+										className='btn-minimize-search no-print'
+										size={size}
+										tooltip={globalSearchTooltip}
+										icon={<IconMagnifyingglass />}
+										style={globalSearchText ? { borderColor: primaryColor, color: primaryColor } : undefined}
+									/>
+								</PopoverTrigger>
+								<PopoverContent align='end' style={{ padding: 8, width: 280 }}>
+									{renderGlobalSearch(isMinimize)}
+								</PopoverContent>
 							</Popover>
 						) : (
 							renderGlobalSearch(isMinimize)
@@ -503,11 +574,16 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					) : null}
 
 					{hasTotal ? (
-						<Tooltip title={intl.formatMessage({ id: 'global.tablestatic.button.tongso.tooltip' })}>
-							<div className={classNames({ total: true, small: size === 'small' })}>
-								{intl.formatMessage({ id: 'global.tablestatic.button.tongso' })}:
-								<span style={{ fontSize: 15 }}>{total ?? tableData?.length ?? props.data?.length ?? 0}</span>
-							</div>
+						<Tooltip>
+							<TooltipTrigger asChild>
+								{props.totalComponent || (
+									<div className={classNames({ total: true, small: size === 'small' })}>
+										{intl.formatMessage({ id: 'global.tablestatic.button.tongso' })}:
+										<span>{total ?? tableData?.length ?? props.data?.length ?? 0}</span>
+									</div>
+								)}
+							</TooltipTrigger>
+							<TooltipContent>{intl.formatMessage({ id: 'global.tablestatic.button.tongso.tooltip' })}</TooltipContent>
 						</Tooltip>
 					) : null}
 
@@ -515,25 +591,15 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				</div>
 			</div>
 
-			<ConfigProvider
-				renderEmpty={() => (
-					<Empty
-						style={{ marginTop: 32, marginBottom: 32 }}
-						description={props.emptyText ?? intl.formatMessage({ id: 'global.table.index.empty' })}
-						image={size === 'small' ? Empty.PRESENTED_IMAGE_SIMPLE : undefined}
-					/>
-				)}
-			>
-				{rowSortable ? (
-					<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-						<SortableContext items={tableData.map((item: any) => item.key)} strategy={verticalListSortingStrategy}>
-							{renderTable()}
-						</SortableContext>
-					</DndContext>
-				) : (
-					renderTable()
-				)}
-			</ConfigProvider>
+			{rowSortable ? (
+				<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+					<SortableContext items={tableData.map((item: any) => item.key)} strategy={verticalListSortingStrategy}>
+						{renderTable()}
+					</SortableContext>
+				</DndContext>
+			) : (
+				renderTable()
+			)}
 		</div>
 	);
 
@@ -542,8 +608,13 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 			{props.title === undefined ? (
 				mainContent
 			) : (
-				<Card title={props.title || false} variant='borderless' className='card-borderless card-big-title'>
-					<Card>{mainContent}</Card>
+				<Card>
+					{props.title ? <CardTitle style={{ padding: '12px 16px 0' }}>{props.title}</CardTitle> : null}
+					<CardContent>
+						<Card>
+							<CardContent>{mainContent}</CardContent>
+						</Card>
+					</CardContent>
 				</Card>
 			)}
 
@@ -551,20 +622,30 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				<>
 					{props?.formType === 'Drawer' ? (
 						<Drawer
-							width={props?.widthDrawer}
-							onClose={() => {
-								if (setShowEdit) setShowEdit(false);
-							}}
-							destroyOnClose
-							footer={false}
+							direction='right'
 							open={showEdit}
+							onOpenChange={(open) => {
+								if (!open && setShowEdit) setShowEdit(false);
+							}}
 						>
-							<Form
-								onCancel={() => {
-									if (setShowEdit) setShowEdit(false);
+							<DrawerContent
+								style={{
+									width:
+										typeof props?.widthDrawer === 'number'
+											? `${props.widthDrawer}px`
+											: props?.widthDrawer === 'full'
+												? '100vw'
+												: '520px',
+									maxWidth: '100vw',
 								}}
-								{...props.formProps}
-							/>
+							>
+								<Form
+									onCancel={() => {
+										if (setShowEdit) setShowEdit(false);
+									}}
+									{...props.formProps}
+								/>
+							</DrawerContent>
 						</Drawer>
 					) : (
 						<ModalExpandable
@@ -573,7 +654,6 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 								if (setShowEdit) setShowEdit(false);
 							}}
 							destroyOnClose
-							footer={false}
 							styles={{ body: { padding: 0 } }}
 							open={showEdit}
 						>

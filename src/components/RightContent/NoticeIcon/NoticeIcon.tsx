@@ -1,8 +1,8 @@
 import readAll from '@/assets/read-all.svg';
 import reLoad from '@/assets/refresh.svg';
-import { getPublicAssetPath } from '@/utils/path';
+import { IconBell, SidebarDockItem } from '@vinuni/ui';
 import { Link, useIntl } from '@umijs/max';
-import { Badge, Space, Tooltip } from 'antd';
+import { Space, Tooltip } from 'antd';
 import useMergedState from 'rc-util/es/hooks/useMergedState';
 import React from 'react';
 import { useMediaQuery } from 'react-responsive';
@@ -73,26 +73,21 @@ const NoticeIcon: React.FC<NoticeIconProps> = ({
 							</Tooltip>
 						</Space>
 					</div>
-					<div className='module-container' style={{ paddingBottom: 2, overflow: 'hidden' }}>
-						{children}
-					</div>
+					<div className={`module-container ${styles.noticeContainer}`}>{children}</div>
 				</div>
 			}
 			trigger={['click']}
 			open={visible}
 			onOpenChange={(open) => setVisible(open)}
 		>
-			<Tooltip title={intl.formatMessage({ id: 'app.header.notice', defaultMessage: 'Thông báo' })} placement='bottom'>
-				<div className='header-menu-item'>
-					<Badge count={count ? (count < 100 ? count : '99+') : undefined} className={styles.noti_badge}>
-						<img
-							src={getPublicAssetPath('icons/notification.svg')}
-							alt='notif'
-							className={count ? styles.ringing : undefined}
-						/>
-					</Badge>
-				</div>
-			</Tooltip>
+			<span className={styles.iconTrigger}>
+				<SidebarDockItem
+					tooltip={intl.formatMessage({ id: 'app.header.notice', defaultMessage: 'Thông báo' })}
+					badge={count ? (count < 100 ? count : '99+') : undefined}
+				>
+					<IconBell />
+				</SidebarDockItem>
+			</span>
 		</HeaderDropdown>
 	);
 };

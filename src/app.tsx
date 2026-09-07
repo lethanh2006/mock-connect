@@ -1,8 +1,7 @@
-import Footer from '@/components/Footer';
-import { default as GlobalHeaderRight, default as RightContent } from '@/components/RightContent';
+import AppShell from '@/components/AppShell';
 import '@/utils/dayjs';
-import { PageContainer } from '@ant-design/pro-components';
 import '@ant-design/v5-patch-for-react-19';
+import { UiProvider } from '@vinuni/ui';
 import { App } from 'antd';
 import React from 'react'; // Bổ sung import React
 import type { RunTimeLayoutConfig } from 'umi';
@@ -12,7 +11,6 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { OIDCBounder } from './components/OIDCBounder';
 import { unCheckPermissionPaths } from './components/OIDCBounder/constant';
 import OneSignalBounder from './components/OneSignalBounder';
-import HeaderContentPage from './components/RightContent/Header';
 import TechnicalSupportBounder from './components/TechnicalSupportBounder';
 import ConfigBounder from './components/TechnicalSupportBounder/ConfigBounder';
 import NotAccessible from './pages/exception/403';
@@ -24,9 +22,11 @@ import { currentRole, replaceRole } from './utils/ip';
 
 export function rootContainer(container: React.ReactNode) {
 	return (
-		<ConfigBounder>
-			<App>{container}</App>
-		</ConfigBounder>
+		<UiProvider defaultTheme='light'>
+			<ConfigBounder>
+				<App>{container}</App>
+			</ConfigBounder>
+		</UiProvider>
 	);
 }
 
@@ -58,11 +58,10 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 			</OIDCBounder>
 		),
 		noFound: <NotFoundContent />,
-		rightContentRender: () => <RightContent />,
-		headerContentRender: () => <HeaderContentPage />,
+		menuRender: false,
+		headerRender: false,
+		footerRender: false,
 		disableContentMargin: true,
-
-		footerRender: () => <Footer />,
 
 		onPageChange: () => {
 			if (initialState?.currentUser) {
@@ -91,14 +90,13 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 
 		menuItemRender: (item: any, dom: any) => (
 			<a
-				className='not-underline'
+				className='not-underline menu-item-link'
 				key={item?.path}
 				href={item?.path}
 				onClick={(e) => {
 					e.preventDefault();
 					history.push(item?.path ?? '/');
 				}}
-				style={{ display: 'block' }}
 			>
 				{dom}
 			</a>
@@ -115,15 +113,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 				</OIDCBounder>
 			);
 
-			if (initialState?.settings?.layout === 'side') {
-				return (
-					<PageContainer ghost breadcrumbRender={false} title={false} extra={<GlobalHeaderRight />} header={{}}>
-						{content}
-					</PageContainer>
-				);
-			}
-
-			return content;
+			return <AppShell>{content}</AppShell>;
 		},
 
 		title: intl.formatMessage({ id: AppModules[currentRole].title }),

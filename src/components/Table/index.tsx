@@ -40,7 +40,7 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 			.filter((item) => {
 				const isDefaultSearchable = item?.filterType === 'string';
 				const enableGlobalSearch = item?.enableGlobalSearch ?? isDefaultSearchable;
-				return enableGlobalSearch && item?.dataIndex && item.dataIndex !== 'index';
+				return enableGlobalSearch && item?.dataIndex && item.dataIndex !== 'index' && item?.hide !== true;
 			})
 			.reduce((result, item) => {
 				const fieldKey = JSON.stringify(item.dataIndex);
@@ -102,7 +102,7 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 	);
 	const hasExternalConditions = !!(props.externalConditions && props.externalConditions.length > 0);
 	const hasFilter =
-		props.columns?.filter((item) => item.filterType)?.length ||
+		props.columns?.filter((item) => item.filterType && item.hide !== true)?.length ||
 		(props.externalFilters && props.externalFilters.length > 0) ||
 		hasExternalConditions;
 	const {

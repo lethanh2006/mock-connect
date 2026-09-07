@@ -1,11 +1,11 @@
 import ExpandText from '@/components/ExpandText';
 import dayjs from '@/utils/dayjs';
-import { formatDate } from '@/utils/formatDate';
-import { ArrowLeftOutlined, QuestionOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Row, Space } from 'antd';
+import { formatDate, getDateFormat } from '@/utils/formatDate';
+import { Button, Checkbox, IconArrowLeft, IconQuestionCircle } from '@vinuni/ui';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import TableStaticData from '../TableStaticData';
+import './style.less';
 import type { IColumn, TImportHeader } from '../typing';
 
 const PreviewDataImport = (props: {
@@ -27,7 +27,7 @@ const PreviewDataImport = (props: {
 			title: intl.formatMessage({ id: 'global.table.import.preview.table.tthang' }),
 			width: 80,
 			align: 'center',
-			onCell: (row) => ({ style: { backgroundColor: row.invalid ? '#ffdada94' : undefined } }),
+			onCell: (row) => ({ className: row.invalid ? 'import-preview-invalid-cell' : undefined }),
 		},
 		...importHeaders?.map((item) => ({
 			dataIndex: item.field,
@@ -36,9 +36,9 @@ const PreviewDataImport = (props: {
 			align: (item.type === 'String' ? 'left' : 'center') as any,
 			render: (val: any) =>
 				val === invalidText ? (
-					<i style={{ color: 'red' }}>{val}</i>
+					<i className='import-preview-error-text'>{val}</i>
 				) : item.type === 'Boolean' ? (
-					<Checkbox checked={!!val} />
+					<Checkbox checked={!!val} disabled />
 				) : item.type === 'Date' && val ? (
 					formatDate(val)
 				) : item.type === 'String' ? (
@@ -46,7 +46,7 @@ const PreviewDataImport = (props: {
 				) : (
 					val
 				),
-			onCell: (row: any) => ({ style: { backgroundColor: row.invalid ? '#ffdada94' : undefined } }),
+			onCell: (row: any) => ({ className: row.invalid ? 'import-preview-invalid-cell' : undefined }),
 		})),
 	];
 
@@ -86,8 +86,8 @@ const PreviewDataImport = (props: {
 								case 'Date':
 									let parsedDate: string;
 
-									if (dayjs(content, 'DD/MM/YYYY', true).isValid()) {
-										parsedDate = dayjs(content, 'DD/MM/YYYY').toISOString();
+									if (dayjs(content, getDateFormat(), true).isValid()) {
+										parsedDate = dayjs(content, getDateFormat()).toISOString();
 									} else if (dayjs(content, 'D/M/YYYY', true).isValid()) {
 										parsedDate = dayjs(content, 'D/M/YYYY').toISOString();
 									} else if (!isNaN(Number(content))) {
@@ -132,47 +132,43 @@ const PreviewDataImport = (props: {
 	}, [JSON.stringify(matchedColumns)]);
 
 	return (
-		<Row gutter={[12, 12]}>
-			<Col span={24}>
+		<div className='import-preview-wrapper'>
+			<div>
 				<div className='fw500'>{intl.formatMessage({ id: 'global.table.import.preview.danhsacdulieu' })}</div>
 				{invalidRows?.size ? (
-					<i style={{ color: 'red' }}>
+					<i className='import-preview-error-text'>
 						{intl.formatMessage(
 							{ id: 'global.table.import.preview.invalidRows' },
 							{ rows: Array.from(invalidRows).join(', ') },
 						)}
 					</i>
 				) : null}
-			</Col>
+			</div>
 
-			<Col span={24}>
-				<TableStaticData
-					columns={columns}
-					data={dataImport ?? []}
-					loading={loading}
-					size='small'
-					otherProps={{ bordered: true, rowKey: (rec: any) => rec.row }}
-					hasTotal
-				/>
-			</Col>
+			<TableStaticData
+				columns={columns}
+				data={dataImport ?? []}
+				loading={loading}
+				size='small'
+				otherProps={{ bordered: true, rowKey: (rec: any) => rec.row }}
+				hasTotal
+			/>
 
-			<Col span={24}>
-				<Space style={{ marginTop: 12, justifyContent: 'space-between', width: '100%' }}>
-					<Button onClick={() => onBack()} icon={<ArrowLeftOutlined />}>
-						{intl.formatMessage({ id: 'global.table.import.preview.button.quaylai' })}
-					</Button>
-					<Button
-						htmlType='submit'
-						type='primary'
-						onClick={() => onChange()}
-						icon={<QuestionOutlined />}
-						disabled={!dataImport?.length || !!invalidRows?.size}
-					>
-						{intl.formatMessage({ id: 'global.table.import.preview.button.kiemtra' })}
-					</Button>
-				</Space>
-			</Col>
-		</Row>
+			<div className='import-preview-footer'>
+				<Button variant='outline' onClick={() => onBack()} icon={<IconArrowLeft />} type='button'>
+					{intl.formatMessage({ id: 'global.table.import.preview.button.quaylai' })}
+				</Button>
+				<Button
+					type='button'
+					variant='default'
+					onClick={() => onChange()}
+					icon={<IconQuestionCircle />}
+					disabled={!dataImport?.length || !!invalidRows?.size}
+				>
+					{intl.formatMessage({ id: 'global.table.import.preview.button.kiemtra' })}
+				</Button>
+			</div>
+		</div>
 	);
 };
 

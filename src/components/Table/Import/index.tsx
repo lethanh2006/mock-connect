@@ -6,7 +6,7 @@ import ChooseFileImport from './ChooseFileImport';
 import MatchColumns from './MatchColumns';
 import PreviewDataImport from './PreviewDataImport';
 import ValidateDataImport from './ValidateDataImport';
-import { type ModalImportProps } from './typing';
+import { ModalImportProps } from './typing';
 
 const ModalImport = (props: ModalImportProps) => {
 	const intl = useIntl();

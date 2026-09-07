@@ -226,20 +226,29 @@ export const stripMetadata = (filters: TFilter<any>[] = []): TFilter<any>[] => {
 export const findFiltersInColumns = (columns: IColumn<unknown>[], filters?: any[]): any[] => {
 	if (!filters?.length) return [];
 
+	const flatColumns = (columns || [])
+		.map((item: any) => (item?.children?.length ? [item, ...item.children] : [item]))
+		.flat()
+		.filter((item) => item?.hide !== true);
+
 	return filters
 		.map((filter): any => {
 			// Support both filters and filtes (legacy typo).
 			const filterArray = filter.filters || filter.filtes;
 			if (filterArray && Array.isArray(filterArray)) {
 				return {
-					filters: findFiltersInColumns(columns, filterArray),
+					filters: findFiltersInColumns(flatColumns, filterArray),
 					logicOperator: filter.operator || filter.logicOperator || 'and',
 					active: true,
 				};
 			}
 
 			const field = JSON.stringify(filter.field);
-			const column = columns.find((col) => JSON.stringify(col.dataIndex) === field);
+			const column = flatColumns.find((col) => {
+				const colField = JSON.stringify(col.dataIndex);
+				const colFieldStr = Array.isArray(col.dataIndex) ? col.dataIndex.join('.') : col.dataIndex;
+				return colField === field || colFieldStr === filter.field;
+			});
 
 			if (column) {
 				return {

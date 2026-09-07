@@ -21,21 +21,22 @@ const ModalFilter = () => {
 		filters,
 		externalConditions,
 	} = useTableContext();
-	const columns = originalColumns || finalColumns;
+	const targetColumns = useMemo(() => originalColumns || finalColumns || [], [originalColumns, finalColumns]);
+	const columns = useMemo(
+		() =>
+			targetColumns
+				.map((item) => (item.children?.length ? [item, ...item.children] : [item]))
+				.flat()
+				.filter((item) => item?.hide !== true),
+		[targetColumns],
+	);
 	const [form] = Form.useForm();
 	const { fieldsFilterable } = useFilterFields(columns, form);
 
 	const fieldMetaMap = useMemo(() => {
 		const map: Record<string, { label: string; valueLabelMap: Record<string, string> }> = {};
 
-		const allColumns = columns
-			.map((item) => {
-				if (item.children?.length) return [item, ...item.children];
-				return [item];
-			})
-			.flat();
-
-		allColumns.forEach((column: any) => {
+		columns.forEach((column: any) => {
 			if (!column?.dataIndex || column.dataIndex === 'index') return;
 
 			const fieldKey = Array.isArray(column.dataIndex) ? column.dataIndex.join('.') : String(column.dataIndex);
@@ -70,7 +71,7 @@ const ModalFilter = () => {
 
 		const formatScalarValue = (item: any): string => {
 			if (item.value === null || item.value === undefined)
-					return '-';
+				return '-';
 
 			if (typeof item.valueLabel === 'string') return item.valueLabel;
 			if (typeof item.valueLabel === 'object' && item.valueLabel[String(item.value)])
@@ -266,7 +267,16 @@ const ModalFilter = () => {
 										disabled={!fieldsFilterable.length}
 										icon={<PlusOutlined />}
 										onClick={() => {
-											const firstAvailableField = fieldsFilterable[0]?.replace(/"/g, '') ?? '';
+											const rawField = fieldsFilterable[0];
+											let firstAvailableField = '';
+											if (rawField) {
+												try {
+													const parsed = JSON.parse(rawField);
+													firstAvailableField = Array.isArray(parsed) ? parsed.join('.') : parsed;
+												} catch {
+													firstAvailableField = rawField.replace(/"/g, '');
+												}
+											}
 											if (firstAvailableField) {
 												add({
 													field: firstAvailableField,

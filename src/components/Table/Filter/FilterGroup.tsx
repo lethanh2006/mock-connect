@@ -1,18 +1,27 @@
-import ButtonExtend from '@/components/Table/ButtonExtend';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Card, Checkbox, Form, Select, Space } from 'antd';
+import { useMemo } from 'react';
 import { useIntl } from 'umi';
 import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
 import { useFilterFields } from '../hooks/useFilterFields';
 import { type RowFilterProps } from '../typing';
 import RowFilter from './RowFilter';
+import ButtonExtend from '../ButtonExtend';
 
 const FilterGroup = (props: RowFilterProps) => {
 	const intl = useIntl();
 	const { name, onRemove, allowGrouping = true, level = 0, formOwner, parentPath, ...restProps } = props;
-	const { finalColumns } = useTableContext();
-	const columns = finalColumns;
+	const { columns: rawColumns, finalColumns } = useTableContext();
+	const targetColumns = useMemo(() => rawColumns || finalColumns || [], [rawColumns, finalColumns]);
+	const columns = useMemo(
+		() =>
+			targetColumns
+				.map((item) => (item.children?.length ? [item, ...item.children] : [item]))
+				.flat()
+				.filter((item) => item?.hide !== true),
+		[targetColumns],
+	);
 	const formInstance = Form.useFormInstance();
 	const { fieldsFilterable } = useFilterFields(columns, formInstance);
 
@@ -88,7 +97,16 @@ const FilterGroup = (props: RowFilterProps) => {
 								size='small'
 								icon={<PlusOutlined />}
 								onClick={() => {
-									const firstAvailableField = fieldsFilterable[0]?.replace(/"/g, '') ?? '';
+									const rawField = fieldsFilterable[0];
+									let firstAvailableField = '';
+									if (rawField) {
+										try {
+											const parsed = JSON.parse(rawField);
+											firstAvailableField = Array.isArray(parsed) ? parsed.join('.') : parsed;
+										} catch {
+											firstAvailableField = rawField.replace(/"/g, '');
+										}
+									}
 									if (!firstAvailableField) return;
 									add({
 										active: true,

@@ -355,6 +355,8 @@ export type TableStaticProps = Pick<
 	setShowEdit?: (vi: boolean) => void;
 
 	hasCreate?: boolean;
+	/** Vô hiệu hóa nút Thêm mới nhưng vẫn hiển thị nút */
+	createDisabled?: boolean;
 	hasTotal?: boolean;
 	totalComponent?: React.ReactNode;
 	/** Có nút cấu hình cột ko? Mặc định: Có */

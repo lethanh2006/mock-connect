@@ -2,6 +2,7 @@
 @import 'split-panel.less';
 @import 'custom-antd.less';
 @import 'custom_vinuni.less';
+@import '@vinuni/ui/styles.css';
 
 html,
 body,
@@ -52,6 +53,10 @@ a {
 	}
 }
 
+.menu-item-link {
+	display: block;
+}
+
 ::selection {
 	background-color: var(--color-primary);
 	/* Change the color to your preferred choice */
@@ -83,7 +88,7 @@ a {
 		margin-top: 0;
 	}
 
-	.ant-btn+.ant-btn {
+	.ant-btn + .ant-btn {
 		margin-left: 0 !important;
 	}
 }
@@ -209,16 +214,16 @@ canvas {
 		height: 100vh;
 		overflow: hidden;
 
-		>.ant-modal-content,
-		>div .ant-modal-content,
-		.ant-modal-body>.ant-card {
+		> .ant-modal-content,
+		> div .ant-modal-content,
+		.ant-modal-body > .ant-card {
 			border-radius: 0;
 			height: 100vh;
 			display: flex;
 			flex-direction: column;
 
-			>.ant-modal-body,
-			>.ant-card-body {
+			> .ant-modal-body,
+			> .ant-card-body {
 				// height: 100vh;
 				overflow: auto;
 				flex: 1;
@@ -288,6 +293,10 @@ canvas {
 	color: @red-5 !important;
 }
 
+.text-warning {
+	color: var(--ant-warning-color) !important;
+}
+
 .bg-success {
 	background-color: var(--ant-success-color) !important;
 	color: white;
@@ -310,6 +319,16 @@ canvas {
 
 .text-line {
 	text-decoration: line-through;
+}
+
+.ant-table-cell.ant-table-cell-row-hover.hovered-cell {
+	cursor: pointer;
+
+	> span {
+		display: block;
+		border: 1px solid #e9e9e9;
+		border-radius: 2px;
+	}
 }
 
 // Hiệu ứng chuyển đổi cho mmodal và drawer khi nhấn Expand Button
@@ -381,5 +400,37 @@ canvas {
 			font-size: 14px;
 			font-weight: 400;
 		}
+	}
+}
+
+/* Menu Badge Parent Pulsing Dot */
+.menu-badge-pulsing-dot {
+	display: inline-flex;
+	align-items: center;
+
+	.ant-badge-dot,
+	.ant-badge-status-dot {
+		background-color: #ff4d4f !important;
+		border-radius: 50% !important;
+		box-shadow: 0 0 0 0 rgba(255, 77, 79, 0.7);
+		animation: menuBadgePulse 1.8s infinite ease-in-out !important;
+	}
+}
+
+@keyframes menuBadgePulse {
+	0% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(255, 77, 79, 0.7);
+		opacity: 0.8;
+	}
+	50% {
+		transform: scale(1.2);
+		box-shadow: 0 0 0 6px rgba(255, 77, 79, 0);
+		opacity: 1;
+	}
+	100% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(255, 77, 79, 0);
+		opacity: 0.8;
 	}
 }
