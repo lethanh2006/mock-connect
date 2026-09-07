@@ -98,7 +98,7 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 				onClick={onClick}
 			>
 				<div className='text'>
-					{iconElement && <span className='anticon'>{iconElement}</span>}
+					{iconElement && <span className='anticon stat-icon'>{iconElement}</span>}
 					<div>{title}</div>
 				</div>
 

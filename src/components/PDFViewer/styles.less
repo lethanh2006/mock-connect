@@ -26,8 +26,12 @@
 			background-color: rgba(225, 225, 225, 0.2);
 			border: none;
 
-			span:not([class*='anticon']) {
+			span:not([class*='anticon']):not(.anticon) {
 				display: none;
+			}
+
+			svg {
+				display: inline-block;
 			}
 
 			&:hover,
@@ -44,7 +48,6 @@
 }
 
 @media (max-width: @screen-xs) {
-
 	.next,
 	.prev {
 		position: initial;

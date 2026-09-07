@@ -71,12 +71,22 @@
 // =============================================================================
 // 2. Base & Form
 // =============================================================================
-* {
-	font-family: 'Montserrat', sans-serif !important;
+html,
+body,
+button,
+input,
+select,
+textarea {
+	font-family: 'Montserrat', sans-serif;
 }
 
 body {
 	font-weight: 500;
+}
+
+[data-vinuni-ui] {
+	--vinuni-font-sans: 'Montserrat', sans-serif;
+	--vinuni-font-heading: 'Montserrat', sans-serif;
 }
 
 // Antd <App> tiêm reset màu `a` toàn cục qua cssinjs, không nằm trong @layer nào nên luôn

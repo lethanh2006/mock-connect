@@ -32,17 +32,21 @@
 			transition: 0.3s;
 
 			.anticon,
+			.module-icon,
+			svg,
 			img {
 				transform: scale(1.2);
 			}
 		}
 
-		.anticon {
+		.anticon,
+		.module-icon,
+		> svg {
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			height: 56px;
-			margin: 12px;
+			margin: 12px auto;
 
 			color: #bbb;
 			font-size: 44px;
