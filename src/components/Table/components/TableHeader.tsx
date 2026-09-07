@@ -77,8 +77,7 @@ export const TableHeader: React.FC = () => {
 	const searchInputRef = useRef<any>(null);
 	const currentPath = window.location.pathname;
 	const globalDataIndex = useMemo(() => `GLOBAL_SEARCH_${currentPath}`, [currentPath]);
-	const canOpenModalFilter = false;
-	// btnFilter && hasFilter && disableFilterModal !== true;
+	const canOpenModalFilter = btnFilter && hasFilter && disableFilterModal !== true;
 
 	//#region Global Search Logic
 
