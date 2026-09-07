@@ -1,8 +1,9 @@
 .modal-expandable-title {
 	font-weight: 600;
 	font-size: var(--font-size-lg);
-	padding: var(--padding-sm) 56px var(--padding-sm) var(--padding-lg);
+	padding: var(--padding-sm) 56px var(--padding-sm) 56px;
 	text-align: center;
+	border-bottom: none !important;
 }
 
 .modal-expandable {
@@ -13,6 +14,25 @@
 
 	.ant-card {
 		border: none !important;
+
+		.ant-card-head {
+			border-bottom: none !important;
+			text-align: center !important;
+
+			.ant-card-head-title {
+				text-align: center !important;
+				font-size: 18px !important;
+				font-weight: 600 !important;
+			}
+		}
+	}
+
+	.form-footer {
+		border-top: none !important;
+
+		&::before {
+			display: none !important;
+		}
 	}
 }
 

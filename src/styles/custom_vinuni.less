@@ -890,6 +890,7 @@ body {
 	font-size: 18px !important;
 	font-weight: bold !important;
 	color: var(--color-primary) !important;
+	text-align: center !important;
 }
 
 .ant-modal {
@@ -939,8 +940,9 @@ body {
 	overflow: hidden;
 
 	.ant-modal-header {
-		border-bottom: 1.5px solid var(--color-accent-700) !important;
-		padding: 16px 56px 16px 24px !important;
+		border-bottom: none !important;
+		padding: 20px 56px 8px 56px !important;
+		text-align: center !important;
 	}
 
 	.table-export-modal-body {
@@ -950,14 +952,25 @@ body {
 	.ant-modal-body {
 		padding: 16px 24px;
 
-		.ant-card .ant-card-head {
-			background-color: var(--vin-color-primary-bg) !important;
+		.ant-card {
+			border: none !important;
+
+			.ant-card-head {
+				border-bottom: none !important;
+				text-align: center !important;
+
+				.ant-card-head-title {
+					text-align: center !important;
+					font-size: 18px !important;
+					font-weight: 600 !important;
+				}
+			}
 		}
 	}
 
 	.ant-modal-footer {
-		border-top: 1.5px solid var(--color-accent-700) !important;
-		padding: 16px 24px !important;
+		border-top: none !important;
+		padding: 16px 24px 24px !important;
 		justify-content: end;
 		flex-direction: row-reverse;
 	}
@@ -974,15 +987,10 @@ body {
 	padding: 16px 0 0 !important;
 	justify-content: flex-start !important;
 	flex-direction: row-reverse;
+	border-top: none !important;
 
 	&::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: calc(-1 * var(--ant-modal-body-padding-horizontal, 16px)) !important;
-		right: calc(-1 * var(--ant-modal-body-padding-horizontal, 16px)) !important;
-		height: 1px;
-		background-color: var(--color-accent-700);
+		display: none !important;
 	}
 }
 
