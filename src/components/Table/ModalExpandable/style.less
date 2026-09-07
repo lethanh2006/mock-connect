@@ -5,40 +5,80 @@
 	text-align: center;
 }
 
+.modal-expandable {
+	// Bỏ scrollbar gutter thừa gây khoảng trống bên phải
+	> div {
+		scrollbar-gutter: auto !important;
+	}
+
+	.ant-card {
+		border: none !important;
+	}
+}
+
 // Modal buttons: Close, Expand fullscreen, Collapse fullscreen
 .modal-buttons {
 	position: absolute;
-	top: 0;
-	right: 0;
-	display: flex;
+	top: 16px;
+	right: 16px;
+	z-index: 20;
+	display: inline-flex;
 	align-items: center;
-	justify-content: center;
+	background: #ffffff;
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+	border-radius: 9999px; // Dạng viên thuốc khi có từ 2 nút
+	height: 36px;
+	padding: 2px 4px;
 	gap: 2px;
-	height: 56px;
-	padding: var(--padding-sm);
+	flex: none !important;
+	overflow: visible !important;
+
+	// Nếu chỉ có 1 nút: biến thành hình tròn hoàn hảo (36x36)
+	&:has(> .button:only-child),
+	&:has(> *:only-child) {
+		width: 36px;
+		padding: 0;
+		justify-content: center;
+		border-radius: 50% !important;
+
+		.button {
+			width: 100%;
+			height: 100%;
+		}
+	}
 
 	.button {
-		color: rgba(0, 0, 0, 0.45);
+		color: #374151;
 		line-height: 1;
 		text-decoration: none;
 		background: transparent;
 		border: 0;
 		outline: 0;
 		cursor: pointer;
-		transition: color 0.3s;
-		font-size: var(--font-size-lg);
 		padding: 0;
+		width: 30px;
+		height: 30px;
+		min-width: 30px;
+		border-radius: 50%;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
-		border-radius: var(--border-radius-sm);
-		width: var(--control-height);
-		height: var(--control-height);
-		transition:
-			color var(--motion-duration-mid),
-			background-color var(--motion-duration-mid);
+		svg {
+			width: 14px;
+			height: 14px;
+			stroke-width: 2.2;
+		}
 
 		&:hover {
-			color: var(--color-icon-hover) rgba(0, 0, 0, 0.88);
-			background-color: var(--color-bg-text-hover);
+			color: #000000;
+			background-color: #f3f4f6;
+		}
+
+		&:active {
+			transform: scale(0.92);
 		}
 	}
 }
