@@ -42,7 +42,7 @@ const alignStyle = (align?: string): React.CSSProperties | undefined =>
  * kéo giãn. Chỉ cột khai báo rõ `resizable: false` mới được co giãn theo tỷ lệ.
  */
 const isColumnLocked = (col: FlatColumn): boolean =>
-	col.fixed === 'left' || col.fixed === 'right' || col.resizable !== false;
+	col.fixed === 'left' || col.fixed === 'right' || col.key === 'index' || (col.dataIndex as string) === 'index' || col.resizable !== false;
 
 const SortableTableRow: React.FC<{ id: string | number; children: React.ReactNode }> = ({ id, children }) => {
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
@@ -261,16 +261,19 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		// Cột resizable/pin: dùng nguyên resizeProps (giữ tính năng kéo giãn tay).
 		// Cột co giãn theo tỷ lệ: đè width bằng calc() và tắt resizable để ResizableTableHead render đúng nhánh không kéo tay.
 		const headProps = locked
-			? resizeProps
+			? {
+				width: colWidthPx,
+				...resizeProps,
+			}
 			: {
-					...resizeProps,
-					width:
-						flexibleWidth > 0
-							? `calc((100% - ${pinnedWidth}px) * ${colWidthPx} / ${flexibleWidth})`
-							: colWidthPx,
-					minWidth: colWidthPx,
-					resizable: false,
-				};
+				...resizeProps,
+				width:
+					flexibleWidth > 0
+						? `calc((100% - ${pinnedWidth}px) * ${colWidthPx} / ${flexibleWidth})`
+						: colWidthPx,
+				minWidth: colWidthPx,
+				resizable: false,
+			};
 		return (
 			<ResizableTableHead
 				key={col.key as any}
@@ -385,8 +388,14 @@ export const TableBaseContent = (props: TableBaseProps) => {
 										truncate={false}
 									>
 										{col.render
-											? col.render(_.get(record, col.dataIndex as any), record, index)
-											: _.get(record, col.dataIndex as any)}
+											? col.render(
+													col.dataIndex ? _.get(record, col.dataIndex as any) : record,
+													record,
+													index,
+											  )
+											: col.dataIndex
+												? _.get(record, col.dataIndex as any)
+												: null}
 									</TableCell>
 								))}
 							</>

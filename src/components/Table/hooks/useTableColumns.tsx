@@ -240,6 +240,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 				key: 'index',
 				align: 'center',
 				width: 60,
+				resizable: false,
 				render: (val, rec) => {
 					const phanVungHienTai = dsPhanVung?.find((it: any) => it?.ma === rec?.dataPartitionCode);
 					const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';

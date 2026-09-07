@@ -127,6 +127,18 @@
 			bottom: 0;
 		}
 	}
+
+	// Ẩn handle kéo giãn ở cột cuối cùng và cột pin sang phải, tránh làm dư pixel gây thanh cuộn ngang
+	thead>tr>th:last-child,
+	thead>tr>th[data-pinned='right'],
+	[data-slot='table-header']>tr>th:last-child,
+	[data-slot='table-header']>tr>th[data-pinned='right'] {
+		overflow: hidden;
+
+		.react-resizable-handle {
+			margin-left: -8px;
+		}
+	}
 }
 
 .column-settings-popover {
@@ -371,7 +383,7 @@
 	cursor: pointer;
 }
 
-.ant-table-thead > tr > th:last-child {
+.ant-table-thead>tr>th:last-child {
 	overflow: hidden;
 }
 

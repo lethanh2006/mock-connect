@@ -374,6 +374,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				dataIndex: 'index',
 				align: 'center',
 				width: 60,
+				resizable: false,
 				render: (val: string, rec: any) => {
 					const phanVungHienTai = dsPhanVung?.find((item: any) => item?.ma === rec?.dataPartitionCode);
 					const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';

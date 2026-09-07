@@ -28,6 +28,9 @@
 			"react": [
 				"./node_modules/@types/react"
 			],
+			"@/icons": [
+				"./src/components/Icons"
+			],
 			"@vinuni/ui": [
 				"./node_modules/@vinuni/ui/dist/index.d.ts"
 			],
