@@ -346,6 +346,7 @@ export type TableStaticProps = Pick<
 	| 'otherTextButtons'
 	| 'otherExtra'
 	| 'scroll'
+	| 'rowSelection'
 > & {
 	data: any[];
 	loading?: boolean;
@@ -363,6 +364,12 @@ export type TableStaticProps = Pick<
 	columnSetting?: boolean;
 	size?: 'small' | 'middle';
 	globalSearch?: boolean;
+	border?: boolean;
+	bordered?: boolean;
+	cardProps?: any;
+	cardExtra?: React.ReactNode;
+	selectedIds?: (string | number)[];
+	onSelectChange?: (selectedIds: (string | number)[]) => void;
 };
 
 // IMPORT HEADER
