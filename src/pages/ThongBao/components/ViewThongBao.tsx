@@ -49,15 +49,21 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 	};
 
 	const content = (
-		<>
+		<div style={{ padding: hideCard ? '0 24px 20px 24px' : undefined }}>
 			<Card.Meta
 				avatar={record?.imageUrl ? <Avatar src={record?.imageUrl} size='large' /> : false}
 				description={
 					<>
-						<div style={{ marginBottom: 8 }}>{record?.description}</div>
-						<IconHuman style={{ verticalAlign: 'middle' }} /> {record?.senderName ?? ''}{' '}
-						<Divider type='vertical' />
-						<IconCalendar style={{ verticalAlign: 'middle' }} /> {formatDateTime(record?.createdAt)}
+						{record?.description ? <div style={{ marginBottom: 8 }}>{record.description}</div> : null}
+						<div className='notif-meta-row'>
+							<span className='notif-meta-item'>
+								<IconHuman size={15} /> {record?.senderName || 'Hệ thống'}
+							</span>
+							<Divider type='vertical' />
+							<span className='notif-meta-item'>
+								<IconCalendar size={15} /> {formatDateTime(record?.createdAt)}
+							</span>
+						</div>
 					</>
 				}
 			/>
@@ -87,13 +93,13 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 
 				{record?.metadata?.pathWeb && record?.metadata?.phanHe ? (
 					<Col span={24}>
-						<Button type='primary' onClick={() => redirectNotif()}>
+						<Button type='primary' style={{ textTransform: 'none' }} onClick={() => redirectNotif()}>
 							Xem chi tiết
 						</Button>
 					</Col>
 				) : null}
 			</Row>
-		</>
+		</div>
 	);
 
 	if (hideCard) return content;
