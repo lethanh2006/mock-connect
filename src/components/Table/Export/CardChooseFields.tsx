@@ -1,5 +1,5 @@
-import { IconChervolDown } from '@/components/Icons';
-import { Button, Card, Space, Tree } from 'antd';
+import { Button, Card, CardContent, CardTitle, IconChervolDown } from '@/components/Icons';
+import { Tree } from 'antd';
 import { useIntl } from 'umi';
 import { type TExportField } from '../typing';
 
@@ -30,31 +30,42 @@ const CardChooseFields = (props: {
 	const onUnCheckAll = () => setFields(fields.map((item) => ({ ...item, selected: false })));
 
 	return (
-		<Card
-			title={intl.formatMessage({ id: 'global.table.export.khadung' })}
-			variant='borderless'
-			className='card-borderless'
-		>
-			<Space style={{ marginBottom: 8 }} wrap>
-				<Button size='small' type={isAllSelected ? 'primary' : 'default'} onClick={onCheckAll}>
-					{intl.formatMessage({ id: 'global.table.export.choose.chontatca' })}
-				</Button>
-				<Button size='small' type={isAllUnSelected ? 'primary' : 'default'} onClick={onUnCheckAll}>
-					{intl.formatMessage({ id: 'global.table.export.choose.bochontatca' })}
-				</Button>
-			</Space>
+		<Card>
+			<CardTitle style={{ padding: '12px 16px 0' }}>
+				{intl.formatMessage({ id: 'global.table.export.khadung' })}
+			</CardTitle>
+			<CardContent style={{ padding: '12px 16px 16px' }}>
+				<div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+					<Button
+						size='sm'
+						variant={isAllSelected ? 'default' : 'outline'}
+						onClick={onCheckAll}
+						type='button'
+					>
+						{intl.formatMessage({ id: 'global.table.export.choose.chontatca' })}
+					</Button>
+					<Button
+						size='sm'
+						variant={isAllUnSelected ? 'default' : 'outline'}
+						onClick={onUnCheckAll}
+						type='button'
+					>
+						{intl.formatMessage({ id: 'global.table.export.choose.bochontatca' })}
+					</Button>
+				</div>
 
-			<div style={{ maxHeight: 385, overflowY: 'scroll', border: '1px solid #f0f0f0' }}>
-				<Tree
-					treeData={treeData}
-					switcherIcon={<IconChervolDown />}
-					checkable
-					checkedKeys={fields.filter((item) => item.selected).map((item) => item._id)}
-					onCheck={(keys) => {
-						if (Array.isArray(keys)) setFields(fields.map((item) => ({ ...item, selected: keys.includes(item._id) })));
-					}}
-				/>
-			</div>
+				<div style={{ maxHeight: 340, overflowY: 'auto', border: '1px solid #f0f0f0', borderRadius: 8, padding: 4 }}>
+					<Tree
+						treeData={treeData}
+						switcherIcon={<IconChervolDown />}
+						checkable
+						checkedKeys={fields.filter((item) => item.selected).map((item) => item._id)}
+						onCheck={(keys) => {
+							if (Array.isArray(keys)) setFields(fields.map((item) => ({ ...item, selected: keys.includes(item._id) })));
+						}}
+					/>
+				</div>
+			</CardContent>
 		</Card>
 	);
 };

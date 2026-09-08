@@ -69,10 +69,12 @@ const ModalImport = (props: ModalImportProps) => {
 			destroyOnClose
 			maskClosable={maskCloseableForm || false}
 			loading={loading}
+			allowExpand={false}
+			styles={{ body: { padding: '0 24px 24px 24px' } }}
 		>
 			{!!importHeaders.length ? (
 				<>
-					<Steps current={currentStep} style={{ marginBottom: 18 }}>
+					<Steps current={currentStep} style={{ marginBottom: 24, padding: '0 48px' }}>
 						<Steps.Step title={intl.formatMessage({ id: 'global.table.import.index.step.chontaptin' })} />
 						<Steps.Step title={intl.formatMessage({ id: 'global.table.import.index.step.ghepcotdulieu' })} />
 						<Steps.Step title={intl.formatMessage({ id: 'global.table.import.index.step.xemtruocdulieu' })} />

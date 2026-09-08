@@ -17,12 +17,25 @@ export interface ModalExpandableProps {
 	styles?: { body?: React.CSSProperties };
 	loading?: boolean;
 	footer?: React.ReactNode;
+	allowExpand?: boolean;
 }
 
 const ModalExpandable = (props: ModalExpandableProps) => {
 	const [isExpanded, setIsExpanded] = useState(false);
-	const { children, fullScreen, open, onCancel, title, width, maskClosable, destroyOnClose, className, styles, footer } =
-		props;
+	const {
+		children,
+		fullScreen,
+		open,
+		onCancel,
+		title,
+		width,
+		maskClosable,
+		destroyOnClose,
+		className,
+		styles,
+		footer,
+		allowExpand = true,
+	} = props;
 
 	const isFull = isExpanded || fullScreen;
 
@@ -62,7 +75,7 @@ const ModalExpandable = (props: ModalExpandableProps) => {
 				{footer}
 
 				<div className='modal-buttons'>
-					{!fullScreen && (
+					{!fullScreen && allowExpand && (
 						<IconButton
 							label={isExpanded ? 'Thu nhỏ' : 'Phóng to'}
 							variant='ghost'

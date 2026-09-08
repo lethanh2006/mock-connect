@@ -7,8 +7,8 @@ import {
 	validateFileBlob,
 } from '@/utils/fileValidation';
 import rules from '@/utils/rules';
-import { IconArrowRight, IconDownload, IconXmark } from '@/components/Icons';
-import { Button, Col, Form, InputNumber, Row, Select, Space, message } from 'antd';
+import { Button, IconArrowRight, IconDownload } from '@/components/Icons';
+import { Col, Form, InputNumber, Row, Select, message } from 'antd';
 import fileDownload from 'js-file-download';
 import { pick } from 'lodash';
 import { useState } from 'react';
@@ -213,25 +213,31 @@ const ChooseFileImport = (props: { onChange: () => void; onCancel: any; getTempl
 				</Col>
 
 				{getTemplate ? (
-					<Col span={24} style={{ textAlign: 'center', marginTop: 8 }}>
-						<i>{intl.formatMessage({ id: 'global.table.import.choose.sudungtapdulieu' })}</i>
-						<br />
-						<Button icon={<IconDownload />} type='link' onClick={onDownloadTemplate}>
+					<Col span={24} style={{ textAlign: 'center', marginTop: 10, marginBottom: 4 }}>
+						<div style={{ fontStyle: 'italic', color: '#6b7280', fontSize: 13, marginBottom: 4 }}>
+							{intl.formatMessage({ id: 'global.table.import.choose.sudungtapdulieu' })}
+						</div>
+						<Button
+							variant='link'
+							type='button'
+							icon={<IconDownload />}
+							onClick={onDownloadTemplate}
+							style={{ fontWeight: 500 }}
+						>
 							{intl.formatMessage({ id: 'global.table.import.choose.button.taitaptin' })}
 						</Button>
 					</Col>
 				) : null}
 
 				<Col span={24}>
-					<Space style={{ marginTop: 12, justifyContent: 'space-between', width: '100%' }}>
-						<Button onClick={() => onCancel()} icon={<IconXmark />}>
+					<div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginTop: 16 }}>
+						<Button variant='outline' type='button' onClick={() => onCancel()}>
 							{intl.formatMessage({ id: 'global.table.import.choose.button.huy' })}
 						</Button>
-						<Button htmlType='submit' type='primary'>
-							{intl.formatMessage({ id: 'global.table.import.choose.button.tieptheo' })}{' '}
-							<IconArrowRight style={{ marginLeft: 6 }} />
+						<Button variant='default' type='submit' iconRight={<IconArrowRight />}>
+							{intl.formatMessage({ id: 'global.table.import.choose.button.tieptheo' })}
 						</Button>
-					</Space>
+					</div>
 				</Col>
 			</Row>
 		</Form>

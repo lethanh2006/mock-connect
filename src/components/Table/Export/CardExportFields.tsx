@@ -38,21 +38,26 @@ const CardExportFields = (props: { fields: TExportField[]; setFields: (val: TExp
 		setFields(tmp);
 	};
 
+	const selectedFields = fields.filter((item) => item.selected);
+
 	return (
 		<Card>
 			<CardTitle style={{ padding: '12px 16px 0' }}>
 				{intl.formatMessage({ id: 'global.table.export.field.title' })}
 			</CardTitle>
-			<CardContent>
+			<CardContent style={{ padding: '12px 16px 16px' }}>
 				<TableStaticData
 					columns={columns}
-					data={fields.filter((item) => item.selected)}
+					data={selectedFields}
 					size='small'
 					addStt
 					columnSetting={false}
 					rowSortable
 					onSortEnd={onSortEnd}
-					otherProps={{ scroll: { y: 380 }, pagination: false }}
+					otherProps={{
+						scroll: selectedFields.length > 7 ? { y: 300 } : undefined,
+						pagination: false,
+					}}
 				/>
 			</CardContent>
 		</Card>

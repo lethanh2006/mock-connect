@@ -1,6 +1,6 @@
 import { genExcelFile } from '@/utils/utils';
-import { IconArrowLeft, IconCheck, IconCheckCircle, IconDownload } from '@/components/Icons';
-import { Button, Col, Collapse, Popconfirm, Row, Space, Spin, Tag } from 'antd';
+import { Button, IconArrowLeft, IconCheck, IconCheckCircle, IconDownload } from '@/components/Icons';
+import { Col, Collapse, Popconfirm, Row, Space, Spin, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ButtonExtend from '../ButtonExtend';
@@ -235,8 +235,8 @@ const ValidateDataImport = (props: {
 			) : null}
 
 			<Col span={24}>
-				<Space style={{ marginTop: 12, justifyContent: 'space-between', width: '100%' }}>
-					<Button onClick={() => onBack()} icon={<IconArrowLeft />}>
+				<div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginTop: 16 }}>
+					<Button variant='outline' type='button' onClick={() => onBack()} icon={<IconArrowLeft />}>
 						{intl.formatMessage({ id: 'global.table.import.math.button.quaylai' })}
 					</Button>
 
@@ -257,8 +257,8 @@ const ValidateDataImport = (props: {
 							// disabled={isError || !!errorCount}
 						>
 							<Button
-								htmlType='submit'
-								type='primary'
+								type='button'
+								variant='default'
 								loading={formSubmiting}
 								icon={<IconCheck />}
 								// disabled={isError || !!errorCount}
@@ -268,6 +268,8 @@ const ValidateDataImport = (props: {
 						</Popconfirm>
 					) : (
 						<Button
+							type='button'
+							variant='default'
 							onClick={() => {
 								if (onOk) onOk(); // Get data
 								onCancel();
@@ -276,7 +278,7 @@ const ValidateDataImport = (props: {
 							{intl.formatMessage({ id: 'global.table.import.validate.button.hoanthanh' })}
 						</Button>
 					)}
-				</Space>
+				</div>
 			</Col>
 		</Row>
 	);
