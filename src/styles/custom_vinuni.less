@@ -87,6 +87,12 @@ body {
 	font-weight: 500;
 }
 
+button:not(:disabled),
+[data-slot='button']:not(:disabled),
+[data-slot='tooltip-trigger']:not(:disabled) {
+	cursor: pointer;
+}
+
 [data-vinuni-ui] {
 	--vinuni-font-sans: 'Montserrat', sans-serif;
 	--vinuni-font-heading: 'Montserrat', sans-serif;
@@ -119,6 +125,70 @@ body {
 	span {
 		color: inherit !important;
 	}
+}
+
+// Nút bấm trong Modal Bộ lọc (#custom-filter-form)
+// Do Modal portal ra ngoài body, bọc qua TooltipTrigger nên định dạng riêng cho nút trong form lọc.
+#custom-filter-form {
+	.ant-card {
+		border-radius: 8px;
+	}
+
+	.ant-card-extra button,
+	.ant-space-vertical button {
+		border: none !important;
+		outline: none !important;
+		cursor: pointer;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+		background: transparent !important;
+		box-shadow: none !important;
+		width: 28px !important;
+		height: 28px !important;
+		min-width: 28px !important;
+		padding: 0 !important;
+		border-radius: 6px !important;
+		vertical-align: middle;
+		color: #595959 !important;
+
+		svg {
+			width: 15px !important;
+			height: 15px !important;
+			display: block;
+			fill: currentColor;
+		}
+
+		&:hover {
+			background: rgba(0, 0, 0, 0.06) !important;
+			color: #1f2937 !important;
+		}
+
+		&:active {
+			transform: scale(0.92);
+			background: rgba(0, 0, 0, 0.1) !important;
+		}
+
+		&[data-variant='destructive'],
+		&.ant-btn-dangerous {
+			color: #8c8c8c !important;
+
+			&:hover {
+				background: #fff1f0 !important;
+				color: #ff4d4f !important;
+			}
+
+			&:active {
+				background: #ffccc7 !important;
+			}
+		}
+	}
+}
+
+// Bỏ hover riêng nút trang hiện tại trong phân trang
+[data-slot='pagination-link'][data-active='true'] {
+	pointer-events: none;
 }
 
 .ant-form-item-label > label {

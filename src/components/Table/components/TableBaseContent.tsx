@@ -438,9 +438,12 @@ export const TableBaseContent = (props: TableBaseProps) => {
 					) : null}
 				</>
 			) : null}
-			<span>
-				{intl.formatMessage({ id: 'global.table.index.tongso' })}: {total ?? 0}
-			</span>
+			{/* Ẩn tổng số ở phân trang bên dưới (đã hiển thị trên thanh công cụ) */}
+			{false && (
+				<span>
+					{intl.formatMessage({ id: 'global.table.index.tongso' })}: {total ?? 0}
+				</span>
+			)}
 		</span>
 	);
 

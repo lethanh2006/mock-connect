@@ -4,8 +4,6 @@ import {
 	PaginationEllipsis,
 	PaginationItem,
 	PaginationLink,
-	PaginationNext,
-	PaginationPrevious,
 	Select,
 	SelectContent,
 	SelectItem,
@@ -13,6 +11,7 @@ import {
 	SelectValue,
 } from '@vinuni/ui';
 import React from 'react';
+import { IconChervolLeft, IconChervolRight } from '@/components/Icons';
 import '../style.less';
 
 export interface TablePaginationProps {
@@ -63,16 +62,19 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
 			<Pagination style={{ width: 'auto', margin: '12px 0px 0px 0px' }}>
 				<PaginationContent>
 					<PaginationItem>
-						<PaginationPrevious
+						<PaginationLink
 							href='#!'
-							size='sm'
+							size='icon-sm'
+							aria-label='Previous'
 							aria-disabled={page <= 1}
 							style={page <= 1 ? { opacity: 0.5, pointerEvents: 'none' } : undefined}
 							onClick={(e) => {
 								e.preventDefault();
 								if (page > 1) onPageChange(page - 1);
 							}}
-						/>
+						>
+							<IconChervolLeft />
+						</PaginationLink>
 					</PaginationItem>
 
 					{tokens.map((token, index) =>
@@ -84,11 +86,11 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
 							<PaginationItem key={token}>
 								<PaginationLink
 									href='#!'
-									size='sm'
+									size='icon-sm'
 									isActive={token === page}
 									onClick={(e) => {
 										e.preventDefault();
-										onPageChange(token);
+										if (token !== page) onPageChange(token);
 									}}
 								>
 									{token}
@@ -98,16 +100,19 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
 					)}
 
 					<PaginationItem>
-						<PaginationNext
+						<PaginationLink
 							href='#!'
-							size='sm'
+							size='icon-sm'
+							aria-label='Next'
 							aria-disabled={page >= totalPages}
 							style={page >= totalPages ? { opacity: 0.5, pointerEvents: 'none' } : undefined}
 							onClick={(e) => {
 								e.preventDefault();
 								if (page < totalPages) onPageChange(page + 1);
 							}}
-						/>
+						>
+							<IconChervolRight />
+						</PaginationLink>
 					</PaginationItem>
 				</PaginationContent>
 			</Pagination>
