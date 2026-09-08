@@ -37,7 +37,7 @@ const NotAccessible = () => {
 					}}
 					subTitle={intl.formatMessage({ id: 'pages.exception.403.subtitle' })}
 					extra={
-						<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+						<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
 							<Button
 								type='primary'
 								onClick={() => (window.location.href = landingUrl)}

@@ -138,7 +138,9 @@ button:not(:disabled),
 	}
 
 	.ant-card-extra button,
-	.ant-space-vertical button {
+	.filter-item-actions button,
+	.ant-col-2 > .ant-space-vertical button,
+	.ant-col-md-1 > .ant-space-vertical button {
 		border: none !important;
 		outline: none !important;
 		cursor: pointer;
@@ -194,7 +196,7 @@ button:not(:disabled),
 	pointer-events: none;
 }
 
-.ant-form-item-label > label {
+.ant-form-item-label>label {
 	font-weight: 600 !important;
 }
 
@@ -312,8 +314,8 @@ button:not(:disabled),
 // =============================================================================
 .ant-table,
 .ant-table-container,
-.ant-table-content > tr > th,
-.ant-table-content > tr > td {
+.ant-table-content>tr>th,
+.ant-table-content>tr>td {
 	border: none !important;
 }
 
@@ -372,7 +374,7 @@ button:not(:disabled),
 		}
 	}
 
-	> tr > th:last-child,
+	>tr>th:last-child,
 	.ant-table-cell:last-child {
 		border-right: none !important;
 	}
@@ -385,7 +387,7 @@ button:not(:disabled),
 .ant-table-tbody .ant-table-row .ant-table-cell-fix-right:last-child {
 	gap: 6px !important;
 
-	> .ant-btn {
+	>.ant-btn {
 		padding: 4px !important;
 		margin-right: 6px !important;
 		margin-bottom: 6px !important;
@@ -401,7 +403,7 @@ button:not(:disabled),
 }
 
 .ant-card {
-	> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
+	>.ant-card-head>.ant-card-head-wrapper>.ant-card-head-title {
 		white-space: pre-wrap;
 		font-size: 18px !important;
 		font-weight: bold !important;
@@ -409,7 +411,7 @@ button:not(:disabled),
 	}
 
 	&.has-indicator {
-		> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
+		>.ant-card-head>.ant-card-head-wrapper>.ant-card-head-title {
 			&::after {
 				.indicator();
 				left: -18px !important;
@@ -420,8 +422,8 @@ button:not(:disabled),
 	}
 
 	&.card-big-title {
-		> .ant-card-head {
-			> .ant-card-head-wrapper > .ant-card-head-title {
+		>.ant-card-head {
+			>.ant-card-head-wrapper>.ant-card-head-title {
 				font-size: 24px !important;
 				font-weight: 600 !important;
 				// color: var(--color-official-300) !important;
@@ -431,7 +433,7 @@ button:not(:disabled),
 		}
 
 		&.has-indicator {
-			> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
+			>.ant-card-head>.ant-card-head-wrapper>.ant-card-head-title {
 				margin-left: 2px !important;
 
 				&::after {
@@ -445,8 +447,8 @@ button:not(:disabled),
 	}
 
 	&.highlight {
-		> .ant-card-head {
-			> .ant-card-head-wrapper > .ant-card-head-title {
+		>.ant-card-head {
+			>.ant-card-head-wrapper>.ant-card-head-title {
 				color: var(--color-official-300) !important;
 				padding-left: 0 !important;
 			}
@@ -467,8 +469,8 @@ button:not(:disabled),
 	}
 
 	&.normal {
-		> .ant-card-head {
-			> .ant-card-head-wrapper > .ant-card-head-title {
+		>.ant-card-head {
+			>.ant-card-head-wrapper>.ant-card-head-title {
 				font-size: 16px !important;
 				color: var(--color-official-300) !important;
 
@@ -507,14 +509,14 @@ button:not(:disabled),
 }
 
 .ant-btn-group {
-	> .ant-btn:first-child:not(:last-child) {
+	>.ant-btn:first-child:not(:last-child) {
 		border-top-left-radius: var(--vin-border-radius) !important;
 		border-bottom-left-radius: var(--vin-border-radius) !important;
 		border-top-right-radius: 0 !important;
 		border-bottom-right-radius: 0 !important;
 	}
 
-	> .ant-btn:last-child:not(:first-child) {
+	>.ant-btn:last-child:not(:first-child) {
 		border-top-right-radius: var(--vin-border-radius) !important;
 		border-bottom-right-radius: var(--vin-border-radius) !important;
 		border-top-left-radius: 0 !important;
@@ -543,14 +545,15 @@ button:not(:disabled),
 }
 
 .ant-input-group {
-	> .ant-input:first-child:not(:last-child),
-	> .ant-input-affix-wrapper:first-child:not(:last-child) {
+
+	>.ant-input:first-child:not(:last-child),
+	>.ant-input-affix-wrapper:first-child:not(:last-child) {
 		border-top-right-radius: 0 !important;
 		border-bottom-right-radius: 0 !important;
 	}
 
-	> .ant-input:last-child:not(:first-child),
-	> .ant-input-affix-wrapper:last-child:not(:first-child) {
+	>.ant-input:last-child:not(:first-child),
+	>.ant-input-affix-wrapper:last-child:not(:first-child) {
 		border-top-left-radius: 0 !important;
 		border-bottom-left-radius: 0 !important;
 	}
@@ -649,6 +652,7 @@ button:not(:disabled),
 				.ant-page-header-heading-extra {
 					.ant-space {
 						.ant-space-item {
+
 							[class*='menu_right'],
 							.menu_right {
 								color: var(--color-text-100) !important;
@@ -725,6 +729,7 @@ button:not(:disabled),
 			.ant-page-header-heading-extra {
 				.ant-space {
 					.ant-space-item {
+
 						[class*='menu_right'],
 						.menu_right {
 							margin-left: auto !important;
@@ -811,18 +816,18 @@ button:not(:disabled),
 			flex-direction: row-reverse;
 
 			button.ant-btn:has(> .span-extend) {
-				> span.ant-btn-icon {
+				>span.ant-btn-icon {
 					@media (min-width: 576px) {
 						display: none !important;
 					}
 				}
 
 				&.btn-reload {
-					> span.ant-btn-icon {
+					>span.ant-btn-icon {
 						display: inline-flex !important;
 					}
 
-					> .span-extend {
+					>.span-extend {
 						display: none !important;
 					}
 				}
@@ -834,6 +839,7 @@ button:not(:disabled),
 			align-items: center !important;
 
 			.ant-btn {
+
 				.ant-btn-icon,
 				.anticon {
 					margin: 0 !important;
@@ -934,8 +940,7 @@ button:not(:disabled),
 	img {
 		height: 24px !important;
 		width: 24px !important;
-		filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%)
-			contrast(97%);
+		filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
 	}
 
 	img[src*='notification.svg'],
@@ -1081,15 +1086,7 @@ button:not(:disabled),
 // 9. Picker & Calendar
 // =============================================================================
 .ant-picker-dropdown {
-	.ant-picker-range-wrapper
-		.ant-picker-panel-container
-		.ant-picker-panel-layout
-		.ant-picker-panels
-		.ant-picker-panel
-		.ant-picker-body
-		.ant-picker-content
-		tbody
-		tr {
+	.ant-picker-range-wrapper .ant-picker-panel-container .ant-picker-panel-layout .ant-picker-panels .ant-picker-panel .ant-picker-body .ant-picker-content tbody tr {
 		.ant-picker-cell-in-view {
 			color: var(--color-text-100) !important;
 		}
@@ -1187,9 +1184,11 @@ button:not(:disabled),
 }
 
 .ant-steps {
+
 	.ant-steps-item-finish,
 	.ant-steps-item-process {
 		.ant-steps-item-icon {
+
 			.ant-steps-icon,
 			span {
 				color: white !important;
@@ -1215,7 +1214,7 @@ button:not(:disabled),
 	border-radius: var(--vin-border-radius) !important;
 	overflow: hidden;
 
-	> .ant-card-body {
+	>.ant-card-body {
 		border-radius: var(--vin-border-radius) !important;
 	}
 }

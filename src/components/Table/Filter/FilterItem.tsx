@@ -241,7 +241,7 @@ const FilterItem = (props: RowFilterProps) => {
 				</Col>
 				{!isReadOnly && (
 					<Col span={2} md={1}>
-						<Space direction='vertical' align='center' style={{ width: '100%' }} size={4}>
+						<Space className='filter-item-actions' direction='vertical' align='center' style={{ width: '100%' }} size={4}>
 							{allowGrouping && level === 0 && (
 								<ButtonExtend
 									type='text'
