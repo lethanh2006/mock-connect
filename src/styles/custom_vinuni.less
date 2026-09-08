@@ -69,6 +69,9 @@
 	--color-bg-layout: var(--color-accent-700);
 	--color-icon-hover: var(--vin-color-primary-300);
 	--color-bg-text-hover: var(--vin-color-primary-bg);
+
+	// Bo góc chuẩn VinUni
+	--vin-border-radius: 16px;
 }
 
 // =============================================================================
@@ -494,7 +497,7 @@ button:not(:disabled),
 	text-transform: uppercase !important;
 
 	&:not(.ant-btn-circle) {
-		border-radius: 16px !important;
+		border-radius: var(--vin-border-radius) !important;
 	}
 
 	&:disabled,
@@ -505,15 +508,15 @@ button:not(:disabled),
 
 .ant-btn-group {
 	> .ant-btn:first-child:not(:last-child) {
-		border-top-left-radius: 16px !important;
-		border-bottom-left-radius: 16px !important;
+		border-top-left-radius: var(--vin-border-radius) !important;
+		border-bottom-left-radius: var(--vin-border-radius) !important;
 		border-top-right-radius: 0 !important;
 		border-bottom-right-radius: 0 !important;
 	}
 
 	> .ant-btn:last-child:not(:first-child) {
-		border-top-right-radius: 16px !important;
-		border-bottom-right-radius: 16px !important;
+		border-top-right-radius: var(--vin-border-radius) !important;
+		border-bottom-right-radius: var(--vin-border-radius) !important;
 		border-top-left-radius: 0 !important;
 		border-bottom-left-radius: 0 !important;
 	}
@@ -523,13 +526,15 @@ button:not(:disabled),
 	text-transform: none !important;
 }
 
-/* Các ô input tùy chỉnh (border-radius: 16px) - VinUni */
+/* Các ô input & select tùy chỉnh (border-radius: 16px) - VinUni */
 .ant-input:not(.ant-input-affix-wrapper .ant-input),
 .ant-input-affix-wrapper,
 .ant-input-number,
 .ant-picker,
-.ant-select:not(.ant-select-customize-input) .ant-select-selector {
-	border-radius: 16px !important;
+.ant-select:not(.ant-select-customize-input) .ant-select-selector,
+.ant-select-single .ant-select-selector,
+.ant-select-multiple .ant-select-selector {
+	border-radius: var(--vin-border-radius) !important;
 }
 
 .ant-input-number-handler-wrap {
@@ -551,20 +556,20 @@ button:not(:disabled),
 	}
 
 	.ant-input-group-addon:first-child {
-		border-top-left-radius: 16px !important;
-		border-bottom-left-radius: 16px !important;
+		border-top-left-radius: var(--vin-border-radius) !important;
+		border-bottom-left-radius: var(--vin-border-radius) !important;
 	}
 
 	.ant-input-group-addon:last-child {
-		border-top-right-radius: 16px !important;
-		border-bottom-right-radius: 16px !important;
+		border-top-right-radius: var(--vin-border-radius) !important;
+		border-bottom-right-radius: var(--vin-border-radius) !important;
 	}
 
 	.ant-input-search-button {
 		border-top-left-radius: 0 !important;
 		border-bottom-left-radius: 0 !important;
-		border-top-right-radius: 16px !important;
-		border-bottom-right-radius: 16px !important;
+		border-top-right-radius: var(--vin-border-radius) !important;
+		border-bottom-right-radius: var(--vin-border-radius) !important;
 	}
 }
 
@@ -1200,4 +1205,66 @@ button:not(:disabled),
 
 .ant-pro-global-footer {
 	margin-block-start: 24;
+}
+
+/* Bo góc cho Bảng và Card chứa Bảng - VinUni */
+.ant-card:has(.table-base),
+.card-big-title:has(.table-base),
+.card-big-title .ant-card,
+.table-card {
+	border-radius: var(--vin-border-radius) !important;
+	overflow: hidden;
+
+	> .ant-card-body {
+		border-radius: var(--vin-border-radius) !important;
+	}
+}
+
+.table-base {
+	[data-slot='table-pin-root'] {
+		border-radius: var(--vin-border-radius) !important;
+		overflow: hidden !important;
+		border: 1px solid var(--color-accent-700) !important;
+		background: #ffffff;
+	}
+
+	[data-slot='table-container'] {
+		border-radius: var(--vin-border-radius) !important;
+		overflow-x: auto !important;
+	}
+
+	table[data-slot='table'],
+	table.table-custom {
+		border-collapse: separate !important;
+		border-spacing: 0 !important;
+
+		thead tr:first-child th:first-child {
+			border-top-left-radius: var(--vin-border-radius) !important;
+		}
+
+		thead tr:first-child th:last-child {
+			border-top-right-radius: var(--vin-border-radius) !important;
+		}
+
+		tbody tr:last-child td:first-child {
+			border-bottom-left-radius: var(--vin-border-radius) !important;
+		}
+
+		tbody tr:last-child td:last-child {
+			border-bottom-right-radius: var(--vin-border-radius) !important;
+		}
+	}
+}
+
+.ant-table-wrapper {
+	.ant-table {
+		border-radius: var(--vin-border-radius) !important;
+		border: 1px solid var(--color-accent-700) !important;
+		overflow: hidden !important;
+	}
+
+	.ant-table-container {
+		border-radius: var(--vin-border-radius) !important;
+		overflow: hidden !important;
+	}
 }
