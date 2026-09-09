@@ -54,7 +54,7 @@ const CardChooseFields = (props: {
 					</Button>
 				</div>
 
-				<div style={{ maxHeight: 340, overflowY: 'auto', border: '1px solid #f0f0f0', borderRadius: 8, padding: 4 }}>
+				<div style={{ maxHeight: 340, overflowY: 'auto', border: '1px solid var(--color-border-secondary)', borderRadius: 8, padding: 4 }}>
 					<Tree
 						treeData={treeData}
 						switcherIcon={<IconChervolDown />}

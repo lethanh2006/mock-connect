@@ -21,8 +21,17 @@ import './styles/global.less';
 import { currentRole, replaceRole } from './utils/ip';
 
 export function rootContainer(container: React.ReactNode) {
+	const currentTheme = (localStorage.getItem('theme') as any) || 'light';
+	document.documentElement.setAttribute('data-vinuni-theme', currentTheme);
+
 	return (
-		<UiProvider defaultTheme='light'>
+		<UiProvider
+			defaultTheme={currentTheme}
+			onThemeChange={(theme) => {
+				localStorage.setItem('theme', theme);
+				document.documentElement.setAttribute('data-vinuni-theme', theme);
+			}}
+		>
 			<ConfigBounder>
 				<App>{container}</App>
 			</ConfigBounder>
@@ -34,6 +43,8 @@ export async function getInitialState(): Promise<IInitialState> {
 	const initialState: IInitialState = {
 		settings: defaultSettings,
 		permissionLoading: true,
+		authorizedRoles: [],
+		authorizedRolesByClient: {},
 	};
 	try {
 		const raw = sessionStorage.getItem('initialState');

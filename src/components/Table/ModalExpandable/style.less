@@ -58,7 +58,7 @@
 				text-align: center !important;
 				font-size: 18px !important;
 				font-weight: bold !important;
-				color: #000000 !important;
+				color: var(--color-text-base, var(--color-text)) !important;
 			}
 		}
 	}
@@ -80,8 +80,8 @@
 	z-index: 20;
 	display: inline-flex;
 	align-items: center;
-	background: #ffffff;
-	border: 1px solid rgba(0, 0, 0, 0.08);
+	background: var(--color-bg-elevated);
+	border: 1px solid var(--color-border-secondary);
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
 	border-radius: 9999px; // Dạng viên thuốc khi có từ 2 nút
 	height: 36px;
@@ -105,7 +105,7 @@
 	}
 
 	.button {
-		color: #374151;
+		color: var(--color-text-secondary);
 		line-height: 1;
 		text-decoration: none;
 		background: transparent;
@@ -129,8 +129,8 @@
 		}
 
 		&:hover {
-			color: #000000;
-			background-color: #f3f4f6;
+			color: var(--color-text);
+			background-color: var(--color-fill-secondary);
 		}
 
 		&:active {

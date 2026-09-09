@@ -59,8 +59,14 @@ const LocaleDockSwitcher = () => {
 	);
 };
 
-const isNodeActive = (node: NavNode, pathname: string): boolean =>
-	pathname === node.path || pathname.startsWith(`${node.path}/`);
+const normalizePath = (p: string) => (p || '').replace(/\/+$/, '') || '/';
+
+const isNodeActive = (node: NavNode, pathname: string): boolean => {
+	const current = normalizePath(pathname);
+	const target = normalizePath(node.path);
+	if (target === '/') return current === '/';
+	return current === target || current.startsWith(`${target}/`);
+};
 
 /** Như `isNodeActive` nhưng đi xuống hết cây con — cần cho menu sâu hơn 2 cấp, để group tổ tiên tự mở khi route đang active nằm ở cấp cháu. */
 const hasActiveDescendant = (node: NavNode, pathname: string): boolean =>
@@ -141,7 +147,7 @@ const NavMenuGroupItem = ({ node, pathname }: { node: NavNode; pathname: string 
 /** Item lá bên trong `SidebarMenuSub` (cấp 3 trở lên). */
 const NavSubLeaf = ({ node, pathname }: { node: NavNode; pathname: string }) => (
 	<SidebarMenuSubItem>
-		<SidebarMenuSubButton asChild isActive={isNodeActive(node, pathname)} className='pl-11'>
+		<SidebarMenuSubButton asChild isActive={isNodeActive(node, pathname)}>
 			<NavLink node={node} showIcon={false} />
 		</SidebarMenuSubButton>
 	</SidebarMenuSubItem>
@@ -166,7 +172,7 @@ const NavSubGroup = ({ node, pathname }: { node: NavNode; pathname: string }) =>
 		<Collapsible.Root open={open} onOpenChange={setOpen}>
 			<SidebarMenuSubItem>
 				<Collapsible.Trigger asChild>
-					<SidebarMenuSubButton asChild isActive={hasActiveChild && !open} className='pl-11'>
+					<SidebarMenuSubButton asChild isActive={hasActiveChild && !open}>
 						<button type='button'>
 							<span>{intl.formatMessage({ id: node.localeId, defaultMessage: node.name })}</span>
 							<IconChervolDown

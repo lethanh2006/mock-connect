@@ -173,8 +173,8 @@ const ModalFilter = () => {
 						marginBottom: 12,
 						padding: '8px 8px',
 						borderRadius: 6,
-						background: '#fafafa',
-						border: '1px solid #f0f0f0',
+						background: 'var(--color-fill-quaternary)',
+						border: '1px solid var(--color-border-secondary)',
 					}}
 				>
 					<div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>

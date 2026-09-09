@@ -90,6 +90,11 @@ body {
 	font-weight: 500;
 }
 
+html[data-vinuni-theme='dark'],
+html[data-vinuni-theme='dark'] body {
+	background-color: #000000;
+}
+
 button:not(:disabled),
 [data-slot='button']:not(:disabled),
 [data-slot='tooltip-trigger']:not(:disabled) {
@@ -99,6 +104,7 @@ button:not(:disabled),
 [data-vinuni-ui] {
 	--vinuni-font-sans: 'Montserrat', sans-serif;
 	--vinuni-font-heading: 'Montserrat', sans-serif;
+	min-height: 100vh;
 }
 
 // Antd <App> tiêm reset màu `a` toàn cục qua cssinjs, không nằm trong @layer nào nên luôn
@@ -591,7 +597,7 @@ button:not(:disabled),
 	}
 
 	&:active {
-		background-color: #f5f5f5 !important;
+		background-color: var(--color-fill-tertiary) !important;
 		border-color: var(--color-primary) !important;
 		color: var(--color-primary) !important;
 	}
@@ -644,7 +650,7 @@ button:not(:disabled),
 
 		.ant-page-header {
 			background-image: none !important;
-			background-color: #fff !important;
+			background-color: var(--color-bg-container) !important;
 			border-bottom: none !important;
 			box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.06) !important;
 
@@ -974,11 +980,20 @@ button:not(:disabled),
 }
 
 [data-slot='dialog-title'],
-.modal-expandable-title {
+.modal-expandable-title,
+.modal-expandable .ant-card .ant-card-head .ant-card-head-title {
 	font-size: 18px !important;
 	font-weight: bold !important;
-	color: #000000 !important;
+	color: var(--color-text-base, var(--color-text)) !important;
 	text-align: center !important;
+}
+
+[data-vinuni-theme='dark'] {
+	[data-slot='dialog-title'],
+	.modal-expandable-title,
+	.modal-expandable .ant-card .ant-card-head .ant-card-head-title {
+		color: #ffffff !important;
+	}
 }
 
 .ant-modal {
@@ -991,13 +1006,13 @@ button:not(:disabled),
 	width: 36px !important;
 	height: 36px !important;
 	border-radius: 50% !important;
-	background: #ffffff !important;
-	border: 1px solid rgba(0, 0, 0, 0.08) !important;
+	background: var(--color-bg-elevated) !important;
+	border: 1px solid var(--color-border-secondary) !important;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04) !important;
 	display: inline-flex !important;
 	align-items: center !important;
 	justify-content: center !important;
-	color: #374151 !important;
+	color: var(--color-text) !important;
 	padding: 0 !important;
 	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 	z-index: 20;
@@ -1013,8 +1028,8 @@ button:not(:disabled),
 	}
 
 	&:hover {
-		color: #000000 !important;
-		background: #f3f4f6 !important;
+		color: var(--color-text) !important;
+		background: var(--color-fill-secondary) !important;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
 	}
 
@@ -1172,7 +1187,8 @@ button:not(:disabled),
 }
 
 .loading-content {
-	height: 70vh;
+	min-height: 100vh;
+	margin: 0;
 }
 
 .ant-table-selection-column {
@@ -1224,7 +1240,7 @@ button:not(:disabled),
 		border-radius: var(--vin-border-radius) !important;
 		overflow: hidden !important;
 		border: 1px solid var(--color-accent-700) !important;
-		background: #ffffff;
+		background: var(--color-bg-container);
 	}
 
 	[data-slot='table-container'] {

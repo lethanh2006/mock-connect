@@ -197,3 +197,75 @@
 		transform: rotate(0deg) !important;
 	}
 }
+
+// =============================================================================
+// Sidebar Menu & Sub-Menu Active / Selected State
+// =============================================================================
+[data-slot="sidebar-menu-button"] {
+	&::after { display: none !important; }
+	&[data-active="true"] {
+		font-weight: 600 !important;
+		color: #ffffff !important;
+	}
+}
+
+[data-slot="sidebar-menu-sub"] {
+	--sub-border: rgba(255, 255, 255, 0.12);
+	--sub-color: rgba(255, 255, 255, 0.72);
+	--sub-hover-color: #ffffff;
+	--sub-hover-bg: rgba(255, 255, 255, 0.08);
+	--sub-active-color: #ffffff;
+	--sub-active-bg: rgba(59, 129, 218, 0.28);
+
+	margin: 0 4px 0 24px !important;
+	padding: 4px 0 4px 8px !important;
+	transform: none !important;
+	border-left: 1px solid var(--sub-border) !important;
+	display: flex !important;
+	flex-direction: column !important;
+	gap: 4px !important;
+
+	[data-slot="sidebar-menu-sub-button"] {
+		display: flex !important;
+		align-items: center !important;
+		width: 100% !important;
+		height: 38px !important;
+		padding: 0 16px !important;
+		border-radius: 9999px !important;
+		font-size: 14px !important;
+		color: var(--sub-color) !important;
+		transform: none !important;
+		transition: all 0.2s ease !important;
+		box-sizing: border-box !important;
+		cursor: pointer;
+		&::after { display: none !important; }
+
+		&:hover {
+			color: var(--sub-hover-color) !important;
+			background-color: var(--sub-hover-bg) !important;
+		}
+
+		&[data-active="true"] {
+			color: var(--sub-active-color) !important;
+			background-color: var(--sub-active-bg) !important;
+			font-weight: 600 !important;
+		}
+	}
+}
+
+// Light theme overrides
+[data-vinuni-theme="light"] {
+	[data-slot="sidebar-menu-button"][data-active="true"] {
+		color: var(--color-primary, #134d8b) !important;
+	}
+
+	[data-slot="sidebar-menu-sub"] {
+		--sub-border: rgba(0, 0, 0, 0.12);
+		--sub-color: rgba(0, 0, 0, 0.65);
+		--sub-hover-color: #000000;
+		--sub-hover-bg: rgba(0, 0, 0, 0.05);
+		--sub-active-color: var(--color-primary, #134d8b);
+		--sub-active-bg: rgba(19, 77, 139, 0.12);
+	}
+}
+

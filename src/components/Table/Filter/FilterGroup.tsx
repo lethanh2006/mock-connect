@@ -35,8 +35,8 @@ const FilterGroup = (props: RowFilterProps) => {
 			size='small'
 			styles={{ body: { padding: 8 } }}
 			style={{
-				backgroundColor: level === 0 ? '#f9f9f9' : '#f0f8ff',
-				border: level === 0 ? '1px solid #d9d9d9' : '1px solid #91d5ff',
+				backgroundColor: level === 0 ? 'var(--color-fill-quaternary)' : 'var(--color-info-bg)',
+				border: level === 0 ? '1px solid var(--color-border)' : '1px solid var(--color-info)',
 			}}
 			title={
 				<Space>

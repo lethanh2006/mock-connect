@@ -50,7 +50,7 @@ const SortableTableRow: React.FC<{ id: string | number; children: React.ReactNod
 		transform: CSS.Transform.toString(transform),
 		transition,
 		cursor: 'grab',
-		...(isDragging ? { background: '#fafafa' } : {}),
+		...(isDragging ? { background: 'var(--color-fill-quaternary)' } : {}),
 	};
 	return (
 		<TableRow ref={setNodeRef as any} style={style} {...attributes} {...listeners}>

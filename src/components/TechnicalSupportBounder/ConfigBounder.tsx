@@ -8,14 +8,18 @@ import {
 	textColors,
 } from '@/services/base/constant';
 import { getIntl, getLocale } from '@umijs/max';
-import { ConfigProvider, Empty, Spin } from 'antd';
+import { ConfigProvider, Empty, Spin, theme } from 'antd';
+import { useUi } from '@vinuni/ui';
 import { useEffect } from 'react';
 
 const ConfigBounder = (props: { children?: any }) => {
 	const intl = getIntl();
+	const { resolvedTheme } = useUi();
+	const isDark = resolvedTheme === 'dark';
 	useEffect(() => {
 		ConfigProvider.config({
 			theme: {
+				algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
 				token: { borderRadius: 4, colorPrimary: primaryColor, colorLink: primaryColor },
 				hashed: false,
 				cssVar: { prefix: '' },
@@ -23,7 +27,7 @@ const ConfigBounder = (props: { children?: any }) => {
 		});
 
 		Spin.setDefaultIndicator(<div className='circle-loader' />);
-	}, [primaryColor]);
+	}, [primaryColor, isDark]);
 
 	const locale = getLocale();
 
@@ -41,6 +45,7 @@ const ConfigBounder = (props: { children?: any }) => {
 				/>
 			)}
 			theme={{
+				algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
 				token: {
 					borderRadius: 4,
 					colorPrimary: primaryColor,
@@ -76,7 +81,7 @@ const ConfigBounder = (props: { children?: any }) => {
 					},
 					Button: {
 						textTextColor: primaryColor,
-						defaultColor: textColors.text100,
+						defaultColor: isDark ? undefined : textColors.text100,
 						borderColorDisabled: 'transparent',
 						paddingInline: 10,
 						borderRadius: 4,
@@ -98,18 +103,18 @@ const ConfigBounder = (props: { children?: any }) => {
 						colorPrimary: primaryColor,
 						borderRadius: 4,
 						fontWeightStrong: 700,
-						colorTextDisabled: textColors.text100,
+						colorTextDisabled: isDark ? undefined : textColors.text100,
 					},
 					Calendar: {
 						itemActiveBg: statusBgColors.statusBg400,
 						colorPrimary: primaryColor,
 					},
 					Modal: {
-						headerBg: officialColors.official500,
+						headerBg: isDark ? undefined : officialColors.official500,
 						headerMarginBottom: 0,
 					} as any,
 					Steps: {
-						colorSplit: accentColors.accent700,
+						colorSplit: isDark ? undefined : accentColors.accent700,
 						lineWidth: 2,
 						finishIconBgColor: statusColors.status100,
 					} as any,
@@ -125,7 +130,7 @@ const ConfigBounder = (props: { children?: any }) => {
 					},
 					Input: {
 						colorTextDisabled: textColors.text200,
-						activeBorderColor: accentColors.accent600,
+						activeBorderColor: isDark ? undefined : accentColors.accent600,
 					},
 					Segmented: {
 						itemSelectedColor: primaryColor,
@@ -137,7 +142,7 @@ const ConfigBounder = (props: { children?: any }) => {
 					Collapse: {
 						headerPadding: '16px 12px',
 						contentPadding: 12,
-						headerBg: accentColors.accent700,
+						headerBg: isDark ? undefined : accentColors.accent700,
 					},
 					Notification: {
 						paddingMD: 12,
@@ -158,19 +163,19 @@ const ConfigBounder = (props: { children?: any }) => {
 					Radio: {
 						colorPrimary: primaryColor,
 						radioColor: primaryColor,
-						radioBgColor: textColors.text400,
+						radioBgColor: isDark ? undefined : textColors.text400,
 						dotSize: 10,
 					} as any,
 					Tabs: {
 						fontWeightStrong: 600,
-						cardBg: officialColors.official500,
+						cardBg: isDark ? undefined : officialColors.official500,
 						inkBarColor: highlightColor,
 						cardGutter: 0,
 						horizontalItemPadding: '12px',
 						horizontalItemGutter: 8,
 					},
 					Divider: {
-						colorSplit: accentColors.accent700,
+						colorSplit: isDark ? undefined : accentColors.accent700,
 						lineWidth: 2,
 						orientationMargin: 0,
 						textPaddingInline: 2,
@@ -178,11 +183,11 @@ const ConfigBounder = (props: { children?: any }) => {
 					},
 					Select: {
 						optionSelectedColor: primaryColor,
-						optionSelectedBg: officialColors.official500,
+						optionSelectedBg: isDark ? undefined : officialColors.official500,
 					},
 					Table: {
-						borderColor: textColors?.text400,
-						headerBg: accentColors?.accent700,
+						borderColor: isDark ? undefined : textColors?.text400,
+						headerBg: isDark ? undefined : accentColors?.accent700,
 						cellPaddingBlock: 8,
 						cellPaddingInline: 8,
 						cellPaddingBlockSM: 3,
