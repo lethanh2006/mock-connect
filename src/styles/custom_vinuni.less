@@ -114,6 +114,17 @@ button:not(:disabled),
 	color: inherit !important;
 }
 
+[data-slot='search-input'] input {
+	outline: none !important;
+	box-shadow: none !important;
+
+	&:focus,
+	&:focus-visible {
+		outline: none !important;
+		box-shadow: none !important;
+	}
+}
+
 // Nút bấm primary của @vinuni/ui (variant="default") và token text-ds-always-light-primary
 // Đảm bảo chữ và icon luôn hiển thị màu trắng (#ffffff), không bị reset antd ghi đè.
 .text-ds-always-light-primary,

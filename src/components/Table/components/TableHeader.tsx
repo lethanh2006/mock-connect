@@ -244,20 +244,14 @@ export const TableHeader: React.FC = () => {
 			<SearchInput
 				ref={searchInputRef}
 				variant='tiled'
-				className='global-search'
+				className={classNames('global-search', { 'has-value': !!globalSearchText })}
 				size={size === 'large' ? 'large' : size === 'small' ? 'small' : 'medium'}
 				clearable
 				value={globalSearchText}
 				placeholder={globalSearchPlaceholder}
 				autoFocus={minimized}
 				title={globalSearchTooltip}
-				style={
-					minimized
-						? { width: 250 }
-						: globalSearchText
-							? { borderColor: primaryColor, outline: '1px solid ' + primaryColor, borderRadius: 4 }
-							: undefined
-				}
+				autoComplete='off'
 				onKeyDown={(e) => {
 					if (e.key === 'Enter') handleGlobalSearchTrigger((e.target as HTMLInputElement).value);
 				}}
