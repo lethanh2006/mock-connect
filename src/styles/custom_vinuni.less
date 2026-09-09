@@ -1216,11 +1216,34 @@ button:not(:disabled),
 }
 
 .ant-steps {
+	.ant-steps-item-icon {
+		display: inline-flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+
+		.ant-steps-icon {
+			display: inline-flex !important;
+			align-items: center !important;
+			justify-content: center !important;
+			line-height: 1 !important;
+			top: 0 !important;
+
+			.anticon {
+				display: inline-flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+			}
+		}
+	}
+
+	.ant-steps-item-title {
+		font-size: 14px !important;
+		font-weight: 500 !important;
+	}
 
 	.ant-steps-item-finish,
 	.ant-steps-item-process {
 		.ant-steps-item-icon {
-
 			.ant-steps-icon,
 			span {
 				color: white !important;
