@@ -407,8 +407,13 @@ button:not(:disabled),
 	>.ant-btn {
 		padding: 4px !important;
 		margin-right: 6px !important;
-		margin-bottom: 6px !important;
-		background-color: var(--color-info-bg) !important;
+		background-color: transparent !important;
+		box-shadow: none !important;
+		border: none !important;
+
+		&:hover {
+			background-color: var(--color-accent-700) !important;
+		}
 	}
 
 	.ant-btn-icon,
