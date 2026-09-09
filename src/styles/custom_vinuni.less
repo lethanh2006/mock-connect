@@ -1257,6 +1257,19 @@ button:not(:disabled),
 	height: 35px !important;
 }
 
+// Đảm bảo popups & dropdowns của Ant Design luôn tương tác chuột bình thường khi mở trong Modal/Dialog (@vinuni/ui)
+.ant-select-dropdown,
+.ant-picker-dropdown,
+.ant-dropdown,
+.ant-popover,
+.ant-tooltip,
+.ant-cascader-dropdown,
+.ant-tree-select-dropdown,
+.ant-color-picker-dropdown,
+.ant-tour {
+	pointer-events: auto !important;
+}
+
 .ant-pro-global-footer {
 	margin-block-start: 24;
 }

@@ -65,7 +65,28 @@ const ModalExpandable = (props: ModalExpandableProps) => {
 						  }
 						: { width: width ?? 600, maxWidth: 'calc(100vw - 2rem)' }
 				}
+				onPointerDownOutside={(e) => {
+					const target = ((e as any)?.detail?.originalEvent?.target || (e as any)?.target) as HTMLElement | null;
+					if (
+						target?.closest?.(
+							'.ant-select-dropdown, .ant-picker-dropdown, .ant-dropdown, .ant-popover, .ant-tooltip, .ant-cascader-dropdown, .ant-tree-select-dropdown, .ant-color-picker-dropdown, .ant-tour, .ant-message, .ant-notification, .ant-modal-wrap'
+						)
+					) {
+						e.preventDefault();
+						return;
+					}
+					if (!maskClosable) e.preventDefault();
+				}}
 				onInteractOutside={(e) => {
+					const target = ((e as any)?.detail?.originalEvent?.target || (e as any)?.target) as HTMLElement | null;
+					if (
+						target?.closest?.(
+							'.ant-select-dropdown, .ant-picker-dropdown, .ant-dropdown, .ant-popover, .ant-tooltip, .ant-cascader-dropdown, .ant-tree-select-dropdown, .ant-color-picker-dropdown, .ant-tour, .ant-message, .ant-notification, .ant-modal-wrap'
+						)
+					) {
+						e.preventDefault();
+						return;
+					}
 					if (!maskClosable) e.preventDefault();
 				}}
 				key={destroyOnClose ? String(open) : undefined}
