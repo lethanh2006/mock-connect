@@ -202,10 +202,15 @@
 // Sidebar Menu & Sub-Menu Active / Selected State
 // =============================================================================
 [data-slot="sidebar-menu-button"] {
+	font-family: var(--font-family-base, 'Montserrat', sans-serif) !important;
 	&::after { display: none !important; }
 	&[data-active="true"] {
 		font-weight: 600 !important;
 		color: #ffffff !important;
+	}
+
+	span, a {
+		font-family: inherit !important;
 	}
 }
 
@@ -226,6 +231,7 @@
 	gap: 4px !important;
 
 	[data-slot="sidebar-menu-sub-button"] {
+		font-family: var(--font-family-base, 'Montserrat', sans-serif) !important;
 		display: flex !important;
 		align-items: center !important;
 		width: 100% !important;

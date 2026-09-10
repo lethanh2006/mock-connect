@@ -20,7 +20,12 @@ const ConfigBounder = (props: { children?: any }) => {
 		ConfigProvider.config({
 			theme: {
 				algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
-				token: { borderRadius: 4, colorPrimary: primaryColor, colorLink: primaryColor },
+				token: {
+					fontFamily: "'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+					borderRadius: 4,
+					colorPrimary: primaryColor,
+					colorLink: primaryColor,
+				},
 				hashed: false,
 				cssVar: { prefix: '' },
 			},
@@ -47,6 +52,7 @@ const ConfigBounder = (props: { children?: any }) => {
 			theme={{
 				algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
 				token: {
+					fontFamily: "'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
 					borderRadius: 4,
 					colorPrimary: primaryColor,
 					colorLink: primaryColor,
