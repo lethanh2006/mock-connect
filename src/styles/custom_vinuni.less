@@ -529,7 +529,7 @@ button:not(:disabled),
 	flex: auto;
 	font-size: 18px !important;
 	font-weight: bold !important;
-	color: var(--color-primary) !important;
+	color: var(--color-text-base, var(--color-text)) !important;
 }
 
 /* Các class button tùy chỉnh - VinUni */
@@ -1006,18 +1006,12 @@ button:not(:disabled),
 // =============================================================================
 // 8. Modal, Drawer, Form footer, Popover
 // =============================================================================
-.ant-modal-title {
-	white-space: pre-wrap;
-	flex: auto;
-	font-size: 18px !important;
-	font-weight: bold !important;
-	color: var(--color-primary) !important;
-	text-align: center !important;
-}
-
+.ant-modal-title,
 [data-slot='dialog-title'],
 .modal-expandable-title,
 .modal-expandable .ant-card .ant-card-head .ant-card-head-title {
+	white-space: pre-wrap;
+	flex: auto;
 	font-size: 18px !important;
 	font-weight: bold !important;
 	color: var(--color-text-base, var(--color-text)) !important;
@@ -1025,6 +1019,7 @@ button:not(:disabled),
 }
 
 [data-vinuni-theme='dark'] {
+	.ant-modal-title,
 	[data-slot='dialog-title'],
 	.modal-expandable-title,
 	.modal-expandable .ant-card .ant-card-head .ant-card-head-title {
@@ -1036,7 +1031,8 @@ button:not(:disabled),
 	top: 60px;
 }
 
-.ant-modal-close {
+.ant-modal-close,
+.ant-drawer-close {
 	top: 16px !important;
 	right: 16px !important;
 	width: 36px !important;
@@ -1048,19 +1044,32 @@ button:not(:disabled),
 	display: inline-flex !important;
 	align-items: center !important;
 	justify-content: center !important;
-	color: var(--color-text) !important;
+	color: var(--color-text-secondary) !important;
 	padding: 0 !important;
 	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 	z-index: 20;
 
-	.ant-modal-close-x {
+	.ant-modal-close-x,
+	.ant-drawer-close-x {
 		display: inline-flex !important;
 		align-items: center !important;
 		justify-content: center !important;
 		width: 100% !important;
 		height: 100% !important;
-		font-size: 15px !important;
+		font-size: 14px !important;
 		line-height: 1 !important;
+
+		svg {
+			width: 14px !important;
+			height: 14px !important;
+			stroke-width: 2.2 !important;
+		}
+	}
+
+	svg {
+		width: 14px !important;
+		height: 14px !important;
+		stroke-width: 2.2 !important;
 	}
 
 	&:hover {
@@ -1080,7 +1089,8 @@ button:not(:disabled),
 
 	.ant-modal-header {
 		border-bottom: none !important;
-		padding: 20px 56px 8px 56px !important;
+		background: transparent !important;
+		padding: 20px 72px 16px 72px !important;
 		text-align: center !important;
 	}
 

@@ -106,6 +106,7 @@ export default defineConfig({
 
 	theme: {
 		'@base-path': process.env.APP_CONFIG_BASE_PATH || '/',
+		'@font-family': "'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
 	},
 
 	// plugins: ['@react-dev-inspector/umi4-plugin'],

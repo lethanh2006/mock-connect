@@ -11,6 +11,7 @@ import { getIntl, getLocale } from '@umijs/max';
 import { ConfigProvider, Empty, Spin, theme } from 'antd';
 import { useUi } from '@vinuni/ui';
 import { useEffect } from 'react';
+import { IconXmark } from '@/components/Icons';
 
 const ConfigBounder = (props: { children?: any }) => {
 	const intl = getIntl();
@@ -41,6 +42,12 @@ const ConfigBounder = (props: { children?: any }) => {
 			locale={locale}
 			form={{
 				requiredMark: false,
+			}}
+			modal={{
+				closeIcon: <IconXmark size={14} />,
+			}}
+			drawer={{
+				closeIcon: <IconXmark size={14} />,
 			}}
 			renderEmpty={() => (
 				<Empty
@@ -116,8 +123,10 @@ const ConfigBounder = (props: { children?: any }) => {
 						colorPrimary: primaryColor,
 					},
 					Modal: {
-						headerBg: isDark ? undefined : officialColors.official500,
+						headerBg: 'transparent',
 						headerMarginBottom: 0,
+						titleColor: isDark ? '#ffffff' : textColors.text100,
+						titleFontSize: 18,
 					} as any,
 					Steps: {
 						colorSplit: isDark ? undefined : accentColors.accent700,
