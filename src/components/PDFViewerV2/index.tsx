@@ -83,7 +83,7 @@ const PDFViewerV2 = ({
 				<Viewer
 					fileUrl={fileUrl}
 					defaultScale={defaultScale}
-					plugins={plugins ?? [defaultLayoutPluginInstance]}
+					plugins={(plugins ?? [defaultLayoutPluginInstance]) as any}
 					{...viewerProps}
 				/>
 			</Worker>
