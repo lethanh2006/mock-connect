@@ -4,11 +4,11 @@ import modules from './vi-VN/modules';
 import pages from './vi-VN/pages';
 
 export default {
-	'app.copyright.produced': 'Phát triển bởi A.I-SOFT',
-	'app.locale.image': 'vi-VN.svg',
-	'app.locale.title': 'Tiếng Việt',
+	...global,
 	...menu,
 	...pages,
-	...global,
-	...modules
+	...modules,
+	'app.copyright.produced': 'Phát triển bởi A.I-SOFT',
+	'app.locale.image': 'vi-VN.svg',
+	'app.locale.title': 'Tiếng Việt'
 };

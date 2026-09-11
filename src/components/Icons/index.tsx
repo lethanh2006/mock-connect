@@ -232,3 +232,22 @@ export const IconXmarkCircle = wrapIcon(VinUI.IconXmarkCircle, 'IconXmarkCircle'
 export const IconXmarkCircleFill = wrapIcon(VinUI.IconXmarkCircleFill, 'IconXmarkCircleFill');
 export const IconXmarkMedium = wrapIcon(VinUI.IconXmarkMedium, 'IconXmarkMedium');
 export const IconXmarkPentagon = wrapIcon(VinUI.IconXmarkPentagon, 'IconXmarkPentagon');
+
+// =============================================================================
+// Icon Bridge Aliases (Đồng bộ với từ điển Mapping Icon VinUni UI)
+// =============================================================================
+export const IconEyeOpen = IconEye;
+export const IconEyeClose = IconEyeSlash;
+export const IconCheck01 = IconCheck;
+export const IconFilter01 = IconFilter;
+export const IconMagnifyingGlass = IconMagnifyingglass;
+export const IconDocument = IconFile;
+export const IconPencil01 = IconPen;
+export const IconMail01 = IconMail;
+export const IconPhoneCall = IconPhone;
+export const IconFolder01 = IconFolder;
+export const IconSave = IconFileCheckPen;
+export const IconShare01 = IconForward;
+export const IconLink01 = IconPaperClip45Degree;
+export const IconPrinter = IconFile;
+
