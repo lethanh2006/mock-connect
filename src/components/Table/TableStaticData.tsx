@@ -1,9 +1,3 @@
-import ButtonExtend from '@/components/Table/ButtonExtend';
-import PageCard from '@/components/PageCard';
-import { primaryColor } from '@/services/base/constant';
-import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 import {
 	Drawer,
 	DrawerContent,
@@ -27,6 +21,12 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from '@/components/Icons';
+import PageCard from '@/components/PageCard';
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import { primaryColor } from '@/services/base/constant';
+import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { AutoComplete, Empty, Spin } from 'antd';
 import classNames from 'classnames';
 import _ from 'lodash';
@@ -36,12 +36,12 @@ import { useIntl, useModel } from 'umi';
 import { ColumnFilterPopover } from './components/ColumnFilterPopover';
 import { ColumnSettings } from './components/ColumnSettings';
 import { ResizableTableHead } from './components/ResizableTableHead';
-import { TablePagination } from './components/TablePagination';
 import { TableProvider, useTableContext } from './components/TableContext';
+import { TablePagination } from './components/TablePagination';
+import { EOperatorType } from './constant/constant';
 import { useApplyColumnSettings } from './hooks/useApplyColumnSettings';
 import type { TableSortDirection } from './hooks/useTableColumns';
 import ModalExpandable from './ModalExpandable';
-import { EOperatorType } from './constant/constant';
 import './style.less';
 import type { IColumn, TableStaticProps, TFilter } from './typing';
 import { updateSearchStorage } from './utils';
@@ -50,10 +50,13 @@ const alignStyle = (align?: string): React.CSSProperties | undefined =>
 	align ? { textAlign: align as React.CSSProperties['textAlign'] } : undefined;
 
 const isColumnLocked = (col: FlatColumn): boolean =>
-	col.fixed === 'left' || col.fixed === 'right' || col.key === 'index' || (col.dataIndex as string) === 'index' || col.resizable !== false;
+	col.fixed === 'left' ||
+	col.fixed === 'right' ||
+	col.key === 'index' ||
+	(col.dataIndex as string) === 'index' ||
+	col.resizable !== false;
 
-const getValueByDataIndex = (record: any, dataIndex: any) =>
-	dataIndex ? _.get(record, dataIndex) : undefined;
+const getValueByDataIndex = (record: any, dataIndex: any) => (dataIndex ? _.get(record, dataIndex) : undefined);
 
 const SortableTableRow: React.FC<{ id: string | number; children: React.ReactNode }> = ({ id, children }) => {
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
@@ -244,7 +247,8 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		const cols: FlatColumn[] = processedColumns.map((item: IColumn<any>) => {
 			const fieldKey = Array.isArray(item.dataIndex) ? item.dataIndex.join('.') : (item.dataIndex as string);
 			const sortDir = fieldKey && sort[fieldKey] ? (sort[fieldKey] === 1 ? 'asc' : 'desc') : false;
-			const hasFilter = item.filterType === 'string' || item.filterType === 'select' || item.filterType === 'customselect';
+			const hasFilter =
+				item.filterType === 'string' || item.filterType === 'select' || item.filterType === 'customselect';
 
 			return {
 				...item,
@@ -253,7 +257,8 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				children: item.children?.map((child: IColumn<any>) => {
 					const childKey = Array.isArray(child.dataIndex) ? child.dataIndex.join('.') : (child.dataIndex as string);
 					const childSortDir = childKey && sort[childKey] ? (sort[childKey] === 1 ? 'asc' : 'desc') : false;
-					const childHasFilter = child.filterType === 'string' || child.filterType === 'select' || child.filterType === 'customselect';
+					const childHasFilter =
+						child.filterType === 'string' || child.filterType === 'select' || child.filterType === 'customselect';
 					return {
 						...child,
 						_sortDirection: childSortDir,
@@ -281,7 +286,10 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							{phanVungHienTai?._id && (
 								<Tooltip>
 									<TooltipTrigger asChild>
-										<div className='cornerTriangle' style={{ backgroundColor: maMau, top: size === 'small' ? -4 : -8 }} />
+										<div
+											className='cornerTriangle'
+											style={{ backgroundColor: maMau, top: size === 'small' ? -4 : -8 }}
+										/>
 									</TooltipTrigger>
 									<TooltipContent>{phanVungHienTai?.name}</TooltipContent>
 								</Tooltip>
@@ -389,7 +397,16 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		}
 
 		return result;
-	}, [props.data, props.hideChildrenRows, props.columns, columnFilters, globalSearch, globalSearchText, globalSearchColumns, sort]);
+	}, [
+		props.data,
+		props.hideChildrenRows,
+		props.columns,
+		columnFilters,
+		globalSearch,
+		globalSearchText,
+		globalSearchColumns,
+		sort,
+	]);
 
 	// Pagination
 	const isPaginationEnabled = props.otherProps?.pagination !== false;
@@ -401,7 +418,9 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 	const [currentLimit, setCurrentLimit] = useState<number>(initialPageSize);
 
 	const pagedData = useMemo(() => {
-		const base = isPaginationEnabled ? tableData.slice((currentPage - 1) * currentLimit, currentPage * currentLimit) : tableData;
+		const base = isPaginationEnabled
+			? tableData.slice((currentPage - 1) * currentLimit, currentPage * currentLimit)
+			: tableData;
 		const offset = isPaginationEnabled ? (currentPage - 1) * currentLimit : 0;
 		return base.map((item: any, idx: number) => ({
 			...item,
@@ -485,31 +504,90 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		);
 	};
 
+	const getColKey = useCallback((col: FlatColumn, fallbackIndex: number): string | number => {
+		if (col.key !== undefined && col.key !== null) return String(col.key);
+		if (col.dataIndex !== undefined && col.dataIndex !== null) {
+			return Array.isArray(col.dataIndex) ? col.dataIndex.join('.') : String(col.dataIndex);
+		}
+		return fallbackIndex;
+	}, []);
+
+	const { leftPinnedOffsets, rightPinnedOffsets } = useMemo(() => {
+		const leftOffsets: Record<string | number, number> = {};
+		const rightOffsets: Record<string | number, number> = {};
+
+		let currentLeft = effectiveRowSelection ? 56 : 0;
+		leafColumns.forEach((col, idx) => {
+			if (col.fixed === 'left') {
+				const key = getColKey(col, idx);
+				leftOffsets[key] = currentLeft;
+				currentLeft += col.width ?? 80;
+			}
+		});
+
+		let currentRight = 0;
+		for (let i = leafColumns.length - 1; i >= 0; i--) {
+			const col = leafColumns[i];
+			if (col.fixed === 'right') {
+				const key = getColKey(col, i);
+				rightOffsets[key] = currentRight;
+				currentRight += col.width ?? 80;
+			}
+		}
+
+		return { leftPinnedOffsets: leftOffsets, rightPinnedOffsets: rightOffsets };
+	}, [leafColumns, effectiveRowSelection, getColKey]);
+
 	const renderHeadCell = (col: FlatColumn, extraProps?: Record<string, any>) => {
 		const resizeProps = (col as any).onHeaderCell?.(col) ?? {};
 		const colWidthPx = col.width ?? 80;
 		const locked = isColumnLocked(col);
+		const colKey = getColKey(col, 0);
+
+		const isPinnedLeft = col.fixed === 'left';
+		const isPinnedRight = col.fixed === 'right';
+
+		const pinnedHeadStyle: React.CSSProperties = isPinnedLeft
+			? {
+				position: 'sticky',
+				left: leftPinnedOffsets[colKey] ?? 0,
+				zIndex: 20,
+				backgroundColor: 'var(--color-bg-container, var(--ds-bg-mortared, #ffffff))',
+			}
+			: isPinnedRight
+				? {
+					position: 'sticky',
+					right: rightPinnedOffsets[colKey] ?? 0,
+					zIndex: 20,
+					backgroundColor: 'var(--color-bg-container, var(--ds-bg-mortared, #ffffff))',
+				}
+				: {};
+
 		const headProps = locked
 			? {
 				width: colWidthPx,
 				...resizeProps,
+				resizable: !isPinnedLeft && !isPinnedRight && col.resizable !== false,
 			}
 			: {
 				...resizeProps,
-				width:
-					flexibleWidth > 0
-						? `calc((100% - ${pinnedWidth}px) * ${colWidthPx} / ${flexibleWidth})`
-						: colWidthPx,
+				width: flexibleWidth > 0 ? `calc((100% - ${pinnedWidth}px) * ${colWidthPx} / ${flexibleWidth})` : colWidthPx,
 				minWidth: colWidthPx,
 				resizable: false,
 			};
 
 		return (
 			<ResizableTableHead
-				key={col.key as any}
-				pinned={col.fixed === 'left' ? 'left' : col.fixed === 'right' ? 'right' : undefined}
+				key={colKey}
 				truncate={false}
-				style={alignStyle(col.align as any)}
+				style={{
+					...alignStyle(col.align as any),
+					...pinnedHeadStyle,
+				}}
+				className={classNames({
+					'table-cell-pinned-left': isPinnedLeft,
+					'table-cell-pinned-right': isPinnedRight,
+				})}
 				{...headProps}
 				onResizeStart={() => {
 					isResizingRef.current = true;
@@ -528,6 +606,24 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 
 	const renderTable = () => (
 		<Table style={{ width: `max(${props.scroll?.x ?? totalWidth}px, 100%)`, tableLayout: 'fixed' }} density='compact'>
+			<colgroup>
+				{effectiveRowSelection && <col style={{ width: 56, minWidth: 56 }} />}
+				{leafColumns.map((col, idx) => {
+					const locked = isColumnLocked(col);
+					const colWidthPx = col.width ?? 80;
+					const widthStyle = locked
+						? { width: colWidthPx, minWidth: colWidthPx }
+						: {
+							width:
+								flexibleWidth > 0
+									? `calc((100% - ${pinnedWidth}px) * ${colWidthPx} / ${flexibleWidth})`
+									: colWidthPx,
+							minWidth: colWidthPx,
+						};
+					return <col key={getColKey(col, idx)} style={widthStyle} />;
+				})}
+			</colgroup>
+
 			<TableHeaderEl>
 				{hasGroupedColumns ? (
 					<>
@@ -542,9 +638,33 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 									label={intl.formatMessage({ id: 'global.table.index.chontatca', defaultMessage: 'Chọn tất cả' })}
 								/>
 							)}
-							{actualColumns.map((col) =>
+							{actualColumns.map((col, colIdx) =>
 								col.children?.length ? (
-									<TableHead key={col.key as any} colSpan={col.children.length} style={alignStyle(col.align as any)}>
+									<TableHead
+										key={(col.key as any) ?? colIdx}
+										colSpan={col.children.length}
+										style={{
+											...alignStyle(col.align as any),
+											...(col.fixed === 'right'
+												? {
+													position: 'sticky',
+													right:
+														rightPinnedOffsets[
+														getColKey(col.children[col.children.length - 1] as FlatColumn, colIdx)
+														] ?? 0,
+													zIndex: 21,
+													backgroundColor: 'var(--color-bg-container, var(--ds-bg-mortared, #ffffff))',
+												}
+												: col.fixed === 'left'
+													? {
+														position: 'sticky',
+														left: leftPinnedOffsets[getColKey(col.children[0] as FlatColumn, colIdx)] ?? 0,
+														zIndex: 21,
+														backgroundColor: 'var(--color-bg-container, var(--ds-bg-mortared, #ffffff))',
+													}
+													: {}),
+										}}
+									>
 										{col.title as any}
 									</TableHead>
 								) : (
@@ -599,6 +719,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					</TableRow>
 				) : (
 					pagedData.map((record: any, index: number) => {
+						const rowProps = props.otherProps?.onRow ? props.otherProps.onRow(record, index) : undefined;
 						const rowContent = (
 							<>
 								{effectiveRowSelection && (
@@ -612,24 +733,60 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 										)}
 									/>
 								)}
-								{leafColumns.map((col: any, colIndex: number) => (
-									<TableCell
-										key={(col.key as any) ?? colIndex}
-										style={alignStyle(col.align as any)}
-										pinned={col.fixed === 'left' ? 'left' : col.fixed === 'right' ? 'right' : undefined}
-										truncate={false}
-									>
-										{col.render
-											? col.render(
-												col.dataIndex ? getValueByDataIndex(record, col.dataIndex) : record,
-												record,
-												index,
-											)
-											: col.dataIndex
-												? getValueByDataIndex(record, col.dataIndex)
-												: null}
-									</TableCell>
-								))}
+								{leafColumns.map((col: any, colIndex: number) => {
+									const cellProps = col.onCell ? col.onCell(record, index) : undefined;
+									if (cellProps?.colSpan === 0 || cellProps?.rowSpan === 0) {
+										return null;
+									}
+
+									const colKey = getColKey(col, colIndex);
+									const isSpanning = (cellProps?.colSpan ?? 1) > 1;
+									const isPinnedLeft = !isSpanning && col.fixed === 'left';
+									const isPinnedRight = !isSpanning && col.fixed === 'right';
+
+									const pinnedStyle: React.CSSProperties = isPinnedLeft
+										? {
+											position: 'sticky',
+											left: leftPinnedOffsets[colKey] ?? 0,
+											zIndex: 2,
+											backgroundColor: 'var(--color-bg-container, var(--ds-bg-mortared, #ffffff))',
+										}
+										: isPinnedRight
+											? {
+												position: 'sticky',
+												right: rightPinnedOffsets[colKey] ?? 0,
+												zIndex: 2,
+												backgroundColor: 'var(--color-bg-container, var(--ds-bg-mortared, #ffffff))',
+											}
+											: {};
+
+									const cellStyle: React.CSSProperties = {
+										...alignStyle(col.align as any),
+										...pinnedStyle,
+										...cellProps?.style,
+									};
+
+									return (
+										<TableCell
+											key={colKey}
+											colSpan={cellProps?.colSpan}
+											rowSpan={cellProps?.rowSpan}
+											style={cellStyle}
+											className={classNames(cellProps?.className, {
+												'table-cell-pinned-left': isPinnedLeft,
+												'table-cell-pinned-right': isPinnedRight,
+											})}
+											onClick={cellProps?.onClick}
+											truncate={false}
+										>
+											{col.render
+												? col.render(col.dataIndex ? getValueByDataIndex(record, col.dataIndex) : record, record, index)
+												: col.dataIndex
+													? getValueByDataIndex(record, col.dataIndex)
+													: null}
+										</TableCell>
+									);
+								})}
 							</>
 						);
 
@@ -638,7 +795,9 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 								{rowContent}
 							</SortableTableRow>
 						) : (
-							<TableRow key={record.key}>{rowContent}</TableRow>
+							<TableRow key={record.key} {...rowProps} style={{ ...rowProps?.style }}>
+								{rowContent}
+							</TableRow>
 						);
 					})
 				)}
@@ -690,8 +849,16 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		</AutoComplete>
 	);
 
+	const tableContainerStyle: React.CSSProperties = useMemo(() => {
+		const s: any = {};
+		if (props.scroll?.y) {
+			s['--table-scroll-max-height'] = typeof props.scroll.y === 'number' ? `${props.scroll.y}px` : props.scroll.y;
+		}
+		return s;
+	}, [props.scroll?.y]);
+
 	const mainContent = (
-		<div className='table-base'>
+		<div className='table-base' style={tableContainerStyle}>
 			<div className='header'>
 				{children}
 				<div className='action no-print'>
@@ -710,7 +877,6 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							{intl.formatMessage({ id: 'global.tablestatic.button.themmoi' })}
 						</ButtonExtend>
 					)}
-
 					{props.otherButtons}
 
 					{!!props.onReload ? (

@@ -129,13 +129,77 @@
 	// Ẩn handle kéo giãn ở cột cuối cùng và cột pin sang phải, tránh làm dư pixel gây thanh cuộn ngang
 	thead>tr>th:last-child,
 	thead>tr>th[data-pinned='right'],
+	thead>tr>th.table-cell-pinned-right,
 	[data-slot='table-header']>tr>th:last-child,
-	[data-slot='table-header']>tr>th[data-pinned='right'] {
+	[data-slot='table-header']>tr>th[data-pinned='right'],
+	[data-slot='table-header']>tr>th.table-cell-pinned-right {
 		overflow: hidden;
 
 		.react-resizable-handle {
 			margin-left: -8px;
+			display: none !important;
 		}
+	}
+
+	[data-slot='table-container'] {
+		max-height: var(--table-scroll-max-height, none);
+		overflow-y: auto;
+	}
+
+	[data-slot='table-header'] {
+		th {
+			position: sticky;
+			top: 0;
+			z-index: 15;
+			background-color: var(--color-bg-container, var(--ds-bg-mortared, #ffffff));
+
+			&.table-cell-pinned-right,
+			&.table-cell-pinned-left {
+				z-index: 25;
+			}
+		}
+	}
+}
+
+.table-cell-pinned-right {
+	position: sticky !important;
+	z-index: 2;
+	background-color: var(--color-bg-container, var(--ds-bg-mortared, #ffffff));
+	box-shadow: -3px 0 6px -3px rgba(0, 0, 0, 0.12);
+	border-left: 1px solid var(--color-accent-700, #f0f0f0);
+
+	th&,
+	&[data-slot='table-head'] {
+		z-index: 25;
+		background-color: var(--color-bg-container, var(--ds-bg-mortared, #ffffff));
+	}
+}
+
+.table-cell-pinned-left {
+	position: sticky !important;
+	z-index: 2;
+	background-color: var(--color-bg-container, var(--ds-bg-mortared, #ffffff));
+	box-shadow: 3px 0 6px -3px rgba(0, 0, 0, 0.12);
+	border-right: 1px solid var(--color-accent-700, #f0f0f0);
+
+	th&,
+	&[data-slot='table-head'] {
+		z-index: 25;
+		background-color: var(--color-bg-container, var(--ds-bg-mortared, #ffffff));
+	}
+}
+
+tr:hover>td.table-cell-pinned-right,
+tr:hover>td.table-cell-pinned-left {
+	background-color: var(--color-fill-quaternary, #fafafa) !important;
+}
+
+tr.diem-tp-semester-row {
+	background-color: #e8fafdbf !important;
+
+	>td {
+		background-color: #e8fafdbf !important;
+		font-weight: 600;
 	}
 }
 
@@ -161,7 +225,7 @@
 }
 
 .column-settings-content {
-	width: 250px;
+	width: 280px;
 }
 
 .column-settings-header {
@@ -184,9 +248,23 @@
 }
 
 .column-settings-list {
-	max-height: 300px;
+	max-height: min(70vh, 420px);
 	overflow-y: auto;
-	padding: 8px;
+	padding: 8px 12px;
+	scrollbar-width: thin;
+
+	&::-webkit-scrollbar {
+		width: 4px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: rgba(0, 0, 0, 0.15);
+		border-radius: 4px;
+	}
 }
 
 .column-settings-footer {
