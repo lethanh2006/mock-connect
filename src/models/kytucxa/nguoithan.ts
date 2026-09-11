@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 
 export default () => {
 	const [visibleForm, setVisibleForm] = useState<boolean>(false);

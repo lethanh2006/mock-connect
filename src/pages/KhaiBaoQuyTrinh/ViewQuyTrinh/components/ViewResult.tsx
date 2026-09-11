@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 const ViewResult = (props: { danhSachKhaiBao: any; modelName: any; type?: 'dieu_phoi' | 'tiep_nhan' }) => {
 	const { danhSachKhaiBao, modelName } = props;
-	const model = useModel(modelName);
+	const model = useModel(modelName) as any;
 	const { setRecordSanPham } = useModel('quytrinh.khaibaoquytrinh');
 	const { currentFormKhaiBao, current } = model;
 	const [formValues, setFormValues] = useState<any>({});

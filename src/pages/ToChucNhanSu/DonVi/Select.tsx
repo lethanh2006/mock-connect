@@ -40,7 +40,7 @@ const SelectDonVi = (props: {
 			disabled={disabled}
 			options={danhSach.map((item) => ({
 				key: item._id,
-				value: props.fieldValue ? item?.[props.fieldValue] ?? '' : item.maDonVi,
+				value: props.fieldValue ? (item as any)?.[props.fieldValue] ?? '' : item.maDonVi,
 				label: `${item.ten} (${item.maDonVi ?? ''})`,
 				rawData: item,
 			}))}

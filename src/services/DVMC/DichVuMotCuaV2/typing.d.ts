@@ -33,6 +33,9 @@ declare module DichVuMotCuaV2 {
     thoiHanGiaiQuyet: string;
     yeuCau: string;
     yeuCauTraPhi: boolean;
+    idMucThu?: string;
+    tinhTienTheoSoLuong?: boolean;
+    maLePhi?: string;
     _id: string;
   }
 
@@ -81,6 +84,7 @@ declare module DichVuMotCuaV2 {
     mauBieu?: string;
     luuY?: string;
     maLePhi: string;
+    idMucThu?: string;
     tinhTienTheoSoLuong: boolean;
     choPhepGuiNhieuLan: boolean;
   }
