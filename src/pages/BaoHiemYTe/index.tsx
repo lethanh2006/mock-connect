@@ -16,7 +16,7 @@ import { ETagColor } from '@/services/base/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { chuanHoaTen } from '@/utils/utils';
-import { ClockCircleOutlined, EyeOutlined, FormOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { IconStopwatch, IconEyeOpen, IconShieldInfo, IconFilePen } from '@/components/Icons';
 import { Button, Popover, Space, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -321,7 +321,7 @@ const SinhVienDangKyBHYT = () => {
 								</div>
 							}
 						>
-							<Button type='text' size='small' icon={<InfoCircleOutlined />} style={{ paddingInline: 4 }} />
+							<Button type='text' size='small' icon={<IconShieldInfo />} style={{ paddingInline: 4 }} />
 						</Popover>
 					)}
 				</Space>
@@ -350,14 +350,14 @@ const SinhVienDangKyBHYT = () => {
 								if (type) openForm(type, toDotDangKyRecordFromHistory(rec), { isView: true });
 							}}
 							type='link'
-							icon={<EyeOutlined />}
+							icon={<IconEyeOpen />}
 						/>
 						{canEdit && type === 'mien' && (
 							<ButtonExtend
 								tooltip={t('global.button.chinhsua')}
 								onClick={() => openForm(type, toDotDangKyRecordFromHistory(rec), { edit: true })}
 								type='link'
-								icon={<FormOutlined />}
+								icon={<IconFilePen />}
 							/>
 						)}
 					</>
@@ -391,7 +391,7 @@ const SinhVienDangKyBHYT = () => {
 				}}
 			>
 				<Space size={8}>
-					<ClockCircleOutlined style={{ color: '#0E50CF', fontSize: 16 }} />
+					<IconStopwatch style={{ color: '#0E50CF', fontSize: 16 }} />
 					<span>
 						{hasPeriod
 							? renderThoiGianDangKy(currentInfo.period?.registrationStartAt, currentInfo.period?.registrationEndAt)
@@ -427,15 +427,15 @@ const SinhVienDangKyBHYT = () => {
 
 	const formModalTitle = formModal
 		? intl.formatMessage(
-				{
-					id: formModal.isView
-						? 'global.table.form.title.chitiet'
-						: formModal.edit
-							? 'global.table.form.title.chinhsua'
-							: 'global.table.form.title.themmoi',
-				},
-				{ title: chuanHoaTen(t('baohiemyte.dangky.title').toLowerCase()) },
-			)
+			{
+				id: formModal.isView
+					? 'global.table.form.title.chitiet'
+					: formModal.edit
+						? 'global.table.form.title.chinhsua'
+						: 'global.table.form.title.themmoi',
+			},
+			{ title: chuanHoaTen(t('baohiemyte.dangky.title').toLowerCase()) },
+		)
 		: undefined;
 
 	return (

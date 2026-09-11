@@ -5,7 +5,7 @@ import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrin
 import { ENguonDot } from '@/services/QuyTrinh/constant';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { getPublicAssetPath } from '@/utils/path';
-import { ArrowRightOutlined, RightOutlined } from '@ant-design/icons';
+import { IconArrowRight, Icon2ChervolRightLine } from '@/components/Icons';
 import { Button, Card, Col, message, Modal, Popconfirm, Row, Space, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, Link, useIntl, useModel } from 'umi';
@@ -169,7 +169,7 @@ const CardDichVuSinhVien = () => {
 													</Tooltip>
 												</div>
 											</Space>
-											<RightOutlined className='right-arrow' />
+											<Icon2ChervolRightLine className='right-arrow' />
 										</div>
 									) : (
 										// Nếu không có thông tin chung, sử dụng Popconfirm
@@ -230,7 +230,7 @@ const CardDichVuSinhVien = () => {
 				footer={
 					<div className='modal-footer'>
 						<Button
-							icon={<ArrowRightOutlined />}
+							icon={<IconArrowRight />}
 							type={'primary'}
 							onClick={() => {
 								if (recordQuyTrinh) {

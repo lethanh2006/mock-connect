@@ -3,6 +3,8 @@ import PageCard from '@/components/PageCard';
 import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { formatDateTime } from '@/utils/formatDate';
 import { FileTextOutlined, InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { ipDaoTao } from '@/utils/ip';
+import { IconShorttext, IconShieldInfo, IconQuestionCircle } from '@/components/Icons';
 import { Alert, Button, Card, Empty, Modal } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
@@ -120,12 +122,12 @@ const DangKyTinChiPage = () => {
 			<div ref={dangKyCardRef}>
 				<PageCard title={intl.formatMessage({ id: 'dangkytinchi.title' })} extra={<FilterDotDangKy />}>
 					{!!phieuDangKy?.soTinChiToiDa &&
-					dotDangKyHienTai &&
-					sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
+						dotDangKyHienTai &&
+						sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
 						<Alert
 							type='info'
 							showIcon
-							icon={<InfoCircleOutlined />}
+							icon={<IconShieldInfo />}
 							style={{ marginBottom: 12 }}
 							message={
 								<span>
@@ -153,7 +155,7 @@ const DangKyTinChiPage = () => {
 								</span>
 							}
 							action={
-								<Button type='link' size='small' icon={<FileTextOutlined />} onClick={() => setVisibleThongTin(true)} />
+								<Button type='link' size='small' icon={<IconShorttext />} onClick={() => setVisibleThongTin(true)} />
 							}
 						/>
 					) : null}
@@ -188,7 +190,7 @@ const DangKyTinChiPage = () => {
 							<>
 								{sinhVienDot?.ghiChu && (
 									<div>
-										{<QuestionCircleOutlined />} {intl.formatMessage({ id: 'dangkytinchi.empty.ghichu' })}:{' '}
+										{<IconQuestionCircle />} {intl.formatMessage({ id: 'dangkytinchi.empty.ghichu' })}:{' '}
 										<i style={{ color: 'gray' }}>{sinhVienDot.ghiChu}.</i>
 									</div>
 								)}

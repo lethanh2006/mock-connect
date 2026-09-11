@@ -3,7 +3,7 @@ import ProgramDesignTable from '@/pages/SinhVien/DangKyChuyenNganhMoi/CustomBuil
 import { ETrangThaiKqht } from '@/services/DaoTao/constant';
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
 import rules from '@/utils/rules';
-import { CheckCircleOutlined, CloseCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { IconShieldCheck, IconXmarkCircle, Icon3SquarePlusmark } from '@/components/Icons';
 import { Card, Col, Descriptions, Divider, Form, FormInstance, Input, Modal, Row } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -164,9 +164,9 @@ const StepProgramDesign = ({
 										<Row align='middle' gutter={12}>
 											<Col flex='1'>
 												{item.ok ? (
-													<CheckCircleOutlined style={{ color: 'var(--color-success)' }} />
+													<IconShieldCheck style={{ color: 'var(--color-success)' }} />
 												) : (
-													<CloseCircleOutlined style={{ color: 'var(--color-error)' }} />
+													<IconXmarkCircle style={{ color: 'var(--color-error)' }} />
 												)}
 												<div style={{ fontWeight: 600 }}>{item.label}</div>
 												<sub>{item.subLabel}</sub>
@@ -242,7 +242,7 @@ const StepProgramDesign = ({
 										otherButtons={[
 											<ButtonExtend
 												key='add'
-												icon={<PlusCircleOutlined />}
+												icon={<Icon3SquarePlusmark />}
 												onClick={handleAdd}
 												type='primary'
 												size='small'

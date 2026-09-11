@@ -3,7 +3,7 @@ import type { IColumn } from '@/components/Table/typing';
 import { SoLanNhapCanhVisa, TenSoLanNhapCanhVisa } from '@/services/DaoTao/SinhVien/constants';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import dayjs from '@/utils/dayjs';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { IconTrash, IconPencil01 } from '@/components/Icons';
 import { Button, Popconfirm, Tooltip } from 'antd';
 import { useState } from 'react';
 import { useIntl } from 'umi';
@@ -90,7 +90,7 @@ const ThongTinVisaFormItem = (props: {
 			render: (val, rec) => (
 				<>
 					<Tooltip title={intl.formatMessage({ id: 'thongtincanhan.form.thongtinvisa.chinhsua' })}>
-						<Button onClick={() => handleEdit(rec)} type="link" icon={<EditOutlined />} />
+						<Button onClick={() => handleEdit(rec)} type="link" icon={<IconPencil01 />} />
 					</Tooltip>
 					<Tooltip title={intl.formatMessage({ id: 'thongtincanhan.form.thongtinvisa.xoa' })}>
 						<Popconfirm
@@ -98,7 +98,7 @@ const ThongTinVisaFormItem = (props: {
 							title={intl.formatMessage({ id: 'thongtincanhan.form.thongtinvisa.xoa.xacnhan' })}
 							placement="topRight"
 						>
-							<Button danger type="link" icon={<DeleteOutlined />} />
+							<Button danger type="link" icon={<IconTrash />} />
 						</Popconfirm>
 					</Tooltip>
 				</>

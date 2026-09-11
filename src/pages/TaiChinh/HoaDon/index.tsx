@@ -21,6 +21,7 @@ import {
 	ScheduleOutlined,
 	UnorderedListOutlined,
 } from '@ant-design/icons';
+import { IconEyeOpen, Icon3Dot3Line } from '@/components/Icons';
 import { Alert, Empty, Modal, Tabs, Tag, notification } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState, type Key, type ReactNode } from 'react';
@@ -413,11 +414,11 @@ const HoaDonPage = () => {
 						}}
 						type='link'
 						className={disableThanhToan(rec) ? undefined : 'text-success'}
-						icon={<UnorderedListOutlined />}
+						icon={<Icon3Dot3Line />}
 					/>
 					<ButtonExtend
 						tooltip={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemchitiet' })}
-						icon={<EyeOutlined />}
+						icon={<IconEyeOpen />}
 						onClick={() => handleDetail(rec)}
 						type='link'
 					/>

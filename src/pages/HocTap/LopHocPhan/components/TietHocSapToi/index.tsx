@@ -7,7 +7,7 @@ import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/cons
 import { ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { ArrowRightOutlined, BookOutlined } from '@ant-design/icons';
+import { IconArrowRight, IconBookOpen } from '@/components/Icons';
 import { Badge, Card, Empty, Space, Spin, Tag } from 'antd';
 import { type Dayjs } from 'dayjs';
 import { isEmpty, sortBy } from 'lodash';
@@ -127,7 +127,7 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 						}}
 					>
 						{tietGanNhat.tenBuoiHoc} {/* - {dayjs(tietGanNhat.thoiGianBatDau).format('HH:mm DD/MM')}  */}
-						<ArrowRightOutlined />
+						<IconArrowRight />
 					</Link>
 				)
 			}
@@ -212,7 +212,7 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 																);
 															}}
 														>
-															<BookOutlined /> {intl.formatMessage({ id: 'lophocphan.hocsaptoi.xemchitiet' })}
+															<IconBookOpen /> {intl.formatMessage({ id: 'lophocphan.hocsaptoi.xemchitiet' })}
 														</Link>
 
 														{/* Hiển thị trạng thái điểm danh */}

@@ -12,7 +12,7 @@ import {
 	colorTrangThaiThi,
 } from '@/services/KhaoThi/constant';
 import dayjs from '@/utils/dayjs';
-import { TeamOutlined } from '@ant-design/icons';
+import { IconPeople } from '@/components/Icons';
 import { Button, Card, Space, Tag, Tooltip } from 'antd';
 import _ from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
@@ -169,7 +169,7 @@ const LichThiPage = () => {
 							setRecLichThi(rec);
 							setVisibleDSSV(true);
 						}}
-						icon={<TeamOutlined />}
+						icon={<IconPeople />}
 					/>
 				</Tooltip>
 			),

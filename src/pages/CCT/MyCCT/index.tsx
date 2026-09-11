@@ -1,14 +1,7 @@
 import CCTCover from '@/assets/cct/CCT_Bia.png';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EStatusMyCCT } from '@/services/CCT/constant';
-import {
-	CloseCircleOutlined,
-	FilePdfOutlined,
-	LoadingOutlined,
-	ReloadOutlined,
-	SaveOutlined,
-	SendOutlined,
-} from '@ant-design/icons';
+import { IconXmarkCircle, IconFile, IconRotateArrow, IconSave, IconSend } from '@/components/Icons';
 import { Badge, Button, Form, Space, Tag, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import html2canvas from 'html2canvas';
@@ -225,7 +218,7 @@ const MyCCT = () => {
 											<>
 												<Tooltip title='RELOAD'>
 													<Tag
-														icon={<ReloadOutlined style={{ fontSize: 14 }} />}
+														icon={<IconRotateArrow style={{ fontSize: 14 }} />}
 														style={{
 															...tagStyle,
 															cursor: 'pointer',
@@ -243,9 +236,9 @@ const MyCCT = () => {
 												<Tag
 													icon={
 														loadingExport ? (
-															<LoadingOutlined spin style={{ fontSize: 14 }} />
+															<IconRotateArrow className='anticon-spin' style={{ fontSize: 14 }} />
 														) : (
-															<FilePdfOutlined style={{ fontSize: 14 }} />
+															<IconFile style={{ fontSize: 14 }} />
 														)
 													}
 													style={{
@@ -357,21 +350,21 @@ const MyCCT = () => {
 								onClick={() => {
 									setEdit(false);
 								}}
-								icon={<CloseCircleOutlined />}
+								icon={<IconXmarkCircle />}
 							>
 								Cancel
 							</Button>
 							<Button
 								htmlType='submit'
 								loading={formSubmiting}
-								icon={<SaveOutlined />}
+								icon={<IconSave />}
 								onClick={() => setIsSubmit(false)}
 							>
 								Save
 							</Button>
 							<Button
 								type='primary'
-								icon={<SendOutlined />}
+								icon={<IconSend />}
 								onClick={() => {
 									form
 										.validateFields()

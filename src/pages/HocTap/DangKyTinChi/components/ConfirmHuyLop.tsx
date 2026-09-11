@@ -1,6 +1,6 @@
 import type { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { resetFieldsForm } from '@/utils/utils';
-import { ExclamationCircleFilled } from '@ant-design/icons';
+import { IconWarningCircle } from '@/components/Icons';
 import { Button, Checkbox, Col, Form, Modal, Row } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -72,7 +72,7 @@ const ConfirmKetHuyLopDKTC = (props: {
 							}}
 						>
 							<div style={{ color: 'orange', fontSize: 48 }}>
-								<ExclamationCircleFilled />
+								<IconWarningCircle />
 							</div>
 							<div style={{ textAlign: 'center' }}>
 								{intl.formatMessage({ id: 'dangkytinchi.modalconfimhuylop.confirm.cochacmuonhuy' })}

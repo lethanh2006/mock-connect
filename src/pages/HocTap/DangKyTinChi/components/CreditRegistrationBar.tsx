@@ -1,6 +1,6 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
-import { CalendarOutlined } from '@ant-design/icons';
+import { IconCalendar } from '@/components/Icons';
 import { Flex, Space } from 'antd';
 import { useIntl } from 'umi';
 import BtnDangKyTinChi from './BtnDangKyTinChi';
@@ -70,7 +70,7 @@ const CreditRegistrationBar = ({
 
 				<Space wrap>
 					<ButtonExtend
-						icon={<CalendarOutlined />}
+						icon={<IconCalendar />}
 						onClick={onViewSchedule}
 						disabled={disabledViewSchedule}
 						tooltip={xemTruocLichHocTooltip}

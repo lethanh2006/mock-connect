@@ -15,7 +15,7 @@ import {
 	transactionType,
 } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
-import { CloseOutlined, DollarOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { IconXmark, IconFileMoney, Icon3SquarePlusmark } from '@/components/Icons';
 import { Popconfirm, Segmented, Tag, notification } from 'antd';
 
 import { formatDateTime } from '@/utils/formatDate';
@@ -185,7 +185,7 @@ const GiaoDichPage = () => {
 				<>
 					<ButtonExtend
 						disabled={rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL}
-						icon={<DollarOutlined />}
+						icon={<IconFileMoney />}
 						tooltip={intl.formatMessage({ id: 'lichsugiaodich.column.thanhtoan' })}
 						onClick={() => onPay && onPay(rec)}
 						type='link'
@@ -200,7 +200,7 @@ const GiaoDichPage = () => {
 							disabled={
 								rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL
 							}
-							icon={<CloseOutlined />}
+							icon={<IconXmark />}
 							tooltip={intl.formatMessage({ id: 'global.button.huy' })}
 							type='link'
 							danger
@@ -248,7 +248,7 @@ const GiaoDichPage = () => {
 											})
 											.then(() => setVisibleHocPhi(true));
 									}}
-									icon={<PlusCircleOutlined />}
+									icon={<Icon3SquarePlusmark />}
 									type='primary'
 									className='btn-success'
 									key='topup'

@@ -4,7 +4,7 @@ import { type IColumn } from '@/components/Table/typing';
 import { colorTransactionStatus, colorTransactionType, ETransactionStatus, ETransactionType, transactionType } from '@/services/TaiChinh/constant';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { currencyFormat } from '@/utils/utils';
-import { AppstoreAddOutlined } from '@ant-design/icons';
+import { Icon4SquareGrid } from '@/components/Icons';
 import { Col, Row, Space, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -173,7 +173,7 @@ const FormItemHoaDonChiTiet = () => {
 						<ButtonExtend
 							disabled={isDisabled}
 							onClick={() => setVisibleModalThanhToan(true)}
-							icon={<AppstoreAddOutlined />}
+							icon={<Icon4SquareGrid />}
 							type='primary'
 							className='btn-success'
 							loading={loading}

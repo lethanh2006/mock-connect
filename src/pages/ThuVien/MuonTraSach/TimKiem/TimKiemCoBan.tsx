@@ -1,5 +1,5 @@
 import { resetFieldsForm } from '@/utils/utils';
-import { ReloadOutlined } from '@ant-design/icons';
+import { IconRotateArrow } from '@/components/Icons';
 import { Button, Col, Form, Input, Row } from 'antd';
 import { useModel } from 'umi';
 
@@ -78,7 +78,7 @@ const TimKiemCoBan = () => {
 				<Button htmlType='submit' type='primary'>
 					Tìm kiếm
 				</Button>
-				<Button icon={<ReloadOutlined />} onClick={() => resetFieldsForm(form)}>
+				<Button icon={<IconRotateArrow />} onClick={() => resetFieldsForm(form)}>
 					Làm mới
 				</Button>
 			</div>

@@ -4,7 +4,7 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import ViewThongBao from '@/pages/ThongBao/components/ViewThongBao';
 import type { ThongBao } from '@/services/ThongBao/typing';
 import dayjs from '@/utils/dayjs';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { IconArrowRight } from '@/components/Icons';
 import { Avatar, List, Modal } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -33,7 +33,7 @@ const CardThongBao = (props: { loai: 'lop-hanh-chinh' | 'lop-hoc-phan'; idLop?: 
 						props.onShowAll?.();
 					}}
 					type='link'
-					icon={<ArrowRightOutlined />}
+					icon={<IconArrowRight />}
 				>
 					{intl.formatMessage({ id: 'trangchu.xemtatca' })}
 				</ButtonExtend>

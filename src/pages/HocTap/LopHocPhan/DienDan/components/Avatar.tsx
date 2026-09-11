@@ -1,4 +1,4 @@
-import { UserOutlined } from '@ant-design/icons';
+import { IconHuman } from '@/components/Icons';
 import { Avatar } from 'antd';
 import type { CSSProperties } from 'react';
 
@@ -10,7 +10,7 @@ const AvatarBlog = (props: { url?: string; style?: CSSProperties; name?: string 
 			className={'avatar-class'}
 			style={props?.style}
 			src={props?.url ? <img alt='avatar' src={props?.url} /> : undefined}
-			icon={!props?.url ? lastNameChar ?? <UserOutlined /> : undefined}
+			icon={!props?.url ? lastNameChar ?? <IconHuman /> : undefined}
 			alt='avatar'
 		/>
 	);

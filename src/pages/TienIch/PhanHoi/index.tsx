@@ -4,7 +4,7 @@ import { type IColumn } from '@/components/Table/typing';
 import SelectDonVi from '@/pages/ToChucNhanSu/DonVi/Select';
 import { type PhanHoi } from '@/services/TienIch/PhanHoi/typing';
 import { formatDateTime } from '@/utils/formatDate';
-import { EyeOutlined } from '@ant-design/icons';
+import { IconEyeOpen } from '@/components/Icons';
 import { Button, Segmented, Tag, Tooltip } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -108,7 +108,7 @@ const PhanHoiPage = () => {
 			render: (val, rec) => (
 				<>
 					<Tooltip title={intl.formatMessage({ id: 'phanhoi.action.detail' })}>
-						<Button type='link' icon={<EyeOutlined />} onClick={() => handleEdit(rec)} />
+						<Button type='link' icon={<IconEyeOpen />} onClick={() => handleEdit(rec)} />
 					</Tooltip>
 				</>
 			),

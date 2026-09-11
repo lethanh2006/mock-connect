@@ -6,7 +6,7 @@ import type { IColumn } from '@/components/Table/typing';
 import type { QuanLyThuVien } from '@/services/QuanLyThuVien/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
-import { StockOutlined, UserOutlined } from '@ant-design/icons';
+import { IconChartRing, IconHuman } from '@/components/Icons';
 import { Tag } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -86,10 +86,10 @@ const VaoRaThuVienPage = () => {
 						}}
 						style={{ width: 250 }}
 					/>,
-					<ButtonExtend onClick={() => setVisibleStat(true)} key='stat' icon={<StockOutlined />}>
+					<ButtonExtend onClick={() => setVisibleStat(true)} key='stat' icon={<IconChartRing />}>
 						Thống kê
 					</ButtonExtend>,
-					<ButtonExtend onClick={() => setVisibleForm(true)} key='top' icon={<UserOutlined />}>
+					<ButtonExtend onClick={() => setVisibleForm(true)} key='top' icon={<IconHuman />}>
 						Top thống kê
 					</ButtonExtend>,
 				]}

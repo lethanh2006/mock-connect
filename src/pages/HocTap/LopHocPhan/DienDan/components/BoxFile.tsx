@@ -1,7 +1,7 @@
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { getNameFile } from '@/utils/utils';
-import { FileExcelOutlined, FileOutlined, FilePdfOutlined, FileWordOutlined } from '@ant-design/icons';
+import { IconFile, IconDocument } from '@/components/Icons';
 import { Button } from 'antd';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -43,13 +43,13 @@ const BoxFile = ({ url, isPrivate }: BoxFileProps) => {
 		switch (type) {
 			case 'docx':
 			case 'doc':
-				return <FileWordOutlined />;
+				return <IconDocument />;
 			case 'pdf':
-				return <FilePdfOutlined />;
+				return <IconFile />;
 			case 'xlsx':
-				return <FileExcelOutlined />;
+				return <IconFile />;
 			default:
-				return <FileOutlined />;
+				return <IconDocument />;
 		}
 	};
 

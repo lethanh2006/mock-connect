@@ -6,7 +6,7 @@ import ModalChiTiet from '@/pages/CongTacSinhVien/HoatDongCTSV/ModalChiTiet';
 import { ELoaiThongTinXemSau, mapLoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
 import type { XemSau } from '@/services/TienIch/XemSau/typing';
 import { openSafeUrl } from '@/utils/security';
-import { CloseOutlined, EyeOutlined } from '@ant-design/icons';
+import { IconXmark, IconEyeOpen } from '@/components/Icons';
 import { Card, Popconfirm } from 'antd';
 import { useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -74,13 +74,13 @@ const XemSauPage = () => {
 							tooltip={intl.formatMessage({ id: 'xemsau.boluu' })}
 							type='link'
 							danger
-							icon={<CloseOutlined />}
+							icon={<IconXmark />}
 						/>
 					</Popconfirm>
 					<ButtonExtend
 						tooltip={intl.formatMessage({ id: 'xemsau.xem' })}
 						type='link'
-						icon={<EyeOutlined />}
+						icon={<IconEyeOpen />}
 						onClick={() => {
 							xemChiTiet(rec);
 						}}

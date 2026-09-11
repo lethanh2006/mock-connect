@@ -7,6 +7,7 @@ import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { primaryColor } from '@/services/base/constant';
 import { CheckOutlined, FileTextOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Modal, Select, Space, Tag, Tooltip, Typography } from 'antd';
+import { IconCheck01 } from '@/components/Icons';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -236,7 +237,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				dataIndex: 'tichLuy',
 				width: 80,
 				align: 'center',
-				render: (val, rec) => isTichLuyDiem(rec) && <CheckOutlined />,
+				render: (val, rec) => isTichLuyDiem(rec) && <IconCheck01 />,
 				onCell: onCellHocPhan,
 			},
 			// {

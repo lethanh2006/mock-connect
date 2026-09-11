@@ -6,6 +6,7 @@ import { formatDate } from '@/utils/formatDate';
 import { getLocalizedName } from '@/utils/localeName';
 import { getPublicAssetPath } from '@/utils/path';
 import { BookOutlined, ScheduleOutlined } from '@ant-design/icons';
+import { IconBookOpen, IconCalendar } from '@/components/Icons';
 import { Alert, Col, Descriptions, Divider, Row, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { getLocale, useAccess, useIntl, useModel } from 'umi';
@@ -192,13 +193,13 @@ const TienTrinhHocTap = () => {
 						title: intl.formatMessage({ id: 'tientrinhhoctap.curriculumPlanner' }),
 						menuKey: 'chuong-trinh-dao-tao',
 						content: <TienTrinhChuongTrinhKhung />,
-						icon: <BookOutlined />,
+						icon: <IconBookOpen />,
 					},
 					{
 						title: intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte' }),
 						menuKey: 'tien-trinh-thuc-te',
 						content: <TienTrinhThucTe />,
-						icon: <ScheduleOutlined />,
+						icon: <IconCalendar />,
 					},
 					// {
 					// 	title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.title' }),

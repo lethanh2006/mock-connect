@@ -36,6 +36,7 @@ const FilterHocPhanDKTC = (props: { tongTinChi: number }) => {
 	const danhSachMaHpDangKy = danhSachLopDangKy.map((item) => item.maHocPhan);
 
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
+	const [visibleHuongDan, setVisibleHuongDan] = useState<boolean>(false);
 	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
 
 	const getData = () =>

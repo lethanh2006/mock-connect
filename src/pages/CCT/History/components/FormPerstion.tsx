@@ -17,7 +17,7 @@ import { ipCCT } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { getSafeTagColor } from '@/utils/security';
 import { buildDisabledDateTime, resetFieldsForm } from '@/utils/utils';
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { IconTrash, IconPlus } from '@/components/Icons';
 import { Button, Checkbox, Col, Form, Input, message, Radio, Row, Select, Space, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -574,7 +574,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 																	danger
 																	type='link'
 																	title='Xóa'
-																	icon={<DeleteOutlined />}
+																	icon={<IconTrash />}
 																	onClick={() => remove(field.name)}
 																	disabled={isView}
 																/>
@@ -586,7 +586,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 
 												<Button
 													onClick={() => add()}
-													icon={<PlusOutlined />}
+													icon={<IconPlus />}
 													type='dashed'
 													size='small'
 													disabled={isView}

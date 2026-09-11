@@ -3,6 +3,7 @@ import ModalExpandable from '@/components/Table/ModalExpandable';
 import { getNameFile } from '@/utils/utils';
 import { DownloadOutlined, PaperClipOutlined } from '@ant-design/icons';
 import { Button, Col, Divider, Empty, Row, Spin, Tag } from 'antd';
+import { IconDownload } from '@/components/Icons';
 import DOMPurify from 'dompurify';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -189,7 +190,7 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 												<Button
 													type='text'
 													size='small'
-													icon={<DownloadOutlined />}
+													icon={<IconDownload />}
 													onClick={() => window.open(APP_CONFIG_URL_THU_VIEN + item.url, '_blank')}
 													title={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.chitiet' })}
 												/>

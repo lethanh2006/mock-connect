@@ -1,7 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { useLoaiSuKienLabel } from '@/services/Calendar/constant';
 import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac } from '@/services/SuKien/constant';
-import { EditFilled /* , FilterOutlined */ } from '@ant-design/icons';
+import { IconPencil01 } from '@/components/Icons';
 import { Checkbox, Popover } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -94,7 +94,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 					<Popover content={<PickColorLich loaiLich={loaiSuKien} />} trigger='click' placement='right'>
 						<ButtonExtend
 							type='link'
-							icon={<EditFilled />}
+							icon={<IconPencil01 />}
 							className='edit-button'
 							onClick={(e) => e.stopPropagation()} // Prevent label click when clicking edit button
 						/>

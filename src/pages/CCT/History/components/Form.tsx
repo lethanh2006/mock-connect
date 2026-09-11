@@ -3,7 +3,7 @@ import { Activity } from '@/services/CCT/Activity/typing';
 import { EApprovalStatus } from '@/services/CCT/constant';
 import { EFileScope, uploadFileManagerMultipart } from '@/services/uploadFile';
 import rules from '@/utils/rules';
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { IconTrash, IconPlus } from '@/components/Icons';
 import { Button, Checkbox, Col, Collapse, Form, Input, message, Row, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { uniqBy } from 'lodash';
@@ -249,7 +249,7 @@ const FormActivityOutCome = (props: any) => {
 													danger
 													type='link'
 													title={intl.formatMessage({ id: 'activity.outcome.delete' })}
-													icon={<DeleteOutlined />}
+													icon={<IconTrash />}
 													onClick={() => remove(field.name)}
 												/>
 											</div>
@@ -258,7 +258,7 @@ const FormActivityOutCome = (props: any) => {
 									</Row>
 								))}
 
-								<Button onClick={() => add()} icon={<PlusOutlined />} type='dashed' size='small' disabled={isView}>
+								<Button onClick={() => add()} icon={<IconPlus />} type='dashed' size='small' disabled={isView}>
 									{intl.formatMessage({ id: 'activity.outcome.evidence.update' })}
 								</Button>
 							</>

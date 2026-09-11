@@ -3,7 +3,7 @@ import { colorHinhThucGiangDay, EHinhThucGiangDay, mapHinhThucGiangDayI18n } fro
 import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { ArrowRightOutlined, CalendarOutlined, InfoCircleOutlined, MenuOutlined } from '@ant-design/icons';
+import { IconArrowRight, IconCalendar, IconShieldInfo, IconHumberger } from '@/components/Icons';
 import { Badge, Card, Col, Empty, Modal, Popover, Row, Segmented, Space, Tag, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -258,8 +258,8 @@ const LichDashboard = () => {
 							<Segmented
 								value={segmentSelected}
 								options={[
-									{ icon: <MenuOutlined />, value: 'list', title: 'Dạng danh sách' },
-									{ icon: <CalendarOutlined />, value: 'calendar', title: 'Dạng lịch tuần' },
+									{ icon: <IconHumberger />, value: 'list', title: 'Dạng danh sách' },
+									{ icon: <IconCalendar />, value: 'calendar', title: 'Dạng lịch tuần' },
 								]}
 								size='small'
 								onChange={(val) => {
@@ -277,12 +277,12 @@ const LichDashboard = () => {
 									placement={isMobile ? 'bottom' : 'right'}
 									title='Chọn lịch hiển thị'
 								>
-									<ButtonExtend type='link' icon={<InfoCircleOutlined />} />
+									<ButtonExtend type='link' icon={<IconShieldInfo />} />
 								</Popover>
 							) : null}
 						</Space>
 						<Link to={'/calendar'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
-							Xem thêm <ArrowRightOutlined />
+							Xem thêm <IconArrowRight />
 						</Link>
 					</div>
 				}

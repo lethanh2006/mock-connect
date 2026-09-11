@@ -8,6 +8,7 @@ import { formatDateTime } from '@/utils/formatDate';
 import { getPublicAssetPath } from '@/utils/path';
 import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Alert, Button, Col, Empty, Flex, Input, message, Row, Select, Space, Spin } from 'antd';
+import { IconShieldInfo, IconRotateArrow } from '@/components/Icons';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -345,13 +346,13 @@ const DangKyKyTucXa = () => {
 					/>
 				</Space>
 
-				<Button icon={<ReloadOutlined />} loading={loading} onClick={getData} />
+				<Button icon={<IconRotateArrow />} loading={loading} onClick={getData} />
 			</Flex>
 
 			<Alert
 				type='info'
 				showIcon
-				icon={<InfoCircleOutlined />}
+				icon={<IconShieldInfo />}
 				style={{ marginBottom: 12, marginTop: 12 }}
 				message={
 					<span>

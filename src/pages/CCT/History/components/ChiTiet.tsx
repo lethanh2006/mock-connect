@@ -4,7 +4,7 @@ import ModalExpandable from '@/components/Table/ModalExpandable';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EApprovalStatus } from '@/services/CCT/constant';
 import { getNameFile, getPreviewUrl, isFileUrl } from '@/utils/utils';
-import { FileOutlined } from '@ant-design/icons';
+import { IconDocument } from '@/components/Icons';
 import { Button, Card, Col, Divider, Empty, Input, List, Row, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
@@ -185,7 +185,7 @@ const ChiTietActivityOutCome = (props: { recOutcome: ActivityOutCome.IRecord }) 
 																	setPreviewOpen(true);
 																}}
 															>
-																<FileOutlined />
+																<IconDocument />
 																<span>{isFileUrl(url) ? getNameFile(url) : `File ${index + 1}`}</span>
 															</Typography.Link>
 														))}

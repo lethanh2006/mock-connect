@@ -1,4 +1,4 @@
-import { CheckCircleFilled } from '@ant-design/icons';
+import { IconShieldCheck } from '@/components/Icons';
 import { Modal, Space, Typography } from 'antd';
 import { useIntl } from 'umi';
 
@@ -21,7 +21,7 @@ const ModalDangKyThanhCong = (props: { visibleDangKy: boolean; setVisibleDangKy:
 						justifyContent: 'center',
 					}}
 				>
-					<CheckCircleFilled style={{ fontSize: 48, color: '#329323' }} />
+					<IconShieldCheck style={{ fontSize: 48, color: '#329323' }} />
 				</div>
 			</Space>
 

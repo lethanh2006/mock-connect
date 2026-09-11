@@ -3,7 +3,7 @@ import ThanhToan from '@/pages/DichVuMotCuaV2/ThanhToan';
 import DanhMuc from '@/pages/DichVuMotCuaV2/components/DanhMuc';
 import FormBieuMau from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
-import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
+import { IconArrowLeft, IconPlus } from '@/components/Icons';
 import { history } from '@umijs/max';
 import { Button, Card, Modal } from 'antd';
 import { useEffect } from 'react';
@@ -42,13 +42,13 @@ const SinhVienTaoDon = () => {
 	}, []);
 	return (
 		<Card>
-			<ArrowLeftOutlined
+			<IconArrowLeft
 				style={{ color: '#007EB9', fontSize: '24px' }}
 				onClick={() => history.push('/dich-vu-hanh-chinh/tao-don')}
 			/>
 			{/*<Button*/}
 			{/*  type={'primary'}*/}
-			{/*  icon={<ArrowLeftOutlined />}*/}
+			{/*  icon={<IconArrowLeft />}*/}
 			{/*  onClick={() => history.push('/dich-vu-hanh-chinh/tao-don')}*/}
 			{/*  key={1}*/}
 			{/*>*/}
@@ -108,7 +108,7 @@ const SinhVienTaoDon = () => {
 						onClick={() => {
 							setVisibleFormBieuMau(true);
 						}}
-						icon={<PlusOutlined />}
+						icon={<IconPlus />}
 						type='primary'
 						style={{ marginRight: '18%' }}
 					>

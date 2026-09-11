@@ -1,6 +1,6 @@
 import { ETrangThaiDuyetLoTrinh, mapNamTrangThaiDuyetLoTrinh } from '@/services/DaoTao/ChuongTrinhDaoTao/constant';
 import { formatDateTime } from '@/utils/formatDate';
-import { CheckCircleFilled, ClockCircleFilled, ExclamationCircleFilled, InfoCircleFilled } from '@ant-design/icons';
+import { IconShieldCheck, IconStopwatch, IconWarningCircle, IconShieldInfo } from '@/components/Icons';
 import { Alert, Divider, Typography } from 'antd';
 import { useIntl, useModel } from 'umi';
 
@@ -15,13 +15,13 @@ const CardNotePathWay = () => {
 	const getStatusConfig = () => {
 		switch (trangThai) {
 			case ETrangThaiDuyetLoTrinh.DA_DUYET:
-				return { type: 'success' as const, icon: <CheckCircleFilled /> };
+				return { type: 'success' as const, icon: <IconShieldCheck /> };
 			case ETrangThaiDuyetLoTrinh.CHO_DUYET:
-				return { type: 'warning' as const, icon: <ClockCircleFilled /> };
+				return { type: 'warning' as const, icon: <IconStopwatch /> };
 			case ETrangThaiDuyetLoTrinh.TU_CHOI:
-				return { type: 'error' as const, icon: <ExclamationCircleFilled /> };
+				return { type: 'error' as const, icon: <IconWarningCircle /> };
 			default:
-				return { type: 'info' as const, icon: <InfoCircleFilled /> };
+				return { type: 'info' as const, icon: <IconShieldInfo /> };
 		}
 	};
 

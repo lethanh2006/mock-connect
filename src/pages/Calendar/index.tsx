@@ -12,6 +12,7 @@ import {
 	MenuOutlined,
 	SettingOutlined,
 } from '@ant-design/icons';
+import { IconArrowRight, IconCalendar, IconPinLocation, IconHumberger, Icon3SquarePlusmark, IconWrenchGear01 } from '@/components/Icons';
 import { Card, Col, Divider, Empty, Flex, Modal, Row, Segmented, Space, Spin, Tag } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -232,7 +233,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				<div>{event.title || '--'}</div>
 				{location ? (
 					<Flex align='center' gap={6}>
-						<EnvironmentOutlined />
+						<IconPinLocation />
 						<span>{location}</span>
 					</Flex>
 				) : null}
@@ -428,7 +429,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 											</div>
 											{location ? (
 												<div className={styles.su_kien__location}>
-													<EnvironmentOutlined />
+													<IconPinLocation />
 													<span>{location}</span>
 												</div>
 											) : null}
@@ -499,8 +500,8 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 					<Segmented
 						value={segmentSelected}
 						options={[
-							{ icon: <CalendarOutlined />, value: true, title: intl.formatMessage({ id: 'lichsukien.danglich' }) },
-							{ icon: <MenuOutlined />, value: false, title: intl.formatMessage({ id: 'lichsukien.danhsach' }) },
+							{ icon: <IconCalendar />, value: true, title: intl.formatMessage({ id: 'lichsukien.danglich' }) },
+							{ icon: <IconHumberger />, value: false, title: intl.formatMessage({ id: 'lichsukien.danhsach' }) },
 						]}
 						size='small'
 						onChange={(val) => {
@@ -516,7 +517,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 						{mainContent()}
 						<div style={{ marginTop: 8, textAlign: 'right' }}>
 							<Link to={'/calendar'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
-								{intl.formatMessage({ id: 'lichsukien.xemthem' })} <ArrowRightOutlined />
+								{intl.formatMessage({ id: 'lichsukien.xemthem' })} <IconArrowRight />
 							</Link>
 						</div>
 					</Col>
@@ -541,7 +542,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 										type='link'
 										size='large'
 										tooltip={intl.formatMessage({ id: 'lichsukien.themmoi' })}
-										icon={<PlusCircleOutlined />}
+										icon={<Icon3SquarePlusmark />}
 										onClick={() => {
 											setRecord(undefined);
 											setVisibleForm(true);
@@ -551,7 +552,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 										type='link'
 										size='large'
 										tooltip={intl.formatMessage({ id: 'lichsukien.cauhinh' })}
-										icon={<SettingOutlined />}
+										icon={<IconWrenchGear01 />}
 										onClick={() => setVisibleMauLich(true)}
 									/>
 								</Space>

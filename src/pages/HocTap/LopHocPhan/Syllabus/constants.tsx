@@ -1,17 +1,15 @@
 import {
-	AuditOutlined,
-	CalendarOutlined,
-	CheckCircleOutlined,
-	CloseCircleOutlined,
-	EditOutlined,
-	FileTextOutlined,
-	InboxOutlined,
-	InfoCircleFilled,
-	LayoutOutlined,
-	OrderedListOutlined,
-	SafetyCertificateOutlined,
-	TeamOutlined,
-} from '@ant-design/icons';
+	IconCalendar,
+	IconShieldCheck,
+	IconXmarkCircle,
+	IconPencil01,
+	IconShorttext,
+	IconShieldInfo,
+	IconPeople,
+	IconShippingbox,
+	Icon4SquareGrid,
+	Icon3Dot3Line,
+} from '@/components/Icons';
 import type { ReactNode } from 'react';
 
 import { EKetQuaThamDinh, LoaiNoiDungGiaoAn } from '@/services/DanhMucHeThong/Syllabus/constant';
@@ -28,18 +26,18 @@ export const THAM_DINH_ACTIONS: IThamDinhAction[] = [
 	{
 		action: EKetQuaThamDinh.DUYET,
 		labelId: 'syllabus.assessment.chotThamDinh',
-		icon: <CheckCircleOutlined />,
+		icon: <IconShieldCheck />,
 		primary: true,
 	},
 	{
 		action: EKetQuaThamDinh.YEU_CAU_CHINH_SUA,
 		labelId: 'syllabus.list.yeuCauChinhSua',
-		icon: <EditOutlined />,
+		icon: <IconPencil01 />,
 	},
 	{
 		action: EKetQuaThamDinh.TU_CHOI,
 		labelId: 'syllabus.list.reject',
-		icon: <CloseCircleOutlined />,
+		icon: <IconXmarkCircle />,
 		danger: true,
 	},
 ];
@@ -58,42 +56,42 @@ export const AVAILABLE_SECTION_TYPES = [
 	{
 		tieuDe: 'Header',
 		loai: LoaiNoiDungGiaoAn.TITLE,
-		icon: <LayoutOutlined />,
+		icon: <Icon4SquareGrid />,
 	},
 	{
 		tieuDe: 'Course Overview',
 		loai: LoaiNoiDungGiaoAn.COURSE,
-		icon: <InfoCircleFilled />,
+		icon: <IconShieldInfo />,
 	},
 	{
 		tieuDe: 'Faculty and Teaching Assistant Information',
 		loai: LoaiNoiDungGiaoAn.PROVIDER,
-		icon: <FileTextOutlined />,
+		icon: <IconShorttext />,
 	},
 	{
 		tieuDe: 'Learning Framework',
 		loai: LoaiNoiDungGiaoAn.PLO_CLO,
-		icon: <OrderedListOutlined />,
+		icon: <Icon3Dot3Line />,
 	},
 	{
 		tieuDe: 'Essential Logistics',
-		icon: <InboxOutlined />,
+		icon: <IconShippingbox />,
 	},
 	{
 		tieuDe: 'Course Schedule',
-		icon: <CalendarOutlined />,
+		icon: <IconCalendar />,
 	},
 	{
 		tieuDe: 'Assessment',
-		icon: <AuditOutlined />,
+		icon: <IconShieldCheck />,
 	},
 	{
 		tieuDe: 'Course Expectations',
-		icon: <TeamOutlined />,
+		icon: <IconPeople />,
 	},
 	{
 		tieuDe: 'Institutional Policies',
-		icon: <SafetyCertificateOutlined />,
+		icon: <IconShieldCheck />,
 	},
 ].map((item) => ({
 	...item,

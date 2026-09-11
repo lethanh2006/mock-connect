@@ -10,7 +10,7 @@ import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import { getSafeHref } from '@/utils/security';
 import { getNameFile } from '@/utils/utils';
-import { SaveOutlined } from '@ant-design/icons';
+import { IconSave } from '@/components/Icons';
 import { Card, Segmented, Space, Tag } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -168,7 +168,7 @@ const BaiThiCuoiKy = () => {
 						}
 						onClick={() => handleEdit(rec)}
 						type='link'
-						icon={<SaveOutlined />}
+						icon={<IconSave />}
 					/>
 				);
 			},

@@ -2,7 +2,7 @@ import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
-import { EyeOutlined } from '@ant-design/icons';
+import { IconEyeOpen } from '@/components/Icons';
 import { Checkbox } from 'antd';
 import { useIntl, useModel } from 'umi';
 
@@ -70,7 +70,7 @@ const HocLieuDeCuongPage = () => {
 						rel='noreferrer'
 						title={intl.formatMessage({ id: 'lophocphan.id.decuong.hoclieu.xemchitiet' })}
 					>
-						<EyeOutlined />
+						<IconEyeOpen />
 					</a>
 				) : null,
 		},

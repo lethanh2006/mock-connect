@@ -1,4 +1,4 @@
-import { ClockCircleOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { IconStopwatch, Icon2ChervolLeftLine, Icon2ChervolRightLine } from '@/components/Icons';
 import { Card, Flex } from 'antd';
 
 const News = ({ loading = true }) => {
@@ -36,10 +36,10 @@ const News = ({ loading = true }) => {
 					<span className='title'>News</span>
 					<div className='pagination-controls'>
 						<button className='nav-btn'>
-							<LeftOutlined />
+							<Icon2ChervolLeftLine />
 						</button>
 						<button className='nav-btn'>
-							<RightOutlined />
+							<Icon2ChervolRightLine />
 						</button>
 					</div>
 				</Flex>
@@ -73,7 +73,7 @@ const News = ({ loading = true }) => {
 							<div className='news-content'>
 								<h3 className='news-title'>{item.title}</h3>
 								<div className='news-date'>
-									<ClockCircleOutlined className='date-icon' />
+									<IconStopwatch className='date-icon' />
 									<span>{item.date}</span>
 								</div>
 							</div>

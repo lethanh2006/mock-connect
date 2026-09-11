@@ -8,6 +8,7 @@ import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { CheckCircleFilled, ColumnWidthOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Row, Space, Tag, Typography } from 'antd';
+import { IconLeftRightBar, IconShieldCheck } from '@/components/Icons';
 import { useIntl, useModel } from 'umi';
 import '../style.less';
 import {
@@ -113,7 +114,7 @@ const CardPhong = ({
 			{room?.dienTich ? (
 				<div className='room-card__specifications'>
 					<Space>
-						<ColumnWidthOutlined />
+						<IconLeftRightBar />
 						{`${room.dienTich}m2`}
 					</Space>
 				</div>
@@ -124,14 +125,14 @@ const CardPhong = ({
 			<Row className='room-card__amenities' gutter={[12, 12]}>
 				{tienIchHienThi.map((item: any) => (
 					<Col key={item.maDanhMucTienIch} span={12}>
-						<CheckCircleFilled />
+						<IconShieldCheck />
 						<Typography.Text>{item?.tienIch?.ten ?? item?.maDanhMucTienIch}</Typography.Text>
 					</Col>
 				))}
 
 				{tienIch.length > 3 && (
 					<Col span={12}>
-						<CheckCircleFilled />
+						<IconShieldCheck />
 						<Typography.Link
 							style={{ color: '#0087C3', fontWeight: 'normal' }}
 							onClick={(event) => {

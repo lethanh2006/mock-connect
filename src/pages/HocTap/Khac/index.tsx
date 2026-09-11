@@ -1,6 +1,6 @@
 import { TabViewPage } from '@/components/TabViewPage';
 import TheChatPage from '@/pages/TienIch/TheChat';
-import { CheckCircleOutlined, SmileOutlined, StopOutlined } from '@ant-design/icons';
+import { IconShieldCheck, IconEmojiInLove, IconXmarkCircle } from '@/components/Icons';
 import { useIntl } from 'umi';
 import BaoLuuThoiHoc from '../BaoLuuThoiHoc';
 import XetHocVuPage from '../XetHocVu';
@@ -10,19 +10,19 @@ const HocTapKhacPage = () => {
 
 	const menu = [
 		{
-			icon: <CheckCircleOutlined />,
+			icon: <IconShieldCheck />,
 			title: intl.formatMessage({ id: 'hoctapkhac.xethocvu.title' }),
 			menuKey: 'xet-hoc-vu',
 			content: <XetHocVuPage />,
 		},
 		{
-			icon: <StopOutlined />,
+			icon: <IconXmarkCircle />,
 			title: intl.formatMessage({ id: 'hoctapkhac.baoluuthoihoc.title' }),
 			menuKey: 'baoluu-thoihoc',
 			content: <BaoLuuThoiHoc />,
 		},
 		{
-			icon: <SmileOutlined />,
+			icon: <IconEmojiInLove />,
 			title: intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.title' }),
 			menuKey: 'thechat',
 			content: <TheChatPage />,

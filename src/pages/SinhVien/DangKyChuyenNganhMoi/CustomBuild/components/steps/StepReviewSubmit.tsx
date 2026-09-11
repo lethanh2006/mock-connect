@@ -1,7 +1,7 @@
 import ProgramDesignTable from '@/pages/SinhVien/DangKyChuyenNganhMoi/CustomBuild/components/ProgramDesignTable';
 import { ETrangThaiKqht } from '@/services/DaoTao/constant';
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
-import { CheckCircleOutlined, CloseCircleOutlined, WarningOutlined } from '@ant-design/icons';
+import { IconShieldCheck, IconXmarkCircle, IconWarningTriangle } from '@/components/Icons';
 import { Alert, Card, Checkbox, Col, Divider, Form, Row, Tag, Typography } from 'antd';
 import { useIntl, useModel } from 'umi';
 import FormFooter from '../FormFooter';
@@ -84,7 +84,7 @@ const StepReviewSubmit = ({
 				<Col span={24}>
 					<Alert
 						type='warning'
-						icon={<WarningOutlined />}
+						icon={<IconWarningTriangle />}
 						message={intl.formatMessage({ id: 'minor.idm.review.warning' })}
 					/>
 				</Col>
@@ -377,9 +377,9 @@ const StepReviewSubmit = ({
 									<Row align='middle' gutter={12}>
 										<Col flex='1'>
 											{item.ok ? (
-												<CheckCircleOutlined style={{ color: 'var(--color-success)' }} />
+												<IconShieldCheck style={{ color: 'var(--color-success)' }} />
 											) : (
-												<CloseCircleOutlined style={{ color: 'var(--color-error)' }} />
+												<IconXmarkCircle style={{ color: 'var(--color-error)' }} />
 											)}
 											<div style={{ fontWeight: 600 }}>{item.label}</div>
 											<sub>{item.subLabel}</sub>

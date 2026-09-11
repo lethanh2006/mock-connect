@@ -1,7 +1,7 @@
 import DonutChart from '@/components/Chart/DonutChart';
 import { EOperatorType } from '@/components/Table/constant';
 import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { IconArrowRight } from '@/components/Icons';
 import { Card, Col, Empty, Row, Space, Tooltip } from 'antd';
 import { useEffect } from 'react';
 import { Link, useIntl, useModel } from 'umi';
@@ -99,7 +99,7 @@ const CardCongNoDashboard = () => {
 
 						<Tooltip title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.congno.xemchitiet' })}>
 							<Link to='/tai-chinh/cong-no'>
-								<ArrowRightOutlined />
+								<IconArrowRight />
 							</Link>
 						</Tooltip>
 					</div>

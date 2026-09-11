@@ -176,7 +176,7 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 							size='small'
 							otherProps={{
 								pagination: false,
-								summary: (pageData: HoaDon.IBillItem[]) => {
+								summary: (pageData: readonly HoaDon.IBillItem[]) => {
 									const totalDue = _.sumBy(pageData, (item) => item.amountDue);
 									const totalPaid = _.sumBy(pageData, (item) => item.amountPaid);
 									const totalRemain = _.sumBy(pageData, (item) => item.amountRemaining);

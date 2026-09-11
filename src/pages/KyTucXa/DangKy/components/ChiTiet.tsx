@@ -5,6 +5,7 @@ import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { CheckOutlined, ColumnWidthOutlined } from '@ant-design/icons';
 import { Button, Col, message, Row, Typography } from 'antd';
+import { IconLeftRightBar } from '@/components/Icons';
 import { useIntl, useModel } from 'umi';
 import '../style.less';
 import {
@@ -134,7 +135,7 @@ const ChiTietPhong = (props: {
 
 					{record?.room?.dienTich ? (
 						<div className='room-summary'>
-							<ColumnWidthOutlined /> <span>{record?.room?.dienTich}m2</span>
+							<IconLeftRightBar /> <span>{record?.room?.dienTich}m2</span>
 						</div>
 					) : null}
 

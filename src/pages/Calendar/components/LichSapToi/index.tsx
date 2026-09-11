@@ -1,7 +1,7 @@
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { ClockCircleOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
+import { IconStopwatch, IconArrowDown, IconArrowUp } from '@/components/Icons';
 import { Button, Card, List, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'umi';
@@ -75,7 +75,7 @@ const LichSapToi: React.FC<LichSapToiProps> = ({ dataCalendar, limit = 5, onEven
 			<Button
 				type='text'
 				size='small'
-				icon={expandLichSapToi ? <UpOutlined /> : <DownOutlined />}
+				icon={expandLichSapToi ? <IconArrowUp /> : <IconArrowDown />}
 				onClick={(e) => {
 					e.stopPropagation();
 					setExpandLichSapToi(!expandLichSapToi);
@@ -89,7 +89,7 @@ const LichSapToi: React.FC<LichSapToiProps> = ({ dataCalendar, limit = 5, onEven
 		<Card size='small' className='lich-sap-toi-card' title={cardTitle}>
 			{upcomingEvents.length === 0 ? (
 				<div className={`lich-sap-toi-empty ${expandLichSapToi ? 'expanded' : 'collapsed'}`}>
-					<ClockCircleOutlined />
+					<IconStopwatch />
 					<div>{intl.formatMessage({ id: 'lichsukien.lichsaptoi.empty' })}</div>
 				</div>
 			) : (

@@ -1,4 +1,4 @@
-import { YoutubeOutlined } from '@ant-design/icons';
+import { IconFrontCamera } from '@/components/Icons';
 import { useIntl } from 'umi';
 
 const HuongDanDangKyTinChi = () => {
@@ -12,7 +12,7 @@ const HuongDanDangKyTinChi = () => {
 				<i>{intl.formatMessage({ id: 'dangkytinchi.thongtindangky.huongdandangky.title' })}</i>
 			</div>
 
-			{youtubeUrl ? <YoutubeOutlined className='pulse' onClick={() => window.open(youtubeUrl, '_blank')} /> : null}
+			{youtubeUrl ? <IconFrontCamera className='pulse' onClick={() => window.open(youtubeUrl, '_blank')} /> : null}
 		</div>
 	);
 };

@@ -14,7 +14,7 @@ import {
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { MenuOutlined, PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
+import { IconHumberger, Icon3SquarePlusmark, IconRotateArrow } from '@/components/Icons';
 import { Alert, Checkbox, Empty, Space, Table } from 'antd';
 import _ from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
@@ -209,7 +209,7 @@ const DangKyNhuCauHocPhan = () => {
 									ngoaiThoiGian
 								}
 								onClick={() => setVisibleForm(true)}
-								icon={<PlusCircleOutlined />}
+								icon={<Icon3SquarePlusmark />}
 								type='primary'
 								notHideText
 								tooltip={intl.formatMessage({ id: 'hocphannhucau.tooltip.dangKyNhuCau' })}
@@ -218,12 +218,12 @@ const DangKyNhuCauHocPhan = () => {
 							</ButtonExtend>
 
 							{isBanCanSu ? (
-								<ButtonExtend onClick={() => setVisibleLop(true)} icon={<MenuOutlined />}>
+								<ButtonExtend onClick={() => setVisibleLop(true)} icon={<IconHumberger />}>
 									{intl.formatMessage({ id: 'hocphannhucau.button.dsLop' })}
 								</ButtonExtend>
 							) : null}
 
-							<ButtonExtend onClick={() => getData()} icon={<ReloadOutlined />}>
+							<ButtonExtend onClick={() => getData()} icon={<IconRotateArrow />}>
 								{intl.formatMessage({ id: 'hocphannhucau.button.taiLai' })}
 							</ButtonExtend>
 						</Space>

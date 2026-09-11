@@ -3,7 +3,7 @@ import type { IColumn } from '@/components/Table/typing';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { formatDate } from '@/utils/formatDate';
 import { formatPhoneNumber } from '@/utils/utils';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { IconTrash, IconPencil01 } from '@/components/Icons';
 import { Button, Popconfirm, Tooltip } from 'antd';
 import { useState } from 'react';
 import { useIntl } from 'umi';
@@ -96,7 +96,7 @@ const ThongTinGiaDinhFormItem = (props: {
 			render: (val, rec) => (
 				<>
 					<Tooltip title={intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.chinhsua' })}>
-						<Button onClick={() => handleEdit(rec)} type='link' icon={<EditOutlined />} />
+						<Button onClick={() => handleEdit(rec)} type='link' icon={<IconPencil01 />} />
 					</Tooltip>
 					<Tooltip title={intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.xoa' })}>
 						<Popconfirm
@@ -104,7 +104,7 @@ const ThongTinGiaDinhFormItem = (props: {
 							title={intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.xoa.xacnhan' })}
 							placement='topRight'
 						>
-							<Button danger type='link' icon={<DeleteOutlined />} />
+							<Button danger type='link' icon={<IconTrash />} />
 						</Popconfirm>
 					</Tooltip>
 				</>

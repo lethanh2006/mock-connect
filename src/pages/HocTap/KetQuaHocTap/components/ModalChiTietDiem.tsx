@@ -3,6 +3,7 @@ import { colorTrangThaiHocTap, ETrangThaiHocTap } from '@/services/DaoTao/consta
 import { ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Button, Descriptions, Divider, Empty, Modal, Tag } from 'antd';
+import { Icon3SquarePlusmark } from '@/components/Icons';
 import { useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalHocPhan from '../../../DaoTao/DeCuongHocPhan/ModalHocPhan';
@@ -126,7 +127,7 @@ const ModalChiTietDiem = (
 								}
 								disabled={ngoaiQuyDoiDiem}
 								onClick={() => setVisibleCongNhan(true)}
-								icon={<PlusCircleOutlined />}
+								icon={<Icon3SquarePlusmark />}
 							>
 								{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan' })}
 							</ButtonExtend>

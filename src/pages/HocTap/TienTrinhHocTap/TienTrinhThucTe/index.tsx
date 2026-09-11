@@ -2,7 +2,7 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import { getSearchStorage, updateSearchStorage } from '@/components/Table/utils';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { primaryColor } from '@/services/base/constant';
-import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import { IconRotateArrow, IconMagnifyingGlass } from '@/components/Icons';
 import type { InputRef } from 'antd';
 import { AutoComplete, Button, Divider, Empty, Input, Select, Space, Spin, Tag, Tooltip, Typography } from 'antd';
 import _ from 'lodash';
@@ -147,7 +147,7 @@ const TienTrinhThucTeV2 = () => {
 								loading={loading}
 								icon={
 									<Tooltip title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.search.tooltip' })}>
-										<SearchOutlined />
+										<IconMagnifyingGlass />
 									</Tooltip>
 								}
 							/>
@@ -167,7 +167,7 @@ const TienTrinhThucTeV2 = () => {
 				</AutoComplete>
 				<Space>
 					<ButtonExtend
-						icon={<ReloadOutlined />}
+						icon={<IconRotateArrow />}
 						onClick={fetch}
 						loading={loading}
 						className='btn-reload'

@@ -7,7 +7,7 @@ import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EActivityCategory, EActivityStatus, EApprovalStatus, mapNameActivityCategory } from '@/services/CCT/constant';
 import dayjs from '@/utils/dayjs';
 import { getPublicAssetPath } from '@/utils/path';
-import { DashOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
+import { Icon2LineHorizontal, IconSend, IconTrash } from '@/components/Icons';
 import { Button, Col, Empty, Pagination, Popconfirm, Popover, Row, Space, Spin, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -324,7 +324,7 @@ const HistoryActivityPage = () => {
 																				className='btn-success'
 																				disabled={!canEdit(item)}
 																				type='link'
-																				icon={<SendOutlined />}
+																				icon={<IconSend />}
 																				size='small'
 																			>
 																				{intl.formatMessage({ id: 'activity.history.button.duyet' })}
@@ -349,7 +349,7 @@ const HistoryActivityPage = () => {
 																				disabled={!canDelete}
 																				danger
 																				type='link'
-																				icon={<DeleteOutlined />}
+																				icon={<IconTrash />}
 																				size='small'
 																			>
 																				{intl.formatMessage({ id: 'activity.history.button.xoa' })}
@@ -358,7 +358,7 @@ const HistoryActivityPage = () => {
 																	</Space>
 																}
 															>
-																<Button block icon={<DashOutlined />} />
+																<Button block icon={<Icon2LineHorizontal />} />
 															</Popover>
 														</Col>
 														<Col span={21}>{renderButton}</Col>
@@ -417,9 +417,9 @@ const HistoryActivityPage = () => {
 				styles={
 					isView
 						? {
-								body: { backgroundColor: '#F8F8F8', borderRadius: 2 },
-								header: { backgroundColor: '#F8F8F8' },
-							}
+							body: { backgroundColor: '#F8F8F8', borderRadius: 2 },
+							header: { backgroundColor: '#F8F8F8' },
+						}
 						: undefined
 				}
 				destroyOnClose

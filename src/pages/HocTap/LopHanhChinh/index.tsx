@@ -3,7 +3,7 @@ import { TabViewPage } from '@/components/TabViewPage';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
 import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/DienDan';
-import { InfoCircleOutlined, MessageOutlined, NotificationOutlined } from '@ant-design/icons';
+import { IconShieldInfo, IconBubbleChat, IconBell } from '@/components/Icons';
 import { Col, Empty, Row, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -94,19 +94,19 @@ const LopHanhChinhPage = () => {
 											</Col>
 										</Row>
 									),
-									icon: <InfoCircleOutlined />,
+									icon: <IconShieldInfo />,
 								},
 								{
 									title: intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao' }),
 									menuKey: 'thong-bao',
 									content: <ThongBaoLopPage loai='lop-hanh-chinh' idLop={record._id} />,
-									icon: <NotificationOutlined />,
+									icon: <IconBell />,
 								},
 								{
 									title: intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan' }),
 									menuKey: 'dien-dan',
 									content: <DienDanLopPage idLopHanhChinh={record?._id} />,
-									icon: <MessageOutlined />,
+									icon: <IconBubbleChat />,
 								},
 							]}
 						/>

@@ -1,5 +1,5 @@
 import dayjs from '@/utils/dayjs';
-import { CheckCircleOutlined, InfoCircleOutlined, WarningOutlined } from '@ant-design/icons';
+import { IconShieldCheck, IconShieldInfo, IconWarningTriangle } from '@/components/Icons';
 import { Alert, Button, Col, Row } from 'antd';
 import { history, useIntl, useModel } from 'umi';
 
@@ -45,7 +45,7 @@ const AlertBanners = ({
 	};
 
 	const alertType = isRegistrationOpen ? 'success' : registrationStatus === 'upcoming' ? 'info' : 'warning';
-	const alertIcon = isRegistrationOpen ? <CheckCircleOutlined /> : registrationStatus === 'upcoming' ? <InfoCircleOutlined /> : <WarningOutlined />;
+	const alertIcon = isRegistrationOpen ? <IconShieldCheck /> : registrationStatus === 'upcoming' ? <IconShieldInfo /> : <IconWarningTriangle />;
 
 	return (
 		<Row gutter={[0, 8]}>

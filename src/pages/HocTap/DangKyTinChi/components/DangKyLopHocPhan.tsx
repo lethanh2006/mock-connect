@@ -31,6 +31,7 @@ import { formatDateTime } from '@/utils/formatDate';
 import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Descriptions, Modal, Popconfirm, Popover, Select, Space, Tag } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
+import { IconShieldInfo } from '@/components/Icons';
 import { useAccess, useIntl, useModel } from 'umi';
 import {
 	buildLopDangKy,
@@ -245,7 +246,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 								</span>
 							}
 						>
-							<InfoCircleOutlined style={{ color: '#1677ff', fontSize: 12 }} />
+							<IconShieldInfo style={{ color: '#1677ff', fontSize: 12 }} />
 						</Popover>
 					)}
 				</Space>

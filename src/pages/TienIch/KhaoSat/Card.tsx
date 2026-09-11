@@ -6,7 +6,7 @@ import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { type DotKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat/typing';
 import { ELoaiDot, EThoiGianDot, textThucHienKhaoSat, thoiGianDot } from '@/services/TienIch/KhaoSat/constants';
 import { formatDateTime } from '@/utils/formatDate';
-import { EditOutlined } from '@ant-design/icons';
+import { IconPencil01 } from '@/components/Icons';
 import { Button, Segmented, Tag, Tooltip } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -120,7 +120,7 @@ const CardKhaoSat = (props: { loai: ELoaiDot }) => {
 						disabled={thoiGian !== EThoiGianDot.DANG_DIEN_RA || record?.kichHoat === false}
 						onClick={() => handleEdit(record)}
 						type='link'
-						icon={<EditOutlined />}
+						icon={<IconPencil01 />}
 					/>
 				</Tooltip>
 			),

@@ -1,7 +1,7 @@
 import { EOperatorType } from '@/components/Table/constant';
 import { EDoiTuong } from '@/services/TienIch/VanBanHuongDan/constant';
 import { type VanBanHuongDan } from '@/services/TienIch/VanBanHuongDan/typing';
-import { SearchOutlined } from '@ant-design/icons';
+import { IconMagnifyingGlass } from '@/components/Icons';
 import { Avatar, Button, Card, Form, Input, List, Modal, Space, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -79,7 +79,7 @@ const VanBanHuongDanComponent = () => {
 							<Form.Item name='ten'>
 								<Input placeholder={intl.formatMessage({ id: 'vanbanhuongdan.timkiem.place' })} allowClear />
 							</Form.Item>
-							<Button icon={<SearchOutlined />} htmlType='submit' type='primary'>
+							<Button icon={<IconMagnifyingGlass />} htmlType='submit' type='primary'>
 								{intl.formatMessage({ id: 'vanbanhuongdan.timkiem.button' })}
 							</Button>
 						</Form>

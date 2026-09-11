@@ -1,7 +1,7 @@
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { formatDateTime } from '@/utils/formatDate';
-import { PaperClipOutlined } from '@ant-design/icons';
+import { IconPaperClip45Degree } from '@/components/Icons';
 import { Button, Card, Descriptions, Tag } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -24,7 +24,7 @@ const ModalDetailPhanhoi = () => {
 				<Descriptions.Item label={intl.formatMessage({ id: 'phanhoi.chitiet.file' })}>
 					{(Array.isArray(record?.urlPhanAnh) ? record.urlPhanAnh : [record?.urlPhanAnh]).filter(Boolean).length ? (
 						<>
-							<PaperClipOutlined />{' '}
+							<IconPaperClip45Degree />{' '}
 							<a
 								onClick={() => {
 									const files = Array.isArray(record?.urlPhanAnh)
@@ -72,7 +72,7 @@ const ModalDetailPhanhoi = () => {
 						: [record?.urlChuyenVienPhanAnh]
 					).filter(Boolean).length ? (
 						<>
-							<PaperClipOutlined />{' '}
+							<IconPaperClip45Degree />{' '}
 							<a
 								onClick={() => {
 									const files = Array.isArray(record?.urlChuyenVienPhanAnh)

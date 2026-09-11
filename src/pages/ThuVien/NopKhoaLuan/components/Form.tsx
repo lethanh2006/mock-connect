@@ -1,6 +1,6 @@
 import MyDatePicker from '@/components/MyDatePicker';
 import UploadFile from '@/components/Upload/UploadFile';
-import SelectNganhCoSo from '@/pages/DaoTao/Nganh/SelectNganh';
+import SelectChuyenNganh from '@/pages/DaoTao/Nganh/SelectChuyenNganh';
 import { ETrangThaiNopThuVien } from '@/services/QuanLyThuVien/constant';
 import { EFileScope, uploadFile } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
@@ -143,7 +143,7 @@ const FormThuVien = (props: any) => {
 					</Col>
 					<Col span={8}>
 						<Form.Item label='Chuyên ngành' name='maNganh'>
-							<SelectNganhCoSo selectMa disabled />
+							<SelectChuyenNganh selectMa disabled />
 						</Form.Item>
 					</Col>
 					<Col span={24}>

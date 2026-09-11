@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { IconArrowLeft } from '@/components/Icons';
 import { Card } from 'antd';
 import queryString from 'query-string';
 import { useEffect } from 'react';
@@ -31,7 +31,7 @@ const ChiTietTinTucPage = () => {
 		<Card
 			title={
 				<span onClick={() => window.history.back()} style={{ cursor: 'pointer' }}>
-					<ArrowLeftOutlined /> {intl.formatMessage({ id: 'global.button.quaylai' })}
+					<IconArrowLeft /> {intl.formatMessage({ id: 'global.button.quaylai' })}
 				</span>
 			}
 		>

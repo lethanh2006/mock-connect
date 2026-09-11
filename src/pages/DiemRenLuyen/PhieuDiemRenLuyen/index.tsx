@@ -3,7 +3,7 @@ import { type IColumn } from '@/components/Table/typing';
 import { type DotChamDiem } from '@/services/CongTacSinhVien/DiemRenLuyen/DotChamDiem/typing';
 import { EVaiTroPhieuDiem } from '@/services/CongTacSinhVien/DiemRenLuyen/PhieuDiemRenLuyen/constants';
 import { formatDateTime } from '@/utils/formatDate';
-import { EditOutlined } from '@ant-design/icons';
+import { IconPencil01 } from '@/components/Icons';
 import { Button, Tooltip } from 'antd';
 import { useIntl, useModel } from 'umi';
 import ModalPhieuDiem from './components/ModalPhieuDiem';
@@ -61,7 +61,7 @@ const PhieuDiemRenLuyenSinhVienPage = () => {
 			render: (_, rec) => (
 				<>
 					<Tooltip title={intl.formatMessage({ id: 'diemrenluyen.phieudiem.xemchitiet' })}>
-						<Button onClick={() => handleView(rec)} type='link' icon={<EditOutlined />} />
+						<Button onClick={() => handleView(rec)} type='link' icon={<IconPencil01 />} />
 					</Tooltip>
 				</>
 			),

@@ -9,7 +9,7 @@ import {
 import { ELoaiPhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/constant';
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
 import dayjs from '@/utils/dayjs';
-import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
+import { IconTrash, IconEyeOpen } from '@/components/Icons';
 import { Button, Modal, Popconfirm, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -126,7 +126,7 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 					<Tooltip title={intl.formatMessage({ id: 'minor.history.viewDetail' })}>
 						<Button
 							type='link'
-							icon={<EyeOutlined />}
+							icon={<IconEyeOpen />}
 							onClick={() => {
 								history.push(`/hoc-tap/dang-ky-chuyen-nganh/${rec._id}?loai=${type}`);
 							}}
@@ -151,7 +151,7 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 								cancelText={intl.formatMessage({ id: 'global.button.huy' })}
 								onConfirm={() => handleDeleteRegistration(rec)}
 							>
-								<Button type='link' danger icon={<DeleteOutlined />} />
+								<Button type='link' danger icon={<IconTrash />} />
 							</Popconfirm>
 						</Tooltip>
 					)}

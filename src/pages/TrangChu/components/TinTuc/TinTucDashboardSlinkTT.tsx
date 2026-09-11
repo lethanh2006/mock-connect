@@ -1,7 +1,7 @@
 import anh from '@/assets/noimg.png';
 import { renderParagraph } from '@/pages/TinTuc/Slink/BlockTinTuc';
 import { formatDate } from '@/utils/formatDate';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { IconArrowRight } from '@/components/Icons';
 import { Col, Empty, Row, Spin } from 'antd';
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
@@ -59,7 +59,7 @@ const TinTucDashboardSlink = () => {
 			</div>
 			<div className='xem-them'>
 				<Link to='/tin-tuc'>
-					Xem thêm <ArrowRightOutlined />
+					Xem thêm <IconArrowRight />
 				</Link>
 			</div>
 		</>

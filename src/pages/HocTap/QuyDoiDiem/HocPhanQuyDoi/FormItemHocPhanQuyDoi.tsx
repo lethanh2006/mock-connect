@@ -10,7 +10,7 @@ import {
 	ETrangThaiPhieuQuyDoiDiem,
 	colorTrangThaiHocPhanQuyDoi,
 } from '@/services/HocTap/constant';
-import { EditOutlined } from '@ant-design/icons';
+import { IconPencil01 } from '@/components/Icons';
 import { Tag } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -124,7 +124,7 @@ const FormItemHocPhanQuyDoi = () => {
 					tooltip={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hocphan.edit' })}
 					onClick={() => handleEdit(rec)}
 					type='link'
-					icon={<EditOutlined />}
+					icon={<IconPencil01 />}
 				/>
 			),
 		},

@@ -1,7 +1,7 @@
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { getSafeHref } from '@/utils/security';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { Icon2ChervolLeftLine, Icon2ChervolRightLine } from '@/components/Icons';
 import { Button, Space } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -32,13 +32,13 @@ const ChiTietTepTin = (props: { visible: boolean; setVisible: (val: boolean) => 
 		>
 			<Space wrap>
 				<Button onClick={prevSlide}>
-					<LeftOutlined />
+					<Icon2ChervolLeftLine />
 				</Button>
 				<span>
 					Tệp tin {files.length > 0 ? currentIndex + 1 : 0}/{files.length}
 				</span>
 				<Button onClick={nextSlide}>
-					<RightOutlined />
+					<Icon2ChervolRightLine />
 				</Button>
 			</Space>
 

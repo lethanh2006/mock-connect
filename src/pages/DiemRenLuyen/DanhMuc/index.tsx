@@ -1,7 +1,7 @@
 import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { IconTrash, IconPencil01 } from '@/components/Icons';
 import { Button, Popconfirm, Tooltip } from 'antd';
 import { useIntl, useModel } from 'umi';
 import { FormDanhMuc } from './components/Form';
@@ -38,7 +38,7 @@ export default () => {
 				return (
 					<>
 						<Tooltip title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.chinhsua' })}>
-							<Button onClick={() => handleEdit(record)} type='link' icon={<EditOutlined />} />
+							<Button onClick={() => handleEdit(record)} type='link' icon={<IconPencil01 />} />
 						</Tooltip>
 						<Tooltip title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.xoa' })}>
 							<Popconfirm
@@ -46,7 +46,7 @@ export default () => {
 								title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.xacnhanxoa' })}
 								placement='topLeft'
 							>
-								<Button danger type='link' icon={<DeleteOutlined />} />
+								<Button danger type='link' icon={<IconTrash />} />
 							</Popconfirm>
 						</Tooltip>
 					</>

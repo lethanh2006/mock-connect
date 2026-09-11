@@ -16,7 +16,7 @@ import {
 	TU_DANH_GIA_PREFIX,
 } from '@/services/DiemRenLuyenV2/PhieuDiemRenLuyen/constants';
 import dayjs from '@/utils/dayjs';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { IconQuestionCircle } from '@/components/Icons';
 import { Button, Form, message, Modal, Spin, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -268,7 +268,7 @@ const FormNhapPhieuDiem = () => {
 													type='primary'
 												>
 													{intl.formatMessage({ id: 'diemrenluyen.form.button.guikhieunai' })}
-													<QuestionCircleOutlined />
+													<IconQuestionCircle />
 												</Button>
 											) : (
 												<div>
@@ -285,7 +285,7 @@ const FormNhapPhieuDiem = () => {
 																		</div>
 																		<div>
 																			<b>{intl.formatMessage({ id: 'diemrenluyen.form.label.minhchung' })}: </b>{' '}
-																			{recPhieuDiem?.urlFileDinhKem?.map((item) => (
+																			{recPhieuDiem?.urlFileDinhKem?.map((item: string) => (
 																				<Tag color={primaryColor} key={item}>
 																					<a href={item} target='_blank' rel='noreferrer'>
 																						{intl.formatMessage({ id: 'diemrenluyen.form.link.xemtaptin' })}
@@ -313,7 +313,7 @@ const FormNhapPhieuDiem = () => {
 														{intl.formatMessage({ id: 'diemrenluyen.form.link.xuatmaudon' })}
 													</a>
 													), {intl.formatMessage({ id: 'diemrenluyen.form.label.trangthai' })}:{' '}
-													<Tag color={MapKeyColorTrangThaiKhieuNai[recPhieuDiem.trangThaiXuLyKhieuNai]}>
+													<Tag color={MapKeyColorTrangThaiKhieuNai[recPhieuDiem.trangThaiXuLyKhieuNai as keyof typeof MapKeyColorTrangThaiKhieuNai]}>
 														{recPhieuDiem.trangThaiXuLyKhieuNai}
 													</Tag>
 												</div>
@@ -327,13 +327,13 @@ const FormNhapPhieuDiem = () => {
 									<Tag
 										color={
 											MapColorETrangThaiPhieuDiemRL?.[
-												formValuesTuDanhGiaVaDonViDanhGia?.trangThaiNopSV as ETrangThaiPhieuDiemRL
+											formValuesTuDanhGiaVaDonViDanhGia?.trangThaiNopSV as ETrangThaiPhieuDiemRL
 											]
 										}
 									>
 										{
 											MapTitleETrangThaiPhieuDiemRL?.[
-												formValuesTuDanhGiaVaDonViDanhGia?.trangThaiNopSV as ETrangThaiPhieuDiemRL
+											formValuesTuDanhGiaVaDonViDanhGia?.trangThaiNopSV as ETrangThaiPhieuDiemRL
 											]
 										}
 									</Tag>

@@ -10,7 +10,7 @@ import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import type { QuyTrinh } from '@/services/QuyTrinh/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { EditOutlined, LeftOutlined } from '@ant-design/icons';
+import { IconPencil01, Icon2ChervolLeftLine } from '@/components/Icons';
 import { Button, Card, Col, Collapse, Modal, Popconfirm, Row, Spin, Steps, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -175,7 +175,7 @@ const View = (props: Iprops) => {
 								<>
 									<Button
 										style={{ marginBottom: 16 }}
-										icon={<LeftOutlined />}
+										icon={<Icon2ChervolLeftLine />}
 										type={'link'}
 										onClick={() => {
 											window.history.back();
@@ -198,7 +198,7 @@ const View = (props: Iprops) => {
 										okText='Đồng ý'
 										cancelText='Đóng'
 									>
-										<Button style={{ marginBottom: 16 }} icon={<LeftOutlined />} type={'link'}>
+										<Button style={{ marginBottom: 16 }} icon={<Icon2ChervolLeftLine />} type={'link'}>
 											Quay lại
 										</Button>
 									</Popconfirm>
@@ -312,7 +312,7 @@ const View = (props: Iprops) => {
 														setRecordFormKhaiBao(valuesFormKhaiBao);
 													}}
 													style={{ margin: '0 auto' }}
-													icon={<EditOutlined />}
+													icon={<IconPencil01 />}
 													type='primary'
 													disabled={!allowChinhSua}
 												>

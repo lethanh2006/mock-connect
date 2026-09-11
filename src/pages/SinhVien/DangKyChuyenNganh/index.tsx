@@ -8,7 +8,7 @@ import {
 } from '@/services/DaoTao/DangKyChuyenNganh/constant';
 import type { DangKyChuyenNganh } from '@/services/DaoTao/DangKyChuyenNganh/typing';
 import { formatDateTime } from '@/utils/formatDate';
-import { EditOutlined } from '@ant-design/icons';
+import { IconPencil01 } from '@/components/Icons';
 import { Alert, Button, Tag, Tooltip } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -95,7 +95,7 @@ const DangKyChuyenNganhPage = () => {
 							}
 							onClick={() => handleEdit(rec)}
 							type='link'
-							icon={<EditOutlined />}
+							icon={<IconPencil01 />}
 						/>
 					</Tooltip>
 				</>

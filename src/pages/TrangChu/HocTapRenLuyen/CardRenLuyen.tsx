@@ -8,7 +8,7 @@ import {
 	TU_DANH_GIA_PREFIX,
 } from '@/services/DiemRenLuyenV2/PhieuDiemRenLuyen/constants';
 import dayjs from '@/utils/dayjs';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { IconArrowRight } from '@/components/Icons';
 import { Card, Col, Row, Space, Tooltip } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
@@ -197,7 +197,7 @@ const CardRenLuyenDashboard = () => {
 
 					<Tooltip title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.renluyen.xemchitiet' })}>
 						<Link to='/diem-ren-luyen/phieu-diem-ren-luyen'>
-							<ArrowRightOutlined />
+							<IconArrowRight />
 						</Link>
 					</Tooltip>
 				</div>

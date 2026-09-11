@@ -28,7 +28,8 @@ const FormDangKyNhuCau = (props: any) => {
 		const index = danhSach?.find((item) => item?.maHocPhan === values.maHocPhan);
 
 		if (index) {
-			return message.error(intl.formatMessage({ id: 'dangkyhoctap.message.error.tonTai' }));
+			message.error(intl.formatMessage({ id: 'dangkyhoctap.message.error.tonTai' }));
+			return;
 		}
 
 		if (edit) {

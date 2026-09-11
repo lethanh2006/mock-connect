@@ -10,7 +10,7 @@ import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { getSafeHref } from '@/utils/security';
-import { MailOutlined } from '@ant-design/icons';
+import { IconMail01 } from '@/components/Icons';
 import { Button, Carousel, Tag } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -154,7 +154,7 @@ const TableLichHocLopHP = (props: {
 							? intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.dagoidon' })
 							: intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.xinnghihoc' })
 					}
-					icon={<MailOutlined />}
+					icon={<IconMail01 />}
 					// TODO: Chỉ cho phép gửi đơn chậm nhất 1 ngày sau buổi học => TH Muốn gửi lại/Hủy đơn thì sao?
 					// disabled={dayjs().isAfter(dayjs(rec.ngay).add(1, 'day').endOf('day')) || daXinNghiHoc(rec._id)}
 					onClick={(e) => {

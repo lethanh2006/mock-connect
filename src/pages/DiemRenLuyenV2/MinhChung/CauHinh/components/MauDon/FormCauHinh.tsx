@@ -10,7 +10,7 @@ import { LoaiDefaultValue } from '@/services/FormDong/QuyTrinh/constants';
 import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { removeVietnameseTones } from '@/utils/utils';
-import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { IconTrash, IconPencil01, Icon3SquarePlusmark } from '@/components/Icons';
 import {
 	Button,
 	Card,
@@ -153,7 +153,7 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 								setEditCot(true);
 							}}
 							type='link'
-							icon={<EditOutlined />}
+							icon={<IconPencil01 />}
 						/>
 					</Tooltip>
 
@@ -173,7 +173,7 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 							title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.xacnhanxoa' })}
 							placement='topRight'
 						>
-							<Button danger type='link' icon={<DeleteOutlined />} />
+							<Button danger type='link' icon={<IconTrash />} />
 						</Popconfirm>
 					</Tooltip>
 				</>
@@ -465,7 +465,7 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 								<Button
 									size='small'
 									type='primary'
-									icon={<PlusCircleOutlined />}
+									icon={<Icon3SquarePlusmark />}
 									onClick={() => {
 										setEditCot(false);
 										setVisibleCot(true);

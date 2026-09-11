@@ -1,5 +1,6 @@
 import { openSafeUrl } from '@/utils/security';
 import { Card, message, Spin } from 'antd';
+import { IconMobile, IconEarth } from '@/components/Icons';
 import { useIntl, useModel } from 'umi';
 import GioiThieuChungLopHp from './GioiThieuChung';
 import './style.less';
@@ -143,12 +144,12 @@ const ThongTinChung = (props: { onShowDeCuong: (activeTab: string) => void }) =>
 			{/* {record?.lmsUrl || record?.moodleShortname ? (
 				<Space wrap className='button-space'>
 					{record?.lmsUrl ? (
-						<ButtonExtend notHideText icon={<GlobalOutlined />} onClick={() => openSafeUrl(record.lmsUrl)}>
+						<ButtonExtend notHideText icon={<IconEarth />} onClick={() => openSafeUrl(record.lmsUrl)}>
 							{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.hoctructuyen' })}
 						</ButtonExtend>
 					) : null}
 					{record?.moodleShortname ? (
-						<ButtonExtend notHideText icon={<DesktopOutlined />} onClick={handleMoodle}>
+						<ButtonExtend notHideText icon={<IconMobile />} onClick={handleMoodle}>
 							{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.lms' })}
 						</ButtonExtend>
 					) : null}

@@ -7,7 +7,7 @@ import Text from '@/pages/TienIch/KhaoSat/components/Question/Text';
 import { ETrangThaiNopBaiTap } from '@/services/DaoTao/BaiTap/constants';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { IconCheck01, IconXmark } from '@/components/Icons';
 import { Checkbox, Divider } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -55,9 +55,9 @@ const FormQuiz = (props: any) => {
 					{isDiemSo &&
 					(question.loai === ELoaiCauHoi.SINGLE_CHOICE || question.loai === ELoaiCauHoi.MULTIPLE_CHOICE) ? (
 						correctQuestion ? (
-							<CheckOutlined />
+							<IconCheck01 />
 						) : (
-							<CloseOutlined />
+							<IconXmark />
 						)
 					) : null}
 				</div>

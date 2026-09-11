@@ -10,7 +10,7 @@ import {
 	mapEvalidation,
 	mapNameApprovalStatus,
 } from '@/services/CCT/constant';
-import { ClockCircleOutlined, EnvironmentOutlined, HourglassOutlined, UserOutlined } from '@ant-design/icons';
+import { IconStopwatch, IconPinLocation, IconHuman, IconHourglass } from '@/components/Icons';
 import { Card, Flex, Space, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { JSX } from 'react';
@@ -234,7 +234,7 @@ const CardSuKienCCT = (props: {
 
 				<Space direction='vertical' className='activity-content'>
 					<Space size='small'>
-						<ClockCircleOutlined className='icon-light' />
+						<IconStopwatch className='icon-light' />
 						<span className={`${!isDetail ? 'one-line' : ''}`}>
 							<span className='text-semibold'>{startDate} </span> {intl.formatMessage({ id: 'activity.card.to' })}{' '}
 							<span className='text-semibold'>{endDate} </span>
@@ -244,7 +244,7 @@ const CardSuKienCCT = (props: {
 					{isPersonal ? (
 						isDetail ? (
 							<Space size='small'>
-								<EnvironmentOutlined className='icon-light' />
+								<IconPinLocation className='icon-light' />
 								<span className={`${!isDetail ? 'one-line' : ''}`}>
 									{[record?.activityOutcome?.organizer, record?.activityOutcome?.location].filter(Boolean).join(', ') ||
 										'--'}
@@ -252,7 +252,7 @@ const CardSuKienCCT = (props: {
 							</Space>
 						) : (
 							<Space size='small'>
-								<UserOutlined className='icon-light' />
+								<IconHuman className='icon-light' />
 								<span className={`${!isDetail ? 'one-line' : ''}`}>
 									{intl.formatMessage({ id: 'activity.card.approver' })}:{' '}
 									{record?.activityOutcome?.studentDeclarationApproverName}
@@ -264,32 +264,32 @@ const CardSuKienCCT = (props: {
 							<Space size='small'>
 								{showLocation ? (
 									<>
-										<EnvironmentOutlined className='icon-light' />
+										<IconPinLocation className='icon-light' />
 										<span className={`${!isDetail ? 'one-line' : ''}`}>
 											{record?.onCampus ? record?.facilityName : record?.otherAddress}
 										</span>
 									</>
 								) : (
 									<>
-										<UserOutlined className='icon-light' />
+										<IconHuman className='icon-light' />
 										<span className={`${!isDetail ? 'one-line' : ''}`}>
 											{intl.formatMessage({ id: 'activity.card.approver' })}:{' '}
 											{record?.activityOutcome?.workflow === EApprovalStatus.APPROVED &&
-											!record?.activityOutcome?.studentDeclarationApproverName
+												!record?.activityOutcome?.studentDeclarationApproverName
 												? 'System'
 												: approvalWorkflow
 													? record?.activityOutcome?.studentDeclarationApproverName
 													: record?.studentDeclarationApproverList
-															?.map((item) => item?.name)
-															.filter(Boolean)
-															.join(', ')}
+														?.map((item) => item?.name)
+														.filter(Boolean)
+														.join(', ')}
 										</span>
 									</>
 								)}
 							</Space>
 
 							<Space size='small'>
-								<HourglassOutlined className='icon-light' />
+								<IconHourglass className='icon-light' />
 								{timeContent}
 							</Space>
 						</>

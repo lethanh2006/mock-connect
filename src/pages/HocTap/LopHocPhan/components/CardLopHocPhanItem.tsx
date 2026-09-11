@@ -1,6 +1,6 @@
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { MessageOutlined, ReadOutlined, ScheduleOutlined } from '@ant-design/icons';
+import { IconBubbleChat, IconBookOpen, IconCalendar } from '@/components/Icons';
 import { Badge, Card, Progress, Space, Tag, Tooltip, Typography } from 'antd';
 import React, { useMemo } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -144,7 +144,7 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 								history.push(`/hoc-tap/lop-tin-chi/${lop?._id}#buoi-hoc`);
 							}}
 						>
-							<ScheduleOutlined className='anticon' />
+							<IconCalendar className='anticon' />
 							<Text strong>
 								{diemDanh?.coMat !== undefined ? diemDanh.coMat : '-'} /{' '}
 								{diemDanh?.chuaDiemDanh
@@ -162,7 +162,7 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 								history.push(`/hoc-tap/lop-tin-chi/${lop?._id}#bai-tap`);
 							}}
 						>
-							<ReadOutlined className='anticon' />
+							<IconBookOpen className='anticon' />
 							<Text strong>{soBaiTap ?? '--'}</Text>
 						</div>
 					</Tooltip>
@@ -175,7 +175,7 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 								history.push(`/hoc-tap/lop-tin-chi/${lop?._id}#dien-dan`);
 							}}
 						>
-							<MessageOutlined className='anticon' />
+							<IconBubbleChat className='anticon' />
 							<Text strong>{soBaiDang ?? '--'}</Text>
 						</div>
 					</Tooltip>

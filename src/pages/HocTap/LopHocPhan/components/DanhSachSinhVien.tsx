@@ -7,6 +7,7 @@ import { getPublicAssetPath } from '@/utils/path';
 import { EyeOutlined, MoreOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Descriptions, Dropdown, Input, List, Menu, Modal, Row, Typography } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
+import { IconEyeOpen, Icon3DotVertical } from '@/components/Icons';
 import { useIntl } from 'umi';
 import './style.less';
 const { Text } = Typography;
@@ -54,7 +55,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 
 	const getDropdownMenu = (student: TSinhVien) => (
 		<Menu>
-			<Menu.Item key='detail' icon={<EyeOutlined />} onClick={() => showStudentDetail(student)}>
+			<Menu.Item key='detail' icon={<IconEyeOpen />} onClick={() => showStudentDetail(student)}>
 				{intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongtinlop.chitiet' })}
 			</Menu.Item>
 		</Menu>
@@ -96,7 +97,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 								style={{ padding: '12px 0px', borderBottom: '1px solid #f0f0f0' }}
 								actions={[
 									<Dropdown overlay={getDropdownMenu(student)} trigger={['click']} placement='bottomRight'>
-										<Button type='text' icon={<MoreOutlined />} style={{ color: '#666' }} />
+										<Button type='text' icon={<Icon3DotVertical />} style={{ color: '#666' }} />
 									</Dropdown>,
 								]}
 							>

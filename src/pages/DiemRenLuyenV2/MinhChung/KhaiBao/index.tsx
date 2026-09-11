@@ -8,7 +8,7 @@ import {
 } from '@/services/DiemRenLuyenV2/MinhChung/KhaiBao/constants';
 import type { KhaiBaoDRL } from '@/services/DiemRenLuyenV2/MinhChung/KhaiBao/typing';
 import dayjs from '@/utils/dayjs';
-import { DeleteOutlined, EditOutlined, MenuOutlined } from '@ant-design/icons';
+import { IconTrash, IconPencil01, IconHumberger } from '@/components/Icons';
 import { Button, Card, Divider, Popconfirm, Popover, Tag } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -107,7 +107,7 @@ const KhaiBaoMinhChung = () => {
 								}
 								tooltip={intl.formatMessage({ id: 'diemrenluyen.minhchung.danhsach.chinhsua' })}
 								type='link'
-								icon={<EditOutlined />}
+								icon={<IconPencil01 />}
 								onClick={() => {
 									handleEdit(rec);
 								}}
@@ -132,13 +132,13 @@ const KhaiBaoMinhChung = () => {
 									tooltip={intl.formatMessage({ id: 'diemrenluyen.minhchung.danhsach.xoa' })}
 									type='link'
 									danger
-									icon={<DeleteOutlined />}
+									icon={<IconTrash />}
 								/>
 							</Popconfirm>
 						</>
 					}
 				>
-					<Button type='link' icon={<MenuOutlined />} />
+					<Button type='link' icon={<IconHumberger />} />
 				</Popover>
 			),
 		},

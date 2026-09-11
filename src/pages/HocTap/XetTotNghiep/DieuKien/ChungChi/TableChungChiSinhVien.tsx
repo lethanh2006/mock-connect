@@ -4,7 +4,7 @@ import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EPhuongThucTinhDiem } from '@/services/DaoTao/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { IconShieldCheck } from '@/components/Icons';
 import { Empty, Tag } from 'antd';
 import { useIntl, useModel } from 'umi';
 
@@ -36,7 +36,7 @@ const TableChungChiSinhVien = () => {
 					const findBac = rec.chungChi.bac?.find((item) => item.order === val);
 					return <span>{findBac?.ten}</span>;
 				}
-				return <CheckCircleOutlined style={{ color: 'green' }} />;
+				return <IconShieldCheck style={{ color: 'green' }} />;
 			},
 		},
 		{

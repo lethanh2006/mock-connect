@@ -1,7 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { getPublicAssetPath } from '@/utils/path';
-import { ReloadOutlined } from '@ant-design/icons';
+import { IconRotateArrow } from '@/components/Icons';
 import { Segmented, Skeleton, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -47,7 +47,7 @@ const BaiTapPage = (props: { lopHocPhanId: string }) => {
 								{ value: '2', label: intl.formatMessage({ id: 'lophocphan.id.baitap.quahan' }) },
 							]}
 						/>
-						<ButtonExtend icon={<ReloadOutlined />} onClick={() => getData()}>
+						<ButtonExtend icon={<IconRotateArrow />} onClick={() => getData()}>
 							{intl.formatMessage({ id: 'lophocphan.id.baitap.tailai' })}
 						</ButtonExtend>
 					</div>

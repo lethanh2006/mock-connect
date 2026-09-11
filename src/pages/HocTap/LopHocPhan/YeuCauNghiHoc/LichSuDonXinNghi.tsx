@@ -8,7 +8,7 @@ import { ETrangThaiDonNghiHoc, TrangThaiDonNghiHoc } from '@/services/DaoTao/con
 import type { YeuCauNghiHoc } from '@/services/DaoTao/YeuCauNghiHoc/typing';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { getSafeHref } from '@/utils/security';
-import { CloseOutlined } from '@ant-design/icons';
+import { IconXmark } from '@/components/Icons';
 import { Popconfirm, Tag } from 'antd';
 import React, { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -119,7 +119,7 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 						type='link'
 						danger
 						tooltip={intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.huydon' })}
-						icon={<CloseOutlined />}
+						icon={<IconXmark />}
 					/>
 				</Popconfirm>
 			),

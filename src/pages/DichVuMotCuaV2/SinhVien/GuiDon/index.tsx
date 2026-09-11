@@ -2,7 +2,7 @@ import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
-import { ArrowLeftOutlined, FormOutlined } from '@ant-design/icons';
+import { IconArrowLeft, IconFilePen } from '@/components/Icons';
 import { Button, Card, Tooltip } from 'antd';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
@@ -62,7 +62,7 @@ const GuiDon = () => {
 						}}
 						shape='circle'
 						type='link'
-						icon={<FormOutlined />}
+						icon={<IconFilePen />}
 					/>
 				</Tooltip>
 			),
@@ -83,7 +83,7 @@ const GuiDon = () => {
 				otherButtons={[
 					<Button
 						type={'primary'}
-						icon={<ArrowLeftOutlined />}
+						icon={<IconArrowLeft />}
 						onClick={() => history.push('/dich-vu-hanh-chinh')}
 						key={1}
 					>

@@ -5,7 +5,7 @@ import { EHoatDongChungType1 } from '@/services/SuKien/constant';
 import type { SuKien } from '@/services/SuKien/typings';
 import { ELoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
 import { formatDateTime } from '@/utils/formatDate';
-import { EyeOutlined, FileExcelOutlined, ReloadOutlined, SaveOutlined } from '@ant-design/icons';
+import { IconEyeOpen, IconFile, IconRotateArrow, IconSave } from '@/components/Icons';
 import { Card, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -118,7 +118,7 @@ const SinhVienHoatDongCTSV = () => {
 					<ButtonExtend
 						tooltip={intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.button.chitiet' })}
 						type='link'
-						icon={<EyeOutlined />}
+						icon={<IconEyeOpen />}
 						onClick={() => handleEdit(rec)}
 					/>
 					{danhSachXemSau?.find((items) => items?.sourceId === rec?._id)?._id ? (
@@ -126,7 +126,7 @@ const SinhVienHoatDongCTSV = () => {
 							loading={loadingXemSau}
 							type='link'
 							danger
-							icon={<FileExcelOutlined />}
+							icon={<IconFile />}
 							tooltip={intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.button.boluu' })}
 							onClick={() => handleBoXemSau(danhSachXemSau?.find((items) => items?.sourceId === rec?._id))}
 						/>
@@ -135,7 +135,7 @@ const SinhVienHoatDongCTSV = () => {
 							className='text-success'
 							loading={loadingXemSau}
 							type='link'
-							icon={<SaveOutlined />}
+							icon={<IconSave />}
 							tooltip={intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.button.luu' })}
 							onClick={() => handleXemSau(rec)}
 						/>
@@ -169,7 +169,7 @@ const SinhVienHoatDongCTSV = () => {
 					<div style={{ position: 'absolute', right: 130 }}>
 						<ButtonExtend
 							onClick={() => getData()}
-							icon={<ReloadOutlined />}
+							icon={<IconRotateArrow />}
 						>
 							{intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.button.tailai' })}
 						</ButtonExtend>

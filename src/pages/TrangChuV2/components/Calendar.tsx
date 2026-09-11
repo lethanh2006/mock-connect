@@ -3,7 +3,7 @@ import { colorHinhThucGiangDay, EHinhThucGiangDay, mapHinhThucGiangDayI18n } fro
 import { ColorSuKien, ELoaiSuKien, LoaiSuKienLocaleKey } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { EnvironmentOutlined, RightOutlined } from '@ant-design/icons';
+import { IconPinLocation, Icon2ChervolRightLine } from '@/components/Icons';
 import { Card, Empty, Flex, Space, Tag } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -224,7 +224,7 @@ const CardCalendar = () => {
 								</div>
 								{location ? (
 									<div className='su_kien__location'>
-										<EnvironmentOutlined />
+										<IconPinLocation />
 										<span>{location}</span>
 									</div>
 								) : null}
@@ -254,7 +254,7 @@ const CardCalendar = () => {
 				extra={
 					<Link to='/my-calendar'>
 						<Space size={4}>
-							<span style={{ fontSize: 14, fontWeight: 700 }}>See More</span> <RightOutlined />
+							<span style={{ fontSize: 14, fontWeight: 700 }}>See More</span> <Icon2ChervolRightLine />
 						</Space>
 					</Link>
 				}

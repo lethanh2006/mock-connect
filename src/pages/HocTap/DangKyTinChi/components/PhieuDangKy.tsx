@@ -28,6 +28,8 @@ import { formatDateTime } from '@/utils/formatDate';
 import { CalendarOutlined, DeleteOutlined, HistoryOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Descriptions, Popconfirm, Popover, Space, Tag } from 'antd';
 import { useState } from 'react';
+import { inputFormat } from '@/utils/utils';
+import { IconTrash } from '@/components/Icons';
 import { useIntl, useModel } from 'umi';
 import { isDuThinhDaDuyet, isTinhTinChiDangKy, renderKhoangThoiGian } from '../utils';
 import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
@@ -318,7 +320,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 			render: (val, rec) =>
 				dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 					<ButtonExtend
-						icon={<DeleteOutlined />}
+						icon={<IconTrash />}
 						danger
 						otherTooltipProps={{
 							placement: 'bottom',
@@ -366,7 +368,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 						}
 					>
 						<ButtonExtend
-							icon={<DeleteOutlined />}
+							icon={<IconTrash />}
 							danger
 							type='link'
 							otherTooltipProps={{

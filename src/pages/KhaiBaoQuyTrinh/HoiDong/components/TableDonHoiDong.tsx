@@ -5,7 +5,7 @@ import { MapColorTrangThaiTiepNhan } from '@/services/QuyTrinh/KhaiBao/constants
 import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import { formatDate } from '@/utils/formatDate';
 
-import { EyeOutlined } from '@ant-design/icons';
+import { IconEyeOpen } from '@/components/Icons';
 import { Button, Tag, Tooltip } from 'antd';
 import { history, useModel } from 'umi';
 
@@ -104,7 +104,7 @@ const TableDonHoiDong = () => {
 								history.push(`/khai-bao-quy-trinh/${recordVal?._id}?hoiDong=true`);
 							}}
 							type='link'
-							icon={<EyeOutlined />}
+							icon={<IconEyeOpen />}
 						/>
 					</Tooltip>
 				</>

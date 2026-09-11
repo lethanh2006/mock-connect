@@ -1,6 +1,6 @@
 import { formatDateTime } from '@/utils/formatDate';
 import DOMPurify from 'dompurify';
-import { CalendarOutlined, UserOutlined } from '@ant-design/icons';
+import { IconCalendar, IconHuman } from '@/components/Icons';
 import { Col, Divider, Row, Spin } from 'antd';
 import { history, useModel } from 'umi';
 import '../components/styles.less';
@@ -20,9 +20,9 @@ const ChiTietTinTucSlink = () => {
 					<div id='content'>
 						<h4>{record?.tieuDe ?? ''}</h4>
 						<p className='ngay-dang'>
-							<CalendarOutlined /> {record?.ngayDang && formatDateTime(record?.ngayDang)}
+							<IconCalendar /> {record?.ngayDang && formatDateTime(record?.ngayDang)}
 							<Divider type='vertical' />
-							<UserOutlined /> {record?.nguoiDang?.hoTen}
+							<IconHuman /> {record?.nguoiDang?.hoTen}
 							<Divider type='vertical' />{' '}
 							<a type='link' onClick={() => changeMenu()}>
 								{record?.chuDe?.name}

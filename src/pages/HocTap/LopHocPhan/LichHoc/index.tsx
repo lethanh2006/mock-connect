@@ -3,6 +3,7 @@ import { EHinhThucGiangDay, mapHinhThucGiangDayI18n } from '@/services/HocTap/Lo
 import dayjs from '@/utils/dayjs';
 import { CalendarOutlined, TableOutlined } from '@ant-design/icons';
 import { Card, Col, Row, Segmented, Space, Spin } from 'antd';
+import { IconCalendar, IconBoard } from '@/components/Icons';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import CalendarLichHocLopHp from './CalendarLichHoc';
@@ -92,12 +93,12 @@ const DanhSachBuoiHoc = () => {
 							{
 								value: 'table',
 								title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.dschitiet' }),
-								icon: <TableOutlined />,
+								icon: <IconBoard />,
 							},
 							{
 								value: 'calendar',
 								title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.lichhoc' }),
-								icon: <CalendarOutlined />,
+								icon: <IconCalendar />,
 							},
 						]}
 					/>

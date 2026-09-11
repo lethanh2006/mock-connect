@@ -14,6 +14,7 @@ import { DollarCircleOutlined } from '@ant-design/icons';
 import { Button, Tag } from 'antd';
 import { useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
+import { IconTrash, IconFileMoney } from '@/components/Icons';
 import ChiTietPhong from '../DangKy/components/ChiTiet';
 import ModalDanKyKTX from '../DangKy/components/Modal';
 
@@ -209,7 +210,7 @@ const LichSuaKTX = () => {
 									event.stopPropagation();
 									handleOpenPayment();
 								}}
-								icon={<DollarCircleOutlined />}
+								icon={<IconFileMoney />}
 							/>
 						) : null}
 
@@ -225,7 +226,7 @@ const LichSuaKTX = () => {
 								disabled={!canDelete}
 								type='link'
 								onClick={(event) => event.stopPropagation()}
-								icon={<DeleteOutlined />}
+								icon={<IconTrash />}
 							/>
 						</Popconfirm> */}
 					</>

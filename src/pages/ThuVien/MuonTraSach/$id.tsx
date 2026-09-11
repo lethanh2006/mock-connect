@@ -2,7 +2,7 @@ import ExpandText from '@/components/ExpandText';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { getDKCBKhaDung } from '@/services/QuanLyThuVien/AnPham';
 import dayjs from '@/utils/dayjs';
-import { CarryOutOutlined } from '@ant-design/icons';
+import { IconCalendar } from '@/components/Icons';
 import { Breadcrumb, Card, Col, Descriptions, Divider, Row, Space, Typography } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
@@ -60,7 +60,7 @@ const DetailThongTinSach = () => {
 			title={
 				<Breadcrumb style={{ cursor: 'pointer' }}>
 					<Breadcrumb.Item onClick={() => history.push('/thu-vien/muon-tra-sach')}>
-						<CarryOutOutlined /> Tài nguyên số
+						<IconCalendar /> Tài nguyên số
 					</Breadcrumb.Item>
 					<Breadcrumb.Item>
 						{danhSach

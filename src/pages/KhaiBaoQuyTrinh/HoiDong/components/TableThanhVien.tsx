@@ -2,7 +2,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { HoiDong } from '@/services/QuyTrinh/HoiDong/typings';
 
-import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { IconTrash, IconPencil01, Icon3SquarePlusmark } from '@/components/Icons';
 import { Button, Divider, Popconfirm, Space, Tooltip } from 'antd';
 import { useModel } from 'umi';
 
@@ -37,7 +37,7 @@ const TableThanhVien = (props: { mode: 'view' | 'edit'; data?: HoiDong.ThanhVien
 			render: (rec: HoiDong.ThanhVienHoiDong) => (
 				<>
 					<Tooltip title='Chỉnh sửa'>
-						<Button size='small' shape='circle' icon={<EditOutlined />} type='link' />
+						<Button size='small' shape='circle' icon={<IconPencil01 />} type='link' />
 					</Tooltip>
 					<Divider type='vertical' />
 					<Tooltip title='Xóa'>
@@ -53,7 +53,7 @@ const TableThanhVien = (props: { mode: 'view' | 'edit'; data?: HoiDong.ThanhVien
 							}}
 							title='Bạn có chắc chắn muốn xóa?'
 						>
-							<Button size='small' shape='circle' type={'link'} danger icon={<DeleteOutlined />} />
+							<Button size='small' shape='circle' type={'link'} danger icon={<IconTrash />} />
 						</Popconfirm>
 					</Tooltip>
 				</>
@@ -78,7 +78,7 @@ const TableThanhVien = (props: { mode: 'view' | 'edit'; data?: HoiDong.ThanhVien
 			>
 				{props.mode === 'edit' && (
 					<Space wrap>
-						<Button size='small' type='primary' icon={<PlusCircleOutlined />}>
+						<Button size='small' type='primary' icon={<Icon3SquarePlusmark />}>
 							Thêm mới
 						</Button>
 					</Space>
