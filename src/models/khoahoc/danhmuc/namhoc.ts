@@ -1,5 +1,4 @@
 import useInitModel from '@/hooks/useInitModel';
-import type { NamHoc } from '@/services/QuanLyKhoaHocV2/DanhMuc/NamHoc/typings';
 import { useState } from 'react';
 
 export default () => {

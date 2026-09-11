@@ -29,8 +29,8 @@ import {
 	importQuyetDinhGiao,
 	searchDeTaiTheoTen,
 } from '@/services/KhoaHoc/DeTaiKHCN';
+import type { ELoaiHoiDongKHCN } from '@/services/KhoaHoc/HoiDongKHCN/constants';
 import type {
-	ELoaiHoiDongKHCN,
 	ETrangThaiDangKy,
 	ETrangThaiXetDuyetDangKy,
 } from '@/services/KhoaHoc/DeTaiKHCN/constants';
@@ -589,8 +589,8 @@ export default () => {
 				sanPhamDeCuongDangIII: recordDeTai?.nghiemThuKhcn?.baoCaoUrl?.length
 					? recordDeTai.nghiemThuKhcn.sanPhamChinh.filter((item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_III)
 					: recordDeTai.deCuongKhcn.sanPhamDeCuong.filter(
-							(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_III,
-						),
+						(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_III,
+					),
 			},
 		};
 

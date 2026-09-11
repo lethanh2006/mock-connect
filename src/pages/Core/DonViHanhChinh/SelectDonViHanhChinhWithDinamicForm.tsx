@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { getPhuongXa } from '@/services/Core/DonViHanhChinh';
 import type { DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
-import type { IRecordTinh } from '@/services/DonViHanhChinh/typing';
 import rules from '@/utils/rules';
 import { Col, Form, Input, Row, Select } from 'antd';
 import type { FormInstance } from 'antd/es/form/Form';
@@ -25,7 +24,7 @@ type Props = {
 		xaPhuong: string[];
 		diaChiCuThe: string[];
 	};
-	initialValue?: IRecordTinh.DonViHanhChinhRecord;
+	initialValue?: DonViHanhChinh.DonViHanhChinhRecord & DonViHanhChinh.IDataInit;
 	setTen?: {
 		setTenTinh?: any;
 		setTenQuanHuyen?: any;

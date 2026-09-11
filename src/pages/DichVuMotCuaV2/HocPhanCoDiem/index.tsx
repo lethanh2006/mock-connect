@@ -41,7 +41,7 @@ const HocPhanCoDiem = (props: Props) => {
             value={idKy}
             onChange={(val: string, option: any) => {
               setIdKy(val);
-              const newValue = {};
+              const newValue: Record<string, any> = {};
               newValue[`${props?.fields?.idHocKy?.[0]}`] = {
                 idDiem: undefined,
                 tenHocKy: option?.key,
@@ -84,7 +84,7 @@ const HocPhanCoDiem = (props: Props) => {
               // const danhSachXaPhuongNew = {};
               // danhSachXaPhuongNew[`${props?.fields?.xaPhuong?.join('.')}`] = [];
               // setObjDanhSachXaPhuong({ ...objDanhSachXaPhuong, ...danhSachXaPhuongNew });
-              const newValue = {};
+              const newValue: Record<string, any> = {};
               newValue[`${props?.fields?.idDiem?.[0]}`] = {
                 maHocPhan: option?.key,
                 tenHocPhan: option?.children,

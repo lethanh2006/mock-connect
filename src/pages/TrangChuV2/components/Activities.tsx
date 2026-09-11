@@ -7,7 +7,7 @@ import ModalDangKyThanhCong from '@/pages/CCT/Activity/components/DangKyThanhCon
 import FormActivityOutCome from '@/pages/CCT/History/components/Form';
 import { EApprovalStatus } from '@/services/CCT/constant';
 import { getPublicAssetPath } from '@/utils/path';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { Icon2ChervolLeftLine, Icon2ChervolRightLine } from '@/components/Icons';
 import { Button, Card, Carousel, Col, Empty, Flex, Popconfirm, Row, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
@@ -99,10 +99,10 @@ const Activities = () => {
 					{danhSach && danhSach.length > 1 && (
 						<div className='pagination-controls'>
 							<button className='nav-btn' onClick={() => carouselRef.current?.prev()}>
-								<LeftOutlined />
+								<Icon2ChervolLeftLine />
 							</button>
 							<button className='nav-btn' onClick={() => carouselRef.current?.next()}>
-								<RightOutlined />
+								<Icon2ChervolRightLine />
 							</button>
 						</div>
 					)}

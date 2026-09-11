@@ -1,7 +1,7 @@
 import { b64toBlob } from '@/utils/utils';
 import { Button } from 'antd';
 import classNames from 'classnames';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 import { useModel } from 'umi';
 import './style.less';
@@ -11,11 +11,12 @@ const WebcamNhanDienKhuonMat = (props: { onChange?: (val: any) => void; value?: 
 	const { onChange, value } = props;
 	const [userCamera, setUserCamera] = useState<boolean>(true);
 	const [devices, setDevices] = useState<any[]>([]);
+	const webcamRef = useRef<Webcam>(null);
 	const hasDevices = devices.some((i) => !!i.deviceId);
 	const faceUrl = typeof value === 'object' ? value?.fileList?.[0]?.url : value;
 
 	const handleDevices = useCallback(
-		(mediaDevices) => setDevices(mediaDevices.filter(({ kind }: any) => kind === 'videoinput')),
+		(mediaDevices: MediaDeviceInfo[]) => setDevices(mediaDevices.filter(({ kind }: any) => kind === 'videoinput')),
 		[setDevices],
 	);
 
@@ -40,45 +41,43 @@ const WebcamNhanDienKhuonMat = (props: { onChange?: (val: any) => void; value?: 
 		<div className='webcam-face-reg'>
 			<div className={classNames({ webcam: true, mirror: userCamera })}>
 				<Webcam
+					ref={webcamRef}
 					audio={false}
 					screenshotFormat='image/jpeg'
 					height={320}
 					width={240}
 					videoConstraints={videoConstraints}
-				>
-					{({ getScreenshot }) =>
-						hasDevices ? (
-							<div className='buttons'>
-								<Button
-									onClick={() => {
-										const imageSrc = getScreenshot({ height: 1280, width: 960 });
-										if (imageSrc) {
-											const base64Data = imageSrc.split(',')[1];
-											const blob = b64toBlob(base64Data);
-											const file = blobToFile(
-												blob,
-												`captured-${initialState?.currentUser?.preferred_username ?? ''}.jpeg`,
-												'image/jpeg',
-											);
-											if (onChange)
-												onChange({ fileList: [{ originFileObj: file, thumbUrl: imageSrc, url: imageSrc }] });
-										}
-									}}
-								>
-									Chụp ảnh
-								</Button>
-								<Button onClick={() => setUserCamera((val) => !val)}>Đổi camera</Button>
-							</div>
-						) : (
-							<div>
-								<i className='text-error'>
-									Thiết bị không hỗ trợ camera hoặc chưa cho phép website sử dụng camera. Vui lòng kiểm tra lại sau đó
-									Tải lại trang web
-								</i>
-							</div>
-						)
-					}
-				</Webcam>
+				/>
+				{hasDevices ? (
+					<div className='buttons'>
+						<Button
+							onClick={() => {
+								const imageSrc = webcamRef.current?.getScreenshot({ height: 1280, width: 960 });
+								if (imageSrc) {
+									const base64Data = imageSrc.split(',')[1];
+									const blob = b64toBlob(base64Data);
+									const file = blobToFile(
+										blob,
+										`captured-${initialState?.currentUser?.preferred_username ?? ''}.jpeg`,
+										'image/jpeg',
+									);
+									if (onChange)
+										onChange({ fileList: [{ originFileObj: file, thumbUrl: imageSrc, url: imageSrc }] });
+								}
+							}}
+						>
+							Chụp ảnh
+						</Button>
+						<Button onClick={() => setUserCamera((val) => !val)}>Đổi camera</Button>
+					</div>
+				) : (
+					<div>
+						<i className='text-error'>
+							Thiết bị không hỗ trợ camera hoặc chưa cho phép website sử dụng camera. Vui lòng kiểm tra lại sau đó
+							Tải lại trang web
+						</i>
+					</div>
+				)}
 
 				{hasDevices ? <div className='overlay' /> : null}
 			</div>

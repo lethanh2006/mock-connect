@@ -1,4 +1,5 @@
 import useInitModel from '@/hooks/useInitModel';
+import type { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
 import { ipNhanSu } from '@/utils/ip';
 
 export default () => {

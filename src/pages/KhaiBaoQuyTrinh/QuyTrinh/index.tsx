@@ -4,7 +4,7 @@ import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrin
 import { ENguonDot } from '@/services/QuyTrinh/constant';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { getPublicAssetPath } from '@/utils/path';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { IconArrowRight } from '@/components/Icons';
 import { Button, Card, Empty, Modal, Pagination, Popconfirm, Tag, Typography, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -223,7 +223,7 @@ const QuyTrinhPage = () => {
 				onCancel={() => setVisibleThongTinChung(false)}
 				footer={
 					<Button
-						icon={<ArrowRightOutlined />}
+						icon={<IconArrowRight />}
 						type={'primary'}
 						onClick={() => {
 							if (recordQuyTrinh) handleRedirect(recordQuyTrinh);
