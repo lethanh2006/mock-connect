@@ -31,6 +31,7 @@ const News = ({ loading = true }) => {
 
 	return (
 		<Card
+			className='vin-dashboard-card'
 			title={
 				<Flex justify='space-between' align='center'>
 					<span className='title'>News</span>

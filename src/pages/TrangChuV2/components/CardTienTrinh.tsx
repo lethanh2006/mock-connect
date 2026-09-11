@@ -11,23 +11,23 @@ interface StatCardProps {
 }
 
 const StatCard = ({ title, value, subValue, periodText, disabled }: StatCardProps) => (
-	<Card size='small'>
+	<Card size='small' className='vin-stat-card' variant='outlined'>
 		<Flex vertical gap={4}>
-			<Typography.Text type='secondary' style={{ fontSize: 14 }}>
+			<Typography.Text type='secondary' style={{ fontSize: 13, fontWeight: 500 }}>
 				{title}
 			</Typography.Text>
 
 			<Typography.Text
 				style={{
-					fontSize: 18,
-					lineHeight: 1.2,
+					fontSize: 20,
+					lineHeight: 1.25,
 					fontWeight: 700,
 					color: disabled ? '#cfcfcf' : '#2e2e2e',
 				}}
 			>
 				{disabled ? '--' : value}
 				{!disabled && subValue && (
-					<Typography.Text type='secondary' style={{ fontSize: 12, fontWeight: 600 }}>
+					<Typography.Text type='secondary' style={{ fontSize: 13, fontWeight: 600 }}>
 						{' '}
 						{subValue}
 					</Typography.Text>

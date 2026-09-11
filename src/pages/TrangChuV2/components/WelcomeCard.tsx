@@ -51,7 +51,7 @@ const WelcomeCard = () => {
 		<Card
 			loading={loading}
 			variant='borderless'
-			style={{ background: 'var(--color-official-300)', borderRadius: 8 }}
+			style={{ background: 'var(--color-official-300)', borderRadius: 'var(--vin-border-radius, 16px)' }}
 			styles={{ body: { padding: '20px 24px' } }}
 		>
 			<Row gutter={[16, 16]} align='middle' justify='space-between'>

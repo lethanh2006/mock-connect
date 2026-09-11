@@ -244,6 +244,7 @@ const CardCalendar = () => {
 	return (
 		<>
 			<Card
+				className='vin-dashboard-card'
 				loading={loading}
 				title={
 					<Flex align='center' gap={12}>

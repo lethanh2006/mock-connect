@@ -93,6 +93,7 @@ const Activities = () => {
 
 	return (
 		<Card
+			className='vin-dashboard-card'
 			title={
 				<Flex justify='space-between' align='center'>
 					<span className='title'>Activities</span>

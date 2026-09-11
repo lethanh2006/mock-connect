@@ -37,7 +37,7 @@ const Emergency = () => {
 					const title = intl.formatMessage({ id: item.titleId });
 					return (
 						<Col xs={24} sm={12} key={item.id}>
-							<Card size='small' variant='outlined'>
+							<Card size='small' variant='outlined' className='vin-hotline-card'>
 								<Flex vertical gap={12} align='flex-start'>
 									<Image src={item.icon} alt={title} width={20} height={20} preview={false} />
 									<Typography.Text strong style={{ fontSize: 12 }}>
