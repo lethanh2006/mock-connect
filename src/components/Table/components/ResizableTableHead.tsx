@@ -28,8 +28,9 @@ export const ResizableTableHead: React.FC<ResizableTableHeadProps> = ({
 	children,
 	...restProps
 }) => {
-	// `Resizable` (react-resizable) cần width dạng số nguyên px để tính toán kéo giãn — cột co giãn theo % (không resizable) luôn rơi vào nhánh dưới.
-	if (typeof width !== 'number' || !resizable) {
+	// `Resizable` (react-resizable) cần width dạng số nguyên px để tính toán kéo giãn — cột co giãn theo % (không resizable) hoặc cột pin (fixed/sticky) không bọc qua Resizable
+	const isPinned = !!(restProps as any)?.pinned || style?.position === 'sticky';
+	if (typeof width !== 'number' || !resizable || isPinned) {
 		return (
 			<TableHead style={{ width, minWidth, ...style }} {...restProps}>
 				{children}
