@@ -22,7 +22,7 @@ const ConfigBounder = (props: { children?: any }) => {
 			theme: {
 				algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
 				token: {
-					fontFamily: "'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+					fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
 					borderRadius: 4,
 					colorPrimary: primaryColor,
 					colorLink: primaryColor,
@@ -59,7 +59,7 @@ const ConfigBounder = (props: { children?: any }) => {
 			theme={{
 				algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
 				token: {
-					fontFamily: "'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+					fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
 					borderRadius: 4,
 					colorPrimary: primaryColor,
 					colorLink: primaryColor,

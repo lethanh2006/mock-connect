@@ -1,6 +1,6 @@
 @font-face {
-	font-family: 'Montserrat';
-	src: url('@{base-path}font/Montserrat.ttf') format('truetype');
+	font-family: 'Inter';
+	src: url('@{base-path}font/Inter.ttf') format('truetype');
 	font-weight: 100 900;
 	font-style: normal;
 	font-display: swap;
@@ -73,13 +73,13 @@
 	// Bo góc chuẩn VinUni
 	--vin-border-radius: 16px;
 
-	// Font chuẩn toàn hệ thống VinUni (Montserrat)
+	// Font chuẩn toàn hệ thống VinUni (Inter)
 	--font-family-base:
-		'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+		'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 	--vinuni-font-sans:
-		'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+		'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 	--default-font-family:
-		'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+		'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 // =============================================================================
@@ -130,8 +130,8 @@ button:not(:disabled),
 }
 
 [data-vinuni-ui] {
-	--vinuni-font-sans: 'Montserrat', sans-serif;
-	--vinuni-font-heading: 'Montserrat', sans-serif;
+	--vinuni-font-sans: 'Inter', sans-serif;
+	--vinuni-font-heading: 'Inter', sans-serif;
 	min-height: 100vh;
 }
 
@@ -1391,7 +1391,7 @@ button:not(:disabled),
 	background-color: var(--color-accent-700, #f4f4f4) !important;
 	border-radius: var(--vin-border-radius, 16px) !important;
 	padding: 4px !important;
-	font-family: var(--font-family-base, 'Montserrat', sans-serif) !important;
+	font-family: var(--font-family-base, 'Inter', sans-serif) !important;
 	color: var(--color-text-100, #2e2e2e) !important;
 	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -1401,7 +1401,7 @@ button:not(:disabled),
 
 	.ant-segmented-item {
 		border-radius: 12px !important;
-		font-family: var(--font-family-base, 'Montserrat', sans-serif) !important;
+		font-family: var(--font-family-base, 'Inter', sans-serif) !important;
 		font-weight: 500;
 		color: var(--color-text-100, #4a4a4a) !important;
 		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
