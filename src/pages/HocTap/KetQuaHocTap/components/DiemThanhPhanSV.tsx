@@ -1,13 +1,16 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
+import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
 import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { primaryColor } from '@/services/base/constant';
-import { CheckOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Button, Modal, Select, Space, Tag, Tooltip, Typography } from 'antd';
+import { CheckOutlined, FileTextOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Modal, Select, Space, Tag, Tooltip, Typography } from 'antd';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import ModalBangDiemTranscript from '../BangDiemTranscript/ModalBangDiemTranscript';
 import DiemChuMarks from './DiemChuMarks';
 import ModalChiTietDiem from './ModalChiTietDiem';
 
@@ -32,14 +35,17 @@ const filterBySemester = (rows: DataType[], maHocKy: string) => {
 const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 	const intl = useIntl();
 	const { maKhoaNganh } = props;
+	const { record: sinhVien } = useModel('sinhvien.sinhvien');
 	const { getKetQuaHocKy } = useModel('daotao.ketquahocky');
 	const { getDiemSvHk, loading } = useModel('daotao.diemhpsvhk');
 	const { danhSach: danhSachDauDiem, getModel: getDauDiem } = useModel('daotao.daudiemhocphan');
 	const [maHocKyFilter, setMaHocKyFilter] = useState<string>('all');
 	const [data, setData] = useState<DataType[]>([]);
 	const [diemSvList, setDiemSvList] = useState<LopHocPhan.IDiemHpSvHk[]>([]);
+	const [kqhkList, setKqhkList] = useState<KetQuaHocKy.IRecord[]>([]);
 	const [visibleDiem, setVisibleDiem] = useState(false);
 	const [visibleGpaInfo, setVisibleGpaInfo] = useState(false);
+	const [visibleTranscript, setVisibleTranscript] = useState(false);
 	const [recDiem, setRecDiem] = useState<DataType | null>(null);
 
 	const buildSemesterTitle = useCallback(
@@ -98,6 +104,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			});
 
 			setDiemSvList(diemSv);
+			setKqhkList(kqhkList);
 			setData(res);
 		});
 	}, [buildSemesterTitle, maKhoaNganh]);
@@ -362,6 +369,12 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				}}
 				otherButtons={[
 					<Space wrap>
+						<ButtonExtend
+							icon={<FileTextOutlined />}
+							disabled={!maKhoaNganh || !sinhVien?.ssoId}
+							tooltip={intl.formatMessage({ id: 'ketquahoctap.ketquahocky.xuatbangdiemv2' })}
+							onClick={() => setVisibleTranscript(true)}
+						/>
 						<Select
 							style={{ minWidth: 220 }}
 							value={maHocKyFilter}
@@ -378,13 +391,13 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 					</Space>,
 				]}
 				otherTextButtons={[
-					<Tooltip key='gpa-info' title={intl.formatMessage({ id: 'ketquahoctap.diemtp.gpaInfo.tooltip' })}>
-						<Button
-							type='link'
-							icon={<InfoCircleOutlined style={{ color: primaryColor }} />}
-							onClick={() => setVisibleGpaInfo(true)}
-						/>
-					</Tooltip>,
+					<ButtonExtend
+						key='gpa-info'
+						type='link'
+						icon={<InfoCircleOutlined style={{ color: primaryColor }} />}
+						tooltip={intl.formatMessage({ id: 'ketquahoctap.diemtp.gpaInfo.tooltip' })}
+						onClick={() => setVisibleGpaInfo(true)}
+					/>,
 				]}
 				data={tableData}
 				columns={columns}
@@ -394,7 +407,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 					value={loaiHocPhan}
 					onChange={(val) => setLoaiHocPhan(val.toString())}
 					options={[
-						{ value: 'all', label: 'Tất cả học phần' },
+						{ value: 'all', label: intl.formatMessage({ id: 'ketquahoctap.diemtp.filter.allCourses' }) },
 						// { value: 'fail', label: 'Học phần chưa đạt' },
 					]}
 				/> */}
@@ -425,6 +438,16 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				maKhoaNganh={maKhoaNganh}
 				khoiChuongTrinh={recDiem?.khoiHpCt}
 			/>
+			{maKhoaNganh && sinhVien?.ssoId && (
+				<ModalBangDiemTranscript
+					open={visibleTranscript}
+					onFinish={() => setVisibleTranscript(false)}
+					sinhVienSsoId={sinhVien.ssoId}
+					maKhoaNganh={maKhoaNganh}
+					kqhkList={kqhkList}
+					diemList={diemSvList}
+				/>
+			)}
 		</>
 	);
 };
