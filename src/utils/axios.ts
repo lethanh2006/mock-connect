@@ -93,21 +93,6 @@ axios.interceptors.request.use(
 			config.headers.set('Accept-Language', getAcceptLanguage());
 		}
 
-		if (!isExcluded) {
-			const hasHeader = Object.prototype.hasOwnProperty.call(config.headers, 'x-data-partition-code');
-
-			if (hasHeader) {
-				const value = config.headers['x-data-partition-code'];
-				if (value === null || value === undefined) {
-					delete config.headers['x-data-partition-code'];
-				}
-			} else {
-				const partitionCode = localStorage.getItem('partitionCode');
-				if (partitionCode) {
-					config.headers['x-data-partition-code'] = partitionCode;
-				}
-			}
-		}
 		return config;
 	},
 	(error) => Promise.reject(error),
@@ -115,40 +100,8 @@ axios.interceptors.request.use(
 
 // Add a response interceptor
 axios.interceptors.response.use(
-	(response) =>
-		// Do something with response data
-		response,
-	async (error) => {
-		const originalRequest = error?.config as RetryableRequestConfig | undefined;
-		const isTokenRequest = originalRequest?.url?.startsWith(keycloakTokenEndpoint);
-		const hasAuthorizationHeader = Boolean(
-			originalRequest?.headers?.get?.('Authorization') || originalRequest?.headers?.Authorization,
-		);
-
-		if (
-			error?.response?.status === 401 &&
-			originalRequest &&
-			hasAuthorizationHeader &&
-			!originalRequest._retry &&
-			!isTokenRequest
-		) {
-			originalRequest._retry = true;
-
-			try {
-				const accessToken = await renewAccessToken();
-				if (accessToken) {
-					if (typeof originalRequest.headers?.set === 'function') {
-						originalRequest.headers.set('Authorization', `Bearer ${accessToken}`);
-					} else if (originalRequest.headers) {
-						originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-					}
-					return axios(originalRequest);
-				}
-			} catch {
-				// The OIDC event handler will redirect to sign-in when the token is expired.
-			}
-		}
-
+	(response) => response,
+	(error) => {
 		let er = error?.response?.data;
 		// Convert response data to JSON
 		if ((error?.response?.config?.responseType as string)?.toLowerCase() === 'arraybuffer') {
@@ -158,11 +111,14 @@ axios.interceptors.response.use(
 
 		let originData = originalRequest?.data;
 		if (typeof originData === 'string') originData = JSON.parse(originData);
-		if (typeof originData !== 'object' || !Object.keys(originData ?? {}).includes('silent') || !originData?.silent) {
+		if (
+			typeof originData !== 'object' ||
+			!Object.keys(originData ?? {}).includes('silent') ||
+			!originData?.silent
+		) {
 			const descriptionError = Array.isArray(er?.detail?.exception?.response?.message)
 				? er?.detail?.exception?.response?.message?.join(', ')
-				: // Sequelize validation Errors
-					Array.isArray(er?.detail?.exception?.errors)
+				: Array.isArray(er?.detail?.exception?.errors)
 					? er?.detail?.exception?.errors?.map((e: any) => e?.message)?.join(', ')
 					: data.error[er?.detail?.errorCode || er?.errorCode] ||
 						er?.detail?.message ||

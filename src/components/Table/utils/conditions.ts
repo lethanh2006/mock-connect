@@ -6,7 +6,7 @@ import type { QueryCondition, TExternalConditionItem } from '../typing';
 /**
  * Chuẩn hóa mảng externalConditions (Unified Filter) về 3 thành phần rời rạc (Conditions, Labels, ValueLabels) để dùng nội bộ.
  * Hỗ trợ gộp nhiều toán tử trên cùng một trường dữ liệu.
- * 
+ *
  * @template T Kiểu dữ liệu bản ghi.
  * @param input Mảng các điều kiện lọc từ bên ngoài.
  * @returns Object chứa conditions (MongoDB style), labels và valueLabels đã được chuẩn hóa.

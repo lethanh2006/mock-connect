@@ -34,7 +34,7 @@ const ExemptionBanner = ({ recDot, coThongTinPheDuyet }: ExemptionBannerProps) =
 		: isTuChoi
 		? 'kytucxa.dangky.exempt.rejectedMessage'
 		: 'kytucxa.dangky.exempt.pendingMessage';
-	
+
 	return (
 		<div
 			className='exemption-banner'
@@ -87,7 +87,7 @@ const ExemptionBanner = ({ recDot, coThongTinPheDuyet }: ExemptionBannerProps) =
 					<span className='exemption-banner__meta-value'>{recDot.ghiChuDuyetMien}</span>
 				</div>
 			)}
-			
+
 			<div className='exemption-banner__action-message'>
 				{intl.formatMessage({ id: actionAlertId })} {intl.formatMessage({ id: actionMessageId })}
 			</div>

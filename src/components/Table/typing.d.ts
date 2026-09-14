@@ -230,6 +230,11 @@ export type TableBaseProps<T extends object = any> = {
 	 */
 	onCreateClick?: () => void;
 
+	/** Text thay thế cho nút thêm mới (mặc định: "Thêm mới"), dùng khi ngữ cảnh nghiệp vụ cần từ khác (VD: "Khai báo") */
+	createButtonText?: React.ReactNode;
+	/** Tooltip thay thế cho nút thêm mới */
+	createButtonTooltip?: React.ReactNode;
+
 	cardExtra?: React.ReactNode;
 	/** Cấp độ của PageCard bao quanh Table (1, 2, 3) */
 	cardProps?: PageCardProps;

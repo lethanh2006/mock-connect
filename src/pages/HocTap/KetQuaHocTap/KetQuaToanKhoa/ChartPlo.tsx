@@ -69,9 +69,9 @@ const ChartPloToanKhoa = (props: { maKhoaNganh: string }) => {
 							<span style="font-size:11px; color:#666; margin-left:6px;">${DOMPurify.sanitize(plo.ten)}</span>
 						</div>
 						<div style="margin-top:4px">
-							<span style="color:#3b82f6;">●</span> ${intl.formatMessage({ id: 'ketquahoctap.chart.toankhoa.plo' })}: 
+							<span style="color:#3b82f6;">●</span> ${intl.formatMessage({ id: 'ketquahoctap.chart.toankhoa.plo' })}:
 							<b>${series[0][dataPointIndex].toFixed(2)}</b><br/>
-							<span style="color:#10b981;">●</span> ${intl.formatMessage({ id: 'ketquahoctap.chart.toankhoa.min' })}: 
+							<span style="color:#10b981;">●</span> ${intl.formatMessage({ id: 'ketquahoctap.chart.toankhoa.min' })}:
 							<b>${series[1][dataPointIndex]}</b>
 						</div>
 					</div>

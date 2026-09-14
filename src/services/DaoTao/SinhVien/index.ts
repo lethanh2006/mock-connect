@@ -66,4 +66,3 @@ export async function putNhapHocGiayTo(payLoad: {
 }) {
 	return axios.put(`${ipDaoTao}/sinh-vien/me/nhap-hoc/giay-to`, payLoad);
 }
-

@@ -47,7 +47,7 @@ export declare module PhieuDkCtdt {
 		tenDonViPhuTrach?: string;
 		maDonViPhuTrach?: string;
 		idDonViPhuTrach?: string;
-		
+
 		ssoIdCoVanHocTapChinh?: string;
 		hoTenCoVanHocTapChinh?: string;
 		emailCoVanHocTapChinh?: string;
@@ -68,7 +68,7 @@ export declare module PhieuDkCtdt {
 		ghiChuCVHT?: string;
 		ghiChuBoMon?: string;
 		ghiChuQldt?: string;
-		
+
 		hasDiscussedWithAdvisor?: boolean;
 		dot?: DangKyChuyenNganh.IDotDangKy;
 		ngayNop?: string;

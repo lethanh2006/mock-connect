@@ -1,0 +1,114 @@
+.stepper {
+	display: flex;
+	padding: 6px 0 22px;
+}
+
+.stepperItem {
+	position: relative;
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	cursor: pointer;
+}
+
+.stepperItem::before {
+	position: absolute;
+	top: 17px;
+	left: -50%;
+	z-index: 0;
+	width: 100%;
+	height: 1px;
+	background: #ddd;
+	content: '';
+}
+
+.stepperItem:first-child::before {
+	display: none;
+}
+
+.stepperItem.completed::before {
+	background: #57a443;
+}
+
+.stepperCircle {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex: 0 0 auto;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
+	border: 2px solid #ddd;
+	border-radius: 50%;
+	background: #fff;
+	color: #999;
+	font-weight: 700;
+	font-size: 14px;
+}
+
+.stepperCircle.active {
+	border-color: #57a443;
+	background: #57a443;
+	color: #fff;
+}
+
+.stepperLabel {
+	margin-top: 8px;
+	padding: 0 8px;
+	color: #999;
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.4;
+}
+
+.stepperLabel.active {
+	color: #57a443;
+}
+
+.footer {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+	margin-top: 20px;
+	padding-top: 16px;
+	border-top: 1px solid #eee;
+
+	:global(.ant-btn) {
+		height: 42px;
+		padding: 0 28px;
+		border-radius: 5px;
+		font-size: 14px;
+		font-weight: 700;
+	}
+}
+
+// Nút Quay lại đứng riêng bên trái footer; các nút còn lại vẫn dồn về phải.
+.backButton {
+	margin-right: auto;
+}
+
+.prevButton {
+	border-color: #d9d9d9;
+	color: #595959;
+
+	&:hover,
+	&:focus {
+		border-color: #285797;
+		color: #285797;
+	}
+}
+
+.nextButton {
+	border-color: #285797;
+	background: #285797;
+
+	&:hover,
+	&:focus {
+		border-color: #1f477d;
+		background: #1f477d;
+	}
+}

@@ -146,6 +146,64 @@ export default [
 	// 	],
 	// },
 	{
+		path: '/advising-development',
+		name: 'AdvisingDevelopment',
+		icon: 'TeamOutlined',
+		routes: [
+			{
+				path: 'IDP',
+				name: 'IDP',
+				component: 'New/IDP',
+				access: 'accessFilter',
+				permission: 'ctsv.idp:personal',
+			},
+			{
+				path: 'advisor-change',
+				name: 'AdvisorChange',
+				component: 'New/AdvisorChange',
+				access: 'accessFilter',
+				permission: 'ctsv.idp:personal',
+			},
+			{
+				path: 'advisor-appointment',
+				name: 'AdvisorAppointment',
+				component: 'New/AdvisorAppointment',
+				access: 'accessFilter',
+				permission: 'ctsv.advising:personal',
+			},
+		],
+	},
+
+	// CỐ VẤN HỌC TẬP (advisor-side)
+	{
+		path: '/co-van-hoc-tap',
+		name: 'CoVanHocTap',
+		icon: 'SolutionOutlined',
+		routes: [
+			{
+				name: 'IDPSinhVien',
+				path: 'idp-sinh-vien',
+				component: 'GiangDay/IDP/SinhVien',
+				access: 'accessFilter',
+				permission: 'ctsv.idp:review',
+			},
+			{
+				name: 'TuVanKhaDung',
+				path: 'tu-van-kha-dung',
+				component: 'GiangDay/TuVan/KhaDung',
+				access: 'accessFilter',
+				permission: 'ctsv.advising:consult',
+			},
+			{
+				name: 'TuVanYeuCau',
+				path: 'tu-van-yeu-cau',
+				component: 'GiangDay/TuVan/YeuCau',
+				access: 'accessFilter',
+				permission: 'ctsv.advising:consult',
+			},
+		],
+	},
+	{
 		path: '/experience-porfolio',
 		name: 'ExperiencePorfolio',
 		icon: 'FolderOpenOutlined',

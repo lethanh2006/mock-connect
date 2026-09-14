@@ -142,7 +142,6 @@
     "@babel/core": "7.29.6",
     "bn.js": ">=5.2.3",
     "brace-expansion": "5.0.9",
-    "body-parser": ">=1.20.6",
     "dompurify": "3.4.13",
     "flatted": ">=3.4.2",
     "postcss": ">=8.5.23",
@@ -164,8 +163,8 @@
     "form-data": ">=4.0.6",
     "glob": ">=10.5.0",
     "tar-fs": ">=2.1.4",
-    "hono": "4.12.34",
-    "js-yaml": "4.3.1",
+    "hono": "4.13.5",
+    "js-yaml": "4.3.2",
     "react-router": "7.18.2",
     "node-fetch": ">=2.6.7",
     "react-split-pane/node-fetch": ">=2.6.7",
@@ -176,7 +175,11 @@
     "decode-uri-component": "0.2.2",
     "tinymce": "7.9.3",
     "ws": ">=8.21.0",
-    "**/elliptic": "npm:@soatok/elliptic-to-noble@9999.0.0"
+    "**/elliptic": "npm:@soatok/elliptic-to-noble@9999.0.0",
+    "@hono/node-server": ">=1.19.15 <2.0.0",
+    "body-parser": ">=1.20.6",
+    "colord": ">=2.9.4",
+    "decode-uri-component": ">=0.5.0"
   },
   "overrides": {
     "@babel/core": "7.29.6",
@@ -189,16 +192,16 @@
     "elliptic": "npm:@soatok/elliptic-to-noble@9999.0.0",
     "fast-uri": "3.1.6",
     "form-data": ">=4.0.6",
-    "hono": "4.12.34",
-    "js-yaml": "4.3.1",
-    "qs": ">=6.16.0",
+    "hono": "4.13.5",
+    "js-yaml": "4.3.2",
+    "qs": ">=6.15.2",
     "react-router": "7.18.2",
     "tinymce": "7.9.3",
     "vite": ">=8.0.16",
     "ws": ">=8.21.0",
-    "less": "4.9.1",
-    "browserslist": ">=4.28.7",
-    "decode-uri-component": "0.2.2"
-  },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+    "@hono/node-server": ">=1.19.15 <2.0.0",
+    "body-parser": ">=1.20.6",
+    "colord": ">=2.9.4",
+    "decode-uri-component": ">=0.5.0"
+  }
 }

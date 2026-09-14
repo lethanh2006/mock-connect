@@ -1,0 +1,214 @@
+.container {
+	padding: 0;
+}
+
+@media (max-width: 992px) {
+	.container {
+		padding: 0;
+	}
+}
+
+.stepper {
+	display: flex;
+	padding: 6px 0 22px;
+}
+
+.stepperItem {
+	position: relative;
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	cursor: pointer;
+}
+
+.stepperItem::before {
+	position: absolute;
+	top: 17px;
+	left: -50%;
+	z-index: 0;
+	width: 100%;
+	height: 1px;
+	background: #ddd;
+	content: '';
+}
+
+.stepperItem:first-child::before {
+	display: none;
+}
+
+.stepperItem.completed::before {
+	background: #57a443;
+}
+
+.stepperCircle {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex: 0 0 auto;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
+	border: 2px solid #ddd;
+	border-radius: 50%;
+	background: #fff;
+	color: #999;
+	font-weight: 700;
+	font-size: 14px;
+}
+
+.stepperCircle.active {
+	border-color: #57a443;
+	background: #57a443;
+	color: #fff;
+}
+
+.stepperLabel {
+	margin-top: 8px;
+	padding: 0 8px;
+	color: #999;
+	font-size: 13px;
+	font-weight: 600;
+	// Nhãn bước hay xuống 2 dòng ("PART B — INDIVIDUAL DEVELOPMENT PLAN") nên bó sát hơn.
+	line-height: 1.4;
+}
+
+.stepperLabel.active {
+	color: #57a443;
+}
+
+.sectionHeader {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 22px 0 16px;
+	color: #275694;
+	// Thang chữ của khối review: 20px tiêu đề canvas > 18px section > 16px nhãn field > 14px nội dung.
+	// Tiêu đề dùng line-height 1.4, chữ thân bài dùng 1.6 — khai báo tường minh để
+	// không phụ thuộc giá trị thừa kế của antd (1.5714) hay `normal` của thẻ h2.
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1.4;
+}
+
+.sectionHeader:first-child {
+	margin-top: 0;
+}
+
+.sectionHeaderArrow {
+	color: #e64545;
+	font-size: 12px;
+}
+
+.sectionHeaderLine {
+	flex: 1;
+	border-top: 1px dashed #ccc;
+}
+
+.footer {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+	margin-top: 8px;
+	padding-top: 16px;
+	border-top: 1px solid #eee;
+
+	:global(.ant-btn) {
+		height: 42px;
+		padding: 0 28px;
+		border-radius: 5px;
+		font-size: 14px;
+		font-weight: 700;
+	}
+}
+
+// Nút Quay lại đứng riêng bên trái footer; các nút còn lại vẫn dồn về phải.
+.backButton {
+	margin-right: auto;
+}
+
+.prevButton {
+	border-color: #d9d9d9;
+	color: #595959;
+
+	&:hover,
+	&:focus {
+		border-color: #285797;
+		color: #285797;
+	}
+}
+
+.nextButton {
+	border-color: #285797;
+	background: #285797;
+
+	&:hover,
+	&:focus {
+		border-color: #1f477d;
+		background: #1f477d;
+	}
+}
+
+// Khối review theo canvas bản in (docs/IDP_Canvas_UI).
+.reviewHeader {
+	padding: 18px 24px;
+	border-radius: 8px 8px 0 0;
+	background: #204b82;
+}
+
+.reviewHeaderTitle {
+	margin: 0;
+	color: #f5e5c0;
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 1.4;
+	letter-spacing: 1px;
+}
+
+.reviewBody {
+	padding: 24px;
+	border: 1px solid #d9e7f7;
+	border-top: none;
+
+	:global(.ant-table-thead > tr > th) {
+		background: #f7fbff;
+	}
+
+	// Nội dung sinh viên nhập có thể là chuỗi dài không khoảng trắng (URL) — phải cho
+	// ngắt giữa từ, nếu không cell sẽ đẩy bảng tràn khỏi khung review.
+	:global(.ant-table-tbody > tr > td) {
+		overflow-wrap: anywhere;
+	}
+}
+
+.reviewFooter {
+	margin-bottom: 24px;
+	padding: 12px 24px;
+	border-radius: 0 0 8px 8px;
+	background: #204b82;
+	color: #fff;
+	font-weight: 600;
+	line-height: 1.6;
+}
+
+// Nhãn của từng ô nội dung ở khối review: to hơn phần nội dung một bậc để mắt
+// bắt được cấu trúc, không chỉ dựa vào chữ đậm.
+.fieldLabel {
+	display: block;
+	margin-bottom: 4px;
+	color: #204b82;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1.5;
+}
+
+.fieldValue {
+	margin-bottom: 0;
+	font-size: 14px;
+	line-height: 1.6;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}

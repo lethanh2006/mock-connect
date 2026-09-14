@@ -112,7 +112,7 @@ export interface StatisticsCardProps {
 USAGE EXAMPLES:
 
 // 1. Sử dụng cơ bản - tự động sinh màu nền
-<StatisticsCard 
+<StatisticsCard
   title="Statistics"
   data={[
     { title: "Sales", value: "1,234", valueColor: "red" },
@@ -122,7 +122,7 @@ USAGE EXAMPLES:
 />
 
 // 2. Tùy chỉnh độ sáng và trong suốt
-<StatisticsCard 
+<StatisticsCard
   title="Custom Background"
   autoBackground={{
     enabled: true,
@@ -133,28 +133,28 @@ USAGE EXAMPLES:
 />
 
 // 3. Tắt tự động sinh màu nền
-<StatisticsCard 
+<StatisticsCard
   title="Manual Background"
   autoBackground={{ enabled: false }}
   data={[
-    { 
-      title: "Custom", 
-      value: "100", 
-      valueColor: "purple", 
+    {
+      title: "Custom",
+      value: "100",
+      valueColor: "purple",
       backgroundColor: "#f0f8ff" // Phải tự set
     }
   ]}
 />
 
 // 4. Mix tự động và thủ công
-<StatisticsCard 
+<StatisticsCard
   title="Mixed Mode"
   data={[
     { title: "Auto", value: "123", valueColor: "green" }, // Tự động
-    { 
-      title: "Manual", 
-      value: "456", 
-      valueColor: "red", 
+    {
+      title: "Manual",
+      value: "456",
+      valueColor: "red",
       backgroundColor: "#ffe6e6" // Override
     }
   ]}
@@ -163,7 +163,7 @@ USAGE EXAMPLES:
 BENEFITS:
 - Tự động nhận diện ALL color formats (hex, rgb, hsl, named colors)
 - Chỉ 2.5KB gzipped - siêu nhẹ
-- API clean và intuitive 
+- API clean và intuitive
 - Robust color processing
 - TypeScript support đầy đủ
 - Không cần predefined mapping table

@@ -1,10 +1,13 @@
 import PageCard from '@/components/PageCard';
-import Comming from '../Comming';
+import { useIntl } from 'umi';
+import MyBookingsPanel from './components/MyBookingsPanel';
 
 const AdvisorAppointment = () => {
+	const intl = useIntl();
+
 	return (
-		<PageCard title='Advisor Appointment'>
-			<Comming />
+		<PageCard title={intl.formatMessage({ id: 'advisorAppointment.title' })}>
+			<MyBookingsPanel />
 		</PageCard>
 	);
 };

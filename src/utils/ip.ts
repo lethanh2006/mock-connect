@@ -35,6 +35,7 @@ const keycloakClientID = AppModules[currentRole].clientId;
 const keycloakAuthority = APP_CONFIG_KEYCLOAK_AUTHORITY;
 const qldtApiClientId = `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}qldt-api`;
 const financeApiClientId = `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}tc-api`;
+const ctsvApiClientId = `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}ctsv-api`;
 const keycloakAuthEndpoint = APP_CONFIG_KEYCLOAK_AUTHORITY + '/protocol/openid-connect/auth';
 const keycloakTokenEndpoint = APP_CONFIG_KEYCLOAK_AUTHORITY + '/protocol/openid-connect/token';
 const keycloakUserInfoEndpoint = APP_CONFIG_KEYCLOAK_AUTHORITY + '/protocol/openid-connect/userinfo';
@@ -42,6 +43,7 @@ const moodleEndpoint = typeof APP_CONFIG_MOODLE_ENDPOINT !== 'undefined' ? APP_C
 
 export {
 	currentRole,
+	ctsvApiClientId,
 	financeApiClientId,
 	ip3,
 	ipCCT,

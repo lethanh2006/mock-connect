@@ -1,3 +1,6 @@
+import advisorAppointment from './advisorAppointment';
+import baohiemyteDangKy from './baohiemyte/dangky';
+import baohiemyteMien from './baohiemyte/mien';
 import activity from './cct/activity';
 import dangky from './dichvuhanhchinh/dangky';
 import lichsu from './dichvuhanhchinh/lichsu';
@@ -13,8 +16,13 @@ import hoctapkhac from './hoctap/khac';
 import lichthi from './hoctap/lichthi';
 import lophocphan from './hoctap/lophocphan';
 import tientrinhhoctap from './hoctap/tientrinhhoctap';
+import idp from './idp';
+import covanIdp from './covanIdp';
+import covanTuVan from './covanTuVan';
 import khaosat from './khaosat';
 import detaikhcn from './khoahoc/detaikhcn';
+import kiemtrasuckhoeDangKy from './kiemtrasuckhoe/dangky';
+import kiemtrasuckhoeMien from './kiemtrasuckhoe/mien';
 import kytucxa from './kytucxa';
 import lichsukien from './lichsukien';
 import login from './login';
@@ -33,10 +41,6 @@ import vanbanhuongdan from './tienichkhac/vanbanhuongdan';
 import xemsau from './tienichkhac/xemsau';
 import tintuc from './tintuc';
 import trangchu from './trangchu';
-import kiemtrasuckhoeDangKy from './kiemtrasuckhoe/dangky';
-import kiemtrasuckhoeMien from './kiemtrasuckhoe/mien';
-import baohiemyteDangKy from './baohiemyte/dangky';
-import baohiemyteMien from './baohiemyte/mien';
 
 export default {
 	...login,
@@ -79,6 +83,10 @@ export default {
 	...kiemtrasuckhoeMien,
 	...baohiemyteDangKy,
 	...baohiemyteMien,
+	...idp,
+	...advisorAppointment,
+	...covanIdp,
+	...covanTuVan,
 	'pages.trangchu.title': 'TRAINING STUDENT PORTAL',
 	'pages.trangchu.subtitle': 'DIGITAL UNIVERSITY SYSTEM',
 	'pages.gioithieu.title': 'ABOUT',

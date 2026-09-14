@@ -2,8 +2,8 @@ import { useAuthActions } from '@/hooks/useAuthActions';
 import { getUserInfo } from '@/services/base/api';
 import { AppModules, EModuleKey } from '@/services/base/constant';
 import { type Login } from '@/services/base/typing';
-import axios, { registerOidcSilentRenew } from '@/utils/axios';
-import { currentRole, financeApiClientId, qldtApiClientId, replaceRole } from '@/utils/ip';
+import axios from '@/utils/axios';
+import { ctsvApiClientId, currentRole, financeApiClientId, qldtApiClientId, replaceRole } from '@/utils/ip';
 import type { AuthorizedRolesByClient } from '@/utils/keycloakRoles';
 import { getKeycloakRoleContext, hasModulePermission } from '@/utils/keycloakRoles';
 import { getOidcRedirectUri, oidcConfig } from '@/utils/oidcConfig';
@@ -30,6 +30,7 @@ const getAllRoleClientIds = () =>
 			...Object.keys(AppModules).flatMap((moduleKey) => getModuleClientIds(moduleKey as EModuleKey)),
 			qldtApiClientId,
 			financeApiClientId,
+			ctsvApiClientId,
 		]),
 	);
 

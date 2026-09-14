@@ -13,13 +13,16 @@ const SelectNamHoc = (props: {
 	style?: React.CSSProperties;
 	isSetRecord?: boolean;
 	hasDefault?: boolean;
+	isGetAll?: boolean;
+	/** Dùng `ma` (vd '2025-2026') làm value thay vì `_id`. */
+	selectMa?: boolean;
 }) => {
-	const { value, onChange, multiple, allowClear, style, isSetRecord, hasDefault } = props;
+	const { value, onChange, multiple, allowClear, style, isSetRecord, hasDefault, isGetAll, selectMa } = props;
 	const { danhSach, getAllModel } = useModel('daotao.namhoc');
 
 	useEffect(() => {
 		if (!danhSach.length)
-			getAllModel(isSetRecord, undefined, undefined, undefined, 'sinh-vien/me').then((res) => {
+			getAllModel(isSetRecord, undefined, undefined, undefined, !isGetAll ? 'sinh-vien/me' : undefined).then((res) => {
 				if (hasDefault && onChange) onChange(res?.[0]?._id);
 			});
 	}, []);
@@ -32,7 +35,7 @@ const SelectNamHoc = (props: {
 			onChange={onChange}
 			options={danhSach.map((item) => ({
 				key: item._id,
-				value: item._id,
+				value: selectMa ? item.ma : item._id,
 				label: item.ten,
 			}))}
 			showSearch

@@ -67,7 +67,34 @@ export const formatTimeRange = (start: any, end: any, formatStr?: string): strin
 
 	if (!startStr || !endStr) return '';
 
-	return `${startStr} - ${endStr}`;
+	// Khi start/end là datetime đầy đủ và rơi vào các ngày khác nhau, thêm hậu tố (+n)
+	// để tránh hiểu nhầm "23:00 - 1:00". Với chuỗi giờ thuần ("09:00") dayjs không hợp lệ nên bỏ qua.
+	const startDay = dayjs(start);
+	const endDay = dayjs(end);
+	const dayDiff =
+		startDay.isValid() && endDay.isValid()
+			? endDay.startOf('day').diff(startDay.startOf('day'), 'day')
+			: 0;
+
+	return dayDiff > 0 ? `${startStr} - ${endStr} (+${dayDiff})` : `${startStr} - ${endStr}`;
+};
+
+/**
+ * Formats a datetime range, mở rộng phần cuối thành ngày đầy đủ khi start/end không cùng ngày.
+ * Cùng ngày:  DD/MM/YYYY HH:mm — HH:mm
+ * Khác ngày:  DD/MM/YYYY HH:mm — DD/MM/YYYY HH:mm
+ */
+export const formatDateTimeRange = (start: any, end: any): string => {
+	if (!start) return '';
+	const startStr = formatDateTime(start);
+	if (!end) return startStr;
+
+	const startDay = dayjs(start);
+	const endDay = dayjs(end);
+	if (!endDay.isValid()) return startStr;
+
+	const endStr = startDay.isSame(endDay, 'day') ? formatTime(end) : formatDateTime(end);
+	return `${startStr} — ${endStr}`;
 };
 
 /**
