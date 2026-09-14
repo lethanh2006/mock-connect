@@ -172,7 +172,7 @@ const createRules = () => {
 
 		soDienThoai: [
 			{
-				pattern: new RegExp(/(^(09|03|07|08|05|01|02|04|06){1}[0-9]{8}$){1}/g),
+				pattern: /^\d+$/,
 				message: getMessage('global.validation.soDienThoai.invalid'),
 			},
 		] as Rule[],

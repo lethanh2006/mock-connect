@@ -117,4 +117,9 @@ export default {
 	'ketquahoctap.maytinh.common.ok': 'Confirm',
 	'ketquahoctap.ketquahocky.diemquydoi_tooltip': 'Transferred Grade',
 	'ketquahoctap.ketquahocky.hoclai_tooltip': 'Retake',
+	'ketquahoctap.ketquahocky.xuatbangdiemv2': 'Academic Transcript',
+	'ketquahoctap.ketquahocky.xuatbangdiemv2.loi': 'Unable to generate transcript',
+	'ketquahoctap.ketquahocky.xuatbangdiemv2.dangtao': 'Generating transcript...',
+	'ketquahoctap.ketquahocky.xuatbangdiemv2.thanhcong': 'Transcript generated ({0} pages)',
+	'ketquahoctap.ketquahocky.xuatbangdiemv2.taipdf': 'Download PDF',
 };

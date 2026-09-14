@@ -17,7 +17,7 @@ export default {
 	'global.validation.diemToeic.divisibleBy5': 'Điểm thi là số chia hết cho 5',
 	'global.validation.email.invalid': 'Email chưa đúng định dạng',
 	'global.validation.httpLink.invalid': 'Đường dẫn chưa đúng định dạng',
-	'global.validation.soDienThoai.invalid': 'Số điện thoại không đúng định dạng (10 số, không bao gồm kí tự đặc biệt)',
+	'global.validation.soDienThoai.invalid': 'Số điện thoại chỉ được chứa chữ số, không bao gồm khoảng trắng hoặc kí tự đặc biệt',
 	'global.validation.ngaySinh.invalid': 'Ngày sinh chưa đúng',
 	'global.validation.sauHomNay.beforeNow': 'Không được trước thời điểm hiện tại',
 	'global.validation.sauThoiDiem.before': 'Không được trước {label}',

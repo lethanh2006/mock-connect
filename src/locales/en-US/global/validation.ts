@@ -17,7 +17,7 @@ export default {
 	'global.validation.diemToeic.divisibleBy5': 'Test score must be divisible by 5',
 	'global.validation.email.invalid': 'Invalid email format',
 	'global.validation.httpLink.invalid': 'Invalid URL format',
-	'global.validation.soDienThoai.invalid': 'Invalid phone number format (10 digits, no special characters)',
+	'global.validation.soDienThoai.invalid': 'Phone number must contain digits only without spaces or special characters',
 	'global.validation.ngaySinh.invalid': 'Invalid date of birth',
 	'global.validation.sauHomNay.beforeNow': 'Cannot be before current time',
 	'global.validation.sauThoiDiem.before': 'Cannot be before {label}',

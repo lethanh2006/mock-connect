@@ -1,6 +1,7 @@
 export default {
 	'ketquahoctap.title': 'Kết quả học tập',
 	'ketquahoctap.diemtongket': 'Điểm tổng kết',
+	'ketquahoctap.tab.learningOutcomes': 'Chuẩn đầu ra',
 	'ketquahoctap.maytinh': 'Máy tính thông minh',
 	'ketquahoctap.empty': 'Chưa có kết quả học tập!',
 	'ketquahoctap.stat.ketqua': 'Kết quả tích lũy',
@@ -121,4 +122,9 @@ export default {
 	'ketquahoctap.ketquahocky.trungbinhtichluy10': 'TBC tích lũy (hệ 10)',
 	'ketquahoctap.ketquahocky.diemquydoi_tooltip': 'Điểm quy đổi',
 	'ketquahoctap.ketquahocky.hoclai_tooltip': 'Học lại',
+	'ketquahoctap.ketquahocky.xuatbangdiemv2': 'Bảng điểm',
+	'ketquahoctap.ketquahocky.xuatbangdiemv2.loi': 'Không thể tạo bảng điểm',
+	'ketquahoctap.ketquahocky.xuatbangdiemv2.dangtao': 'Đang tạo bảng điểm...',
+	'ketquahoctap.ketquahocky.xuatbangdiemv2.thanhcong': 'Đã tạo bảng điểm ({0} trang)',
+	'ketquahoctap.ketquahocky.xuatbangdiemv2.taipdf': 'Tải PDF',
 };

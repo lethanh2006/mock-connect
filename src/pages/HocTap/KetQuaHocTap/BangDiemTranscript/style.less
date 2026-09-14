@@ -1,0 +1,923 @@
+@font-face {
+	font-family: 'Montserrat';
+	src: url('@{base-path}font/Montserrat.ttf') format('truetype');
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Lora';
+	src: url('@{base-path}font/Lora.ttf') format('truetype');
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Licorice';
+	src: url('@{base-path}font/Licorice.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+.bang-diem-transcript-page {
+	.transcript-print-source {
+		position: absolute;
+		left: -9999px;
+		top: 0;
+		pointer-events: none;
+
+		/* Vẫn render full layout cho html2canvas, nhưng không đẩy ra giữa màn hình */
+		&.is-capturing {
+			position: fixed;
+			left: -100vw;
+			top: 0;
+			z-index: -1;
+			opacity: 1;
+			pointer-events: none;
+			max-height: none;
+			overflow: visible;
+			visibility: visible;
+		}
+	}
+}
+
+/* Modal portal — style global */
+.transcript-preview-modal {
+	.ant-modal-body {
+		padding: 0 !important;
+		overflow: hidden;
+	}
+
+	.preview-stage {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 10px;
+		padding: 16px 20px 24px;
+		background:
+			radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.35), transparent 55%),
+			linear-gradient(160deg, #9aa3ad 0%, #c5cbd2 45%, #aeb6bf 100%);
+		height: min(86vh, 980px);
+		max-height: calc(100vh - 140px);
+		overflow: auto;
+		box-sizing: border-box;
+	}
+
+	.ant-modal {
+		max-width: 98vw;
+	}
+
+	.a4-badge {
+		flex-shrink: 0;
+		align-self: flex-start;
+		font-size: 11px;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.92);
+		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+	}
+
+	.preview-scale-host {
+		flex-shrink: 0;
+		position: relative;
+		/* Không clip — tránh cắt mất trang khi scale/đo height lệch */
+		overflow: visible;
+		background: transparent;
+	}
+
+	.preview-scale-inner {
+		pointer-events: none;
+		position: relative !important;
+		left: auto !important;
+		top: auto !important;
+	}
+
+	.preview-scale-inner .transcript-doc {
+		gap: 16px;
+	}
+
+	.preview-scale-inner .transcript-a4-page {
+		box-shadow:
+			0 0 0 1px rgba(0, 0, 0, 0.12),
+			0 12px 32px rgba(0, 0, 0, 0.22);
+	}
+
+	/* Khi capture PDF: đưa bản full-size ra ngoài viewport */
+	.preview-scale-inner.is-capturing {
+		position: fixed !important;
+		left: -100vw !important;
+		top: 0 !important;
+		transform: none !important;
+		z-index: -1;
+		opacity: 1;
+		visibility: visible;
+		pointer-events: none;
+	}
+}
+
+/* ========== A4 transcript ========== */
+.transcript-doc {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+
+/* Host đo chiều cao thật — ẩn, không đưa vào PDF */
+.transcript-measure-host {
+	position: fixed;
+	left: -10000px;
+	top: 0;
+	width: 210mm;
+	pointer-events: none;
+	visibility: hidden;
+	z-index: -1;
+
+	.transcript-measure-closing {
+		height: auto;
+		min-height: 297mm;
+		overflow: visible;
+
+		.tr-page-inner,
+		.tr-page-main {
+			height: auto;
+			min-height: 0;
+			overflow: visible;
+		}
+	}
+}
+
+.transcript-a4-page {
+	--tr-blue: #1a3a8b;
+	--tr-red: #c41e3a;
+	--tr-text: #000;
+	--tr-muted: #00000099;
+	--tr-line: #1a3a8b;
+	--tr-row: #d8dce3;
+
+	position: relative;
+	isolation: isolate;
+	width: 210mm;
+	height: 297mm;
+	background: #fff;
+	box-sizing: border-box;
+	/* Clip đúng khổ A4; nội dung đã được splitPages đóng gói theo chiều cao */
+	overflow: hidden;
+	color: var(--tr-text);
+	font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 7px;
+	font-weight: 500;
+	line-height: 1.35;
+
+	.tr-watermark {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		pointer-events: none;
+		background-color: #fff;
+		background-image: url('@{base-path}images/bg-transcript.jpg');
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: cover;
+		opacity: 1;
+	}
+
+	.tr-page-inner {
+		position: relative;
+		z-index: 1;
+		height: 100%;
+		padding: 10mm 10mm 7mm;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+	}
+
+	/* Nội dung phía trên — không đè footer */
+	.tr-page-main {
+		flex: 1 1 auto;
+		min-height: 0;
+		overflow: hidden;
+		padding-bottom: 10px;
+		box-sizing: border-box;
+	}
+
+	.bi-en {
+		display: block;
+		font-weight: 500;
+		font-size: 7px;
+		line-height: 150%;
+		color: var(--tr-text);
+	}
+
+	.bi-vi {
+		display: block;
+		font-size: 7px;
+		font-weight: 400;
+		line-height: 150%;
+		color: var(--tr-muted);
+		font-style: italic;
+	}
+
+	/* Italic nghiêng phải — đệm để không bị overflow:hidden cắt chữ */
+	.bi-vi,
+	.course-vi,
+	.tr-sign-title-vi,
+	.tr-end-en,
+	.tr-legend-title-vi,
+	.tr-legend-vi,
+	.tr-issue .bi-en {
+		padding-right: 0.4em;
+		box-sizing: content-box;
+	}
+
+	.bi-label {
+		display: block;
+	}
+
+	.tr-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 18px;
+		margin-bottom: 14px;
+	}
+
+	.tr-title {
+		margin: 0;
+		font-family: 'Lora', Georgia, serif !important;
+		font-size: 22px;
+		font-weight: 700;
+		font-style: normal;
+		color: var(--tr-blue);
+		letter-spacing: 0.01em;
+		line-height: 1.28;
+		vertical-align: bottom;
+	}
+
+	.tr-logo-img {
+		width: 210px;
+		height: 40px;
+		min-width: 210px;
+		min-height: 40px;
+		padding-left: 4px;
+		object-fit: contain;
+		object-position: right center;
+		display: block;
+		box-sizing: content-box;
+		flex: 0 0 auto;
+		flex-shrink: 0;
+		margin-top: -2px;
+	}
+
+	.tr-rule {
+		border: none;
+		border-top: 1px solid var(--tr-line);
+	}
+
+	.tr-student {
+		display: grid;
+		grid-template-columns: 280px 1fr;
+		gap: 10px 22px;
+		margin-bottom: 0;
+	}
+
+	.tr-field {
+		display: grid;
+		grid-template-columns: 100px 1fr;
+		gap: 10px;
+		align-items: start;
+		margin-bottom: 12px;
+	}
+
+	.tr-field-label,
+	.tr-field-value {
+		.bi-en {
+			font-weight: 600;
+			font-size: 9px;
+			line-height: 1.25;
+			color: var(--tr-text);
+		}
+
+		.bi-vi {
+			font-weight: 400;
+			font-size: 8px;
+			line-height: 1.25;
+			font-style: italic;
+			color: var(--tr-muted);
+			margin-top: 2px;
+		}
+	}
+
+	.tr-field-label {
+		.bi-en,
+		.bi-vi {
+			white-space: nowrap;
+		}
+	}
+
+	.tr-field-value {
+		padding-top: 0;
+	}
+
+	.tr-body {
+		flex: 0 1 auto;
+		min-height: 0;
+		padding-top: 8px;
+	}
+
+	.tr-semester {
+		margin-bottom: 12px;
+
+		&.tr-semester-continue {
+			margin-top: 0;
+		}
+	}
+
+	.tr-sem-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 8px;
+		margin-bottom: 12px;
+	}
+
+	.tr-sem-title {
+		font-family: 'Montserrat', sans-serif;
+		font-weight: 700;
+		font-style: normal;
+		font-size: 14px;
+		line-height: 1.15;
+		letter-spacing: 0.01em;
+		text-transform: uppercase;
+	}
+
+	.tr-sem-title-vi {
+		color: var(--tr-muted);
+		font-weight: 500;
+	}
+
+	.tr-sem-badges {
+		display: inline-flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		justify-content: flex-end;
+	}
+
+	.tr-sem-badge {
+		font-size: 13px;
+		font-weight: 700;
+		line-height: 1.15;
+		white-space: nowrap;
+	}
+
+	.tr-course-table {
+		width: 100%;
+		border-collapse: collapse;
+		border: none;
+		font-size: 7px;
+		font-weight: 500;
+
+		th,
+		td {
+			padding: 4px 3px;
+			vertical-align: top;
+			border: none;
+			font-weight: 500;
+		}
+
+		th {
+			text-align: left;
+			padding-bottom: 8px;
+			font-size: 9px;
+
+			// border-bottom thay text-decoration — html2canvas bỏ qua text-underline-offset
+			.bi-en,
+			.bi-vi {
+				width: fit-content;
+				max-width: 100%;
+				text-decoration: none;
+				border-bottom: 0.1px solid currentColor;
+				white-space: nowrap;
+				padding-bottom: 0px;
+				margin-bottom: 4px;
+			}
+
+			.bi-en {
+				font-size: 9px;
+				font-weight: 600;
+				line-height: 1;
+			}
+
+			.bi-vi {
+				font-size: 8px;
+				font-weight: 400;
+				line-height: 1;
+			}
+		}
+
+		td {
+			font-size: 10px;
+		}
+
+		.col-code {
+			width: 98px;
+		}
+
+		.col-name {
+			width: auto;
+		}
+
+		.col-num {
+			width: 64px;
+			text-align: right;
+		}
+
+		.col-credit-attempted {
+			width: 100px;
+			text-align: right;
+		}
+
+		.col-credit-earned {
+			width: 92px;
+			text-align: right;
+		}
+
+		.col-grade {
+			width: 44px;
+			text-align: right;
+		}
+
+		td.col-grade {
+			font-weight: 600;
+			white-space: nowrap;
+
+			.grade-retake {
+				font-size: 0.65em;
+				font-weight: 400;
+				line-height: 0;
+				vertical-align: super;
+				margin-left: 0px;
+			}
+		}
+
+		.tr-course-group-title {
+			font-weight: 700;
+			font-style: italic;
+			font-size: 10px;
+			padding-top: 10px;
+			padding-bottom: 4px;
+			color: var(--tr-text);
+
+			.course-en {
+				display: block;
+				font-weight: 700;
+				font-style: italic;
+			}
+
+			.course-vi {
+				display: block;
+				font-weight: 500;
+				font-style: italic;
+				font-size: 9px;
+				color: var(--tr-muted);
+			}
+		}
+
+		td.col-num,
+		td.col-credit-attempted,
+		td.col-credit-earned,
+		td.col-grade {
+			vertical-align: middle;
+		}
+
+		td.col-num,
+		th.col-num,
+		td.col-credit-attempted,
+		th.col-credit-attempted,
+		td.col-credit-earned,
+		th.col-credit-earned,
+		td.col-grade,
+		th.col-grade {
+			text-align: right;
+		}
+
+		th.col-num,
+		th.col-credit-attempted,
+		th.col-credit-earned,
+		th.col-grade {
+			.bi-en,
+			.bi-vi {
+				margin-left: auto;
+				margin-right: 0;
+				/* Italic + padding-right làm border-bottom dài → lệch căn phải với điểm */
+				padding-right: 0;
+			}
+		}
+	}
+
+	.course-en {
+		display: block;
+		font-weight: 500;
+		font-size: 11px;
+		line-height: 1.35;
+	}
+
+	.course-vi {
+		display: block;
+		color: var(--tr-muted);
+		font-size: 10px;
+		font-weight: 400;
+		font-style: italic;
+		line-height: 1.35;
+	}
+
+	.tr-sem-foot {
+		display: flex;
+		justify-content: space-between;
+		gap: 12px;
+		margin-top: 8px;
+		padding: 10px 47px 4px 0;
+		border: none;
+		border-top: 1px solid #134d8b4d;
+
+		.bi-en {
+			font-size: 10px;
+			font-weight: 600;
+			line-height: 1.25;
+		}
+
+		.bi-vi {
+			font-size: 9px;
+			font-weight: 400;
+			line-height: 1.35;
+		}
+	}
+
+	.tr-sem-gpa,
+	.tr-sem-credit {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	.tr-sem-credit {
+		text-align: end;
+		align-items: flex-end;
+	}
+
+	/* Ngay dưới GPA học kỳ cuối — không đẩy xuống đáy trang */
+	.tr-closing {
+		padding-top: 0;
+		flex: 0 0 auto;
+	}
+
+	.tr-closing-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 16px;
+		margin-bottom: 8px;
+	}
+
+	.tr-totals {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.tr-total-item {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+
+		.bi-en {
+			font-size: 10px;
+			font-weight: 600;
+			line-height: 1.25;
+		}
+
+		.bi-vi {
+			font-size: 9px;
+			font-weight: 400;
+			line-height: 1.35;
+		}
+	}
+
+	.tr-sign {
+		position: relative;
+		text-align: right;
+		max-width: 380px;
+		min-width: 280px;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		justify-content: flex-end;
+		padding-top: 52px;
+		min-height: 92px;
+		overflow: visible;
+	}
+
+	/* Float chỉ đè nhẹ dòng EN — không che dòng VI phía dưới */
+	.tr-sign-space {
+		position: absolute;
+		right: 52px;
+		bottom: 34px; /* = chiều cao dòng VI + gap → nhấc chữ ký lên khỏi VI */
+		width: fit-content;
+		height: 58px;
+		margin: 0;
+		z-index: 2;
+		pointer-events: none;
+		display: flex;
+		align-items: flex-end;
+		justify-content: flex-end;
+		transform: rotate(-2deg);
+		transform-origin: 75% 85%;
+	}
+
+	.tr-sign-img {
+		display: block;
+		height: 56px;
+		width: auto;
+		max-width: 180px;
+		object-fit: contain;
+		object-position: right bottom;
+		opacity: 0.92;
+	}
+
+	.tr-sign-title {
+		position: relative;
+		z-index: 1;
+		font-size: 9px;
+		font-weight: 400;
+		line-height: 1.35;
+		color: var(--tr-text);
+		white-space: nowrap;
+		padding-bottom: 2px;
+	}
+
+	.tr-sign-title-vi {
+		position: relative;
+		z-index: 3; /* luôn nổi trên chữ ký */
+		font-style: italic;
+		color: var(--tr-muted);
+		padding-bottom: 0;
+	}
+
+	.tr-closing-with-legend .tr-end {
+		padding-bottom: 4px;
+		margin-bottom: 8px;
+
+		.tr-end-rules {
+			margin-top: 8px;
+		}
+	}
+
+	.tr-end {
+		text-align: center;
+		border: none;
+		padding: 4px 0 16px;
+		margin: 6px 0 18px;
+		font-weight: 400;
+		font-size: 7px;
+
+		.tr-end-en {
+			display: block;
+			font-weight: 500;
+			font-size: 7px;
+			font-style: italic;
+		}
+
+		.bi-vi {
+			font-weight: 400;
+			font-size: 7px;
+			font-style: italic;
+		}
+
+		.tr-end-rules {
+			display: block;
+			width: 142px;
+			height: 0;
+			margin: 16px auto 0;
+			border-top: 1px solid #a8b4c4;
+			box-sizing: border-box;
+		}
+	}
+
+	.tr-legend {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 18px;
+		font-size: 7px;
+		font-weight: 400;
+		color: var(--tr-text);
+
+		.bi-vi,
+		.tr-legend-title-vi,
+		.tr-legend-vi {
+			color: var(--tr-text);
+		}
+	}
+
+	.tr-legend-col {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+	}
+
+	.tr-legend-title {
+		margin-bottom: 6px;
+		font-weight: 600;
+		font-size: 10px;
+		text-transform: uppercase;
+		line-height: 150%;
+	}
+
+	.tr-legend-title-vi {
+		display: block;
+		font-weight: 400;
+		text-transform: none;
+		font-style: italic;
+		font-size: 9px;
+	}
+
+	.tr-legend-en {
+		margin: 0;
+		line-height: 155%;
+		letter-spacing: 0.015em;
+		font-weight: 500;
+		font-size: 9px;
+	}
+
+	.tr-legend-vi {
+		margin: 0;
+		font-style: italic;
+		line-height: 155%;
+		letter-spacing: 0.015em;
+		font-size: 8px;
+		font-weight: 400;
+	}
+
+	.tr-auth {
+		margin-top: 8px;
+		margin-bottom: 4px;
+	}
+
+	.tr-auth-list {
+		margin: 2px 0 0;
+		padding-left: 14px;
+
+		li {
+			margin-bottom: 3px;
+
+			.tr-legend-en {
+				font-size: 8px;
+				line-height: 150%;
+			}
+
+			.tr-legend-vi {
+				font-size: 7px;
+				line-height: 145%;
+			}
+
+			.tr-legend-en,
+			.tr-legend-vi {
+				display: block;
+			}
+		}
+	}
+
+	.tr-grade-scale {
+		width: 100%;
+		border-collapse: collapse;
+		border: 1px solid var(--tr-text);
+		margin-top: 2px;
+		font-size: 7px;
+		font-weight: 400;
+		box-sizing: border-box;
+
+		th,
+		td {
+			border: 1px solid var(--tr-text);
+			padding: 3px 2px;
+			text-align: center;
+			vertical-align: middle;
+			font-size: 7px;
+			font-weight: 400;
+			color: var(--tr-text);
+		}
+
+		th {
+			text-align: left;
+			padding: 3px 5px;
+			width: 74px;
+			background: rgba(255, 255, 255, 05);
+
+			.bi-en,
+			.bi-vi {
+				display: block;
+				width: fit-content;
+				max-width: 100%;
+				font-size: 8px;
+				font-weight: 500;
+				text-decoration: none;
+				border-bottom: 0.1px solid currentColor;
+				padding-bottom: 0px;
+				white-space: nowrap;
+				line-height: 1;
+				margin-bottom: 4px;
+				color: var(--tr-text);
+			}
+
+			.bi-vi {
+				font-style: italic;
+			}
+		}
+
+		td {
+			min-width: 18px;
+		}
+	}
+
+	.tr-notations-table {
+		width: 100%;
+		border-collapse: collapse;
+		border: none;
+		font-size: 7px;
+		font-weight: 400;
+		margin-top: 4px;
+
+		td {
+			padding: 0;
+			vertical-align: top;
+			border: none;
+			font-weight: 400;
+			color: var(--tr-text);
+		}
+
+		.nt-code {
+			width: 36px;
+			font-size: 9px;
+			font-weight: 600;
+			padding-right: 6px;
+			padding-top: 1px;
+			white-space: nowrap;
+		}
+
+		.nt-mean {
+			.bi-en {
+				font-weight: 500;
+				font-size: 8px;
+				line-height: 155%;
+				color: var(--tr-text);
+			}
+
+			.bi-vi {
+				font-weight: 400;
+				font-size: 7px;
+				line-height: 155%;
+				color: var(--tr-text);
+			}
+		}
+
+		tr + tr td {
+			padding-top: 4px;
+		}
+	}
+
+	.tr-page-footer {
+		flex: 0 0 40px;
+		height: 40px;
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		margin-top: auto;
+		padding-top: 6px;
+		box-sizing: border-box;
+		background: transparent;
+		position: relative;
+		z-index: 2;
+	}
+
+	.tr-issue {
+		.bi-en {
+			font-size: 6px;
+			font-weight: 500;
+			font-style: italic;
+		}
+
+		.bi-vi {
+			font-size: 6px;
+			font-weight: 400;
+			font-style: italic;
+		}
+	}
+
+	.tr-page-no {
+		font-weight: 400;
+		font-size: 8px;
+	}
+}
