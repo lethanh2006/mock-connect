@@ -32,11 +32,12 @@ const MyDatePicker = (
 		 */
 		saveFormat?: string;
 		disabledDate?: (cur: string) => any;
+		disabledTime?: (cur: any) => any;
 		onChange?: (arg: string | null) => any;
 	},
 ) => {
 	const format = props?.format ?? getDateFormat();
-	const { saveFormat, pickerStyle, disabledDate, showTime, allowClear = false, disabled } = props;
+	const { saveFormat, pickerStyle, disabledDate, disabledTime, showTime, allowClear = false, disabled } = props;
 
 	const handleChange = (value: Dayjs | null) => {
 		if (props.onChange)
@@ -57,6 +58,7 @@ const MyDatePicker = (
 			value={objMoment}
 			onChange={handleChange}
 			disabledDate={disabledDate}
+			disabledTime={disabledTime}
 			showTime={showTime}
 			allowClear={allowClear}
 			disabled={disabled}

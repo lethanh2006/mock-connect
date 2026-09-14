@@ -83,4 +83,3 @@ export interface IPaymentResponse {
     paymentCollect?: IPaymentCollect;
     payUrl?: string;
 }
-

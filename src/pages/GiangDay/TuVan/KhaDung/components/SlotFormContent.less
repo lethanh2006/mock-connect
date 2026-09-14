@@ -1,0 +1,35 @@
+// Form khai báo ca tư vấn: rút gọn khoảng cách mặc định của antd Form/Card để mỗi card gọn hơn,
+// và giới hạn chiều cao vùng nội dung để cuộn bên trong thay vì đẩy cả modal tràn màn hình.
+.tuvan-slot-form {
+	.ant-form-item {
+		margin-bottom: 10px;
+	}
+
+	.tuvan-slot-scroll {
+		max-height: calc(100vh - 300px);
+		padding-right: 4px;
+		overflow-y: auto;
+	}
+
+	.tuvan-slot-card {
+		.ant-card-head {
+			min-height: 36px;
+			padding: 0 12px;
+		}
+
+		.ant-card-head-title {
+			padding: 6px 0;
+			font-size: 13px;
+			font-weight: 600;
+			color: rgba(0, 0, 0, 0.65);
+		}
+
+		.ant-card-extra {
+			padding: 6px 0;
+		}
+
+		.ant-card-body {
+			padding: 12px 16px 2px;
+		}
+	}
+}

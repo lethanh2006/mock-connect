@@ -1,0 +1,15 @@
+// Highlight các lịch đã quá giờ hẹn nhưng vẫn còn "Đã xác nhận" — cố vấn quên ghi nhận kết quả
+// (Hoàn thành/Vắng mặt). Set trực tiếp lên `tr` qua `rowClassName` của TableBase.
+.ant-table-tbody > tr.tuvan-row-overdue {
+	> td {
+		background: var(--color-warning-bg);
+	}
+
+	&:hover > td {
+		background: var(--color-warning-bg);
+	}
+
+	> td:first-child {
+		box-shadow: inset 3px 0 var(--color-warning);
+	}
+}

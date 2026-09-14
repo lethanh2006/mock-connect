@@ -53,6 +53,8 @@ export const TableHeader: React.FC = () => {
 		total,
 		hideTotal,
 		header,
+		createButtonText,
+		createButtonTooltip,
 		// disableFilterModal,
 		size,
 	} = useTableContext();
@@ -291,9 +293,9 @@ export const TableHeader: React.FC = () => {
 						icon={<PlusCircleOutlined />}
 						className='btn-add'
 						type='primary'
-						tooltip={intl.formatMessage({ id: 'global.table.index.button.themmoi.tooltip' })}
+						tooltip={createButtonTooltip ?? intl.formatMessage({ id: 'global.table.index.button.themmoi.tooltip' })}
 					>
-						{intl.formatMessage({ id: 'global.table.index.button.themmoi' })}
+						{createButtonText ?? intl.formatMessage({ id: 'global.table.index.button.themmoi' })}
 					</ButtonExtend>
 				)}
 

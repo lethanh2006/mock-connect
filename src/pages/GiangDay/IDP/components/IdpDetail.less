@@ -1,0 +1,95 @@
+// Bố cục canvas bản in của IDP — giữ cùng design language với màn IDP của cổng sinh viên.
+
+.sectionHeader {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 22px 0 16px;
+	color: #275694;
+	// Thang chữ của khối chi tiết: 20px tiêu đề canvas > 18px section > 16px nhãn field > 14px nội dung.
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1.4;
+}
+
+.sectionHeader:first-child {
+	margin-top: 0;
+}
+
+.sectionHeaderArrow {
+	color: #e64545;
+	font-size: 12px;
+}
+
+.sectionHeaderLine {
+	flex: 1;
+	border-top: 1px dashed #ccc;
+}
+
+.reviewHeader {
+	padding: 18px 24px;
+	border-radius: 8px 8px 0 0;
+	background: #204b82;
+}
+
+.reviewHeaderTitle {
+	margin: 0;
+	color: #f5e5c0;
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 1.4;
+	letter-spacing: 1px;
+}
+
+.reviewBody {
+	padding: 24px;
+	border: 1px solid #d9e7f7;
+	border-top: none;
+
+	:global(.ant-table-thead > tr > th) {
+		background: #f7fbff;
+	}
+}
+
+.reviewFooter {
+	margin-bottom: 24px;
+	padding: 12px 24px;
+	border-radius: 0 0 8px 8px;
+	background: #204b82;
+	color: #fff;
+	font-weight: 600;
+	line-height: 1.6;
+}
+
+// Nhãn của từng ô nội dung: to hơn phần nội dung một bậc để mắt bắt được cấu trúc,
+// không chỉ dựa vào chữ đậm.
+.fieldLabel {
+	display: block;
+	margin-bottom: 4px;
+	color: #204b82;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1.5;
+}
+
+.fieldValue {
+	margin-bottom: 0;
+	font-size: 14px;
+	line-height: 1.6;
+	white-space: pre-wrap;
+}
+
+// Dòng sinh viên có bản mới nhất đang chờ duyệt — việc cần cố vấn xử lý.
+:global(.idp-advisor-table) {
+	:global(tr.idp-row-pending) > td {
+		background: #fffbe6;
+	}
+
+	:global(tr.idp-row-pending:hover) > td {
+		background: #fff4c9 !important;
+	}
+
+	:global(tr.idp-row-pending) > td:first-child {
+		box-shadow: inset 3px 0 0 0 #faad14;
+	}
+}

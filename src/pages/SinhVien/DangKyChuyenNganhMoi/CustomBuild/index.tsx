@@ -186,7 +186,7 @@ const IDMPage = () => {
 
 		const payload = {
 			...phieuDangKyHienTai,
-			...formData, 
+			...formData,
 			...restValues,
 			tenChuongTrinh,
 			mucTieuLyDo,

@@ -24,5 +24,3 @@ export async function thongTinWithdraw(lopHocPhanId: string) {
 export async function postWithdraw(payLoad: any) {
 	return axios.post(`${ipDaoTao}/lop-hp-sv/rut-lop-hp`, payLoad);
 }
-
-

@@ -1,0 +1,95 @@
+repos:
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v4.5.0
+      hooks:
+          - id: trailing-whitespace
+          - id: end-of-file-fixer
+          - id: check-yaml
+          - id: check-merge-conflict
+
+    - repo: local
+      hooks:
+          # 1. Gitleaks Secret Detection
+          # - id: gitleaks
+          #   name: 🔐 Gitleaks Secret Detection
+          #   entry: gitleaks
+          #   args: ["protect", "--staged", "--redact", "--verbose"]
+          #   language: system
+          #   pass_filenames: false
+
+          # 2. Trivy Filesystem Scan (Block HIGH/CRITICAL)
+          - id: trivy-fs
+            name: 🛡️ Trivy Filesystem Scan
+            entry: bash
+            args:
+                - -c
+                - |
+                    if command -v trivy >/dev/null 2>&1; then
+                      echo ">>> Scanning for VULNERABILITIES (Blocking HIGH/CRITICAL)..."
+                      trivy fs --exit-code 1 --severity HIGH,CRITICAL --format table --scanners vuln,secret,misconfig .
+                    else
+                      echo "Trivy not installed, skipping."
+                    fi
+            language: system
+            pass_filenames: false
+
+          # 3. MobSF Mobile Security Scan (Report Only)
+          # - id: mobsfscan
+          #   name: 📱 MobSF Mobile Scan
+          #   entry: bash
+          #   args:
+          #       - -c
+          #       - |
+          #           if command -v mobsfscan >/dev/null 2>&1; then
+          #             # Chỉ chạy nếu tìm thấy file mobile
+          #             if find . \( -name "*.java" -o -name "*.kt" -o -name "*.swift" -o -name "*.m" -o -name "*.xml" -o -name "*.plist" \) -not -path "./node_modules/*" | grep -q .; then
+          #               echo ">>> Running MobSF Scan..."
+          #               mobsfscan . --json > mobsf-report.json
+          #               echo "MobSF scan complete. Report saved to mobsf-report.json"
+          #             else
+          #               echo "No mobile source code found. Skipping."
+          #             fi
+          #           fi
+          #   language: system
+          #   pass_filenames: false
+
+          # # 4. GoSec (Go Only)
+          # - id: gosec
+          #   name: 🐹 GoSec Security Scan
+          #   entry: bash
+          #   files: '\.go$'
+          #   args:
+          #       - -c
+          #       - |
+          #           if command -v gosec >/dev/null 2>&1; then
+          #              echo ">>> Running GoSec..."
+          #              gosec -severity medium ./...
+          #           else
+          #              echo "GoSec not installed. Skipping."
+          #           fi
+          #   language: system
+          #   pass_filenames: false
+
+          # # 5. Semgrep (General SAST)
+          # - id: semgrep
+          #   name: 🔍 Semgrep Security Scan
+          #   entry: bash
+          #   args:
+          #       - -c
+          #       - |
+          #           if command -v semgrep >/dev/null 2>&1; then
+          #             # Bỏ qua nếu chỉ là dự án Go thuần (đã có gosec)
+          #             if [ -f "go.mod" ] && ! find . -type f \( -name "*.py" -o -name "*.js" -o -name "*.ts" -o -name "*.java" \) | grep -q .; then
+          #                echo "Pure Go project detected. Skipping Semgrep."
+          #                exit 0
+          #             fi
+          #             echo ">>> Running Semgrep..."
+          #             semgrep --config=p/security-audit --config=p/owasp-top-ten --error --severity ERROR .
+          #           else
+          #             echo "Semgrep not installed. Skipping."
+          #           fi
+          #   language: system
+          #   pass_filenames: false
+
+fail_fast: false
+default_stages: [pre-commit]

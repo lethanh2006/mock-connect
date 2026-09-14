@@ -1,0 +1,7 @@
+.table {
+	:global(.ant-table-tbody > tr > td) {
+		// !important vì antd đặt `vertical-align: top` trên `.ant-table-cell` với độ đặc thù (specificity)
+		// bằng đúng rule này — nếu CSS của antd nạp sau thì rule top sẽ thắng, cell không center được.
+		vertical-align: middle !important;
+	}
+}
