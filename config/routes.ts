@@ -1,4 +1,4 @@
-﻿export default [
+export default [
 	{
 		path: '/user',
 		layout: false,
@@ -26,7 +26,7 @@
 		path: '/dashboard',
 		name: 'Dashboard',
 		component: './TrangChu',
-		icon: 'HomeOutlined',
+		icon: 'IconRoofedHouse',
 	},
 	{
 		path: '/gioi-thieu',
@@ -34,18 +34,25 @@
 		component: './TienIch/GioiThieu',
 		hideInMenu: true,
 	},
+	// GROUP: DANH MỤC & TỔ CHỨC (Collapsible Group)
+	{
+		name: 'DanhMucGroup',
+		path: '/__group__/danh-muc',
+		disabled: true,
+	},
 
 	// DANH MUC HE THONG
 	{
 		name: 'DanhMuc',
 		path: '/danh-muc',
-		icon: 'copy',
+		icon: 'IconFolder',
 		routes: [
 			{
 				name: 'ChucVu',
 				path: 'chuc-vu',
 				component: './DanhMuc/ChucVu',
-			},
+				badge: 'Mới',
+			}
 		],
 	},
 

@@ -183,15 +183,112 @@
 }
 
 // =============================================================================
-// Sidebar Menu (Menu mở rộng) - Icon nút bấm & Accordion chevron
+// Sidebar Header & Title
 // =============================================================================
-.app-shell-chevron {
+/* Chỉ áp dụng padding cho header khi nó chứa title bên trong */
+.app-shell-sidebar-header:has(.app-shell-sidebar-title) {
+	padding: 24px 20px 16px 20px !important;
+}
+
+
+.app-shell-sidebar-title,
+[data-slot="sidebar-title"] {
+	font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+// =============================================================================
+// Sidebar Groups & Collapsible Section (Triệt tiêu khoảng trống thừa 56px)
+// =============================================================================
+// Loại bỏ hoàn toàn py-16px mặc định của thư viện @vinuni/ui bọc quanh mỗi group
+// Triệt tiêu toàn bộ gap và padding-block mặc định của @vinuni/ui
+[data-slot="sidebar-content"] {
+	gap: 0 !important;
+}
+
+[data-slot="sidebar-group"],
+[data-slot="sidebar-collapsible-group"],
+.app-shell-default-group,
+.app-shell-collapsible-group {
+	padding: 0 8px !important;
+	padding-block: 0 !important;
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+	margin: 0 !important;
+}
+
+// Khoảng cách giữa các nhóm: chỉ 6px nhịp nhàng
+.app-shell-collapsible-group {
+	margin-bottom: 0 !important;
+}
+
+// Thu gọn padding của tiêu đề nhóm trigger (loại bỏ pt-16 mặc định)
+[data-slot="sidebar-group-trigger"],
+.app-shell-group-trigger {
+	text-transform: uppercase !important;
+	font-size: 11px !important;
+	font-weight: 600 !important;
+	letter-spacing: 0.05em !important;
+	color: #6b7280 !important;
+	padding: 4px 16px 2px 16px !important;
+	padding-block: 4px 2px !important;
+	padding-top: 4px !important;
+	padding-bottom: 2px !important;
+	height: auto !important;
+	min-height: 0 !important;
+
+	&:hover {
+		color: #374151 !important;
+	}
+
+	svg {
+		width: 16px !important;
+		height: 16px !important;
+		color: #6b7280 !important;
+	}
+}
+
+// =============================================================================
+// Menu Badge (Thông báo đỏ tròn / pill)
+// =============================================================================
+[data-slot="sidebar-menu-badge"],
+.app-shell-badge {
+	position: absolute !important;
+	right: 14px !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	height: 20px !important;
+	min-width: 20px !important;
+	padding: 0 6px !important;
+	border-radius: 999px !important;
+	background-color: #d9383a !important;
+	color: #ffffff !important;
+	font-size: 11px !important;
+	font-weight: 700 !important;
+	pointer-events: none !important;
+}
+
+// Tránh badge đè lên mũi tên chevron ở nhóm menu cha
+.app-shell-menu-btn,
+.app-shell-sub-group-btn {
+	.app-shell-badge {
+		right: 36px !important;
+	}
+}
+
+// =============================================================================
+// Chevron xoay khi mở accordion
+// =============================================================================
+.app-shell-chevron,
+svg.app-shell-chevron {
 	margin-left: auto !important;
 	width: 16px !important;
 	height: 16px !important;
 	flex-shrink: 0;
 	transform: rotate(-90deg);
-	transition: transform 0.25s ease;
+	transition: transform 0.2s ease;
 
 	&.open {
 		transform: rotate(0deg) !important;
@@ -199,77 +296,120 @@
 }
 
 // =============================================================================
-// Sidebar Menu & Sub-Menu Active / Selected State
+// Placeholder giữ chỗ icon 20px (giúp text luôn thẳng hàng tuyệt đối)
 // =============================================================================
-[data-slot="sidebar-menu-button"] {
-	font-family: var(--font-family-base, 'Inter', sans-serif) !important;
-	&::after { display: none !important; }
-	&[data-active="true"] {
-		font-weight: 600 !important;
-		color: #ffffff !important;
+.app-shell-menu-icon-placeholder {
+	width: 20px !important;
+	height: 20px !important;
+	min-width: 20px !important;
+	flex-shrink: 0 !important;
+	display: inline-block !important;
+}
+
+// =============================================================================
+// Menu Items (Gộp chung Cấp 1 & Cấp 2: đồng bộ 44px, bo góc 999px, chữ 16px)
+// =============================================================================
+[data-slot="sidebar-menu-button"],
+[data-slot="sidebar-menu-sub-button"],
+.app-shell-sub-group-btn {
+	height: 44px !important;
+	padding: 0 16px !important;
+	border-radius: 999px !important;
+	font-size: 16px !important;
+	font-weight: 400 !important;
+	color: #374151 !important;
+	gap: 12px !important;
+	transition: all 0.15s ease !important;
+
+	// Loại bỏ hoàn toàn pseudo-element để tránh 2 viền lồng nhau
+	&::before,
+	&::after {
+		display: none !important;
 	}
 
-	span, a {
-		font-family: inherit !important;
+	svg:not(.app-shell-chevron) {
+		width: 20px !important;
+		height: 20px !important;
+		min-width: 20px !important;
+		flex-shrink: 0 !important;
+		color: #4b5563 !important;
+	}
+
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.04) !important;
+		color: #111827 !important;
+
+		svg {
+			color: #111827 !important;
+		}
+	}
+
+	&[data-active="true"] {
+		font-weight: 600 !important;
+		color: var(--color-primary, #134d8b) !important;
+		background-color: rgba(19, 77, 139, 0.08) !important;
+
+		svg {
+			color: var(--color-primary, #134d8b) !important;
+		}
 	}
 }
 
+// Reset khoảng cách cho danh sách menu con
 [data-slot="sidebar-menu-sub"] {
-		--sub-color: rgba(255, 255, 255, 0.72);
-	--sub-hover-color: #ffffff;
-	--sub-hover-bg: rgba(255, 255, 255, 0.08);
-	--sub-active-color: #ffffff;
-	--sub-active-bg: rgba(59, 129, 218, 0.28);
-
-	margin: 0 4px 0 24px !important;
-	padding: 4px 0 !important;
-	transform: none !important;
+	margin: 0 !important;
+	padding: 2px 0 6px 0 !important;
 	border-left: none !important;
-	display: flex !important;
-	flex-direction: column !important;
-	gap: 4px !important;
+}
 
-	[data-slot="sidebar-menu-sub-button"] {
-		font-family: var(--font-family-base, 'Inter', sans-serif) !important;
-		display: flex !important;
-		align-items: center !important;
-		width: 100% !important;
-		height: 38px !important;
-		padding: 0 16px !important;
-		border-radius: 9999px !important;
-		font-size: 14px !important;
-		color: var(--sub-color) !important;
-		transform: none !important;
-		transition: all 0.2s ease !important;
-		box-sizing: border-box !important;
-		cursor: pointer;
-		&::after { display: none !important; }
+// =============================================================================
+// Dark Theme Overrides
+// =============================================================================
+[data-vinuni-theme="dark"] {
+
+	.app-shell-sidebar-title,
+	[data-slot="sidebar-title"] {
+		color: #f9fafb !important;
+	}
+
+	[data-slot="sidebar-group-trigger"],
+	.app-shell-group-trigger {
+		color: #9ca3af !important;
 
 		&:hover {
-			color: var(--sub-hover-color) !important;
-			background-color: var(--sub-hover-bg) !important;
+			color: #f3f4f6 !important;
+		}
+
+		svg {
+			color: #9ca3af !important;
+		}
+	}
+
+	[data-slot="sidebar-menu-button"],
+	[data-slot="sidebar-menu-sub-button"],
+	.app-shell-sub-group-btn {
+		color: #d1d5db !important;
+
+		svg:not(.app-shell-chevron) {
+			color: #9ca3af !important;
+		}
+
+		&:hover {
+			background-color: rgba(255, 255, 255, 0.08) !important;
+			color: #ffffff !important;
+
+			svg {
+				color: #ffffff !important;
+			}
 		}
 
 		&[data-active="true"] {
-			color: var(--sub-active-color) !important;
-			background-color: var(--sub-active-bg) !important;
-			font-weight: 600 !important;
+			color: #ffffff !important;
+			background-color: rgba(59, 129, 218, 0.28) !important;
+
+			svg {
+				color: #ffffff !important;
+			}
 		}
 	}
 }
-
-// Light theme overrides
-[data-vinuni-theme="light"] {
-	[data-slot="sidebar-menu-button"][data-active="true"] {
-		color: var(--color-primary, #134d8b) !important;
-	}
-
-	[data-slot="sidebar-menu-sub"] {
-				--sub-color: rgba(0, 0, 0, 0.65);
-		--sub-hover-color: #000000;
-		--sub-hover-bg: rgba(0, 0, 0, 0.05);
-		--sub-active-color: var(--color-primary, #134d8b);
-		--sub-active-bg: rgba(19, 77, 139, 0.12);
-	}
-}
-

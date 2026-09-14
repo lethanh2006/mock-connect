@@ -1,4 +1,4 @@
-import { IconFolder, IconRoofedHouse } from '@/components/Icons';
+import * as Icons from '@/components/Icons';
 import type { ComponentType, ReactNode } from 'react';
 import routes from '../../../config/routes';
 
@@ -7,8 +7,9 @@ export type NavNode = {
 	name: string;
 	localeId: string;
 	hideInMenu?: boolean;
-	icon: ReactNode;
+	icon?: ReactNode;
 	children?: NavNode[];
+	badge?: ReactNode;
 };
 
 export type NavSection = {
@@ -17,13 +18,28 @@ export type NavSection = {
 	items: NavNode[];
 };
 
-/** Ánh xạ `icon` khai trong config/routes.ts (chuỗi antd-icon cũ) sang icon của @vinuni/ui. */
-const ICON_MAP: Record<string, ComponentType> = {
-	HomeOutlined: IconRoofedHouse,
-	copy: IconFolder,
-};
+const DEFAULT_ICON: ComponentType = Icons.IconFolder;
 
-const DEFAULT_ICON: ComponentType = IconFolder;
+/**
+ * Tự động tìm component Icon từ @/components/Icons theo tên khai báo trong routes.ts:
+ * Hỗ trợ tên đầy đủ (vd: 'IconBriefcase') hoặc tên rút gọn (vd: 'Briefcase').
+ */
+function resolveIcon(iconName: any): ComponentType | null {
+	if (!iconName || typeof iconName !== 'string') return null;
+
+	// 1. Khớp trực tiếp tên component từ @/components/Icons
+	if ((Icons as any)[iconName]) {
+		return (Icons as any)[iconName];
+	}
+
+	// 2. Thử thêm prefix 'Icon' (vd: 'Briefcase' -> 'IconBriefcase')
+	const withPrefix = iconName.startsWith('Icon') ? iconName : `Icon${iconName}`;
+	if ((Icons as any)[withPrefix]) {
+		return (Icons as any)[withPrefix];
+	}
+
+	return DEFAULT_ICON;
+}
 
 /** Route đánh dấu ranh giới section trong routes.ts, vd `{ name: 'OtherGroup', path: '/__group__/other', disabled: true }`. */
 const GROUP_MARKER_PREFIX = '/__group__/';
@@ -48,15 +64,19 @@ function buildNode(route: any, parentPath: string, localeChain: string[]): NavNo
 		.map((child: any) => buildNode(child, path, chain))
 		.filter((child: NavNode | null): child is NavNode => !!child);
 
-	const Icon = ICON_MAP[route.icon] ?? DEFAULT_ICON;
+	const hasIconConfig = !!route.icon;
+	const Icon = hasIconConfig
+		? resolveIcon(route.icon)
+		: (localeChain.length === 0 ? DEFAULT_ICON : null);
 
 	return {
 		path,
 		name: route.name,
 		localeId: `menu.${chain.join('.')}`,
 		hideInMenu: !!route.hideInMenu,
-		icon: <Icon />,
+		icon: Icon ? <Icon /> : undefined,
 		children: children.length ? children : undefined,
+		badge: route.badge,
 	};
 }
 
@@ -69,8 +89,8 @@ function dropHidden(nodes: NavNode[]): NavNode[] {
 /**
  * Cây menu cho Sidebar, nhóm theo section — mỗi section mở đầu bằng một route
  * đánh dấu (`disabled: true`, path `/__group__/...`) trong config/routes.ts.
- * Item ở gốc mỗi section có `children` sẽ hiển thị dạng accordion (như PTIT),
- * còn nhãn section (vd "DASHBOARD & QUẢN TRỊ", "KHÁC") luôn hiển thị, không thu gọn.
+ * Item ở gốc mỗi section có `children` sẽ hiển thị dạng accordion,
+ * còn nhãn section (vd "DANH MỤC & TỔ CHỨC") gập mở cả section.
  */
 export function getNavSections(): NavSection[] {
 	const sections: NavSection[] = [];

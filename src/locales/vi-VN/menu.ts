@@ -5,6 +5,10 @@ export default {
 	'menu.Dashboard': 'Trang chủ',
 	'menu.About': `Giới thiệu ${APP_CONFIG_TIEN_TO_TRUONG.toLowerCase()}`,
 	'menu.News': 'Tin tức',
-	'menu.DanhMuc': 'Danh mục',
+
+	// Group: Danh mục & Tổ chức
+	'menu.DanhMucGroup': 'DANH MỤC & TỔ CHỨC',
+	'menu.DanhMuc': 'Quản lý danh mục',
 	'menu.DanhMuc.ChucVu': 'Chức vụ',
+
 };

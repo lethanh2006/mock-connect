@@ -6,7 +6,6 @@ import { currentRole } from '@/utils/ip';
 import {
 	IconChervolDown,
 	Sidebar,
-	SidebarBanner,
 	SidebarContent,
 	SidebarDock,
 	SidebarDockBrand,
@@ -19,9 +18,12 @@ import {
 	SidebarDockViews,
 	SidebarDockWordmark,
 	SidebarFooter,
+	SidebarCollapsibleGroup,
 	SidebarGroup,
+	SidebarGroupCollapsibleContent,
+	SidebarGroupTrigger,
+	SidebarMenuBadge,
 	SidebarGroupContent,
-	SidebarGroupLabel,
 	SidebarHeader,
 	SidebarInset,
 	SidebarMenu,
@@ -31,12 +33,16 @@ import {
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
 	SidebarProvider,
+	SidebarTitle,
 } from '@/components/Icons';
 import { Collapsible } from 'radix-ui';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { forwardRef, useEffect, useMemo, useState } from 'react';
 import { getLocale, history, setLocale, useIntl, useLocation } from 'umi';
 import { getNavSections, type NavNode } from './nav';
+import { useMenuBadges, setMenuBadge, setMenuBadges, getMenuBadge, clearMenuBadges, useMenuBadge, type BadgeValue } from './badgeStore';
+
+export { setMenuBadge, setMenuBadges, getMenuBadge, clearMenuBadges, useMenuBadge, useMenuBadges, type BadgeValue };
 import './style.less';
 
 const LocaleDockSwitcher = () => {
@@ -77,8 +83,17 @@ const hasActiveDescendant = (node: NavNode, pathname: string): boolean =>
  * Radix `Slot` merge className, data-attrs, ref vào thẳng phần tử này, nên phải
  * nhận `...rest` và `ref` rồi gắn lên `<a>`, nếu không class của thư viện sẽ rơi mất.
  */
-const NavLink = forwardRef<HTMLAnchorElement, ComponentPropsWithoutRef<'a'> & { node: NavNode; showIcon?: boolean }>(
-	({ node, showIcon = true, onClick, ...rest }, ref) => {
+const NodeBadge = ({ path, staticBadge }: { path: string; staticBadge?: ReactNode }) => {
+	const badges = useMenuBadges();
+	const dynamicVal = badges[path];
+	const badge = dynamicVal !== undefined ? dynamicVal : staticBadge;
+
+	if (badge == null || badge === 0) return null;
+	return <SidebarMenuBadge className="app-shell-badge">{badge}</SidebarMenuBadge>;
+};
+
+const NavLink = forwardRef<HTMLAnchorElement, ComponentPropsWithoutRef<'a'> & { node: NavNode }>(
+	({ node, onClick, ...rest }, ref) => {
 		const intl = useIntl();
 
 		return (
@@ -92,8 +107,13 @@ const NavLink = forwardRef<HTMLAnchorElement, ComponentPropsWithoutRef<'a'> & { 
 				}}
 				{...rest}
 			>
-				{showIcon && node.icon}
-				<span>{intl.formatMessage({ id: node.localeId, defaultMessage: node.name })}</span>
+				{node.icon ? (
+					node.icon
+				) : (
+					<span className="app-shell-menu-icon-placeholder" aria-hidden="true" />
+				)}
+				<span className="app-shell-menu-label">{intl.formatMessage({ id: node.localeId, defaultMessage: node.name })}</span>
+				<NodeBadge path={node.path} staticBadge={node.badge} />
 			</a>
 		);
 	},
@@ -123,9 +143,10 @@ const NavMenuGroupItem = ({ node, pathname }: { node: NavNode; pathname: string 
 		<Collapsible.Root open={open} onOpenChange={setOpen}>
 			<SidebarMenuItem>
 				<Collapsible.Trigger asChild>
-					<SidebarMenuButton isActive={hasActiveChild && !open}>
-						{node.icon}
-						<span>{intl.formatMessage({ id: node.localeId, defaultMessage: node.name })}</span>
+					<SidebarMenuButton isActive={hasActiveChild && !open} className="app-shell-menu-btn">
+						{node.icon ? node.icon : <span className="app-shell-menu-icon-placeholder" aria-hidden="true" />}
+						<span className="app-shell-menu-label">{intl.formatMessage({ id: node.localeId, defaultMessage: node.name })}</span>
+						<NodeBadge path={node.path} staticBadge={node.badge} />
 						<IconChervolDown
 							aria-hidden
 							className={`app-shell-chevron ${open ? 'open' : ''}`}
@@ -148,7 +169,7 @@ const NavMenuGroupItem = ({ node, pathname }: { node: NavNode; pathname: string 
 const NavSubLeaf = ({ node, pathname }: { node: NavNode; pathname: string }) => (
 	<SidebarMenuSubItem>
 		<SidebarMenuSubButton asChild isActive={isNodeActive(node, pathname)}>
-			<NavLink node={node} showIcon={false} />
+			<NavLink node={node} />
 		</SidebarMenuSubButton>
 	</SidebarMenuSubItem>
 );
@@ -173,8 +194,10 @@ const NavSubGroup = ({ node, pathname }: { node: NavNode; pathname: string }) =>
 			<SidebarMenuSubItem>
 				<Collapsible.Trigger asChild>
 					<SidebarMenuSubButton asChild isActive={hasActiveChild && !open}>
-						<button type='button'>
-							<span>{intl.formatMessage({ id: node.localeId, defaultMessage: node.name })}</span>
+						<button type='button' className="app-shell-sub-group-btn">
+							{node.icon ? node.icon : <span className="app-shell-menu-icon-placeholder" aria-hidden="true" />}
+							<span className="app-shell-menu-label">{intl.formatMessage({ id: node.localeId, defaultMessage: node.name })}</span>
+							<NodeBadge path={node.path} staticBadge={node.badge} />
 							<IconChervolDown
 								aria-hidden
 								className={`app-shell-chevron ${open ? 'open' : ''}`}
@@ -228,28 +251,43 @@ const AppShell = ({ children }: { children: ReactNode }) => {
 				</SidebarDock>
 
 				<Sidebar collapsible='offcanvas'>
-					<SidebarHeader>
-						{/* <SidebarTitle className='font-heading'>{appTitle}</SidebarTitle> */}
-						<SidebarBanner projectName={appTitle} />
+					<SidebarHeader className="app-shell-sidebar-header">
+						<SidebarTitle className="app-shell-sidebar-title font-heading">{appTitle}</SidebarTitle>
+						{/* <SidebarBanner projectName={appTitle} /> */}
 					</SidebarHeader>
 
 					<SidebarContent>
-						{sections.map((section) => (
-							<SidebarGroup key={section.id} style={{ paddingTop: 4, paddingBottom: 4 }}>
-								{section.localeId && (
-									<SidebarGroupLabel style={{ paddingTop: 4, paddingBottom: 4 }}>
-										{intl.formatMessage({ id: section.localeId, defaultMessage: section.id })}
-									</SidebarGroupLabel>
-								)}
-								<SidebarGroupContent>
-									<SidebarMenu>
-										{section.items.map((node) => (
-											<NavMenuNode key={node.path} node={node} pathname={pathname} />
-										))}
-									</SidebarMenu>
-								</SidebarGroupContent>
-							</SidebarGroup>
-						))}
+						{sections.map((section) => {
+							if (section.localeId) {
+								return (
+									<SidebarCollapsibleGroup key={section.id} defaultOpen className='app-shell-collapsible-group'>
+										<SidebarGroupTrigger className='app-shell-group-trigger'>
+											{intl.formatMessage({ id: section.localeId, defaultMessage: section.id })}
+										</SidebarGroupTrigger>
+										<SidebarGroupCollapsibleContent>
+											<SidebarGroupContent>
+												<SidebarMenu>
+													{section.items.map((node) => (
+														<NavMenuNode key={node.path} node={node} pathname={pathname} />
+													))}
+												</SidebarMenu>
+											</SidebarGroupContent>
+										</SidebarGroupCollapsibleContent>
+									</SidebarCollapsibleGroup>
+								);
+							}
+							return (
+								<SidebarGroup key={section.id} className='app-shell-default-group'>
+									<SidebarGroupContent>
+										<SidebarMenu>
+											{section.items.map((node) => (
+												<NavMenuNode key={node.path} node={node} pathname={pathname} />
+											))}
+										</SidebarMenu>
+									</SidebarGroupContent>
+								</SidebarGroup>
+							);
+						})}
 					</SidebarContent>
 
 					<SidebarFooter>
