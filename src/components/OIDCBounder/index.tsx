@@ -2,7 +2,7 @@ import { useAuthActions } from '@/hooks/useAuthActions';
 import { getUserInfo } from '@/services/base/api';
 import { AppModules, EModuleKey } from '@/services/base/constant';
 import { type Login } from '@/services/base/typing';
-import axios from '@/utils/axios';
+import axios, { registerOidcSilentRenew } from '@/utils/axios';
 import { ctsvApiClientId, currentRole, financeApiClientId, qldtApiClientId, replaceRole } from '@/utils/ip';
 import type { AuthorizedRolesByClient } from '@/utils/keycloakRoles';
 import { getKeycloakRoleContext, hasModulePermission } from '@/utils/keycloakRoles';
