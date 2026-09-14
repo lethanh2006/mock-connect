@@ -215,17 +215,16 @@
 }
 
 [data-slot="sidebar-menu-sub"] {
-	--sub-border: rgba(255, 255, 255, 0.12);
-	--sub-color: rgba(255, 255, 255, 0.72);
+		--sub-color: rgba(255, 255, 255, 0.72);
 	--sub-hover-color: #ffffff;
 	--sub-hover-bg: rgba(255, 255, 255, 0.08);
 	--sub-active-color: #ffffff;
 	--sub-active-bg: rgba(59, 129, 218, 0.28);
 
 	margin: 0 4px 0 24px !important;
-	padding: 4px 0 4px 8px !important;
+	padding: 4px 0 !important;
 	transform: none !important;
-	border-left: 1px solid var(--sub-border) !important;
+	border-left: none !important;
 	display: flex !important;
 	flex-direction: column !important;
 	gap: 4px !important;
@@ -266,8 +265,7 @@
 	}
 
 	[data-slot="sidebar-menu-sub"] {
-		--sub-border: rgba(0, 0, 0, 0.12);
-		--sub-color: rgba(0, 0, 0, 0.65);
+				--sub-color: rgba(0, 0, 0, 0.65);
 		--sub-hover-color: #000000;
 		--sub-hover-bg: rgba(0, 0, 0, 0.05);
 		--sub-active-color: var(--color-primary, #134d8b);
