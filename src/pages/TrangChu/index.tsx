@@ -1,5 +1,5 @@
 import { useMenuBadge } from '@/components/AppShell';
-import { Card, CardContent } from '@/components/Icons';
+import PageCard from '@/components/PageCard';
 import { unitName } from '@/services/base/constant';
 import { useIntl } from '@umijs/max';
 import { useEffect } from 'react';
@@ -17,16 +17,14 @@ const TrangChu = () => {
 	}, []);
 
 	return (
-		<Card>
-			<CardContent>
-				<div className='home-welcome'>
-					<h1 className='title'>{intl.formatMessage({ id: 'pages.trangchu.title' })}</h1>
-					<h2 className='sub-title'>
-						{intl.formatMessage({ id: 'pages.trangchu.subtitle' })} - {intl.formatMessage({ id: unitName }).toUpperCase()}
-					</h2>
-				</div>
-			</CardContent>
-		</Card>
+		<PageCard title={intl.formatMessage({ id: 'menu.Dashboard' })}>
+			<div className='home-welcome'>
+				<h1 className='title'>{intl.formatMessage({ id: 'pages.trangchu.title' })}</h1>
+				<h2 className='sub-title'>
+					{intl.formatMessage({ id: 'pages.trangchu.subtitle' })} - {intl.formatMessage({ id: unitName }).toUpperCase()}
+				</h2>
+			</div>
+		</PageCard>
 	);
 };
 

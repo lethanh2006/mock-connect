@@ -72,6 +72,22 @@
 
 	// Bo góc chuẩn VinUni
 	--vin-border-radius: 16px;
+	--vin-border-radius-sm: 8px;
+	--vin-border-radius-lg: 24px;
+	--vin-border-radius-pill: 9999px;
+
+	// Spacing & Padding tham số hóa
+	--spacing-xs: 4px;
+	--spacing-sm: 8px;
+	--spacing-md: 12px;
+	--spacing-lg: 16px;
+	--spacing-xl: 20px;
+	--spacing-xxl: 24px;
+
+	--page-card-padding: 18px;
+	--page-card-padding-xs: 12px;
+	--modal-padding: 24px;
+	--modal-padding-xs: 16px;
 
 	// Font chuẩn toàn hệ thống VinUni (Inter)
 	--font-family-base:
@@ -456,6 +472,138 @@ button:not(:disabled),
 	}
 }
 
+// =============================================================================
+// Card & TableCard - Chuẩn hóa typography, header & indicator VinUni
+// =============================================================================
+[data-slot='card'],
+[data-slot='table-card'],
+.page-card {
+	font-family: var(--font-family-base);
+}
+
+[data-slot='card-title'] {
+	white-space: pre-wrap;
+	font-family: var(--font-family-base);
+	font-size: 18px;
+	font-weight: 600;
+	color: var(--color-text-base, var(--color-text-100, #2e2e2e));
+	line-height: 1.4;
+}
+
+[data-slot='card-header'],
+[data-slot='page-card-header'],
+.page-card-header {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: space-between !important;
+	flex-wrap: wrap !important;
+	gap: 12px !important;
+	width: 100% !important;
+
+	[data-slot='card-title'],
+	.page-card-title {
+		flex: 1 1 auto;
+		min-width: 0;
+		font-family: var(--font-family-base);
+		font-size: 18px;
+		font-weight: 600;
+		color: var(--color-text-base, var(--color-text-100, #2e2e2e));
+		line-height: 1.4;
+	}
+
+	[data-slot='card-action'],
+	.page-card-action {
+		flex: 0 0 auto;
+		margin-left: auto;
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+	}
+}
+
+.page-card {
+	width: 100%;
+
+	.page-card-header {
+		display: flex !important;
+		align-items: center !important;
+		justify-content: space-between !important;
+		flex-wrap: wrap !important;
+		gap: 12px !important;
+		width: 100% !important;
+		min-height: 32px !important;
+		margin-top: 8px !important;
+		margin-bottom: 16px !important;
+	}
+
+	.page-card-inner {
+		border-radius: var(--vin-border-radius);
+		background-color: var(--color-bg-container, var(--ds-bg-mortared, #ffffff));
+		padding: 0 !important;
+
+		[data-slot='card-content'],
+		>.card-content {
+			padding: var(--page-card-padding, 18px) !important;
+		}
+
+		@media (max-width: @screen-xs) {
+
+			[data-slot='card-content'],
+			>.card-content {
+				padding: var(--page-card-padding-xs, 12px) !important;
+			}
+		}
+	}
+}
+
+// Table Toolbar: Extra (Bộ lọc/Tìm kiếm/Tổng số) bên trái, Action (Tác vụ) bên phải (Dùng CSS order)
+[data-slot='table-card-toolbar'],
+.table-base .header {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: space-between !important;
+	flex-direction: row !important;
+	flex-wrap: wrap !important;
+	gap: 12px !important;
+	width: 100% !important;
+
+	.extra {
+		order: 1 !important; // Hiển thị BÊN TRÁI
+		display: flex !important;
+		align-items: center !important;
+		flex-direction: row !important;
+		flex-wrap: wrap !important;
+		gap: 8px !important;
+
+		.total {
+			display: inline-flex !important;
+			align-items: center !important;
+			margin-left: var(--spacing-md, 12px) !important; // Tách bạch rõ ràng khỏi ô tìm kiếm
+			white-space: nowrap !important;
+			border: none !important;
+			padding: 0 !important;
+
+			span {
+				margin-left: var(--spacing-xs, 4px) !important;
+				color: var(--color-highlight) !important;
+				font-weight: 700 !important;
+			}
+		}
+	}
+
+	.action {
+		order: 2 !important; // Hiển thị BÊN PHẢI
+		display: flex !important;
+		align-items: center !important;
+		flex-direction: row-reverse !important; // Tải lại ở trái nhóm, Thêm mới ở ngoài cùng bên phải
+		flex-wrap: wrap !important;
+		gap: 8px !important;
+		justify-content: flex-end !important;
+		margin-left: auto !important;
+	}
+}
+
+/* Code cũ (Ant Design Card):
 .ant-card {
 	>.ant-card-head>.ant-card-head-wrapper>.ant-card-head-title {
 		white-space: pre-wrap;
@@ -535,6 +683,100 @@ button:not(:disabled),
 		}
 	}
 }
+*/
+
+// Indicator bar khi Card/TableCard/PageCard có class has-indicator
+[data-slot='card'].has-indicator,
+[data-slot='table-card'].has-indicator,
+.table-base-card.has-indicator,
+.page-card.has-indicator,
+.ant-card.has-indicator {
+
+	.page-card-title,
+	[data-slot='card-title'],
+	>.ant-card-head>.ant-card-head-wrapper>.ant-card-head-title {
+		position: relative;
+		padding-left: 18px !important;
+
+		&::after {
+			.indicator();
+			left: 0 !important;
+			top: 50% !important;
+			transform: translateY(-50%) !important;
+		}
+	}
+}
+
+// Card & TableCard & PageCard highlight (Level 2: Section Title 18px)
+[data-slot='card'].highlight,
+[data-slot='table-card'].highlight,
+.table-base-card.highlight,
+.page-card.highlight,
+.ant-card.highlight {
+
+	.page-card-title,
+	[data-slot='card-title'],
+	>.ant-card-head>.ant-card-head-wrapper>.ant-card-head-title {
+		font-size: 18px !important;
+		font-weight: 600 !important;
+		color: var(--color-official-300, var(--color-text-base)) !important;
+	}
+}
+
+// Card & TableCard & PageCard normal (Level 3: Sub-section Title 16px)
+[data-slot='card'].normal,
+[data-slot='table-card'].normal,
+.table-base-card.normal,
+.page-card.normal,
+.ant-card.normal {
+
+	.page-card-title,
+	[data-slot='card-title'],
+	>.ant-card-head>.ant-card-head-wrapper>.ant-card-head-title {
+		font-size: 16px !important;
+		font-weight: 600 !important;
+		color: var(--color-official-300, var(--color-text-base)) !important;
+
+		&::after {
+			display: none !important;
+		}
+	}
+}
+
+// Card & TableCard & PageCard card-big-title (Level 1 & 2)
+[data-slot='card'].card-big-title,
+[data-slot='table-card'].card-big-title,
+.table-base-card.card-big-title,
+.page-card.card-big-title,
+.page-card:not(.normal):not(.highlight):not(.standard):not(.page-card-standard) {
+
+	.page-card-title,
+	[data-slot='card-title'] {
+		font-size: 24px !important;
+		margin-top: 8px !important;
+		font-weight: 600 !important;
+		color: var(--color-text-base, var(--color-text-100, #2e2e2e)) !important;
+		line-height: 1.4;
+	}
+}
+
+// Card & TableCard & PageCard card-borderless
+[data-slot='card'].card-borderless,
+[data-slot='table-card'].card-borderless,
+.table-base-card.card-borderless,
+.page-card.card-borderless {
+	border: none !important;
+	box-shadow: none !important;
+}
+
+// Giữ .ant-card cho tương thích ngược nếu còn component ngoài phân hệ dùng
+.ant-card {
+	>.ant-card-head>.ant-card-head-wrapper>.ant-card-head-title {
+		white-space: pre-wrap;
+		font-size: 18px !important;
+		font-weight: bold !important;
+	}
+}
 
 .ant-modal-title {
 	white-space: pre-wrap;
@@ -550,7 +792,8 @@ button:not(:disabled),
 	justify-content: center !important;
 	align-items: center !important;
 	box-shadow: none !important;
-	text-transform: uppercase !important;
+	/* Code cũ: text-transform: uppercase !important; */
+	text-transform: none !important;
 
 	&:not(.ant-btn-circle) {
 		border-radius: var(--vin-border-radius) !important;
@@ -861,13 +1104,63 @@ button:not(:disabled),
 
 .table-base {
 	.header {
+		/* Code cũ:
 		display: flex;
 		flex-direction: row-reverse;
+		*/
+		display: flex !important;
+		align-items: center !important;
 		justify-content: space-between !important;
+		flex-direction: row !important;
+		flex-wrap: wrap !important;
+		gap: 12px !important;
+
+		.extra {
+			order: 1 !important;
+			display: flex !important;
+			align-items: center !important;
+			flex-direction: row !important;
+			flex-wrap: wrap !important;
+			gap: 8px !important;
+
+			.ant-btn {
+				.ant-btn-icon,
+				.anticon {
+					margin: 0 !important;
+					line-height: 1 !important;
+				}
+
+				.span-extend {
+					display: none !important;
+				}
+			}
+
+			.total {
+				z-index: 1 !important;
+				border: none !important;
+				padding: 0 !important;
+				margin-left: 12px !important;
+				display: inline-flex !important;
+				align-items: center !important;
+				white-space: nowrap !important;
+
+				span {
+					margin-left: 4px !important;
+					color: var(--color-highlight) !important;
+					font-weight: 700 !important;
+				}
+			}
+		}
 
 		.action {
+			order: 2 !important;
 			display: flex !important;
-			flex-direction: row-reverse;
+			align-items: center !important;
+			flex-direction: row-reverse !important;
+			flex-wrap: wrap !important;
+			gap: 8px !important;
+			justify-content: flex-end !important;
+			margin-left: auto !important;
 
 			button.ant-btn:has(> .span-extend) {
 				>span.ant-btn-icon {
@@ -888,6 +1181,7 @@ button:not(:disabled),
 			}
 		}
 
+		/* Code cũ:
 		.extra {
 			display: flex !important;
 			align-items: center !important;
@@ -915,6 +1209,7 @@ button:not(:disabled),
 				color: var(--color-highlight) !important;
 			}
 		}
+		*/
 	}
 }
 
@@ -1021,7 +1316,8 @@ button:not(:disabled),
 .ant-modal-title,
 [data-slot='dialog-title'],
 .modal-expandable-title,
-.modal-expandable .ant-card .ant-card-head .ant-card-head-title {
+.modal-expandable .ant-card .ant-card-head .ant-card-head-title,
+.modal-expandable [data-slot='card'] [data-slot='card-title'] {
 	white-space: pre-wrap;
 	flex: auto;
 	font-size: 18px !important;
@@ -1035,7 +1331,9 @@ button:not(:disabled),
 	.ant-modal-title,
 	[data-slot='dialog-title'],
 	.modal-expandable-title,
-	.modal-expandable .ant-card .ant-card-head .ant-card-head-title {
+	.modal-expandable .ant-card .ant-card-head .ant-card-head-title,
+	.modal-expandable [data-slot='card'] [data-slot='card-title'],
+	[data-slot='card-title'] {
 		color: #ffffff !important;
 	}
 }
@@ -1148,9 +1446,18 @@ button:not(:disabled),
 
 .form-footer {
 	position: relative;
+	/* Code cũ:
 	padding: 16px 0 0 !important;
 	justify-content: flex-start !important;
 	flex-direction: row-reverse;
+	*/
+	margin-top: var(--modal-padding, 24px) !important;
+	padding: 0 !important;
+	display: flex !important;
+	justify-content: flex-start !important; // Trong row-reverse, flex-start đưa các nút về BÊN PHẢI modal
+	align-items: center !important;
+	gap: var(--spacing-md, 12px) !important;
+	flex-direction: row-reverse !important; // Nút primary ở ngoài cùng bên phải, Hủy ở bên trái
 	border-top: none !important;
 
 	&::before {
@@ -1321,6 +1628,7 @@ button:not(:disabled),
 }
 
 /* Bo góc cho Bảng và Card chứa Bảng - VinUni */
+/* Code cũ:
 .ant-card:has(.table-base),
 .card-big-title:has(.table-base),
 .card-big-title .ant-card,
@@ -1331,6 +1639,11 @@ button:not(:disabled),
 	>.ant-card-body {
 		border-radius: var(--vin-border-radius) !important;
 	}
+}
+*/
+.table-card,
+.table-base-card {
+	border-radius: var(--vin-border-radius) !important;
 }
 
 .table-base {

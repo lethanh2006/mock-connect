@@ -392,8 +392,24 @@ tr.diem-tp-semester-row {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	justify-content: flex-end;
+	justify-content: space-between;
 	gap: 12px;
+	width: 100%;
+	padding: 12px 16px;
+
+	.table-pagination-left {
+		display: flex;
+		align-items: center;
+		flex-shrink: 0;
+	}
+
+	.table-pagination-right {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		margin-left: auto;
+		flex-shrink: 0;
+	}
 }
 
 .column-select-filter-row {

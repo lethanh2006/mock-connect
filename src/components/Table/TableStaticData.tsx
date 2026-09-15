@@ -859,7 +859,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 
 	const mainContent = (
 		<div className='table-base' style={tableContainerStyle}>
-			<div className='header'>
+			<div className='header' data-slot='table-card-toolbar'>
 				{children}
 				<div className='action no-print'>
 					{hasCreate && (
@@ -981,6 +981,8 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					title={props.title || false}
 					extra={props.cardExtra}
 					bordered={props.border ?? props.bordered}
+					className={props.cardProps?.className}
+					style={props.cardProps?.style}
 				>
 					{mainContent}
 				</PageCard>

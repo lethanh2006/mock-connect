@@ -57,9 +57,10 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
 
 	return (
 		<div className='table-pagination-bar'>
-			{extra}
+			<div className='table-pagination-left'>{extra}</div>
 
-			<Pagination style={{ width: 'auto', margin: '12px 0px 0px 0px' }}>
+			<div className='table-pagination-right'>
+				<Pagination style={{ width: 'auto', margin: 0 }}>
 				<PaginationContent>
 					<PaginationItem>
 						<PaginationLink
@@ -128,7 +129,8 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
 						</SelectItem>
 					))}
 				</SelectContent>
-			</Select>
+				</Select>
+			</div>
 		</div>
 	);
 };

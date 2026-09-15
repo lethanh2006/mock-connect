@@ -490,6 +490,8 @@ export const TableBaseContent = (props: TableBaseProps) => {
 					title={props.title || false}
 					extra={props.cardExtra}
 					bordered={props.border}
+					className={props.cardProps?.className}
+					style={props.cardProps?.style}
 				>
 					{mainContent}
 				</PageCard>
