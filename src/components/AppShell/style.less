@@ -180,6 +180,7 @@
 .app-shell-sidebar-title,
 [data-slot="sidebar-title"] {
 	font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
+	color: var(--color-text, #111827) !important;
 	padding: 0 !important;
 	margin: 0 !important;
 }
@@ -212,7 +213,7 @@
 	font-size: 11px !important;
 	font-weight: 600 !important;
 	letter-spacing: 0.05em !important;
-	color: #6b7280 !important;
+	color: var(--color-text-tertiary, #6b7280) !important;
 	padding: 4px 16px 2px 16px !important;
 	padding-block: 4px 2px !important;
 	padding-top: 4px !important;
@@ -221,13 +222,13 @@
 	min-height: 0 !important;
 
 	&:hover {
-		color: #374151 !important;
+		color: var(--color-text-secondary, #374151) !important;
 	}
 
 	svg {
 		width: 16px !important;
 		height: 16px !important;
-		color: #6b7280 !important;
+		color: var(--color-text-tertiary, #6b7280) !important;
 	}
 }
 
@@ -242,7 +243,7 @@
 	border-radius: 999px !important;
 	font-size: 16px !important;
 	font-weight: 400 !important;
-	color: #374151 !important;
+	color: var(--color-text-secondary, #374151) !important;
 	gap: 12px !important;
 	transition: all 0.15s ease !important;
 
@@ -257,15 +258,15 @@
 		height: 20px !important;
 		min-width: 20px !important;
 		flex-shrink: 0 !important;
-		color: #4b5563 !important;
+		color: var(--color-text-tertiary, #4b5563) !important;
 	}
 
 	&:hover {
 		background-color: rgba(0, 0, 0, 0.04) !important;
-		color: #111827 !important;
+		color: var(--color-text, #111827) !important;
 
 		svg {
-			color: #111827 !important;
+			color: var(--color-text, #111827) !important;
 		}
 	}
 
@@ -325,7 +326,7 @@ svg.app-shell-chevron {
 	min-width: 20px !important;
 	padding: 0 6px !important;
 	border-radius: 999px !important;
-	background-color: #d9383a !important;
+	background-color: var(--color-error, #d9383a) !important;
 	color: #ffffff !important;
 	font-size: 11px !important;
 	font-weight: 700 !important;
@@ -337,45 +338,19 @@ svg.app-shell-chevron {
 	right: 36px !important;
 }
 
-// =============================================================================
 // Dark Theme Overrides
-// =============================================================================
+// Chỉ còn background của hover/active — màu chữ/icon đã chuyển sang token
+// var(--color-text...) ở rule gốc bên trên, tự đổi theo theme qua ConfigProvider
+// (algorithm: darkAlgorithm) nên không cần lặp lại ở đây nữa. Active state giữ
+// nguyên #ffffff riêng cho dark mode vì var(--color-primary) không tự đổi độ
+// tương phản theo theme (primary color giữ nguyên hex bất kể light/dark).
 [data-vinuni-theme="dark"] {
-
-	.app-shell-sidebar-title,
-	[data-slot="sidebar-title"] {
-		color: #f9fafb !important;
-	}
-
-	[data-slot="sidebar-group-trigger"],
-	.app-shell-group-trigger {
-		color: #9ca3af !important;
-
-		&:hover {
-			color: #f3f4f6 !important;
-		}
-
-		svg {
-			color: #9ca3af !important;
-		}
-	}
 
 	[data-slot="sidebar-menu-button"],
 	[data-slot="sidebar-menu-sub-button"],
 	.app-shell-sub-group-btn {
-		color: #d1d5db !important;
-
-		svg:not(.app-shell-chevron) {
-			color: #9ca3af !important;
-		}
-
 		&:hover {
 			background-color: rgba(255, 255, 255, 0.08) !important;
-			color: #ffffff !important;
-
-			svg {
-				color: #ffffff !important;
-			}
 		}
 
 		&[data-active="true"] {

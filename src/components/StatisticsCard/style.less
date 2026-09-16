@@ -23,7 +23,7 @@
 	}
 
 	.text {
-		color: var(--color-text-base, var(--color-text-100, rgba(0, 0, 0, 0.85)));
+		color: var(--color-text, rgba(0, 0, 0, 0.85));
 		font-weight: 500;
 		flex: 1;
 
@@ -64,7 +64,6 @@
 	}
 
 	&.success {
-		border-left-color: #52c41a;
 		color: var(--color-success);
 		background-color: var(--color-success-bg);
 
@@ -76,7 +75,6 @@
 	}
 
 	&.warning {
-		border-left-color: #faad14;
 		color: var(--color-warning);
 		background-color: var(--color-warning-bg);
 
@@ -88,7 +86,6 @@
 	}
 
 	&.error {
-		border-left-color: #ff4d4f;
 		color: var(--color-error);
 		background-color: var(--color-error-bg);
 
@@ -100,7 +97,6 @@
 	}
 
 	&.info {
-		border-left-color: #1890ff;
 		color: var(--color-info);
 		background-color: var(--color-info-bg);
 
@@ -112,14 +108,13 @@
 	}
 
 	&.gray {
-		border-left-color: #1890ff;
-		color: #7a7a7a;
-		background-color: #fafafa;
+		color: var(--color-text-secondary, #7a7a7a);
+		background-color: var(--color-fill-quaternary, #fafafa);
 
 		.anticon,
 		.stat-icon,
 		svg {
-			color: #7a7a7a;
+			color: var(--color-text-secondary, #7a7a7a);
 		}
 	}
 
@@ -137,21 +132,5 @@
 
 	&.shadow {
 		box-shadow: var(--box-shadow-tertiary);
-	}
-}
-
-[data-vinuni-theme='dark'] {
-	.statistics-item {
-		.text {
-			color: rgba(255, 255, 255, 0.85);
-		}
-
-		&.gray {
-			background-color: var(--color-fill-quaternary, rgba(255, 255, 255, 0.08));
-
-			.text {
-				color: rgba(255, 255, 255, 0.65);
-			}
-		}
 	}
 }
