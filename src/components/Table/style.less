@@ -409,6 +409,22 @@ tr.diem-tp-semester-row {
 		gap: 12px;
 		margin-left: auto;
 		flex-shrink: 0;
+
+		// Ép align-items:center ở mọi cấp bên trong Pagination — phòng trường hợp
+		// margin mặc định của <nav>/<ul> trình duyệt hoặc line-height của glyph số
+		// làm các mục (mũi tên, số trang, "...", Select) lệch tâm với nhau.
+		[data-slot='pagination'],
+		[data-slot='pagination-content'] {
+			margin: 0;
+			padding: 0;
+			display: flex;
+			align-items: center;
+		}
+
+		[data-slot='pagination-link'],
+		[data-slot='pagination-ellipsis'] {
+			line-height: 1;
+		}
 	}
 }
 

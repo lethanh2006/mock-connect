@@ -1,6 +1,6 @@
 import { tienVietNam } from '@/utils/utils';
 import { getLocale } from '@umijs/max';
-import { Empty } from 'antd';
+import EmptyState from '@/components/EmptyState';
 import type { ApexOptions } from 'apexcharts';
 import en from 'apexcharts/dist/locales/en.json';
 import vi from 'apexcharts/dist/locales/vi.json';
@@ -15,7 +15,7 @@ const BarChart = (props: DataChartType) => {
 	const locale = getLocale();
 	const defaultLocale = locale === 'vi-VN' ? 'vi' : 'en';
 	if (!xAxis || !yAxis || yAxis.length === 0 || yAxis[0].length === 0) {
-		return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />;
+		return <EmptyState description='Không có dữ liệu' />;
 	}
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks

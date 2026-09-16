@@ -1,12 +1,14 @@
-import { Icon3SquarePlusmark, IconPlus, IconQuestionCircle } from '@/components/Icons';
-import { Button, Descriptions, Form, Modal, Space, Tooltip, Typography } from 'antd';
+import { Button, Icon3SquarePlusmark, IconPlus, IconQuestionCircle, Tooltip, TooltipContent, TooltipTrigger } from '@/components/Icons';
+import { Descriptions, Form, Typography } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'umi';
+import ModalExpandable from '../ModalExpandable';
 import { useTableContext } from '../components/TableContext';
 import { useFilterFields } from '../hooks/useFilterFields';
 import { normalizeFilters } from '../utils';
 import { ModalFooter } from './ModalFooter';
 import RowFilter from './RowFilter';
+import './style.less';
 
 const { Text } = Typography;
 
@@ -160,38 +162,36 @@ const ModalFilter = () => {
 	};
 
 	return (
-		<Modal
+		<ModalExpandable
 			open={visibleFilter}
 			onCancel={() => setVisibleFilter?.(false)}
 			footer={<ModalFooter onReset={handleReset} onCancel={() => setVisibleFilter?.(false)} />}
 			title={intl.formatMessage({ id: 'global.table.customfilter.title' })}
 			width={800}
+			allowExpand={false}
 		>
 			{visibleConditionRows.length ? (
-				<div
-					style={{
-						marginBottom: 12,
-						padding: '8px 8px',
-						borderRadius: 6,
-						background: 'var(--color-fill-quaternary)',
-						border: '1px solid var(--color-border-secondary)',
-					}}
-				>
-					<div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-						<Tooltip
-							title={intl.formatMessage({
-								id: 'global.table.customfilter.tooltip.applied',
-								defaultMessage: 'Filter conditions currently applied to the table',
-							})}
-						>
-							<Text strong>
-								{intl.formatMessage({ id: 'global.table.customfilter.dieukien', defaultMessage: 'Conditions' })}{' '}
-							</Text>
-							<IconQuestionCircle style={{ color: '#999' }} />
+				<div className='filter-conditions-box'>
+					<div className='filter-conditions-header'>
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<span className='filter-conditions-tooltip-trigger'>
+									<Text strong>
+										{intl.formatMessage({ id: 'global.table.customfilter.dieukien', defaultMessage: 'Conditions' })}{' '}
+									</Text>
+									<IconQuestionCircle className='filter-conditions-icon' />
+								</span>
+							</TooltipTrigger>
+							<TooltipContent>
+								{intl.formatMessage({
+									id: 'global.table.customfilter.tooltip.applied',
+									defaultMessage: 'Filter conditions currently applied to the table',
+								})}
+							</TooltipContent>
 						</Tooltip>
 						<Text strong>:</Text>
 					</div>
-					<div style={{ marginTop: 8 }}>
+					<div className='filter-conditions-descriptions'>
 						<Descriptions
 							column={
 								visibleConditionRows.length === 1 || visibleConditionRows.some((row) => row.expression.length > 50)
@@ -210,17 +210,18 @@ const ModalFilter = () => {
 					</div>
 
 					{hiddenConditionRows > 0 ? (
-						<div style={{ marginTop: 4 }}>
-							<Text type='secondary' style={{ marginRight: 8 }}>
+						<div className='filter-conditions-more'>
+							<Text type='secondary' className='filter-more-text'>
 								{intl.formatMessage(
 									{ id: 'global.table.customfilter.moreconditions', defaultMessage: '+{count} more conditions' },
 									{ count: hiddenConditionRows },
 								)}
 							</Text>
 							<Button
-								size='small'
-								type='link'
-								style={{ padding: 0 }}
+								size='sm'
+								variant='link'
+								type='button'
+								className='filter-more-button'
 								onClick={() => setMaxConditionRows((prev) => prev + LOAD_MORE_STEP)}
 							>
 								{intl.formatMessage({ id: 'global.table.customfilter.button.xemthem', defaultMessage: 'View more' })}
@@ -242,7 +243,7 @@ const ModalFilter = () => {
 						return (
 							<>
 								{fields.length > 0 && (
-									<Space direction='vertical' size={8} style={{ marginBottom: '16px', width: '100%' }}>
+									<div className='filter-rows-list'>
 										{fields.map(({ key, name, ...restField }) => {
 											return (
 												<RowFilter
@@ -256,13 +257,14 @@ const ModalFilter = () => {
 												/>
 											);
 										})}
-									</Space>
+									</div>
 								)}
 
-								<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+								<div className='filter-actions-row'>
 									<Button
-										block
-										type='dashed'
+										className='filter-add-button'
+										variant='outline'
+										type='button'
 										disabled={!fieldsFilterable.length}
 										icon={<IconPlus />}
 										onClick={() => {
@@ -289,8 +291,9 @@ const ModalFilter = () => {
 										{intl.formatMessage({ id: 'global.table.customfilter.button.them' })}
 									</Button>
 									<Button
-										type='dashed'
-										block
+										variant='outline'
+										type='button'
+										className='filter-add-button'
 										disabled={!fieldsFilterable.length}
 										icon={<Icon3SquarePlusmark />}
 										onClick={() => {
@@ -309,7 +312,7 @@ const ModalFilter = () => {
 					}}
 				</Form.List>
 			</Form>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

@@ -92,8 +92,10 @@ const ModalExpandable = (props: ModalExpandableProps) => {
 				key={destroyOnClose ? String(open) : undefined}
 			>
 				{title ? <div className='modal-expandable-title'>{title}</div> : null}
-				<div style={styles?.body}>{typeof children === 'function' ? children(isExpanded) : children}</div>
-				{footer}
+				<div className='modal-expandable-body' style={styles?.body}>
+					{typeof children === 'function' ? children(isExpanded) : children}
+				</div>
+				{footer ? <div className='modal-expandable-footer'>{footer}</div> : null}
 
 				<div className='modal-buttons'>
 					{!fullScreen && allowExpand && (

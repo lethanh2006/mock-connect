@@ -1,0 +1,60 @@
+.notice-panel-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	padding: 12px 12px 8px 12px;
+	font-weight: 600;
+}
+
+.notice-panel-actions {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+// SidebarView cha đã là flex column + overflow:auto (motion.css đặt position:absolute;
+// inset:0 nên nó có chiều cao xác định). Panel-list chỉ chuyển tiếp flex:1 xuống
+// .notice-list — chỗ cuộn thật sự là #scrollableDiv bên trong NoticeList, không phải ở
+// đây, để tránh 2 lớp overflow chồng nhau.
+.notice-panel-list {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-height: 0;
+}
+
+.notice-list {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-height: 0;
+}
+
+// Đặt cách đáy 58px (46px của .bottomBar + 12px) để không đè lên thanh "Tải thêm".
+.notice-list-scroll-top {
+	position: absolute;
+	right: 12px;
+	bottom: 58px;
+	z-index: 1;
+	background: var(--color-bg-elevated);
+	box-shadow:
+		0 2px 8px rgba(0, 0, 0, 0.12),
+		0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.notice-list-scroll {
+	flex: 1;
+	min-height: 0;
+	overflow: auto;
+}
+
+.notice-list-loadmore {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	height: 100%;
+	color: var(--color-text-secondary);
+}

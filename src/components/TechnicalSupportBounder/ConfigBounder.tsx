@@ -8,9 +8,10 @@ import {
 	textColors,
 } from '@/services/base/constant';
 import { getIntl, getLocale } from '@umijs/max';
-import { ConfigProvider, Empty, Spin, theme } from 'antd';
+import { ConfigProvider, Spin, theme } from 'antd';
 import { useUi } from '@vinuni/ui';
 import { useEffect } from 'react';
+import EmptyState from '@/components/EmptyState';
 import { IconXmark } from '@/components/Icons';
 
 const ConfigBounder = (props: { children?: any }) => {
@@ -49,13 +50,7 @@ const ConfigBounder = (props: { children?: any }) => {
 			drawer={{
 				closeIcon: <IconXmark size={14} />,
 			}}
-			renderEmpty={() => (
-				<Empty
-					style={{ marginTop: 32, marginBottom: 32 }}
-					image='/images/empty.png'
-					description={intl.formatMessage({ id: 'global.table.index.empty' })}
-				/>
-			)}
+			renderEmpty={() => <EmptyState description={intl.formatMessage({ id: 'global.table.index.empty' })} />}
 			theme={{
 				algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
 				token: {

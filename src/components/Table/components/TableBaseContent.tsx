@@ -1,3 +1,4 @@
+import EmptyState from '@/components/EmptyState';
 import PageCard from '@/components/PageCard';
 import { useTableColumns } from '@/components/Table/hooks/useTableColumns';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
@@ -14,7 +15,7 @@ import {
 	TableSelectionCell,
 	TableSortButton,
 } from '@/components/Icons';
-import { Empty, Spin } from 'antd';
+import { Spin } from 'antd';
 import _ from 'lodash';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -362,7 +363,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 							colSpan={leafColumns.length + (props?.rowSelection ? 1 : 0)}
 							style={{ textAlign: 'center', padding: 32 }}
 						>
-							<Empty />
+							<EmptyState description={intl.formatMessage({ id: 'global.table.index.empty' })} />
 						</TableCell>
 					</TableRow>
 				) : (

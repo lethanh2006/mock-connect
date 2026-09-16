@@ -1,0 +1,128 @@
+.filter-conditions-box {
+	margin-bottom: 12px;
+	padding: 8px;
+	border-radius: 6px;
+	background: var(--color-fill-quaternary);
+	border: 1px solid var(--color-border-secondary);
+}
+
+.filter-conditions-header {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.filter-conditions-tooltip-trigger {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.filter-conditions-icon {
+	color: var(--color-text-tertiary, var(--color-text-secondary));
+}
+
+.filter-conditions-descriptions {
+	margin-top: 8px;
+}
+
+.filter-conditions-more {
+	margin-top: 4px;
+}
+
+.filter-more-text {
+	margin-right: 8px;
+}
+
+.filter-more-button {
+	padding: 0;
+}
+
+.filter-rows-list {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-bottom: 16px;
+	width: 100%;
+}
+
+.filter-actions-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+}
+
+.filter-add-button {
+	flex: 1;
+}
+
+// Cùng quy ước với .form-footer (global.less) và .ant-modal-footer (custom_vinuni.less):
+// JSX đặt nút chính (submit) trước, Hủy cuối cùng; row-reverse tự đảo chiều hiển thị.
+// Lưu ý: row-reverse đảo luôn hướng của justify-content — flex-start (không phải
+// flex-end) mới là giá trị đẩy nút về BÊN PHẢI modal.
+.filter-footer {
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: flex-start;
+	gap: 8px;
+}
+
+// @vinuni/ui chưa có variant outline-destructive (xem yêu cầu gửi VinUni),
+// dùng !important để chắc chắn thắng class variant mặc định của Button.
+.filter-footer-danger {
+	color: var(--ds-negative-primary) !important;
+	border-color: var(--ds-negative-primary) !important;
+}
+
+// Phân biệt group gốc (root) và group lồng nhau (nested) — trước đây antd Card
+// set backgroundColor/border theo level qua inline style, giờ chuyển sang class.
+.filter-group-card-root {
+	background-color: var(--color-fill-quaternary);
+	border: 1px solid var(--color-border);
+}
+
+.filter-group-card-nested {
+	background-color: var(--color-info-bg);
+	border: 1px solid var(--color-info);
+}
+
+.filter-group-header-fields {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.filter-group-operator-item {
+	margin: 0;
+}
+
+.filter-group-operator-select {
+	width: 100px;
+}
+
+.filter-danger-action {
+	color: var(--ds-negative-primary) !important;
+}
+
+.filter-item-value-input {
+	width: 100%;
+}
+
+.filter-group-rows-list {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.filter-group-add-button {
+	align-self: flex-start;
+}
+
+.filter-item-actions {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	gap: 4px;
+}

@@ -6,7 +6,7 @@ import {
 	moduleTapChiKhoaHoc,
 } from '@/services/base/constant';
 import type { Login } from '@/services/base/typing';
-import { IconDoubleHumanCard } from '@/components/Icons';
+import { IconDoubleHumanCard, SidebarView } from '@/components/Icons';
 import { Col, Row } from 'antd';
 import { useIntl, useModel } from 'umi';
 import './style.less';
@@ -29,7 +29,7 @@ const ModuleView = () => {
 	const cntModules = allowedModules.length + extendModules.length;
 
 	return (
-		<div className='module-view'>
+		<SidebarView value='app-drawer' className='module-view'>
 			<div className='module-header'>
 				{intl.formatMessage({ id: 'global.rightcontent.moduleswitch.dschungnang' })} ({cntModules})
 			</div>
@@ -67,7 +67,7 @@ const ModuleView = () => {
 					))}
 				</Row>
 			</div>
-		</div>
+		</SidebarView>
 	);
 };
 

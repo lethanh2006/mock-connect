@@ -1,6 +1,8 @@
 import AvatarDropdown from '@/components/RightContent/AvatarDropdown';
 import ModuleSwitch from '@/components/RightContent/ModuleSwitch';
+import ModuleView from '@/components/RightContent/ModuleSwitch/ModuleView';
 import NoticeIconView from '@/components/RightContent/NoticeIcon';
+import NoticePanel from '@/components/RightContent/NoticeIcon/NoticePanel';
 import { AppModules } from '@/services/base/constant';
 import { currentRole } from '@/utils/ip';
 import {
@@ -34,6 +36,8 @@ import {
 	SidebarMenuSubItem,
 	SidebarProvider,
 	SidebarTitle,
+	SidebarView,
+	SidebarViewport,
 } from '@/components/Icons';
 import { Collapsible } from 'radix-ui';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
@@ -235,7 +239,7 @@ const AppShell = ({ children }: { children: ReactNode }) => {
 
 	return (
 		<SidebarProvider>
-			<SidebarDockViews>
+			<SidebarDockViews baseValue='nav'>
 				<SidebarDock>
 					<SidebarDockBrand />
 					<SidebarDockNav className='app-shell-dock-nav'>
@@ -257,14 +261,29 @@ const AppShell = ({ children }: { children: ReactNode }) => {
 					</SidebarHeader>
 
 					<SidebarContent>
-						{sections.map((section) => {
-							if (section.localeId) {
-								return (
-									<SidebarCollapsibleGroup key={section.id} defaultOpen className='app-shell-collapsible-group'>
-										<SidebarGroupTrigger className='app-shell-group-trigger'>
-											{intl.formatMessage({ id: section.localeId, defaultMessage: section.id })}
-										</SidebarGroupTrigger>
-										<SidebarGroupCollapsibleContent>
+						<SidebarViewport>
+							<SidebarView value='nav'>
+								{sections.map((section) => {
+									if (section.localeId) {
+										return (
+											<SidebarCollapsibleGroup key={section.id} defaultOpen className='app-shell-collapsible-group'>
+												<SidebarGroupTrigger className='app-shell-group-trigger'>
+													{intl.formatMessage({ id: section.localeId, defaultMessage: section.id })}
+												</SidebarGroupTrigger>
+												<SidebarGroupCollapsibleContent>
+													<SidebarGroupContent>
+														<SidebarMenu>
+															{section.items.map((node) => (
+																<NavMenuNode key={node.path} node={node} pathname={pathname} />
+															))}
+														</SidebarMenu>
+													</SidebarGroupContent>
+												</SidebarGroupCollapsibleContent>
+											</SidebarCollapsibleGroup>
+										);
+									}
+									return (
+										<SidebarGroup key={section.id} className='app-shell-default-group'>
 											<SidebarGroupContent>
 												<SidebarMenu>
 													{section.items.map((node) => (
@@ -272,22 +291,14 @@ const AppShell = ({ children }: { children: ReactNode }) => {
 													))}
 												</SidebarMenu>
 											</SidebarGroupContent>
-										</SidebarGroupCollapsibleContent>
-									</SidebarCollapsibleGroup>
-								);
-							}
-							return (
-								<SidebarGroup key={section.id} className='app-shell-default-group'>
-									<SidebarGroupContent>
-										<SidebarMenu>
-											{section.items.map((node) => (
-												<NavMenuNode key={node.path} node={node} pathname={pathname} />
-											))}
-										</SidebarMenu>
-									</SidebarGroupContent>
-								</SidebarGroup>
-							);
-						})}
+										</SidebarGroup>
+									);
+								})}
+							</SidebarView>
+
+							<ModuleView />
+							<NoticePanel />
+						</SidebarViewport>
 					</SidebarContent>
 
 					<SidebarFooter>

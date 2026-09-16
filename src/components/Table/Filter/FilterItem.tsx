@@ -1,8 +1,8 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { getDateTimeFormat } from '@/utils/formatDate';
 import rules from '@/utils/rules';
-import { Icon3SquarePlusmark, IconXmark } from '@/components/Icons';
-import { Card, Checkbox, Col, Form, Input, InputNumber, Row, Select, Space } from 'antd';
+import { Card, CardContent, Icon3SquarePlusmark, IconXmark } from '@/components/Icons';
+import { Checkbox, Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'umi';
 import MyDatePicker from '../../MyDatePicker';
@@ -10,6 +10,7 @@ import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
 import { useFilterFields } from '../hooks/useFilterFields';
 import { type RowFilterProps, type TDataOption } from '../typing';
+import './style.less';
 
 const FilterItem = (props: RowFilterProps) => {
 	const intl = useIntl();
@@ -96,7 +97,7 @@ const FilterItem = (props: RowFilterProps) => {
 			case 'number':
 				return (
 					<InputNumber
-						style={{ width: '100%' }}
+						className='filter-item-value-input'
 						placeholder={intl.formatMessage({ id: 'global.table.customfilter.label.giatri' })}
 						disabled={isReadOnly}
 					/>
@@ -125,7 +126,8 @@ const FilterItem = (props: RowFilterProps) => {
 	};
 
 	return (
-		<Card styles={{ body: { padding: 8 } }} style={{ marginTop: 8 }} variant='borderless'>
+		<Card size='sm'>
+			<CardContent>
 			<Row gutter={[8, 8]}>
 				<Col span={22} md={isReadOnly ? 24 : 23}>
 					<Row gutter={[8, 0]}>
@@ -135,13 +137,11 @@ const FilterItem = (props: RowFilterProps) => {
 								rules={[...rules.required]}
 								{...restProps}
 								label={
-									<Space>
-										<Form.Item valuePropName='checked' initialValue={true} name={[...namePath, 'active']} noStyle>
-											<Checkbox disabled={isReadOnly}>
-												{intl.formatMessage({ id: 'global.table.customfilter.label.thuoctinh' })}
-											</Checkbox>
-										</Form.Item>
-									</Space>
+									<Form.Item valuePropName='checked' initialValue={true} name={[...namePath, 'active']} noStyle>
+										<Checkbox disabled={isReadOnly}>
+											{intl.formatMessage({ id: 'global.table.customfilter.label.thuoctinh' })}
+										</Checkbox>
+									</Form.Item>
 								}
 							>
 								<Select
@@ -241,7 +241,7 @@ const FilterItem = (props: RowFilterProps) => {
 				</Col>
 				{!isReadOnly && (
 					<Col span={2} md={1}>
-						<Space className='filter-item-actions' direction='vertical' align='center' style={{ width: '100%' }} size={4}>
+						<div className='filter-item-actions'>
 							{allowGrouping && level === 0 && (
 								<ButtonExtend
 									type='text'
@@ -265,14 +265,15 @@ const FilterItem = (props: RowFilterProps) => {
 									size='small'
 									icon={<IconXmark />}
 									onClick={onRemove}
-									danger
+									className='filter-danger-action'
 									tooltip={intl.formatMessage({ id: 'global.table.customfilter.button.xoadieukien' })}
 								/>
 							)}
-						</Space>
+						</div>
 					</Col>
 				)}
 			</Row>
+			</CardContent>
 		</Card>
 	);
 };

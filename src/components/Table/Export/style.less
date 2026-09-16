@@ -1,13 +1,3 @@
-[data-slot='dialog-title'] {
-	font-size: 18px !important;
-	font-weight: bold !important;
-	text-align: center !important;
-}
-
-.export-modal-body {
-	padding: 16px;
-}
-
 .export-modal-loading {
 	text-align: center;
 	padding: 24px;
@@ -20,6 +10,10 @@
 .export-modal-fields-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+	// Grid mặc định kéo 2 card bằng chiều cao nhau (align-items: stretch) — khi
+	// card phải hiện empty-state cao hơn, card trái bị giãn theo và nội dung bên
+	// trong (nút + checkbox) bị xô lệch. 2 card không cần bằng chiều cao nhau.
+	align-items: start;
 	gap: 12px;
 	margin-bottom: 16px;
 }

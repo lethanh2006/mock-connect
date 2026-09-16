@@ -1,3 +1,8 @@
+// DialogContent của @vinuni/ui ép mọi con không phải dialog-header/footer/close
+// nhận `flex:1; min-height:0; overflow-y:auto` (để vùng nội dung tự co giãn/cuộn).
+// title/footer ở đây chỉ là div thường (không gắn data-slot tương ứng) nên bị áp
+// nhầm luật đó, khiến chúng bị giãn ra và chừa khoảng trống thừa. Ép flex:none để
+// chỉ vùng nội dung mới co giãn.
 .modal-expandable-title {
 	font-weight: bold !important;
 	font-size: var(--font-size-lg);
@@ -5,6 +10,23 @@
 	padding: 20px 72px 16px 72px;
 	text-align: center;
 	border-bottom: none !important;
+	flex: none !important;
+	overflow: visible !important;
+	min-height: auto !important;
+}
+
+.modal-expandable-footer {
+	flex: none !important;
+	overflow: visible !important;
+	min-height: auto !important;
+	padding: 16px 24px 24px 24px;
+}
+
+// Padding mặc định cho vùng nội dung — để nơi dùng ModalExpandable không phải tự
+// bù padding riêng. Truyền `styles={{ body: { padding: ... } }}` khi cần khác đi
+// (inline style luôn thắng class, kể cả padding: 0 cho form tự quản padding riêng).
+.modal-expandable-body {
+	padding: 0 24px 24px 24px;
 }
 
 .modal-expandable {
@@ -37,6 +59,41 @@
 				.ant-card-body {
 					flex: 1;
 					overflow: auto;
+				}
+			}
+
+			// Tương đương rule .ant-card ở trên, cho Form dùng Card của @vinuni/ui làm gốc
+			// (vd FormChucVu). Thiếu rule này thì khi bấm phóng to toàn màn hình, Card giữ
+			// nguyên chiều cao theo nội dung, để trống cả vùng full-screen phía dưới thay vì
+			// giãn ra và cho phần nội dung tự cuộn.
+			[data-slot='card'] {
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				min-height: 0;
+
+				[data-slot='card-content'] {
+					flex: 1;
+					overflow: auto;
+					min-height: 0;
+					display: flex;
+					flex-direction: column;
+
+					// antd Form render ra thẻ <form> thường (block), phải ép flex column thì
+					// margin-top: auto của .form-footer bên dưới mới có tác dụng đẩy xuống đáy.
+					form {
+						display: flex;
+						flex-direction: column;
+						flex: 1;
+						min-height: 0;
+					}
+				}
+
+				// custom_vinuni.less đặt margin-top: ... !important cho .form-footer (đẩy layout
+				// bình thường) nên phải !important ở đây mới đè được, đẩy footer xuống đáy Card.
+				.form-footer {
+					flex: none !important;
+					margin-top: auto !important;
 				}
 			}
 		}

@@ -2,7 +2,8 @@ import { ELoaiPhanHoi } from '@/services/TienIch/PhanHoi/constant';
 import { buildUpLoadFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Form, Input } from 'antd';
+import { Button } from '@/components/Icons';
+import { Form, Input } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import FormItemUrlOrUpload from '../Upload/FormItemUrlOrUpload';
@@ -53,10 +54,12 @@ const FormPostIssue = (props: { visible: boolean; setVisible: (val: boolean) => 
 				<FormItemUrlOrUpload form={form} field='urlPhanAnh' />
 
 				<div className='form-footer'>
-					<Button loading={formSubmiting} htmlType='submit' type='primary'>
+					<Button variant='default' type='submit' loading={formSubmiting}>
 						{intl.formatMessage({ id: 'global.technical.button.gui' })}
 					</Button>
-					<Button onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'global.technical.button.huy' })}</Button>
+					<Button variant='outline' type='button' onClick={() => setVisible(false)}>
+						{intl.formatMessage({ id: 'global.technical.button.huy' })}
+					</Button>
 				</div>
 			</Form>
 		</>

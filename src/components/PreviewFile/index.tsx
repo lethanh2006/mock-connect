@@ -4,6 +4,7 @@ import { getFileContent, getFileInfo } from '@/services/uploadFile';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { getFileType, getNameFile } from '@/utils/utils';
+import EmptyState from '@/components/EmptyState';
 import {
 	Icon2SquareCopy,
 	IconChervolLeft,
@@ -12,7 +13,7 @@ import {
 	IconMagnifyingglass,
 	IconOpenrectagleToprightarrow,
 } from '@/components/Icons';
-import { Button, Empty, message, Spin } from 'antd';
+import { Button, message, Spin } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
@@ -215,7 +216,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	}
 
 	if (!file) {
-		return <Empty style={{ marginTop: 32, marginBottom: 32 }} description='Không tồn tại dữ liệu tệp tin' />;
+		return <EmptyState description='Không tồn tại dữ liệu tệp tin' />;
 	}
 
 	return (

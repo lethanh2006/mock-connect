@@ -1,8 +1,10 @@
+import { RadioGroup, RadioGroupItem } from '@/components/Icons';
 import rules from '@/utils/rules';
-import { Form, Input, Radio, type FormInstance } from 'antd';
+import { Form, Input, type FormInstance } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
 import UploadFile from './UploadFile';
+import './FormItemUrlOrUpload.less';
 
 /**
  * Form Item cho vào Form cho nhập URL hoặc UPLOAD file
@@ -37,17 +39,24 @@ const FormItemUrlOrUpload = (props: {
 			label={
 				<>
 					{label} &nbsp;
-					<Radio.Group
+					<RadioGroup
+						className='url-or-upload-radio-group'
 						disabled={disabled}
-						onChange={(e) => {
-							setTypeUpload(e.target.value);
+						value={typeUpload}
+						onValueChange={(value) => {
+							setTypeUpload(value as 'UPLOAD' | 'URL');
 							form.setFieldsValue({ [field]: undefined });
 						}}
-						value={typeUpload}
 					>
-						<Radio value={'URL'}>{intl.formatMessage({ id: 'global.uploadfile.duongdan' })}</Radio>
-						<Radio value={'UPLOAD'}>{intl.formatMessage({ id: 'global.uploadfile.tailen' })}</Radio>
-					</Radio.Group>
+						<label className='url-or-upload-radio-item' htmlFor={`${field}-url`}>
+							<RadioGroupItem id={`${field}-url`} value='URL' />
+							{intl.formatMessage({ id: 'global.uploadfile.duongdan' })}
+						</label>
+						<label className='url-or-upload-radio-item' htmlFor={`${field}-upload`}>
+							<RadioGroupItem id={`${field}-upload`} value='UPLOAD' />
+							{intl.formatMessage({ id: 'global.uploadfile.tailen' })}
+						</label>
+					</RadioGroup>
 				</>
 			}
 			rules={[

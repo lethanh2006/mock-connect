@@ -1,3 +1,4 @@
+import EmptyState from '@/components/EmptyState';
 import {
 	Drawer,
 	DrawerContent,
@@ -27,7 +28,7 @@ import { primaryColor } from '@/services/base/constant';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { AutoComplete, Empty, Spin } from 'antd';
+import { AutoComplete, Spin } from 'antd';
 import classNames from 'classnames';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -710,10 +711,9 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							colSpan={leafColumns.length + (effectiveRowSelection ? 1 : 0)}
 							style={{ textAlign: 'center', padding: 32 }}
 						>
-							<Empty
-								style={{ marginTop: 32, marginBottom: 32 }}
+							<EmptyState
+								compact={size === 'small'}
 								description={props.emptyText ?? intl.formatMessage({ id: 'global.table.index.empty' })}
-								image={size === 'small' ? Empty.PRESENTED_IMAGE_SIMPLE : undefined}
 							/>
 						</TableCell>
 					</TableRow>

@@ -3,8 +3,9 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
 import { EReceiverType, EVaiTroKhaoSat } from '@/services/ThongBao/constant';
 import { type ThongBao } from '@/services/ThongBao/typing';
+import EmptyState from '@/components/EmptyState';
 import { IconUpload } from '@/components/Icons';
-import { Checkbox, Col, Empty, Row } from 'antd';
+import { Checkbox, Col, Row } from 'antd';
 import _ from 'lodash';
 import { Key, useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -179,7 +180,7 @@ const TableSelectUser = (props: {
 						{selectedUsers?.length ? (
 							<GroupTagUsers users={selectedUsers} setUsers={setSelectedUsers} type={type} />
 						) : (
-							<Empty style={{ marginTop: 32, marginBottom: 32 }} description='Không có dữ liệu' />
+							<EmptyState description='Không có dữ liệu' />
 						)}
 					</div>
 				</Col>

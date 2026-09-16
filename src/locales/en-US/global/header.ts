@@ -5,6 +5,7 @@ export default {
 	'app.header.noti': 'Personal Notifications',
 	'app.header.reload': 'Refresh',
 	'app.header.readAll': 'Mark all as read',
+	'app.header.scrolltop': 'Back to top',
 
 	'app.header.userpage': 'User Info',
 	'app.header.portal': 'Portal',

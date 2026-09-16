@@ -1,8 +1,10 @@
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, IconDownload } from '@/components/Icons';
-import { Empty, Spin } from 'antd';
+import EmptyState from '@/components/EmptyState';
+import { Button, IconDownload } from '@/components/Icons';
+import { Spin } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import ModalExpandable from '../ModalExpandable';
 import { type TExportField } from '../typing';
 import CardChooseFields from './CardChooseFields';
 import CardExportFields from './CardExportFields';
@@ -76,59 +78,50 @@ const ModalExport = (props: ModalExportProps) => {
 	};
 
 	return (
-		<Dialog
+		<ModalExpandable
 			open={visible}
-			onOpenChange={(open) => {
-				if (!open) onCancelModal();
-			}}
+			onCancel={onCancelModal}
+			title={intl.formatMessage({ id: 'global.table.export.title' })}
+			width={800}
+			allowExpand={false}
+			maskClosable={maskCloseableForm}
 		>
-			<DialogContent
-				style={{ width: 800, maxWidth: 'calc(100vw - 2rem)' }}
-				onInteractOutside={(e) => {
-					if (!maskCloseableForm) e.preventDefault();
-				}}
-			>
-				<DialogHeader>
-					<DialogTitle>{intl.formatMessage({ id: 'global.table.export.title' })}</DialogTitle>
-				</DialogHeader>
-
-				<div className='export-modal-body'>
-					{loading ? (
-						<div className='export-modal-loading'>
-							<Spin />
+			<div>
+				{loading ? (
+					<div className='export-modal-loading'>
+						<Spin />
+					</div>
+				) : !!exportFields.length ? (
+					<>
+						<div className='export-modal-fields-label'>
+							{intl.formatMessage({ id: 'global.table.export.index.choncactruong' })}:
 						</div>
-					) : !!exportFields.length ? (
-						<>
-							<div className='export-modal-fields-label'>
-								{intl.formatMessage({ id: 'global.table.export.index.choncactruong' })}:
-							</div>
 
-							<div className='export-modal-fields-grid'>
-								<CardChooseFields allFields={allFields} fields={exportFields} setFields={setExportFields} />
-								<CardExportFields fields={exportFields} setFields={setExportFields} />
-							</div>
+						<div className='export-modal-fields-grid'>
+							<CardChooseFields allFields={allFields} fields={exportFields} setFields={setExportFields} />
+							<CardExportFields fields={exportFields} setFields={setExportFields} />
+						</div>
 
-							<div className='form-footer'>
-								<Button
-									variant='default'
-									icon={<IconDownload />}
-									onClick={onFinish}
-									disabled={!finalFields.length}
-									loading={formSubmiting}
-								>
-									{intl.formatMessage({ id: 'global.table.export.index.button.taixuong' })}
-								</Button>
-								<Button variant='outline' onClick={onCancelModal}>
-									{intl.formatMessage({ id: 'global.table.export.index.button.huy' })}
-								</Button>
-							</div>
-						</>
-					) : (
-						<Empty description={intl.formatMessage({ id: 'global.table.export.index.empty' })} />
-					)}
-				</div>
-			</DialogContent>
-		</Dialog>
+						<div className='form-footer'>
+							<Button
+								variant='default'
+								icon={<IconDownload />}
+								onClick={onFinish}
+								disabled={!finalFields.length}
+								loading={formSubmiting}
+							>
+								{intl.formatMessage({ id: 'global.table.export.index.button.taixuong' })}
+							</Button>
+							<Button variant='outline' onClick={onCancelModal}>
+								{intl.formatMessage({ id: 'global.table.export.index.button.huy' })}
+							</Button>
+						</div>
+					</>
+				) : (
+					<EmptyState description={intl.formatMessage({ id: 'global.table.export.index.empty' })} />
+				)}
+			</div>
+		</ModalExpandable>
 	);
 };
 

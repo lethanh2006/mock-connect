@@ -1,5 +1,6 @@
-import { IconPlus, IconXmark } from '@/components/Icons';
-import { Button, Card, Checkbox, Form, Select, Space } from 'antd';
+import { Button, Card, CardAction, CardContent, CardHeader, IconPlus, IconXmark } from '@/components/Icons';
+import { Checkbox, Form, Select } from 'antd';
+import classNames from 'classnames';
 import { useMemo } from 'react';
 import { useIntl } from 'umi';
 import ButtonExtend from '../ButtonExtend';
@@ -8,6 +9,7 @@ import { EOperatorType } from '../constant';
 import { useFilterFields } from '../hooks/useFilterFields';
 import { type RowFilterProps } from '../typing';
 import RowFilter from './RowFilter';
+import './style.less';
 
 const FilterGroup = (props: RowFilterProps) => {
 	const intl = useIntl();
@@ -32,69 +34,66 @@ const FilterGroup = (props: RowFilterProps) => {
 
 	return (
 		<Card
-			size='small'
-			styles={{ body: { padding: 8 } }}
-			style={{
-				backgroundColor: level === 0 ? 'var(--color-fill-quaternary)' : 'var(--color-info-bg)',
-				border: level === 0 ? '1px solid var(--color-border)' : '1px solid var(--color-info)',
-			}}
-			title={
-				<Space>
+			size='sm'
+			className={classNames('filter-group-card', level === 0 ? 'filter-group-card-root' : 'filter-group-card-nested')}
+		>
+			<CardHeader>
+				<div className='filter-group-header-fields'>
 					<Form.Item valuePropName='checked' initialValue={true} name={[...namePath, 'active']} noStyle>
 						<Checkbox disabled={isReadOnly}>
 							{intl.formatMessage({ id: 'global.table.customfilter.label.nhomdieukien' })}
 						</Checkbox>
 					</Form.Item>
-					<Form.Item name={[...namePath, 'operator']} initialValue='and' style={{ margin: 0 }} noStyle>
+					<Form.Item name={[...namePath, 'operator']} initialValue='and' className='filter-group-operator-item' noStyle>
 						<Select
 							options={[
 								{ label: intl.formatMessage({ id: `global.table.operator.${EOperatorType.AND}` }), value: 'and' },
 								{ label: intl.formatMessage({ id: `global.table.operator.${EOperatorType.OR}` }), value: 'or' },
 							]}
-							style={{ width: 100 }}
+							className='filter-group-operator-select'
 							size='small'
 							disabled={isReadOnly}
 						/>
 					</Form.Item>
-				</Space>
-			}
-			extra={
-				onRemove &&
-				!isReadOnly && (
-					<ButtonExtend
-						type='text'
-						size='small'
-						icon={<IconXmark />}
-						onClick={onRemove}
-						danger
-						tooltip={intl.formatMessage({ id: 'global.table.customfilter.button.xoanhomdieukien' })}
-					/>
-				)
-			}
-		>
-			<Form.List name={[...namePath, 'filters']}>
-				{(fields, { remove, add }) => (
-					<>
-						{fields.map((field, index) => {
-							return (
-								<RowFilter
-									key={field.key}
-									name={field.name}
-									parentPath={[...fullPath, 'filters']}
-									onRemove={() => remove(field.name)}
-									allowGrouping={allowGrouping}
-									level={level + 1}
-									formOwner={formOwner}
-									forceReadOnly={isReadOnly}
-									{...restProps}
-								/>
-							);
-						})}
+				</div>
+				{onRemove && !isReadOnly && (
+					<CardAction>
+						<ButtonExtend
+							type='text'
+							size='small'
+							icon={<IconXmark />}
+							onClick={onRemove}
+							className='filter-danger-action'
+							tooltip={intl.formatMessage({ id: 'global.table.customfilter.button.xoanhomdieukien' })}
+						/>
+					</CardAction>
+				)}
+			</CardHeader>
+			<CardContent>
+				<Form.List name={[...namePath, 'filters']}>
+					{(fields, { remove, add }) => (
+						<div className='filter-group-rows-list'>
+							{fields.map((field, index) => {
+								return (
+									<RowFilter
+										key={field.key}
+										name={field.name}
+										parentPath={[...fullPath, 'filters']}
+										onRemove={() => remove(field.name)}
+										allowGrouping={allowGrouping}
+										level={level + 1}
+										formOwner={formOwner}
+										forceReadOnly={isReadOnly}
+										{...restProps}
+									/>
+								);
+							})}
 
-						<Space style={{ marginTop: '12px' }}>
 							<Button
-								type='dashed'
-								size='small'
+								variant='outline'
+								type='button'
+								size='sm'
+								className='filter-group-add-button'
 								icon={<IconPlus />}
 								onClick={() => {
 									const rawField = fieldsFilterable[0];
@@ -119,10 +118,10 @@ const FilterGroup = (props: RowFilterProps) => {
 							>
 								{intl.formatMessage({ id: 'global.table.customfilter.button.them' })}
 							</Button>
-						</Space>
-					</>
-				)}
-			</Form.List>
+						</div>
+					)}
+				</Form.List>
+			</CardContent>
 		</Card>
 	);
 };

@@ -1,4 +1,5 @@
-import { Empty, Steps } from 'antd';
+import EmptyState from '@/components/EmptyState';
+import { Steps } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalExpandable from '../ModalExpandable';
@@ -70,7 +71,6 @@ const ModalImport = (props: ModalImportProps) => {
 			maskClosable={maskCloseableForm || false}
 			loading={loading}
 			allowExpand={false}
-			styles={{ body: { padding: '0 24px 24px 24px' } }}
 		>
 			{!!importHeaders.length ? (
 				<>
@@ -116,7 +116,7 @@ const ModalImport = (props: ModalImportProps) => {
 					)}
 				</>
 			) : (
-				<Empty description={intl.formatMessage({ id: 'global.table.import.index.empty' })} />
+				<EmptyState description={intl.formatMessage({ id: 'global.table.import.index.empty' })} />
 			)}
 		</ModalExpandable>
 	);

@@ -1,5 +1,6 @@
-import { IconPlus } from '@/components/Icons';
-import { Button, Modal, Select } from 'antd';
+import { IconButton, IconPlus } from '@/components/Icons';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { Select } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import FormChucVu from './Form';
@@ -47,15 +48,17 @@ const SelectChucVu = (props: {
 
       {hasCreate !== false ? (
         <>
-          <Button icon={<IconPlus />} onClick={onAddNew} />
-          <Modal
-            visible={visibleForm}
-            bodyStyle={{ padding: 0 }}
-            footer={null}
+          <IconButton label="Thêm mới chức vụ" variant="outline" onClick={onAddNew}>
+            <IconPlus />
+          </IconButton>
+          <ModalExpandable
+            open={visibleForm}
             onCancel={() => setVisibleForm(false)}
+            allowExpand={false}
+            styles={{ body: { padding: 0 } }}
           >
             <FormChucVu title="chức vụ" />
-          </Modal>
+          </ModalExpandable>
         </>
       ) : null}
     </div>

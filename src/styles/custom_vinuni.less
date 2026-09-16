@@ -1845,3 +1845,13 @@ button:not(:disabled),
 		}
 	}
 }
+
+// @vinuni/ui Button/IconButton dùng `disabled:pointer-events-none`, nên khi hover
+// vào nút disabled, trình duyệt bỏ qua hit-test và không hiện cursor "not-allowed"
+// (fallback về cursor mặc định của phần tử bên dưới). Bật lại pointer-events để
+// hiện đúng cursor, `disabled` gốc của thẻ <button> vẫn chặn click/focus như cũ.
+[data-slot='button']:disabled,
+[data-slot='liquid-button']:disabled {
+	pointer-events: auto !important;
+	cursor: not-allowed !important;
+}
