@@ -1,8 +1,8 @@
-import { Button } from '@/components/Icons';
+import { Button, Input } from '@/components/Icons';
 import { Card } from '@/components/PageCard';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Form, Input } from 'antd';
+import { Form } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 

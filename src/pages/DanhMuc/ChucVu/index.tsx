@@ -1,7 +1,7 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
-import { IconPen, IconTrash } from '@/components/Icons';
-import { Button, Popconfirm, Tooltip } from 'antd';
+import { IconButton, IconPen, IconTrash } from '@/components/Icons';
+import { Popconfirm } from 'antd';
 import { formatDateTime } from '@/utils/formatDate';
 import { useModel } from 'umi';
 import Form from './components/Form';
@@ -46,18 +46,18 @@ const ChucVuPage = () => {
       fixed: 'right',
       render: (record: ChucVu.IRecord) => (
         <>
-          <Tooltip title="Chỉnh sửa">
-            <Button onClick={() => handleEdit(record)} type="link" icon={<IconPen />} />
-          </Tooltip>
-          <Tooltip title="Xóa">
-            <Popconfirm
-              onConfirm={() => deleteModel(record._id, getModel)}
-              title="Bạn có chắc chắn muốn xóa chức vụ này?"
-              placement="topLeft"
-            >
-              <Button danger type="link" icon={<IconTrash />} />
-            </Popconfirm>
-          </Tooltip>
+          <IconButton label="Chỉnh sửa" variant="ghost" onClick={() => handleEdit(record)}>
+            <IconPen />
+          </IconButton>
+          <Popconfirm
+            onConfirm={() => deleteModel(record._id, getModel)}
+            title="Bạn có chắc chắn muốn xóa chức vụ này?"
+            placement="topLeft"
+          >
+            <IconButton label="Xóa" variant="destructive">
+              <IconTrash />
+            </IconButton>
+          </Popconfirm>
         </>
       ),
     },
