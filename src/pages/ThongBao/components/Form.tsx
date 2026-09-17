@@ -15,13 +15,33 @@ import { buildUpLoadFile, buildUpLoadMultiFile } from '@/services/uploadFile';
 import { currentRole } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Card, Col, Form, Input, Row, Segmented, Select, Tabs } from 'antd';
+import { Button, SegmentedControl, SegmentedControlItem } from '@/components/Icons';
+import { Card, Col, Form, Input, Row, Select, Tabs } from 'antd';
 import { toast } from '@/utils/toast';
 import { useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
 import { useModel } from 'umi';
 import SelectTag from '../Tags/components/Select';
 import GroupTagVaiTro from './GroupTagVaiTro';
 import TableSelectUser from './TableSelect';
+
+const FormSegmented = ({
+	value,
+	onChange,
+	options,
+}: {
+	value?: string;
+	onChange?: (val: string) => void;
+	options: { value: string; label: ReactNode }[];
+}) => (
+	<SegmentedControl value={value} onValueChange={onChange}>
+		{options.map((opt) => (
+			<SegmentedControlItem key={opt.value} value={opt.value}>
+				{opt.label}
+			</SegmentedControlItem>
+		))}
+	</SegmentedControl>
+);
 
 const FormThongBao = (props: any) => {
 	const { title, getData, notiType } = props;
@@ -191,7 +211,7 @@ const FormThongBao = (props: any) => {
 					{roles?.length ? (
 						<Col span={24} md={8}>
 							<Form.Item name='loaiNguoiDung' label='Danh sách người dùng'>
-								<Segmented
+								<FormSegmented
 									options={[
 										{ value: EReceiverType.All, label: 'Tất cả' },
 										{ value: EReceiverType.User, label: 'Người dùng cụ thể' },
@@ -277,10 +297,10 @@ const FormThongBao = (props: any) => {
 				</Row>
 
 				<div className='form-footer'>
-					<Button loading={formSubmiting} htmlType='submit' type='primary'>
+					<Button loading={formSubmiting} type='submit' variant='default'>
 						{!edit ? 'Thêm mới ' : 'Lưu lại'}
 					</Button>
-					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+					<Button variant='outline' onClick={() => setVisibleForm(false)}>Hủy</Button>
 				</div>
 			</Form>
 		</Card>

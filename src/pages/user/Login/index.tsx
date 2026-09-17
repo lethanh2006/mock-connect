@@ -4,8 +4,8 @@ import { adminlogin, getUserInfo } from '@/services/base/api';
 import { keycloakAuthority } from '@/utils/ip';
 import { getPublicAssetPath } from '@/utils/path';
 import rules from '@/utils/rules';
-import { IconHuman, IconLockClose } from '@/components/Icons';
-import { Button, Form, Input, Tabs } from 'antd';
+import { Button, IconHuman, IconLockClose } from '@/components/Icons';
+import { Form, Input, Tabs } from 'antd';
 import { toast } from '@/utils/toast';
 import React, { useState } from 'react';
 // import Recaptcha from 'react-recaptcha';
@@ -142,7 +142,7 @@ const Login: React.FC = () => {
 									/>
 								</Form.Item>
 
-								<Button type='primary' block size='large' loading={submitting}>
+								<Button variant='default' className='w-full' size='lg' loading={submitting}>
 									{intl.formatMessage({ id: 'pages.login.submit', defaultMessage: 'submit' })}
 								</Button>
 							</Form>
@@ -154,7 +154,7 @@ const Login: React.FC = () => {
 								onClick={() => {
 									window.open(keycloakAuthority + '/login-actions/reset-credentials');
 								}}
-								type='link'
+								variant='link'
 							>
 								Quên mật khẩu?
 							</Button>

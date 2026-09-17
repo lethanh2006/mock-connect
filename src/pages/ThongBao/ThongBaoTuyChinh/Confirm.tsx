@@ -7,7 +7,7 @@ import type { ThongBao } from '@/services/ThongBao/typing';
 import { formatDateTime } from '@/utils/formatDate';
 import { currentRole } from '@/utils/ip';
 import { sanitizeObject } from '@/utils/utils';
-import { Button } from 'antd';
+import { Button } from '@/components/Icons';
 import { useModel } from 'umi';
 
 const ConfirmThongBaoTuyChinh = (props: { getData: () => void; type: NotificationType }) => {
@@ -77,10 +77,10 @@ const ConfirmThongBaoTuyChinh = (props: { getData: () => void; type: Notificatio
 			/>
 
 			<div className='form-footer'>
-				<Button loading={formSubmiting} onClick={() => handleGui()} type='primary'>
+				<Button loading={formSubmiting} onClick={() => handleGui()} variant='default'>
 					Gửi thông báo
 				</Button>
-				<Button onClick={() => setVisibleThongBaoDanhSach(false)}>Hủy</Button>
+				<Button variant='outline' onClick={() => setVisibleThongBaoDanhSach(false)}>Hủy</Button>
 			</div>
 		</>
 	);

@@ -1,5 +1,4 @@
-import { IconTrash } from '@/components/Icons';
-import { Button } from 'antd';
+import { Button, IconTrash } from '@/components/Icons';
 import { useAuth } from 'react-oidc-context';
 import { useIntl } from 'umi';
 import './style.less';
@@ -36,7 +35,7 @@ const LoadingPage = () => {
 				{/* <Button icon={<HomeOutlined />} type='primary' onClick={() => (window.location.href = '/')}>
 					Về trang chủ
 				</Button> */}
-				<Button type='link' danger icon={<IconTrash />} onClick={onClearCache}>
+				<Button variant='destructive' icon={<IconTrash />} onClick={onClearCache}>
 					{intl.formatMessage({ id: 'global.loading.xoabonhodiem' })}
 				</Button>
 			</div>

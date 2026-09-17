@@ -2,8 +2,8 @@ import Footer from '@/components/Footer';
 import { OIDCBounder } from '@/components/OIDCBounder';
 import { landingUrl } from '@/services/base/constant';
 import { currentRole } from '@/utils/ip';
-import { IconDoor01, IconEarth } from '@/components/Icons';
-import { Button, Result } from 'antd';
+import { Button, IconDoor01, IconEarth } from '@/components/Icons';
+import { Result } from 'antd';
 import { useEffect } from 'react';
 import { history, useIntl, useModel } from 'umi';
 
@@ -39,13 +39,13 @@ const NotAccessible = () => {
 					extra={
 						<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
 							<Button
-								type='primary'
+								variant='default'
 								onClick={() => (window.location.href = landingUrl)}
 								icon={<IconEarth />}
 							>
 								{intl.formatMessage({ id: 'pages.exception.portal' })}
 							</Button>
-							<Button icon={<IconDoor01 />} onClick={onLogout}>
+							<Button variant='outline' icon={<IconDoor01 />} onClick={onLogout}>
 								{intl.formatMessage({ id: 'pages.exception.logout' })}
 							</Button>
 						</div>

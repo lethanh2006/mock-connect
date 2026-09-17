@@ -6,6 +6,7 @@ import { ip3 } from '@/utils/ip';
 import { getFileType, getNameFile } from '@/utils/utils';
 import EmptyState from '@/components/EmptyState';
 import {
+	Button,
 	Icon2SquareCopy,
 	IconChervolLeft,
 	IconChervolRight,
@@ -13,7 +14,7 @@ import {
 	IconMagnifyingglass,
 	IconOpenrectagleToprightarrow,
 } from '@/components/Icons';
-import { Button, Spin } from 'antd';
+import { Spin } from 'antd';
 import { toast } from '@/utils/toast';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
@@ -306,7 +307,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 					isPrivate ? (
 						<div className='preview-error'>
 							<p>This document is protected and cannot be previewed directly via Office Online.</p>
-							<Button type='primary' icon={<IconDownload />} onClick={handleDownloadOrView}>
+							<Button variant='default' icon={<IconDownload />} onClick={handleDownloadOrView}>
 								Download to view
 							</Button>
 						</div>

@@ -1,9 +1,10 @@
 import { isAllowedFile, parseAcceptString, validateFileBlob } from '@/utils/fileValidation';
 import { getSafeHref } from '@/utils/security';
 import { blobToBase64, getNameFile } from '@/utils/utils';
-import { IconEye, IconPlus, IconTrash, IconUpload } from '@/components/Icons';
+import { Button, IconEye, IconPlus, IconTrash, IconUpload } from '@/components/Icons';
+import { mapButtonSize } from '@/components/Table/utils/vinuniAdapters';
 import type { UploadProps } from 'antd';
-import { Button, Image, Upload } from 'antd';
+import { Image, Upload } from 'antd';
 import { toast } from '@/utils/toast';
 import type { RcFile } from 'antd/es/upload';
 import { useEffect, useState } from 'react';
@@ -345,7 +346,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 				{...uploadSecurityProps}
 			>
 				{!isDisabled ? (
-					<Button size={buttonSize || 'small'} icon={<IconUpload />}>
+					<Button variant='outline' size={mapButtonSize(buttonSize || 'small')} icon={<IconUpload />}>
 						{buttonDescription || intl.formatMessage({ id: 'global.uploadfile.button.chontep' }, { maxFileSize })}
 					</Button>
 				) : null}

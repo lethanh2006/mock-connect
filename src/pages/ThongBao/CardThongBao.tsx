@@ -10,7 +10,9 @@ import dayjs from '@/utils/dayjs';
 import { formatDateTime, getDateFormat } from '@/utils/formatDate';
 import { currentRole } from '@/utils/ip';
 import { IconChervolLeft, IconChervolRight, IconEye, IconPlus, IconTrash } from '@/components/Icons';
-import { Button, DatePicker, Popconfirm, Segmented, Space } from 'antd';
+import { Button } from '@/components/Icons';
+import { SegmentedControl, SegmentedControlItem } from '@/components/Icons';
+import { DatePicker, Popconfirm, Space } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import news from '../../assets/new6.gif';
@@ -191,30 +193,30 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 	return (
 		<>
 			<Space wrap style={{ marginBottom: 12 }}>
-				<Segmented
+				<SegmentedControl
+					size='small'
 					value={type}
-					onChange={(key: any) => {
+					onValueChange={(key) => {
 						if (key === 'WEEK') setStartDate(dayjs().startOf('week'));
 						if (key === 'DAY') setStartDate(dayjs());
 						if (key === 'MONTH') setStartDate(dayjs());
 						setType(key);
 					}}
-					options={[
-						{ value: 'MONTH', label: 'Theo tháng' },
-						{ value: 'WEEK', label: 'Theo tuần' },
-						{ value: 'DAY', label: 'Theo ngày' },
-					]}
-				/>
+				>
+					<SegmentedControlItem value='MONTH'>Theo tháng</SegmentedControlItem>
+					<SegmentedControlItem value='WEEK'>Theo tuần</SegmentedControlItem>
+					<SegmentedControlItem value='DAY'>Theo ngày</SegmentedControlItem>
+				</SegmentedControl>
 
 				{type === 'WEEK' && (
 					<Space>
-						<Button onClick={() => setStartDate(startDate.subtract(7, 'day'))}>
+						<Button variant='outline' onClick={() => setStartDate(startDate.subtract(7, 'day'))}>
 							<IconChervolLeft style={{ marginRight: 4, verticalAlign: 'middle' }} /> Tuần trước
 						</Button>
 						<span>
 							Tuần: {startDay} - {endDay}
 						</span>
-						<Button onClick={() => setStartDate(startDate.add(7, 'day'))}>
+						<Button variant='outline' onClick={() => setStartDate(startDate.add(7, 'day'))}>
 							Tuần sau <IconChervolRight style={{ marginLeft: 4, verticalAlign: 'middle' }} />
 						</Button>
 						<a onClick={() => setStartDate(dayjs().startOf('week'))}>Tuần này</a>
@@ -293,8 +295,8 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 			<ModalExpandable
 				width={800}
 				styles={{ body: { padding: 0 } }}
-				okButtonProps={{ hidden: true }}
-				cancelText='Đóng'
+				// okButtonProps={{ hidden: true }}
+				// cancelText='Đóng'
 				open={visible}
 				onCancel={() => setVisible(false)}
 				destroyOnClose
@@ -305,8 +307,8 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 			<ModalExpandable
 				title='Danh sách người nhận'
 				width={800}
-				okButtonProps={{ hidden: true }}
-				cancelText='Đóng'
+				// okButtonProps={{ hidden: true }}
+				// cancelText='Đóng'
 				open={visibleNguoiNhan}
 				onCancel={() => setVisibleNguoiNhan(false)}
 				destroyOnClose

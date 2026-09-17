@@ -1,5 +1,4 @@
-import { IconArrowLeft, IconArrowRight } from '@/components/Icons';
-import { Button } from 'antd';
+import { Button, IconArrowLeft, IconArrowRight } from '@/components/Icons';
 import { useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { useReactToPrint } from 'react-to-print';
@@ -42,7 +41,7 @@ const PDFViewer = (props: { data: any; pagination?: boolean; scale?: number }) =
 
 			<div>
 				{props.pagination && (
-					<Button disabled={pageNumber === 1} onClick={() => setPageNumber(pageNumber - 1)} className={styles.prev}>
+					<Button variant='outline' disabled={pageNumber === 1} onClick={() => setPageNumber(pageNumber - 1)} className={styles.prev}>
 						<IconArrowLeft /> <span>Trước</span>
 					</Button>
 				)}
@@ -64,6 +63,7 @@ const PDFViewer = (props: { data: any; pagination?: boolean; scale?: number }) =
             </div> */}
 				{props.pagination && (
 					<Button
+						variant='outline'
 						disabled={numPages <= pageNumber}
 						onClick={() => setPageNumber(pageNumber + 1)}
 						className={styles.next}

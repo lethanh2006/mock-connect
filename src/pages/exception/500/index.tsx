@@ -1,4 +1,5 @@
-import { Button, Result } from 'antd';
+import { Button } from '@/components/Icons';
+import { Result } from 'antd';
 import { Link, useIntl } from 'umi';
 
 const ServerError = () => {
@@ -14,7 +15,7 @@ const ServerError = () => {
 			subTitle={intl.formatMessage({ id: 'pages.exception.500.subtitle' })}
 			extra={
 				<Link to='/'>
-					<Button type='primary'>{intl.formatMessage({ id: 'pages.exception.backhome' })}</Button>
+					<Button variant='default'>{intl.formatMessage({ id: 'pages.exception.backhome' })}</Button>
 				</Link>
 			}
 		/>

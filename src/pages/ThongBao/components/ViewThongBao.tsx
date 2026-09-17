@@ -5,7 +5,8 @@ import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { currentRole } from '@/utils/ip';
 import { getNameFile, sanitizeObject } from '@/utils/utils';
 import { IconCalendar, IconHuman } from '@/components/Icons';
-import { Avatar, Button, Card, Col, Divider, Row } from 'antd';
+import { Button } from '@/components/Icons';
+import { Avatar, Card, Col, Divider, Row } from 'antd';
 import { history } from 'umi';
 import './style.less';
 
@@ -93,7 +94,7 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 
 				{record?.metadata?.pathWeb && record?.metadata?.phanHe ? (
 					<Col span={24}>
-						<Button type='primary' style={{ textTransform: 'none' }} onClick={() => redirectNotif()}>
+						<Button variant='default' style={{ textTransform: 'none' }} onClick={() => redirectNotif()}>
 							Xem chi tiết
 						</Button>
 					</Col>

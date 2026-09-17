@@ -1,5 +1,5 @@
-import { IconRoofedHouse } from '@/components/Icons';
-import { Button, Result, Spin } from 'antd';
+import { Button, IconRoofedHouse } from '@/components/Icons';
+import { Result, Spin } from 'antd';
 import { useIntl, useModel } from 'umi';
 
 const NotAccessible = () => {
@@ -22,7 +22,7 @@ const NotAccessible = () => {
 			}}
 			subTitle={intl.formatMessage({ id: 'pages.exception.403.subtitle' })}
 			extra={
-				<Button type='primary' icon={<IconRoofedHouse />} onClick={() => (window.location.href = '/')}>
+				<Button variant='default' icon={<IconRoofedHouse />} onClick={() => (window.location.href = '/')}>
 					{intl.formatMessage({ id: 'pages.exception.backhome' })}
 				</Button>
 			}

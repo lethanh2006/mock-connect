@@ -1,5 +1,5 @@
-import { IconRoofedHouse, IconRotateArrow } from '@/components/Icons';
-import { Button, Result } from 'antd';
+import { Button, IconRoofedHouse, IconRotateArrow } from '@/components/Icons';
+import { Result } from 'antd';
 import React from 'react';
 import { history } from 'umi';
 import './style.less';
@@ -59,7 +59,7 @@ class ErrorBoundary extends React.Component<MyProps, MyState> {
 							<Button
 								key='buy'
 								onClick={() => window.location.reload()}
-								type='primary'
+								variant='outline'
 								icon={<IconRotateArrow />}
 							>
 								Tải lại trang

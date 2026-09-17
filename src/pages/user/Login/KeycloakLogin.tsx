@@ -1,7 +1,6 @@
 import { useAuthActions } from '@/hooks/useAuthActions';
 import { tenTruongVietTatTiengAnh } from '@/services/base/constant';
-import { IconTrash } from '@/components/Icons';
-import { Button } from 'antd';
+import { Button, IconTrash } from '@/components/Icons';
 import { useAuth } from 'react-oidc-context';
 
 const LoginWithKeycloak = () => {
@@ -24,7 +23,7 @@ const LoginWithKeycloak = () => {
 		return (
 			<div>
 				Có lỗi xảy ra... <pre>{auth.error.message}</pre>
-				<Button icon={<IconTrash />} onClick={onClearCache} type='link'>
+				<Button icon={<IconTrash />} onClick={onClearCache} variant='link'>
 					Xóa bộ nhớ đệm
 				</Button>
 			</div>
@@ -35,12 +34,12 @@ const LoginWithKeycloak = () => {
 		<>
 			<Button
 				onClick={dangNhap}
-				type='primary'
+				variant='default'
 				style={{
 					marginTop: 8,
 					width: '100%',
 				}}
-				size='large'
+				size='lg'
 			>
 				Đăng nhập bằng {tenTruongVietTatTiengAnh.toUpperCase()} Connect
 			</Button>

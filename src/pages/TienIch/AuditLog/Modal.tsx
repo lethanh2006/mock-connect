@@ -5,7 +5,8 @@ import type { IColumn } from '@/components/Table/typing';
 import type { AuditLog } from '@/services/TienIch/AuditLog/typing';
 import { formatDateTime } from '@/utils/formatDate';
 import type { models as rawModels } from '@@/plugin-model/model';
-import { Button, Card, Col, Descriptions, Row, Spin } from 'antd';
+import { Button } from '@/components/Icons';
+import { Card, Col, Descriptions, Row, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
@@ -224,7 +225,7 @@ const ModalAuditLog = (props: {
 			</SplitPane>
 
 			<div className='form-footer' style={{ marginTop: 18 }}>
-				<Button onClick={() => setVisible(false)}>Đóng</Button>
+				<Button variant='outline' onClick={() => setVisible(false)}>Đóng</Button>
 			</div>
 		</ModalExpandable>
 	);
