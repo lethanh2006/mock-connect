@@ -12,5 +12,7 @@ export interface PageCardProps {
 	level?: 1 | 2 | 3 | 4;
 	showIndicator?: boolean;
 	loading?: boolean;
+	/** Ghim title (Level 1) lại khi cuộn, kèm hiệu ứng ScrollEdgeEffect. Mặc định: tắt. */
+	stickyHeader?: boolean;
 	[key: string]: any;
 }

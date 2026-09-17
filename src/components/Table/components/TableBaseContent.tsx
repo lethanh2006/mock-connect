@@ -493,6 +493,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 					bordered={props.border}
 					className={props.cardProps?.className}
 					style={props.cardProps?.style}
+					stickyHeader={props.cardProps?.stickyHeader}
 				>
 					{mainContent}
 				</PageCard>

@@ -71,6 +71,7 @@ const ChucVuPage = () => {
       title="Chức vụ"
       Form={Form}
       buttons={{ import: true, filter: true, export: true }}
+      cardProps={{ stickyHeader: true }}
     />
   );
 };

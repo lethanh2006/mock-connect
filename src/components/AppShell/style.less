@@ -1,9 +1,13 @@
+// overflow-x: auto trước đây đặt ở đây bị bỏ vì 2 lý do: (1) @vinuni/ui Table đã tự bọc
+// "overflow-x-auto" cho riêng nó rồi, không cần lặp lại ở cấp trang; (2) theo spec CSS, đặt
+// overflow-x khác visible sẽ tự ép overflow-y (đang mặc định visible) thành auto, biến div này
+// thành 1 "scroll container" không có chiều cao cố định — phá position: sticky của page header
+// (PageCard stickyHeader) vì trình duyệt không còn coi document là gốc cuộn thật sự nữa.
 .app-shell-content {
 	width: 100%;
 	min-width: 0;
 	padding: 12px;
 	box-sizing: border-box;
-	overflow-x: auto;
 }
 
 // =============================================================================
@@ -174,7 +178,7 @@
 // Sidebar Header & Title (Playfair Display)
 // =============================================================================
 .app-shell-sidebar-header:has(.app-shell-sidebar-title) {
-	padding: 24px 20px 16px 20px !important;
+	padding: 20px 20px 16px 20px !important;
 }
 
 .app-shell-sidebar-title,
