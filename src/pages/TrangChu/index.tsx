@@ -17,7 +17,7 @@ const TrangChu = () => {
 	}, []);
 
 	return (
-		<PageCard title={intl.formatMessage({ id: 'menu.Dashboard' })}>
+		<PageCard level={1} showIndicator title={intl.formatMessage({ id: 'menu.Dashboard' })}>
 			<div className='home-welcome'>
 				<h1 className='title'>{intl.formatMessage({ id: 'pages.trangchu.title' })}</h1>
 				<h2 className='sub-title'>

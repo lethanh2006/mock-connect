@@ -139,6 +139,14 @@ html[data-vinuni-theme='dark'] body {
 	background-color: #000000;
 }
 
+// --color-accent-700 (#f4f4f4) là token tĩnh dùng làm viền/divider mờ khắp nơi (viền card bảng
+// [data-slot='table-pin-root'], viền .ant-table, ô "Tổng số"...) — không tự đổi theo dark mode nên
+// các viền đó nổi sáng lạc quẻ trên nền tối. Định nghĩa lại NGAY TẠI GỐC (thay vì override từng
+// nơi dùng nó) để mọi chỗ đang tham chiếu var(--color-accent-700) tự động ra đúng màu tối.
+html[data-vinuni-theme='dark'] {
+	--color-accent-700: rgba(255, 255, 255, 0.12);
+}
+
 button:not(:disabled),
 [data-slot='button']:not(:disabled),
 [data-slot='tooltip-trigger']:not(:disabled) {

@@ -114,7 +114,7 @@
 			top: 20%;
 			bottom: 20%;
 			width: 3px;
-			background-color: var(--color-fill-quaternary);
+			background-color: var(--color-border-secondary);
 			transition: background-color 0.2s;
 		}
 
@@ -194,12 +194,20 @@ tr:hover>td.table-cell-pinned-left {
 	background-color: var(--color-fill-quaternary, #fafafa) !important;
 }
 
-tr.diem-tp-semester-row {
-	background-color: #e8fafdbf !important;
+// Viền cột ghim dùng var(--color-accent-700) nên đã tự đổi màu đúng theo dark mode (xem
+// custom_vinuni.less) — ở đây chỉ cần chỉnh box-shadow (đen mờ vô tác dụng trên nền tối) và màu
+// literal khác (không qua token) là ô "Tổng số".
+[data-vinuni-theme='dark'] {
+	.total {
+		border-color: rgba(255, 255, 255, 0.15) !important;
+	}
 
-	>td {
-		background-color: #e8fafdbf !important;
-		font-weight: 600;
+	.table-cell-pinned-right {
+		box-shadow: -3px 0 6px -3px rgba(0, 0, 0, 0.4);
+	}
+
+	.table-cell-pinned-left {
+		box-shadow: 3px 0 6px -3px rgba(0, 0, 0, 0.4);
 	}
 }
 
@@ -264,6 +272,10 @@ tr.diem-tp-semester-row {
 	&::-webkit-scrollbar-thumb {
 		background: rgba(0, 0, 0, 0.15);
 		border-radius: 4px;
+
+		[data-vinuni-theme='dark'] & {
+			background: rgba(255, 255, 255, 0.2);
+		}
 	}
 }
 
