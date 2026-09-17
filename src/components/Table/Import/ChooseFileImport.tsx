@@ -8,7 +8,9 @@ import {
 } from '@/utils/fileValidation';
 import rules from '@/utils/rules';
 import { Button, IconArrowRight, IconDownload } from '@/components/Icons';
-import { Col, Form, InputNumber, Row, Select } from 'antd';
+import { InputNumber } from '@/components/MyInput';
+import Select from '@/components/MySelect';
+import { Col, Form, Row } from 'antd';
 import { toast } from '@/utils/toast';
 import fileDownload from 'js-file-download';
 import { pick } from 'lodash';

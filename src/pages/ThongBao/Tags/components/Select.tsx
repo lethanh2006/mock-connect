@@ -1,4 +1,4 @@
-import { Select, Spin } from 'antd';
+import Select from '@/components/MySelect';
 import type { CSSProperties } from 'react';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -25,7 +25,7 @@ const SelectTag = (props: {
 
 	return (
 		<Select
-			notFoundContent={loading ? <Spin spinning={true} /> : undefined}
+			loading={loading}
 			mode={multiple ? 'multiple' : undefined}
 			value={value}
 			disabled={disabled}

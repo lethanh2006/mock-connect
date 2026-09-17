@@ -1,6 +1,7 @@
 import { RadioGroup, RadioGroupItem } from '@/components/Icons';
+import Input from '@/components/MyInput';
 import rules from '@/utils/rules';
-import { Form, Input, type FormInstance } from 'antd';
+import { Form, type FormInstance } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
 import UploadFile from './UploadFile';

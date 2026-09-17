@@ -3,7 +3,9 @@ import { getDateTimeFormat } from '@/utils/formatDate';
 import rules from '@/utils/rules';
 import { Icon3SquarePlusmark, IconXmark } from '@/components/Icons';
 import { Card } from '@/components/PageCard';
-import { Col, Form, Input, InputNumber, Row, Select } from 'antd';
+import Input, { InputNumber } from '@/components/MyInput';
+import Select from '@/components/MySelect';
+import { Col, Form, Row } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'umi';
 import MyDatePicker from '../../MyDatePicker';
@@ -168,10 +170,12 @@ const FilterItem = (props: RowFilterProps) => {
 											return item.filterType && item.dataIndex && item.dataIndex !== 'index' && !isSelectedByOther;
 										})
 										.map((item) => ({
-											label: item.title,
-											value: Array.isArray(item.dataIndex)
+											// item.title có kiểu ColumnTitle<any> (có thể là render function), nhưng cột filterable
+											// trong thực tế luôn đặt title tĩnh — ép kiểu cho khớp MySelectOption.
+											label: item.title as React.ReactNode,
+											value: (Array.isArray(item.dataIndex)
 												? item.dataIndex.join('.') // string
-												: item.dataIndex,
+												: item.dataIndex) as string,
 										}))}
 								/>
 							</Form.Item>

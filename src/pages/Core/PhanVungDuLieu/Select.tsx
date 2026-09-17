@@ -1,4 +1,4 @@
-import { Select } from 'antd';
+import Select from '@/components/MySelect';
 import React, { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -48,7 +48,6 @@ const SelectPhanVungDuLieu = (props: {
 			optionFilterProp='label'
 			placeholder={placeholder ?? 'Chọn phân vùng dữ liệu'}
 			style={{ width: '100%', ...style }}
-			showArrow
 		/>
 	);
 };

@@ -1,6 +1,7 @@
 import rules from '@/utils/rules';
 import { Button, IconArrowLeft, IconArrowRight } from '@/components/Icons';
-import { Col, Form, Row, Select } from 'antd';
+import Select from '@/components/MySelect';
+import { Col, Form, Row } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import { type TImportHeader } from '../typing';

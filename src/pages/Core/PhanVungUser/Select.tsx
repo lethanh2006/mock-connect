@@ -1,4 +1,4 @@
-import { Select } from 'antd';
+import Select from '@/components/MySelect';
 import React, { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -63,11 +63,10 @@ const SelectPhanVungCuaToi = (props: {
 				label: item?.ten ?? item.ma,
 			}))}
 			showSearch
-			size={size}
 			optionFilterProp='label'
+			size={size}
 			placeholder={placeholder ?? 'Chọn phân vùng dữ liệu'}
 			style={{ width: '100%', ...style }}
-			showArrow
 		/>
 	);
 };

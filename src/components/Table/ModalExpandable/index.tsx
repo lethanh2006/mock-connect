@@ -1,7 +1,19 @@
-import { Dialog, DialogContent, IconArrowdownSquare, IconButton, IconXmark } from '@/components/Icons';
+import { Button, Dialog, DialogContent, IconArrowdownSquare, IconButton, IconXmark } from '@/components/Icons';
+import { type VinuniButtonVariant } from '@/components/Table/utils/vinuniAdapters';
 import classNames from 'classnames';
 import { useState } from 'react';
 import './style.less';
+
+/** Props được phép truyền vào nút OK / nút Hủy trong footer mặc định */
+export interface ModalButtonProps {
+	hidden?: boolean;
+	disabled?: boolean;
+	loading?: boolean;
+	/** VinUni Button variant. Mặc định OK: 'default', Cancel: 'outline' */
+	variant?: VinuniButtonVariant;
+	className?: string;
+	style?: React.CSSProperties;
+}
 
 export interface ModalExpandableProps {
 	children?: ((isExpand: boolean) => React.ReactNode) | React.ReactNode;
@@ -16,8 +28,23 @@ export interface ModalExpandableProps {
 	className?: string;
 	styles?: { body?: React.CSSProperties };
 	loading?: boolean;
-	footer?: React.ReactNode;
+	/**
+	 * Truyền `null` để ẩn hoàn toàn footer.
+	 * Truyền ReactNode để hiển thị nội dung tùy chỉnh.
+	 * Không truyền (undefined) + có `onOk` → tự render footer mặc định.
+	 */
+	footer?: React.ReactNode | null;
 	allowExpand?: boolean;
+	/** Text nút OK (mặc định: 'OK') */
+	okText?: React.ReactNode;
+	/** Text nút Đóng/Cancel (mặc định: 'Đóng') */
+	cancelText?: React.ReactNode;
+	/** Props bổ sung cho nút OK. Dùng `hidden: true` để ẩn hoàn toàn. */
+	okButtonProps?: ModalButtonProps;
+	/** Props bổ sung cho nút Hủy. Dùng `hidden: true` để ẩn hoàn toàn. */
+	cancelButtonProps?: ModalButtonProps;
+	/** Handler khi bấm OK — khi truyền prop này, footer mặc định tự hiện */
+	onOk?: (e?: any) => void;
 }
 
 const ModalExpandable = (props: ModalExpandableProps) => {
@@ -35,9 +62,42 @@ const ModalExpandable = (props: ModalExpandableProps) => {
 		styles,
 		footer,
 		allowExpand = true,
+		okText = 'OK',
+		cancelText = 'Đóng',
+		okButtonProps,
+		cancelButtonProps,
+		onOk,
 	} = props;
 
 	const isFull = isExpanded || fullScreen;
+
+	/** Footer mặc định: nút Đóng bên trái + nút OK bên phải (nếu onOk được truyền) */
+	const renderDefaultFooter = () => {
+		const { hidden: okHidden, variant: okVariant = 'default', ...okRest } = okButtonProps ?? {};
+		const { hidden: cancelHidden, variant: cancelVariant = 'outline', ...cancelRest } = cancelButtonProps ?? {};
+		return (
+			<div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+				{!cancelHidden && (
+					<Button type='button' variant={cancelVariant} onClick={onCancel} {...cancelRest}>
+						{cancelText}
+					</Button>
+				)}
+				{!okHidden && onOk && (
+					<Button type='button' variant={okVariant} onClick={onOk} {...okRest}>
+						{okText}
+					</Button>
+				)}
+			</div>
+		);
+	};
+
+	/**
+	 * footer === null    → không render footer
+	 * footer = ReactNode → render custom
+	 * footer = undefined + onOk → render footer mặc định
+	 * footer = undefined, không có onOk → không render footer
+	 */
+	const footerContent = footer === null ? null : footer !== undefined ? footer : onOk ? renderDefaultFooter() : null;
 
 	return (
 		<Dialog
@@ -95,7 +155,7 @@ const ModalExpandable = (props: ModalExpandableProps) => {
 				<div className='modal-expandable-body' style={styles?.body}>
 					{typeof children === 'function' ? children(isExpanded) : children}
 				</div>
-				{footer ? <div className='modal-expandable-footer'>{footer}</div> : null}
+				{footerContent ? <div className='modal-expandable-footer'>{footerContent}</div> : null}
 
 				<div className='modal-buttons'>
 					{!fullScreen && allowExpand && (

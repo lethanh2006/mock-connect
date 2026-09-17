@@ -2,7 +2,7 @@ import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
 import type { ThongBao } from '@/services/ThongBao/typing';
 import { Badge } from '@/components/Icons';
-import { Select } from 'antd';
+import Select from '@/components/MySelect';
 import { useModel } from 'umi';
 import { thongKeNotificationNguoiNhan } from '@/services/ThongBao';
 import { useEffect, useState } from 'react';

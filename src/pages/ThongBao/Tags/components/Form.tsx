@@ -1,7 +1,8 @@
 import { Button } from '@/components/Icons';
+import Input from '@/components/MyInput';
 import { Card } from '@/components/PageCard';
 import rules from '@/utils/rules';
-import { Col, Form, Input, Row } from 'antd';
+import { Col, Form, Row } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 

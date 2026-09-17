@@ -1,6 +1,6 @@
 import { IconButton, IconPlus } from '@/components/Icons';
+import Select from '@/components/MySelect';
 import ModalExpandable from '@/components/Table/ModalExpandable';
-import { Select } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import FormChucVu from './Form';
