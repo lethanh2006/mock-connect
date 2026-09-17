@@ -37,19 +37,19 @@ export default [
 	{
 		path: '/thong-tin-ca-nhan',
 		name: 'MyProfile',
-		icon: 'UserOutlined',
+		icon: 'IconHumanCard',
 		component: 'SinhVien',
 	},
 	{
 		path: '/my-calendar',
 		name: 'MyCalendar',
-		icon: 'CalendarOutlined',
+		icon: 'IconCalendar',
 		component: 'Calendar',
 	},
 	{
 		path: '/hoc-tap',
 		name: 'HocTap',
-		icon: 'BookOutlined',
+		icon: 'IconBookOpen',
 		routes: [
 			{
 				name: 'LopHocPhan',
@@ -206,7 +206,7 @@ export default [
 	{
 		path: '/experience-porfolio',
 		name: 'ExperiencePorfolio',
-		icon: 'FolderOpenOutlined',
+		icon: 'IconFolder',
 		routes: [
 			{
 				path: 'student-development',
@@ -236,107 +236,106 @@ export default [
 		],
 	},
 	{
-		path: '/student-support',
-		name: 'StudentSupport',
-		icon: 'CustomerServiceOutlined',
+		name: 'StudentSupportGroup',
+		path: '/__group__/student-support',
+		disabled: true,
+	},
+	// {
+	// 	path: '/student-support/registrar-services',
+	// 	name: 'RegistrarServices',
+	// 	routes: [
+	// 		{
+	// 			path: 'registration',
+	// 			name: 'Registration',
+	// 			component: 'New/Registration',
+	// 		},
+	// 		{
+	// 			path: 'history',
+	// 			name: 'History',
+	// 			component: 'New/History',
+	// 		},
+	// 	],
+	// },
+	{
+		path: '/student-support/health-clinic',
+		name: 'HealthClinic',
+		icon: 'IconBriefcaseHealth',
 		routes: [
-			// {
-			// 	path: 'registrar-services',
-			// 	name: 'RegistrarServices',
-			// 	routes: [
-			// 		{
-			// 			path: 'registration',
-			// 			name: 'Registration',
-			// 			component: 'New/Registration',
-			// 		},
-			// 		{
-			// 			path: 'history',
-			// 			name: 'History',
-			// 			component: 'New/History',
-			// 		},
-			// 	],
-			// },
 			{
-				path: 'health-clinic',
-				name: 'HealthClinic',
-				routes: [
-					{
-						path: 'health-insurance',
-						name: 'HealthInsurance',
-						component: 'BaoHiemYTe',
-					},
-					{
-						path: 'health-checkup',
-						name: 'HealthCheckup',
-						component: 'KiemTraSucKhoe',
-					},
-				],
+				path: 'health-insurance',
+				name: 'HealthInsurance',
+				component: 'BaoHiemYTe',
 			},
-			// {
-			// 	path: 'mental-health',
-			// 	name: 'MentalHealth',
-			// 	component: 'New/MentalHealth',
-			// },
-			// {
-			// 	path: 'work-study',
-			// 	name: 'WorkStudy',
-			// 	component: 'New/WorkStudy',
-			// },
-			// {
-			// 	path: 'international',
-			// 	name: 'International',
-			// 	component: 'New/International',
-			// },
-			// {
-			// 	path: 'IT-support',
-			// 	name: 'ITSupport',
-			// 	component: 'New/ITSupport',
-			// },
+			{
+				path: 'health-checkup',
+				name: 'HealthCheckup',
+				component: 'KiemTraSucKhoe',
+			},
 		],
+	},
+	// {
+	// 	path: '/student-support/mental-health',
+	// 	name: 'MentalHealth',
+	// 	component: 'New/MentalHealth',
+	// },
+	// {
+	// 	path: '/student-support/work-study',
+	// 	name: 'WorkStudy',
+	// 	component: 'New/WorkStudy',
+	// },
+	// {
+	// 	path: '/student-support/international',
+	// 	name: 'International',
+	// 	component: 'New/International',
+	// },
+	// {
+	// 	path: '/student-support/IT-support',
+	// 	name: 'ITSupport',
+	// 	component: 'New/ITSupport',
+	// },
+	// GROUP: ĐỜI SỐNG HỌC ĐƯỜNG (Collapsible Group)
+	{
+		name: 'CampusLifeGroup',
+		path: '/__group__/campus-life',
+		disabled: true,
 	},
 	{
-		path: '/campus-life',
-		name: 'CampusLife',
-		icon: 'BankOutlined',
+		path: '/campus-life/student-housing',
+		name: 'StudentHousing',
+		icon: 'IconDoor01',
 		routes: [
 			{
-				path: 'student-housing',
-				name: 'StudentHousing',
-				routes: [
-					{
-						path: 'dang-ky',
-						name: 'DangKy',
-						component: 'KyTucXa/DangKy',
-					},
-					{
-						path: 'lich-su',
-						name: 'LichSu',
-						component: 'KyTucXa/LichSu',
-					},
-				],
+				path: 'dang-ky',
+				name: 'DangKy',
+				component: 'KyTucXa/DangKy',
 			},
-			// {
-			// 	path: 'Club',
-			// 	name: 'Club',
-			// 	component: 'New/Club',
-			// },
-			// {
-			// 	path: 'code-conduct',
-			// 	name: 'CodeConduct',
-			// 	component: 'New/CodeConduct',
-			// },
-			// {
-			// 	path: 'facility-booking',
-			// 	name: 'FacilityBooking',
-			// 	component: 'New/FacilityBooking',
-			// },
-			// {
-			// 	path: 'campus-news',
-			// 	name: 'CampusNews',
-			// 	component: 'New/CampusNews',
-			// },
+			{
+				path: 'lich-su',
+				name: 'LichSu',
+				component: 'KyTucXa/LichSu',
+			},
 		],
 	},
+	// {
+	// 	path: '/campus-life/club',
+	// 	name: 'Club',
+	// 	component: 'New/Club',
+	// },
+	// {
+	// 	path: '/campus-life/code-conduct',
+	// 	name: 'CodeConduct',
+	// 	component: 'New/CodeConduct',
+	// },
+	// {
+	// 	path: '/campus-life/facility-booking',
+	// 	name: 'FacilityBooking',
+	// 	component: 'New/FacilityBooking',
+	// },
+	// {
+	// 	path: '/campus-life/campus-news',
+	// 	name: 'CampusNews',
+	// 	component: 'New/CampusNews',
+	// },
 	// {
 	// 	path: '/career-industry',
 	// 	name: 'CareerIndustry',
@@ -433,10 +432,16 @@ export default [
 	// 		},
 	// 	],
 	// },
+	// GROUP: TÀI CHÍNH (Collapsible Group)
+	{
+		name: 'FinanceGroup',
+		path: '/__group__/finance',
+		disabled: true,
+	},
 	{
 		path: '/finance',
 		name: 'Finance',
-		icon: 'DollarOutlined',
+		icon: 'IconBankCard',
 		routes: [
 			{
 				path: 'tuition-billing',
