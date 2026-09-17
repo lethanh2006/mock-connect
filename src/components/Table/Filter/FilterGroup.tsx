@@ -1,6 +1,7 @@
 import { Button, IconPlus, IconXmark } from '@/components/Icons';
+import Select from '@/components/MySelect';
 import { Card } from '@/components/PageCard';
-import { Form, Select } from 'antd';
+import { Form } from 'antd';
 import classNames from 'classnames';
 import { useMemo } from 'react';
 import { useIntl } from 'umi';
