@@ -15,7 +15,8 @@ import { buildUpLoadFile, buildUpLoadMultiFile } from '@/services/uploadFile';
 import { currentRole } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Card, Col, Form, Input, message, Modal, Row, Segmented, Select, Tabs } from 'antd';
+import { Button, Card, Col, Form, Input, Modal, Row, Segmented, Select, Tabs } from 'antd';
+import { toast } from '@/utils/toast';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import SelectTag from '../Tags/components/Select';
@@ -72,7 +73,7 @@ const FormThongBao = (props: any) => {
 					email365: item.email365,
 				}));
 				if (!values.userList?.length) {
-					message.warning('Vui lòng chọn người nhận');
+					toast.warning('Vui lòng chọn người nhận');
 					return;
 				}
 			}

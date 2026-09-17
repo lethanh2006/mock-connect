@@ -1,6 +1,6 @@
 import { getThongBao, readNotification } from '@/services/ThongBao';
 import { type ThongBao } from '@/services/ThongBao/typing';
-import { message } from 'antd';
+import { toast } from '@/utils/toast';
 import { useState } from 'react';
 
 export default () => {
@@ -40,7 +40,7 @@ export default () => {
 			const response = await readNotification({ type, notificationId });
 			if (page !== 1) setPage(1);
 			else getThongBaoModel();
-			if (type === 'ALL') messageText ?? message.success('Đã đọc tất cả thông báo');
+			if (type === 'ALL') messageText ?? toast.success('Đã đọc tất cả thông báo');
 
 			return response?.data?.data;
 		} catch (er) {

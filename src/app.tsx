@@ -1,7 +1,7 @@
 import AppShell from '@/components/AppShell';
 import '@/utils/dayjs';
 import '@ant-design/v5-patch-for-react-19';
-import { UiProvider } from '@vinuni/ui';
+import { Toaster, UiProvider } from '@vinuni/ui';
 import { App } from 'antd';
 import React from 'react'; // Bổ sung import React
 import type { RunTimeLayoutConfig } from 'umi';
@@ -35,6 +35,7 @@ export function rootContainer(container: React.ReactNode) {
 			<ConfigBounder>
 				<App>{container}</App>
 			</ConfigBounder>
+			<Toaster />
 		</UiProvider>
 	);
 }

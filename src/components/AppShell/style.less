@@ -184,8 +184,16 @@
 .app-shell-sidebar-title,
 [data-slot="sidebar-title"] {
 	font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
+	color: var(--color-primary, #134d8b) !important;
 	padding: 0 !important;
 	margin: 0 !important;
+}
+
+[data-vinuni-theme="dark"] {
+	.app-shell-sidebar-title,
+	[data-slot="sidebar-title"] {
+		color: var(--color-text, #111827) !important;
+	}
 }
 
 // =============================================================================

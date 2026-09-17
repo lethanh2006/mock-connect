@@ -8,7 +8,8 @@ import {
 } from '@/utils/fileValidation';
 import rules from '@/utils/rules';
 import { Button, IconArrowRight, IconDownload } from '@/components/Icons';
-import { Col, Form, InputNumber, Row, Select, message } from 'antd';
+import { Col, Form, InputNumber, Row, Select } from 'antd';
+import { toast } from '@/utils/toast';
 import fileDownload from 'js-file-download';
 import { pick } from 'lodash';
 import { useState } from 'react';
@@ -56,7 +57,7 @@ const ChooseFileImport = (props: { onChange: () => void; onCancel: any; getTempl
 	const getWorksheets = (data: ArrayBuffer, extension?: string) => {
 		if (!isValidFileBuffer(data, extension ?? '')) {
 			resetWorkbookState();
-			message.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
+			toast.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
 			return;
 		}
 
@@ -65,7 +66,7 @@ const ChooseFileImport = (props: { onChange: () => void; onCancel: any; getTempl
 			const sheets = wb.SheetNames;
 			if (!sheets?.length || sheets.length > MAX_SHEET_COUNT) {
 				resetWorkbookState();
-				message.error(intl.formatMessage({ id: 'global.table.import.choose.message2' }));
+				toast.error(intl.formatMessage({ id: 'global.table.import.choose.message2' }));
 				return;
 			}
 			setWorkbook(wb);
@@ -73,7 +74,7 @@ const ChooseFileImport = (props: { onChange: () => void; onCancel: any; getTempl
 			form.setFieldsValue({ sheet: sheets[0], line: 1 });
 		} catch {
 			resetWorkbookState();
-			message.error(intl.formatMessage({ id: 'global.table.import.choose.message2' }));
+			toast.error(intl.formatMessage({ id: 'global.table.import.choose.message2' }));
 		}
 	};
 
@@ -85,12 +86,12 @@ const ChooseFileImport = (props: { onChange: () => void; onCancel: any; getTempl
 		}
 		if (!isAllowedFile(file, FILE_EXTENSIONS.excel)) {
 			resetWorkbookState();
-			message.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
+			toast.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
 			return;
 		}
 		if (!(await validateFileBlob(file, file.name))) {
 			resetWorkbookState();
-			message.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
+			toast.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
 			return;
 		}
 		if (typeof FileReader !== 'undefined') {
@@ -101,16 +102,16 @@ const ChooseFileImport = (props: { onChange: () => void; onCancel: any; getTempl
 				if (result instanceof ArrayBuffer) getWorksheets(result, extension);
 				else {
 					resetWorkbookState();
-					message.error(intl.formatMessage({ id: 'global.table.import.choose.message2' }));
+					toast.error(intl.formatMessage({ id: 'global.table.import.choose.message2' }));
 				}
 			};
 			reader.onerror = () => {
 				resetWorkbookState();
-				message.error(intl.formatMessage({ id: 'global.table.import.choose.message2' }));
+				toast.error(intl.formatMessage({ id: 'global.table.import.choose.message2' }));
 			};
 			reader.readAsArrayBuffer(file);
 		} else {
-			message.error(intl.formatMessage({ id: 'global.table.import.choose.message1' }));
+			toast.error(intl.formatMessage({ id: 'global.table.import.choose.message1' }));
 			if (onCancel) onCancel();
 		}
 	};
@@ -121,7 +122,7 @@ const ChooseFileImport = (props: { onChange: () => void; onCancel: any; getTempl
 		if (ws) {
 			const { rows: sheetRows, cols: sheetCols } = getSheetDimensions(ws);
 			if (sheetRows > MAX_IMPORT_ROWS || sheetCols > MAX_IMPORT_COLS) {
-				message.error(intl.formatMessage({ id: 'global.table.import.choose.message2' }));
+				toast.error(intl.formatMessage({ id: 'global.table.import.choose.message2' }));
 				return;
 			}
 
@@ -151,7 +152,7 @@ const ChooseFileImport = (props: { onChange: () => void; onCancel: any; getTempl
 				return;
 			}
 		}
-		message.error(intl.formatMessage({ id: 'global.table.import.choose.message2' }));
+		toast.error(intl.formatMessage({ id: 'global.table.import.choose.message2' }));
 	};
 
 	const onDownloadTemplate = () => {

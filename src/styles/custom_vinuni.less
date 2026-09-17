@@ -252,6 +252,39 @@ button:not(:disabled),
 	}
 }
 
+// Bản dark mode của #custom-filter-form ở trên — không có override thì nút icon chìm vào nền tối.
+[data-vinuni-theme='dark'] #custom-filter-form {
+	.ant-card-extra button,
+	.filter-item-actions button,
+	.ant-col-2>.ant-space-vertical button,
+	.ant-col-md-1>.ant-space-vertical button {
+		color: rgba(255, 255, 255, 0.65) !important;
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.08) !important;
+			color: #ffffff !important;
+		}
+
+		&:active {
+			background: rgba(255, 255, 255, 0.14) !important;
+		}
+
+		&[data-variant='destructive'],
+		&.ant-btn-dangerous {
+			color: rgba(255, 255, 255, 0.45) !important;
+
+			&:hover {
+				background: rgba(255, 77, 79, 0.16) !important;
+				color: #ff7875 !important;
+			}
+
+			&:active {
+				background: rgba(255, 77, 79, 0.28) !important;
+			}
+		}
+	}
+}
+
 // Bỏ hover riêng nút trang hiện tại trong phân trang
 [data-slot='pagination-link'][data-active='true'] {
 	pointer-events: none;

@@ -3,7 +3,8 @@ import { getSafeHref } from '@/utils/security';
 import { blobToBase64, getNameFile } from '@/utils/utils';
 import { IconEye, IconPlus, IconTrash, IconUpload } from '@/components/Icons';
 import type { UploadProps } from 'antd';
-import { Button, Image, Upload, message } from 'antd';
+import { Button, Image, Upload } from 'antd';
+import { toast } from '@/utils/toast';
 import type { RcFile } from 'antd/es/upload';
 import { useEffect, useState } from 'react';
 import Resizer from 'react-image-file-resizer';
@@ -47,7 +48,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 	const acceptString = accept || otherAccept || (showImage ? 'image/*' : '');
 	const allowedExtensions = acceptString ? parseAcceptString(acceptString) : [];
 
-	const showFormatError = () => message.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
+	const showFormatError = () => toast.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
 
 	const resolveBeforeUpload: UploadProps['beforeUpload'] = async (file, fileList) => {
 		if (allowedExtensions.length) {
@@ -145,7 +146,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 		let files = val.fileList as TFileProps[];
 		const findLargeFile = files?.some((file) => file.size && file.size / 1024 / 1024 > maxFileSize);
 		if (findLargeFile) {
-			message.error(intl.formatMessage({ id: 'global.uploadfile.error.mb' }, { maxFileSize: maxFileSize }));
+			toast.error(intl.formatMessage({ id: 'global.uploadfile.error.mb' }, { maxFileSize: maxFileSize }));
 			return;
 		}
 
@@ -153,7 +154,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 			(file) => file?.remote !== true && allowedExtensions.length > 0 && !isAllowedFile(file, allowedExtensions),
 		);
 		if (findWrongTypeFile) {
-			message.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
+			toast.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
 			return;
 		}
 

@@ -6,7 +6,7 @@ import axios from '@/utils/axios';
 import { currentRole, replaceRole } from '@/utils/ip';
 import { oidcConfig } from '@/utils/oidcConfig';
 import { getAppBasePath } from '@/utils/path';
-import { notification } from 'antd';
+import { toast } from '@/utils/toast';
 import queryString from 'query-string';
 import { useEffect, type FC } from 'react';
 import { AuthProvider, hasAuthParams, useAuth } from 'react-oidc-context';
@@ -90,7 +90,7 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 			} catch {
 				if (auth.isAuthenticated) auth.removeUser();
 				else {
-					notification.warning({
+					toast.warning({
 						message: intl.formatMessage({ id: 'global.OIDCBounder.message' }),
 						description: intl.formatMessage({ id: 'global.OIDCBounder.description' }),
 					});

@@ -5,7 +5,8 @@ import { keycloakAuthority } from '@/utils/ip';
 import { getPublicAssetPath } from '@/utils/path';
 import rules from '@/utils/rules';
 import { IconHuman, IconLockClose } from '@/components/Icons';
-import { Button, Form, Input, Tabs, message } from 'antd';
+import { Button, Form, Input, Tabs } from 'antd';
+import { toast } from '@/utils/toast';
 import React, { useState } from 'react';
 // import Recaptcha from 'react-recaptcha';
 import { OIDCBounder } from '@/components/OIDCBounder';
@@ -44,14 +45,14 @@ const Login: React.FC = () => {
 			id: 'pages.login.success',
 			defaultMessage: 'success',
 		});
-		message.success(defaultloginSuccessMessage);
+		toast.success(defaultloginSuccessMessage);
 		history.push('/dashboard');
 	};
 
 	const handleSubmit = async (values: { login: string; password: string }) => {
 		try {
 			if (!isVerified) {
-				message.error('Vui lòng xác thực Captcha');
+				toast.error('Vui lòng xác thực Captcha');
 				return;
 			}
 			setSubmitting(true);
@@ -72,7 +73,7 @@ const Login: React.FC = () => {
 				id: 'pages.login.failure',
 				defaultMessage: 'failure',
 			});
-			message.error(defaultloginFailureMessage);
+			toast.error(defaultloginFailureMessage);
 		}
 		setSubmitting(false);
 	};

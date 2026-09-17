@@ -1,6 +1,6 @@
 import { EDinhDangFile } from '@/services/base/constant';
 import { EFileScope, uploadFile } from '@/services/uploadFile';
-import { message, type FormInstance } from 'antd';
+import { type FormInstance } from 'antd';
 import { type AxiosResponse } from 'axios';
 import type dayjs from 'dayjs';
 import { Dayjs } from 'dayjs';
@@ -8,6 +8,7 @@ import DOMPurify from 'dompurify';
 import * as XLSX from 'xlsx';
 import dayjsLib from './dayjs';
 import { isSafeUrl } from './security';
+import { toast } from './toast';
 
 export const urlRegex =
 	/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.,~#?&//=]*)$/;
@@ -281,7 +282,7 @@ export const checkFileSize = (arrFile: any[], fileSize?: number) => {
 		?.forEach((item) => {
 			if (item?.size / 1024 / 1024 > size) {
 				check = false;
-				message.error(`file ${item?.name} có dung lượng > ${size}Mb`);
+				toast.error(`file ${item?.name} có dung lượng > ${size}Mb`);
 			}
 		});
 	return check;

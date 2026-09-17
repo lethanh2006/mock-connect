@@ -13,7 +13,8 @@ import {
 	IconMagnifyingglass,
 	IconOpenrectagleToprightarrow,
 } from '@/components/Icons';
-import { Button, message, Spin } from 'antd';
+import { Button, Spin } from 'antd';
+import { toast } from '@/utils/toast';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
@@ -177,7 +178,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 			navigator.clipboard
 				.writeText(frameData?.url)
 				.then(() => {
-					message.success(intl.formatMessage({ id: 'global.previewfile.message.saochep' }));
+					toast.success(intl.formatMessage({ id: 'global.previewfile.message.saochep' }));
 				})
 				.catch((error) => {
 					console.error(error);
