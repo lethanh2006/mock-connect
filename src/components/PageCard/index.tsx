@@ -1,4 +1,4 @@
-import { Card, CardAction, CardContent, CardHeader, CardTitle, ScrollEdgeEffect, useResolvedTheme } from '@vinuni/ui';
+import { Card as VinCard, CardAction, CardContent, CardHeader, CardTitle, ScrollEdgeEffect, useResolvedTheme } from '@vinuni/ui';
 import { Spin } from 'antd';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import './style.less';
@@ -152,18 +152,33 @@ const PageCard: React.FC<PageCardProps> = ({
 			.filter(Boolean)
 			.join(' ');
 
+		const cardBody = (
+			<>
+				{hasHeader && (
+					<CardHeader>
+						{title && <CardTitle>{title}</CardTitle>}
+						{extraContent && <CardAction>{extraContent}</CardAction>}
+					</CardHeader>
+				)}
+				<CardContent className={hideInnerCard ? 'p-0' : undefined}>{children}</CardContent>
+			</>
+		);
+
 		return (
-			<Card className={cardClasses} style={style} {...rest}>
-				<Spin spinning={loading} style={{ width: '100%' }}>
-					{hasHeader && (
-						<CardHeader>
-							{title && <CardTitle>{title}</CardTitle>}
-							{extraContent && <CardAction>{extraContent}</CardAction>}
-						</CardHeader>
-					)}
-					<CardContent className={hideInnerCard ? 'p-0' : undefined}>{children}</CardContent>
-				</Spin>
-			</Card>
+			<VinCard className={cardClasses} style={style} {...rest}>
+				{/* Spin của antd bọc thêm 2 lớp div thường (.ant-spin-nested-loading/.ant-spin-container),
+				không phải flex — chèn giữa Card và CardHeader/CardContent sẽ phá chuỗi flex:1 mà
+				ModalExpandable/style.less dựa vào để giãn Card full-screen (footer bị đẩy lên trên,
+				để trống khoảng lớn phía dưới). Chỉ bọc Spin khi thực sự có loading, mặc định (loading=false)
+				giữ CardHeader/CardContent làm con trực tiếp của Card. */}
+				{loading ? (
+					<Spin spinning style={{ width: '100%' }}>
+						{cardBody}
+					</Spin>
+				) : (
+					cardBody
+				)}
+			</VinCard>
 		);
 	}
 
@@ -238,13 +253,13 @@ const PageCard: React.FC<PageCardProps> = ({
 				{hideInnerCard ? (
 					children
 				) : (
-					<Card
+					<VinCard
 						className={['page-card-inner', bordered ? 'border border-ds-line-primary' : 'border-0 shadow-none']
 							.filter(Boolean)
 							.join(' ')}
 					>
 						<CardContent>{children}</CardContent>
-					</Card>
+					</VinCard>
 				)}
 			</Spin>
 		</div>
@@ -252,3 +267,9 @@ const PageCard: React.FC<PageCardProps> = ({
 };
 
 export default PageCard;
+
+// Card đơn giản có tiêu đề (khóa cứng level=4 "Standard") — điểm dùng chung cho mọi nơi cần
+// "Card + title + content" thay vì tự dựng Card/CardHeader/CardTitle/CardContent của @vinuni/ui
+// mỗi nơi 1 kiểu. Card gốc của @vinuni/ui được import ở trên dưới tên VinCard để tránh trùng tên
+// với export này.
+export const Card: React.FC<Omit<PageCardProps, 'level'>> = (props) => <PageCard {...props} level={4} />;

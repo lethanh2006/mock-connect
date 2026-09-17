@@ -119,3 +119,10 @@ const ModalExpandable = (props: ModalExpandableProps) => {
 };
 
 export default ModalExpandable;
+
+// Modal "trơn" — ẩn nút phóng to/thu nhỏ theo mặc định (allowExpand=false), dùng cho các chỗ chỉ
+// cần 1 modal thường (form, xác nhận...) mà không cần tính năng expand-fullscreen. Vẫn cho phép
+// truyền allowExpand={true} nếu chỗ nào sau này cần bật lại.
+export const Modal: React.FC<ModalExpandableProps> = ({ allowExpand = false, ...props }) => (
+	<ModalExpandable {...props} allowExpand={allowExpand} />
+);

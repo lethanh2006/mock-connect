@@ -1,4 +1,5 @@
-import { Button, Card, CardContent, CardHeader, CardTitle } from '@/components/Icons';
+import { Button } from '@/components/Icons';
+import { Card } from '@/components/PageCard';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Form, Input } from 'antd';
@@ -28,19 +29,15 @@ const FormChucVu = (props: any) => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{(edit ? 'Chỉnh sửa ' : 'Thêm mới ') + title?.toLowerCase()}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Form onFinish={onFinish} form={form} layout="vertical">
-          <Form.Item
-            name="ma"
-            label="Mã"
-            rules={[...rules.required, ...rules.text, ...rules.length(20)]}
-          >
-            <Input placeholder="Mã chức vụ" />
-          </Form.Item>
+    <Card title={(edit ? 'Chỉnh sửa ' : 'Thêm mới ') + title?.toLowerCase()}>
+      <Form onFinish={onFinish} form={form} layout="vertical">
+        <Form.Item
+          name="ma"
+          label="Mã"
+          rules={[...rules.required, ...rules.text, ...rules.length(20)]}
+        >
+          <Input placeholder="Mã chức vụ" />
+        </Form.Item>
 
         <Form.Item
           name="ten"
@@ -50,16 +47,15 @@ const FormChucVu = (props: any) => {
           <Input placeholder="Tên chức vụ" />
         </Form.Item>
 
-          <div className="form-footer">
-            <Button variant="default" type="submit" loading={formSubmiting}>
-              {!edit ? 'Thêm mới' : 'Lưu lại'}
-            </Button>
-            <Button variant="outline" type="button" onClick={() => setVisibleForm(false)}>
-              Hủy
-            </Button>
-          </div>
-        </Form>
-      </CardContent>
+        <div className="form-footer">
+          <Button variant="default" type="submit" loading={formSubmiting}>
+            {!edit ? 'Thêm mới' : 'Lưu lại'}
+          </Button>
+          <Button variant="outline" type="button" onClick={() => setVisibleForm(false)}>
+            Hủy
+          </Button>
+        </div>
+      </Form>
     </Card>
   );
 };

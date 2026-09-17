@@ -1,7 +1,8 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { getDateTimeFormat } from '@/utils/formatDate';
 import rules from '@/utils/rules';
-import { Card, CardContent, Icon3SquarePlusmark, IconXmark } from '@/components/Icons';
+import { Icon3SquarePlusmark, IconXmark } from '@/components/Icons';
+import { Card } from '@/components/PageCard';
 import { Checkbox, Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'umi';
@@ -127,7 +128,6 @@ const FilterItem = (props: RowFilterProps) => {
 
 	return (
 		<Card size='sm'>
-			<CardContent>
 			<Row gutter={[8, 8]}>
 				<Col span={22} md={isReadOnly ? 24 : 23}>
 					<Row gutter={[8, 0]}>
@@ -273,7 +273,6 @@ const FilterItem = (props: RowFilterProps) => {
 					</Col>
 				)}
 			</Row>
-			</CardContent>
 		</Card>
 	);
 };

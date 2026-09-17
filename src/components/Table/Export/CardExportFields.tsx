@@ -1,4 +1,5 @@
-import { Card, CardContent, CardTitle, IconButton, IconTrash } from '@/components/Icons';
+import { IconButton, IconTrash } from '@/components/Icons';
+import { Card } from '@/components/PageCard';
 import { useIntl } from 'umi';
 import TableStaticData from '../TableStaticData';
 import { type IColumn, type TExportField } from '../typing';
@@ -41,25 +42,20 @@ const CardExportFields = (props: { fields: TExportField[]; setFields: (val: TExp
 	const selectedFields = fields.filter((item) => item.selected);
 
 	return (
-		<Card>
-			<CardTitle style={{ padding: '12px 16px 0' }}>
-				{intl.formatMessage({ id: 'global.table.export.field.title' })}
-			</CardTitle>
-			<CardContent style={{ padding: '12px 16px 16px' }}>
-				<TableStaticData
-					columns={columns}
-					data={selectedFields}
-					size='small'
-					addStt
-					columnSetting={false}
-					rowSortable
-					onSortEnd={onSortEnd}
-					otherProps={{
-						scroll: selectedFields.length > 7 ? { y: 300 } : undefined,
-						pagination: false,
-					}}
-				/>
-			</CardContent>
+		<Card title={intl.formatMessage({ id: 'global.table.export.field.title' })}>
+			<TableStaticData
+				columns={columns}
+				data={selectedFields}
+				size='small'
+				addStt
+				columnSetting={false}
+				rowSortable
+				onSortEnd={onSortEnd}
+				otherProps={{
+					scroll: selectedFields.length > 7 ? { y: 300 } : undefined,
+					pagination: false,
+				}}
+			/>
 		</Card>
 	);
 };
