@@ -71,6 +71,8 @@ const ChucVuPage = () => {
       title="Chức vụ"
       Form={Form}
       buttons={{ import: true, filter: true, export: true }}
+      rowSelection
+      deleteMany
       cardProps={{ stickyHeader: true }}
     />
   );

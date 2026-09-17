@@ -16,7 +16,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from '@/components/Icons';
-import { AutoComplete } from 'antd';
+import { AutoComplete, Popconfirm } from 'antd';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -329,7 +329,7 @@ export const TableHeader: React.FC = () => {
 
 				{otherTextButtons}
 
-				{/* {rowSelection && deleteMany && selectedIds?.length ? (
+				{rowSelection && deleteMany && selectedIds?.length ? (
 					<Popconfirm
 						title={intl.formatMessage({ id: 'global.table.index.button.xoa.title' }, { count: selectedIds?.length })}
 						onConfirm={handleDeleteMany}
@@ -338,7 +338,7 @@ export const TableHeader: React.FC = () => {
 							{intl.formatMessage({ id: 'global.table.index.button.xoa' }, { count: selectedIds?.length })}
 						</ButtonExtend>
 					</Popconfirm>
-				) : null} */}
+				) : null}
 			</div>
 
 			<div className='extra no-print'>
