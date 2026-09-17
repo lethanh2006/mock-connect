@@ -1,4 +1,4 @@
-import FormWaiting from '@/components/Loading/FormWaiting';
+import FormWaiting, { hideFormWaiting } from '@/components/Loading/FormWaiting';
 import MyDatePicker from '@/components/MyDatePicker';
 import TinyEditor from '@/components/TinyEditor';
 import UploadFile from '@/components/Upload/UploadFile';
@@ -15,7 +15,7 @@ import { buildUpLoadFile, buildUpLoadMultiFile } from '@/services/uploadFile';
 import { currentRole } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Card, Col, Form, Input, Modal, Row, Segmented, Select, Tabs } from 'antd';
+import { Button, Card, Col, Form, Input, Row, Segmented, Select, Tabs } from 'antd';
 import { toast } from '@/utils/toast';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -101,7 +101,7 @@ const FormThongBao = (props: any) => {
 			console.log(er);
 		} finally {
 			setFormSubmiting(false);
-			Modal.destroyAll();
+			hideFormWaiting();
 		}
 	};
 

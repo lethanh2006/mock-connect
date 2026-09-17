@@ -1,4 +1,5 @@
 import AppShell from '@/components/AppShell';
+import LoadingModal from '@/components/Loading/LoadingModal';
 import '@/utils/dayjs';
 import '@ant-design/v5-patch-for-react-19';
 import { Toaster, UiProvider } from '@vinuni/ui';
@@ -36,6 +37,7 @@ export function rootContainer(container: React.ReactNode) {
 				<App>{container}</App>
 			</ConfigBounder>
 			<Toaster />
+			<LoadingModal />
 		</UiProvider>
 	);
 }
