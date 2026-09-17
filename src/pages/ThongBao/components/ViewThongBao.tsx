@@ -5,8 +5,8 @@ import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { currentRole } from '@/utils/ip';
 import { getNameFile, sanitizeObject } from '@/utils/utils';
 import { IconCalendar, IconHuman } from '@/components/Icons';
-import { Button } from '@/components/Icons';
-import { Avatar, Card, Col, Divider, Row } from 'antd';
+import { Avatar, AvatarImage, Button } from '@/components/Icons';
+import { Card, Col, Divider, Row } from 'antd';
 import { history } from 'umi';
 import './style.less';
 
@@ -52,7 +52,15 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 	const content = (
 		<div style={{ padding: hideCard ? '0 24px 20px 24px' : undefined }}>
 			<Card.Meta
-				avatar={record?.imageUrl ? <Avatar src={record?.imageUrl} size='large' /> : false}
+				avatar={
+					record?.imageUrl ? (
+						<Avatar size='40'>
+							<AvatarImage src={record?.imageUrl} />
+						</Avatar>
+					) : (
+						false
+					)
+				}
 				description={
 					<>
 						{record?.description ? <div style={{ marginBottom: 8 }}>{record.description}</div> : null}

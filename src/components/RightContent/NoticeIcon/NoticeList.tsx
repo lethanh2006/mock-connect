@@ -1,7 +1,8 @@
 import { type ThongBao } from '@/services/ThongBao/typing';
 import dayjs from '@/utils/dayjs';
-import { IconArrowDown, IconArrowUp, IconButton } from '@/components/Icons';
-import { Avatar, Divider, List, Skeleton } from 'antd';
+import { Avatar, AvatarImage, IconArrowDown, IconArrowUp, IconButton } from '@/components/Icons';
+import SkeletonParagraph from '@/components/SkeletonParagraph';
+import { Divider, List } from 'antd';
 import classNames from 'classnames';
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -48,7 +49,7 @@ const NoticeList: React.FC<NoticeIconTabProps> = ({
 
 	// Tách "đang tải lần đầu" khỏi "trống thật" để không hiện nhầm empty-state lúc chờ API.
 	if (loading && !hasData) {
-		return <Skeleton paragraph={{ rows: 4 }} active style={{ padding: 12 }} />;
+		return <SkeletonParagraph rows={4} style={{ padding: 12 }} />;
 	}
 
 	if (!hasData) {
@@ -81,7 +82,11 @@ const NoticeList: React.FC<NoticeIconTabProps> = ({
 					dataSource={danhSach}
 					renderItem={(item) => {
 						const itemCls = classNames(styles.item, { [styles.read]: !item.read });
-						const leftIcon = item.imageUrl ? <Avatar className={styles.avatar} src={item.imageUrl} /> : null;
+						const leftIcon = item.imageUrl ? (
+							<Avatar className={styles.avatar} size='40'>
+								<AvatarImage src={item.imageUrl} />
+							</Avatar>
+						) : null;
 
 						return (
 							<List.Item className={itemCls} key={item._id} onClick={() => onItemClick(item)}>
@@ -100,7 +105,7 @@ const NoticeList: React.FC<NoticeIconTabProps> = ({
 						);
 					}}
 				/>
-				{loading ? <Skeleton paragraph={{ rows: 2 }} active style={{ padding: 12 }} /> : null}
+				{loading ? <SkeletonParagraph rows={2} style={{ padding: 12 }} /> : null}
 				{!hasMore ? <Divider plain>{emptyText}</Divider> : null}
 			</div>
 

@@ -1,6 +1,6 @@
 import { Button, IconPlus, IconXmark } from '@/components/Icons';
 import { Card } from '@/components/PageCard';
-import { Checkbox, Form, Select } from 'antd';
+import { Form, Select } from 'antd';
 import classNames from 'classnames';
 import { useMemo } from 'react';
 import { useIntl } from 'umi';
@@ -9,6 +9,7 @@ import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
 import { useFilterFields } from '../hooks/useFilterFields';
 import { type RowFilterProps } from '../typing';
+import FormCheckbox from './FormCheckbox';
 import RowFilter from './RowFilter';
 import './style.less';
 
@@ -40,9 +41,9 @@ const FilterGroup = (props: RowFilterProps) => {
 			title={
 				<div className='filter-group-header-fields'>
 					<Form.Item valuePropName='checked' initialValue={true} name={[...namePath, 'active']} noStyle>
-						<Checkbox disabled={isReadOnly}>
+						<FormCheckbox disabled={isReadOnly}>
 							{intl.formatMessage({ id: 'global.table.customfilter.label.nhomdieukien' })}
-						</Checkbox>
+						</FormCheckbox>
 					</Form.Item>
 					<Form.Item name={[...namePath, 'operator']} initialValue='and' className='filter-group-operator-item' noStyle>
 						<Select

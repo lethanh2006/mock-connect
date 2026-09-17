@@ -4,8 +4,8 @@ import { type IColumn } from '@/components/Table/typing';
 import { EReceiverType, EVaiTroKhaoSat } from '@/services/ThongBao/constant';
 import { type ThongBao } from '@/services/ThongBao/typing';
 import EmptyState from '@/components/EmptyState';
-import { IconUpload } from '@/components/Icons';
-import { Checkbox, Col, Row } from 'antd';
+import { Checkbox, IconUpload } from '@/components/Icons';
+import { Col, Row } from 'antd';
 import _ from 'lodash';
 import { Key, useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -152,14 +152,10 @@ const TableSelectUser = (props: {
 						}}
 						otherButtons={[
 							type === EVaiTroKhaoSat.NHAN_VIEN && receiverType === EReceiverType.All ? (
-								<Checkbox
-									key='check'
-									disabled={loading}
-									checked={checked}
-									onChange={(e) => handleCheckBox(e.target.checked)}
-								>
+								<label key='check' className='form-checkbox-label'>
+									<Checkbox disabled={loading} checked={checked} onCheckedChange={handleCheckBox} />
 									Cán bộ chủ chốt
-								</Checkbox>
+								</label>
 							) : (
 								<></>
 							),

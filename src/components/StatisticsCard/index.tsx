@@ -1,6 +1,7 @@
 import { inputFormat } from '@/utils/utils';
 import { Card, CardContent } from '@/components/Icons';
-import { Col, Row, Skeleton, Spin } from 'antd';
+import SkeletonParagraph from '@/components/SkeletonParagraph';
+import { Col, Row, Spin } from 'antd';
 import classNames from 'classnames';
 import { lighten, rgba } from 'polished';
 import React, { isValidElement, ReactElement } from 'react';
@@ -130,7 +131,7 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 				{title && <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>{title}</div>}
 
 				{loading ? (
-					<Skeleton active paragraph={{ rows: 3 }} />
+					<SkeletonParagraph rows={3} />
 				) : (
 					<Row gutter={[rowGutter, rowGutter]} wrap>
 						{data.map((item, index) => (

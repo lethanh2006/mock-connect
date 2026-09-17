@@ -3,7 +3,7 @@ import { getDateTimeFormat } from '@/utils/formatDate';
 import rules from '@/utils/rules';
 import { Icon3SquarePlusmark, IconXmark } from '@/components/Icons';
 import { Card } from '@/components/PageCard';
-import { Checkbox, Col, Form, Input, InputNumber, Row, Select } from 'antd';
+import { Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'umi';
 import MyDatePicker from '../../MyDatePicker';
@@ -11,6 +11,7 @@ import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
 import { useFilterFields } from '../hooks/useFilterFields';
 import { type RowFilterProps, type TDataOption } from '../typing';
+import FormCheckbox from './FormCheckbox';
 import './style.less';
 
 const FilterItem = (props: RowFilterProps) => {
@@ -138,9 +139,9 @@ const FilterItem = (props: RowFilterProps) => {
 								{...restProps}
 								label={
 									<Form.Item valuePropName='checked' initialValue={true} name={[...namePath, 'active']} noStyle>
-										<Checkbox disabled={isReadOnly}>
+										<FormCheckbox disabled={isReadOnly}>
 											{intl.formatMessage({ id: 'global.table.customfilter.label.thuoctinh' })}
-										</Checkbox>
+										</FormCheckbox>
 									</Form.Item>
 								}
 							>
