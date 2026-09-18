@@ -27,6 +27,7 @@ import type { TFilter } from '../typing';
 import {
 	buildGlobalSearchFilter,
 	findFiltersInColumns,
+	formatSearchPlaceholderFields,
 	getGlobalSearchKeyword,
 	getSearchStorage,
 	getStandaloneSearchableFields,
@@ -169,11 +170,10 @@ export const TableHeader: React.FC = () => {
 				if (Array.isArray(item.field)) return item.field.join('.');
 				return item.field ? String(item.field) : '';
 			})
-			.filter(Boolean)
-			.slice(0, 3)
-			.join(', ');
+			.filter(Boolean);
 
-		if (!labels)
+		const fields = formatSearchPlaceholderFields(labels);
+		if (!fields)
 			return intl.formatMessage({
 				id: 'global.table.index.search.placeholder.default',
 			});
@@ -182,7 +182,7 @@ export const TableHeader: React.FC = () => {
 			{
 				id: 'global.table.index.search.placeholder',
 			},
-			{ fields: labels },
+			{ fields },
 		);
 	}, [intl, searchableColumns]);
 

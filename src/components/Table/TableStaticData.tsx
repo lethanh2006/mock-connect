@@ -46,7 +46,7 @@ import type { TableSortDirection } from './hooks/useTableColumns';
 import ModalExpandable from './ModalExpandable';
 import './style.less';
 import type { IColumn, TableStaticProps, TFilter } from './typing';
-import { updateSearchStorage } from './utils';
+import { formatSearchPlaceholderFields, updateSearchStorage } from './utils';
 
 const alignStyle = (align?: string): React.CSSProperties | undefined =>
 	align ? { textAlign: align as React.CSSProperties['textAlign'] } : undefined;
@@ -174,13 +174,12 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				if (Array.isArray(item.dataIndex)) return item.dataIndex.join('.');
 				return item.dataIndex ? String(item.dataIndex) : '';
 			})
-			.filter(Boolean)
-			.slice(0, 3)
-			.join(', ');
+			.filter(Boolean);
 
-		if (!labels) return intl.formatMessage({ id: 'global.table.index.search.placeholder.default' });
+		const fields = formatSearchPlaceholderFields(labels);
+		if (!fields) return intl.formatMessage({ id: 'global.table.index.search.placeholder.default' });
 
-		return intl.formatMessage({ id: 'global.table.index.search.placeholder' }, { fields: labels });
+		return intl.formatMessage({ id: 'global.table.index.search.placeholder' }, { fields });
 	}, [intl, globalSearchColumns]);
 
 	const globalSearchTooltip = useMemo(() => {

@@ -165,3 +165,35 @@ export const getTableFingerprint = (columns: IColumn<any>[]): string => {
 	});
 	return columnIds.join('|');
 };
+
+/**
+ * Rút gọn danh sách nhãn cột để tạo placeholder tìm kiếm vừa vặn,
+ * tránh tràn khung và luôn có '...' nếu danh sách dài hoặc còn cột phía sau.
+ */
+export const formatSearchPlaceholderFields = (labels: string[]): string => {
+	if (!labels || !labels.length) return '';
+
+	// Nếu chỉ có 1 cột
+	if (labels.length === 1) {
+		const first = labels[0];
+		return first.length > 20 ? `${first.slice(0, 18)}...` : first;
+	}
+
+	// Nếu cột đầu tiên đã dài (> 14 ký tự), chỉ hiển thị cột đầu kèm '...'
+	if (labels[0].length > 14) {
+		return `${labels[0]}, ...`;
+	}
+
+	// Thử ghép 2 cột đầu
+	const twoCols = `${labels[0]}, ${labels[1]}`;
+	if (twoCols.length > 22) {
+		return `${labels[0]}, ...`;
+	}
+
+	// Nếu có nhiều hơn 2 cột
+	if (labels.length > 2) {
+		return `${twoCols}, ...`;
+	}
+
+	return twoCols;
+};

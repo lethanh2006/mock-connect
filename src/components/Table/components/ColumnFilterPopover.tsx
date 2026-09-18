@@ -36,14 +36,32 @@ const FilterFooter: React.FC<{ onReset: () => void; onApply: () => void }> = ({ 
 	);
 };
 
-const FilterTrigger: React.FC<{ active?: boolean; icon?: React.ReactNode }> = ({ active, icon }) => {
+const getColumnTitleText = (title: any, dataIndex?: any): string => {
+	if (typeof title === 'string') return title;
+	if (typeof title === 'number') return String(title);
+	if (React.isValidElement(title)) {
+		const props = (title as any).props;
+		if (props?.children) return getColumnTitleText(props.children);
+	}
+	if (Array.isArray(dataIndex)) return dataIndex.join('.');
+	if (dataIndex) return String(dataIndex);
+	return '';
+};
+
+const FilterTrigger: React.FC<{ active?: boolean; icon?: React.ReactNode; ariaLabel?: string }> = ({
+	active,
+	icon,
+	ariaLabel,
+}) => {
 	const intl = useIntl();
+	const label =
+		ariaLabel || intl.formatMessage({ id: 'global.table.columnfilter.label', defaultMessage: 'Lọc cột' });
 	return (
 		<PopoverTrigger asChild>
 			<button
 				type='button'
 				className='column-filter-trigger-button'
-				aria-label={intl.formatMessage({ id: 'global.table.columnfilter.label', defaultMessage: 'Lọc cột' })}
+				aria-label={label}
 				onClick={(e) => e.stopPropagation()}
 			>
 				{icon || <IconFilter className={active ? 'text-primary' : undefined} />}
@@ -67,9 +85,19 @@ const StringFilterPopover: React.FC<ColumnFilterPopoverProps> = ({ column, getFi
 		setOpen(false);
 	};
 
+	const columnTitle = getColumnTitleText(column.title, column.dataIndex);
+	const ariaLabel = intl.formatMessage(
+		{ id: 'global.table.columnfilter.search.ariaLabel', defaultMessage: 'Filter by {field}' },
+		{ field: columnTitle },
+	);
+
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
-			<FilterTrigger active={!!currentValue} icon={<IconMagnifyingglass className={currentValue ? 'text-primary' : undefined} />} />
+			<FilterTrigger
+				active={!!currentValue}
+				ariaLabel={ariaLabel}
+				icon={<IconMagnifyingglass className={currentValue ? 'text-primary' : undefined} />}
+			/>
 			<PopoverContent align='start' className='column-filter-popover-content' onClick={(e) => e.stopPropagation()}>
 				<SearchInput
 					autoFocus
@@ -100,6 +128,12 @@ const SelectFilterPopover: React.FC<ColumnFilterPopoverProps> = ({ column, getFi
 	const [draft, setDraft] = useState<string[]>(currentValues);
 	const [kw, setKw] = useState('');
 
+	const columnTitle = getColumnTitleText(column.title, column.dataIndex);
+	const ariaLabel = intl.formatMessage(
+		{ id: 'global.table.columnfilter.filter.ariaLabel', defaultMessage: 'Filter by {field}' },
+		{ field: columnTitle },
+	);
+
 	const options = useMemo(
 		() =>
 			(column.filterData ?? []).map((i) =>
@@ -125,7 +159,7 @@ const SelectFilterPopover: React.FC<ColumnFilterPopoverProps> = ({ column, getFi
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
-			<FilterTrigger active={currentValues.length > 0} />
+			<FilterTrigger active={currentValues.length > 0} ariaLabel={ariaLabel} />
 			<PopoverContent align='start' className='column-filter-popover-content' onClick={(e) => e.stopPropagation()}>
 				{options.length > 5 && (
 					<SearchInput
@@ -176,6 +210,7 @@ const SelectFilterPopover: React.FC<ColumnFilterPopoverProps> = ({ column, getFi
 };
 
 const CustomSelectFilterPopover: React.FC<ColumnFilterPopoverProps> = ({ column, getFilterColumn, onFilter }) => {
+	const intl = useIntl();
 	const [open, setOpen] = useState(false);
 	const values = getFilterColumn(column.dataIndex, EOperatorType.INCLUDE, true)?.values ?? [];
 	const [draft, setDraft] = useState<any[]>(values);
@@ -186,9 +221,15 @@ const CustomSelectFilterPopover: React.FC<ColumnFilterPopoverProps> = ({ column,
 
 	if (!column.filterCustomSelect) return null;
 
+	const columnTitle = getColumnTitleText(column.title, column.dataIndex);
+	const ariaLabel = intl.formatMessage(
+		{ id: 'global.table.columnfilter.filter.ariaLabel', defaultMessage: 'Filter by {field}' },
+		{ field: columnTitle },
+	);
+
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
-			<FilterTrigger active={values.length > 0} />
+			<FilterTrigger active={values.length > 0} ariaLabel={ariaLabel} />
 			<PopoverContent align='start' className='column-filter-popover-content custom-select' onClick={(e) => e.stopPropagation()}>
 				{React.cloneElement(column.filterCustomSelect, {
 					value: draft,
