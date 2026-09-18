@@ -24,6 +24,8 @@ const PageCard: React.FC<PageCardProps> = ({
 	cardExtra,
 	loading = false,
 	style,
+	styles,
+	size,
 	level = 1,
 	showIndicator = false,
 	bordered = false,
@@ -155,17 +157,19 @@ const PageCard: React.FC<PageCardProps> = ({
 		const cardBody = (
 			<>
 				{hasHeader && (
-					<CardHeader>
+					<CardHeader style={styles?.header}>
 						{title && <CardTitle>{title}</CardTitle>}
 						{extraContent && <CardAction>{extraContent}</CardAction>}
 					</CardHeader>
 				)}
-				<CardContent className={hideInnerCard ? 'p-0' : undefined}>{children}</CardContent>
+				<CardContent className={hideInnerCard ? 'p-0' : undefined} style={styles?.body}>
+					{children}
+				</CardContent>
 			</>
 		);
 
 		return (
-			<VinCard className={cardClasses} style={style} {...rest}>
+			<VinCard className={cardClasses} size={size === 'small' ? 'sm' : undefined} style={style} {...rest}>
 				{/* Spin của antd bọc thêm 2 lớp div thường (.ant-spin-nested-loading/.ant-spin-container),
 				không phải flex — chèn giữa Card và CardHeader/CardContent sẽ phá chuỗi flex:1 mà
 				ModalExpandable/style.less dựa vào để giãn Card full-screen (footer bị đẩy lên trên,
