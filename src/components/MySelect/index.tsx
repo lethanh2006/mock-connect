@@ -124,7 +124,11 @@ const SelectSearchPopover = ({
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>{children}</PopoverTrigger>
-			<PopoverContent align='start' className='h-80 p-0'>
+			<PopoverContent
+				align='start'
+				className='w-auto p-0'
+				style={{ minWidth: 'var(--radix-popover-trigger-width)', maxHeight: 320 }}
+			>
 				<Command surface={false} className='flex h-full flex-col overflow-hidden p-0'>
 					<PopoverBar className='pb-ds-sp-8'>
 						<CommandSearchInput

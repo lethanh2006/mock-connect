@@ -11,7 +11,7 @@ import { formatDateTime, getDateFormat } from '@/utils/formatDate';
 import { currentRole } from '@/utils/ip';
 import { IconChervolLeft, IconChervolRight, IconEye, IconPlus, IconTrash } from '@/components/Icons';
 import { Button } from '@/components/Icons';
-import { SegmentedControl, SegmentedControlItem } from '@/components/Icons';
+import MySegmented from '@/components/MySegmented';
 import { DatePicker, Popconfirm, Space } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -193,20 +193,21 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 	return (
 		<>
 			<Space wrap style={{ marginBottom: 12 }}>
-				<SegmentedControl
+				<MySegmented
 					size='small'
 					value={type}
-					onValueChange={(key) => {
-						if (key === 'WEEK') setStartDate(dayjs().startOf('week'));
-						if (key === 'DAY') setStartDate(dayjs());
-						if (key === 'MONTH') setStartDate(dayjs());
-						setType(key);
+					onChange={(val: string) => {
+						if (val === 'WEEK') setStartDate(dayjs().startOf('week'));
+						if (val === 'DAY') setStartDate(dayjs());
+						if (val === 'MONTH') setStartDate(dayjs());
+						setType(val);
 					}}
-				>
-					<SegmentedControlItem value='MONTH'>Theo tháng</SegmentedControlItem>
-					<SegmentedControlItem value='WEEK'>Theo tuần</SegmentedControlItem>
-					<SegmentedControlItem value='DAY'>Theo ngày</SegmentedControlItem>
-				</SegmentedControl>
+					options={[
+						{ value: 'MONTH', label: 'Theo tháng' },
+						{ value: 'WEEK', label: 'Theo tuần' },
+						{ value: 'DAY', label: 'Theo ngày' },
+					]}
+				/>
 
 				{type === 'WEEK' && (
 					<Space>

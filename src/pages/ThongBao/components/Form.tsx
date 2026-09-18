@@ -15,36 +15,18 @@ import { buildUpLoadFile, buildUpLoadMultiFile } from '@/services/uploadFile';
 import { currentRole } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, SegmentedControl, SegmentedControlItem } from '@/components/Icons';
+import { Button } from '@/components/Icons';
 import Input from '@/components/MyInput';
+import MySegmented from '@/components/MySegmented';
 import Select from '@/components/MySelect';
 import { Card, Form, Tabs } from 'antd';
 import { Col, Row } from '@/components/MyGrid';
 import { toast } from '@/utils/toast';
 import { useEffect, useState } from 'react';
-import type { ReactNode } from 'react';
 import { useModel } from 'umi';
 import SelectTag from '../Tags/components/Select';
 import GroupTagVaiTro from './GroupTagVaiTro';
 import TableSelectUser from './TableSelect';
-
-const FormSegmented = ({
-	value,
-	onChange,
-	options,
-}: {
-	value?: string;
-	onChange?: (val: string) => void;
-	options: { value: string; label: ReactNode }[];
-}) => (
-	<SegmentedControl value={value} onValueChange={onChange}>
-		{options.map((opt) => (
-			<SegmentedControlItem key={opt.value} value={opt.value}>
-				{opt.label}
-			</SegmentedControlItem>
-		))}
-	</SegmentedControl>
-);
 
 const FormThongBao = (props: any) => {
 	const { title, getData, notiType } = props;
@@ -214,7 +196,7 @@ const FormThongBao = (props: any) => {
 					{roles?.length ? (
 						<Col span={24} md={8}>
 							<Form.Item name='loaiNguoiDung' label='Danh sách người dùng'>
-								<FormSegmented
+								<MySegmented
 									options={[
 										{ value: EReceiverType.All, label: 'Tất cả' },
 										{ value: EReceiverType.User, label: 'Người dùng cụ thể' },
