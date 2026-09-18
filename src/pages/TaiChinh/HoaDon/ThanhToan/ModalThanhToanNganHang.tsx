@@ -5,8 +5,9 @@ import dayjs from '@/utils/dayjs';
 import { removeVietnameseTones } from '@/utils/utils';
 import EmptyState from '@/components/EmptyState';
 import ModalExpandable from '@/components/Table/ModalExpandable';
-import { Col, Row, Space, Spin } from 'antd';
+import { Space, Spin } from 'antd';
 import { useEffect, useState } from 'react';
+import { Col, Row } from '@/components/MyGrid';
 import { useIntl, useModel } from 'umi';
 
 const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) => {

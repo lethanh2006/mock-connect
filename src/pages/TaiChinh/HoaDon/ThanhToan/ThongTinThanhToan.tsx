@@ -18,7 +18,9 @@ import {
 	PhoneOutlined,
 	UserOutlined,
 } from '@ant-design/icons';
-import { Alert, Avatar, Button, Card, Col, Modal, Row, Space, Tabs, Tag, Typography } from 'antd';
+import { Alert, Avatar, Button, Modal, Space, Tabs, Tag, Typography } from 'antd';
+import { Card } from '@/components/PageCard';
+import { Col, Row } from '@/components/MyGrid';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -37,7 +39,7 @@ const InfoItem = (props: { icon?: React.ReactNode; label: string; value?: React.
 			{props.icon && <span style={{ marginRight: 6 }}>{props.icon}</span>}
 			{props.label}
 		</Text>
-		<div style={{ fontWeight: 500, color: '#1f1f1f', wordBreak: 'break-word' }}>{props.value || '-'}</div>
+		<div style={{ fontWeight: 500, color: 'var(--color-text, inherit)', wordBreak: 'break-word' }}>{props.value || '-'}</div>
 	</div>
 );
 
@@ -45,14 +47,14 @@ const InfoItem = (props: { icon?: React.ReactNode; label: string; value?: React.
 const StatBox = (props: { label: string; value: number | string; color: string }) => (
 	<div
 		style={{
-			background: '#fafafa',
-			border: '1px solid #f0f0f0',
+			background: 'var(--color-bg-container, #fafafa)',
+			border: '1px solid var(--color-border-secondary, #f0f0f0)',
 			borderRadius: 8,
 			padding: '12px 16px',
 			height: '100%',
 		}}
 	>
-		<div style={{ fontSize: 12, color: '#8c8c8c', marginBottom: 6 }}>{props.label}</div>
+		<div style={{ fontSize: 12, color: 'var(--color-text-secondary, #8c8c8c)', marginBottom: 6 }}>{props.label}</div>
 		<div style={{ fontSize: 18, fontWeight: 700, color: props.color, lineHeight: 1.2 }}>
 			{typeof props.value === 'number' ? `${currencyFormat(props.value)} VND` : props.value}
 		</div>

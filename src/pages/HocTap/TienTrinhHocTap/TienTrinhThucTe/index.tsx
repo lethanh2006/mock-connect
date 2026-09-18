@@ -3,8 +3,9 @@ import { getSearchStorage, updateSearchStorage } from '@/components/Table/utils'
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { primaryColor } from '@/services/base/constant';
 import { IconRotateArrow, IconMagnifyingGlass } from '@/components/Icons';
+import EmptyState from '@/components/EmptyState';
 import type { InputRef } from 'antd';
-import { AutoComplete, Button, Divider, Empty, Input, Select, Space, Spin, Tag, Tooltip, Typography } from 'antd';
+import { AutoComplete, Button, Divider, Input, Select, Space, Spin, Tag, Tooltip, Typography } from 'antd';
 import _ from 'lodash';
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -135,11 +136,11 @@ const TienTrinhThucTeV2 = () => {
 						style={
 							searchText
 								? {
-										width: 320,
-										borderColor: primaryColor,
-										outline: `1px solid ${primaryColor}`,
-										borderRadius: 4,
-									}
+									width: 320,
+									borderColor: primaryColor,
+									outline: `1px solid ${primaryColor}`,
+									borderRadius: 4,
+								}
 								: { width: 320 }
 						}
 						enterButton={
@@ -225,7 +226,7 @@ const TienTrinhThucTeV2 = () => {
 						</Fragment>
 					))
 				) : (
-					<Empty
+					<EmptyState
 						description={intl.formatMessage({ id: 'tientrinhhoctap.empty' })}
 						style={{
 							marginTop: '100px',
@@ -250,9 +251,9 @@ const TienTrinhThucTeV2 = () => {
 				khoiChuongTrinh={
 					recTienTrinh?.khoiKienThuc
 						? {
-								maKhoiKienThuc: recTienTrinh.maKhoiKienThuc ?? recTienTrinh.khoiKienThuc.ma,
-								khoiKienThuc: recTienTrinh.khoiKienThuc,
-							}
+							maKhoiKienThuc: recTienTrinh.maKhoiKienThuc ?? recTienTrinh.khoiKienThuc.ma,
+							khoiKienThuc: recTienTrinh.khoiKienThuc,
+						}
 						: undefined
 				}
 			/>

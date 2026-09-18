@@ -1,3 +1,6 @@
+import { IconArrowRight, IconCalendar, IconHumberger, IconPinLocation, IconWrenchGear01 } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import PageCard from '@/components/PageCard';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { useMessagesCalendar } from '@/services/Calendar/constant';
 import { colorHinhThucGiangDay, EHinhThucGiangDay, mapHinhThucGiangDayI18n } from '@/services/HocTap/constant';
@@ -5,15 +8,7 @@ import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac } from '@/services/SuKien/con
 import { type SuKien } from '@/services/SuKien/typings';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import {
-	ArrowRightOutlined,
-	CalendarOutlined,
-	EnvironmentOutlined,
-	MenuOutlined,
-	SettingOutlined,
-} from '@ant-design/icons';
-import { IconArrowRight, IconCalendar, IconPinLocation, IconHumberger, Icon3SquarePlusmark, IconWrenchGear01 } from '@/components/Icons';
-import { Card, Col, Divider, Empty, Flex, Modal, Row, Segmented, Space, Spin, Tag } from 'antd';
+import { Card, Divider, Empty, Flex, Modal, Segmented, Space, Spin, Tag } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import { useEffect, useState } from 'react';
 import type { DateRange, View } from 'react-big-calendar';
@@ -491,9 +486,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	);
 
 	return (
-		<Card
-			variant='borderless'
-			className='card-borderless card-big-title has-indicator'
+		<PageCard
 			title={
 				<>
 					{intl.formatMessage({ id: 'lichsukien.title' })}{' '}
@@ -634,7 +627,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 			</Modal>
 
 			<ModalSettingMauLich />
-		</Card>
+		</PageCard>
 	);
 };
 

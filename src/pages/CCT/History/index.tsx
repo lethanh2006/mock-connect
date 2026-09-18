@@ -8,7 +8,9 @@ import { EActivityCategory, EActivityStatus, EApprovalStatus, mapNameActivityCat
 import dayjs from '@/utils/dayjs';
 import { getPublicAssetPath } from '@/utils/path';
 import { Icon2LineHorizontal, IconSend, IconTrash } from '@/components/Icons';
-import { Button, Col, Empty, Pagination, Popconfirm, Popover, Row, Space, Spin, Tabs } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import EmptyState from '@/components/EmptyState';
+import { Button, Pagination, Popconfirm, Popover, Space, Spin, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import { FilterSuKienValue } from '../Activity';
@@ -394,10 +396,9 @@ const HistoryActivityPage = () => {
 						)}
 					</>
 				) : (
-					<Empty
+					<EmptyState
 						style={{ marginTop: 32, marginBottom: 32 }}
 						description={intl.formatMessage({ id: 'global.table.index.empty' })}
-						image={getPublicAssetPath('images/empty.png')}
 					/>
 				)}
 			</Spin>

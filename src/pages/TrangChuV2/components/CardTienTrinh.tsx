@@ -1,5 +1,6 @@
 import PageCard from '@/components/PageCard';
-import { Col, Flex, Row, Typography } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import { Flex, Typography } from 'antd';
 import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
 

@@ -11,7 +11,7 @@ import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { formatDate } from '@/utils/formatDate';
 import { DollarCircleOutlined } from '@ant-design/icons';
-import { Button, Tag } from 'antd';
+import { Button, Popconfirm, Tag } from 'antd';
 import { useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import { IconTrash, IconFileMoney } from '@/components/Icons';

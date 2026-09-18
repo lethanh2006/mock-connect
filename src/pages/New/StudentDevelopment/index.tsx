@@ -1,7 +1,7 @@
 import backgroundImage from '@/assets/cct/background.png';
 import studentdevelopment from '@/assets/trangchu/StudentDevelopment.svg';
 import PageCard from '@/components/PageCard';
-import { Col, Row } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
 import './style.less';
 
 const StudentDevelopment = () => {

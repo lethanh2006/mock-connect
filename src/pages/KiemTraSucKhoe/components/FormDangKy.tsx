@@ -1,7 +1,8 @@
 import { KiemTraSucKhoe } from '@/services/KiemTraSucKhoe/typing';
 import dayjs from '@/utils/dayjs';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Form, Row } from 'antd';
+import { Row } from '@/components/MyGrid';
+import { Button, Form } from 'antd';
 import { useEffect } from 'react';
 import { useIntl } from 'umi';
 import { usePersonalInfo } from '../hooks/usePersonalInfo';

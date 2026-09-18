@@ -1,4 +1,5 @@
-import { Col, Flex, Row } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import { Flex } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import Activities from './components/Activities';

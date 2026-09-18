@@ -10,7 +10,8 @@ import { getPublicAssetPath } from '@/utils/path';
 import { Button, Icon2ChervolLeftLine, Icon2ChervolRightLine } from '@/components/Icons';
 import EmptyState from '@/components/EmptyState';
 import { Card } from '@/components/PageCard';
-import { Carousel, Col, Flex, Popconfirm, Row, Spin } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import { Carousel, Flex, Popconfirm, Spin } from 'antd';
 
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';

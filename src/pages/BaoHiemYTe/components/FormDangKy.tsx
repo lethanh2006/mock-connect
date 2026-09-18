@@ -5,12 +5,15 @@ import { getPhuongXa, getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
 import type { DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
-import { resetFieldsForm } from '@/utils/utils';
-import { Button, Col, Divider, Form, Input, Row, Select } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import Input from '@/components/MyInput';
+import Select from '@/components/MySelect';
+import { Button, Divider, Form } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import { usePersonalInfo } from '../hooks/usePersonalInfo';
 import PersonalInfoFields from './PersonalInfoFields';
+import { resetFieldsForm } from '@/utils/utils';
 
 interface IProps {
 	record?: BaoHiemYTe.IDotDangKy;

@@ -1,10 +1,11 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 // import { exportLyLich } from '@/services/DaoTao/SinhVien';
+import { Icon2ChervolLeftLine, IconPencil01 } from '@/components/Icons';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { IconPencil01, Icon2ChervolLeftLine } from '@/components/Icons';
 import { Alert, Button, Card, Space, Spin } from 'antd';
 // import fileDownload from 'js-file-download';
+import PageCard from '@/components/PageCard';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalCapNhatAnhNhanDien from './CapNhatKhuonMat/Modal';
@@ -94,11 +95,7 @@ const ThongTinSinhVienPage = () => {
 	);
 
 	return (
-		<Card
-			title={intl.formatMessage({ id: 'menu.MyProfile' })}
-			variant='borderless'
-			className='card-borderless card-big-title has-indicator'
-		>
+		<PageCard title={intl.formatMessage({ id: 'menu.MyProfile' })}>
 			{/* <Card variant='borderless'>
 				{recordDot?._id && choPhepSua ? (
 					<Alert
@@ -229,7 +226,7 @@ const ThongTinSinhVienPage = () => {
 
 			<ModalCapNhatAnhNhanDien visible={visibleCapNhat} setVisible={setVisibleCapNhat} />
 			<ModalHocBaSinhVien visible={visibleHocBa} setVisible={setVisibleHocBa} />
-		</Card>
+		</PageCard>
 	);
 };
 

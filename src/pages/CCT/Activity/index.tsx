@@ -4,7 +4,9 @@ import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { EApprovalStatus } from '@/services/CCT/constant';
 import { getPublicAssetPath } from '@/utils/path';
-import { Button, Col, Empty, Pagination, Popconfirm, Row, Spin, Tabs } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import EmptyState from '@/components/EmptyState';
+import { Button, Pagination, Popconfirm, Spin, Tabs } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { useEffect, useState } from 'react';
@@ -338,10 +340,9 @@ const ActivityPage = () => {
 						)}
 					</>
 				) : (
-					<Empty
+					<EmptyState
 						style={{ marginTop: 32, marginBottom: 32 }}
 						description={intl.formatMessage({ id: 'global.table.index.empty' })}
-						image={getPublicAssetPath('images/empty.png')}
 					/>
 				)}
 			</Spin>

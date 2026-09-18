@@ -31,6 +31,7 @@ import ModalThanhToan from './ThanhToan/ModalThanhToan';
 import ThongTinThanhToan from './ThanhToan/ThongTinThanhToan';
 import ModalDangKyTraGop from './TraGop/ModalDangKyTraGop';
 import ModalTienDoTraGop from './TraGop/ModalTienDoTraGop';
+import EmptyState from '@/components/EmptyState';
 
 const PaymentDeadlineCountdown = ({ deadline }: { deadline: string }) => {
 	const intl = useIntl();
@@ -244,13 +245,17 @@ const HoaDonPage = () => {
 				const isKtxDeposit = rec.transactions?.some((transaction) => transaction.isKtxDeposit === true);
 				if (isKtxDeposit) return <PaymentDeadlineCountdown deadline={val} />;
 
+				if (!val || !dayjs(val).isValid()) {
+					return <div>--</div>;
+				}
+
 				const ngayHetHan = dayjs(val);
 				const now = dayjs();
 				const soNgayConLai = ngayHetHan.diff(now, 'day', true);
 
 				let extraText = null;
 
-				if (dayjs().isAfter(dayjs(rec.ngayHetHanThanhToan), 'day')) {
+				if (dayjs().isAfter(ngayHetHan, 'day')) {
 					extraText = (
 						<div style={{ color: '#cf1322', fontWeight: 500, fontSize: 12 }}>
 							{intl.formatMessage({ id: 'taichinh.hoadon.hanthanhtoan.hethan' })}
@@ -400,6 +405,11 @@ const HoaDonPage = () => {
 			render: (val, rec: BillTableRecord) => (
 				<div onClick={(e) => e.stopPropagation()}>
 					<ButtonExtend
+						aria-label={
+							disableThanhToan(rec)
+								? intl.formatMessage({ id: 'taichinh.hoadon.tooltip.ngoaithoihan' })
+								: intl.formatMessage({ id: 'taichinh.hoadon.tooltip.thanhtoanngay' })
+						}
 						tooltip={
 							disableThanhToan(rec)
 								? intl.formatMessage({ id: 'taichinh.hoadon.tooltip.ngoaithoihan' })
@@ -417,6 +427,7 @@ const HoaDonPage = () => {
 						icon={<Icon3Dot3Line />}
 					/>
 					<ButtonExtend
+						aria-label={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemchitiet' })}
 						tooltip={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemchitiet' })}
 						icon={<IconEyeOpen />}
 						onClick={() => handleDetail(rec)}
@@ -637,7 +648,7 @@ const HoaDonPage = () => {
 				title={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemhuongdan' })}
 			>
 				{/* <PreviewFile file={pdfUrl ?? ''} /> */}
-				{pdfUrl ? <PDFViewerV2 url={pdfUrl} height='80vh' /> : <Empty />}
+				{pdfUrl ? <PDFViewerV2 url={pdfUrl} height='80vh' /> : <EmptyState compact description={intl.formatMessage({ id: 'global.table.index.empty' })} />}
 			</Modal>
 
 			<ModalThanhToan

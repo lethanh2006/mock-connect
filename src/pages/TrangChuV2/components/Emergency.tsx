@@ -6,8 +6,9 @@ import ky_thuat from '@/assets/trangchu/ky_thuat.svg';
 import nha_o from '@/assets/trangchu/nha_o.svg';
 import suc_khoe from '@/assets/trangchu/suc_khoe.svg';
 import PageCard from '@/components/PageCard';
-import { Col, Flex, Image, Row, Typography } from 'antd';
+import { Flex, Image, Typography } from 'antd';
 import { useIntl } from 'umi';
+import { Col, Row } from '@/components/MyGrid';
 
 const hotlines = [
 	{ id: 1, titleId: 'trangchu.v2.emergency.clinic', phone: '(+84) 866 200 019', icon: Clinic },

@@ -7,8 +7,10 @@ import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { formatDateTime } from '@/utils/formatDate';
 import { getPublicAssetPath } from '@/utils/path';
 import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Alert, Button, Col, Empty, Flex, Input, message, Row, Select, Space, Spin } from 'antd';
+import { Alert, Button, Empty, Flex, Input, message, Select, Space, Spin } from 'antd';
 import { IconShieldInfo, IconRotateArrow } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import EmptyState from '@/components/EmptyState';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -284,7 +286,7 @@ const DangKyKyTucXa = () => {
 	if (!recDot?._id) {
 		return (
 			<PageCard title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}>
-				<Empty description={intl.formatMessage({ id: 'kytucxa.dangky.empty.noDotDangKy' })} />
+				<EmptyState description={intl.formatMessage({ id: 'kytucxa.dangky.empty.noDotDangKy' })} />
 			</PageCard>
 		);
 	}
@@ -431,10 +433,9 @@ const DangKyKyTucXa = () => {
 						) : null}
 					</>
 				) : (
-					<Empty
+					<EmptyState
 						style={{ marginTop: 32, marginBottom: 32 }}
 						description={intl.formatMessage({ id: 'kytucxa.dangky.empty.noData' })}
-						image={getPublicAssetPath('images/empty.png')}
 					/>
 				)}
 			</Spin>

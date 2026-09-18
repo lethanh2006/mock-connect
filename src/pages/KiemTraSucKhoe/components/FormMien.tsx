@@ -5,7 +5,8 @@ import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Col, Form, Row } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import { Button, Form } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import { usePersonalInfo } from '../hooks/usePersonalInfo';

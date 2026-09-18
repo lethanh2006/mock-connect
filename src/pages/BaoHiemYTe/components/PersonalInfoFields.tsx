@@ -1,7 +1,10 @@
 import MyDatePicker from '@/components/MyDatePicker';
 import { bhytNationalityOptionsIntlId, EGioiTinh } from '@/services/BaoHiemYTe/constant';
 import rules from '@/utils/rules';
-import { Col, Form, Input, Select } from 'antd';
+import { Col } from '@/components/MyGrid';
+import Input from '@/components/MyInput';
+import Select from '@/components/MySelect';
+import { Form } from 'antd';
 import { useIntl } from 'umi';
 import type { IPersonalInfo } from '../hooks/usePersonalInfo';
 

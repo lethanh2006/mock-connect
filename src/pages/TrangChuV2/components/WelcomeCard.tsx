@@ -1,6 +1,8 @@
 import dayjs from '@/utils/dayjs';
 import { Card } from '@/components/PageCard';
-import { Col, Flex, Row, Tag, Typography } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import { Badge } from '@/components/Icons';
+import { Flex, Typography } from 'antd';
 import { useIntl, useModel } from 'umi';
 
 const pillStyle = {
@@ -8,10 +10,12 @@ const pillStyle = {
 	border: 'none',
 	color: '#fff',
 	borderRadius: 20,
-	padding: '6px 14px',
+	padding: '8px 16px',
 	fontSize: 13,
 	fontWeight: 600,
 	margin: 0,
+	display: 'inline-flex',
+	alignItems: 'center',
 } as const;
 
 const getSemesterKey = (month: number) => {
@@ -71,9 +75,9 @@ const WelcomeCard = () => {
 
 				<Col xs={24} lg={10}>
 					<Flex gap={8} wrap justify='flex-end'>
-						<Tag style={pillStyle}>
+						<Badge style={pillStyle}>
 							{intl.formatMessage({ id: 'trangchu.v2.welcome.classesToday' }, { count: danhSach?.length ?? 0 })}
-						</Tag>
+						</Badge>
 					</Flex>
 				</Col>
 			</Row>
