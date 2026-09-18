@@ -98,7 +98,10 @@
 
 .notFound {
 	padding: 73px 0 88px;
-	color: @text-color-secondary;
+	// @text-color-secondary là biến LESS (compile-time cố định), không phải CSS custom property —
+	// không thể đổi theo dark mode dù runtime toggle theme thế nào. Dùng --color-text-secondary
+	// (cssVar antd tự sinh, tự đổi theo algorithm sáng/tối) thay thế.
+	color: var(--color-text-secondary, @text-color-secondary);
 	text-align: center;
 
 	img {
@@ -110,10 +113,11 @@
 
 .bottomBar {
 	height: 46px;
-	color: @text-color;
+	// @text-color/@border-color-split cũng là biến LESS cố định, cùng lý do như .notFound ở trên.
+	color: var(--color-text-base, @text-color);
 	line-height: 46px;
 	text-align: center;
-	border-top: 1px solid @border-color-split;
+	border-top: 1px solid var(--color-border-secondary, @border-color-split);
 	border-radius: 0 0 var(--border-radius) var(--border-radius);
 	transition: all 0.3s;
 

@@ -58,14 +58,17 @@ export type MySelectOption = {
  * lấy từ field do `optionFilterProp` chỉ định thay vì luôn luôn là `label`. Mặc định vẫn lọc theo
  * `label` khi không truyền, giống hệt hành vi cũ.
  *
+ * `onSearch`: giống antd — bắn ra từ khoá đang gõ để tự fetch/lọc server-side. Khi có `onSearch`,
+ * TẮT LUÔN filter client-side của cmdk (`shouldFilter={false}`) — mặc định của antd khi dùng
+ * `onSearch` là caller tự chịu trách nhiệm lọc `options` trả về, không lọc chồng lần 2 ở client
+ * (tránh trường hợp options server trả về không match hết filter client, bị ẩn nhầm).
+ *
  * Props antd Select CỐ Ý KHÔNG hỗ trợ (dùng đến thì phải mở rộng file này trước, đừng đoán mò):
  * - `filterOption` (hàm lọc tùy ý): mới hỗ trợ chọn field qua `optionFilterProp`, chưa hỗ trợ hàm
  *   lọc tùy biến hoàn toàn.
  * - `labelInValue`, `tokenSeparators`, `maxTagCount`, `tagRender`: chưa có nhu cầu dùng.
  * - `dropdownRender`, `popupClassName`, `open`/`onDropdownVisibleChange`: chưa expose các control
  *   này ra ngoài.
- * - `onSearch` (server-side search): vẫn tự lọc client-side trên `options` truyền vào, không có
- *   callback báo từ khoá đang gõ ra ngoài.
  * - mode `'tags'` (tự thêm option mới khi gõ): chỉ hỗ trợ `'multiple'`.
  */
 export type MySelectProps = {
@@ -83,6 +86,9 @@ export type MySelectProps = {
 	/** Field trong option dùng để lọc khi gõ tìm kiếm (mặc định 'label'). Chỉ nhận field có giá trị
 	 * string/number/boolean trên option — không hỗ trợ hàm lọc tùy biến. */
 	optionFilterProp?: string;
+	/** Server-side search — có prop này thì tự tắt filter client-side, options coi như đã được caller
+	 * tự lọc sẵn theo từ khoá. */
+	onSearch?: (value: string) => void;
 	size?: 'small' | 'middle' | 'large';
 	className?: string;
 	style?: CSSProperties;
@@ -108,6 +114,7 @@ const SelectSearchPopover = ({
 	onToggle,
 	searchPlaceholder,
 	emptyLabel,
+	onSearch,
 	children,
 }: {
 	options: InternalOption[];
@@ -116,6 +123,7 @@ const SelectSearchPopover = ({
 	onToggle: (key: string) => void;
 	searchPlaceholder?: string;
 	emptyLabel?: ReactNode;
+	onSearch?: (value: string) => void;
 	children: ReactNode;
 }) => {
 	const [search, setSearch] = useState('');
@@ -130,12 +138,15 @@ const SelectSearchPopover = ({
 				className='w-auto p-0'
 				style={{ minWidth: 'var(--radix-popover-trigger-width)', maxHeight: 320 }}
 			>
-				<Command surface={false} className='flex h-full flex-col overflow-hidden p-0'>
+				<Command surface={false} shouldFilter={!onSearch} className='flex h-full flex-col overflow-hidden p-0'>
 					<PopoverBar className='pb-ds-sp-8'>
 						<CommandSearchInput
 							size='medium'
 							value={search}
-							onValueChange={setSearch}
+							onValueChange={(val) => {
+								setSearch(val);
+								onSearch?.(val);
+							}}
 							placeholder={searchPlaceholder}
 							className='w-full'
 						/>
@@ -182,6 +193,7 @@ const Select = ({
 	loading,
 	notFoundContent,
 	optionFilterProp,
+	onSearch,
 	size,
 	className,
 	style,
@@ -319,6 +331,7 @@ const Select = ({
 				}}
 				searchPlaceholder={placeholder}
 				emptyLabel={notFoundContent}
+				onSearch={onSearch}
 			>
 				{trigger}
 			</SelectSearchPopover>
@@ -336,6 +349,7 @@ const Select = ({
 			}}
 			searchPlaceholder={placeholder}
 			emptyLabel={notFoundContent}
+			onSearch={onSearch}
 		>
 			{trigger}
 		</SelectSearchPopover>

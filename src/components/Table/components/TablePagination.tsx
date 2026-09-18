@@ -64,7 +64,8 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
 				<PaginationContent>
 					<PaginationItem>
 						<PaginationLink
-							href='#!'
+							role='button'
+							tabIndex={page <= 1 ? -1 : 0}
 							size='icon-sm'
 							aria-label='Previous'
 							aria-disabled={page <= 1}
@@ -86,7 +87,8 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
 						) : (
 							<PaginationItem key={token}>
 								<PaginationLink
-									href='#!'
+									role='button'
+									tabIndex={0}
 									size='icon-sm'
 									isActive={token === page}
 									onClick={(e) => {
@@ -102,7 +104,8 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
 
 					<PaginationItem>
 						<PaginationLink
-							href='#!'
+							role='button'
+							tabIndex={page >= totalPages ? -1 : 0}
 							size='icon-sm'
 							aria-label='Next'
 							aria-disabled={page >= totalPages}

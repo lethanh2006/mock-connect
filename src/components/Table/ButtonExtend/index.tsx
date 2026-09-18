@@ -27,8 +27,10 @@ const mapTooltipPlacement = (placement?: string): { side: TooltipSide; align: To
 	}
 };
 
-export interface ButtonExtendProps
-	extends Omit<React.ComponentProps<typeof Button>, 'type' | 'size' | 'variant' | 'icon' | 'iconRight'> {
+export interface ButtonExtendProps extends Omit<
+	React.ComponentProps<typeof Button>,
+	'type' | 'size' | 'variant' | 'icon' | 'iconRight'
+> {
 	/** Kiểu button (tương đương antd Button `type`) */
 	type?: AntdButtonType;
 	danger?: boolean;
@@ -43,12 +45,26 @@ export interface ButtonExtendProps
 
 /** Button extend text with default Tooltip */
 const ButtonExtend = (props: ButtonExtendProps) => {
-	const { children, tooltip, notHideText, otherTooltipProps, type, danger, htmlType, size = 'small', icon, ...otherProps } =
-		props;
+	const {
+		children,
+		tooltip,
+		notHideText,
+		otherTooltipProps,
+		type,
+		danger,
+		htmlType,
+		size = 'small',
+		icon,
+		...otherProps
+	} = props;
+
+	const ariaLabel =
+		(otherProps as any)['aria-label'] || (typeof tooltip === 'string' ? tooltip : undefined);
 
 	const buttonNode = (
 		<Button
 			{...otherProps}
+			aria-label={ariaLabel}
 			type={htmlType ?? 'button'}
 			variant={mapButtonVariant(type, danger)}
 			size={mapButtonSize(size, !children)}

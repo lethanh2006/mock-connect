@@ -417,26 +417,26 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 	const paginationExtra = (
 		<span className='table-pagination-extra'>
-			{props?.rowSelection ? (
+			{props?.rowSelection && selectedIds && selectedIds.length > 0 ? (
 				<>
 					<span>
-						{intl.formatMessage({ id: 'global.table.index.dachon' })}: {selectedIds?.length ?? 0}
+						{intl.formatMessage({ id: 'global.table.index.dachon' })}: {selectedIds.length}
 					</span>
-					{selectedIds && selectedIds.length > 0 ? (
-						<span>
-							(
-							<a
-								href='#!'
-								onClick={(e) => {
-									e.preventDefault();
-									setSelectedIds?.(undefined);
-								}}
-							>
-								{intl.formatMessage({ id: 'global.table.index.bochon' })}
-							</a>
-							)
-						</span>
-					) : null}
+					<span>
+						(
+						<button
+							type='button'
+							role='button'
+							style={{ background: 'none', border: 'none', padding: 0, color: 'var(--primary, #0052cc)', cursor: 'pointer', textDecoration: 'underline' }}
+							onClick={(e) => {
+								e.preventDefault();
+								setSelectedIds?.(undefined);
+							}}
+						>
+							{intl.formatMessage({ id: 'global.table.index.bochon' })}
+						</button>
+						)
+					</span>
 				</>
 			) : null}
 			{/* Ẩn tổng số ở phân trang bên dưới (đã hiển thị trên thanh công cụ) */}
