@@ -5,7 +5,8 @@ import { colorTransactionStatus, colorTransactionType, ETransactionStatus, ETran
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { currencyFormat } from '@/utils/utils';
 import { Icon4SquareGrid } from '@/components/Icons';
-import { Col, Row, Space, Tag } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import { Space, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';

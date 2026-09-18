@@ -2,7 +2,8 @@ import CCTCover from '@/assets/cct/CCT_Bia.png';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EStatusMyCCT } from '@/services/CCT/constant';
 import { IconXmarkCircle, IconFile, IconRotateArrow, IconSave, IconSend } from '@/components/Icons';
-import { Badge, Button, Form, Space, Tag, Tooltip } from 'antd';
+import { Button } from '@vinuni/ui';
+import { Badge, Form, Space, Tag, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -347,6 +348,7 @@ const MyCCT = () => {
 					>
 						<Space wrap>
 							<Button
+								variant='outline'
 								onClick={() => {
 									setEdit(false);
 								}}
@@ -355,7 +357,8 @@ const MyCCT = () => {
 								Cancel
 							</Button>
 							<Button
-								htmlType='submit'
+								type='submit'
+								variant='outline'
 								loading={formSubmiting}
 								icon={<IconSave />}
 								onClick={() => setIsSubmit(false)}
@@ -363,7 +366,7 @@ const MyCCT = () => {
 								Save
 							</Button>
 							<Button
-								type='primary'
+								variant='default'
 								icon={<IconSend />}
 								onClick={() => {
 									form

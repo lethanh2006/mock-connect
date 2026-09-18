@@ -1,5 +1,5 @@
 import { Phong } from '@/services/KyTucXa/Phong/typing';
-import { Select } from 'antd';
+import Select from '@/components/MySelect';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 

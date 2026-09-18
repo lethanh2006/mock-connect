@@ -9,7 +9,12 @@ import { ELoaiThanhVienGiaDinh, ETrangThaiThanhVienGiaDinh } from '@/services/Da
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Card, Col, Form, Input, Row, Select } from 'antd';
+import { Button } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import Select from '@/components/MySelect';
+import { Card } from '@/components/PageCard';
+import Input from '@/components/MyInput';
+import { Form } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
 
@@ -42,6 +47,7 @@ const FormThongTinGiaDinh = (props: {
 
 	return (
 		<Card
+			bordered={false}
 			title={
 				record?.key === undefined
 					? `${intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.form.themmoi' })}`
@@ -239,12 +245,14 @@ const FormThongTinGiaDinh = (props: {
 				</Row>
 
 				<div className='form-footer'>
-					<Button htmlType='submit' type='primary'>
+					<Button type='submit' variant='default'>
 						{record?.key === undefined
 							? `${intl.formatMessage({ id: 'global.button.themmoi' })}`
 							: `${intl.formatMessage({ id: 'global.button.luulai' })}`}
 					</Button>
-					<Button onClick={onCancel}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
+					<Button variant='outline' onClick={onCancel}>
+						{intl.formatMessage({ id: 'global.button.huy' })}
+					</Button>
 				</div>
 			</Form>
 		</Card>

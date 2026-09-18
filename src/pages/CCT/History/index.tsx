@@ -8,9 +8,10 @@ import { EActivityCategory, EActivityStatus, EApprovalStatus, mapNameActivityCat
 import dayjs from '@/utils/dayjs';
 import { getPublicAssetPath } from '@/utils/path';
 import { Icon2LineHorizontal, IconSend, IconTrash } from '@/components/Icons';
+import { Button } from '@vinuni/ui';
 import { Col, Row } from '@/components/MyGrid';
 import EmptyState from '@/components/EmptyState';
-import { Button, Pagination, Popconfirm, Popover, Space, Spin, Tabs } from 'antd';
+import { Pagination, Popconfirm, Popover, Space, Spin, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import { FilterSuKienValue } from '../Activity';
@@ -163,7 +164,7 @@ const HistoryActivityPage = () => {
 	const isExpired = editableWorkflow && now.isAfter(endDateUpdateEvidence);
 
 	return (
-		<PageCard title={intl.formatMessage({ id: 'activity.history.title' })}>
+		<PageCard stickyHeader title={intl.formatMessage({ id: 'activity.history.title' })}>
 			<Tabs
 				activeKey={tabActive}
 				onChange={(tab) => {
@@ -187,7 +188,7 @@ const HistoryActivityPage = () => {
 				button={
 					tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR ? (
 						<Button
-							type='primary'
+							variant='default'
 							onClick={() => {
 								setRecord({} as ActivityOutCome.IRecord);
 								setEdit(false);
@@ -258,11 +259,11 @@ const HistoryActivityPage = () => {
 
 								const renderButton =
 									editableWorkflow && (tabActive === EActivityCategory.REGISTERED ? isOngoing : isOngoingPerstion) ? (
-										<Button block type={'primary'} onClick={() => handleEdit(item)}>
+										<Button style={{ width: '100%' }} variant='default' onClick={() => handleEdit(item)}>
 											{intl.formatMessage({ id: 'activity.history.updateEvidence' })}
 										</Button>
 									) : (
-										<Button block onClick={() => handleView(item)}>
+										<Button style={{ width: '100%' }} variant='outline' onClick={() => handleView(item)}>
 											{intl.formatMessage({ id: 'activity.history.seeMore' })}
 										</Button>
 									);
@@ -325,9 +326,9 @@ const HistoryActivityPage = () => {
 																			<Button
 																				className='btn-success'
 																				disabled={!canEdit(item)}
-																				type='link'
+																				variant='link'
 																				icon={<IconSend />}
-																				size='small'
+																				size='sm'
 																			>
 																				{intl.formatMessage({ id: 'activity.history.button.duyet' })}
 																			</Button>
@@ -349,10 +350,9 @@ const HistoryActivityPage = () => {
 																		>
 																			<Button
 																				disabled={!canDelete}
-																				danger
-																				type='link'
+																				variant='link'
 																				icon={<IconTrash />}
-																				size='small'
+																				size='sm'
 																			>
 																				{intl.formatMessage({ id: 'activity.history.button.xoa' })}
 																			</Button>
@@ -360,7 +360,7 @@ const HistoryActivityPage = () => {
 																	</Space>
 																}
 															>
-																<Button block icon={<Icon2LineHorizontal />} />
+																<Button variant='outline' icon={<Icon2LineHorizontal />} />
 															</Popover>
 														</Col>
 														<Col span={21}>{renderButton}</Col>
@@ -451,11 +451,11 @@ const HistoryActivityPage = () => {
 									padding: 16,
 								}}
 							>
-								<Button onClick={() => setVisibleForm(false)}>
+								<Button variant='outline' onClick={() => setVisibleForm(false)}>
 									{intl.formatMessage({ id: 'activity.history.close' })}
 								</Button>
 								{canEdit(record ?? ({} as ActivityOutCome.IRecord)) && (
-									<Button type='primary' onClick={() => handleEdit(record)}>
+									<Button variant='default' onClick={() => handleEdit(record)}>
 										{intl.formatMessage({ id: 'activity.history.updateEvidence' })}
 									</Button>
 								)}
@@ -483,11 +483,11 @@ const HistoryActivityPage = () => {
 								padding: 16,
 							}}
 						>
-							<Button onClick={() => setVisibleForm(false)}>
+							<Button variant='outline' onClick={() => setVisibleForm(false)}>
 								{intl.formatMessage({ id: 'activity.history.close' })}
 							</Button>
 							{canEdit(record ?? ({} as ActivityOutCome.IRecord)) && (
-								<Button type='primary' onClick={() => handleEdit(record)}>
+								<Button variant='default' onClick={() => handleEdit(record)}>
 									{intl.formatMessage({ id: 'activity.history.updateEvidence' })}
 								</Button>
 							)}

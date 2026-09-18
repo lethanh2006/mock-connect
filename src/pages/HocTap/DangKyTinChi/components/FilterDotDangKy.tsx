@@ -1,6 +1,6 @@
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import dayjs from '@/utils/dayjs';
-import { Col, Row } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 

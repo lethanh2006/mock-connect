@@ -4,7 +4,10 @@ import { type SuKien } from '@/services/SuKien/typings';
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Col, Form, Input, Row } from 'antd';
+import { Button } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import Input from '@/components/MyInput';
+import { Form } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -104,12 +107,14 @@ const FormLichCaNhan = (props: { getData: () => void }) => {
 				</Row>
 
 				<div className='form-footer'>
-					<Button loading={formSubmiting} htmlType='submit' type='primary'>
+					<Button loading={formSubmiting} type='submit' variant='default'>
 						{!edit
 							? intl.formatMessage({ id: 'global.button.themmoi' })
 							: intl.formatMessage({ id: 'global.button.luulai' })}
 					</Button>
-					<Button onClick={() => setVisibleForm(false)}> {intl.formatMessage({ id: 'global.button.huy' })}</Button>
+					<Button variant='outline' onClick={() => setVisibleForm(false)}>
+						{intl.formatMessage({ id: 'global.button.huy' })}
+					</Button>
 				</div>
 			</Form>
 		</>

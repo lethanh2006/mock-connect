@@ -7,7 +7,7 @@ import {
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { CheckCircleFilled, ColumnWidthOutlined } from '@ant-design/icons';
-import { Button, Card, Image, Space, Tag, Typography } from 'antd';
+import { Card, Image, Space, Tag, Typography } from 'antd';
 import { IconLeftRightBar, IconShieldCheck } from '@/components/Icons';
 import { Col, Row } from '@/components/MyGrid';
 import { useIntl, useModel } from 'umi';
@@ -20,6 +20,7 @@ import {
 	getTenPhong,
 	getTienIchPhong,
 } from '../utils';
+import { Button } from '@/components/Icons';
 
 interface CardPhongProps {
 	phong: Phong.IChinhSachPhongRecord;
@@ -167,8 +168,8 @@ const CardPhong = ({
 				)}
 
 				<Button
-					type={hienThiNhuDaDangKy && daThanhToanXong ? 'default' : 'primary'}
-					size='large'
+					variant={hienThiNhuDaDangKy && daThanhToanXong ? 'outline' : 'default'}
+					size='lg'
 					disabled={khongChoDangKy}
 					className={hienThiNhuDaDangKy && daThanhToanXong ? 'room-card__button--secondary' : undefined}
 					onClick={(event) => {

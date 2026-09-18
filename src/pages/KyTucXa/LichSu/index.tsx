@@ -11,10 +11,11 @@ import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { formatDate } from '@/utils/formatDate';
 import { DollarCircleOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Tag } from 'antd';
+import { Popconfirm, Tag } from 'antd';
 import { useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import { IconTrash, IconFileMoney } from '@/components/Icons';
+import { Button } from '@vinuni/ui';
 import ChiTietPhong from '../DangKy/components/ChiTiet';
 import ModalDanKyKTX from '../DangKy/components/Modal';
 
@@ -138,9 +139,9 @@ const LichSuaKTX = () => {
 
 				return (
 					<Button
-						type='link'
+						variant='link'
 						style={{ padding: 0, height: 'auto' }}
-						onClick={(event) => {
+						onClick={(event: React.MouseEvent) => {
 							event.stopPropagation();
 							handleViewPhong(rec);
 						}}

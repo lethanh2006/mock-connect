@@ -14,7 +14,8 @@ import rules from '@/utils/rules';
 import { Col, Row } from '@/components/MyGrid';
 import Input from '@/components/MyInput';
 import Select from '@/components/MySelect';
-import { Button, Divider, Form } from 'antd';
+import { Button } from '@/components/Icons';
+import { Divider, Form } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import { usePersonalInfo } from '../hooks/usePersonalInfo';
@@ -316,11 +317,11 @@ const FormMienBHYT = ({ record, isView, edit, onCancel, getData }: IProps) => {
 			</Row>
 			<div className='form-footer'>
 				{!readOnly ? (
-					<Button loading={formSubmiting} htmlType='submit' type='primary'>
+					<Button loading={formSubmiting} type='submit' variant='default'>
 						{t(edit ? 'baohiemyte.dangky.button.capNhat' : 'baohiemyte.dangky.button.dangKy')}
 					</Button>
 				) : null}
-				<Button htmlType='button' onClick={onCancel}>
+				<Button variant='outline' onClick={onCancel}>
 					{t('global.button.huy')}
 				</Button>
 			</div>

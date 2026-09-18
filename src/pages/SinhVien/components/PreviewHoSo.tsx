@@ -9,9 +9,11 @@ import { getPublicAssetPath } from '@/utils/path';
 import { getSafeHref } from '@/utils/security';
 import { formatPhoneNumber, getNameFile } from '@/utils/utils';
 import { CheckCircleFilled } from '@ant-design/icons';
-import { Card, Col, Divider, Flex, Row, Spin, Tag, Typography } from 'antd';
+import { Divider, Flex, Spin, Tag, Typography } from 'antd';
 import { Fragment, useEffect, useMemo, type ReactNode } from 'react';
 import { getLocale, useIntl, useModel } from 'umi';
+import { Card } from '@/components/PageCard';
+import { Col, Row } from '@/components/MyGrid';
 
 const { Text, Title, Link } = Typography;
 
@@ -191,7 +193,7 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 	);
 
 	const leftPanel = (
-		<Card variant='borderless'>
+		<Card bordered={false}>
 			<div className='sv-profile-summary'>
 				<Flex vertical align='center' gap={8}>
 					<div className='avatar-container'>
@@ -288,7 +290,7 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 	);
 
 	const rightPanel = (
-		<Card variant='borderless'>
+		<Card bordered={false}>
 			<SectionTitle title={intl.formatMessage({ id: 'thongtincanhan.hoso.identity' })} />
 			<div className='sv-profile-field-list'>
 				<ProfileGroupTitle>

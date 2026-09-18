@@ -4,8 +4,9 @@ import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typi
 import { primaryColor } from '@/services/base/constant';
 import { IconRotateArrow, IconMagnifyingGlass } from '@/components/Icons';
 import EmptyState from '@/components/EmptyState';
+import Select from '@/components/MySelect';
 import type { InputRef } from 'antd';
-import { AutoComplete, Button, Divider, Input, Select, Space, Spin, Tag, Tooltip, Typography } from 'antd';
+import { AutoComplete, Button, Divider, Input, Space, Spin, Tag, Tooltip, Typography } from 'antd';
 import _ from 'lodash';
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useIntl, useModel } from 'umi';

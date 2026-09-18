@@ -1,5 +1,6 @@
 import { IconShieldCheck } from '@/components/Icons';
-import { Modal, Space, Typography } from 'antd';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { Space, Typography } from 'antd';
 import { useIntl } from 'umi';
 
 const { Title } = Typography;
@@ -9,7 +10,7 @@ const ModalDangKyThanhCong = (props: { visibleDangKy: boolean; setVisibleDangKy:
 	const { visibleDangKy, setVisibleDangKy } = props;
 
 	return (
-		<Modal open={visibleDangKy} onCancel={() => setVisibleDangKy(false)} footer={null} centered width={400}>
+		<ModalExpandable open={visibleDangKy} onCancel={() => setVisibleDangKy(false)} footer={null} width={400}>
 			<Space direction='vertical' size={24} align='center' style={{ width: '100%' }}>
 				<div
 					style={{
@@ -30,7 +31,7 @@ const ModalDangKyThanhCong = (props: { visibleDangKy: boolean; setVisibleDangKy:
 					{intl.formatMessage({ id: 'activity.chitiet.dangkythanhcong' })}
 				</Title>
 			</div>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

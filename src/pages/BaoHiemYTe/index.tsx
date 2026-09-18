@@ -17,12 +17,13 @@ import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { chuanHoaTen } from '@/utils/utils';
 import { IconStopwatch, IconEyeOpen, IconShieldInfo, IconFilePen } from '@/components/Icons';
-import { Button, Popover, Space, Tag } from 'antd';
+import { Popover, Space, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChoiceModal from './components/ChoiceModal';
 import FormDangKy from './components/FormDangKy';
 import FormMien from './components/FormMien';
+import { Button } from '@/components/Icons';
 
 type TFormType = 'dangKy' | 'mien';
 
@@ -321,7 +322,7 @@ const SinhVienDangKyBHYT = () => {
 								</div>
 							}
 						>
-							<Button type='text' size='small' icon={<IconShieldInfo />} style={{ paddingInline: 4 }} />
+							<Button variant='ghost' size='sm' icon={<IconShieldInfo />} style={{ paddingInline: 4 }} />
 						</Popover>
 					)}
 				</Space>
@@ -401,7 +402,7 @@ const SinhVienDangKyBHYT = () => {
 
 				{hasPeriod ? (
 					canRegister ? (
-						<Button type='primary' onClick={onViewFull}>
+						<Button variant='default' onClick={onViewFull}>
 							{t('baohiemyte.dangky.banner.xemDayDu')}
 						</Button>
 					) : (
@@ -440,6 +441,7 @@ const SinhVienDangKyBHYT = () => {
 
 	return (
 		<TableBase<BaoHiemYTe.IHistoryItem>
+			cardProps={{ stickyHeader: true }}
 			getData={refreshAll}
 			columns={columns}
 			dependencies={[page, limit]}

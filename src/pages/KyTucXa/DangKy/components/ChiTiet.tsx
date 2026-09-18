@@ -4,8 +4,10 @@ import { ETrangThaiThanhToanKTX } from '@/services/KyTucXa/PhieuDangKy/constant'
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { CheckOutlined, ColumnWidthOutlined } from '@ant-design/icons';
-import { Button, Col, message, Row, Typography } from 'antd';
+import { Button, message, Typography } from 'antd';
 import { IconLeftRightBar } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import { toast } from '@/utils/toast';
 import { useIntl, useModel } from 'umi';
 import '../style.less';
 import {
@@ -68,7 +70,7 @@ const ChiTietPhong = (props: {
 		if (khoaDangKy) return;
 
 		if (daCoLichSuPhongDangKy || (!lichSuPhong && daCoLichSuDangKy)) {
-			message.warning(intl.formatMessage({ id: 'kytucxa.dangky.message.daCoLichSu' }));
+			toast.warning(intl.formatMessage({ id: 'kytucxa.dangky.message.daCoLichSu' }));
 			return;
 		}
 

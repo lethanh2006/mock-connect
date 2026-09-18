@@ -1,6 +1,5 @@
-import { IconArrowRight, IconCalendar, IconHumberger, IconPinLocation, IconWrenchGear01 } from '@/components/Icons';
+import { Badge, Icon3SquarePlusmark, IconArrowRight, IconCalendar, IconHumberger, IconPinLocation, IconWrenchGear01 } from '@/components/Icons';
 import { Col, Row } from '@/components/MyGrid';
-import PageCard from '@/components/PageCard';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { useMessagesCalendar } from '@/services/Calendar/constant';
 import { colorHinhThucGiangDay, EHinhThucGiangDay, mapHinhThucGiangDayI18n } from '@/services/HocTap/constant';
@@ -8,7 +7,11 @@ import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac } from '@/services/SuKien/con
 import { type SuKien } from '@/services/SuKien/typings';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { Card, Divider, Empty, Flex, Modal, Segmented, Space, Spin, Tag } from 'antd';
+import { Divider, Empty, Flex, Modal, Space, Spin, Tag } from 'antd';
+import PageCard, { Card } from '@/components/PageCard';
+import EmptyState from '@/components/EmptyState';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import Segmented from '@/components/MySegmented';
 import { isEmpty, sortBy } from 'lodash';
 import { useEffect, useState } from 'react';
 import type { DateRange, View } from 'react-big-calendar';
@@ -97,11 +100,11 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		const nextDate =
 			action === 'next'
 				? dayjs(date)
-						.add(1, unit as dayjs.ManipulateType)
-						.toDate()
+					.add(1, unit as dayjs.ManipulateType)
+					.toDate()
 				: dayjs(date)
-						.subtract(1, unit as dayjs.ManipulateType)
-						.toDate();
+					.subtract(1, unit as dayjs.ManipulateType)
+					.toDate();
 
 		setCalendarDateByView(nextDate);
 	};
@@ -362,7 +365,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 			<div className={styles.dashboard_calendar}>
 				{renderListToolbar()}
 				{!loading && isEmpty(data) ? (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={intl.formatMessage({ id: 'lichsukien.empty' })} />
+					<EmptyState description={intl.formatMessage({ id: 'lichsukien.empty' })} />
 				) : null}
 				{keysSorted.map((ngay) => {
 					const { cacSuKien, thuTrongTuan } = data[ngay];
@@ -379,7 +382,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 											? messagesCalendar.today
 											: `${thuTrongTuan}, ${formatDate(ngay, 'DD/MM')}`}
 									</div>
-									<Tag color='yellow'>{cacSuKien.length}</Tag>
+									<Badge variant='warning'>{cacSuKien.length}</Badge>
 								</Space>
 							</Divider>
 							{cacSuKienSorted.map((sukien) => {
@@ -412,14 +415,14 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 												{sukien.tenSuKien ?? ''}
 												{sukien.loaiSuKien === ELoaiSuKien.LICH_HOC &&
 													sukien.hinhThucGiangDay === EHinhThucGiangDay.ONLINE && (
-														<Tag
-															color={colorHinhThucGiangDay[sukien.hinhThucGiangDay as EHinhThucGiangDay]}
+														<Badge
+															variant='inprogress'
 															style={{ marginLeft: 8 }}
 														>
 															{intl.formatMessage({
 																id: mapHinhThucGiangDayI18n[sukien.hinhThucGiangDay as EHinhThucGiangDay],
 															})}
-														</Tag>
+														</Badge>
 													)}
 											</div>
 											{location ? (
@@ -487,9 +490,11 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 
 	return (
 		<PageCard
+			stickyHeader
+			hideInnerCard
 			title={
-				<>
-					{intl.formatMessage({ id: 'lichsukien.title' })}{' '}
+				<div style={{ display: 'inline-flex', alignItems: 'center', gap: 12 }}>
+					<span>{intl.formatMessage({ id: 'lichsukien.title' })}</span>
 					<Segmented
 						value={segmentSelected}
 						options={[
@@ -501,7 +506,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 							setSegmentSelected(val);
 						}}
 					/>
-				</>
+				</div>
 			}
 		>
 			{isDashboard ? (
@@ -598,7 +603,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				/>
 			) : null}
 
-			<Modal
+			<ModalExpandable
 				open={visibleXemThem}
 				title={
 					`${intl.formatMessage({ id: 'lichsukien.title' })} ` + formatDate(dateXemThem, 'dddd, [ngày] DD/MM/YYYY')
@@ -624,7 +629,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 						</div>
 					);
 				})}
-			</Modal>
+			</ModalExpandable>
 
 			<ModalSettingMauLich />
 		</PageCard>

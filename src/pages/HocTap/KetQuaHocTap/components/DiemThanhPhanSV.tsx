@@ -6,8 +6,9 @@ import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constan
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { primaryColor } from '@/services/base/constant';
 import { CheckOutlined, FileTextOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Modal, Select, Space, Tag, Tooltip, Typography } from 'antd';
+import { Modal, Space, Tag, Tooltip, Typography } from 'antd';
 import { IconCheck01 } from '@/components/Icons';
+import Select from '@/components/MySelect';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';

@@ -1,5 +1,7 @@
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
-import { Button, Card, Modal } from 'antd';
+import { Button } from '@/components/Icons';
+import { Card } from '@/components/PageCard';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { useModel } from 'umi';
 import TabHocTapRenLuyenSinhVien from '../HocTapRenLuyen';
 
@@ -18,15 +20,15 @@ const ModalHocBaSinhVien = (props: { visible: boolean; setVisible: (val: boolean
 	// };
 
 	return (
-		<Modal
+		<ModalExpandable
 			width={1100}
 			open={visible}
 			onCancel={() => setVisible(false)}
-			maskClosable={false}
 			footer={null}
 			styles={{ body: { padding: 0 } }}
 		>
 			<Card
+				bordered={false}
 				title={
 					<>
 						Học bạ số{' '}
@@ -69,10 +71,12 @@ const ModalHocBaSinhVien = (props: { visible: boolean; setVisible: (val: boolean
 				)} */}
 
 				<div className='form-footer'>
-					<Button onClick={() => setVisible(false)}>Đóng</Button>
+					<Button variant='outline' onClick={() => setVisible(false)}>
+						Đóng
+					</Button>
 				</div>
 			</Card>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

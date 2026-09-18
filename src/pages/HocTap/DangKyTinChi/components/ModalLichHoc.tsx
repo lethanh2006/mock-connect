@@ -1,4 +1,3 @@
-import ModalExpandable from '@/components/Table/ModalExpandable';
 import { useMessagesCalendar } from '@/services/Calendar/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
@@ -6,6 +5,7 @@ import { IconCalendar } from '@/components/Icons';
 import { Card } from '@/components/PageCard';
 import { formatDate } from '@/utils/formatDate';
 import { Spin } from 'antd';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { useEffect, useState } from 'react';
 import type { DateRange, View } from 'react-big-calendar';
 import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar';
@@ -116,8 +116,7 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 		<ModalExpandable
 			open={visibleModal}
 			onCancel={() => setVisibleModal(false)}
-			okButtonProps={{ hidden: true }}
-			cancelText={intl.formatMessage({ id: 'dangkytinchi.action.dong' })}
+			footer={null}
 			width={1000}
 			styles={{ body: { padding: 0 } }}
 		>

@@ -1,5 +1,6 @@
 import { getLocalizedName } from '@/utils/localeName';
-import { Select } from 'antd';
+
+import Select from '@/components/MySelect';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 

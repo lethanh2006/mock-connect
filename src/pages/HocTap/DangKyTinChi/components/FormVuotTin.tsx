@@ -1,4 +1,6 @@
-import { Button, Col, Descriptions, Divider, Form, InputNumber, Row, Typography } from 'antd';
+import { Button } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import { Descriptions, Divider, Form, InputNumber, Typography } from 'antd';
 import React from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -107,10 +109,10 @@ const FormVuotTin: React.FC = () => {
 			<Divider />
 
 			<div className='form-footer'>
-				<Button type='primary' htmlType='submit' loading={formSubmiting}>
+				<Button variant='default' type='submit' loading={formSubmiting}>
 					{intl.formatMessage({ id: 'dangkytinchi.vuottin.form.btn.luu' })}
 				</Button>
-				<Button onClick={() => setVisibleForm(false)}>
+				<Button variant='outline' onClick={() => setVisibleForm(false)}>
 					{intl.formatMessage({ id: 'dangkytinchi.vuottin.form.btn.dong' })}
 				</Button>
 			</div>

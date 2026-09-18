@@ -1,5 +1,7 @@
 import { getRecaptchaSiteKey } from '@/utils/config';
-import { Alert, Button, Col, Descriptions, Modal, Row } from 'antd';
+import { Alert, Descriptions, Modal } from 'antd';
+import { Button } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
 import { useState } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { useIntl, useModel } from 'umi';
@@ -155,20 +157,20 @@ const ModalDangKyNgayContent = ({
 
 				<div className='form-footer'>
 					{isVuotTin ? (
-						<Button type='primary' loading={formSubmiting} onClick={() => openLyDoModal('vuot_tin')}>
+						<Button variant='default' loading={formSubmiting} onClick={() => openLyDoModal('vuot_tin')}>
 							{intl.formatMessage({ id: 'dangkytinchi.vuottin.button.dangkyvuottin' })}
 						</Button>
 					) : (
-						<Button type='primary' loading={formSubmiting} onClick={postDangKy}>
+						<Button variant='default' loading={formSubmiting} onClick={postDangKy}>
 							{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.action.dangky' })}
 						</Button>
 					)}
 
-					<Button loading={formSubmiting} onClick={() => openLyDoModal('du_thinh')}>
+					<Button variant='outline' loading={formSubmiting} onClick={() => openLyDoModal('du_thinh')}>
 						{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.action.dangkyduthinh' })}
 					</Button>
 
-					<Button onClick={handleClose}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
+					<Button variant='outline' onClick={handleClose}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
 				</div>
 			</Modal>
 

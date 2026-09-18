@@ -7,10 +7,12 @@ import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { formatDateTime } from '@/utils/formatDate';
 import { getPublicAssetPath } from '@/utils/path';
 import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Alert, Button, Empty, Flex, Input, message, Select, Space, Spin } from 'antd';
+import { Alert, Empty, Flex, Input, message, Space, Spin } from 'antd';
 import { IconShieldInfo, IconRotateArrow } from '@/components/Icons';
 import { Col, Row } from '@/components/MyGrid';
 import EmptyState from '@/components/EmptyState';
+import Select from '@/components/MySelect';
+import { toast } from '@/utils/toast';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -21,6 +23,7 @@ import ChiTietPhong from './components/ChiTiet';
 import ExemptionBanner from './components/ExemptionBanner';
 import ModalDanKyKTX from './components/Modal';
 import { getSoChoConLai } from './utils';
+import { Button } from '@/components/Icons';
 
 const { Search } = Input;
 const SO_PHONG_MOI_LAN_HIEN_THI = 12;
@@ -245,7 +248,7 @@ const DangKyKyTucXa = () => {
 		if (dangMienKtx) return;
 
 		if (coFormDonDangKy(recLichSu)) {
-			message.warning(intl.formatMessage({ id: 'kytucxa.dangky.message.daCoLichSu' }));
+			toast.warning(intl.formatMessage({ id: 'kytucxa.dangky.message.daCoLichSu' }));
 			return;
 		}
 
@@ -285,14 +288,14 @@ const DangKyKyTucXa = () => {
 
 	if (!recDot?._id) {
 		return (
-			<PageCard title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}>
+			<PageCard stickyHeader title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}>
 				<EmptyState description={intl.formatMessage({ id: 'kytucxa.dangky.empty.noDotDangKy' })} />
 			</PageCard>
 		);
 	}
 
 	return (
-		<PageCard title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}>
+		<PageCard stickyHeader title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}>
 			{recDot?.isMienKyTucXa && <ExemptionBanner recDot={recDot} coThongTinPheDuyet={coThongTinPheDuyet} />}
 
 			<Flex justify='space-between' align='center' style={{ marginBottom: 8 }}>
@@ -348,7 +351,7 @@ const DangKyKyTucXa = () => {
 					/>
 				</Space>
 
-				<Button icon={<IconRotateArrow />} loading={loading} onClick={getData} />
+				<Button variant='outline' icon={<IconRotateArrow />} loading={loading} onClick={getData} />
 			</Flex>
 
 			<Alert

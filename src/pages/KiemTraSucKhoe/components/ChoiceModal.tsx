@@ -1,5 +1,6 @@
+import { Button } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
 import ModalExpandable from '@/components/Table/ModalExpandable';
-import { Button, Col, Row } from 'antd';
 import { useIntl } from 'umi';
 
 interface IProps {
@@ -35,7 +36,7 @@ const ChoiceModalKiemTraSucKhoe = ({ open, onClose, onSelectDangKy, onSelectMien
 			onCancel={onClose}
 			width={900}
 			footer={[
-				<Button key='close' onClick={onClose}>
+				<Button key='close' variant='outline' onClick={onClose}>
 					{t('global.button.dong')}
 				</Button>,
 			]}
@@ -50,7 +51,7 @@ const ChoiceModalKiemTraSucKhoe = ({ open, onClose, onSelectDangKy, onSelectMien
 							{t('kiemtrasuckhoe.dangky.choiceModal.chuaKham.desc')}
 						</div>
 						<div style={{ textAlign: 'right' }}>
-							<Button type='primary' loading={loadingDangKy} onClick={onSelectDangKy}>
+							<Button variant='default' loading={loadingDangKy} onClick={onSelectDangKy}>
 								{t('kiemtrasuckhoe.dangky.choiceModal.chuaKham.button')}
 							</Button>
 						</div>
@@ -65,7 +66,9 @@ const ChoiceModalKiemTraSucKhoe = ({ open, onClose, onSelectDangKy, onSelectMien
 							{t('kiemtrasuckhoe.dangky.choiceModal.daKham.desc')}
 						</div>
 						<div style={{ textAlign: 'right' }}>
-							<Button onClick={onSelectMien}>{t('kiemtrasuckhoe.dangky.choiceModal.daKham.button')}</Button>
+							<Button variant='outline' onClick={onSelectMien}>
+								{t('kiemtrasuckhoe.dangky.choiceModal.daKham.button')}
+							</Button>
 						</div>
 					</div>
 				</Col>

@@ -1,8 +1,8 @@
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { IconStopwatch, IconArrowDown, IconArrowUp } from '@/components/Icons';
-import { Button, Card, List, Typography } from 'antd';
+import { Button, IconStopwatch, IconArrowDown, IconArrowUp } from '@/components/Icons';
+import { Card, List, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'umi';
 import './style.less';
@@ -73,8 +73,8 @@ const LichSapToi: React.FC<LichSapToiProps> = ({ dataCalendar, limit = 5, onEven
 			</div>
 
 			<Button
-				type='text'
-				size='small'
+				variant='ghost'
+				size='sm'
 				icon={expandLichSapToi ? <IconArrowUp /> : <IconArrowDown />}
 				onClick={(e) => {
 					e.stopPropagation();

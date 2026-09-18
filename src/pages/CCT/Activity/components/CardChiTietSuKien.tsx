@@ -4,8 +4,12 @@ import ModalExpandable from '@/components/Table/ModalExpandable';
 import { Activity } from '@/services/CCT/Activity/typing';
 import { EApprovalStatus } from '@/services/CCT/constant';
 import { getNameFile, getPreviewUrl, isFileUrl } from '@/utils/utils';
+import { Button } from '@vinuni/ui';
+import EmptyState from '@/components/EmptyState';
 import { IconDocument } from '@/components/Icons';
-import { Button, Card, Col, Divider, Empty, Input, List, Row, Typography } from 'antd';
+import { Card } from '@/components/PageCard';
+import { Col, Row } from '@/components/MyGrid';
+import { Divider, Input, List, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useIntl } from 'umi';
@@ -53,7 +57,7 @@ const CardChiTietSuKien = (props: {
 					/>
 				</Col>
 				<Col span={24} md={15}>
-					<Card variant='borderless' size='small'>
+					<Card bordered={false} size='small'>
 						<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0 }}>
 							{intl.formatMessage({ id: 'activity.chitiet.admin' })}
 						</Divider>
@@ -239,8 +243,8 @@ const CardChiTietSuKien = (props: {
 											dataSource={record?.activityOutcome?.evidenceFile ?? []}
 											locale={{
 												emptyText: (
-													<Empty
-														image={Empty.PRESENTED_IMAGE_SIMPLE}
+													<EmptyState
+														compact
 														description={intl.formatMessage({ id: 'activity.chitiet.noEvidence' })}
 													/>
 												),
@@ -331,7 +335,9 @@ const CardChiTietSuKien = (props: {
 				<PreviewFile file={previewImage} isPrivate />
 
 				<div className='form-footer'>
-					<Button onClick={() => setPreviewOpen(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
+					<Button variant='outline' onClick={() => setPreviewOpen(false)}>
+						{intl.formatMessage({ id: 'global.button.dong' })}
+					</Button>
 				</div>
 			</ModalExpandable>
 		</>

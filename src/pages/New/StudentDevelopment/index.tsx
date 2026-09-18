@@ -6,7 +6,7 @@ import './style.less';
 
 const StudentDevelopment = () => {
 	return (
-		<PageCard title='Student Development Framework'>
+		<PageCard stickyHeader title='Student Development Framework'>
 			<div className='student-development-wrapper'>
 				<div className='framework-bg-overlay' style={{ backgroundImage: `url(${backgroundImage})` }}></div>
 

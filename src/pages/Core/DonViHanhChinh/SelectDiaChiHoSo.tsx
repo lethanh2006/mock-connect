@@ -2,7 +2,10 @@ import { getPhuongXa } from '@/services/Core/DonViHanhChinh';
 import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import rules from '@/utils/rules';
-import { Col, Form, Input, Row, Select } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import Input from '@/components/MyInput';
+import Select from '@/components/MySelect';
+import { Form } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
 

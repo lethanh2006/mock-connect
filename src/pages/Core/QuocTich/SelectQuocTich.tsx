@@ -1,7 +1,8 @@
 import { DANH_SACH_QUOC_TICH } from '@/services/Core/QuocTich/danhSach';
 import { getLocalizedName } from '@/utils/localeName';
-import { Select } from 'antd';
+
 import { useIntl } from 'umi';
+import Select from '@/components/MySelect';
 
 /**
  * Secect Căn cứ pháp lý để cho vào FormItem

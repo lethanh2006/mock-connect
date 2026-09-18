@@ -1,5 +1,7 @@
 import rules from '@/utils/rules';
-import { Col, Form, Input, Row } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import Input from '@/components/MyInput';
+import { Form } from 'antd';
 import React from 'react';
 import { useIntl } from 'umi';
 import type { InvoiceFormProps } from './typing';

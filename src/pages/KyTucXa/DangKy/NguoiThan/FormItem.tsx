@@ -3,7 +3,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { IconPencil01 } from '@/components/Icons';
-import { Modal } from 'antd';
+import { Modal } from '@/components/Table/ModalExpandable';
 import { useIntl, useModel } from 'umi';
 import Form from './Form';
 

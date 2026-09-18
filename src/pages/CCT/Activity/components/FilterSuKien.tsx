@@ -1,6 +1,7 @@
 import MyDateRangePicker from '@/components/MyDatePicker/RangePicker';
-import { IconFilter01, IconRotateArrow } from '@/components/Icons';
-import { Button, Flex, Input, Select, Space } from 'antd';
+import { Button, IconFilter01, IconRotateArrow } from '@/components/Icons';
+import Select from '@/components/MySelect';
+import { Flex, Input, Space } from 'antd';
 import dayjs from 'dayjs';
 import { JSX } from 'react';
 import { useIntl } from 'umi';
@@ -22,7 +23,7 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 	return (
 		<Flex justify='space-between' align='center' style={{ marginBottom: 8 }}>
 			<Space wrap>
-				<Button className='btn-filter' icon={<IconFilter01 />} size='small' />
+				<Button variant='outline' className='btn-filter' icon={<IconFilter01 />} size='sm' />
 
 				<Search
 					placeholder={intl.formatMessage({ id: 'activity.filter.name' })}
@@ -98,7 +99,7 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 			</Space>
 
 			<Space wrap>
-				<Button icon={<IconRotateArrow />} onClick={onReload} />
+				<Button variant='outline' icon={<IconRotateArrow />} onClick={onReload} />
 				{button}
 			</Space>
 		</Flex>

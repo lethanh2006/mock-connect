@@ -5,8 +5,9 @@ import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
+import { Button } from '@/components/Icons';
 import { Col, Row } from '@/components/MyGrid';
-import { Button, Form } from 'antd';
+import { Form } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import { usePersonalInfo } from '../hooks/usePersonalInfo';
@@ -151,11 +152,11 @@ const FormMienKiemTraSucKhoe = ({ record, isView, edit, onCancel, getData }: IPr
 			</Row>
 			<div className='form-footer'>
 				{!readOnly ? (
-					<Button loading={formSubmiting} htmlType='submit' type='primary'>
+					<Button loading={formSubmiting} type='submit' variant='default'>
 						{t(edit ? 'kiemtrasuckhoe.dangky.button.capNhat' : 'kiemtrasuckhoe.dangky.button.dangKy')}
 					</Button>
 				) : null}
-				<Button htmlType='button' onClick={onCancel}>
+				<Button variant='outline' onClick={onCancel}>
 					{t('global.button.huy')}
 				</Button>
 			</div>

@@ -1,6 +1,8 @@
 import SelectCategory from '@/pages/Core/Category/SelectCategory';
 import rules from '@/utils/rules';
-import { Col, Form, Input, InputNumber, Row } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import Input, { InputNumber } from '@/components/MyInput';
+import { Form } from 'antd';
 import { useIntl } from 'umi';
 
 const FormSucKhoe = () => {

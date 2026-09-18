@@ -1,7 +1,11 @@
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Col, Form, Input, Row, Select } from 'antd';
+import { Button } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import Input from '@/components/MyInput';
+import Select from '@/components/MySelect';
+import { Form } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -206,14 +210,16 @@ const FormNguoiThanKTX = (props: {
 
 			<div className='form-footer'>
 				{!isView ? (
-					<Button htmlType='submit' type='primary'>
+					<Button type='submit' variant='default'>
 						{!edit
 							? intl.formatMessage({ id: 'global.button.themmoi' })
 							: intl.formatMessage({ id: 'global.button.luulai' })}
 					</Button>
 				) : null}
 
-				<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
+				<Button variant='outline' onClick={() => setVisibleForm(false)}>
+					{intl.formatMessage({ id: 'global.button.huy' })}
+				</Button>
 			</div>
 		</Form>
 	);

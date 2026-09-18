@@ -1,7 +1,9 @@
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
-import { Button, Form, message, Steps } from 'antd';
+import { Button } from '@/components/Icons';
+import { toast } from '@/utils/toast';
+import { Form, Steps, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import { chuanHoaDanhSachLienHeKhanCap } from '../NguoiThan/FormItem';
@@ -212,7 +214,7 @@ const ModalDanKyKTX = (props: {
 		if (isView) return;
 		if (currentStep !== 1) return;
 		if (daCoLichSuDangKy) {
-			message.warning(intl.formatMessage({ id: 'kytucxa.dangky.message.daCoLichSu' }));
+			toast.warning(intl.formatMessage({ id: 'kytucxa.dangky.message.daCoLichSu' }));
 			handleClose();
 			return;
 		}
@@ -288,36 +290,36 @@ const ModalDanKyKTX = (props: {
 						{isView ? (
 							<>
 								{currentStep < lastStep ? (
-									<Button htmlType='button' type='primary' onClick={handleViewNext}>
+									<Button type='button' variant='default' onClick={handleViewNext}>
 										{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.next' })}
 									</Button>
 								) : null}
 
 								{currentStep > 0 ? (
-									<Button htmlType='button' onClick={handleViewPrevious}>
+									<Button variant='outline' type='button' onClick={handleViewPrevious}>
 										{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.previous' })}
 									</Button>
 								) : null}
 
-								<Button htmlType='button' onClick={handleClose}>
+								<Button variant='outline' type='button' onClick={handleClose}>
 									{intl.formatMessage({ id: 'activity.outcome.close' })}
 								</Button>
 							</>
 						) : currentStep === 0 ? (
 							<>
-								<Button htmlType='button' type='primary' disabled={!daDongYThongTinChung} onClick={handleNext}>
+								<Button type='button' variant='default' disabled={!daDongYThongTinChung} onClick={handleNext}>
 									{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.next' })}
 								</Button>
 
-								<Button htmlType='button' onClick={handleClose}>
+								<Button variant='outline' type='button' onClick={handleClose}>
 									{intl.formatMessage({ id: 'activity.outcome.close' })}
 								</Button>
 							</>
 						) : (
 							<>
 								<Button
-									htmlType='button'
-									type='primary'
+									type='button'
+									variant='default'
 									disabled={!daDongYChinhSach}
 									loading={formSubmiting}
 									onClick={handleSubmit}
@@ -325,7 +327,7 @@ const ModalDanKyKTX = (props: {
 									{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.submit' })}
 								</Button>
 
-								<Button htmlType='button' onClick={() => setCurrentStep(0)}>
+								<Button variant='outline' type='button' onClick={() => setCurrentStep(0)}>
 									{intl.formatMessage({ id: 'kytucxa.dangky.modal.button.previous' })}
 								</Button>
 							</>
@@ -345,8 +347,8 @@ const ModalDanKyKTX = (props: {
 
 				<div className='form-footer'>
 					<Button
-						htmlType='button'
-						type='primary'
+						type='button'
+						variant='default'
 						onClick={() => {
 							setVisibleDangKyThanhCong(false);
 							history.push('/finance/tuition-billing');

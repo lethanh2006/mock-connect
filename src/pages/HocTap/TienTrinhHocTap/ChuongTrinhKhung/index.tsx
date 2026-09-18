@@ -7,13 +7,13 @@ import { accentColors, primaryColor } from '@/services/base/constant';
 import { IconRotateArrow, IconMagnifyingGlass } from '@/components/Icons';
 import EmptyState from '@/components/EmptyState';
 import type { InputRef } from 'antd';
+import Segmented from '@/components/MySegmented';
 import {
 	AutoComplete,
 	Button,
 	Collapse,
 	Divider,
 	Input,
-	Segmented,
 	Space,
 	Spin,
 	Tag,

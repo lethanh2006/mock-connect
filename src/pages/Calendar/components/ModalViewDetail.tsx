@@ -3,7 +3,12 @@ import { colorHinhThucGiangDay, mapHinhThucGiangDayI18n, type EHinhThucGiangDay 
 import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac, LoaiSuKienLocaleKey } from '@/services/SuKien/constant';
 import { formatDateTime } from '@/utils/formatDate';
 import { getSafeHref, openSafeUrl } from '@/utils/security';
-import { Button, Descriptions, Modal, Space, Tag, message } from 'antd';
+import { Descriptions, Modal, Space, Tag, message } from 'antd';
+import { mapTrangThaiNopBaiTap, ETrangThaiNopBaiTap } from '@/services/DaoTao/BaiTap/constants';
+import type { LichThi } from '@/services/KhaoThi/LichThi/typing';
+import { Button } from '@/components/Icons';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { toast } from '@/utils/toast';
 import { JSX } from 'react';
 import { history, useIntl, useModel } from 'umi';
 
@@ -41,8 +46,8 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 		if (lopHocPhanId)
 			getMoodleLopHocPhanModel(lopHocPhanId).then((data) => {
 				if (data?.url && openSafeUrl(data.url)) return;
-				if (data?.url) message.error(intl.formatMessage({ id: 'lichsukien.chitiet.duongdan.khonghople' }));
-				else message.error(intl.formatMessage({ id: 'lichsukien.chitiet.loi' }));
+				if (data?.url) toast.error(intl.formatMessage({ id: 'lichsukien.chitiet.duongdan.khonghople' }));
+				else toast.error(intl.formatMessage({ id: 'lichsukien.chitiet.loi' }));
 			});
 	};
 
@@ -163,7 +168,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			actionButtons: () => [
 				<Button
 					key='course-registration'
-					type='primary'
+					variant='default'
 					onClick={() => {
 						history.push('/hoc-tap/dang-ky-tin-chi');
 					}}
@@ -322,8 +327,8 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 
 	const currentConfig = getCurrentEventConfig();
 
-	// Render event type tag
-	const renderEventTypeTag = () => (
+	// Render event type badge
+	const renderEventTypeBadge = () => (
 		<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.loai' })}>
 			{loaiSuKien ? <Tag color={getColorSuKien(loaiSuKien)}>{getLoaiSuKienLabel(loaiSuKien)}</Tag> : '--'}
 		</Descriptions.Item>
@@ -356,7 +361,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 	};
 
 	return (
-		<Modal
+		<ModalExpandable
 			open={visible}
 			title={intl.formatMessage({ id: 'lichsukien.chitiet.title' })}
 			destroyOnClose
@@ -365,10 +370,10 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			footer={renderActionButtons()}
 		>
 			<Descriptions column={1}>
-				{renderEventTypeTag()}
+				{renderEventTypeBadge()}
 				{currentConfig?.renderer(event)}
 			</Descriptions>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

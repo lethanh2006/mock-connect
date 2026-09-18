@@ -11,6 +11,7 @@ const KetQuaHocTap = () => {
 
 	return (
 		<PageCard
+			stickyHeader
 			title={intl.formatMessage({ id: 'menu.HocTap.GradesTranscript' })}
 			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
 		>

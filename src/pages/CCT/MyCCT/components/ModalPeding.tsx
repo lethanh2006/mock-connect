@@ -14,7 +14,9 @@ import {
 	mapNameActivityCategory,
 	mapNameApprovalStatus,
 } from '@/services/CCT/constant';
-import { Button, Segmented, Space, Tag } from 'antd';
+import { Button } from '@/components/Icons';
+import Segmented from '@/components/MySegmented';
+import { Space, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -262,7 +264,9 @@ const ModalPeding = (props: { visible: boolean; setVisible: (val: boolean) => vo
 			/>
 
 			<div className='form-footer'>
-				<Button onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
+				<Button variant='outline' onClick={() => setVisible(false)}>
+					{intl.formatMessage({ id: 'global.button.dong' })}
+				</Button>
 			</div>
 		</ModalExpandable>
 	);

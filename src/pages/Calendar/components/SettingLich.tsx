@@ -1,6 +1,9 @@
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
-import { Button, Col, ColorPicker, Form, Modal, Row } from 'antd';
+import { ColorPicker, Form, Modal } from 'antd';
 import type { Color } from 'antd/es/color-picker';
+import { Button } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -49,7 +52,7 @@ const ModalSettingMauLich = () => {
 	};
 
 	return (
-		<Modal
+		<ModalExpandable
 			open={visibleForm}
 			title={intl.formatMessage({ id: 'lichsukien.cauhinh' })}
 			destroyOnClose
@@ -69,14 +72,18 @@ const ModalSettingMauLich = () => {
 				</Row>
 
 				<div className='form-footer'>
-					<Button loading={formSubmiting} htmlType='submit' type='primary'>
+					<Button loading={formSubmiting} type='submit' variant='default'>
 						{intl.formatMessage({ id: 'global.button.luulai' })}
 					</Button>
-					<Button onClick={handleResetToDefault}> {intl.formatMessage({ id: 'lichsukien.cauhinh.macdinh' })}</Button>
-					<Button onClick={() => setVisibleForm(false)}> {intl.formatMessage({ id: 'global.button.huy' })}</Button>
+					<Button variant='outline' onClick={handleResetToDefault}>
+						{intl.formatMessage({ id: 'lichsukien.cauhinh.macdinh' })}
+					</Button>
+					<Button variant='outline' onClick={() => setVisibleForm(false)}>
+						{intl.formatMessage({ id: 'global.button.huy' })}
+					</Button>
 				</div>
 			</Form>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

@@ -1,10 +1,15 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { colorHinhThucGiangDay, EHinhThucGiangDay, mapHinhThucGiangDayI18n } from '@/services/HocTap/constant';
+import { EHinhThucGiangDay, mapHinhThucGiangDayI18n } from '@/services/HocTap/constant';
 import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { IconArrowRight, IconCalendar, IconShieldInfo, IconHumberger } from '@/components/Icons';
-import { Badge, Card, Col, Empty, Modal, Popover, Row, Segmented, Space, Tag, Typography } from 'antd';
+import { IconArrowRight, IconCalendar, IconShieldInfo, IconHumberger, Badge as VinBadge } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import { Card } from '@/components/PageCard';
+import EmptyState from '@/components/EmptyState';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import Segmented from '@/components/MySegmented';
+import { Badge, Popover, Space, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Calendar, dayjsLocalizer } from 'react-big-calendar';
@@ -142,7 +147,7 @@ const LichDashboard = () => {
 
 		const keysSorted = sortBy(Object.keys(data));
 		if (!loadingSuKien && isEmpty(data)) {
-			return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện' />;
+			return <EmptyState description='Không có sự kiện' />;
 		}
 
 		return keysSorted.map((ngay) => {
@@ -189,11 +194,11 @@ const LichDashboard = () => {
 									{sukien.suffix ? <i> ({sukien.suffix})</i> : null}
 								</div>
 								{sukien.loaiSuKien === ELoaiSuKien.LICH_HOC && sukien.hinhThucGiangDay === EHinhThucGiangDay.ONLINE && (
-									<Tag color={colorHinhThucGiangDay[sukien.hinhThucGiangDay as EHinhThucGiangDay]}>
+									<VinBadge variant='inprogress' style={{ marginLeft: 8 }}>
 										{intl.formatMessage({
 											id: mapHinhThucGiangDayI18n[sukien.hinhThucGiangDay as EHinhThucGiangDay],
 										})}
-									</Tag>
+									</VinBadge>
 								)}
 							</Space>
 						</div>
@@ -242,7 +247,7 @@ const LichDashboard = () => {
 				toolbar={false}
 			/>
 		) : (
-			<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện' />
+			<EmptyState description='Không có sự kiện' />
 		);
 	};
 
@@ -296,15 +301,14 @@ const LichDashboard = () => {
 				</Row>
 			</Card>
 
-			<Modal
+			<ModalExpandable
 				open={visibleForm}
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
-				maskClosable={false}
 				title={edit ? 'Chỉnh sửa sự kiện' : 'Thêm mới sự kiện'}
 			>
 				<FormLichCaNhan getData={getData} />
-			</Modal>
+			</ModalExpandable>
 
 			{selectEvent ? (
 				<ModalViewDetailCalendar

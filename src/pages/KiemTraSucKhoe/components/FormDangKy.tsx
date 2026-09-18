@@ -1,8 +1,9 @@
 import { KiemTraSucKhoe } from '@/services/KiemTraSucKhoe/typing';
 import dayjs from '@/utils/dayjs';
 import { resetFieldsForm } from '@/utils/utils';
+import { Button } from '@/components/Icons';
 import { Row } from '@/components/MyGrid';
-import { Button, Form } from 'antd';
+import { Form } from 'antd';
 import { useEffect } from 'react';
 import { useIntl } from 'umi';
 import { usePersonalInfo } from '../hooks/usePersonalInfo';
@@ -57,7 +58,7 @@ const FormDangKyKiemTraSucKhoe = ({ record, onCancel }: IProps) => {
 				<PersonalInfoFields info={personalInfo} />
 			</Row>
 			<div className='form-footer'>
-				<Button htmlType='button' onClick={onCancel}>
+				<Button variant='outline' onClick={onCancel}>
 					{t('global.button.huy')}
 				</Button>
 			</div>

@@ -62,6 +62,7 @@ const TienTrinhHocTap = () => {
 
 	return (
 		<PageCard
+			stickyHeader
 			title={intl.formatMessage({ id: 'menu.HocTap.DegreeAudit' })}
 			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
 		>
@@ -186,6 +187,7 @@ const TienTrinhHocTap = () => {
 			</Spin>
 
 			<TabViewPage
+				offsetTop={64}
 				hideCard
 				tabType='line'
 				style={{ marginTop: 8 }}

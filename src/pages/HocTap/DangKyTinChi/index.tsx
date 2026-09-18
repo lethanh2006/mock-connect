@@ -122,7 +122,7 @@ const DangKyTinChiPage = () => {
 	return (
 		<GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>
 			<div ref={dangKyCardRef}>
-				<PageCard title={intl.formatMessage({ id: 'dangkytinchi.title' })} extra={<FilterDotDangKy />}>
+				<PageCard stickyHeader title={intl.formatMessage({ id: 'dangkytinchi.title' })} extra={<FilterDotDangKy />}>
 					{!!phieuDangKy?.soTinChiToiDa &&
 						dotDangKyHienTai &&
 						sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (

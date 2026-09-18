@@ -16,7 +16,8 @@ import {
 } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import { IconXmark, IconFileMoney, Icon3SquarePlusmark } from '@/components/Icons';
-import { Popconfirm, Segmented, Tag, notification } from 'antd';
+import Segmented from '@/components/MySegmented';
+import { Popconfirm, Tag, notification } from 'antd';
 
 import { formatDateTime } from '@/utils/formatDate';
 import { useEffect, useState } from 'react';

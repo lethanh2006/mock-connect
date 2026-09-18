@@ -18,7 +18,8 @@ import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { chuanHoaTen } from '@/utils/utils';
 import { IconFilePen, IconStopwatch, IconEyeOpen, IconShieldInfo } from '@/components/Icons';
-import { Button, Popover, Space, Tag } from 'antd';
+import { Button } from '@vinuni/ui';
+import { Popover, Space, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChoiceModal from './components/ChoiceModal';
@@ -319,7 +320,7 @@ const SinhVienDangKyKiemTraSucKhoe = () => {
 								</div>
 							}
 						>
-							<Button type='text' size='small' icon={<IconShieldInfo />} style={{ paddingInline: 4 }} />
+							<Button variant='ghost' size='sm' icon={<IconShieldInfo />} style={{ paddingInline: 4 }} />
 						</Popover>
 					)}
 				</Space>
@@ -401,7 +402,7 @@ const SinhVienDangKyKiemTraSucKhoe = () => {
 
 				{hasPeriod ? (
 					canRegister ? (
-						<Button type='primary' onClick={onViewFull}>
+						<Button variant='default' onClick={onViewFull}>
 							{t('kiemtrasuckhoe.dangky.banner.xemDayDu')}
 						</Button>
 					) : (

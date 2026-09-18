@@ -1,5 +1,5 @@
 import { b64toBlob } from '@/utils/utils';
-import { Button } from 'antd';
+import { Button } from '@/components/Icons';
 import classNames from 'classnames';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
@@ -51,6 +51,7 @@ const WebcamNhanDienKhuonMat = (props: { onChange?: (val: any) => void; value?: 
 				{hasDevices ? (
 					<div className='buttons'>
 						<Button
+							variant='default'
 							onClick={() => {
 								const imageSrc = webcamRef.current?.getScreenshot({ height: 1280, width: 960 });
 								if (imageSrc) {
@@ -68,7 +69,9 @@ const WebcamNhanDienKhuonMat = (props: { onChange?: (val: any) => void; value?: 
 						>
 							Chụp ảnh
 						</Button>
-						<Button onClick={() => setUserCamera((val) => !val)}>Đổi camera</Button>
+						<Button variant='outline' onClick={() => setUserCamera((val) => !val)}>
+							Đổi camera
+						</Button>
 					</div>
 				) : (
 					<div>

@@ -1,12 +1,13 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 // import { exportLyLich } from '@/services/DaoTao/SinhVien';
-import { Icon2ChervolLeftLine, IconPencil01 } from '@/components/Icons';
+import { Button, Icon2ChervolLeftLine, IconPencil01 } from '@/components/Icons';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { Alert, Button, Card, Space, Spin } from 'antd';
+import { Alert, Card, Space, Spin } from 'antd';
 // import fileDownload from 'js-file-download';
 import PageCard from '@/components/PageCard';
 import { useState } from 'react';
+import fileDownload from 'js-file-download';
 import { useIntl, useModel } from 'umi';
 import ModalCapNhatAnhNhanDien from './CapNhatKhuonMat/Modal';
 import FormSinhVien from './components/Form';
@@ -95,7 +96,7 @@ const ThongTinSinhVienPage = () => {
 	);
 
 	return (
-		<PageCard title={intl.formatMessage({ id: 'menu.MyProfile' })}>
+		<PageCard stickyHeader title={intl.formatMessage({ id: 'menu.MyProfile' })}>
 			{/* <Card variant='borderless'>
 				{recordDot?._id && choPhepSua ? (
 					<Alert
@@ -115,7 +116,7 @@ const ThongTinSinhVienPage = () => {
 			{isCapNhat ? (
 				<>
 					<Space style={{ marginBottom: 12 }} wrap>
-						<Button icon={<Icon2ChervolLeftLine />} onClick={() => setIsCapNhat(false)}>
+						<Button variant='outline' icon={<Icon2ChervolLeftLine />} onClick={() => setIsCapNhat(false)}>
 							{intl.formatMessage({ id: 'thongtincanhan.quaylai' })}
 						</Button>
 					</Space>

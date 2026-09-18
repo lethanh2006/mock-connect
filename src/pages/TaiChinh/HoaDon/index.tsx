@@ -22,7 +22,7 @@ import {
 	UnorderedListOutlined,
 } from '@ant-design/icons';
 import { IconEyeOpen, Icon3Dot3Line } from '@/components/Icons';
-import { Alert, Empty, Modal, Tabs, Tag, notification } from 'antd';
+import { Alert, Empty, Tabs, Tag, notification } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState, type Key, type ReactNode } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -32,6 +32,7 @@ import ThongTinThanhToan from './ThanhToan/ThongTinThanhToan';
 import ModalDangKyTraGop from './TraGop/ModalDangKyTraGop';
 import ModalTienDoTraGop from './TraGop/ModalTienDoTraGop';
 import EmptyState from '@/components/EmptyState';
+import { Modal } from '@/components/Table/ModalExpandable';
 
 const PaymentDeadlineCountdown = ({ deadline }: { deadline: string }) => {
 	const intl = useIntl();
@@ -518,7 +519,7 @@ const HoaDonPage = () => {
 	console.log('selectedIds', selectedIds);
 
 	return (
-		<PageCard title={intl.formatMessage({ id: 'taichinh.hoadon.title' })}>
+		<PageCard stickyHeader title={intl.formatMessage({ id: 'taichinh.hoadon.title' })}>
 			<style>{`
 				.row-qua-han > td { background-color: #fff1f0 !important; }
 				.ant-table-wrapper .ant-table-tbody > tr.ktx-deposit-notice-row > td {

@@ -18,9 +18,11 @@ import {
 	PhoneOutlined,
 	UserOutlined,
 } from '@ant-design/icons';
-import { Alert, Avatar, Button, Modal, Space, Tabs, Tag, Typography } from 'antd';
+import { Alert, Avatar, Modal, Space, Tabs, Tag, Typography } from 'antd';
 import { Card } from '@/components/PageCard';
 import { Col, Row } from '@/components/MyGrid';
+import { Button } from '@vinuni/ui';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -165,7 +167,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 				showIcon
 				type='info'
 				action={
-					<Button type='primary' onClick={() => onPay(recGiaoDich)} icon={<DollarOutlined />} loading={loading}>
+					<Button variant='default' onClick={() => onPay(recGiaoDich)} icon={<DollarOutlined />} loading={loading}>
 						{intl.formatMessage({ id: 'taichinh.thanhtoan.button.thanhtoan' })}
 					</Button>
 				}
@@ -385,7 +387,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 			</Card>
 
 			<div style={{ marginTop: 18 }} className='form-footer'>
-				<Button onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
+				<Button variant='outline' onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 			</div>
 
 			<ModalThanhToanNganHang
@@ -396,7 +398,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 					setVisibleHuongDan(false);
 				}}
 			/>
-			<Modal
+			<ModalExpandable
 				title={intl.formatMessage({ id: 'taichinh.thanhtoan.title' })}
 				open={visibleThanhToan}
 				onCancel={() => setVisibleThanhToan(false)}
@@ -410,7 +412,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 						if (getData) getData();
 					}}
 				/>
-			</Modal>
+			</ModalExpandable>
 
 
 		</Card>

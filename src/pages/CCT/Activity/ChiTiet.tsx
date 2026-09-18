@@ -1,6 +1,8 @@
 import { Activity } from '@/services/CCT/Activity/typing';
 import { EApprovalStatus } from '@/services/CCT/constant';
-import { Button, Modal, Popconfirm, Space } from 'antd';
+import { Button } from '@/components/Icons';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { Popconfirm, Space } from 'antd';
 import dayjs from 'dayjs';
 import { useIntl, useModel } from 'umi';
 import CardChiTietSuKien from './components/CardChiTietSuKien';
@@ -47,7 +49,7 @@ const ChiTietActivity = (props: {
 	const isExpired = activeKey === '3' && editableWorkflow && now.isAfter(endDateUpdateEvidence);
 
 	return (
-		<Modal
+		<ModalExpandable
 			title='Activity Detail'
 			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
@@ -113,14 +115,16 @@ const ChiTietActivity = (props: {
 							).then(() => setVisibleForm(false))
 						}
 					>
-						<Button type='link' className='btn-unregister'>
+						<Button variant='link' className='btn-unregister'>
 							{intl.formatMessage({ id: 'activity.chitiet.huydangky' })}
 						</Button>
 					</Popconfirm>
 				)}
 
 				<Space wrap>
-					<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'activity.chitiet.dong' })}</Button>
+					<Button variant='outline' onClick={() => setVisibleForm(false)}>
+						{intl.formatMessage({ id: 'activity.chitiet.dong' })}
+					</Button>
 
 					{!record?.activityOutcome?.workflow && !isFullSlot ? (
 						<Popconfirm
@@ -134,13 +138,13 @@ const ChiTietActivity = (props: {
 							}
 							disabled={outTime}
 						>
-							<Button type='primary' disabled={outTime}>
+							<Button variant='default' disabled={outTime}>
 								{intl.formatMessage({ id: 'activity.chitiet.dangky' })}
 							</Button>
 						</Popconfirm>
 					) : editableWorkflow && isOngoing ? (
 						<Button
-							type='primary'
+							variant='default'
 							onClick={() => {
 								setVisibleForm(false);
 								handleEdit({
@@ -156,7 +160,7 @@ const ChiTietActivity = (props: {
 					) : null}
 				</Space>
 			</div>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 
