@@ -360,6 +360,13 @@ button:not(:disabled),
 	border-right: 1px solid var(--color-accent-700);
 	overflow: visible !important;
 
+	// --color-accent-800 (#f8f8f8) tĩnh, dark mode giữ nguyên gần trắng dù cả trang đã sang nền đen
+	// (html[data-vinuni-theme='dark'] body, ~line 138). Không đổi token gốc vì nó còn dùng đúng cho
+	// chữ trên ảnh banner cố định .ant-page-header (~line 1105-1140) — chỉ ghi đè riêng ở đây.
+	[data-vinuni-theme='dark'] & {
+		background-color: #0a0a0a;
+	}
+
 	.ant-layout-sider-children {
 		overflow: visible !important;
 	}
@@ -764,8 +771,6 @@ button:not(:disabled),
 	.table-base-card.highlight [data-slot='card-title'],
 	.page-card.highlight .page-card-title,
 	.page-card.highlight [data-slot='card-title'],
-	// Level 3 thực tế được áp bởi rule .card-big-title.normal (specificity cao hơn .normal alone),
-	// nhưng thêm cả 2 để không phụ thuộc chỗ nào đang thắng.
 	[data-slot='card'].normal .page-card-title,
 	[data-slot='card'].normal [data-slot='card-title'],
 	[data-slot='table-card'].normal .page-card-title,
@@ -773,7 +778,16 @@ button:not(:disabled),
 	.table-base-card.normal .page-card-title,
 	.table-base-card.normal [data-slot='card-title'],
 	.page-card.normal .page-card-title,
-	.page-card.normal [data-slot='card-title'] {
+	.page-card.normal [data-slot='card-title'],
+	// PageCard Level 3 thực ra mang CẢ 2 class card-big-title + normal cùng lúc (xem
+	// PageCard/index.tsx) — rule .card-big-title.normal ở dưới có specificity NGANG với .normal
+	// đơn ở trên và khai báo SAU nên thắng, khiến override .normal đơn phía trên vô tác dụng với
+	// Level 3 thật. Phải liệt kê thêm đúng tổ hợp .card-big-title.normal ở đây mới thắng được.
+	[data-slot='card'].card-big-title.normal [data-slot='card-title'],
+	[data-slot='table-card'].card-big-title.normal [data-slot='card-title'],
+	.table-base-card.card-big-title.normal [data-slot='card-title'],
+	.page-card.card-big-title.normal [data-slot='card-title'],
+	.ant-card.card-big-title.normal [data-slot='card-title'] {
 		color: var(--color-text-base) !important;
 	}
 }
@@ -963,6 +977,15 @@ button:not(:disabled),
 		border-color: var(--color-primary) !important;
 		color: var(--color-primary) !important;
 	}
+
+	// --color-accent-800 (#f8f8f8) tĩnh — hover/focus bật lên 1 khối gần trắng giữa UI đã tối,
+	// lệch hẳn với mọi state khác của button (đều theme-aware qua --color-fill-*).
+	[data-vinuni-theme='dark'] & {
+		&:hover,
+		&:focus {
+			background-color: rgba(255, 255, 255, 0.08) !important;
+		}
+	}
 }
 
 // Style header của PageContainer - VinUni
@@ -1025,15 +1048,30 @@ button:not(:disabled),
 							.menu_right {
 								color: var(--color-text-100) !important;
 
+								// Nền của .page-dashboard-no-header-bg .ant-page-header đã đổi sang
+								// --color-bg-container (theme-aware, tối trong dark mode ở dòng trên), nhưng
+								// chữ vẫn giữ --color-text-100 tĩnh (xám đậm) → xám đậm trên nền tối = khó đọc.
+								[data-vinuni-theme='dark'] & {
+									color: var(--color-text-base) !important;
+								}
+
 								[class*='account'],
 								.account {
 									color: var(--color-text-100) !important;
 									font-weight: 700 !important;
 
+									[data-vinuni-theme='dark'] & {
+										color: var(--color-text-base) !important;
+									}
+
 									[class*='name'],
 									.name {
 										color: var(--color-text-100) !important;
 										font-weight: 700 !important;
+
+										[data-vinuni-theme='dark'] & {
+											color: var(--color-text-base) !important;
+										}
 									}
 								}
 
@@ -1306,6 +1344,12 @@ button:not(:disabled),
 		margin-right: 0 !important;
 		width: 300px !important;
 	}
+
+	// --color-official-200 (navy tĩnh) làm border trên nền canvas theme-aware (--color-bg-layout,
+	// tối trong dark mode) → border mờ hẳn, gần như biến mất trên nền tối.
+	[data-vinuni-theme='dark'] & {
+		border-color: var(--color-border-secondary) !important;
+	}
 }
 
 .ant-page-header-heading-extra {
@@ -1341,6 +1385,25 @@ button:not(:disabled),
 
 .ant-card-extra .anticon {
 	color: var(--color-text-100) !important;
+}
+
+// --color-text-100 (#2e2e2e) tĩnh — các icon trên nằm trên bề mặt theme-aware của antd (collapse
+// header, table row, card header đều tự đổi tối qua cssVar), icon xám đậm bị chìm. .ant-modal-close/
+// .ant-drawer-close KHÔNG đưa vào đây vì đã có rule riêng specificity cao hơn dùng
+// --color-text-secondary ở chỗ khác (đã đúng theme sẵn).
+[data-vinuni-theme='dark'] {
+
+	.ant-menu-submenu-arrow,
+	.ant-collapse-expand-icon,
+	.ant-collapse-arrow,
+	.ant-table-expand-icon,
+	.ant-table-row-expand-icon {
+		color: var(--color-text-secondary) !important;
+	}
+
+	.ant-card-extra .anticon {
+		color: var(--color-text-secondary) !important;
+	}
 }
 
 .ant-card-extra .ant-btn-primary .anticon {
@@ -1560,6 +1623,24 @@ button:not(:disabled),
 
 		&:hover {
 			opacity: 0.8;
+		}
+	}
+
+	// Dropdown picker portal ra ngoài, dùng bề mặt theme-aware của antd (tối trong dark mode) —
+	// số ngày (--color-text-100, xám đậm) và nút chuyển tháng/năm (--color-official-300, navy tĩnh)
+	// đều là màu tĩnh, chìm hẳn trên nền dropdown đã tối.
+	[data-vinuni-theme='dark'] & {
+		.ant-picker-range-wrapper .ant-picker-panel-container .ant-picker-panel-layout .ant-picker-panels .ant-picker-panel .ant-picker-body .ant-picker-content tbody tr {
+			.ant-picker-cell-in-view {
+				color: var(--color-text-base) !important;
+			}
+		}
+
+		.ant-picker-header .ant-picker-decade-btn,
+		.ant-picker-header .ant-picker-year-btn,
+		.ant-picker-header .ant-picker-month-btn,
+		.ant-picker-header .ant-picker-header-view button {
+			color: var(--color-text-base) !important;
 		}
 	}
 

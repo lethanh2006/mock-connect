@@ -26,7 +26,7 @@ export interface ModalExpandableProps {
 	maskClosable?: boolean;
 	destroyOnClose?: boolean;
 	className?: string;
-	styles?: { body?: React.CSSProperties };
+	styles?: { body?: React.CSSProperties; header?: React.CSSProperties; content?: React.CSSProperties };
 	loading?: boolean;
 	/**
 	 * Truyền `null` để ẩn hoàn toàn footer.
@@ -151,7 +151,7 @@ const ModalExpandable = (props: ModalExpandableProps) => {
 				}}
 				key={destroyOnClose ? String(open) : undefined}
 			>
-				{title ? <div className='modal-expandable-title'>{title}</div> : null}
+				{title ? <div className='modal-expandable-title' style={styles?.header}>{title}</div> : null}
 				<div className='modal-expandable-body' style={styles?.body}>
 					{typeof children === 'function' ? children(isExpanded) : children}
 				</div>
