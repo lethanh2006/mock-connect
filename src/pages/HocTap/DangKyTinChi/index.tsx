@@ -1,11 +1,13 @@
-import FormWaiting from '@/components/Loading/FormWaiting';
-import PageCard from '@/components/PageCard';
+import FormWaiting, { hideFormWaiting } from '@/components/Loading/FormWaiting';
+import PageCard, { Card } from '@/components/PageCard';
+import { ESettingKey } from '@/services/base/constant';
 import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { formatDateTime } from '@/utils/formatDate';
 import { FileTextOutlined, InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { ipDaoTao } from '@/utils/ip';
-import { IconShorttext, IconShieldInfo, IconQuestionCircle } from '@/components/Icons';
-import { Alert, Button, Card, Empty, Modal } from 'antd';
+import { Alert } from 'antd';
+import { Button, IconShorttext, IconShieldInfo, IconQuestionCircle } from '@/components/Icons';
+import EmptyState from '@/components/EmptyState';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import { history, useIntl, useModel } from 'umi';
@@ -72,14 +74,14 @@ const DangKyTinChiPage = () => {
 
 	useEffect(() => {
 		if (!isPageLoading) {
-			Modal.destroyAll();
+			hideFormWaiting();
 			return undefined;
 		}
 
-		FormWaiting(intl.formatMessage({ id: 'dangkytinchi.loading.message' }), intl);
+		FormWaiting(intl.formatMessage({ id: 'dangkytinchi.loading.message' }));
 
 		return () => {
-			Modal.destroyAll();
+			hideFormWaiting();
 		};
 	}, [isPageLoading]);
 
@@ -155,14 +157,14 @@ const DangKyTinChiPage = () => {
 								</span>
 							}
 							action={
-								<Button type='link' size='small' icon={<IconShorttext />} onClick={() => setVisibleThongTin(true)} />
+								<Button variant='link' size='sm' icon={<IconShorttext />} onClick={() => setVisibleThongTin(true)} />
 							}
 						/>
 					) : null}
 
 					{dotDangKyHienTai && sinhVienDot ? (
 						sinhVienDot.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.KHONG_DUOC_DK ? (
-							<Empty
+							<EmptyState
 								description={
 									<>
 										<span className='text-error'>
@@ -174,7 +176,7 @@ const DangKyTinChiPage = () => {
 								}
 							/>
 						) : dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
-							<Empty
+							<EmptyState
 								description={
 									<i style={{ color: '#999' }}>
 										{intl.formatMessage(
@@ -233,14 +235,14 @@ const DangKyTinChiPage = () => {
 								/>
 							</>
 						) : (
-							<Empty
+							<EmptyState
 								description={
 									<i style={{ color: '#999' }}>{intl.formatMessage({ id: 'global.formWaiting.dangxuly' })}</i>
 								}
 							/>
 						)
 					) : (
-						<Empty
+						<EmptyState
 							description={
 								<i style={{ color: '#999' }}>
 									{intl.formatMessage({ id: 'dangkytinchi.thongtindangky.empty.khongcodotdangky' })}

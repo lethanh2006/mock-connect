@@ -1,10 +1,12 @@
+import { Button } from '@/components/Icons';
 import PageCard from '@/components/PageCard';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import FormLichCaNhan from '@/pages/Calendar/components/FormLichCaNhan';
 import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { Button, Card, Modal, Spin, Typography } from 'antd';
+import { Spin, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useIntl, useModel } from 'umi';
 import SlideButtonIcon from '../SlideButtonIcon';
@@ -254,18 +256,18 @@ const LichDashboard = () => {
 					</Typography.Title>
 					<div className={`${responsiveClass} navigation-buttons`}>
 						<Button
-							type='text'
+							variant='ghost'
 							icon={<SlideButtonIcon direction='left' />}
 							onClick={() => setCurrentMonth(currentMonth.subtract(1, 'month'))}
-							size={isMobile ? 'small' : 'middle'}
+							size={isMobile ? 'sm' : 'default'}
 							className='nav-btn'
 							disabled={loading}
 						/>
 						<Button
-							type='text'
+							variant='ghost'
 							icon={<SlideButtonIcon direction='right' />}
 							onClick={() => setCurrentMonth(currentMonth.add(1, 'month'))}
-							size={isMobile ? 'small' : 'middle'}
+							size={isMobile ? 'sm' : 'default'}
 							className='nav-btn'
 							disabled={loading}
 						/>
@@ -370,13 +372,13 @@ const LichDashboard = () => {
 					</Link>
 				}
 			>
-				<Card variant='borderless' className='calendar-card'>
+				<div className='calendar-card'>
 					{renderCalendar()}
-				</Card>
+				</div>
 			</PageCard>
 
 			{/* Modal xem list sự kiện */}
-			<Modal
+			<ModalExpandable
 				title={`${intl.formatMessage({ id: 'trangchu.lich.modal.title' })} ${formatDate(selectedDate)}`}
 				open={visibleDetail}
 				onCancel={() => setVisibleDetail(false)}
@@ -414,10 +416,12 @@ const LichDashboard = () => {
 					))}
 				</div>
 
-				<div className='form-footer'>
-					<Button onClick={() => setVisibleDetail(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
+				<div className='form-footer' style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
+					<Button variant='outline' onClick={() => setVisibleDetail(false)}>
+						{intl.formatMessage({ id: 'global.button.dong' })}
+					</Button>
 				</div>
-			</Modal>
+			</ModalExpandable>
 
 			{/* Modal xem chi tiết sự kiện */}
 			{selectEvent && (
@@ -429,7 +433,7 @@ const LichDashboard = () => {
 				/>
 			)}
 
-			<Modal
+			<ModalExpandable
 				open={visibleForm}
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
@@ -442,7 +446,7 @@ const LichDashboard = () => {
 				}
 			>
 				<FormLichCaNhan getData={getData} />
-			</Modal>
+			</ModalExpandable>
 		</>
 	);
 };

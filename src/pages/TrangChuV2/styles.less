@@ -92,18 +92,19 @@
 .vin-dashboard-card {
 	border-radius: var(--vin-border-radius, 16px) !important;
 	overflow: hidden;
-	border: 1px solid var(--color-accent-700, #f0f0f0);
+	border: 1px solid var(--color-border-secondary, var(--color-accent-700, #f0f0f0));
 	background: var(--color-bg-container, #ffffff);
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
 
 	>.ant-card-head {
-		border-bottom: 1px solid var(--color-accent-700, #f0f0f0);
+		border-bottom: 1px solid var(--color-border-secondary, var(--color-accent-700, #f0f0f0));
 		min-height: 56px;
 		padding: 0 20px;
 
 		.ant-card-head-title {
 			font-family: var(--font-family-base, 'Montserrat', sans-serif);
 			font-weight: 600;
+			color: var(--color-text, #111827);
 		}
 	}
 
@@ -114,8 +115,8 @@
 
 .vin-stat-card {
 	border-radius: var(--vin-border-radius, 16px) !important;
-	border: 1px solid var(--color-accent-700, #f0f0f0) !important;
-	background: #ffffff !important;
+	border: 1px solid var(--color-border-secondary, var(--color-accent-700, #f0f0f0)) !important;
+	background: var(--color-bg-container, #ffffff) !important;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 	transition: all 0.25s ease;
 	overflow: hidden;
@@ -133,6 +134,60 @@
 
 .vin-hotline-card {
 	border-radius: var(--vin-border-radius, 16px) !important;
+	background: var(--color-bg-container, #ffffff) !important;
+	border-color: var(--color-border-secondary, #f0f0f0) !important;
+}
+
+[data-vinuni-theme='dark'] {
+	.vin-dashboard-card {
+		border-color: var(--color-border-secondary, rgba(255, 255, 255, 0.12)) !important;
+		background: var(--color-bg-container, #1f1f1f) !important;
+		box-shadow: none !important;
+
+		>.ant-card-head {
+			border-bottom-color: var(--color-border-secondary, rgba(255, 255, 255, 0.12)) !important;
+
+			.title,
+			h2.title {
+				color: var(--color-text, #ffffff) !important;
+			}
+		}
+	}
+
+	.vin-stat-card {
+		border-color: var(--color-border-secondary, rgba(255, 255, 255, 0.12)) !important;
+		background: var(--color-bg-container, #1f1f1f) !important;
+		box-shadow: none !important;
+	}
+
+	.vin-hotline-card {
+		border-color: var(--color-border-secondary, rgba(255, 255, 255, 0.12)) !important;
+		background: var(--color-bg-container, #1f1f1f) !important;
+	}
+
+	.loading-background {
+		opacity: 0.15 !important;
+		filter: blur(4px) brightness(0.4) !important;
+	}
+
+	.loading-content {
+		.lock-icon-circle {
+			background: rgba(255, 255, 255, 0.08) !important;
+			border-color: rgba(255, 255, 255, 0.15) !important;
+		}
+
+		.loading-text {
+			color: var(--color-text-secondary, rgba(255, 255, 255, 0.65)) !important;
+		}
+	}
+
+	.card-big-title {
+
+		.title,
+		h2.title {
+			color: var(--color-text, #ffffff) !important;
+		}
+	}
 }
 
 // CardTienTrinh
@@ -845,6 +900,7 @@
 				line-height: 1.5;
 				display: -webkit-box;
 				-webkit-line-clamp: 3;
+				line-clamp: 3;
 				-webkit-box-orient: vertical;
 				overflow: hidden;
 			}

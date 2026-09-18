@@ -2,8 +2,9 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { ColorTrangThaiDangKyTinChi, ETrangThaiDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
-import { SyncOutlined } from '@ant-design/icons';
-import { Button, Card, message, Modal, Space, Tag } from 'antd';
+import { IconRotateArrow } from '@/components/Icons';
+import { Card } from '@/components/PageCard';
+import { Button, message, Modal, Space, Tag } from 'antd';
 import pLimit from 'p-limit';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -149,7 +150,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 			align: 'center',
 			render: (val, rec) =>
 				formSubmiting && val === ETrangThaiDangKyTinChi.CHUA_DANG_KY ? (
-					<SyncOutlined spin className='text-info' />
+					<IconRotateArrow className='anticon-spin text-info' />
 				) : (
 					<>
 						<Space wrap>

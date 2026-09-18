@@ -23,7 +23,7 @@ const CreditProgressRow = ({ title, current, total, color }: CreditProgressRowPr
 			<Flex align='center' justify='space-between' gap={12}>
 				<Typography.Text className='credit-progress-title'>{title}</Typography.Text>
 				<Typography.Text className='credit-progress-value'>
-					<b>{total ? (current ?? 0) : '--'}</b> /{total || '--'}{' '}
+					<b>{total ? (current ?? 0) : '--'}</b> / {total || '--'}{' '}
 					{intl.formatMessage({ id: 'trangchu.v2.academicProgress.credits' })}
 				</Typography.Text>
 			</Flex>

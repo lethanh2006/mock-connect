@@ -1,8 +1,10 @@
 import DonutChart from '@/components/Chart/DonutChart';
+import EmptyState from '@/components/EmptyState';
+import { IconArrowRight } from '@/components/Icons';
+import Card from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
 import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
-import { IconArrowRight } from '@/components/Icons';
-import { Card, Col, Empty, Row, Space, Tooltip } from 'antd';
+import { Col, Row, Space, Tooltip } from 'antd';
 import { useEffect } from 'react';
 import { Link, useIntl, useModel } from 'umi';
 import './style.less';
@@ -86,7 +88,7 @@ const CardCongNoDashboard = () => {
 	const yAxis = chartData.total.map((value, index) => (chartData.paid[index] / value) * 100);
 
 	return (
-		<Card className='dashboard-stat-card' variant='borderless' loading={loading}>
+		<Card className='dashboard-stat-card' bordered={false} hideInnerCard loading={loading}>
 			<div className='dashboard-stat-content'>
 				<div>
 					<div className='header'>
@@ -206,9 +208,9 @@ const CardCongNoDashboard = () => {
 							</div>
 						</>
 					) : (
-						<Empty
-							image={Empty.PRESENTED_IMAGE_SIMPLE}
+						<EmptyState
 							description={intl.formatMessage({ id: 'global.table.index.empty' })}
+							compact
 						/>
 					)}
 				</div>

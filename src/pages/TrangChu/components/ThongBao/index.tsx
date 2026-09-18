@@ -2,7 +2,9 @@ import ModalExpandable from '@/components/Table/ModalExpandable';
 import ViewThongBao from '@/pages/ThongBao/components/ViewThongBao';
 import { ThongBao } from '@/services/ThongBao/typing';
 import { formatDate } from '@/utils/formatDate';
-import { Button, Card, Empty, Space, Spin, Tag, Typography } from 'antd';
+import { Badge } from '@vinuni/ui';
+import { Button, Card, Space, Spin, Typography } from 'antd';
+import EmptyState from '@/components/EmptyState';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import SlideButtonIcon from '../SlideButtonIcon';
@@ -80,11 +82,14 @@ const CardThongBaoDashboard = () => {
 								<div className='tags'>
 									{/* cân bằng với Card Sự kiện - Lịch sắp tới */}
 									<Space size={4} wrap>
-										<Tag color={currentNotice?.read ? 'default' : 'var(--color-primary)'} style={{ fontSize: 11 }}>
+										<Badge
+											variant={currentNotice?.read ? 'neutral' : 'default'}
+											style={{ fontSize: 11 }}
+										>
 											{currentNotice?.read
 												? intl.formatMessage({ id: 'trangchu.thongbao.tag.dadoc' })
 												: intl.formatMessage({ id: 'trangchu.thongbao.tag.moi' })}
-										</Tag>
+										</Badge>
 									</Space>
 								</div>
 							</div>
@@ -92,10 +97,9 @@ const CardThongBaoDashboard = () => {
 					</div>
 				</div>
 			) : (
-				<Empty
-					image={Empty.PRESENTED_IMAGE_SIMPLE}
+				<EmptyState
 					description={intl.formatMessage({ id: 'global.table.index.empty' })}
-					className='empty'
+					compact
 				/>
 			)}
 

@@ -83,7 +83,6 @@ const BoxFile = ({ url, isPrivate }: BoxFileProps) => {
 			})}
 
 			<ModalExpandable
-				centered
 				title='Chi tiết tài liệu'
 				width={1000}
 				open={visibleFormFile}

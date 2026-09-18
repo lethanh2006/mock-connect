@@ -1,4 +1,5 @@
-import { Card, Col, Flex, Row, Typography } from 'antd';
+import PageCard from '@/components/PageCard';
+import { Col, Flex, Row, Typography } from 'antd';
 import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -11,7 +12,7 @@ interface StatCardProps {
 }
 
 const StatCard = ({ title, value, subValue, periodText, disabled }: StatCardProps) => (
-	<Card size='small' className='vin-stat-card' variant='outlined'>
+	<div className='vin-stat-card' style={{ padding: '16px 18px' }}>
 		<Flex vertical gap={4}>
 			<Typography.Text type='secondary' style={{ fontSize: 13, fontWeight: 500 }}>
 				{title}
@@ -22,7 +23,7 @@ const StatCard = ({ title, value, subValue, periodText, disabled }: StatCardProp
 					fontSize: 20,
 					lineHeight: 1.25,
 					fontWeight: 700,
-					color: disabled ? '#cfcfcf' : '#2e2e2e',
+					color: disabled ? 'var(--color-text-quaternary, #cfcfcf)' : 'var(--color-text, #2e2e2e)',
 				}}
 			>
 				{disabled ? '--' : value}
@@ -40,7 +41,7 @@ const StatCard = ({ title, value, subValue, periodText, disabled }: StatCardProp
 				</Typography.Text>
 			)}
 		</Flex>
-	</Card>
+	</div>
 );
 
 const CardTienTrinh = () => {
@@ -83,14 +84,10 @@ const CardTienTrinh = () => {
 	}, [intl, recTienTrinh, danhSachActivity]);
 
 	return (
-		<Card
-			title={
-				<span className='title' style={{ color: '#000' }}>
-					{intl.formatMessage({ id: 'trangchu.v2.academicProgress.title' })}
-				</span>
-			}
-			className='card-big-title card-borderless'
-			variant='borderless'
+		<PageCard
+			level={3}
+			hideInnerCard
+			title={intl.formatMessage({ id: 'trangchu.v2.academicProgress.title' })}
 			loading={loadingTienTrinh}
 		>
 			<Row gutter={[12, 12]}>
@@ -100,7 +97,7 @@ const CardTienTrinh = () => {
 					</Col>
 				))}
 			</Row>
-		</Card>
+		</PageCard>
 	);
 };
 

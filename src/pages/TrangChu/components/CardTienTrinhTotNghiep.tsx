@@ -1,7 +1,8 @@
+import Card from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
 import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
-import { Card, Col, Progress, Row, Statistic } from 'antd';
+import { Col, Progress, Row, Statistic } from 'antd';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
 
@@ -48,7 +49,7 @@ const CardTienTrinhTotNghiep = () => {
 	return (
 		<Row gutter={[16, 16]}>
 			<Col span={24} md={8} className='dashboard-card-with-icon'>
-				<Card loading={loading} style={{ cursor: 'pointer' }} onClick={() => history.push('/hoc-tap/ket-qua-hoc-tap')}>
+				<Card hideInnerCard bordered={false} loading={loading} style={{ cursor: 'pointer' }} onClick={() => history.push('/hoc-tap/ket-qua-hoc-tap')}>
 					<div className='ant-statistic'>
 						<div className='ant-statistic-title'>GPA</div>
 						<div className='ant-statistic-content'>
@@ -67,7 +68,7 @@ const CardTienTrinhTotNghiep = () => {
 			</Col>
 
 			<Col span={24} md={8} className='dashboard-card-with-icon'>
-				<Card loading={loading} style={{ cursor: 'pointer' }} onClick={() => history.push('/hoc-tap/ket-qua-hoc-tap')}>
+				<Card hideInnerCard bordered={false} loading={loading} style={{ cursor: 'pointer' }} onClick={() => history.push('/hoc-tap/ket-qua-hoc-tap')}>
 					<Statistic
 						valueStyle={{ fontSize: 14 }}
 						title='Tín chỉ tích lũy'
@@ -79,7 +80,7 @@ const CardTienTrinhTotNghiep = () => {
 			</Col>
 
 			<Col span={24} md={8} className='dashboard-card-with-icon'>
-				<Card loading={loadingCongNo} style={{ cursor: 'pointer' }} onClick={() => history.push('/tai-chinh/cong-no')}>
+				<Card hideInnerCard bordered={false} loading={loadingCongNo} style={{ cursor: 'pointer' }} onClick={() => history.push('/tai-chinh/cong-no')}>
 					<div className='ant-statistic'>
 						<div className='ant-statistic-title'>Công nợ</div>
 						<div className='ant-statistic-content'>

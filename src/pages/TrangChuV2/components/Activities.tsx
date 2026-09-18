@@ -7,8 +7,11 @@ import ModalDangKyThanhCong from '@/pages/CCT/Activity/components/DangKyThanhCon
 import FormActivityOutCome from '@/pages/CCT/History/components/Form';
 import { EApprovalStatus } from '@/services/CCT/constant';
 import { getPublicAssetPath } from '@/utils/path';
-import { Icon2ChervolLeftLine, Icon2ChervolRightLine } from '@/components/Icons';
-import { Button, Card, Carousel, Col, Empty, Flex, Popconfirm, Row, Spin } from 'antd';
+import { Button, Icon2ChervolLeftLine, Icon2ChervolRightLine } from '@/components/Icons';
+import EmptyState from '@/components/EmptyState';
+import { Card } from '@/components/PageCard';
+import { Carousel, Col, Flex, Popconfirm, Row, Spin } from 'antd';
+
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -96,13 +99,15 @@ const Activities = () => {
 			className='vin-dashboard-card'
 			title={
 				<Flex justify='space-between' align='center'>
-					<span className='title'>Activities</span>
+					<h2 className='title' style={{ margin: 0, fontSize: 'inherit', fontWeight: 'inherit', color: 'var(--color-text, inherit)' }}>
+						Activities
+					</h2>
 					{danhSach && danhSach.length > 1 && (
 						<div className='pagination-controls'>
-							<button className='nav-btn' onClick={() => carouselRef.current?.prev()}>
+							<button className='nav-btn' aria-label='Previous activity' onClick={() => carouselRef.current?.prev()}>
 								<Icon2ChervolLeftLine />
 							</button>
-							<button className='nav-btn' onClick={() => carouselRef.current?.next()}>
+							<button className='nav-btn' aria-label='Next activity' onClick={() => carouselRef.current?.next()}>
 								<Icon2ChervolRightLine />
 							</button>
 						</div>
@@ -158,7 +163,7 @@ const Activities = () => {
 								const renderButton = () => {
 									if (isRegistered && isNotStarted) {
 										return (
-											<Button block disabled>
+											<Button className='w-full' disabled>
 												{intl.formatMessage({ id: 'activity.dangky' })}
 											</Button>
 										);
@@ -166,8 +171,8 @@ const Activities = () => {
 									if (editableWorkflow && isOngoing) {
 										return (
 											<Button
-												block
-												type='primary'
+												className='w-full'
+												variant='default'
 												onClick={() => {
 													setVisibleForm(false);
 													handleEdit({
@@ -182,7 +187,7 @@ const Activities = () => {
 									}
 									if (!isRegistered && isFullSlot) {
 										return (
-											<Button block disabled>
+											<Button className='w-full' disabled>
 												{intl.formatMessage({ id: 'activity.full' })}
 											</Button>
 										);
@@ -190,7 +195,8 @@ const Activities = () => {
 									if (isRegistered || (activeKey === '3' && !isRegistered) || outTimeRegis) {
 										return (
 											<Button
-												block
+												className='w-full'
+												variant='outline'
 												onClick={() => {
 													setRecord(item);
 													setVisibleForm(true);
@@ -206,7 +212,7 @@ const Activities = () => {
 											placement='topLeft'
 											onConfirm={() => registerActivityModel(item._id, getData).then(() => setVisibleDangKy(true))}
 										>
-											<Button type='primary' block>
+											<Button variant='default' className='w-full'>
 												{intl.formatMessage({ id: 'activity.now' })}
 											</Button>
 										</Popconfirm>
@@ -243,10 +249,10 @@ const Activities = () => {
 							})}
 						</Carousel>
 					) : (
-						<Empty
-							style={{ marginTop: 32, marginBottom: 32 }}
+						<EmptyState
+							className='my-8'
+							compact
 							description={intl.formatMessage({ id: 'global.table.index.empty' })}
-							image={getPublicAssetPath('images/empty.png')}
 						/>
 					)}
 				</Spin>

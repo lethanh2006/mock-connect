@@ -5,6 +5,7 @@ import {
 	getPhieuTongHop,
 	guiKhieuNai,
 } from '@/services/DiemRenLuyenV2/PhieuDiemRenLuyen';
+import type { PhieuDiemRenLuyenV2 } from '@/services/DiemRenLuyenV2/PhieuDiemRenLuyen/typing';
 import { message } from 'antd';
 import fileDownload from 'js-file-download';
 import { useState } from 'react';

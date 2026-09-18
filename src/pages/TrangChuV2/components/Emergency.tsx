@@ -5,7 +5,8 @@ import Clinic from '@/assets/trangchu/Clinic.svg';
 import ky_thuat from '@/assets/trangchu/ky_thuat.svg';
 import nha_o from '@/assets/trangchu/nha_o.svg';
 import suc_khoe from '@/assets/trangchu/suc_khoe.svg';
-import { Card, Col, Flex, Image, Row, Typography } from 'antd';
+import PageCard from '@/components/PageCard';
+import { Col, Flex, Image, Row, Typography } from 'antd';
 import { useIntl } from 'umi';
 
 const hotlines = [
@@ -23,21 +24,21 @@ const Emergency = () => {
 	const intl = useIntl();
 
 	return (
-		<Card
-			title={
-				<span className='title' style={{ color: '#000' }}>
-					{intl.formatMessage({ id: 'trangchu.v2.emergency.title' })}
-				</span>
-			}
-			className='card-big-title card-borderless'
-			variant='borderless'
-		>
+		<PageCard level={3} hideInnerCard title={intl.formatMessage({ id: 'trangchu.v2.emergency.title' })}>
 			<Row gutter={[12, 12]}>
 				{hotlines.map((item) => {
 					const title = intl.formatMessage({ id: item.titleId });
 					return (
 						<Col xs={24} sm={12} key={item.id}>
-							<Card size='small' variant='outlined' className='vin-hotline-card'>
+							<div
+								className='vin-hotline-card'
+								style={{
+									padding: '12px 16px',
+									border: '1px solid var(--color-border-secondary, #f0f0f0)',
+									borderRadius: 'var(--vin-border-radius, 16px)',
+									background: 'var(--color-bg-container, #ffffff)',
+								}}
+							>
 								<Flex vertical gap={12} align='flex-start'>
 									<Image src={item.icon} alt={title} width={20} height={20} preview={false} />
 									<Typography.Text strong style={{ fontSize: 12 }}>
@@ -47,17 +48,17 @@ const Emergency = () => {
 										href={`tel:${item.phone.replace(/\D/g, '')}`}
 										underline
 										type='secondary'
-										style={{ fontSize: 12 }}
+										style={{ fontSize: 12, whiteSpace: 'nowrap' }}
 									>
 										{item.phone}
 									</Typography.Link>
 								</Flex>
-							</Card>
+							</div>
 						</Col>
 					);
 				})}
 			</Row>
-		</Card>
+		</PageCard>
 	);
 };
 

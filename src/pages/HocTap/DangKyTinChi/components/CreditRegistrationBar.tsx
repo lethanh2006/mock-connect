@@ -70,6 +70,7 @@ const CreditRegistrationBar = ({
 
 				<Space wrap>
 					<ButtonExtend
+						aria-label={intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
 						icon={<IconCalendar />}
 						onClick={onViewSchedule}
 						disabled={disabledViewSchedule}

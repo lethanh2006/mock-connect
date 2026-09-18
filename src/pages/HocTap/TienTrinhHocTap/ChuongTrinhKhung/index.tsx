@@ -5,13 +5,13 @@ import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typi
 import { ELoaiHocPhanCTDT, ETrangThaiHocTap } from '@/services/DaoTao/constant';
 import { accentColors, primaryColor } from '@/services/base/constant';
 import { IconRotateArrow, IconMagnifyingGlass } from '@/components/Icons';
+import EmptyState from '@/components/EmptyState';
 import type { InputRef } from 'antd';
 import {
 	AutoComplete,
 	Button,
 	Collapse,
 	Divider,
-	Empty,
 	Input,
 	Segmented,
 	Space,
@@ -388,7 +388,9 @@ const TienTrinhChuongTrinhKhung = () => {
 			</div>
 
 			<Spin spinning={loading}>
-				{!filteredDanhSachHienThi?.length && !hasMinorData ? <Empty style={{ marginBlock: 36 }} /> : null}
+				{!filteredDanhSachHienThi?.length && !hasMinorData ? (
+					<EmptyState className='my-8' description={intl.formatMessage({ id: 'global.table.index.empty' })} />
+				) : null}
 				{filteredDanhSachHienThi?.map((data, index) => (
 					<React.Fragment key={viewType === 'semester' ? data.soThuTuKy : data.maKhoiKienThuc}>
 						{/* Header học kỳ/Khối */}

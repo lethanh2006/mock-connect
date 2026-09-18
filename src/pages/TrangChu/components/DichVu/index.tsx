@@ -1,12 +1,14 @@
+import { Button, Icon2ChervolRightLine, IconArrowRight } from '@/components/Icons';
 import PageCard from '@/components/PageCard';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import FormKhaiBao from '@/pages/KhaiBaoQuyTrinh/components/FormKhaiBao';
 import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
 import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
 import { ENguonDot } from '@/services/QuyTrinh/constant';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { getPublicAssetPath } from '@/utils/path';
-import { IconArrowRight, Icon2ChervolRightLine } from '@/components/Icons';
-import { Button, Card, Col, message, Modal, Popconfirm, Row, Space, Tooltip } from 'antd';
+import { toast } from '@/utils/toast';
+import { Col, Popconfirm, Row, Space, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, Link, useIntl, useModel } from 'umi';
 import './style.less';
@@ -55,7 +57,7 @@ const CardDichVuSinhVien = () => {
 
 			// Kiểm tra xem quyTrinh có tồn tại và có _id không
 			if (!quyTrinh || !quyTrinh._id) {
-				message.error('Thông tin quy trình không hợp lệ');
+				toast.error('Thông tin quy trình không hợp lệ');
 				return;
 			}
 
@@ -68,7 +70,7 @@ const CardDichVuSinhVien = () => {
 					history.push(`/khai-bao-quy-trinh/${res2.data.data._id}?quyTrinh=${quyTrinh._id}`);
 				} else {
 					console.error('Failed to create don khai bao:', res2);
-					message.error('Không thể tạo đơn khai báo. Vui lòng thử lại.');
+					toast.error('Không thể tạo đơn khai báo. Vui lòng thử lại.');
 				}
 				return;
 			}
@@ -86,7 +88,7 @@ const CardDichVuSinhVien = () => {
 						history.push(`/khai-bao-quy-trinh/${res2.data.data._id}?quyTrinh=${quyTrinh._id}`);
 					} else {
 						console.error('Failed to create don khai bao:', res2);
-						message.error('Không thể tạo đơn khai báo. Vui lòng thử lại.');
+						toast.error('Không thể tạo đơn khai báo. Vui lòng thử lại.');
 					}
 				} else if (res.length > 1) {
 					console.log('Multiple dots found, showing selection modal');
@@ -94,15 +96,15 @@ const CardDichVuSinhVien = () => {
 					setVisibleForm(true);
 				} else {
 					console.log('No dots found');
-					message.error('Chưa có đợt khai báo nào khả dụng');
+					toast.error('Chưa có đợt khai báo nào khả dụng');
 				}
 			} else {
 				console.error('Invalid response from getAllMyDotModel:', res);
-				message.error('Không thể lấy thông tin đợt khai báo');
+				toast.error('Không thể lấy thông tin đợt khai báo');
 			}
 		} catch (e) {
 			console.error('Error in handleRedirect:', e);
-			message.error('Có lỗi xảy ra khi xử lý yêu cầu. Vui lòng thử lại.');
+			toast.error('Có lỗi xảy ra khi xử lý yêu cầu. Vui lòng thử lại.');
 		} finally {
 			setLoading(false);
 		}
@@ -113,7 +115,7 @@ const CardDichVuSinhVien = () => {
 
 		// Kiểm tra quyTrinh có hợp lệ không
 		if (!quyTrinh || !quyTrinh._id) {
-			message.error('Thông tin dịch vụ không hợp lệ');
+			toast.error('Thông tin dịch vụ không hợp lệ');
 			return;
 		}
 
@@ -153,7 +155,7 @@ const CardDichVuSinhVien = () => {
 				}
 				loading={loading}
 			>
-				<Card variant='borderless' className='dashboard-stat-card services-container'>
+				<div className='dashboard-stat-card services-container'>
 					<Row gutter={[0, 4]}>
 						{displayServices.length > 0 ? (
 							displayServices.map((quyTrinh: QuyTrinh.IRecord, index: number) => (
@@ -189,11 +191,13 @@ const CardDichVuSinhVien = () => {
 														</Tooltip>
 													</div>
 												</Space>
-												<Button
-													type='text'
-													icon={<img src={playIc} alt='' width={'100%'} height={'100%'} />}
+												<button
+													type='button'
 													className='play-button'
-												/>
+													style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+												>
+													<img src={playIc} alt='' width={'100%'} height={'100%'} />
+												</button>
 											</div>
 										</Popconfirm>
 									)}
@@ -205,11 +209,11 @@ const CardDichVuSinhVien = () => {
 							</Col>
 						)}
 					</Row>
-				</Card>
+				</div>
 			</PageCard>
 
 			{/* Modal chọn đợt khai báo */}
-			<Modal
+			<ModalExpandable
 				title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.dichvu.dot' })}
 				width={500}
 				open={visibleForm}
@@ -219,19 +223,17 @@ const CardDichVuSinhVien = () => {
 				className='modal-dot-selection'
 			>
 				<FormKhaiBao quyTrinhId={quyTrinhIdSelect} />
-			</Modal>
+			</ModalExpandable>
 
 			{/* Modal thông tin chung */}
-			<Modal
+			<ModalExpandable
 				title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.dichvu.empty' })}
 				width={1000}
 				open={visibleThongTinChung}
 				onCancel={() => setVisibleThongTinChung(false)}
 				footer={
-					<div className='modal-footer'>
+					<div className='modal-footer' style={{ display: 'flex', justifyContent: 'flex-end' }}>
 						<Button
-							icon={<IconArrowRight />}
-							type={'primary'}
 							onClick={() => {
 								if (recordQuyTrinh) {
 									setVisibleThongTinChung(false);
@@ -242,6 +244,7 @@ const CardDichVuSinhVien = () => {
 								}
 							}}
 						>
+							<IconArrowRight size={16} />
 							{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.dichvu.xemthem' })}
 						</Button>
 					</div>
@@ -250,7 +253,7 @@ const CardDichVuSinhVien = () => {
 				className='modal-thong-tin-chung'
 			>
 				<ViewThongTinChung dataThongTinChung={recordThongTinChung} />
-			</Modal>
+			</ModalExpandable>
 		</>
 	);
 };

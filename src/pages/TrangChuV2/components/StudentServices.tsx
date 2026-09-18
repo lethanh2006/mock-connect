@@ -1,5 +1,5 @@
 import { IconCalendar, IconArrowRight } from '@/components/Icons';
-import { Card } from 'antd';
+import { Card } from '@/components/PageCard';
 
 const StudentServices = ({ loading = true }) => {
 	const services = [

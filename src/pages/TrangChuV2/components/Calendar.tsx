@@ -3,8 +3,10 @@ import { colorHinhThucGiangDay, EHinhThucGiangDay, mapHinhThucGiangDayI18n } fro
 import { ColorSuKien, ELoaiSuKien, LoaiSuKienLocaleKey } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { IconPinLocation, Icon2ChervolRightLine } from '@/components/Icons';
-import { Card, Empty, Flex, Space, Tag } from 'antd';
+import { Badge, Icon2ChervolRightLine, IconPinLocation } from '@/components/Icons';
+import EmptyState from '@/components/EmptyState';
+import { Card } from '@/components/PageCard';
+import { Flex, Space } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Link, useIntl, useModel } from 'umi';
@@ -184,7 +186,7 @@ const CardCalendar = () => {
 		return (
 			<div className='dashboard_calendar'>
 				{!loading && isEmpty(data) ? (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={intl.formatMessage({ id: 'lichsukien.empty' })} />
+					<EmptyState description={intl.formatMessage({ id: 'lichsukien.empty' })} compact />
 				) : null}
 				{data.map((sukien) => {
 					const location = getEventLocation(sukien);
@@ -212,14 +214,14 @@ const CardCalendar = () => {
 									{sukien.tenSuKien ?? sukien.title ?? ''}
 									{sukien.loaiSuKien === ELoaiSuKien.LICH_HOC &&
 										sukien.hinhThucGiangDay === EHinhThucGiangDay.ONLINE && (
-											<Tag
-												color={colorHinhThucGiangDay[sukien.hinhThucGiangDay as EHinhThucGiangDay]}
+											<Badge
+												variant='inprogress'
 												style={{ marginLeft: 8 }}
 											>
 												{intl.formatMessage({
 													id: mapHinhThucGiangDayI18n[sukien.hinhThucGiangDay as EHinhThucGiangDay],
 												})}
-											</Tag>
+											</Badge>
 										)}
 								</div>
 								{location ? (
@@ -231,7 +233,15 @@ const CardCalendar = () => {
 							</div>
 							{eventTypeLabel ? (
 								<Space size={4} align='center'>
-									<Tag color={ColorSuKien[sukien.loaiSuKien as ELoaiSuKien]}>{eventTypeLabel}</Tag>
+									<Badge
+										style={{
+											backgroundColor: ColorSuKien[sukien.loaiSuKien as ELoaiSuKien],
+											color: '#fff',
+											border: 'none',
+										}}
+									>
+										{eventTypeLabel}
+									</Badge>
 								</Space>
 							) : null}
 						</div>
@@ -247,8 +257,10 @@ const CardCalendar = () => {
 				className='vin-dashboard-card'
 				loading={loading}
 				title={
-					<Flex align='center' gap={12}>
-						<span className='title'>Calendar</span>
+					<Flex align='center' gap={12} wrap='wrap'>
+						<h2 className='title' style={{ margin: 0, fontSize: 'inherit', fontWeight: 'inherit', color: 'var(--color-text, inherit)' }}>
+							Calendar
+						</h2>
 						<span className='date'>{dayjs().format('DD/MM/YYYY')}</span>
 					</Flex>
 				}
@@ -259,12 +271,6 @@ const CardCalendar = () => {
 						</Space>
 					</Link>
 				}
-				styles={{
-					body: {
-						padding: 0,
-						position: 'relative',
-					},
-				}}
 			>
 				<div className='calendar-body'>{renderContent()}</div>
 			</Card>
