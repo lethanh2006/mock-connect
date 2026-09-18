@@ -750,6 +750,23 @@ button:not(:disabled),
 	}
 }
 
+// --color-official-300 (navy #134d8b) là token tĩnh, không tự đổi theo dark mode như
+// --color-text-base (antd cssVar). Dark mode: bỏ màu navy tĩnh, dùng lại --color-text-base để chữ
+// title Level 2 sáng lên đúng theme thay vì tối om trên nền tối.
+[data-vinuni-theme='dark'] {
+
+	[data-slot='card'].highlight .page-card-title,
+	[data-slot='card'].highlight [data-slot='card-title'],
+	[data-slot='table-card'].highlight .page-card-title,
+	[data-slot='table-card'].highlight [data-slot='card-title'],
+	.table-base-card.highlight .page-card-title,
+	.table-base-card.highlight [data-slot='card-title'],
+	.page-card.highlight .page-card-title,
+	.page-card.highlight [data-slot='card-title'] {
+		color: var(--color-text-base) !important;
+	}
+}
+
 // Card & TableCard & PageCard normal (Level 3: Sub-section Title 18px)
 [data-slot='card'].normal,
 [data-slot='table-card'].normal,

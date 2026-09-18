@@ -1,0 +1,99 @@
+// Cơ chế: margin âm trên .my-row bù bằng padding trên .my-col (kiểu bootstrap/antd), để gutter tạo
+// khoảng cách GIỮA các Col chứ không phải quanh Row. flex-basis/max-width tính theo % của 24 cột.
+
+.my-row {
+	display: flex;
+	flex-wrap: wrap;
+	margin-left: calc(var(--my-row-gutter-x, 0) / -2);
+	margin-right: calc(var(--my-row-gutter-x, 0) / -2);
+	row-gap: var(--my-row-gutter-y, 0px);
+
+	&.my-row-nowrap {
+		flex-wrap: nowrap;
+	}
+}
+
+.my-col {
+	box-sizing: border-box;
+	padding-left: calc(var(--my-row-gutter-x, 0) / 2);
+	padding-right: calc(var(--my-row-gutter-x, 0) / 2);
+
+	// xs không có media query riêng (antd coi xs là mặc định, áp dụng từ 0px) — ưu tiên trên span trần.
+	--my-col-span-effective: var(--my-col-span-xs, var(--my-col-span, 24));
+	flex: 0 0 calc(var(--my-col-span-effective) / 24 * 100%);
+	max-width: calc(var(--my-col-span-effective) / 24 * 100%);
+	margin-left: calc(var(--my-col-offset-xs, var(--my-col-offset, 0)) / 24 * 100%);
+	order: var(--my-col-order-xs, var(--my-col-order, 0));
+	position: relative;
+	left: calc(var(--my-col-push-xs, var(--my-col-push, 0)) / 24 * 100%);
+	right: calc(var(--my-col-pull-xs, var(--my-col-pull, 0)) / 24 * 100%);
+}
+
+// Breakpoint khớp antd: sm≥576, md≥768, lg≥992, xl≥1200, xxl≥1600.
+@media (min-width: 576px) {
+	.my-col {
+		--my-col-span-effective: var(--my-col-span-sm, var(--my-col-span, 24));
+		margin-left: calc(var(--my-col-offset-sm, var(--my-col-offset, 0)) / 24 * 100%);
+		order: var(--my-col-order-sm, var(--my-col-order, 0));
+		left: calc(var(--my-col-push-sm, var(--my-col-push, 0)) / 24 * 100%);
+		right: calc(var(--my-col-pull-sm, var(--my-col-pull, 0)) / 24 * 100%);
+	}
+}
+
+@media (min-width: 768px) {
+	.my-col {
+		--my-col-span-effective: var(--my-col-span-md, var(--my-col-span-sm, var(--my-col-span, 24)));
+		margin-left: calc(var(--my-col-offset-md, var(--my-col-offset-sm, var(--my-col-offset, 0))) / 24 * 100%);
+		order: var(--my-col-order-md, var(--my-col-order-sm, var(--my-col-order, 0)));
+		left: calc(var(--my-col-push-md, var(--my-col-push-sm, var(--my-col-push, 0))) / 24 * 100%);
+		right: calc(var(--my-col-pull-md, var(--my-col-pull-sm, var(--my-col-pull, 0))) / 24 * 100%);
+	}
+}
+
+@media (min-width: 992px) {
+	.my-col {
+		--my-col-span-effective: var(--my-col-span-lg, var(--my-col-span-md, var(--my-col-span-sm, var(--my-col-span, 24))));
+		margin-left: calc(
+			var(--my-col-offset-lg, var(--my-col-offset-md, var(--my-col-offset-sm, var(--my-col-offset, 0)))) / 24 * 100%
+		);
+		order: var(--my-col-order-lg, var(--my-col-order-md, var(--my-col-order-sm, var(--my-col-order, 0))));
+		left: calc(var(--my-col-push-lg, var(--my-col-push-md, var(--my-col-push-sm, var(--my-col-push, 0)))) / 24 * 100%);
+		right: calc(var(--my-col-pull-lg, var(--my-col-pull-md, var(--my-col-pull-sm, var(--my-col-pull, 0)))) / 24 * 100%);
+	}
+}
+
+@media (min-width: 1200px) {
+	.my-col {
+		--my-col-span-effective: var(
+			--my-col-span-xl,
+			var(--my-col-span-lg, var(--my-col-span-md, var(--my-col-span-sm, var(--my-col-span, 24))))
+		);
+		margin-left: calc(
+			var(
+					--my-col-offset-xl,
+					var(--my-col-offset-lg, var(--my-col-offset-md, var(--my-col-offset-sm, var(--my-col-offset, 0))))
+				) / 24 * 100%
+		);
+		order: var(
+			--my-col-order-xl,
+			var(--my-col-order-lg, var(--my-col-order-md, var(--my-col-order-sm, var(--my-col-order, 0))))
+		);
+		left: calc(
+			var(--my-col-push-xl, var(--my-col-push-lg, var(--my-col-push-md, var(--my-col-push-sm, var(--my-col-push, 0))))) /
+				24 * 100%
+		);
+		right: calc(
+			var(--my-col-pull-xl, var(--my-col-pull-lg, var(--my-col-pull-md, var(--my-col-pull-sm, var(--my-col-pull, 0))))) /
+				24 * 100%
+		);
+	}
+}
+
+@media (min-width: 1600px) {
+	.my-col {
+		--my-col-span-effective: var(
+			--my-col-span-xxl,
+			var(--my-col-span-xl, var(--my-col-span-lg, var(--my-col-span-md, var(--my-col-span-sm, var(--my-col-span, 24)))))
+		);
+	}
+}

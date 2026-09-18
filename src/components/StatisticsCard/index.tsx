@@ -1,7 +1,8 @@
 import { inputFormat } from '@/utils/utils';
 import { Card, CardContent } from '@/components/Icons';
 import SkeletonParagraph from '@/components/SkeletonParagraph';
-import { Col, Row, Spin } from 'antd';
+import { Spin } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
 import classNames from 'classnames';
 import { lighten, rgba } from 'polished';
 import React, { isValidElement, ReactElement } from 'react';

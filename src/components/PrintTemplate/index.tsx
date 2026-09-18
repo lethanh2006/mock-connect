@@ -1,6 +1,6 @@
 import { coQuanChuQuan, unitName } from '@/services/base/constant';
 import dayjs from '@/utils/dayjs';
-import { Col, Row } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
 import React from 'react';
 import { useIntl } from 'umi';
 import './style.less';

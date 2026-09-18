@@ -11,7 +11,8 @@ import {
 	IconCheckCircle,
 	IconDownload,
 } from '@/components/Icons';
-import { Col, Popconfirm, Row, Spin } from 'antd';
+import { Popconfirm, Spin } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ButtonExtend from '../ButtonExtend';

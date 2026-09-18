@@ -5,7 +5,7 @@ import { EReceiverType, EVaiTroKhaoSat } from '@/services/ThongBao/constant';
 import { type ThongBao } from '@/services/ThongBao/typing';
 import EmptyState from '@/components/EmptyState';
 import { Checkbox, IconUpload } from '@/components/Icons';
-import { Col, Row } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
 import _ from 'lodash';
 import { Key, useEffect, useState } from 'react';
 import { useModel } from 'umi';

@@ -6,7 +6,8 @@ import { currentRole } from '@/utils/ip';
 import { getNameFile, sanitizeObject } from '@/utils/utils';
 import { IconCalendar, IconHuman } from '@/components/Icons';
 import { Avatar, AvatarImage, Button } from '@/components/Icons';
-import { Card, Col, Divider, Row } from 'antd';
+import { Card, Divider } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
 import { history } from 'umi';
 import './style.less';
 

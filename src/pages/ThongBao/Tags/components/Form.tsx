@@ -2,7 +2,8 @@ import { Button } from '@/components/Icons';
 import Input from '@/components/MyInput';
 import { Card } from '@/components/PageCard';
 import rules from '@/utils/rules';
-import { Col, Form, Row } from 'antd';
+import { Form } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
