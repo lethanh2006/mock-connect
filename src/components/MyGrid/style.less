@@ -1,11 +1,15 @@
-// Cơ chế: margin âm trên .my-row bù bằng padding trên .my-col (kiểu bootstrap/antd), để gutter tạo
-// khoảng cách GIỮA các Col chứ không phải quanh Row. flex-basis/max-width tính theo % của 24 cột.
+// Grid mô phỏng antd Row/Col bằng class sinh sẵn theo 24 cột × 6 breakpoint (kiểu bootstrap/antd
+// thật) — cố ý KHÔNG dùng CSS custom property cascade cho span/offset/push/pull vì custom property
+// set qua inline style luôn kế thừa xuống mọi phần tử con: khi lồng Col trong Col mà Col con không
+// tự set một breakpoint nào đó, nó sẽ "kế thừa nhầm" giá trị breakpoint đó từ Col cha thay vì rơi về
+// fallback đúng của chính nó (bug thật, phát hiện ở FilterItem.tsx khi lồng Row/Col). Class không có
+// cơ chế kế thừa nên tránh được hoàn toàn lớp bug này.
 
 .my-row {
 	display: flex;
 	flex-wrap: wrap;
-	margin-left: calc(var(--my-row-gutter-x, 0) / -2);
-	margin-right: calc(var(--my-row-gutter-x, 0) / -2);
+	margin-left: calc(var(--my-row-gutter-x, 0px) / -2);
+	margin-right: calc(var(--my-row-gutter-x, 0px) / -2);
 	row-gap: var(--my-row-gutter-y, 0px);
 
 	&.my-row-nowrap {
@@ -14,86 +18,111 @@
 }
 
 .my-col {
-	box-sizing: border-box;
-	padding-left: calc(var(--my-row-gutter-x, 0) / 2);
-	padding-right: calc(var(--my-row-gutter-x, 0) / 2);
-
-	// xs không có media query riêng (antd coi xs là mặc định, áp dụng từ 0px) — ưu tiên trên span trần.
-	--my-col-span-effective: var(--my-col-span-xs, var(--my-col-span, 24));
-	flex: 0 0 calc(var(--my-col-span-effective) / 24 * 100%);
-	max-width: calc(var(--my-col-span-effective) / 24 * 100%);
-	margin-left: calc(var(--my-col-offset-xs, var(--my-col-offset, 0)) / 24 * 100%);
-	order: var(--my-col-order-xs, var(--my-col-order, 0));
 	position: relative;
-	left: calc(var(--my-col-push-xs, var(--my-col-push, 0)) / 24 * 100%);
-	right: calc(var(--my-col-pull-xs, var(--my-col-pull, 0)) / 24 * 100%);
+	box-sizing: border-box;
+	// flex item mặc định có min-width: auto (co không nhỏ hơn nội dung bên trong) — nội dung như
+	// SelectTrigger của vinui có white-space: nowrap nên sẽ ép Col không co về đúng % đã khai báo,
+	// khiến .my-row (flex-wrap: wrap) tự xuống dòng dù đủ chỗ theo lý thuyết. min-width: 0 trả lại
+	// đúng hành vi co giãn theo % như antd Col.
+	min-width: 0;
+	padding-left: calc(var(--my-row-gutter-x, 0px) / 2);
+	padding-right: calc(var(--my-row-gutter-x, 0px) / 2);
+	// Mặc định full-width khi không khai báo span nào (khớp hành vi antd Col không span ở base) — các
+	// class .my-col-N/.my-col-{bp}-N bên dưới khai báo SAU nên thắng theo thứ tự nguồn khi cùng
+	// specificity. Có usage thật phụ thuộc điều này: TableSelect.tsx dùng <Col md={12}> không set
+	// span gốc, kỳ vọng full-width ở mobile.
+	flex: 0 0 100%;
+	max-width: 100%;
 }
 
-// Breakpoint khớp antd: sm≥576, md≥768, lg≥992, xl≥1200, xxl≥1600.
-@media (min-width: 576px) {
-	.my-col {
-		--my-col-span-effective: var(--my-col-span-sm, var(--my-col-span, 24));
-		margin-left: calc(var(--my-col-offset-sm, var(--my-col-offset, 0)) / 24 * 100%);
-		order: var(--my-col-order-sm, var(--my-col-order, 0));
-		left: calc(var(--my-col-push-sm, var(--my-col-push, 0)) / 24 * 100%);
-		right: calc(var(--my-col-pull-sm, var(--my-col-pull, 0)) / 24 * 100%);
+// Sinh bộ class theo breakpoint: .my-col-{prefix}-{1..24}, offset/push/pull tương ứng. Dùng
+// each()/range() (LESS built-in) thay vì mixin đệ quy kiểu `when (@i > 0)` — cú pháp guard đệ quy
+// tuy lessc build đúng nhưng khiến ngôn ngữ LESS trong VSCode đếm nhầm dấu ngoặc, báo lỗi giả ở các
+// rule phía sau; each()/range() là vòng lặp LESS chuẩn, không bị vấn đề đó.
+.make-grid-columns(@prefix) {
+	each(range(24), {
+		.my-col-@{prefix}-@{value} {
+			flex: 0 0 (@value / 24 * 100%);
+			max-width: (@value / 24 * 100%);
+		}
+		.my-col-@{prefix}-offset-@{value} {
+			margin-left: (@value / 24 * 100%);
+		}
+		.my-col-@{prefix}-push-@{value} {
+			left: (@value / 24 * 100%);
+		}
+		.my-col-@{prefix}-pull-@{value} {
+			right: (@value / 24 * 100%);
+		}
+	});
+
+	.my-col-@{prefix}-0 {
+		display: none;
 	}
+	.my-col-@{prefix}-offset-0 {
+		margin-left: 0;
+	}
+	.my-col-@{prefix}-push-0 {
+		left: auto;
+	}
+	.my-col-@{prefix}-pull-0 {
+		right: auto;
+	}
+}
+
+// Bộ class base khi không gắn breakpoint (span, offset, push, pull) — dùng chung tên với xs.
+.make-base-columns() {
+	each(range(24), {
+		.my-col-@{value} {
+			flex: 0 0 (@value / 24 * 100%);
+			max-width: (@value / 24 * 100%);
+		}
+		.my-col-offset-@{value} {
+			margin-left: (@value / 24 * 100%);
+		}
+		.my-col-push-@{value} {
+			left: (@value / 24 * 100%);
+		}
+		.my-col-pull-@{value} {
+			right: (@value / 24 * 100%);
+		}
+	});
+
+	.my-col-0 {
+		display: none;
+	}
+	.my-col-offset-0 {
+		margin-left: 0;
+	}
+	.my-col-push-0 {
+		left: auto;
+	}
+	.my-col-pull-0 {
+		right: auto;
+	}
+}
+
+.make-base-columns();
+// xs không có media query riêng (antd coi xs là mặc định, áp dụng từ 0px) — trùng với class base.
+.make-grid-columns(xs);
+
+// Breakpoint chuẩn Ant Design: sm≥576, md≥768, lg≥992, xl≥1200, xxl≥1600.
+@media (min-width: 576px) {
+	.make-grid-columns(sm);
 }
 
 @media (min-width: 768px) {
-	.my-col {
-		--my-col-span-effective: var(--my-col-span-md, var(--my-col-span-sm, var(--my-col-span, 24)));
-		margin-left: calc(var(--my-col-offset-md, var(--my-col-offset-sm, var(--my-col-offset, 0))) / 24 * 100%);
-		order: var(--my-col-order-md, var(--my-col-order-sm, var(--my-col-order, 0)));
-		left: calc(var(--my-col-push-md, var(--my-col-push-sm, var(--my-col-push, 0))) / 24 * 100%);
-		right: calc(var(--my-col-pull-md, var(--my-col-pull-sm, var(--my-col-pull, 0))) / 24 * 100%);
-	}
+	.make-grid-columns(md);
 }
 
 @media (min-width: 992px) {
-	.my-col {
-		--my-col-span-effective: var(--my-col-span-lg, var(--my-col-span-md, var(--my-col-span-sm, var(--my-col-span, 24))));
-		margin-left: calc(
-			var(--my-col-offset-lg, var(--my-col-offset-md, var(--my-col-offset-sm, var(--my-col-offset, 0)))) / 24 * 100%
-		);
-		order: var(--my-col-order-lg, var(--my-col-order-md, var(--my-col-order-sm, var(--my-col-order, 0))));
-		left: calc(var(--my-col-push-lg, var(--my-col-push-md, var(--my-col-push-sm, var(--my-col-push, 0)))) / 24 * 100%);
-		right: calc(var(--my-col-pull-lg, var(--my-col-pull-md, var(--my-col-pull-sm, var(--my-col-pull, 0)))) / 24 * 100%);
-	}
+	.make-grid-columns(lg);
 }
 
 @media (min-width: 1200px) {
-	.my-col {
-		--my-col-span-effective: var(
-			--my-col-span-xl,
-			var(--my-col-span-lg, var(--my-col-span-md, var(--my-col-span-sm, var(--my-col-span, 24))))
-		);
-		margin-left: calc(
-			var(
-					--my-col-offset-xl,
-					var(--my-col-offset-lg, var(--my-col-offset-md, var(--my-col-offset-sm, var(--my-col-offset, 0))))
-				) / 24 * 100%
-		);
-		order: var(
-			--my-col-order-xl,
-			var(--my-col-order-lg, var(--my-col-order-md, var(--my-col-order-sm, var(--my-col-order, 0))))
-		);
-		left: calc(
-			var(--my-col-push-xl, var(--my-col-push-lg, var(--my-col-push-md, var(--my-col-push-sm, var(--my-col-push, 0))))) /
-				24 * 100%
-		);
-		right: calc(
-			var(--my-col-pull-xl, var(--my-col-pull-lg, var(--my-col-pull-md, var(--my-col-pull-sm, var(--my-col-pull, 0))))) /
-				24 * 100%
-		);
-	}
+	.make-grid-columns(xl);
 }
 
 @media (min-width: 1600px) {
-	.my-col {
-		--my-col-span-effective: var(
-			--my-col-span-xxl,
-			var(--my-col-span-xl, var(--my-col-span-lg, var(--my-col-span-md, var(--my-col-span-sm, var(--my-col-span, 24)))))
-		);
-	}
+	.make-grid-columns(xxl);
 }

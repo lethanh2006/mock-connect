@@ -3,17 +3,14 @@ import type { CSSProperties, ReactNode } from 'react';
 import './style.less';
 
 /**
- * Grid tự dựng bằng flexbox + CSS custom property, mô phỏng antd Row/Col (grid 24 cột, cùng
- * breakpoint xs/sm/md/lg/xl/xxl) để các phân hệ pull code base này về chỉ cần đổi
- * `import { Row, Col } from 'antd'` thành `import { Row, Col } from '@/components/MyGrid'`.
+ * Grid mô phỏng antd Row/Col (24 cột, breakpoint xs/sm/md/lg/xl/xxl) để các phân hệ pull code base
+ * này về chỉ cần đổi `import { Row, Col } from 'antd'` thành `import { Row, Col } from '@/components/MyGrid'`.
  *
- * Không dùng CSS Grid thật — flexbox + margin âm (kiểu bootstrap/antd cũ) để `gutter` hoạt động
- * đúng y hệt antd: khoảng cách giữa các Col, không phải khoảng cách quanh Row.
- *
- * Responsive qua CSS custom property theo từng breakpoint (`--my-col-span-md`...) thay vì sinh cả
- * trăm class kiểu Tailwind (24 span × 6 breakpoint) — Col chỉ set biến CSS qua inline style, phần
- * còn lại do file style.less xử lý bằng media query, khớp đúng breakpoint antd dùng (sm≥576,
- * md≥768, lg≥992, xl≥1200, xxl≥1600).
+ * Dùng CSS class sinh sẵn theo từng breakpoint (kiểu bootstrap/antd thật), KHÔNG dùng CSS custom
+ * property cho span/offset/push/pull — custom property set qua inline style luôn kế thừa xuống mọi
+ * phần tử con, nên khi lồng Col trong Col (Col cha set `md` nhưng Col con không set) thì Col con sẽ
+ * "kế thừa nhầm" giá trị breakpoint của Col cha thay vì rơi về fallback đúng của nó. Class không có
+ * cơ chế kế thừa này nên tránh được hoàn toàn bug (đã thấy ở FilterItem.tsx khi lồng Row/Col thật).
  */
 
 export type MyGutter = number | [number, number];
@@ -35,6 +32,15 @@ const ALIGN_MAP: Record<NonNullable<MyRowProps['align']>, CSSProperties['alignIt
 	stretch: 'stretch',
 };
 
+const JUSTIFY_MAP: Record<NonNullable<MyRowProps['justify']>, CSSProperties['justifyContent']> = {
+	start: 'flex-start',
+	end: 'flex-end',
+	center: 'center',
+	'space-around': 'space-around',
+	'space-between': 'space-between',
+	'space-evenly': 'space-evenly',
+};
+
 export const Row = ({ gutter, justify, align, wrap = true, className, style, children, ...rest }: MyRowProps) => {
 	const [gutterX, gutterY] = Array.isArray(gutter) ? gutter : [gutter ?? 0, 0];
 	return (
@@ -44,7 +50,7 @@ export const Row = ({ gutter, justify, align, wrap = true, className, style, chi
 				{
 					'--my-row-gutter-x': `${gutterX}px`,
 					'--my-row-gutter-y': `${gutterY}px`,
-					justifyContent: justify,
+					justifyContent: justify ? JUSTIFY_MAP[justify] : undefined,
 					alignItems: align ? ALIGN_MAP[align] : undefined,
 					...style,
 				} as CSSProperties
@@ -97,34 +103,52 @@ export const Col = ({
 	children,
 	...rest
 }: MyColProps) => {
-	const cssVars: Record<string, string | number> = {};
-	if (span !== undefined) cssVars['--my-col-span'] = span;
-	if (offset !== undefined) cssVars['--my-col-offset'] = offset;
-	if (order !== undefined) cssVars['--my-col-order'] = order;
-	if (push !== undefined) cssVars['--my-col-push'] = push;
-	if (pull !== undefined) cssVars['--my-col-pull'] = pull;
+	const colClasses: string[] = ['my-col'];
+
+	if (span !== undefined) colClasses.push(`my-col-${span}`);
+	if (offset !== undefined) colClasses.push(`my-col-offset-${offset}`);
+	if (push !== undefined) colClasses.push(`my-col-push-${push}`);
+	if (pull !== undefined) colClasses.push(`my-col-pull-${pull}`);
+
+	// `order` không nằm trong lưới 24 cột (số nguyên bất kỳ, không bounded) nên không sinh class như
+	// span/offset/push/pull — vẫn áp qua inline style, ghi đè không phân biệt breakpoint (không có
+	// usage thực tế nào cần order đổi theo breakpoint tại thời điểm viết file này; nếu về sau cần,
+	// nên bổ sung như class .my-col-{bp}-order-{n} cùng cơ chế bên dưới thay vì quay lại CSS variable).
+	let computedOrder = order;
 
 	const byBreakpoint = { xs, sm, md, lg, xl, xxl };
 	for (const bp of BREAKPOINTS) {
 		const val = byBreakpoint[bp];
 		if (val === undefined) continue;
 		if (typeof val === 'number') {
-			cssVars[`--my-col-span-${bp}`] = val;
+			colClasses.push(`my-col-${bp}-${val}`);
+		} else if (typeof val === 'object' && val !== null) {
+			if (val.span !== undefined) colClasses.push(`my-col-${bp}-${val.span}`);
+			if (val.offset !== undefined) colClasses.push(`my-col-${bp}-offset-${val.offset}`);
+			if (val.push !== undefined) colClasses.push(`my-col-${bp}-push-${val.push}`);
+			if (val.pull !== undefined) colClasses.push(`my-col-${bp}-pull-${val.pull}`);
+			if (val.order !== undefined) computedOrder = val.order;
+		}
+	}
+
+	const inlineStyle: CSSProperties = { ...style };
+	if (computedOrder !== undefined) {
+		inlineStyle.order = computedOrder;
+	}
+	if (flex !== undefined) {
+		if (typeof flex === 'number') {
+			inlineStyle.flex = `${flex} ${flex} auto`;
+		} else if (flex === 'auto') {
+			inlineStyle.flex = '1 1 auto';
+		} else if (flex === 'none') {
+			inlineStyle.flex = '0 0 auto';
 		} else {
-			if (val.span !== undefined) cssVars[`--my-col-span-${bp}`] = val.span;
-			if (val.offset !== undefined) cssVars[`--my-col-offset-${bp}`] = val.offset;
-			if (val.order !== undefined) cssVars[`--my-col-order-${bp}`] = val.order;
-			if (val.push !== undefined) cssVars[`--my-col-push-${bp}`] = val.push;
-			if (val.pull !== undefined) cssVars[`--my-col-pull-${bp}`] = val.pull;
+			inlineStyle.flex = flex;
 		}
 	}
 
 	return (
-		<div
-			className={classNames('my-col', className)}
-			style={{ ...cssVars, flex, ...style } as CSSProperties}
-			{...rest}
-		>
+		<div className={classNames(colClasses, className)} style={inlineStyle} {...rest}>
 			{children}
 		</div>
 	);

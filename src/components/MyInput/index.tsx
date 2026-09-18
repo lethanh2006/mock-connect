@@ -42,7 +42,7 @@ export type MyInputProps = Omit<ComponentProps<'input'>, 'prefix' | 'size'> & {
 const MyInput = ({ prefix, suffix, size: _size, className, ...props }: MyInputProps) => {
 	if (!prefix && !suffix) return <VinInput className={className} {...props} />;
 	return (
-		<InputGroup className={className}>
+		<InputGroup className={className} data-disabled={props.disabled ? 'true' : undefined}>
 			{prefix ? <InputGroupAddon>{prefix}</InputGroupAddon> : null}
 			<InputGroupInput {...props} />
 			{suffix ? <InputGroupAddon align='inline-end'>{suffix}</InputGroupAddon> : null}
@@ -58,13 +58,14 @@ const MyTextArea = ({
 const MyPassword = ({ prefix, size: _size, className, ...props }: MyInputProps) => {
 	const [visible, setVisible] = useState(false);
 	return (
-		<InputGroup className={className}>
+		<InputGroup className={className} data-disabled={props.disabled ? 'true' : undefined}>
 			{prefix ? <InputGroupAddon>{prefix}</InputGroupAddon> : null}
 			<InputGroupInput type={visible ? 'text' : 'password'} {...props} />
 			<InputGroupAddon align='inline-end'>
 				<InputGroupButton
 					type='button'
 					tabIndex={-1}
+					disabled={props.disabled}
 					aria-label={visible ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
 					onClick={() => setVisible((v) => !v)}
 				>

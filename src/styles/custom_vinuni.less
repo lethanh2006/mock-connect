@@ -262,6 +262,7 @@ button:not(:disabled),
 
 // Bản dark mode của #custom-filter-form ở trên — không có override thì nút icon chìm vào nền tối.
 [data-vinuni-theme='dark'] #custom-filter-form {
+
 	.ant-card-extra button,
 	.filter-item-actions button,
 	.ant-col-2>.ant-space-vertical button,
@@ -981,6 +982,7 @@ button:not(:disabled),
 	// --color-accent-800 (#f8f8f8) tĩnh — hover/focus bật lên 1 khối gần trắng giữa UI đã tối,
 	// lệch hẳn với mọi state khác của button (đều theme-aware qua --color-fill-*).
 	[data-vinuni-theme='dark'] & {
+
 		&:hover,
 		&:focus {
 			background-color: rgba(255, 255, 255, 0.08) !important;
@@ -2019,4 +2021,17 @@ button:not(:disabled),
 [data-slot='liquid-button']:disabled {
 	pointer-events: auto !important;
 	cursor: not-allowed !important;
+}
+
+// InputGroupAddon (icon prefix/suffix, nút mắt Password) của @vinuni/ui tham chiếu class
+// group-data-[disabled=true]/input-group:opacity-50 nhưng class này không có trong CSS build sẵn
+// của package (đã báo lại VinUni — xem vinuni-ui-handover/notes-to-vinui.md mục 1a). MyInput đã tự
+// set data-disabled đúng theo API InputGroup, chỉ còn thiếu style — bù tạm ở đây.
+[data-slot='input-group'][data-disabled='true'] {
+	cursor: not-allowed;
+
+	[data-slot='input-group-addon'] {
+		background-color: var(--color-disabled);
+		opacity: 0.5;
+	}
 }
