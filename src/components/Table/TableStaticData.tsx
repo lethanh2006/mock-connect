@@ -1,5 +1,8 @@
 import EmptyState from '@/components/EmptyState';
 import {
+	Command,
+	CommandItem,
+	CommandList,
 	Drawer,
 	DrawerContent,
 	Icon6DotGridVertical,
@@ -28,7 +31,7 @@ import { primaryColor } from '@/services/base/constant';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { AutoComplete, Spin } from 'antd';
+import { Spin } from 'antd';
 import classNames from 'classnames';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -102,6 +105,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 	const { danhSach: dsPhanVung } = useModel('core.phanvungdulieu');
 	const [globalSearchText, setGlobalSearchText] = useState<string>('');
 	const [globalOptions, setGlobalOptions] = useState<{ value: string; label?: string }[]>([]);
+	const [globalSearchHistoryOpen, setGlobalSearchHistoryOpen] = useState(false);
 	const [sort, setSort] = useState<{ [key: string]: 1 | -1 }>({});
 	const [columnFilters, setColumnFilters] = useState<Record<string, { type: 'string' | 'select'; value: any }>>({});
 	const [selectedIds, setSelectedIds] = useState<(string | number)[]>(props.selectedIds ?? []);
@@ -810,43 +814,70 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 	const canShowGlobalSearch = globalSearch && globalSearchColumns.length > 0;
 
 	const renderGlobalSearch = (minimized: boolean) => (
-		<AutoComplete
-			className='global-search-wrapper no-print'
-			options={globalOptions}
-			value={globalSearchText}
-			size={size}
-			onSelect={handleGlobalSearchTrigger}
-			onChange={(val) => setGlobalSearchText(val)}
+		<Popover
+			open={globalSearchHistoryOpen && globalOptions.length > 0}
+			onOpenChange={setGlobalSearchHistoryOpen}
 		>
-			<SearchInput
-				ref={searchInputRef}
-				variant='tiled'
-				className='global-search'
-				size={size === 'large' ? 'large' : size === 'small' ? 'small' : 'medium'}
-				clearable
-				value={globalSearchText}
-				placeholder={globalSearchPlaceholder}
-				autoFocus={minimized}
-				title={globalSearchTooltip}
-				style={
-					minimized
-						? { width: 250 }
-						: globalSearchText
-							? { borderColor: primaryColor, outline: '1px solid ' + primaryColor, borderRadius: 4 }
-							: undefined
-				}
-				onKeyDown={(e) => {
-					if (e.key === 'Enter') handleGlobalSearchTrigger((e.target as HTMLInputElement).value);
-				}}
-				onClear={() => {
-					setGlobalSearchText('');
-					handleGlobalSearchTrigger('');
-				}}
-				onChange={(e) => {
-					setGlobalSearchText(e.target.value);
-				}}
-			/>
-		</AutoComplete>
+			{/* SearchInput không phải 1 phần tử đơn (icon + input + nút xóa) nên không asChild thẳng lên
+			nó được — Slot sẽ gộp nhầm prop. Bọc thêm 1 div trơn làm trigger thật để Radix đăng ký đúng
+			"vùng an toàn", SearchInput bên trong không bị đụng tới prop nào cả. */}
+			<PopoverTrigger asChild>
+				<div className='global-search-trigger'>
+					<SearchInput
+						ref={searchInputRef}
+						variant='tiled'
+						className={classNames('global-search-wrapper no-print', 'global-search')}
+						size={size === 'large' ? 'large' : size === 'small' ? 'small' : 'medium'}
+						clearable
+						value={globalSearchText}
+						placeholder={globalSearchPlaceholder}
+						autoFocus={minimized}
+						title={globalSearchTooltip}
+						style={
+							minimized
+								? { width: 250 }
+								: globalSearchText
+									? { borderColor: primaryColor, outline: '1px solid ' + primaryColor, borderRadius: 4 }
+									: undefined
+						}
+						onFocus={() => setGlobalSearchHistoryOpen(true)}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter') {
+								handleGlobalSearchTrigger((e.target as HTMLInputElement).value);
+								setGlobalSearchHistoryOpen(false);
+							}
+						}}
+						onClear={() => {
+							setGlobalSearchText('');
+							handleGlobalSearchTrigger('');
+						}}
+						onChange={(e) => {
+							setGlobalSearchText(e.target.value);
+						}}
+					/>
+				</div>
+			</PopoverTrigger>
+			<PopoverContent align='start' className='p-0' onOpenAutoFocus={(e) => e.preventDefault()}>
+				{/* surface=false — PopoverContent đã tự có bề mặt kính (FloatedPanel), Command lồng
+				thêm 1 lớp kính nữa sẽ bị mờ chồng mờ, giống hệt cách SelectPopover xử lý. */}
+				<Command surface={false}>
+					<CommandList>
+						{globalOptions.map((opt) => (
+							<CommandItem
+								key={opt.value}
+								variant='cell'
+								onSelect={() => {
+									handleGlobalSearchTrigger(opt.value);
+									setGlobalSearchHistoryOpen(false);
+								}}
+							>
+								{opt.label ?? opt.value}
+							</CommandItem>
+						))}
+					</CommandList>
+				</Command>
+			</PopoverContent>
+		</Popover>
 	);
 
 	const tableContainerStyle: React.CSSProperties = useMemo(() => {

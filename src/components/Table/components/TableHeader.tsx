@@ -2,6 +2,9 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import { primaryColor } from '@/services/base/constant';
 import { inputFormat } from '@/utils/utils';
 import {
+	Command,
+	CommandItem,
+	CommandList,
 	IconDownload,
 	IconFilter,
 	IconMagnifyingglass,
@@ -16,7 +19,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from '@/components/Icons';
-import { AutoComplete, Popconfirm } from 'antd';
+import { Popconfirm } from 'antd';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -74,6 +77,7 @@ export const TableHeader: React.FC = () => {
 	} = buttons || {};
 	const [globalSearchText, setGlobalSearchText] = useState<string>('');
 	const [globalOptions, setGlobalOptions] = useState<{ value: string }[]>([]);
+	const [globalSearchHistoryOpen, setGlobalSearchHistoryOpen] = useState(false);
 	const searchInputRef = useRef<any>(null);
 	const currentPath = window.location.pathname;
 	const globalDataIndex = useMemo(() => `GLOBAL_SEARCH_${currentPath}`, [currentPath]);
@@ -235,37 +239,63 @@ export const TableHeader: React.FC = () => {
 	);
 
 	const renderGlobalSearch = (minimized: boolean) => (
-		<AutoComplete
-			options={globalOptions}
-			value={globalSearchText}
-			onSelect={handleGlobalSearchTrigger}
-			onChange={(val) => setGlobalSearchText(val)}
-		>
-			<SearchInput
-				ref={searchInputRef}
-				variant='tiled'
-				className={classNames('global-search', { 'has-value': !!globalSearchText })}
-				size={size === 'large' ? 'large' : size === 'small' ? 'small' : 'medium'}
-				clearable
-				value={globalSearchText}
-				placeholder={globalSearchPlaceholder}
-				autoFocus={minimized}
-				title={globalSearchTooltip}
-				autoComplete='off'
-				onKeyDown={(e) => {
-					if (e.key === 'Enter') handleGlobalSearchTrigger((e.target as HTMLInputElement).value);
-				}}
-				onClear={() => {
-					debounceSearch.cancel();
-					handleGlobalSearchTrigger('');
-				}}
-				onChange={(e) => {
-					const val = e.target.value;
-					setGlobalSearchText(val);
-					debounceSearch(val);
-				}}
-			/>
-		</AutoComplete>
+		<Popover open={globalSearchHistoryOpen && globalOptions.length > 0} onOpenChange={setGlobalSearchHistoryOpen}>
+			{/* SearchInput không phải 1 phần tử đơn (icon + input + nút xóa) nên không asChild thẳng lên
+			nó được — Slot sẽ gộp nhầm prop. Bọc thêm 1 div trơn làm trigger thật để Radix đăng ký đúng
+			"vùng an toàn", SearchInput bên trong không bị đụng tới prop nào cả. */}
+			<PopoverTrigger asChild>
+				<div className='global-search-trigger'>
+					<SearchInput
+						ref={searchInputRef}
+						variant='tiled'
+						className={classNames('global-search', { 'has-value': !!globalSearchText })}
+						size={size === 'large' ? 'large' : size === 'small' ? 'small' : 'medium'}
+						clearable
+						value={globalSearchText}
+						placeholder={globalSearchPlaceholder}
+						autoFocus={minimized}
+						title={globalSearchTooltip}
+						autoComplete='off'
+						onFocus={() => setGlobalSearchHistoryOpen(true)}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter') {
+								handleGlobalSearchTrigger((e.target as HTMLInputElement).value);
+								setGlobalSearchHistoryOpen(false);
+							}
+						}}
+						onClear={() => {
+							debounceSearch.cancel();
+							handleGlobalSearchTrigger('');
+						}}
+						onChange={(e) => {
+							const val = e.target.value;
+							setGlobalSearchText(val);
+							debounceSearch(val);
+						}}
+					/>
+				</div>
+			</PopoverTrigger>
+			<PopoverContent align='start' className='p-0' onOpenAutoFocus={(e) => e.preventDefault()}>
+				{/* surface=false — PopoverContent đã tự có bề mặt kính (FloatedPanel), Command lồng
+				thêm 1 lớp kính nữa sẽ bị mờ chồng mờ, giống hệt cách SelectPopover xử lý. */}
+				<Command surface={false}>
+					<CommandList>
+						{globalOptions.map((opt) => (
+							<CommandItem
+								key={opt.value}
+								variant='cell'
+								onSelect={() => {
+									handleGlobalSearchTrigger(opt.value);
+									setGlobalSearchHistoryOpen(false);
+								}}
+							>
+								{opt.value}
+							</CommandItem>
+						))}
+					</CommandList>
+				</Command>
+			</PopoverContent>
+		</Popover>
 	);
 
 	const isMobile = useMediaQuery({ maxWidth: 767 });

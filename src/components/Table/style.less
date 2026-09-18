@@ -21,6 +21,16 @@
 			gap: 8px;
 			justify-content: flex-end;
 
+			// Trigger của Popover chỉ là 1 div bọc kỹ thuật (Radix asChild cần 1 phần tử đơn để đăng ký
+			// đúng "vùng an toàn" — SearchInput không phải 1 phần tử đơn nên không asChild thẳng lên nó
+			// được). Không dùng display:contents — Popover cần đo getBoundingClientRect() của chính div
+			// này để định vị dropdown, display:contents làm rect đó bằng 0. Item flex bình thường là đủ,
+			// không set width/margin riêng để không đổi layout.
+			.global-search-trigger {
+				display: flex;
+				min-width: 0;
+			}
+
 			.global-search {
 				width: 260px;
 				max-width: 100%;
@@ -29,6 +39,7 @@
 					border-color: var(--color-primary) !important;
 				}
 			}
+
 
 			.total {
 				height: 36px;
