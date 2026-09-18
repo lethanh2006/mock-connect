@@ -1,5 +1,6 @@
 import dayjs from '@/utils/dayjs';
-import { Card, Col, Flex, Row, Tag, Typography } from 'antd';
+import { Card } from '@/components/PageCard';
+import { Col, Flex, Row, Tag, Typography } from 'antd';
 import { useIntl, useModel } from 'umi';
 
 const pillStyle = {
@@ -50,17 +51,21 @@ const WelcomeCard = () => {
 	return (
 		<Card
 			loading={loading}
-			variant='borderless'
-			style={{ background: 'var(--color-official-300)', borderRadius: 'var(--vin-border-radius, 16px)' }}
-			styles={{ body: { padding: '20px 24px' } }}
+			bordered={false}
+			hideInnerCard
+			style={{
+				background: 'var(--color-official-300)',
+				borderRadius: 'var(--vin-border-radius, 16px)',
+				padding: '20px 24px',
+			}}
 		>
 			<Row gutter={[16, 16]} align='middle' justify='space-between'>
 				<Col xs={24} lg={14}>
 					<Flex vertical gap={4}>
 						<Typography.Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{metaText}</Typography.Text>
-						<Typography.Title level={4} style={{ color: '#fff', margin: 0, fontWeight: 700 }}>
+						<h1 style={{ color: '#fff', margin: 0, fontWeight: 700, fontSize: 20, lineHeight: 1.4 }}>
 							{greeting}
-						</Typography.Title>
+						</h1>
 					</Flex>
 				</Col>
 

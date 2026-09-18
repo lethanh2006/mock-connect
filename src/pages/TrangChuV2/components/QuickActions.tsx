@@ -1,5 +1,5 @@
 import { IconBoard, IconRoofedHouse, IconCalendar, IconMobile, IconPlus, IconPeople } from '@/components/Icons';
-import { Card } from 'antd';
+import { Card } from '@/components/PageCard';
 import { history } from 'umi';
 
 const QuickActions = () => {
@@ -14,11 +14,6 @@ const QuickActions = () => {
 	return (
 		<Card
 			title={<span className='title'>Quick Actions</span>}
-			styles={{
-				body: {
-					padding: 0,
-				},
-			}}
 		>
 			<div className='actions-grid'>
 				{actions.map((item) => (

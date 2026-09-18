@@ -206,7 +206,7 @@ export default [
 	{
 		path: '/experience-porfolio',
 		name: 'ExperiencePorfolio',
-		icon: 'IconFolder',
+		icon: 'IconBriefcase',
 		routes: [
 			{
 				path: 'student-development',
