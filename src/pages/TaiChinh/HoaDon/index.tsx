@@ -21,7 +21,7 @@ import {
 	ScheduleOutlined,
 	UnorderedListOutlined,
 } from '@ant-design/icons';
-import { IconEyeOpen, Icon3Dot3Line } from '@/components/Icons';
+import { IconEyeOpen, Icon3Dot3Line, Badge } from '@/components/Icons';
 import { Alert, Empty, Tabs, Tag, notification } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState, type Key, type ReactNode } from 'react';
@@ -33,6 +33,20 @@ import ModalDangKyTraGop from './TraGop/ModalDangKyTraGop';
 import ModalTienDoTraGop from './TraGop/ModalTienDoTraGop';
 import EmptyState from '@/components/EmptyState';
 import { Modal } from '@/components/Table/ModalExpandable';
+
+const mapPaymentBadgeVariant = (val: EMaTrangThaiThanhToan): 'complete' | 'warning' | 'negative' | 'secondary' => {
+	switch (val) {
+		case EMaTrangThaiThanhToan.DA_THANH_TOAN_DU:
+			return 'complete';
+		case EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU:
+			return 'warning';
+		case EMaTrangThaiThanhToan.CHUA_THANH_TOAN:
+			return 'negative';
+		case EMaTrangThaiThanhToan.DONG:
+		default:
+			return 'secondary';
+	}
+};
 
 const PaymentDeadlineCountdown = ({ deadline }: { deadline: string }) => {
 	const intl = useIntl();
@@ -246,11 +260,12 @@ const HoaDonPage = () => {
 				const isKtxDeposit = rec.transactions?.some((transaction) => transaction.isKtxDeposit === true);
 				if (isKtxDeposit) return <PaymentDeadlineCountdown deadline={val} />;
 
-				if (!val || !dayjs(val).isValid()) {
+				const dateValue = val || rec?.ngayHetHanThanhToan || (rec as any)?.dueDate || (rec as any)?.hanThanhToan || (rec?.dotThu as any)?.ngayKetThuc;
+				if (!dateValue || !dayjs(dateValue).isValid()) {
 					return <div>--</div>;
 				}
 
-				const ngayHetHan = dayjs(val);
+				const ngayHetHan = dayjs(dateValue);
 				const now = dayjs();
 				const soNgayConLai = ngayHetHan.diff(now, 'day', true);
 
@@ -258,26 +273,26 @@ const HoaDonPage = () => {
 
 				if (dayjs().isAfter(ngayHetHan, 'day')) {
 					extraText = (
-						<div style={{ color: '#cf1322', fontWeight: 500, fontSize: 12 }}>
+						<div style={{ color: '#cf1322', fontWeight: 500, fontSize: 12, whiteSpace: 'nowrap' }}>
 							{intl.formatMessage({ id: 'taichinh.hoadon.hanthanhtoan.hethan' })}
 						</div>
 					);
 				} else if (soNgayConLai >= 0 && soNgayConLai <= 1) {
 					extraText = (
-						<div style={{ color: '#d48806', fontWeight: 500, fontSize: 12 }}>
+						<div style={{ color: '#d48806', fontWeight: 500, fontSize: 12, whiteSpace: 'nowrap' }}>
 							{intl.formatMessage({ id: 'taichinh.hoadon.hanthanhtoan.con1ngay' })}
 						</div>
 					);
 				} else if (soNgayConLai > 1 && soNgayConLai <= 10) {
 					extraText = (
-						<div style={{ color: '#52c41a', fontWeight: 500, fontSize: 12 }}>
+						<div style={{ color: '#52c41a', fontWeight: 500, fontSize: 12, whiteSpace: 'nowrap' }}>
 							{intl.formatMessage({ id: 'taichinh.hoadon.hanthanhtoan.conngay' }, { soNgay: Math.ceil(soNgayConLai) })}
 						</div>
 					);
 				}
 
 				return (
-					<div>
+					<div style={{ whiteSpace: 'nowrap' }}>
 						<div>{ngayHetHan.format('DD/MM/YYYY')}</div>
 						{rec?.status !== EMaTrangThaiThanhToan.DA_THANH_TOAN_DU && extraText}
 					</div>
@@ -380,7 +395,7 @@ const HoaDonPage = () => {
 			align: 'center',
 			width: 150,
 			render: (val: EMaTrangThaiThanhToan) => (
-				<Tag color={EMauTrangThaiThanhToanTable[val]}>{getPaymentStatusLabel(val)}</Tag>
+				<Badge variant={mapPaymentBadgeVariant(val)}>{getPaymentStatusLabel(val)}</Badge>
 			),
 			filterType: 'select',
 			filterData: Object.values(EMaTrangThaiThanhToan).map((item) => ({
@@ -423,8 +438,7 @@ const HoaDonPage = () => {
 							setLockPaymentAmount(false);
 							setVisibleModalThanhToan(true);
 						}}
-						type='link'
-						className={disableThanhToan(rec) ? undefined : 'text-success'}
+						type='text'
 						icon={<Icon3Dot3Line />}
 					/>
 					<ButtonExtend
@@ -432,7 +446,7 @@ const HoaDonPage = () => {
 						tooltip={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemchitiet' })}
 						icon={<IconEyeOpen />}
 						onClick={() => handleDetail(rec)}
-						type='link'
+						type='text'
 					/>
 
 					{rec.status !== EMaTrangThaiThanhToan.DA_THANH_TOAN_DU &&

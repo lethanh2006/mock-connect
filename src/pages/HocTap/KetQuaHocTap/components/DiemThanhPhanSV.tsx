@@ -6,7 +6,7 @@ import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constan
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { primaryColor } from '@/services/base/constant';
 import { CheckOutlined, FileTextOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Modal, Space, Tag, Tooltip, Typography } from 'antd';
+import { Modal, Space, Tag, Typography } from 'antd';
 import { IconCheck01 } from '@/components/Icons';
 import Select from '@/components/MySelect';
 import _ from 'lodash';
@@ -15,6 +15,7 @@ import { useIntl, useModel } from 'umi';
 import ModalBangDiemTranscript from '../BangDiemTranscript/ModalBangDiemTranscript';
 import DiemChuMarks from './DiemChuMarks';
 import ModalChiTietDiem from './ModalChiTietDiem';
+import Tooltip from '@/components/MyTooltip';
 
 interface DataType extends LopHocPhan.IDiemHpSvHk {
 	title?: string;
@@ -364,9 +365,9 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 					onRow: (rec: DataType) =>
 						isSemesterRow(rec)
 							? {
-									style: semesterRowStyle,
-									className: 'diem-tp-semester-row',
-								}
+								style: semesterRowStyle,
+								className: 'diem-tp-semester-row',
+							}
 							: {},
 				}}
 				otherButtons={[

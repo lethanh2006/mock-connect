@@ -258,9 +258,9 @@ const CardCalendar = () => {
 				loading={loading}
 				title={
 					<Flex align='center' gap={12} wrap='wrap'>
-						<h2 className='title' style={{ margin: 0, fontSize: 'inherit', fontWeight: 'inherit', color: 'var(--color-text, inherit)' }}>
+						<h3 className='title' style={{ margin: 0, fontSize: 'inherit', fontWeight: 'inherit', color: 'var(--color-text, inherit)' }}>
 							Calendar
-						</h2>
+						</h3>
 						<span className='date'>{dayjs().format('DD/MM/YYYY')}</span>
 					</Flex>
 				}

@@ -35,6 +35,19 @@ import { isDuThinhDaDuyet, isTinhTinChiDangKy, renderKhoangThoiGian } from '../u
 import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
+
+const mapTrangThaiDKTCBadgeVariant = (val: ETrangThaiDangKyTinChi): 'complete' | 'inprogress' | 'negative' | 'secondary' => {
+	switch (val) {
+		case ETrangThaiDangKyTinChi.DA_DANG_KY:
+			return 'complete';
+		case ETrangThaiDangKyTinChi.CHUA_DANG_KY:
+			return 'inprogress';
+		case ETrangThaiDangKyTinChi.LOI:
+			return 'negative';
+		default:
+			return 'secondary';
+	}
+};
 import ModalLopDaHuy from './ModalLopDaHuy';
 import RenderLichHoc from './RenderLichHoc';
 
@@ -420,7 +433,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 				otherExtra={[
 					<span>
 						{intl.formatMessage({ id: 'dangkytinchi.tcdangky' })}:{' '}
-						<b style={{ color: '#c80f1f', fontSize: 15 }}>{tongTinChi ?? 0}</b>
+						<b style={{ fontSize: 15, fontWeight: 600 }}>{tongTinChi ?? 0}</b>
 					</span>,
 				]}
 			/>

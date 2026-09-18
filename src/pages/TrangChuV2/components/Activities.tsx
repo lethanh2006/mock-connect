@@ -100,17 +100,29 @@ const Activities = () => {
 			className='vin-dashboard-card'
 			title={
 				<Flex justify='space-between' align='center'>
-					<h2 className='title' style={{ margin: 0, fontSize: 'inherit', fontWeight: 'inherit', color: 'var(--color-text, inherit)' }}>
+					<h3 className='title' style={{ margin: 0, fontSize: 'inherit', fontWeight: 'inherit', color: 'var(--color-text, inherit)' }}>
 						Activities
-					</h2>
+					</h3>
 					{danhSach && danhSach.length > 1 && (
 						<div className='pagination-controls'>
-							<button className='nav-btn' aria-label='Previous activity' onClick={() => carouselRef.current?.prev()}>
+							<Button
+								variant='ghost'
+								size='icon'
+								className='nav-btn'
+								aria-label='Previous activity'
+								onClick={() => carouselRef.current?.prev()}
+							>
 								<Icon2ChervolLeftLine />
-							</button>
-							<button className='nav-btn' aria-label='Next activity' onClick={() => carouselRef.current?.next()}>
+							</Button>
+							<Button
+								variant='ghost'
+								size='icon'
+								className='nav-btn'
+								aria-label='Next activity'
+								onClick={() => carouselRef.current?.next()}
+							>
 								<Icon2ChervolRightLine />
-							</button>
+							</Button>
 						</div>
 					)}
 				</Flex>

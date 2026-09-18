@@ -5,10 +5,10 @@ import Clinic from '@/assets/trangchu/Clinic.svg';
 import ky_thuat from '@/assets/trangchu/ky_thuat.svg';
 import nha_o from '@/assets/trangchu/nha_o.svg';
 import suc_khoe from '@/assets/trangchu/suc_khoe.svg';
+import { Col, Row } from '@/components/MyGrid';
 import PageCard from '@/components/PageCard';
 import { Flex, Image, Typography } from 'antd';
 import { useIntl } from 'umi';
-import { Col, Row } from '@/components/MyGrid';
 
 const hotlines = [
 	{ id: 1, titleId: 'trangchu.v2.emergency.clinic', phone: '(+84) 866 200 019', icon: Clinic },
@@ -31,15 +31,7 @@ const Emergency = () => {
 					const title = intl.formatMessage({ id: item.titleId });
 					return (
 						<Col xs={24} sm={12} key={item.id}>
-							<div
-								className='vin-hotline-card'
-								style={{
-									padding: '12px 16px',
-									border: '1px solid var(--color-border-secondary, #f0f0f0)',
-									borderRadius: 'var(--vin-border-radius, 16px)',
-									background: 'var(--color-bg-container, #ffffff)',
-								}}
-							>
+							<div className='vin-hotline-card' style={{ padding: '12px 16px' }}>
 								<Flex vertical gap={12} align='flex-start'>
 									<Image src={item.icon} alt={title} width={20} height={20} preview={false} />
 									<Typography.Text strong style={{ fontSize: 12 }}>

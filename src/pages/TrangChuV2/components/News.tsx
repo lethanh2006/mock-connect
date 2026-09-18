@@ -1,4 +1,4 @@
-import { IconStopwatch, Icon2ChervolLeftLine, Icon2ChervolRightLine } from '@/components/Icons';
+import { Button, IconStopwatch, Icon2ChervolLeftLine, Icon2ChervolRightLine } from '@/components/Icons';
 import { Card } from '@/components/PageCard';
 import { Flex } from 'antd';
 
@@ -35,16 +35,16 @@ const News = ({ loading = true }) => {
 			className='vin-dashboard-card'
 			title={
 				<Flex justify='space-between' align='center'>
-					<h2 className='title' style={{ margin: 0, fontSize: 'inherit', fontWeight: 'inherit', color: 'var(--color-text, inherit)' }}>
+					<h3 className='title' style={{ margin: 0, fontSize: 'inherit', fontWeight: 'inherit', color: 'var(--color-text, inherit)' }}>
 						News
-					</h2>
+					</h3>
 					<div className='pagination-controls'>
-						<button className='nav-btn' aria-label='Previous news'>
+						<Button variant='ghost' size='icon' className='nav-btn' aria-label='Previous news'>
 							<Icon2ChervolLeftLine />
-						</button>
-						<button className='nav-btn' aria-label='Next news'>
+						</Button>
+						<Button variant='ghost' size='icon' className='nav-btn' aria-label='Next news'>
 							<Icon2ChervolRightLine />
-						</button>
+						</Button>
 					</div>
 				</Flex>
 			}
