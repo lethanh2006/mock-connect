@@ -78,7 +78,8 @@ export type MySelectProps = {
 	placeholder?: string;
 	disabled?: boolean;
 	loading?: boolean;
-	notFoundContent?: string;
+	/** antd cho phép truyền hẳn 1 component (icon, nút "Tạo mới"...), không chỉ text. */
+	notFoundContent?: ReactNode;
 	/** Field trong option dùng để lọc khi gõ tìm kiếm (mặc định 'label'). Chỉ nhận field có giá trị
 	 * string/number/boolean trên option — không hỗ trợ hàm lọc tùy biến. */
 	optionFilterProp?: string;
@@ -114,7 +115,7 @@ const SelectSearchPopover = ({
 	selectedKeys: string[];
 	onToggle: (key: string) => void;
 	searchPlaceholder?: string;
-	emptyLabel?: string;
+	emptyLabel?: ReactNode;
 	children: ReactNode;
 }) => {
 	const [search, setSearch] = useState('');
@@ -290,9 +291,9 @@ const Select = ({
 			<span className={classNames('truncate text-left', !hasValue && 'text-ds-content-secondary')}>
 				{hasValue ? selectedLabels.join(', ') : placeholder}
 			</span>
-			<span className='flex shrink-0 items-center gap-1'>
+			<span className='flex shrink-0 items-center gap-1 text-ds-content-tertiary'>
 				{allowClear && hasValue && !isDisabled ? (
-					<IconXmarkCircleFill size={fieldSize === 'sm' ? 16 : 20} onClick={handleClear} />
+					<IconXmarkCircleFill size={fieldSize === 'sm' ? 16 : 20} className='cursor-pointer' onClick={handleClear} />
 				) : null}
 				{loading ? (
 					<IconRotateArrow size={fieldSize === 'sm' ? 16 : 20} className='animate-spin' />

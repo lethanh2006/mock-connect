@@ -1,4 +1,5 @@
-import { Button, Icon3SquarePlusmark, IconPlus, IconQuestionCircle, Tooltip, TooltipContent, TooltipTrigger } from '@/components/Icons';
+import { Button, Icon3SquarePlusmark, IconPlus, IconQuestionCircle } from '@/components/Icons';
+import MyTooltip from '@/components/MyTooltip';
 import { Descriptions, Form, Typography } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'umi';
@@ -173,22 +174,19 @@ const ModalFilter = () => {
 			{visibleConditionRows.length ? (
 				<div className='filter-conditions-box'>
 					<div className='filter-conditions-header'>
-						<Tooltip>
-							<TooltipTrigger asChild>
-								<span className='filter-conditions-tooltip-trigger'>
-									<Text strong>
-										{intl.formatMessage({ id: 'global.table.customfilter.dieukien', defaultMessage: 'Conditions' })}{' '}
-									</Text>
-									<IconQuestionCircle className='filter-conditions-icon' />
-								</span>
-							</TooltipTrigger>
-							<TooltipContent>
-								{intl.formatMessage({
-									id: 'global.table.customfilter.tooltip.applied',
-									defaultMessage: 'Filter conditions currently applied to the table',
-								})}
-							</TooltipContent>
-						</Tooltip>
+						<MyTooltip
+							title={intl.formatMessage({
+								id: 'global.table.customfilter.tooltip.applied',
+								defaultMessage: 'Filter conditions currently applied to the table',
+							})}
+						>
+							<span className='filter-conditions-tooltip-trigger'>
+								<Text strong>
+									{intl.formatMessage({ id: 'global.table.customfilter.dieukien', defaultMessage: 'Conditions' })}{' '}
+								</Text>
+								<IconQuestionCircle className='filter-conditions-icon' />
+							</span>
+						</MyTooltip>
 						<Text strong>:</Text>
 					</div>
 					<div className='filter-conditions-descriptions'>

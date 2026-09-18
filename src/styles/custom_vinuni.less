@@ -145,6 +145,25 @@ html[data-vinuni-theme='dark'] body {
 // nơi dùng nó) để mọi chỗ đang tham chiếu var(--color-accent-700) tự động ra đúng màu tối.
 html[data-vinuni-theme='dark'] {
 	--color-accent-700: rgba(255, 255, 255, 0.12);
+
+	// --color-*-bg (success/info/warning/error/highlight/teal) là các token nền pastel tĩnh (dùng cho
+	// item chưa đọc trong NoticeList, badge trạng thái, ô info trong Filter/StatisticsCard...) —
+	// không tự đổi theo dark mode nên nổi sáng như 1 khối trắng lạc quẻ trên nền tối. Định nghĩa lại
+	// bằng đúng màu trạng thái ở opacity thấp để vẫn giữ được sắc thái (đỏ/xanh/vàng...) nhưng đọc
+	// được trên nền tối, khớp cùng cách antd tự tính màu -bg theo theme (darkAlgorithm).
+	--color-success-bg: rgba(68, 177, 15, 0.16);
+	--color-info-bg: rgba(0, 81, 255, 0.16);
+	--color-warning-bg: rgba(250, 174, 19, 0.16);
+	--color-error-bg: rgba(226, 4, 4, 0.16);
+	--color-highlight-bg: rgba(166, 26, 222, 0.16);
+	--color-teal-bg: rgba(24, 187, 194, 0.16);
+
+	// --color-official-500 (#f4f9ff, gốc của --vin-color-primary-bg/--color-primary-bg) là màu tĩnh
+	// tương tự — dùng ở >10 nơi làm nền hover/highlight nhạt (item NoticeList, hover row Table,
+	// StatisticsCard, TinyEditor, AuditLog dòng đang chọn, viền split-panel...), không tự đổi theo
+	// dark mode nên hover/highlight loá trắng trên nền tối, chữ theo màu tối cũ đọc không được nữa.
+	// Cùng tông với .highlight (PageCard Level 2) đã tự vá riêng bên dưới.
+	--color-official-500: rgba(59, 129, 218, 0.16);
 }
 
 button:not(:disabled),

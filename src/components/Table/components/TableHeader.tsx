@@ -15,10 +15,8 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 	SearchInput,
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
 } from '@/components/Icons';
+import MyTooltip from '@/components/MyTooltip';
 import { Popconfirm } from 'antd';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
@@ -410,14 +408,11 @@ export const TableHeader: React.FC = () => {
 				) : null}
 
 				{!hideTotal && (
-					<Tooltip>
-						<TooltipTrigger asChild>
-							<div className={classNames({ total: true, small: size === 'small' })}>
-								{intl.formatMessage({ id: 'global.table.index.button.tongso' })}:<span>{inputFormat(total || 0)}</span>
-							</div>
-						</TooltipTrigger>
-						<TooltipContent>{intl.formatMessage({ id: 'global.table.index.button.tongso.tooltip' })}</TooltipContent>
-					</Tooltip>
+					<MyTooltip title={intl.formatMessage({ id: 'global.table.index.button.tongso.tooltip' })}>
+						<div className={classNames({ total: true, small: size === 'small' })}>
+							{intl.formatMessage({ id: 'global.table.index.button.tongso' })}:<span>{inputFormat(total || 0)}</span>
+						</div>
+					</MyTooltip>
 				)}
 
 				{otherExtra}

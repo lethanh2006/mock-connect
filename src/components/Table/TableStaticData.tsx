@@ -21,10 +21,8 @@ import {
 	TableRow,
 	TableSelectionCell,
 	TableSortButton,
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
 } from '@/components/Icons';
+import MyTooltip from '@/components/MyTooltip';
 import PageCard from '@/components/PageCard';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { primaryColor } from '@/services/base/constant';
@@ -317,15 +315,12 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							<span>{val}</span>
 
 							{phanVungHienTai?._id && (
-								<Tooltip>
-									<TooltipTrigger asChild>
-										<div
-											className='cornerTriangle'
-											style={{ backgroundColor: maMau, top: size === 'small' ? -4 : -8 }}
-										/>
-									</TooltipTrigger>
-									<TooltipContent>{phanVungHienTai?.name}</TooltipContent>
-								</Tooltip>
+								<MyTooltip title={phanVungHienTai?.name}>
+									<div
+										className='cornerTriangle'
+										style={{ backgroundColor: maMau, top: size === 'small' ? -4 : -8 }}
+									/>
+								</MyTooltip>
 							)}
 						</div>
 					);
@@ -990,17 +985,14 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					) : null}
 
 					{hasTotal ? (
-						<Tooltip>
-							<TooltipTrigger asChild>
-								{props.totalComponent || (
-									<div className={classNames({ total: true, small: size === 'small' })}>
-										{intl.formatMessage({ id: 'global.tablestatic.button.tongso' })}:
-										<span>{tableData?.length ?? props.data?.length ?? 0}</span>
-									</div>
-								)}
-							</TooltipTrigger>
-							<TooltipContent>{intl.formatMessage({ id: 'global.tablestatic.button.tongso.tooltip' })}</TooltipContent>
-						</Tooltip>
+						<MyTooltip title={intl.formatMessage({ id: 'global.tablestatic.button.tongso.tooltip' })}>
+							{props.totalComponent || (
+								<div className={classNames({ total: true, small: size === 'small' })}>
+									{intl.formatMessage({ id: 'global.tablestatic.button.tongso' })}:
+									<span>{tableData?.length ?? props.data?.length ?? 0}</span>
+								</div>
+							)}
+						</MyTooltip>
 					) : null}
 
 					{props.otherExtra}

@@ -1,8 +1,6 @@
-import readAll from '@/assets/read-all.svg';
-import reLoad from '@/assets/refresh.svg';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import ViewThongBao from '@/pages/ThongBao/components/ViewThongBao';
-import { IconButton, SidebarView } from '@/components/Icons';
+import { IconButton, IconDoubleCheck, IconRotateArrow, SidebarView } from '@/components/Icons';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -37,7 +35,7 @@ const NoticePanel = () => {
 						size='sm'
 						onClick={() => getThongBaoModel()}
 					>
-						<img src={reLoad} className={classNames(styles.reloadIcon, loading && styles.spinning)} alt='' />
+						<IconRotateArrow className={classNames(styles.reloadIcon, loading && styles.spinning)} />
 					</IconButton>
 					<IconButton
 						label={intl.formatMessage({ id: 'app.header.readAll', defaultMessage: 'Đánh dấu tất cả là đã đọc' })}
@@ -46,7 +44,7 @@ const NoticePanel = () => {
 						disabled={!unread}
 						onClick={clearReadState}
 					>
-						<img src={readAll} alt='' />
+						<IconDoubleCheck />
 					</IconButton>
 				</div>
 			</div>
