@@ -752,7 +752,8 @@ button:not(:disabled),
 
 // --color-official-300 (navy #134d8b) là token tĩnh, không tự đổi theo dark mode như
 // --color-text-base (antd cssVar). Dark mode: bỏ màu navy tĩnh, dùng lại --color-text-base để chữ
-// title Level 2 sáng lên đúng theme thay vì tối om trên nền tối.
+// title Level 2/3 sáng lên đúng theme thay vì tối om trên nền tối. Level 4 (standard) không bị vì
+// không có rule riêng ghi đè, đã tự dùng --color-text-base từ rule gốc.
 [data-vinuni-theme='dark'] {
 
 	[data-slot='card'].highlight .page-card-title,
@@ -762,7 +763,17 @@ button:not(:disabled),
 	.table-base-card.highlight .page-card-title,
 	.table-base-card.highlight [data-slot='card-title'],
 	.page-card.highlight .page-card-title,
-	.page-card.highlight [data-slot='card-title'] {
+	.page-card.highlight [data-slot='card-title'],
+	// Level 3 thực tế được áp bởi rule .card-big-title.normal (specificity cao hơn .normal alone),
+	// nhưng thêm cả 2 để không phụ thuộc chỗ nào đang thắng.
+	[data-slot='card'].normal .page-card-title,
+	[data-slot='card'].normal [data-slot='card-title'],
+	[data-slot='table-card'].normal .page-card-title,
+	[data-slot='table-card'].normal [data-slot='card-title'],
+	.table-base-card.normal .page-card-title,
+	.table-base-card.normal [data-slot='card-title'],
+	.page-card.normal .page-card-title,
+	.page-card.normal [data-slot='card-title'] {
 		color: var(--color-text-base) !important;
 	}
 }
