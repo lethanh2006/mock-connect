@@ -62,7 +62,12 @@ const MyPassword = ({ prefix, size: _size, className, ...props }: MyInputProps) 
 			{prefix ? <InputGroupAddon>{prefix}</InputGroupAddon> : null}
 			<InputGroupInput type={visible ? 'text' : 'password'} {...props} />
 			<InputGroupAddon align='inline-end'>
-				<InputGroupButton type='button' tabIndex={-1} onClick={() => setVisible((v) => !v)}>
+				<InputGroupButton
+					type='button'
+					tabIndex={-1}
+					aria-label={visible ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+					onClick={() => setVisible((v) => !v)}
+				>
 					{visible ? <IconEyeSlash size={16} /> : <IconEye size={16} />}
 				</InputGroupButton>
 			</InputGroupAddon>

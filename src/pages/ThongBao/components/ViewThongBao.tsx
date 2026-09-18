@@ -6,7 +6,7 @@ import { currentRole } from '@/utils/ip';
 import { getNameFile, sanitizeObject } from '@/utils/utils';
 import { IconCalendar, IconHuman } from '@/components/Icons';
 import { Avatar, AvatarImage, Button } from '@/components/Icons';
-import { Card, Divider } from 'antd';
+import { Card } from '@/components/PageCard';
 import { Col, Row } from '@/components/MyGrid';
 import { history } from 'umi';
 import './style.less';
@@ -51,32 +51,26 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 	};
 
 	const content = (
-		<div style={{ padding: hideCard ? '0 24px 20px 24px' : undefined }}>
-			<Card.Meta
-				avatar={
-					record?.imageUrl ? (
-						<Avatar size='40'>
-							<AvatarImage src={record?.imageUrl} />
-						</Avatar>
-					) : (
-						false
-					)
-				}
-				description={
-					<>
-						{record?.description ? <div style={{ marginBottom: 8 }}>{record.description}</div> : null}
-						<div className='notif-meta-row'>
-							<span className='notif-meta-item'>
-								<IconHuman size={15} /> {record?.senderName || 'Hệ thống'}
-							</span>
-							<Divider type='vertical' />
-							<span className='notif-meta-item'>
-								<IconCalendar size={15} /> {formatDateTime(record?.createdAt)}
-							</span>
-						</div>
-					</>
-				}
-			/>
+		<div>
+			<div className='notif-meta'>
+				{record?.imageUrl ? (
+					<Avatar size='40'>
+						<AvatarImage src={record?.imageUrl} />
+					</Avatar>
+				) : null}
+				<div className='notif-meta-body'>
+					{record?.description ? <div style={{ marginBottom: 8 }}>{record.description}</div> : null}
+					<div className='notif-meta-row'>
+						<span className='notif-meta-item'>
+							<IconHuman size={15} /> {record?.senderName || 'Hệ thống'}
+						</span>
+						<span className='notif-meta-divider' />
+						<span className='notif-meta-item'>
+							<IconCalendar size={15} /> {formatDateTime(record?.createdAt)}
+						</span>
+					</div>
+				</div>
+			</div>
 
 			<br />
 			<div dangerouslySetInnerHTML={{ __html: sanitizeObject(record?.content ?? '') }} className='notif-content' />

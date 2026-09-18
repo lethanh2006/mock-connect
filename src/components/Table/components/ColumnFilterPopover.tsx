@@ -36,13 +36,21 @@ const FilterFooter: React.FC<{ onReset: () => void; onApply: () => void }> = ({ 
 	);
 };
 
-const FilterTrigger: React.FC<{ active?: boolean; icon?: React.ReactNode }> = ({ active, icon }) => (
-	<PopoverTrigger asChild>
-		<button type='button' className='column-filter-trigger-button' onClick={(e) => e.stopPropagation()}>
-			{icon || <IconFilter className={active ? 'text-primary' : undefined} />}
-		</button>
-	</PopoverTrigger>
-);
+const FilterTrigger: React.FC<{ active?: boolean; icon?: React.ReactNode }> = ({ active, icon }) => {
+	const intl = useIntl();
+	return (
+		<PopoverTrigger asChild>
+			<button
+				type='button'
+				className='column-filter-trigger-button'
+				aria-label={intl.formatMessage({ id: 'global.table.columnfilter.label', defaultMessage: 'Lọc cột' })}
+				onClick={(e) => e.stopPropagation()}
+			>
+				{icon || <IconFilter className={active ? 'text-primary' : undefined} />}
+			</button>
+		</PopoverTrigger>
+	);
+};
 
 const StringFilterPopover: React.FC<ColumnFilterPopoverProps> = ({ column, getFilterColumn, onSearch }) => {
 	const intl = useIntl();

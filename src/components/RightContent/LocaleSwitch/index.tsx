@@ -38,15 +38,19 @@ const LocaleSwitch = () => {
 	// return null;
 	return (
 		<HeaderDropdown content={<Menu items={items} />} trigger='hover'>
-			<span className={styles.action}>
+			<button
+				type='button'
+				className={styles.action}
+				aria-label={intl.formatMessage({ id: 'app.locale.switch', defaultMessage: 'Đổi ngôn ngữ' })}
+			>
 				<img
 					src={getPublicAssetPath(
 						`images/locales/${intl.formatMessage({ id: 'app.locale.image', defaultMessage: 'vi-VN.svg' })}`,
 					)}
-					alt='lang'
+					alt=''
 					width={25}
 				/>
-			</span>
+			</button>
 		</HeaderDropdown>
 	);
 };

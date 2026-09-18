@@ -13,6 +13,17 @@
   }
 }
 
+.notif-meta {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  .notif-meta-body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
 .notif-meta-row {
   display: flex;
   align-items: center;
@@ -25,5 +36,15 @@
     svg {
       display: inline-block !important;
     }
+  }
+
+  // Không dùng component Separator của vinui: class Tailwind nó cần (bg-border) không được biên
+  // dịch sẵn trong CSS build của @vinuni/ui (dự án này không tự chạy Tailwind JIT quét src/**),
+  // nên đường kẻ sẽ vô hình. Dùng span thường + màu token --ds-line-primary (tự đổi theo dark mode).
+  .notif-meta-divider {
+    width: 1px;
+    height: 12px;
+    margin: 0 8px;
+    background-color: var(--ds-line-primary);
   }
 }

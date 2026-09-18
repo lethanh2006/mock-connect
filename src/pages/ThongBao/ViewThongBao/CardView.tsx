@@ -1,5 +1,5 @@
 import { type ThongBao } from '@/services/ThongBao/typing';
-import { Card } from 'antd';
+import { Card } from '@/components/PageCard';
 import ViewThongBao from '../components/ViewThongBao';
 
 const ViewThongBaoCard = (props: { record?: ThongBao.IRecord; afterViewDetail?: () => void }) => {

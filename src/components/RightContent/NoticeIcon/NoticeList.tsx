@@ -6,7 +6,7 @@ import { Divider, List } from 'antd';
 import classNames from 'classnames';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useIntl, useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import styles from './index.less';
 
 export type NoticeIconTabProps = {
@@ -122,16 +122,9 @@ const NoticeList: React.FC<NoticeIconTabProps> = ({
 			) : null}
 
 			<div className={styles.bottomBar}>
-				<Link
-					className='notice-list-loadmore'
-					to='#!'
-					onClick={(e) => {
-						e.preventDefault();
-						onViewMore?.();
-					}}
-				>
+				<button type='button' className='notice-list-loadmore' onClick={() => onViewMore?.()}>
 					<IconArrowDown size={14} /> {viewMoreText}
-				</Link>
+				</button>
 			</div>
 		</div>
 	);

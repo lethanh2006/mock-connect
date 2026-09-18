@@ -270,12 +270,22 @@ const UploadFile: React.FC<TUploadProps> = ({
 
 												{!isDisabled && (
 													<div className='ant-upload-list-item-actions-custom'>
-														<span onClick={() => handlePreviewImage(file)}>
-															<IconEye size={18} style={{ color: '#fff', marginRight: 12 }} />
-														</span>
-														<span onClick={() => actions.remove()}>
+														<button
+															type='button'
+															aria-label={intl.formatMessage({ id: 'global.upload.preview', defaultMessage: 'Xem trước' })}
+															style={{ background: 'none', border: 'none', padding: 0, marginRight: 12, cursor: 'pointer' }}
+															onClick={() => handlePreviewImage(file)}
+														>
+															<IconEye size={18} style={{ color: '#fff' }} />
+														</button>
+														<button
+															type='button'
+															aria-label={intl.formatMessage({ id: 'global.upload.remove', defaultMessage: 'Xóa' })}
+															style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+															onClick={() => actions.remove()}
+														>
 															<IconTrash size={18} style={{ color: '#fff' }} />
-														</span>
+														</button>
 													</div>
 												)}
 											</div>

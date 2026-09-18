@@ -35,7 +35,7 @@ const GroupTagUsers = (props: {
 			align: 'center',
 			width: 60,
 			render: (val, rec) => (
-				<ButtonExtend onClick={() => onClose(rec?.username)} type='link' danger icon={<IconXmark />} />
+				<ButtonExtend onClick={() => onClose(rec?.username)} type='link' danger icon={<IconXmark />} tooltip='Xóa' />
 			),
 		},
 	];

@@ -63,6 +63,8 @@
 	overscroll-behavior-x: contain;
 }
 
+// Là <button> thật (không phải <a href="#!">) — reset style mặc định của trình duyệt để trông
+// giống hệt link cũ.
 .notice-list-loadmore {
 	display: inline-flex;
 	align-items: center;
@@ -70,4 +72,9 @@
 	gap: 6px;
 	height: 100%;
 	color: var(--color-text-secondary);
+	background: none;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
 }

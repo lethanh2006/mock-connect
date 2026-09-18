@@ -236,6 +236,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 								disabled={currentFileIndex === 0}
 								icon={<IconChervolLeft />}
 								onClick={handlePrev}
+								tooltip={intl.formatMessage({ id: 'global.previewfile.button.trentruoc', defaultMessage: 'File trước' })}
 							/>
 							<span>
 								{currentFileIndex + 1} / {fileList.length}
@@ -245,6 +246,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 								disabled={currentFileIndex === fileList.length - 1}
 								icon={<IconChervolRight />}
 								onClick={handleNext}
+								tooltip={intl.formatMessage({ id: 'global.previewfile.button.tieptheo', defaultMessage: 'File tiếp theo' })}
 							/>
 						</div>
 					)}

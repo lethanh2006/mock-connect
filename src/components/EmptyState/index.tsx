@@ -4,8 +4,9 @@ import type { ComponentType, CSSProperties, ReactNode } from 'react';
 import './style.less';
 
 export interface EmptyStateProps {
-	/** Chữ mô tả hiển thị dưới hình minh hoạ. */
-	description?: React.ReactNode;
+	/** Chữ mô tả hiển thị dưới hình minh hoạ. Mặc định "Không có dữ liệu" (giống antd Empty) khi
+	 * không truyền — truyền `false` để ẩn hẳn, giống hệt convention `description={false}` của antd. */
+	description?: React.ReactNode | false;
 	/** Hình minh hoạ Lecxe — mặc định LecxeEmptyNoData, đổi khi cần (404, không quyền...). */
 	image?: ComponentType<{ alt?: string; style?: CSSProperties }>;
 	/** Style riêng cho khung hình minh hoạ — antd Empty gọi là `imageStyle`, giữ tên cho quen thuộc. */
@@ -31,12 +32,15 @@ const EmptyState = ({
 	className,
 	style,
 	children,
-}: EmptyStateProps) => (
-	<div className={classNames('empty-state', compact && 'empty-state-compact', className)} style={style}>
-		<Image alt='' style={imageStyle} />
-		{description ? <span className='empty-state-text'>{description}</span> : null}
-		{children ? <div className='empty-state-action'>{children}</div> : null}
-	</div>
-);
+}: EmptyStateProps) => {
+	const resolvedDescription = description === undefined ? 'Không có dữ liệu' : description;
+	return (
+		<div className={classNames('empty-state', compact && 'empty-state-compact', className)} style={style}>
+			<Image alt='' style={imageStyle} />
+			{resolvedDescription !== false ? <span className='empty-state-text'>{resolvedDescription}</span> : null}
+			{children ? <div className='empty-state-action'>{children}</div> : null}
+		</div>
+	);
+};
 
 export default EmptyState;
