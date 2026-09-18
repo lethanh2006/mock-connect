@@ -7,7 +7,6 @@ import {
 } from '@/services/base/constant';
 import type { Login } from '@/services/base/typing';
 import { IconDoubleHumanCard, SidebarView } from '@/components/Icons';
-import { Col, Row } from 'antd';
 import { useIntl, useModel } from 'umi';
 import './style.less';
 
@@ -35,37 +34,33 @@ const ModuleView = () => {
 			</div>
 
 			<div className='module-container' style={{ padding: '0 12px 12px' }}>
-				<Row gutter={[5, 5]}>
+				<div className='module-grid'>
 					{allowedModules.map(([name, value]) => (
-						<Col span={8} key={name}>
-							<a href={value?.url} target='_blank' rel='noreferrer'>
-								<div className='module-item'>
-									{value?.icon ? (
-										<img src={`${AppModules[EModuleKey.CORE].url}modules/${value.icon}`} />
-									) : (
-										<IconDoubleHumanCard size={36} className='module-icon' />
-									)}
-									<span className='module-name'>{intl.formatMessage({ id: value?.title ?? name })}</span>
-								</div>
-							</a>
-						</Col>
+						<a key={name} href={value?.url} target='_blank' rel='noreferrer'>
+							<div className='module-item'>
+								{value?.icon ? (
+									<img src={`${AppModules[EModuleKey.CORE].url}modules/${value.icon}`} />
+								) : (
+									<IconDoubleHumanCard size={36} className='module-icon' />
+								)}
+								<span className='module-name'>{intl.formatMessage({ id: value?.title ?? name })}</span>
+							</div>
+						</a>
 					))}
 
 					{extendModules.map((mod) => (
-						<Col span={8} key={mod.url}>
-							<a href={mod.url} target='_blank' rel='noreferrer'>
-								<div className='module-item'>
-									{mod.icon ? (
-										<img src={`${AppModules[EModuleKey.CORE].url}modules/${mod.icon}`} />
-									) : (
-										<IconDoubleHumanCard size={36} className='module-icon' />
-									)}
-									<span className='module-name'>{intl.formatMessage({ id: mod.title })}</span>
-								</div>
-							</a>
-						</Col>
+						<a key={mod.url} href={mod.url} target='_blank' rel='noreferrer'>
+							<div className='module-item'>
+								{mod.icon ? (
+									<img src={`${AppModules[EModuleKey.CORE].url}modules/${mod.icon}`} />
+								) : (
+									<IconDoubleHumanCard size={36} className='module-icon' />
+								)}
+								<span className='module-name'>{intl.formatMessage({ id: mod.title })}</span>
+							</div>
+						</a>
 					))}
-				</Row>
+				</div>
 			</div>
 		</SidebarView>
 	);

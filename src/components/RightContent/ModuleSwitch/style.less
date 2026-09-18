@@ -1,4 +1,12 @@
 .module-view {
+	// SidebarView gốc của vinui tự đặt class Tailwind `overflow-auto` (cả 2 chiều) cho panel — chỉ
+	// cần nội dung bên trong tràn vài px theo chiều ngang là sinh thanh cuộn ngang dư thừa. !important
+	// để thắng class Tailwind gốc (cùng specificity, thứ tự nạp CSS không đảm bảo).
+	overflow-x: hidden !important;
+	// Vuốt ngang bằng touchpad vẫn có thể bị trình duyệt hiểu thành cử chỉ điều hướng back/forward
+	// (hiện hiệu ứng xê dịch/preview trang) dù overflow-x đã hidden — chặn hẳn cử chỉ đó ở đây.
+	overscroll-behavior-x: contain;
+
 	.module-header {
 		padding: 16px 16px 12px;
 		font-weight: 600;
@@ -6,6 +14,13 @@
 
 		display: flex;
 		justify-content: space-between;
+	}
+
+	// Thay cho antd Row/Col (gutter tạo margin âm gây tràn ngang) — 3 cột đều nhau, gap thuần CSS.
+	.module-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 5px;
 	}
 
 	.module-item {

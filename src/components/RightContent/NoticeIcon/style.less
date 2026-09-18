@@ -1,3 +1,11 @@
+// SidebarView gốc của vinui tự đặt class Tailwind `overflow-auto` (cả 2 chiều) cho panel — chỉ cần
+// nội dung bên trong tràn vài px theo chiều ngang là sinh thanh cuộn ngang dư thừa. Cuộn dọc thật
+// sự đã có #scrollableDiv/.notice-list-scroll bên trong lo, panel gốc không cần cuộn ngang bao giờ.
+// !important để thắng class Tailwind gốc (cùng specificity, thứ tự nạp CSS không đảm bảo).
+.notice-panel {
+	overflow-x: hidden !important;
+}
+
 .notice-panel-header {
 	display: flex;
 	align-items: center;
@@ -47,7 +55,12 @@
 .notice-list-scroll {
 	flex: 1;
 	min-height: 0;
-	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
+	// Vuốt ngang bằng touchpad vẫn có thể bị trình duyệt hiểu thành cử chỉ điều hướng back/forward
+	// (hiện hiệu ứng xê dịch/preview trang) dù overflow-x đã hidden — overscroll-behavior-x chặn
+	// hẳn việc trình duyệt "mượn" cử chỉ này ra ngoài phạm vi phần tử.
+	overscroll-behavior-x: contain;
 }
 
 .notice-list-loadmore {

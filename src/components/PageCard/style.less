@@ -8,7 +8,7 @@
 	// z-30: dưới Dialog/overlay của @vinuni/ui (z-50) để bị che khi mở modal, trên z-10/z-20 của
 	// Table (header/cột ghim) để không bị nội dung bảng cuộn đè lên.
 	z-index: 30;
-	// Không overflow: hidden — ScrollEdgeEffect tràn 24px xuống dưới mép header để tạo hiệu ứng mờ.
+	// Không overflow: hidden — ScrollEdgeEffect tràn 12px xuống dưới mép header để tạo hiệu ứng mờ.
 }
 
 // Bỏ margin-top mặc định (custom_vinuni.less) cho mọi chế độ — capHeight (đo bằng JS) đã lấy
@@ -31,12 +31,10 @@
 	flex: none;
 }
 
-// !important vì @vinuni/ui tự đặt top-0 cho edge='top', cùng specificity với class này.
+// !important vì @vinuni/ui tự đặt top-0 cho edge='top', cùng specificity với class này. Không tự
 .page-card-scroll-edge {
 	top: 100% !important;
-	height: 24px !important;
-	opacity: 0;
-	transition: opacity 0.15s ease;
+	height: 12px !important;
 }
 
 .page-card-header[data-scrolled='true'] .page-card-scroll-edge {
