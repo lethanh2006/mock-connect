@@ -1,9 +1,10 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, type FC } from 'react';
 import { useModel } from 'umi';
 import { TableBaseContent } from './components/TableBaseContent';
 import { TableProvider } from './components/TableContext';
 import './style.less';
-import type { TableBaseProps, TFilter } from './typing';
+import TableStaticData from './TableStaticData';
+import type { TableBaseProps, TableStaticProps, TFilter } from './typing';
 import {
 	markExternalFilters,
 	normalizeExternalConditions,
@@ -13,6 +14,14 @@ import {
 	stripFilterSource,
 	stripMetadata,
 } from './utils';
+
+// "Table cơ bản" = TableStaticData (đã hỗ trợ sẵn columns+data thuần, không cần modelName) — đầy đủ
+// resize/sort/filter/pagination/pin cột, style y hệt TableBase vì là cùng 1 component. Chỉ tắt mặc
+// định 2 thứ mang tính "CRUD toolbar" mà bảng cơ bản không cần tới (nút cấu hình cột, tìm kiếm toàn
+// bảng) — vẫn bật lại được nếu truyền tường minh `columnSetting`/`globalSearch`.
+export const Table: FC<TableStaticProps> = (props) => (
+	<TableStaticData columnSetting={false} globalSearch={false} {...props} />
+);
 
 const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 	const model = useModel(props.modelName) as any;

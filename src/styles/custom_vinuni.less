@@ -823,7 +823,7 @@ button:not(:disabled),
 	.page-card-title,
 	[data-slot='card-title'] {
 		font-size: 24px !important;
-		margin-top: 8px !important;
+		margin-top: 4px !important;
 		font-weight: 600 !important;
 		color: var(--color-text-base, var(--color-text-100, #2e2e2e)) !important;
 		line-height: 1.4;
@@ -2023,15 +2023,61 @@ button:not(:disabled),
 	cursor: not-allowed !important;
 }
 
-// InputGroupAddon (icon prefix/suffix, nút mắt Password) của @vinuni/ui tham chiếu class
-// group-data-[disabled=true]/input-group:opacity-50 nhưng class này không có trong CSS build sẵn
-// của package (đã báo lại VinUni — xem vinuni-ui-handover/notes-to-vinui.md mục 1a). MyInput đã tự
-// set data-disabled đúng theo API InputGroup, chỉ còn thiếu style — bù tạm ở đây.
-[data-slot='input-group'][data-disabled='true'] {
-	cursor: not-allowed;
+// ============================================================================
+// Chuẩn hóa trạng thái disabled cho Form Fields VinUni (@vinuni/ui)
+// Package @vinuni/ui build thiếu các class Tailwind cho data-[field-state=disable]
+// dẫn đến input/textarea/select khi disabled không ăn style: vẫn giữ màu chữ đen,
+// nền trong suốt và không hiện cursor not-allowed. Bổ sung style đồng bộ token VinUni.
+// ============================================================================
+[data-slot='input']:disabled,
+[data-slot='input'][data-field-state='disable'],
+[data-slot='textarea']:disabled,
+[data-slot='textarea'][data-field-state='disable'],
+[data-slot='select-trigger']:disabled,
+[data-slot='select-trigger'][data-field-state='disable'],
+input[data-slot='input']:disabled,
+input[data-slot='input-group-control']:disabled {
+	cursor: not-allowed !important;
+	background-color: var(--ds-bg-disable, rgba(0, 0, 0, 0.06)) !important;
+	color: var(--ds-content-tertiary, rgba(0, 0, 0, 0.45)) !important;
+	-webkit-text-fill-color: var(--ds-content-tertiary, rgba(0, 0, 0, 0.45)) !important;
+	border-color: var(--ds-line-primary, rgba(0, 0, 0, 0.1)) !important;
+	user-select: none;
+	opacity: 1 !important;
+
+	&::placeholder {
+		color: var(--ds-content-disable, rgba(0, 0, 0, 0.25)) !important;
+		-webkit-text-fill-color: var(--ds-content-disable, rgba(0, 0, 0, 0.25)) !important;
+	}
+}
+
+// Đối với InputGroup có chứa input disabled hoặc có data-disabled='true'
+[data-slot='input-group'][data-disabled='true'],
+[data-slot='input-group']:has(input:disabled) {
+	cursor: not-allowed !important;
+	background-color: var(--ds-bg-disable, rgba(0, 0, 0, 0.06)) !important;
+	border-color: var(--ds-line-primary, rgba(0, 0, 0, 0.1)) !important;
 
 	[data-slot='input-group-addon'] {
-		background-color: var(--color-disabled);
+		cursor: not-allowed !important;
+		background-color: transparent !important;
+		opacity: 0.5;
+		color: var(--ds-content-tertiary, rgba(0, 0, 0, 0.45)) !important;
+	}
+
+	[data-slot='input-group-control'],
+	input {
+		cursor: not-allowed !important;
+		background-color: transparent !important;
+		color: var(--ds-content-tertiary, rgba(0, 0, 0, 0.45)) !important;
+		-webkit-text-fill-color: var(--ds-content-tertiary, rgba(0, 0, 0, 0.45)) !important;
+		opacity: 1 !important;
+	}
+
+	button,
+	[data-slot='input-group-button'] {
+		cursor: not-allowed !important;
+		pointer-events: none !important;
 		opacity: 0.5;
 	}
 }

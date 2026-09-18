@@ -6,9 +6,12 @@ import { PageCardProps } from './typing';
 
 // margin-top của .page-card-header bị style.less ghi đè về 0 (xem .page-card .page-card-header) —
 // placeholderHeight phải khớp giá trị THẬT đang render, không phải 8px gốc trong custom_vinuni.less.
-// margin-bottom giữ nguyên 16px (không bị ghi đè).
+// margin-bottom giữ nguyên 16px + 8px bù thêm dưới đây — chỉ header khi stickyHeader mới đo qua
+// getBoundingClientRect() rồi cộng placeholder, không phải toàn bộ khoảng cách thật giữa title và
+// card nội dung (khác cách trình duyệt tính flow height ở chế độ thường) nên cần cộng tay đúng phần
+// còn thiếu; chế độ không sticky không đi qua hằng số này nên không bị ảnh hưởng.
 const PAGE_CARD_HEADER_MARGIN_TOP = 0;
-const PAGE_CARD_HEADER_MARGIN_BOTTOM = 16;
+const PAGE_CARD_HEADER_MARGIN_BOTTOM = 16 + 8;
 
 // getBoundingClientRect() trả về line-box, không phải mực chữ thật — dấu tiếng Việt dưới baseline
 // có thể tràn ra ngoài line-box vài pixel. Chỉ cộng vào shellHeight (vùng tô màu của shell fixed),

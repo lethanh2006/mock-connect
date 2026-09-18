@@ -276,6 +276,8 @@ const Select = ({
 	const trigger = (
 		<button
 			type='button'
+			data-slot='select-trigger'
+			data-field-state={isDisabled ? 'disable' : undefined}
 			disabled={isDisabled}
 			style={style}
 			className={classNames(

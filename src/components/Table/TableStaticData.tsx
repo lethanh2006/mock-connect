@@ -122,10 +122,38 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 	// dnd-kit sensors
 	const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
+	// Tương thích field antd THẬT (`sorter`, `filters`) — trước đây chỉ đọc field riêng của base-web
+	// (`sortable`, `filterType`/`filterData`), khiến `sorter`/`filters` kế thừa từ ColumnType antd tồn
+	// tại về type nhưng không có tác dụng gì (im lặng không sort/không filter). Chuẩn hóa 1 lần ở đây:
+	// backfill `sortable`/`filterType`/`filterData` từ `sorter`/`filters` khi cột chưa tự khai field
+	// riêng, để phần còn lại của component (đọc `sortable`/`filterType`) tự động nhận ra mà không cần
+	// sửa gì thêm. Riêng compare function của `sorter` (nhận (record,record), khác `customSort` nhận
+	// (value,value)) và `onFilter` (predicate tùy ý, khác includes-check) vẫn cần đọc field gốc tại
+	// nơi thực thi sort/filter — xem 2 chỗ dùng `.sorter`/`.onFilter` trực tiếp bên dưới.
+	const normalizeAntdColumn = useCallback((col: IColumn<any>): IColumn<any> => {
+		const normalized: IColumn<any> = { ...col };
+		if (normalized.sortable === undefined && col.sorter) {
+			normalized.sortable = true;
+		}
+		if (normalized.filterType === undefined && Array.isArray(col.filters) && col.filters.length > 0) {
+			normalized.filterType = 'select';
+			normalized.filterData = col.filters.map((f: any) => ({ label: f.text, value: String(f.value) }));
+		}
+		if (col.children?.length) {
+			normalized.children = col.children.map(normalizeAntdColumn);
+		}
+		return normalized;
+	}, []);
+
+	const normalizedColumns = useMemo(
+		() => (props.columns || []).map(normalizeAntdColumn),
+		[props.columns, normalizeAntdColumn],
+	);
+
 	const globalDataIndex = useMemo(() => `TABLE_STATIC_GLOBAL_SEARCH_${window.location.pathname}`, []);
 
 	const globalSearchColumns = useMemo(() => {
-		const flattenColumns = (props.columns || [])
+		const flattenColumns = normalizedColumns
 			.map((item: IColumn<any>) => (item.children?.length ? [item, ...item.children] : [item]))
 			.flat();
 
@@ -134,7 +162,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 			const enableGlobalSearch = item?.enableGlobalSearch ?? isDefaultSearchable;
 			return enableGlobalSearch && item?.dataIndex && item.dataIndex !== 'index' && item?.hide !== true;
 		});
-	}, [props.columns]);
+	}, [normalizedColumns]);
 
 	useEffect(() => {
 		const history = JSON.parse(localStorage.getItem('dataTimKiem') || '{}')?.[globalDataIndex] || [];
@@ -240,7 +268,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 
 	// Base columns processing with useApplyColumnSettings
 	const { processedColumns } = useApplyColumnSettings({
-		columns: props.columns || [],
+		columns: normalizedColumns,
 		columnSettings,
 		columnsWidth,
 		setColumnsWidth,
@@ -360,7 +388,14 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					return val?.toString()?.toLowerCase()?.includes(kw);
 				});
 			} else if (filter.type === 'select' && Array.isArray(filter.value) && filter.value.length > 0) {
+				const targetCol = normalizedColumns.find((c) =>
+					Array.isArray(c.dataIndex) ? c.dataIndex.join('.') === key : c.dataIndex === key,
+				);
 				result = result.filter((item) => {
+					// `onFilter` antd thật — predicate tùy ý (không chỉ so bằng), dùng khi có khai báo.
+					if (typeof targetCol?.onFilter === 'function') {
+						return filter.value.some((v: any) => targetCol.onFilter!(v, item));
+					}
 					const val = getValueByDataIndex(item, key);
 					return filter.value.includes(String(val));
 				});
@@ -382,10 +417,14 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		const sortKey = Object.keys(sort)[0];
 		const sortOrder = sortKey ? sort[sortKey] : 0;
 		if (sortKey && sortOrder !== 0) {
-			const targetCol = (props.columns || []).find((c) =>
+			const targetCol = normalizedColumns.find((c) =>
 				Array.isArray(c.dataIndex) ? c.dataIndex.join('.') === sortKey : c.dataIndex === sortKey,
 			);
 			result.sort((a, b) => {
+				// `sorter` antd thật nhận (record, record) — khác `customSort` nhận (value, value).
+				if (typeof targetCol?.sorter === 'function') {
+					return targetCol.sorter(a, b) * sortOrder;
+				}
 				const aVal = getValueByDataIndex(a, sortKey);
 				const bVal = getValueByDataIndex(b, sortKey);
 				if (targetCol?.customSort) {
@@ -405,7 +444,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 	}, [
 		props.data,
 		props.hideChildrenRows,
-		props.columns,
+		normalizedColumns,
 		columnFilters,
 		globalSearch,
 		globalSearchText,
