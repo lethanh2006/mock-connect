@@ -42,6 +42,12 @@ const PageCard: React.FC<PageCardProps> = ({
 	// Level 4: Standard Card (title nằm trong Card)
 	const isLevel4 = level === 4;
 
+	// title/section title phải expose qua heading thật cho accessibility
+	// tree, không phải div thường. Level 1 = h1 (page title), Level 2 = h2 (section), Level 3/4 = h3
+	// (sub-section/card title) — style vẫn do .page-card-title/[data-slot='card-title'] quyết định,
+	// đổi tag không đổi giao diện (xem margin reset ở style.less để không lệch phép đo stickyHeader).
+	const HeadingTag = (level === 1 ? 'h1' : level === 2 ? 'h2' : 'h3') as 'h1' | 'h2' | 'h3';
+
 	const containerRef = useRef<HTMLDivElement>(null);
 	const headerRef = useRef<HTMLDivElement>(null);
 	const placeholderRef = useRef<HTMLDivElement>(null);
@@ -158,7 +164,11 @@ const PageCard: React.FC<PageCardProps> = ({
 			<>
 				{hasHeader && (
 					<CardHeader style={styles?.header}>
-						{title && <CardTitle>{title}</CardTitle>}
+						{title && (
+							<CardTitle role='heading' aria-level={3}>
+								{title}
+							</CardTitle>
+						)}
 						{extraContent && <CardAction>{extraContent}</CardAction>}
 					</CardHeader>
 				)}
@@ -218,9 +228,9 @@ const PageCard: React.FC<PageCardProps> = ({
 									data-scrolled={scrolled}
 								>
 									{title && (
-										<div className='page-card-title' data-slot='card-title'>
+										<HeadingTag className='page-card-title' data-slot='card-title'>
 											{title}
-										</div>
+										</HeadingTag>
 									)}
 									{extraContent && (
 										<div className='page-card-action' data-slot='card-action'>
@@ -233,9 +243,9 @@ const PageCard: React.FC<PageCardProps> = ({
 						) : (
 							<div className='page-card-header' data-slot='page-card-header'>
 								{title && (
-									<div className='page-card-title' data-slot='card-title'>
+									<HeadingTag className='page-card-title' data-slot='card-title'>
 										{title}
-									</div>
+									</HeadingTag>
 								)}
 								{extraContent && (
 									<div className='page-card-action' data-slot='card-action'>

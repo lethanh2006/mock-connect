@@ -1,7 +1,6 @@
 import { TenVaiTroKhaoSat, EVaiTroKhaoSat } from '@/services/ThongBao/constant';
-import { Space, Tag } from 'antd';
+import { Chip, ChipGroup } from '@/components/Icons';
 import _ from 'lodash';
-const { CheckableTag } = Tag;
 
 const GroupTagVaiTro = (props: {
 	value?: EVaiTroKhaoSat[];
@@ -29,18 +28,21 @@ const GroupTagVaiTro = (props: {
 	};
 
 	return (
-		<Space wrap size={8} className='lich-tuan-list'>
-			{listVaiTro.map((item) => (
-				<CheckableTag
-					key={item}
-					checked={value?.includes(item) || false}
-					onChange={(checked) => handleChange(item, checked)}
-					style={{ pointerEvents: disabled ? 'none' : undefined }}
-				>
-					{TenVaiTroKhaoSat[item]}
-				</CheckableTag>
-			))}
-		</Space>
+		<ChipGroup className='lich-tuan-list'>
+			{listVaiTro.map((item) => {
+				const isSelected = value?.includes(item) || false;
+				return (
+					<Chip
+						key={item}
+						selected={isSelected}
+						disabled={disabled}
+						onClick={() => handleChange(item, !isSelected)}
+					>
+						{TenVaiTroKhaoSat[item]}
+					</Chip>
+				);
+			})}
+		</ChipGroup>
 	);
 };
 

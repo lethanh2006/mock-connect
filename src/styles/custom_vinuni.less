@@ -523,6 +523,10 @@ button:not(:disabled),
 }
 
 [data-slot='card-title'] {
+	// PageCard giờ render title bằng h1/h2/h3 thật (accessibility) thay vì div — heading có margin
+	// mặc định của trình duyệt, reset về 0 để không lệch phép đo pixel-perfect của stickyHeader.
+	// Các rule margin-top cụ thể hơn bên dưới (card-big-title...) vẫn override đè lên giá trị này.
+	margin: 0;
 	white-space: pre-wrap;
 	font-family: var(--font-family-base);
 	font-size: 18px;
