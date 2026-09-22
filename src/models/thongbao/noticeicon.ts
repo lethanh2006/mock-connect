@@ -1,7 +1,13 @@
 import { getThongBao, readNotification } from '@/services/ThongBao';
 import { type ThongBao } from '@/services/ThongBao/typing';
 import { message } from 'antd';
+import DOMPurify from 'dompurify';
 import { useState } from 'react';
+
+const toPlainText = (value?: string) =>
+	DOMPurify.sanitize(value ?? '', { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
+		.replace(/\s+/g, ' ')
+		.trim();
 
 export default () => {
 	const [loading, setLoading] = useState<boolean>(true);
@@ -21,7 +27,7 @@ export default () => {
 				...item,
 				_id: item.id ?? item._id,
 				content: item.body ?? item.content,
-				description: item.description ?? item.body,
+				description: toPlainText(item.description ?? item.body ?? item.content),
 				read: item.isRead ?? item.read,
 			}));
 			if (page === 1) setDanhSach(list);
