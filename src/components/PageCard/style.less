@@ -40,3 +40,216 @@
 .page-card-header[data-scrolled='true'] .page-card-scroll-edge {
 	opacity: 1;
 }
+
+// Header Standard Card (level 4) — Type=Default.
+// Chiều rộng 1150px / 1102px trong Figma là kích thước frame, map thành stretch + flex-grow.
+.page-card.page-card-standard:has([data-slot='card-header']) {
+	padding-top: 0 !important;
+}
+
+.page-card.page-card-standard {
+	[data-slot='card-header'] {
+		box-sizing: border-box;
+		display: flex !important;
+		flex-direction: row !important;
+		flex-wrap: nowrap !important;
+		align-items: center !important;
+		justify-content: flex-start !important;
+		gap: 0 !important;
+		padding: 0 24px !important;
+		width: 100% !important;
+		min-height: 80px;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+		flex: none;
+		align-self: stretch;
+	}
+
+	.page-card-title-block {
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
+		padding: 16px 0;
+		min-width: 0;
+		width: auto;
+		min-height: 80px;
+		flex: 1 1 auto;
+	}
+
+	[data-slot='card-title'] {
+		box-sizing: border-box;
+		width: 100%;
+		min-height: 28px;
+		margin: 0;
+		font-family: var(--font-family-base, 'Inter', sans-serif) !important;
+		font-style: normal;
+		font-weight: 600 !important;
+		font-size: 18px !important;
+		line-height: 28px !important;
+		color: #000000 !important;
+		flex: none;
+		align-self: stretch;
+
+		.title {
+			font-family: inherit !important;
+			font-size: 18px !important;
+			font-weight: 600 !important;
+			line-height: 28px !important;
+			color: #000000 !important;
+		}
+	}
+
+	[data-slot='card-description'] {
+		box-sizing: border-box;
+		width: 100%;
+		min-height: 20px;
+		margin: 0;
+		font-family: var(--font-family-base, 'Inter', sans-serif);
+		font-style: normal;
+		font-weight: 400;
+		font-size: 14px;
+		line-height: 20px;
+		color: rgba(0, 0, 0, 0.6);
+		flex: none;
+		align-self: stretch;
+	}
+
+	[data-slot='card-action'] {
+		flex: none;
+		align-self: center;
+		margin-left: 12px;
+	}
+
+	// Type=Action — cụm nút sát title, gap 8px nằm giữa các nút.
+	[data-slot='card-header'][data-header-type='action'] {
+		[data-slot='card-action'] {
+			display: flex !important;
+			flex-direction: row;
+			align-items: center;
+			align-self: stretch;
+			padding: 0;
+			margin-left: 0;
+			height: 80px;
+			flex: none;
+		}
+
+		.page-card-header-action-content {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			align-self: stretch;
+			padding: 0;
+			gap: 8px;
+			height: 80px;
+			flex: none;
+		}
+
+		[data-slot='button'] {
+			box-sizing: border-box;
+			height: 36px;
+			padding: 0 16px;
+			gap: 8px;
+			border: none;
+			border-radius: 1000px;
+			background: rgba(0, 0, 0, 0.05) !important;
+			backdrop-filter: blur(12px);
+			font-family: var(--font-family-base, 'Inter', sans-serif);
+			font-style: normal;
+			font-weight: 500;
+			font-size: 14px;
+			line-height: 20px;
+			color: #000000 !important;
+		}
+
+		[data-slot='button'][data-size^='icon'] {
+			width: 36px;
+			padding: 0;
+		}
+	}
+
+	// Type=Button Text — nút chữ, không nền, màu navy.
+	[data-slot='card-header'][data-header-type='button-text'] {
+		[data-slot='card-action'] {
+			display: inline-flex !important;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			align-self: center;
+			margin-left: 0;
+			padding: 0 0 0 16px;
+			gap: 4px;
+			height: 36px;
+			border-radius: 0;
+			background: transparent;
+			font-family: var(--font-family-base, 'Inter', sans-serif);
+			font-style: normal;
+			font-weight: 500;
+			font-size: 14px;
+			line-height: 20px;
+			color: #134d8b;
+		}
+
+		[data-slot='button'],
+		> [data-slot='card-action'] > button,
+		> [data-slot='card-action'] > a {
+			box-sizing: border-box;
+			display: inline-flex;
+			justify-content: center;
+			align-items: center;
+			height: 36px;
+			padding: 0;
+			gap: 4px;
+			border: none;
+			border-radius: 0;
+			background: transparent !important;
+			box-shadow: none;
+			font-family: inherit;
+			font-weight: 500;
+			font-size: 14px;
+			line-height: 20px;
+			color: #134d8b !important;
+		}
+	}
+
+	// Type=Custom — slot cột bên phải, nội dung do nơi gọi truyền vào.
+	[data-slot='card-header'][data-header-type='custom'] {
+		[data-slot='card-action'] {
+			display: flex !important;
+			flex-direction: column;
+			align-items: flex-start;
+			align-self: stretch;
+			justify-content: flex-start;
+			padding: 0;
+			gap: 10px;
+			margin-left: 0;
+			height: 80px;
+			flex: none;
+		}
+	}
+}
+
+[data-vinuni-theme='dark'] .page-card.page-card-standard {
+	[data-slot='card-header'] {
+		border-bottom-color: rgba(255, 255, 255, 0.1);
+	}
+
+	[data-slot='card-title'],
+	[data-slot='card-title'] .title {
+		color: var(--color-text-base, #ffffff) !important;
+	}
+
+	[data-slot='card-description'] {
+		color: var(--color-text-secondary, rgba(255, 255, 255, 0.6));
+	}
+
+	[data-slot='card-header'][data-header-type='action'] [data-slot='button'] {
+		background: rgba(255, 255, 255, 0.08) !important;
+		color: var(--color-text-base, #ffffff) !important;
+	}
+
+	[data-slot='card-header'][data-header-type='button-text'] [data-slot='card-action'],
+	[data-slot='card-header'][data-header-type='button-text'] [data-slot='button'] {
+		color: #8eb6ef !important;
+	}
+}

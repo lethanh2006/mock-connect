@@ -1,16 +1,31 @@
-import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
-import { colorHinhThucGiangDay, mapHinhThucGiangDayI18n, type EHinhThucGiangDay } from '@/services/HocTap/constant';
-import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac, LoaiSuKienLocaleKey } from '@/services/SuKien/constant';
-import { formatDateTime } from '@/utils/formatDate';
-import { getSafeHref, openSafeUrl } from '@/utils/security';
-import { Descriptions, Modal, Space, Tag, message } from 'antd';
-import { mapTrangThaiNopBaiTap, ETrangThaiNopBaiTap } from '@/services/DaoTao/BaiTap/constants';
-import type { LichThi } from '@/services/KhaoThi/LichThi/typing';
 import { Button } from '@/components/Icons';
 import ModalExpandable from '@/components/Table/ModalExpandable';
+import { EVENT_TYPE_TAG, STATUS_TONE } from '@/services/Calendar/constant';
+import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
+import { mapHinhThucGiangDayI18n, type EHinhThucGiangDay } from '@/services/HocTap/constant';
+import { ELoaiSuKien, ELoaiSuKienKhac, LoaiSuKienLocaleKey } from '@/services/SuKien/constant';
+import { formatDateTime } from '@/utils/formatDate';
+import { getSafeHref, openSafeUrl } from '@/utils/security';
 import { toast } from '@/utils/toast';
-import { JSX } from 'react';
+import { Space } from 'antd';
+import { JSX, type ReactNode } from 'react';
 import { history, useIntl, useModel } from 'umi';
+import './style.less';
+
+const DetailView = ({ label, children }: { label: string; children?: ReactNode }) => (
+	<div className='calendar-detail-view'>
+		<div className='calendar-detail-view__label'>{label}</div>
+		<div className='calendar-detail-view__value'>{children || '--'}</div>
+	</div>
+);
+
+const DetailRow = ({ children }: { children: ReactNode }) => <div className='calendar-detail-row'>{children}</div>;
+
+const StatusTag = ({ children, tone = 'success' }: { children: ReactNode; tone?: keyof typeof STATUS_TONE }) => (
+	<span className='calendar-detail-status' style={STATUS_TONE[tone]}>
+		{children}
+	</span>
+);
 
 // Configuration interface for event type handlers
 interface EventTypeConfig {
@@ -25,17 +40,10 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 	const { visible, setVisible, event, getData } = props;
 	const { deleteModel, handleEdit } = useModel('sukien.sukien');
 	const { getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
-	const { record: recSetting } = useModel('tienich.settinglich');
 
 	const loaiSuKien = event?.loaiSuKien as ELoaiSuKien | ELoaiSuKienKhac;
 
 	if (!event) return null;
-
-	const getColorSuKien = (loai: ELoaiSuKien | ELoaiSuKienKhac) => {
-		return (
-			recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === loai)?.maMau ?? ColorSuKien?.[loai] ?? '#ccc'
-		);
-	};
 
 	const getLoaiSuKienLabel = (loai: ELoaiSuKien | ELoaiSuKienKhac) => {
 		const localeKey = LoaiSuKienLocaleKey[loai];
@@ -57,21 +65,17 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 		checker: () => true,
 		renderer: (evt) => (
 			<>
-				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tensukien' })}>
-					{evt?.tenSuKien}
-				</Descriptions.Item>
-				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgbt' })}>
-					{formatDateTime(evt?.thoiGianBatDau)}
-				</Descriptions.Item>
-				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgkt' })}>
-					{formatDateTime(evt?.thoiGianKetThuc)}
-				</Descriptions.Item>
-				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.diadiem' })}>
-					{evt?.diaDiem ?? '--'}
-				</Descriptions.Item>
-				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.ghichu' })}>
-					{evt?.ghiChu ?? '--'}
-				</Descriptions.Item>
+				<DetailView label={intl.formatMessage({ id: 'lichsukien.chitiet.tensukien' })}>{evt?.tenSuKien}</DetailView>
+				<DetailRow>
+					<DetailView label={intl.formatMessage({ id: 'lichsukien.chitiet.tgbt' })}>
+						{formatDateTime(evt?.thoiGianBatDau)}
+					</DetailView>
+					<DetailView label={intl.formatMessage({ id: 'lichsukien.chitiet.tgkt' })}>
+						{formatDateTime(evt?.thoiGianKetThuc)}
+					</DetailView>
+				</DetailRow>
+				<DetailView label={intl.formatMessage({ id: 'lichsukien.chitiet.diadiem' })}>{evt?.diaDiem}</DetailView>
+				<DetailView label={intl.formatMessage({ id: 'lichsukien.chitiet.ghichu' })}>{evt?.ghiChu}</DetailView>
 			</>
 		),
 	};
@@ -83,52 +87,58 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			checker: (evt) => evt.loaiSuKien === ELoaiSuKien.LICH_HOC,
 			renderer: (evt) => {
 				const thoiKhoaBieu = evt as ThoiKhoaBieu.IRecord;
+				const giangVien = thoiKhoaBieu?.giangVien?.ten
+					? [thoiKhoaBieu.giangVien?.hoDem, thoiKhoaBieu.giangVien?.ten].join(' ')
+					: thoiKhoaBieu?.tenNhanSu;
+				const hinhThucGiangDay = thoiKhoaBieu?.hinhThucGiangDay as EHinhThucGiangDay | undefined;
+				const hinhThucGiangDayLocaleKey = hinhThucGiangDay ? mapHinhThucGiangDayI18n[hinhThucGiangDay] : undefined;
+
 				return (
 					<>
-						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.loptinchi' })}>
+						<DetailView label={intl.formatMessage({ id: 'lichsukien.chitiet.loptinchi' })}>
 							{thoiKhoaBieu?.tenLopHocPhan}
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tenhocphan' })}>
+						</DetailView>
+						<DetailView label={intl.formatMessage({ id: 'lichsukien.chitiet.tenhocphan' })}>
 							{thoiKhoaBieu?.lopHocPhan?.hocPhan?.ten}
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgbt' })}>
-							{formatDateTime(thoiKhoaBieu?.thoiGianBatDau)}
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgkt' })}>
-							{formatDateTime(thoiKhoaBieu?.thoiGianKetThuc)}
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.phonghoc' })}>
-							{thoiKhoaBieu?.phongHoc ?? '--'}
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.giangvien' })}>
-							{thoiKhoaBieu?.giangVien?.ten
-								? [thoiKhoaBieu.giangVien?.hoDem, thoiKhoaBieu.giangVien?.ten].join(' ')
-								: (thoiKhoaBieu?.tenNhanSu ?? '--')}
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tieude' })}>
-							{thoiKhoaBieu?.tieuDeBaiHoc ?? '--'}
-						</Descriptions.Item>
+						</DetailView>
+						<DetailRow>
+							<DetailView label={intl.formatMessage({ id: 'lichsukien.chitiet.tgbt' })}>
+								{formatDateTime(thoiKhoaBieu?.thoiGianBatDau)}
+							</DetailView>
+							<DetailView label={intl.formatMessage({ id: 'lichsukien.chitiet.tgkt' })}>
+								{formatDateTime(thoiKhoaBieu?.thoiGianKetThuc)}
+							</DetailView>
+						</DetailRow>
+						<DetailRow>
+							<DetailView label={intl.formatMessage({ id: 'lichsukien.chitiet.phonghoc' })}>
+								{thoiKhoaBieu?.phongHoc}
+							</DetailView>
+							<DetailView label={intl.formatMessage({ id: 'lichsukien.chitiet.giangvien' })}>{giangVien}</DetailView>
+						</DetailRow>
+						<DetailView label={intl.formatMessage({ id: 'lichsukien.chitiet.tieude' })}>
+							{thoiKhoaBieu?.tieuDeBaiHoc}
+						</DetailView>
 						{thoiKhoaBieu?.lopHocPhan?.moodleShortname ? (
-							<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.lms' })}>
+							<DetailView label={intl.formatMessage({ id: 'lichsukien.chitiet.lms' })}>
 								<a onClick={() => handleMoodle(thoiKhoaBieu.lopHocPhan?._id)}>
 									{intl.formatMessage({ id: 'lichsukien.chitiet.duongdan' })}
 								</a>
-							</Descriptions.Item>
+							</DetailView>
 						) : null}
 						{getSafeHref(thoiKhoaBieu?.lopHocPhan?.lmsUrl) ? (
-							<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.hoctructuyen' })}>
+							<DetailView label={intl.formatMessage({ id: 'lichsukien.chitiet.hoctructuyen' })}>
 								<a href={getSafeHref(thoiKhoaBieu?.lopHocPhan?.lmsUrl)} target='_blank' rel='noreferrer'>
 									{intl.formatMessage({ id: 'lichsukien.chitiet.duongdan' })}
 								</a>
-							</Descriptions.Item>
+							</DetailView>
 						) : null}
-						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.hinhthuc' })}>
-							<Tag color={colorHinhThucGiangDay[thoiKhoaBieu?.hinhThucGiangDay as EHinhThucGiangDay]}>
-								{intl.formatMessage({
-									id: mapHinhThucGiangDayI18n[thoiKhoaBieu?.hinhThucGiangDay as EHinhThucGiangDay],
-								})}
-							</Tag>
-						</Descriptions.Item>
+						<DetailView label={intl.formatMessage({ id: 'lichsukien.chitiet.hinhthuc' })}>
+							{hinhThucGiangDay ? (
+								<StatusTag>
+									{hinhThucGiangDayLocaleKey ? intl.formatMessage({ id: hinhThucGiangDayLocaleKey }) : hinhThucGiangDay}
+								</StatusTag>
+							) : null}
+						</DetailView>
 					</>
 				);
 			},
@@ -329,9 +339,16 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 
 	// Render event type badge
 	const renderEventTypeBadge = () => (
-		<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.loai' })}>
-			{loaiSuKien ? <Tag color={getColorSuKien(loaiSuKien)}>{getLoaiSuKienLabel(loaiSuKien)}</Tag> : '--'}
-		</Descriptions.Item>
+		<DetailView label={intl.formatMessage({ id: 'lichsukien.chitiet.loai' })}>
+			{loaiSuKien ? (
+				<span
+					className='calendar-detail-tag'
+					style={{ background: EVENT_TYPE_TAG[loaiSuKien] ?? 'rgba(19, 77, 139, 0.12)' }}
+				>
+					{getLoaiSuKienLabel(loaiSuKien)}
+				</span>
+			) : null}
+		</DetailView>
 	);
 
 	// Render action buttons
@@ -351,8 +368,8 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 		}
 
 		return (
-			<Space>
-				<Button key='close' onClick={() => setVisible(false)}>
+			<Space wrap>
+				<Button key='close' variant='outline' onClick={() => setVisible(false)}>
 					{intl.formatMessage({ id: 'global.button.dong' })}
 				</Button>
 				{actionButtons}
@@ -365,14 +382,15 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			open={visible}
 			title={intl.formatMessage({ id: 'lichsukien.chitiet.title' })}
 			destroyOnClose
-			width={600}
+			width={720}
 			onCancel={() => setVisible(false)}
 			footer={renderActionButtons()}
+			styles={{ body: { padding: 0 } }}
 		>
-			<Descriptions column={1}>
+			<div className='calendar-detail-body'>
 				{renderEventTypeBadge()}
 				{currentConfig?.renderer(event)}
-			</Descriptions>
+			</div>
 		</ModalExpandable>
 	);
 };

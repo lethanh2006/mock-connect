@@ -926,7 +926,6 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							}}
 							icon={<IconPlus />}
 							className='btn-add'
-							type='primary'
 							disabled={createDisabled}
 							size={size}
 							tooltip={intl.formatMessage({ id: 'global.tablestatic.button.themmoi.tooltip' })}
@@ -944,9 +943,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							loading={props.loading}
 							className='btn-reload'
 							tooltip={intl.formatMessage({ id: 'global.tablestatic.button.tailai.tooltip' })}
-						>
-							{intl.formatMessage({ id: 'global.tablestatic.button.tailai' })}
-						</ButtonExtend>
+						/>
 					) : null}
 					{props.otherTextButtons}
 					{props.otherExtra}

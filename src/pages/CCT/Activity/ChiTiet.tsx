@@ -1,7 +1,7 @@
-import { Activity } from '@/services/CCT/Activity/typing';
-import { EApprovalStatus } from '@/services/CCT/constant';
 import { Button } from '@/components/Icons';
 import ModalExpandable from '@/components/Table/ModalExpandable';
+import { Activity } from '@/services/CCT/Activity/typing';
+import { EApprovalStatus } from '@/services/CCT/constant';
 import { Popconfirm, Space } from 'antd';
 import dayjs from 'dayjs';
 import { useIntl, useModel } from 'umi';
@@ -60,35 +60,33 @@ const ChiTietActivity = (props: {
 				header: { backgroundColor: '#F8F8F8' },
 			}}
 		>
-			<div style={{ marginTop: -12 }}>
-				<CardChiTietSuKien
-					record={
-						{
-							...record,
-							activityOutcome: record?.activityOutcome,
-						} as Activity.IRecord
-					}
-					evidenceDeadline={
-						record?.activityOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED
-							? record?.activityOutcome?.dueDate
-								? dayjs(record?.activityOutcome?.dueDate).format('HH:mm DD/MM/YYYY')
+			<CardChiTietSuKien
+				record={
+					{
+						...record,
+						activityOutcome: record?.activityOutcome,
+					} as Activity.IRecord
+				}
+				evidenceDeadline={
+					record?.activityOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED
+						? record?.activityOutcome?.dueDate
+							? dayjs(record?.activityOutcome?.dueDate).format('DD/MM/YYYY, HH:mm')
+							: '--'
+						: record?.allowPostEventResultsUpdate
+							? record?.dueDate
+								? dayjs(record?.dueDate).format('DD/MM/YYYY, HH:mm')
 								: '--'
-							: record?.allowPostEventResultsUpdate
-								? record?.dueDate
-									? dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY')
-									: '--'
-								: record?.endDate
-									? dayjs(record?.endDate).format('HH:mm DD/MM/YYYY')
-									: '--'
-					}
-					infoEvidence={
-						(!!record?.activityOutcome?.workflow && record?.activityOutcome?.workflow !== EApprovalStatus.EXPIRED) ||
-						(record?.activityOutcome?.workflow === EApprovalStatus.EXPIRED && !!record?.activityOutcome?._id)
-					}
-					activeKey={activeKey}
-					isExpired={isExpired}
-				/>
-			</div>
+							: record?.endDate
+								? dayjs(record?.endDate).format('DD/MM/YYYY, HH:mm')
+								: '--'
+				}
+				infoEvidence={
+					(!!record?.activityOutcome?.workflow && record?.activityOutcome?.workflow !== EApprovalStatus.EXPIRED) ||
+					(record?.activityOutcome?.workflow === EApprovalStatus.EXPIRED && !!record?.activityOutcome?._id)
+				}
+				activeKey={activeKey}
+				isExpired={isExpired}
+			/>
 
 			<div
 				style={{

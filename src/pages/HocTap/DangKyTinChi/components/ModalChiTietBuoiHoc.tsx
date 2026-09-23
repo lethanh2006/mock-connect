@@ -11,6 +11,8 @@ export type CalendarLichHocEvent = {
 	title: string;
 	start: Date;
 	end: Date;
+	location?: string;
+	loaiSuKien?: string;
 	lopHocPhan: DangKyTinChi.ILopDangKy;
 	tkb: ThoiKhoaBieu.IRecord;
 };

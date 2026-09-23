@@ -1,4 +1,5 @@
 import background from '@/assets/cct/background.png';
+import { IconHourglass, IconHuman, IconPinLocation, IconStopwatch } from '@/components/Icons';
 import AuthImage from '@/components/Image/AuthImage';
 import { officialColors } from '@/services/base/constant';
 import { Activity } from '@/services/CCT/Activity/typing';
@@ -10,7 +11,6 @@ import {
 	mapEvalidation,
 	mapNameApprovalStatus,
 } from '@/services/CCT/constant';
-import { IconStopwatch, IconPinLocation, IconHuman, IconHourglass } from '@/components/Icons';
 import { Card, Flex, Space, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { JSX } from 'react';
@@ -275,14 +275,14 @@ const CardSuKienCCT = (props: {
 										<span className={`${!isDetail ? 'one-line' : ''}`}>
 											{intl.formatMessage({ id: 'activity.card.approver' })}:{' '}
 											{record?.activityOutcome?.workflow === EApprovalStatus.APPROVED &&
-												!record?.activityOutcome?.studentDeclarationApproverName
+											!record?.activityOutcome?.studentDeclarationApproverName
 												? 'System'
 												: approvalWorkflow
 													? record?.activityOutcome?.studentDeclarationApproverName
 													: record?.studentDeclarationApproverList
-														?.map((item) => item?.name)
-														.filter(Boolean)
-														.join(', ')}
+															?.map((item) => item?.name)
+															.filter(Boolean)
+															.join(', ')}
 										</span>
 									</>
 								)}

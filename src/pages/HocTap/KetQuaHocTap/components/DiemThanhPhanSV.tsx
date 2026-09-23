@@ -1,4 +1,6 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import Select from '@/components/MySelect';
+import Tooltip from '@/components/MyTooltip';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
@@ -8,14 +10,12 @@ import { primaryColor } from '@/services/base/constant';
 import { CheckOutlined, FileTextOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Modal, Space, Tag, Typography } from 'antd';
 import { IconCheck01 } from '@/components/Icons';
-import Select from '@/components/MySelect';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalBangDiemTranscript from '../BangDiemTranscript/ModalBangDiemTranscript';
 import DiemChuMarks from './DiemChuMarks';
 import ModalChiTietDiem from './ModalChiTietDiem';
-import Tooltip from '@/components/MyTooltip';
 
 interface DataType extends LopHocPhan.IDiemHpSvHk {
 	title?: string;
@@ -359,15 +359,15 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				onReload={getData}
 				scroll={hasTableRows ? { y: 660 } : undefined}
 				otherProps={{
-					loading: loading,
+					loading,
 					pagination: false,
 					style: { width: '100%' },
 					onRow: (rec: DataType) =>
 						isSemesterRow(rec)
 							? {
-								style: semesterRowStyle,
-								className: 'diem-tp-semester-row',
-							}
+									style: semesterRowStyle,
+									className: 'diem-tp-semester-row',
+								}
 							: {},
 				}}
 				otherButtons={[

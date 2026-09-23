@@ -44,6 +44,7 @@ export default {
 	'trangchu.lich.lichthi': 'Exam schedule',
 	'trangchu.lich.thang': 'Month',
 	'trangchu.lich.xemtatca': 'See all',
+	'trangchu.lich.xemthem': 'See More',
 	'trangchu.lich.modal.title': 'Event of the day',
 	'trangchu.lich.modal.phong': 'Room',
 	'trangchu.lich.modal.themmoi': 'Add new event',

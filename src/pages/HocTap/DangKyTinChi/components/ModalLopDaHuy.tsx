@@ -6,7 +6,6 @@ import type { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { ELogActionDktc, logActionDktc } from '@/services/TienIch/AuditLog/constant';
 import { formatDateTime } from '@/utils/formatDate';
-import { Button } from '@/components/Icons';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import RenderLichHoc from './RenderLichHoc';
@@ -163,11 +162,11 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 				otherProps={{ pagination: false, scroll: { y: 600 } }}
 			/>
 
-			<div className='form-footer'>
+			{/* <div className='form-footer'>
 				<Button variant='outline' onClick={() => setVisible(false)}>
 					{intl.formatMessage({ id: 'dangkytinchi.action.dong' })}
 				</Button>
-			</div>
+			</div> */}
 		</ModalExpandable>
 	);
 };

@@ -1,7 +1,16 @@
+import {
+	Button,
+	Checkbox,
+	Icon6DotGridVertical,
+	IconGear,
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+	Separator,
+} from '@/components/Icons';
 import { closestCenter, DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Button, Checkbox, Icon6DotGridVertical, IconGear, Popover, PopoverContent, PopoverTrigger, Separator } from '@/components/Icons';
 import { Popconfirm } from 'antd';
 import React from 'react';
 import { useIntl } from 'umi';
@@ -113,6 +122,9 @@ export const ColumnSettings: React.FC = () => {
 					icon={<IconGear />}
 					size={size}
 					tooltip={intl.formatMessage({ id: 'global.table.columnSetting.tooltip' })}
+					onFocus={(event) => {
+						event.preventDefault();
+					}}
 				/>
 			</PopoverTrigger>
 			<PopoverContent align='end' className='column-settings-popover no-print'>
@@ -139,7 +151,9 @@ export const ColumnSettings: React.FC = () => {
 								strategy={verticalListSortingStrategy}
 							>
 								{tempSettings.map((setting: IColumnSetting) => {
-									const colDef = columns.find((col: IColumn<any>, idx: number) => getColumnKey(col, idx) === setting.key);
+									const colDef = columns.find(
+										(col: IColumn<any>, idx: number) => getColumnKey(col, idx) === setting.key,
+									);
 									return (
 										<SortableItem
 											key={setting.key}

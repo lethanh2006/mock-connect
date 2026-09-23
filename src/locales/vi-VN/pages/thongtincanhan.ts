@@ -39,6 +39,7 @@ export default {
 	'thongtincanhan.hoso.nganhang': 'Tài khoản ngân hàng',
 	'thongtincanhan.hoso.nganhang.ten': 'Tên ngân hàng',
 	'thongtincanhan.hoso.nganhang.stk': 'Số tài khoản',
+	'thongtincanhan.hoso.role': 'Sinh viên',
 	'thongtincanhan.hoso.generalInfo': 'Thông tin chung',
 	'thongtincanhan.hoso.identity': 'Định danh',
 	'thongtincanhan.hoso.nationalIdentification': 'Định danh cá nhân',

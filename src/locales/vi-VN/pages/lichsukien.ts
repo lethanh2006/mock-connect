@@ -8,6 +8,11 @@ export default {
 	'lichsukien.caidat': 'Cài đặt lịch',
 	'lichsukien.cauhinh': 'Cấu hình màu lịch',
 	'lichsukien.cauhinh.macdinh': 'Đặt về mặc định',
+	'lichsukien.maulich.course': 'Lịch học',
+	'lichsukien.maulich.activity': 'Sự kiện/Hoạt động',
+	'lichsukien.maulich.mental': 'Đặt lịch sức khỏe tinh thần',
+	'lichsukien.maulich.academic': 'Học vụ/Ngày lễ',
+	'lichsukien.maulich.personal': 'Cá nhân',
 	'lichsukien.form.themmoi': 'Thêm mới sự kiện',
 	'lichsukien.form.chinhsua': 'Chỉnh sửa sự kiện',
 

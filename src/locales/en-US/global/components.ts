@@ -763,6 +763,7 @@ export default {
 	'global.table.columnSetting.apply': 'Apply',
 	'global.table.columnSetting.cancel': 'Cancel',
 	'global.table.columnSetting.tooltip': 'Configure column visibility and order',
+	'global.table.columnfilter.label': 'Filter column',
 
 	'global.table.customfilter.title': 'Filter',
 	'global.table.customfilter.dieukien': 'Applied Filter Conditions',

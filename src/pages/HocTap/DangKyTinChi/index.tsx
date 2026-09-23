@@ -106,7 +106,9 @@ const DangKyTinChiPage = () => {
 			if (!node) return;
 
 			const rect = node.getBoundingClientRect();
-			setFixedBarRect({ left: rect.left, width: rect.width });
+			const left = rect.left;
+			const width = rect.width;
+			setFixedBarRect((prev) => (prev?.left === left && prev?.width === width ? prev : { left, width }));
 		};
 
 		updateFixedBarRect();

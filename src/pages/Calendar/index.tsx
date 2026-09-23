@@ -1,52 +1,41 @@
-import { Badge, Icon3SquarePlusmark, IconArrowRight, IconCalendar, IconHumberger, IconPinLocation, IconWrenchGear01 } from '@/components/Icons';
+import { IconArrowRight, IconCalendar, IconGear, IconHumberger } from '@/components/Icons';
 import { Col, Row } from '@/components/MyGrid';
-import ButtonExtend from '@/components/Table/ButtonExtend';
-import { useMessagesCalendar } from '@/services/Calendar/constant';
-import { colorHinhThucGiangDay, EHinhThucGiangDay, mapHinhThucGiangDayI18n } from '@/services/HocTap/constant';
+import { EVENT_TYPE_TAG, useLoaiSuKienLabel, useMessagesCalendar } from '@/services/Calendar/constant';
 import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { Divider, Empty, Flex, Modal, Space, Spin, Tag } from 'antd';
 import PageCard, { Card } from '@/components/PageCard';
 import EmptyState from '@/components/EmptyState';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import Segmented from '@/components/MySegmented';
+import { Spin } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import { useEffect, useState } from 'react';
-import type { DateRange, View } from 'react-big-calendar';
-import { Calendar, dayjsLocalizer, Views } from 'react-big-calendar';
+import type { View } from 'react-big-calendar';
+import { Views } from 'react-big-calendar';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { useMediaQuery } from 'react-responsive';
-import SplitPane from 'react-split-pane';
-import Pane from 'react-split-pane/lib/Pane';
 import { Link, useIntl, useModel } from 'umi';
+import CalendarBoard, {
+	CalendarToolbar,
+	getCalendarDateRange,
+	getEventLocation,
+	shiftCalendarDate,
+} from './components/CalendarBoard';
 import FilterColumn from './components/FilterColumn';
 import GhiChuLich from './components/GhiChuLich';
 // import LichSapToi from './components/LichSapToi';
 import ModalViewDetailCalendar from './components/ModalViewDetail';
 import ModalSettingMauLich from './components/SettingLich';
-import styles from './LichDashboard/styles.less';
+import './style.less';
 
-const localizer = dayjsLocalizer(dayjs);
-
-const getEventLocation = (event: {
-	loaiSuKien?: string;
-	phongHoc?: string;
-	phong?: { ma?: string };
-	diaDiem?: string;
-	assignment?: { tenLopHocPhan?: string };
-	location?: string;
-}) =>
-	event.location ??
-	(event.loaiSuKien === ELoaiSuKien.LICH_HOC
-		? event.phongHoc
-		: (event.phong?.ma ?? event.assignment?.tenLopHocPhan ?? event.diaDiem));
+const getListEventTag = (loaiSuKien?: string) =>
+	EVENT_TYPE_TAG[loaiSuKien as ELoaiSuKien | ELoaiSuKienKhac] ?? 'rgba(19, 77, 139, 0.12)';
 
 const CalendarPage = (props: { isDashboard?: boolean }) => {
 	const intl = useIntl();
 	const messagesCalendar = useMessagesCalendar();
+	const getLoaiSuKienLabel = useLoaiSuKienLabel();
 	const { visibleForm, setVisibleForm, setRecord, setEdit, loading, dataCalendar, setDataCalendar, setDataLich, edit } =
 		useModel('sukien.sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
@@ -63,50 +52,19 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	const [dateXemThem, setDateXemThem] = useState<any>();
 	const [selectEvent, setSelectEvent] = useState<any>();
 	const { isDashboard } = props;
-	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
-	const [, setPaneSize] = useState('300px');
 	const [segmentSelected, setSegmentSelected] = useState(true);
 
 	useEffect(() => {
 		if (!recSetting?._id) getSettingLich();
 	}, []);
 
-	const handlePaneSizeChange = (size: any) => {
-		setPaneSize(size[0]);
-	};
-
 	const setCalendarDateByView = (nextDate: Date, view: View = calendarView) => {
-		if (view === Views.DAY) setDateRange([dayjs(nextDate).startOf('day'), dayjs(nextDate).endOf('day')]);
-		else if (view === Views.WEEK) setDateRange([dayjs(nextDate).startOf('week'), dayjs(nextDate).endOf('week')]);
-		else setDateRange([dayjs(nextDate).startOf('month'), dayjs(nextDate).endOf('month')]);
-
+		setDateRange(getCalendarDateRange(nextDate, view));
 		setDate(nextDate);
 	};
 
-	const renderToolbarLabel = () => {
-		if (calendarView === Views.DAY) return formatDate(date, 'DD/MM');
-		if (calendarView === Views.MONTH) return formatDate(date, 'MM/YYYY');
-
-		return `${formatDate(dateRange[0], 'DD/MM')} - ${formatDate(dateRange[1], 'DD/MM')}`;
-	};
-
 	const onNavigateList = (action: 'today' | 'previous' | 'next') => {
-		if (action === 'today') {
-			setCalendarDateByView(new Date());
-			return;
-		}
-
-		const unit = calendarView === Views.MONTH ? 'month' : calendarView === Views.DAY ? 'day' : 'week';
-		const nextDate =
-			action === 'next'
-				? dayjs(date)
-					.add(1, unit as dayjs.ManipulateType)
-					.toDate()
-				: dayjs(date)
-					.subtract(1, unit as dayjs.ManipulateType)
-					.toDate();
-
-		setCalendarDateByView(nextDate);
+		setCalendarDateByView(shiftCalendarDate(date, calendarView, action));
 	};
 
 	const onChangeListView = (view: View) => {
@@ -115,7 +73,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	};
 
 	const getWeekdayLabel = (value: string | Date) =>
-		new Intl.DateTimeFormat(intl.locale?.startsWith('en') ? 'en-US' : 'vi-VN', { weekday: 'long' }).format(
+		new Intl.DateTimeFormat(intl.locale?.startsWith('en') ? 'en-US' : 'vi-VN', { weekday: 'short' }).format(
 			dayjs(value).toDate(),
 		);
 
@@ -216,29 +174,6 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		getData();
 	}, [dateRange[0].valueOf(), dateRange[1].valueOf()]);
 
-	const eventPropGetter = (event: { title: string; loaiSuKien?: string }) => ({
-		style: {
-			backgroundColor:
-				recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === event?.loaiSuKien)?.maMau ??
-				ColorSuKien?.[event?.loaiSuKien as ELoaiSuKien],
-		},
-	});
-
-	const eventCustom = ({ event }: any) => {
-		const location = getEventLocation(event);
-		return (
-			<div>
-				<div>{event.title || '--'}</div>
-				{location ? (
-					<Flex align='center' gap={6}>
-						<IconPinLocation />
-						<span>{location}</span>
-					</Flex>
-				) : null}
-			</div>
-		);
-	};
-
 	const onChangeFilterDate = (val: Date) => {
 		if (calendarView === Views.DAY) setDateRange([dayjs(val).startOf('day'), dayjs(val).endOf('day')]);
 		else if (calendarView === Views.WEEK) setDateRange([dayjs(val).startOf('week'), dayjs(val).endOf('week')]);
@@ -263,58 +198,33 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	};
 
 	const renderListToolbar = () => (
-		<div className='rbc-toolbar'>
-			<span className='rbc-btn-group'>
-				<button type='button' onClick={() => onNavigateList('today')}>
-					{messagesCalendar.today}
-				</button>
-				<button type='button' onClick={() => onNavigateList('previous')}>
-					{messagesCalendar.previous}
-				</button>
-				<button type='button' onClick={() => onNavigateList('next')}>
-					{messagesCalendar.next}
-				</button>
-			</span>
-			<span className='rbc-toolbar-label'>{renderToolbarLabel()}</span>
-			<span className='rbc-btn-group'>
-				<button
-					type='button'
-					className={calendarView === Views.MONTH ? 'rbc-active' : undefined}
-					onClick={() => onChangeListView(Views.MONTH)}
-				>
-					{messagesCalendar.month}
-				</button>
-				<button
-					type='button'
-					className={calendarView === Views.WEEK ? 'rbc-active' : undefined}
-					onClick={() => onChangeListView(Views.WEEK)}
-				>
-					{messagesCalendar.week}
-				</button>
-				<button
-					type='button'
-					className={calendarView === Views.DAY ? 'rbc-active' : undefined}
-					onClick={() => onChangeListView(Views.DAY)}
-				>
-					{messagesCalendar.day}
-				</button>
-			</span>
-		</div>
+		<CalendarToolbar
+			date={date}
+			view={calendarView}
+			dateRange={[dateRange[0], dateRange[1]]}
+			onNavigate={onNavigateList}
+			onChangeView={onChangeListView}
+		/>
 	);
 
-	const renderListEventTime = (event: any) => {
+	const renderListEventTimes = (event: any) => {
 		const thoiGianBatDau = event.thoiGianBatDau ?? event.start;
 		const thoiGianKetThuc = event.thoiGianKetThuc ?? event.end;
-		const ngayHienThi = event.ngayHienThi;
 
-		if (!thoiGianBatDau) return '--';
+		if (!thoiGianBatDau) return { start: '--', end: '' };
 
 		const isMultiDay = thoiGianKetThuc && !dayjs(thoiGianBatDau).isSame(dayjs(thoiGianKetThuc), 'day');
 		if (event.allDay || event.isLichDktc || isMultiDay) {
-			return formatDate(ngayHienThi ?? thoiGianBatDau, 'DD/MM');
+			return {
+				start: formatDate(event.ngayHienThi ?? thoiGianBatDau, 'DD/MM'),
+				end: thoiGianKetThuc && isMultiDay ? formatDate(thoiGianKetThuc, 'DD/MM') : '',
+			};
 		}
 
-		return formatDate(thoiGianBatDau, 'HH:mm');
+		return {
+			start: formatDate(thoiGianBatDau, 'HH:mm'),
+			end: thoiGianKetThuc ? formatDate(thoiGianKetThuc, 'HH:mm') : '',
+		};
 	};
 
 	const renderContent = () => {
@@ -362,126 +272,93 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		const keysSorted = sortBy(Object.keys(data));
 
 		return (
-			<div className={styles.dashboard_calendar}>
+			<div className='calendar-list'>
 				{renderListToolbar()}
 				{!loading && isEmpty(data) ? (
 					<EmptyState description={intl.formatMessage({ id: 'lichsukien.empty' })} />
 				) : null}
-				{keysSorted.map((ngay) => {
-					const { cacSuKien, thuTrongTuan } = data[ngay];
-					const cacSuKienSorted = sortBy(cacSuKien, (suKien) => new Date(suKien.thoiGianBatDau));
-					return (
-						<div key={ngay} className={styles.ngay}>
-							<Divider orientation='left' className='divider-big-title'>
-								<Space size={8}>
-									<div
-										className={styles.ngay__title}
-										style={{ color: dayjs().isSame(ngay, 'day') ? 'var(--color-primary)' : undefined }}
-									>
-										{dayjs().isSame(ngay, 'day')
-											? messagesCalendar.today
-											: `${thuTrongTuan}, ${formatDate(ngay, 'DD/MM')}`}
-									</div>
-									<Badge variant='warning'>{cacSuKien.length}</Badge>
-								</Space>
-							</Divider>
-							{cacSuKienSorted.map((sukien) => {
-								const location = getEventLocation(sukien) ?? sukien.suffix;
+				<div className='calendar-list__days'>
+					{keysSorted.map((ngay) => {
+						const { cacSuKien, thuTrongTuan } = data[ngay];
+						const cacSuKienSorted = sortBy(cacSuKien, (suKien) => new Date(suKien.thoiGianBatDau ?? suKien.start));
+						const isToday = dayjs().isSame(ngay, 'day');
+						const dayLabel = `${thuTrongTuan}, ${formatDate(ngay, 'DD/MM/YYYY')}`;
 
-								return (
-									<div
-										key={`${sukien._id ?? sukien.title}-${sukien.ngayHienThi ?? sukien.thoiGianBatDau}`}
-										className={`${styles.su_kien} ${dayjs().isSame(ngay, 'day') ? styles.today : ''}`}
-										// style={{ background: ColorSuKien[sukien.loaiSuKien] }}
-										onClick={() => handleEventClick(sukien)}
-									>
-										<div className={styles.su_kien__left}>
+						return (
+							<section key={ngay} className='calendar-day-card'>
+								<header className='calendar-day-card__title'>
+									<div className='calendar-day-card__label'>{dayLabel}</div>
+									{isToday ? <span className='calendar-day-card__count'>{messagesCalendar.today}</span> : null}
+								</header>
+								<div className='calendar-day-card__content'>
+									{cacSuKienSorted.map((sukien, index) => {
+										const location = getEventLocation(sukien) ?? sukien.suffix;
+										const { start, end } = renderListEventTimes(sukien);
+										const lineColor =
+											recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === sukien.loaiSuKien)?.maMau ??
+											ColorSuKien?.[sukien.loaiSuKien as ELoaiSuKien | ELoaiSuKienKhac] ??
+											'#134D8B';
+										const eventTypeLabel = sukien.loaiSuKien ? getLoaiSuKienLabel(sukien.loaiSuKien) : '';
+
+										return (
 											<div
-												className={styles.su_kien__thoi_gian}
-												style={{ color: dayjs().isSame(ngay, 'day') ? '#0E50CF' : undefined }}
+												key={`${sukien._id ?? sukien.title}-${sukien.ngayHienThi ?? sukien.thoiGianBatDau}`}
+												className='calendar-list-event'
+												onClick={() => handleEventClick(sukien)}
 											>
-												{renderListEventTime(sukien)}
-											</div>
-										</div>
-										<div
-											className={styles.su_kien__right}
-											style={{
-												borderColor:
-													recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === sukien.loaiSuKien)
-														?.maMau ?? ColorSuKien[sukien.loaiSuKien as ELoaiSuKien],
-											}}
-										>
-											<div className={styles.su_kien__title}>
-												{sukien.tenSuKien ?? ''}
-												{sukien.loaiSuKien === ELoaiSuKien.LICH_HOC &&
-													sukien.hinhThucGiangDay === EHinhThucGiangDay.ONLINE && (
-														<Badge
-															variant='inprogress'
-															style={{ marginLeft: 8 }}
-														>
-															{intl.formatMessage({
-																id: mapHinhThucGiangDayI18n[sukien.hinhThucGiangDay as EHinhThucGiangDay],
-															})}
-														</Badge>
-													)}
-											</div>
-											{location ? (
-												<div className={styles.su_kien__location}>
-													<IconPinLocation />
-													<span>{location}</span>
+												<div className='calendar-list-event__time'>
+													<span className='calendar-list-event__start'>{start}</span>
+													{end ? <span className='calendar-list-event__end'>{end}</span> : null}
 												</div>
-											) : null}
-										</div>
-									</div>
-								);
-							})}
-						</div>
-					);
-				})}
+												<span className='calendar-list-event__line' style={{ background: lineColor }} aria-hidden />
+												<div className='calendar-list-event__body'>
+													<div className='calendar-list-event__title'>{sukien.tenSuKien ?? ''}</div>
+													{location ? <div className='calendar-list-event__location'>{location}</div> : null}
+												</div>
+												{eventTypeLabel ? (
+													<span
+														className='calendar-list-event__tag'
+														style={{ background: getListEventTag(sukien.loaiSuKien) }}
+													>
+														{eventTypeLabel}
+													</span>
+												) : null}
+												{index < cacSuKienSorted.length - 1 ? <div className='calendar-list-event__divider' /> : null}
+											</div>
+										);
+									})}
+								</div>
+							</section>
+						);
+					})}
+				</div>
 			</div>
 		);
 	};
 
 	const mainContent = () => (
 		<Spin spinning={loading || loadingTKB}>
-			<Calendar
-				formats={{
-					dayHeaderFormat: 'dddd DD/MM/YYYY',
-					dayRangeHeaderFormat: (range: DateRange) => {
-						return `${formatDate(range.start, 'DD/MM')} - ${formatDate(range.end, 'DD/MM')}`;
-					},
-					eventTimeRangeFormat: () => '',
-				}}
-				slotPropGetter={(date) => {
-					return { style: { borderTop: 'none' } };
-				}}
-				localizer={localizer}
+			<CalendarBoard
 				events={dataCalendar}
-				defaultView={Views.WEEK}
-				onView={(view) => setCalendarView(view)}
+				date={date}
+				view={calendarView}
+				dateRange={[dateRange[0], dateRange[1]]}
+				onNavigate={onNavigateList}
+				onChangeView={onChangeListView}
+				onCalendarNavigate={(newDate) => setDate(newDate)}
 				onRangeChange={(val) => {
 					if (Array.isArray(val)) setDateRange([dayjs(val[0]).startOf('d'), dayjs(val.at(-1)).endOf('d')]);
 					else setDateRange([dayjs(val.start).startOf('d'), dayjs(val.end).endOf('d')]);
 				}}
-				onNavigate={(newDate) => setDate(newDate)}
 				selectable={!isDashboard}
-				scrollToTime={new Date(1970, 1, 1, 6)}
-				defaultDate={new Date()}
-				date={date}
-				messages={messagesCalendar}
-				views={['month', 'week', 'day']}
-				style={{ height: isDashboard ? 500 : 700, overflow: 'auto' }}
-				eventPropGetter={eventPropGetter}
+				height={isDashboard ? 500 : 'calc(100vh - 240px)'}
+				calendarMinHeight={isDashboard ? undefined : 640}
 				onSelectSlot={handleSelect}
 				onSelectEvent={handleEventClick}
-				components={{
-					event: (event: any) => eventCustom(event),
-					timeGutterHeader: () => <span>{messagesCalendar.allDay}</span>,
-				}}
 				popup
-				onShowMore={(events: any[], d) => {
+				onShowMore={(events, selectedDate) => {
 					setEventRecord(events);
-					setDateXemThem(d);
+					setDateXemThem(selectedDate);
 					setVisibleXemThem(true);
 				}}
 			/>
@@ -524,58 +401,29 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 					</Col>
 				</Row>
 			) : (
-				<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange}>
-					{!isMobile && (
-						<Pane>
-							<Card variant='borderless'>{segmentSelected ? mainContent() : renderContent()}</Card>
-						</Pane>
-					)}
-
-					<Pane initialSize='300px' minSize='250px' maxSize='40%'>
-						<Card
-							title={intl.formatMessage({ id: 'lichsukien.caidat' })}
-							extra={
-								<Space wrap>
-									{/* <ButtonExtend
-										type='link'
-										size='large'
-										tooltip={intl.formatMessage({ id: 'lichsukien.themmoi' })}
-										icon={<Icon3SquarePlusmark />}
-										onClick={() => {
-											setRecord(undefined);
-											setVisibleForm(true);
-										}}
-									/> */}
-									<ButtonExtend
-										type='link'
-										size='large'
-										tooltip={intl.formatMessage({ id: 'lichsukien.cauhinh' })}
-										icon={<IconWrenchGear01 />}
-										onClick={() => setVisibleMauLich(true)}
-									/>
-								</Space>
-							}
-						>
-							<FilterColumn date={date} setDate={onChangeFilterDate} />
-
-							{/* <div style={{ marginTop: 12 }}>
-								<LichSapToi
-									dataCalendar={dataCalendar}
-									onEventClick={(event) => {
-										setSelectEvent(event);
-										setVisibleDetail(true);
-									}}
-								/>
-							</div> */}
-						</Card>
-					</Pane>
-
-					{isMobile && (
-						<Pane>
-							<Card variant='borderless'>{segmentSelected ? mainContent() : renderContent()}</Card>
-						</Pane>
-					)}
-				</SplitPane>
+				<div className='calendar-layout'>
+					<Card className='calendar-board' variant='borderless' styles={{ body: { padding: '8px 24px 24px', height: '100%' } }}>
+						{segmentSelected ? mainContent() : renderContent()}
+					</Card>
+					<Card
+						className='calendar-setting'
+						headerType='custom'
+						title={intl.formatMessage({ id: 'lichsukien.caidat' })}
+						styles={{ body: { padding: 0 } }}
+						extra={
+							<button
+								type='button'
+								className='calendar-setting__gear'
+								aria-label={intl.formatMessage({ id: 'lichsukien.cauhinh' })}
+								onClick={() => setVisibleMauLich(true)}
+							>
+								<IconGear size={24} />
+							</button>
+						}
+					>
+						<FilterColumn date={date} setDate={onChangeFilterDate} />
+					</Card>
+				</div>
 			)}
 
 			{/* <Modal

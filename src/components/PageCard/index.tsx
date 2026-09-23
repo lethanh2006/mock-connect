@@ -1,11 +1,12 @@
 import {
+	Card as VinCard,
 	CardAction,
 	CardContent,
+	CardDescription,
 	CardHeader,
 	CardTitle,
 	ScrollEdgeEffect,
 	useResolvedTheme,
-	Card as VinCard,
 } from '@vinuni/ui';
 import { Spin } from 'antd';
 import React, { useLayoutEffect, useRef, useState } from 'react';
@@ -42,10 +43,13 @@ const PageCard: React.FC<PageCardProps> = ({
 	bordered = false,
 	hideInnerCard = false,
 	stickyHeader = false,
+	subtitle,
+	headerType,
 	...rest
 }) => {
 	const extraContent = extra ?? cardExtra;
-	const hasHeader = Boolean(title && title !== true ? title : extraContent);
+	const hasTitle = Boolean(title && title !== true);
+	const hasHeader = hasTitle || Boolean(extraContent) || Boolean(subtitle);
 
 	// Level 1: Page Title (card-big-title, 24px)
 	// Level 2: Section Title (highlight, 18px)
@@ -174,13 +178,26 @@ const PageCard: React.FC<PageCardProps> = ({
 		const cardBody = (
 			<>
 				{hasHeader && (
-					<CardHeader style={styles?.header}>
-						{title && (
-							<CardTitle role='heading' aria-level={3}>
-								{title}
-							</CardTitle>
+					<CardHeader style={styles?.header} data-header-type={headerType ?? 'default'}>
+						{(hasTitle || subtitle) && (
+							<div className='page-card-title-block'>
+								{hasTitle && (
+									<CardTitle role='heading' aria-level={3}>
+										{title}
+									</CardTitle>
+								)}
+								{subtitle ? <CardDescription>{subtitle}</CardDescription> : null}
+							</div>
 						)}
-						{extraContent && <CardAction>{extraContent}</CardAction>}
+						{extraContent && (
+							<CardAction>
+								{headerType === 'action' ? (
+									<div className='page-card-header-action-content'>{extraContent}</div>
+								) : (
+									extraContent
+								)}
+							</CardAction>
+						)}
 					</CardHeader>
 				)}
 				<CardContent className={hideInnerCard ? 'p-0' : undefined} style={styles?.body}>

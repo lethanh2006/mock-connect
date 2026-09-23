@@ -30,7 +30,8 @@ export const mapButtonVariant = (type?: AntdButtonType, danger?: boolean): Vinun
 		case 'link':
 			return 'link';
 		default:
-			return 'outline';
+			// Nút toolbar của table: nền xám nhạt, chữ tối (bg-ds-bg-tiled-md).
+			return 'secondary';
 	}
 };
 

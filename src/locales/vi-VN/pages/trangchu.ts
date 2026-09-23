@@ -50,6 +50,7 @@ export default {
 	'trangchu.lich.lichthi': 'Lịch thi',
 	'trangchu.lich.thang': 'Tháng',
 	'trangchu.lich.xemtatca': 'Xem tất cả',
+	'trangchu.lich.xemthem': 'Xem thêm',
 	'trangchu.lich.modal.title': 'Sự kiện ngày',
 	'trangchu.lich.modal.phong': 'Phòng',
 	'trangchu.lich.modal.themmoi': 'Thêm mới sự kiện',

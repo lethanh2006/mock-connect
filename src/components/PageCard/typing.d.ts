@@ -2,6 +2,16 @@ import React from 'react';
 
 export interface PageCardProps {
 	title?: React.ReactNode | boolean;
+	/** Dòng mô tả dưới title. Chỉ render ở level 4 (Standard Card). */
+	subtitle?: React.ReactNode;
+	/**
+	 * Kiểu header level 4.
+	 * default: chỉ title/subtitle.
+	 * action: cụm nút pill + icon bên phải.
+	 * button-text: nút chữ bên phải.
+	 * custom: slot cột tùy ý bên phải.
+	 */
+	headerType?: 'default' | 'action' | 'button-text' | 'custom';
 	extra?: React.ReactNode;
 	cardExtra?: React.ReactNode;
 	children?: React.ReactNode;

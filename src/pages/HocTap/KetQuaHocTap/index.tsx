@@ -10,35 +10,33 @@ const KetQuaHocTap = () => {
 	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
 
 	return (
-		<PageCard
-			stickyHeader
-			title={intl.formatMessage({ id: 'menu.HocTap.GradesTranscript' })}
-			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				gap: '20px',
+			}}
 		>
-			<KetQuaToanKhoaSinhVien maKhoaNganh={maKhoaNganh} loadData={false} />
-
-			<Divider className='divider-big-title' dashed orientation='left'>
-				{intl.formatMessage({ id: 'ketquahoctap.diemtongket' })}
-			</Divider>
-			{/* <TabViewPage
-					hideCard
-					menu={[
-						{
-							title: intl.formatMessage({ id: 'ketquahoctap.diemtongket' }),
-							menuKey: 'diem',
-							content: <DiemThanhPhanSV maKhoaNganh={maKhoaNganh} />,
-							icon: <PicCenterOutlined />,
-						},
-						// {
-						// 	title: intl.formatMessage({ id: 'ketquahoctap.maytinh' }),
-						// 	menuKey: 'may-tinh',
-						// 	content: <MayTinhThongMinh maKhoaNganh={maKhoaNganh} />,
-						// 	icon: <SnippetsOutlined />,
-						// },
-					]}
-				/> */}
-			<DiemThanhPhanSV maKhoaNganh={maKhoaNganh} />
-		</PageCard>
+			<PageCard
+				stickyHeader
+				title={intl.formatMessage({ id: 'menu.HocTap.GradesTranscript' })}
+				extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
+			>
+				<KetQuaToanKhoaSinhVien maKhoaNganh={maKhoaNganh} loadData={false} />
+			</PageCard>
+			<div
+				style={{
+					backgroundColor: '#fff',
+					padding: '20px',
+					borderRadius: '10px',
+				}}
+			>
+				<Divider className='divider-big-title' dashed orientation='left'>
+					{intl.formatMessage({ id: 'ketquahoctap.diemtongket' })}
+				</Divider>
+				<DiemThanhPhanSV maKhoaNganh={maKhoaNganh} />
+			</div>
+		</div>
 	);
 };
 

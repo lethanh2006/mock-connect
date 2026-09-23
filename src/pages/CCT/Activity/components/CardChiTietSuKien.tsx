@@ -12,9 +12,9 @@ import { Col, Row } from '@/components/MyGrid';
 import { Divider, Input, List, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import { useIntl } from 'umi';
+import { useIntl, useModel } from 'umi';
 import FormRoleEvidence from '../../History/components/FormRoleEvidence';
-import CardSuKienCCT from './CardSuKien';
+import ActivityCard from '@/pages/TrangChuV2/components/ActivityCard';
 
 
 const CardChiTietSuKien = (props: {
@@ -26,7 +26,8 @@ const CardChiTietSuKien = (props: {
 	isRegister?: boolean;
 }) => {
 	const intl = useIntl();
-	const { record, evidenceDeadline, infoEvidence, activeKey, isExpired, isRegister } = props;
+	const { danhSach: dsAttribute } = useModel('cct.attributes');
+	const { record, evidenceDeadline, infoEvidence, activeKey } = props;
 	const [previewOpen, setPreviewOpen] = useState<boolean>(false);
 	const [previewImage, setPreviewImage] = useState<string>('');
 
@@ -39,21 +40,36 @@ const CardChiTietSuKien = (props: {
 		record?.activityOutcome?.workflow === EApprovalStatus.REJECTED ||
 		record?.activityOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED;
 
+	const dateFormat = 'DD/MM/YYYY, HH:mm';
+	const equivalencyAttributeIds = record?.coCurricularActivityEquivalency?.map((item) => item.attributesId) ?? [];
+	const activeLetters = equivalencyAttributeIds
+		.map((id) => id?.split('-').pop()?.toUpperCase())
+		.filter((letter) => letter && letter.length === 1);
+	const attributes = (dsAttribute ?? []).map((attribute: AttributesManagement.IRecord) => {
+		const letter = attribute.code?.charAt(0)?.toUpperCase() ?? '';
+		return {
+			id: attribute._id,
+			letter,
+			active: equivalencyAttributeIds.includes(attribute._id) || activeLetters.includes(letter),
+		};
+	});
+	const isNew = record?.createdAt && dayjs().isBefore(dayjs(record.createdAt).add(3, 'day'));
+	const registerSource = record?.dueDateRegistration ?? record?.endDate;
+
 	return (
 		<>
 			<Row gutter={[12, 12]}>
 				<Col span={24} md={9}>
-					<CardSuKienCCT
-						record={{ ...record, activityOutcome: record?.activityOutcome }}
+					<ActivityCard
+						title={record?.name}
 						banner={record?.banner ?? background}
-						name={record?.name}
-						startDate={record?.startDate ? dayjs(record?.startDate).format('HH:mm DD/MM/YYYY') : '--'}
-						endDate={record?.endDate ? dayjs(record?.endDate).format('HH:mm DD/MM/YYYY') : '--'}
-						equivalencyAttributeIds={record?.coCurricularActivityEquivalency?.map((x) => x.attributesId) ?? []}
-						isDetail
-						activeKey={activeKey}
-						isExpired={isExpired}
-						isRegister={isRegister}
+						isNew={!!isNew}
+						attributes={attributes}
+						startDate={record?.startDate ? dayjs(record.startDate).format(dateFormat) : '--'}
+						endDate={record?.endDate ? dayjs(record.endDate).format(dateFormat) : '--'}
+						location={record?.onCampus ? record?.facilityName : record?.otherAddress}
+						registerBefore={registerSource ? dayjs(registerSource).format(dateFormat) : '--'}
+						approvalStatus={record?.activityOutcome?.workflow}
 					/>
 				</Col>
 				<Col span={24} md={15}>

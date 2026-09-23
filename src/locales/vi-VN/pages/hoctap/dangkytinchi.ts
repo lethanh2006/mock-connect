@@ -215,6 +215,7 @@ export default {
 	'dangkytinchi.vuottin.modal.col.tacdong': 'Tác động',
 	'dangkytinchi.vuottin.modal.col.nguoixuly': 'Người xử lý',
 	'dangkytinchi.vuottin.modal.col.ghichu': 'Ghi chú',
+	'dangkytinchi.vuottin.modal.col.thoigian': 'Thời gian',
 
 	'dangkytinchi.vuottin.status.text.CHO_DUYET': 'Chờ duyệt',
 	'dangkytinchi.vuottin.status.text.DA_DUYET': 'Đã duyệt',

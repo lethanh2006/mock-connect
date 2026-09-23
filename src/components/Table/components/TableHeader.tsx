@@ -312,7 +312,6 @@ export const TableHeader: React.FC = () => {
 						onClick={onCreate}
 						icon={<IconPlus />}
 						className='btn-add'
-						type='primary'
 						tooltip={createButtonTooltip ?? intl.formatMessage({ id: 'global.table.index.button.themmoi.tooltip' })}
 					>
 						{createButtonText ?? intl.formatMessage({ id: 'global.table.index.button.themmoi' })}
@@ -351,9 +350,7 @@ export const TableHeader: React.FC = () => {
 						loading={loading}
 						className='btn-reload'
 						tooltip={intl.formatMessage({ id: 'global.table.index.button.tailai.tooltip' })}
-					>
-						{intl.formatMessage({ id: 'global.table.index.button.tailai' })}
-					</ButtonExtend>
+					/>
 				)}
 
 				{otherTextButtons}
