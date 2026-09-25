@@ -1,31 +1,19 @@
+import EmptyState from '@/components/EmptyState';
+import { IconRotateArrow } from '@/components/Icons';
+import Segmented from '@/components/MySegmented';
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { getSearchStorage, updateSearchStorage } from '@/components/Table/utils';
 import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { ELoaiHocPhanCTDT, ETrangThaiHocTap } from '@/services/DaoTao/constant';
-import { accentColors, primaryColor } from '@/services/base/constant';
-import { IconRotateArrow, IconMagnifyingGlass } from '@/components/Icons';
-import EmptyState from '@/components/EmptyState';
-import type { InputRef } from 'antd';
-import Segmented from '@/components/MySegmented';
-import {
-	AutoComplete,
-	Button,
-	Collapse,
-	Divider,
-	Input,
-	Space,
-	Spin,
-	Tag,
-	Tooltip,
-	Typography,
-} from 'antd';
+import { accentColors } from '@/services/base/constant';
+import { Collapse, Divider, Space, Spin, Tag, Typography } from 'antd';
 import _ from 'lodash';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
 import CardHocPhanV2 from '../components/CardHocPhan';
 import CardKhoiHocPhan from '../components/CardKhoiHocPhan';
+import SearchTienTrinh from '../components/SearchTienTrinh';
 import './style.less';
 
 const { Title } = Typography;
@@ -88,8 +76,6 @@ const TienTrinhChuongTrinhKhung = () => {
 	const [recChuongTrinh, setChuongTrinh] = useState<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>();
 	const [viewType, setViewType] = useState<'semester' | 'block'>('semester');
 	const [searchText, setSearchText] = useState('');
-	const [searchOptions, setSearchOptions] = useState<{ value: string }[]>([]);
-	const searchInputRef = useRef<InputRef>(null);
 	const [mapColorKhoiKienThuc, setMapColorKhoiKienThuc] = useState<Record<string, string>>({});
 	const [visibleDiem, setVisibleDiem] = useState(false);
 	// const { cctFilter } = useAccess();
@@ -246,25 +232,6 @@ const TienTrinhChuongTrinhKhung = () => {
 	}, [danhSachHienThi, searchText]);
 
 	useEffect(() => {
-		const history = getSearchStorage(GLOBAL_SEARCH_KEY);
-		setSearchOptions(history.map((value: string) => ({ value })));
-	}, []);
-
-	const handleSearchTrigger = useCallback((value: string) => {
-		const keyword = value?.trim() || '';
-		setSearchText(keyword);
-
-		if (keyword) updateSearchStorage(GLOBAL_SEARCH_KEY, keyword);
-
-		const history = getSearchStorage(GLOBAL_SEARCH_KEY);
-		setSearchOptions(history.map((val: string) => ({ value: val })));
-
-		setTimeout(() => {
-			searchInputRef.current?.blur();
-		}, 0);
-	}, []);
-
-	useEffect(() => {
 		fetch();
 	}, [isSongNganh, maKhoaNganh]);
 
@@ -315,52 +282,7 @@ const TienTrinhChuongTrinhKhung = () => {
 	return (
 		<div>
 			<div className='view-switch-container'>
-				<AutoComplete
-					className='view-switch-search'
-					options={searchOptions}
-					value={searchText}
-					onSelect={handleSearchTrigger}
-					onChange={(value) => setSearchText(value)}
-				>
-					<Input.Search
-						ref={searchInputRef}
-						className='global-search'
-						allowClear
-						value={searchText}
-						placeholder={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.search.placeholder' })}
-						style={
-							searchText
-								? {
-										width: 320,
-										borderColor: primaryColor,
-										outline: `1px solid ${primaryColor}`,
-										borderRadius: 4,
-									}
-								: { width: 320 }
-						}
-						enterButton={
-							<Button
-								loading={loading}
-								icon={
-									<Tooltip title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.search.tooltip' })}>
-										<IconMagnifyingGlass />
-									</Tooltip>
-								}
-							/>
-						}
-						onSearch={handleSearchTrigger}
-						onChange={(e) => {
-							if (e.type === 'click') {
-								handleSearchTrigger('');
-								return;
-							}
-
-							const value = e.target.value;
-							setSearchText(value);
-							if (!value.trim()) handleSearchTrigger('');
-						}}
-					/>
-				</AutoComplete>
+				<SearchTienTrinh storageKey={GLOBAL_SEARCH_KEY} value={searchText} onChange={setSearchText} />
 				<Space>
 					<ButtonExtend
 						icon={<IconRotateArrow />}
@@ -371,7 +293,8 @@ const TienTrinhChuongTrinhKhung = () => {
 					/>
 					<Segmented
 						value={viewType}
-						style={{ fontWeight: 600 }}
+						size='small'
+						className='view-switch-segmented'
 						onChange={(val) => setViewType(val as any)}
 						options={[
 							{
@@ -396,7 +319,7 @@ const TienTrinhChuongTrinhKhung = () => {
 						{/* Header học kỳ/Khối */}
 						<Divider orientation='left' className='divider-big-title' dashed>
 							<div className='header-content'>
-								<Title level={5} style={{ margin: 0, color: '#262626' }}>
+								<Title level={5} style={{ margin: 0, color: APP_CONFIG_PRIMARY_COLOR }}>
 									{viewType === 'semester'
 										? `${intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hocky' })} ${data.soThuTuKy}`
 										: data.tenKhoiKienThuc || intl.formatMessage({ id: 'tientrinhhoctap.ctdt.khongten' })}
@@ -519,7 +442,7 @@ const TienTrinhChuongTrinhKhung = () => {
 					<>
 						<Divider orientation='left' className='divider-big-title' dashed>
 							<div className='header-content'>
-								<Title level={5} style={{ margin: 0, color: '#262626' }}>
+								<Title level={5} style={{ margin: 0, color: APP_CONFIG_PRIMARY_COLOR }}>
 									{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}
 								</Title>
 								<Tag color='blue'>

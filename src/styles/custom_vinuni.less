@@ -84,6 +84,8 @@
 	--vin-border-radius-lg: 24px;
 	--vin-border-radius-pill: 9999px;
 
+	--rd-primary: 22px;
+
 	// Spacing & Padding tham số hóa
 	--spacing-xs: 4px;
 	--spacing-sm: 8px;
@@ -201,6 +203,85 @@ button:not(:disabled),
 	&:focus-visible {
 		outline: none !important;
 		box-shadow: none !important;
+	}
+}
+
+.search-input-custom-sm {
+	flex: none;
+	width: 250px;
+	min-width: 0;
+
+	[data-slot='search-input'] {
+		box-sizing: border-box;
+		display: flex !important;
+		flex-direction: row;
+		align-items: center;
+		isolation: isolate;
+		width: 250px !important;
+		height: 36px !important;
+		padding: 2px 16px !important;
+		gap: 8px;
+		background: none !important;
+		border: 1px solid rgba(0, 0, 0, 0.1) !important;
+		border-radius: 1000px !important;
+		box-shadow: none !important;
+
+		&:focus-within {
+			border-color: rgba(0, 0, 0, 0.1) !important;
+			box-shadow: none !important;
+		}
+
+		[data-slot='mask-icon'] {
+			width: 17.75px;
+			height: 17.75px;
+			color: rgba(0, 0, 0, 0.6);
+		}
+
+		input {
+			width: auto;
+			height: 20px;
+			padding: 0;
+			font-family: 'Inter', sans-serif;
+			font-style: normal;
+			font-weight: 400;
+			font-size: 14px;
+			line-height: 20px;
+			color: rgba(0, 0, 0, 0.6);
+
+			&::placeholder {
+				color: rgba(0, 0, 0, 0.6);
+				opacity: 1;
+			}
+		}
+	}
+}
+
+.page-card-custom {
+	background-color: #fff;
+	border-radius: 22px;
+	overflow: hidden;
+}
+
+.history-activity-grid {
+	display: grid;
+	grid-template-rows: repeat(2, minmax(0, 1fr));
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	row-gap: 16px;
+	column-gap: 16px;
+	padding: 16px 24px;
+
+	@media (max-width: 1600px) {
+		grid-template-rows: none;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	@media (max-width: 1199px) {
+		grid-template-columns: repeat(1, minmax(0, 1fr));
+	}
+
+	@media (max-width: 767px) {
+		grid-template-columns: minmax(0, 1fr);
+		padding: 16px;
 	}
 }
 
@@ -563,10 +644,10 @@ button:not(:disabled),
 	margin: 0;
 	white-space: pre-wrap;
 	font-family: var(--font-family-base);
-	font-size: 18px;
+	font-size: 16px;
 	font-weight: 600;
 	color: var(--color-text-base, var(--color-text-100, #2e2e2e));
-	line-height: 1.4;
+	line-height: 24px;
 }
 
 [data-slot='card-header'],
@@ -583,11 +664,6 @@ button:not(:disabled),
 	.page-card-title {
 		flex: 1 1 auto;
 		min-width: 0;
-		font-family: var(--font-family-base);
-		font-size: 18px;
-		font-weight: 600;
-		color: var(--color-text-base, var(--color-text-100, #2e2e2e));
-		line-height: 1.4;
 	}
 
 	[data-slot='card-action'],
@@ -611,8 +687,6 @@ button:not(:disabled),
 		gap: 12px !important;
 		width: 100% !important;
 		min-height: 32px !important;
-		margin-top: 8px !important;
-		margin-bottom: 16px !important;
 	}
 
 	// Level 2/3 hẹp khoảng cách với card nội dung bên dưới hơn Level 1 (16px -> 8px).
@@ -625,18 +699,6 @@ button:not(:disabled),
 		border-radius: var(--vin-border-radius);
 		background-color: var(--color-bg-container, var(--ds-bg-mortared, #ffffff));
 		padding: 0 !important;
-
-		[data-slot='card-content'],
-		> .card-content {
-			padding: var(--page-card-padding, 18px) !important;
-		}
-
-		@media (max-width: @screen-xs) {
-			[data-slot='card-content'],
-			> .card-content {
-				padding: var(--page-card-padding-xs, 12px) !important;
-			}
-		}
 	}
 }
 
@@ -831,14 +893,14 @@ button:not(:disabled),
 	}
 }
 
-// Card & TableCard & PageCard card-big-title (Level 1 & 2)
+// Chỉ tiêu đề của chính PageCard (class .page-card-title). Không chọn [data-slot='card-title']
+// hậu duệ — card lồng bên trong (ví dụ Emergency) phải giữ style [data-slot='card-title'] gốc.
 [data-slot='card'].card-big-title,
 [data-slot='table-card'].card-big-title,
 .table-base-card.card-big-title,
 .page-card.card-big-title,
 .page-card:not(.normal):not(.highlight):not(.standard):not(.page-card-standard) {
-	.page-card-title,
-	[data-slot='card-title'] {
+	.page-card-title {
 		font-size: 24px !important;
 		margin-top: 4px !important;
 		font-weight: 600 !important;
@@ -1732,11 +1794,11 @@ button:not(:disabled),
 }
 
 .highlight {
-	border-radius: var(--vin-border-radius) !important;
-	background-color: var(--color-official-500) !important;
+	border-radius: var(--vin-border-radius-sm) !important;
+	background-color: #0000000d !important;
 	// Bù đối xứng với margin-bottom:8px của .page-card-header (nền màu bọc quanh nên lệch trên/dưới
 	// sẽ lộ rõ) — dùng padding thay vì margin để không ảnh hưởng capHeight của sticky header.
-	padding-top: 8px !important;
+	padding: 16px !important;
 }
 
 // --color-official-500 là màu tĩnh, không tự đổi theo theme — đổi nền Level 2 sang lớp phủ xanh

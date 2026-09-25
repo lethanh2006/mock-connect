@@ -1,3 +1,5 @@
+import { Button, IconEyeOpen, IconFilePen, IconShieldInfo, IconStopwatch } from '@/components/Icons';
+import PageCard from '@/components/PageCard';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import ModalExpandable from '@/components/Table/ModalExpandable';
@@ -16,14 +18,12 @@ import { ETagColor } from '@/services/base/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { chuanHoaTen } from '@/utils/utils';
-import { IconStopwatch, IconEyeOpen, IconShieldInfo, IconFilePen } from '@/components/Icons';
 import { Popover, Space, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChoiceModal from './components/ChoiceModal';
 import FormDangKy from './components/FormDangKy';
 import FormMien from './components/FormMien';
-import { Button } from '@/components/Icons';
 
 type TFormType = 'dangKy' | 'mien';
 
@@ -428,65 +428,68 @@ const SinhVienDangKyBHYT = () => {
 
 	const formModalTitle = formModal
 		? intl.formatMessage(
-			{
-				id: formModal.isView
-					? 'global.table.form.title.chitiet'
-					: formModal.edit
-						? 'global.table.form.title.chinhsua'
-						: 'global.table.form.title.themmoi',
-			},
-			{ title: chuanHoaTen(t('baohiemyte.dangky.title').toLowerCase()) },
-		)
+				{
+					id: formModal.isView
+						? 'global.table.form.title.chitiet'
+						: formModal.edit
+							? 'global.table.form.title.chinhsua'
+							: 'global.table.form.title.themmoi',
+				},
+				{ title: chuanHoaTen(t('baohiemyte.dangky.title').toLowerCase()) },
+			)
 		: undefined;
 
 	return (
-		<TableBase<BaoHiemYTe.IHistoryItem>
-			cardProps={{ stickyHeader: true }}
-			getData={refreshAll}
-			columns={columns}
-			dependencies={[page, limit]}
-			modelName='baohiemyte.dotdangky'
-			title={t('baohiemyte.dangky.title')}
-			buttons={{ create: false }}
-			addStt
-		>
-			{renderBanner()}
+		<PageCard title={t('baohiemyte.dangky.title')}>
+			<div className='page-card-custom'>
+				<TableBase<BaoHiemYTe.IHistoryItem>
+					cardProps={{ stickyHeader: true }}
+					getData={refreshAll}
+					columns={columns}
+					dependencies={[page, limit]}
+					modelName='baohiemyte.dotdangky'
+					buttons={{ create: false }}
+					addStt
+				>
+					{renderBanner()}
 
-			<ChoiceModal
-				open={choiceModalOpen}
-				onClose={() => setChoiceModalOpen(false)}
-				onSelectDangKy={onSelectDangKy}
-				onSelectMien={onSelectMien}
-			/>
+					<ChoiceModal
+						open={choiceModalOpen}
+						onClose={() => setChoiceModalOpen(false)}
+						onSelectDangKy={onSelectDangKy}
+						onSelectMien={onSelectMien}
+					/>
 
-			<ModalExpandable
-				title={formModalTitle}
-				width={1000}
-				open={!!formModal}
-				onCancel={closeFormModal}
-				footer={null}
-				destroyOnClose
-			>
-				{formModal?.type === 'dangKy' ? (
-					<FormDangKy
-						record={formModal.record}
-						isView={formModal.isView}
-						edit={formModal.edit}
+					<ModalExpandable
+						title={formModalTitle}
+						width={1000}
+						open={!!formModal}
 						onCancel={closeFormModal}
-						getData={refreshAll}
-					/>
-				) : null}
-				{formModal?.type === 'mien' ? (
-					<FormMien
-						record={formModal.record}
-						isView={formModal.isView}
-						edit={formModal.edit}
-						onCancel={closeFormModal}
-						getData={refreshAll}
-					/>
-				) : null}
-			</ModalExpandable>
-		</TableBase>
+						footer={null}
+						destroyOnClose
+					>
+						{formModal?.type === 'dangKy' ? (
+							<FormDangKy
+								record={formModal.record}
+								isView={formModal.isView}
+								edit={formModal.edit}
+								onCancel={closeFormModal}
+								getData={refreshAll}
+							/>
+						) : null}
+						{formModal?.type === 'mien' ? (
+							<FormMien
+								record={formModal.record}
+								isView={formModal.isView}
+								edit={formModal.edit}
+								onCancel={closeFormModal}
+								getData={refreshAll}
+							/>
+						) : null}
+					</ModalExpandable>
+				</TableBase>
+			</div>
+		</PageCard>
 	);
 };
 

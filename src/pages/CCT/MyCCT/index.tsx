@@ -1,9 +1,11 @@
 import CCTCover from '@/assets/cct/CCT_Bia.png';
+import { FileTypeIcon, IconClock, IconRotateArrow, IconSave, IconSend, IconXmarkCircle } from '@/components/Icons';
+import PageCard from '@/components/PageCard';
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EStatusMyCCT } from '@/services/CCT/constant';
-import { IconXmarkCircle, IconFile, IconRotateArrow, IconSave, IconSend } from '@/components/Icons';
 import { Button } from '@vinuni/ui';
-import { Badge, Form, Space, Tag, Tooltip } from 'antd';
+import { Badge, Form, Space } from 'antd';
 import dayjs from 'dayjs';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -160,170 +162,92 @@ const MyCCT = () => {
 	};
 
 	return (
-		<>
+		<PageCard
+			stickyHeader
+			title={recDot?.roundName}
+			subtitle={
+				<span className='mycct-round-time'>
+					<IconClock />
+					{[dayjs(recDot?.startDate).format('HH:mm DD/MM/YYYY'), dayjs(recDot?.endDate).format('HH:mm DD/MM/YYYY')]
+						.filter(Boolean)
+						.join(' - ')}
+				</span>
+			}
+			extra={
+				<Space wrap>
+					{edit ? null : (
+						<>
+							{(() => {
+								const isDisabled =
+									record?.myCCT?.status === EStatusMyCCT.APPROVED ||
+									record?.myCCT?.status === EStatusMyCCT.PENDING_APPROVAL;
+
+								const isSubmitDisabled = !recDot?._id || isDisabled;
+
+								return (
+									<>
+										<ButtonExtend size='large' icon={<IconRotateArrow style={{ fontSize: 28 }} />} onClick={getData} />
+
+										<ButtonExtend
+											size='large'
+											disabled={loadingExport}
+											icon={
+												loadingExport ? (
+													<IconRotateArrow className='anticon-spin' style={{ fontSize: 28 }} />
+												) : (
+													<FileTypeIcon type='pdf' size={28} />
+												)
+											}
+											onClick={hanldeExport}
+										/>
+
+										{danhSach?.length ? (
+											<Badge count={danhSach?.length} offset={[-3, 7]}>
+												<Button
+													size='lg'
+													variant='outline'
+													style={{ color: APP_CONFIG_PRIMARY_COLOR }}
+													onClick={() => setVisiblePending(true)}
+												>
+													Pending For Approval
+												</Button>
+											</Badge>
+										) : null}
+
+										<Button variant='outline' size='lg' disabled={isDisabled} onClick={() => setEdit(true)}>
+											Update
+										</Button>
+
+										<Button
+											size='lg'
+											disabled={isSubmitDisabled}
+											title={
+												!recDot?._id
+													? 'No submission period available. Students can only submit during an active period.'
+													: ''
+											}
+											onClick={() => {
+												form
+													.validateFields()
+													.then((values) => {
+														setPreviewData(values);
+														setPreviewVisible(true);
+													})
+													.catch(() => {});
+											}}
+										>
+											Submit
+										</Button>
+									</>
+								);
+							})()}
+						</>
+					)}
+				</Space>
+			}
+		>
 			<Form form={form} layout='vertical' onFinish={(values) => onFinish(values, isSubmit)}>
 				<div style={{ maxWidth: '100%', margin: 'auto' }}>
-					<div
-						style={{
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'space-between',
-							margin: !recDot?._id ? '12px 0px 12px 0px' : undefined,
-						}}
-					>
-						<div style={{ color: '#fff', textAlign: 'left' }}>
-							{recDot?._id ? (
-								<>
-									<strong>{recDot?.roundName}</strong>
-									<p>{`(${[
-										dayjs(recDot?.startDate).format('HH:mm DD/MM/YYYY'),
-										dayjs(recDot?.endDate).format('HH:mm DD/MM/YYYY'),
-									]
-										.filter(Boolean)
-										.join(' - ')})`}</p>
-								</>
-							) : (
-								<i>
-									No submission period available. <br />
-									Students can only submit during an active period.
-								</i>
-							)}
-						</div>
-						<Space wrap>
-							{edit ? null : (
-								<>
-									{(() => {
-										const tagStyle = {
-											padding: '6px 10px',
-											marginTop: 12,
-											fontSize: 14,
-											fontWeight: 500,
-											borderRadius: 4,
-											display: 'inline-flex',
-											alignItems: 'center' as const,
-											gap: 4,
-										};
-
-										const disabledStyle = {
-											cursor: 'not-allowed',
-											opacity: 0.5,
-										};
-
-										const isDisabled =
-											record?.myCCT?.status === EStatusMyCCT.APPROVED ||
-											record?.myCCT?.status === EStatusMyCCT.PENDING_APPROVAL;
-
-										const isSubmitDisabled = !recDot?._id || isDisabled;
-
-										return (
-											<>
-												<Tooltip title='RELOAD'>
-													<Tag
-														icon={<IconRotateArrow style={{ fontSize: 14 }} />}
-														style={{
-															...tagStyle,
-															cursor: 'pointer',
-															display: 'inline-flex',
-															alignItems: 'center',
-															justifyContent: 'center',
-															width: 32,
-															height: 32,
-															padding: 0,
-														}}
-														onClick={getData}
-													/>
-												</Tooltip>
-
-												<Tag
-													icon={
-														loadingExport ? (
-															<IconRotateArrow className='anticon-spin' style={{ fontSize: 14 }} />
-														) : (
-															<IconFile style={{ fontSize: 14 }} />
-														)
-													}
-													style={{
-														...tagStyle,
-														cursor: 'pointer',
-														display: 'inline-flex',
-														alignItems: 'center',
-														justifyContent: 'center',
-														width: 32,
-														height: 32,
-														padding: 0,
-														opacity: loadingExport ? 0.7 : 1,
-													}}
-													onClick={!loadingExport ? hanldeExport : undefined}
-												/>
-
-												{danhSach?.length ? (
-													<Badge count={danhSach?.length} offset={[-3, 7]}>
-														<Tag
-															style={{
-																...tagStyle,
-																cursor: 'pointer',
-																animation: 'pulseSmooth 1.8s ease-in-out infinite',
-																backgroundColor: '#FFE58F',
-																color: '#CE7C1E',
-																fontWeight: 600,
-															}}
-															onClick={() => setVisiblePending(true)}
-														>
-															PENDING FOR APPROVAL
-														</Tag>
-													</Badge>
-												) : null}
-
-												<Tag
-													style={{
-														...tagStyle,
-														...(isDisabled ? disabledStyle : { cursor: 'pointer', color: '#134D8B', fontWeight: 600 }),
-													}}
-													onClick={() => {
-														if (!isDisabled) {
-															setEdit(true);
-														}
-													}}
-												>
-													UPDATE
-												</Tag>
-
-												<Tooltip
-													title={
-														!recDot?._id
-															? 'No submission period available. Students can only submit during an active period.'
-															: ''
-													}
-												>
-													<Tag
-														style={{
-															...tagStyle,
-															...(isSubmitDisabled
-																? disabledStyle
-																: { cursor: 'pointer', backgroundColor: '#F5FFEB', color: '#329323', fontWeight: 600 }),
-														}}
-														onClick={() => {
-															if (!isSubmitDisabled) {
-																form
-																	.validateFields()
-																	.then((values) => {
-																		setPreviewData(values);
-																		setPreviewVisible(true);
-																	})
-																	.catch(() => {});
-															}
-														}}
-													>
-														SUBMIT
-													</Tag>
-												</Tooltip>
-											</>
-										);
-									})()}
-								</>
-							)}
-						</Space>
-					</div>
 					{!!record?.myCCT?.status && <CardNoteMyCCT myCCT={record?.myCCT ?? ({} as MyCCT.IRecord)} />}
 				</div>
 
@@ -413,7 +337,7 @@ const MyCCT = () => {
 				setVisible={setVisiblePending}
 				getData={() => getAllModel(undefined, undefined, undefined, undefined, 'pending-for-approval/many')}
 			/>
-		</>
+		</PageCard>
 	);
 };
 

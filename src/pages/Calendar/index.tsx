@@ -1,14 +1,14 @@
+import EmptyState from '@/components/EmptyState';
 import { IconArrowRight, IconCalendar, IconGear, IconHumberger } from '@/components/Icons';
 import { Col, Row } from '@/components/MyGrid';
+import Segmented from '@/components/MySegmented';
+import PageCard, { Card } from '@/components/PageCard';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { EVENT_TYPE_TAG, useLoaiSuKienLabel, useMessagesCalendar } from '@/services/Calendar/constant';
 import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import PageCard, { Card } from '@/components/PageCard';
-import EmptyState from '@/components/EmptyState';
-import ModalExpandable from '@/components/Table/ModalExpandable';
-import Segmented from '@/components/MySegmented';
 import { Spin } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -274,9 +274,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		return (
 			<div className='calendar-list'>
 				{renderListToolbar()}
-				{!loading && isEmpty(data) ? (
-					<EmptyState description={intl.formatMessage({ id: 'lichsukien.empty' })} />
-				) : null}
+				{!loading && isEmpty(data) ? <EmptyState description={intl.formatMessage({ id: 'lichsukien.empty' })} /> : null}
 				<div className='calendar-list__days'>
 					{keysSorted.map((ngay) => {
 						const { cacSuKien, thuTrongTuan } = data[ngay];
@@ -402,7 +400,11 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				</Row>
 			) : (
 				<div className='calendar-layout'>
-					<Card className='calendar-board' variant='borderless' styles={{ body: { padding: '8px 24px 24px', height: '100%' } }}>
+					<Card
+						className='calendar-board'
+						variant='borderless'
+						styles={{ body: { padding: '8px 24px 24px', height: '100%' } }}
+					>
 						{segmentSelected ? mainContent() : renderContent()}
 					</Card>
 					<Card

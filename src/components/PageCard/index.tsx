@@ -1,5 +1,4 @@
 import {
-	Card as VinCard,
 	CardAction,
 	CardContent,
 	CardDescription,
@@ -7,6 +6,7 @@ import {
 	CardTitle,
 	ScrollEdgeEffect,
 	useResolvedTheme,
+	Card as VinCard,
 } from '@vinuni/ui';
 import { Spin } from 'antd';
 import React, { useLayoutEffect, useRef, useState } from 'react';
@@ -42,7 +42,7 @@ const PageCard: React.FC<PageCardProps> = ({
 	showIndicator = false,
 	bordered = false,
 	hideInnerCard = false,
-	stickyHeader = false,
+	stickyHeader = true,
 	subtitle,
 	headerType,
 	...rest
@@ -169,6 +169,22 @@ const PageCard: React.FC<PageCardProps> = ({
 	const canToggleIndicator = !isLevel4;
 	const indicatorClass = canToggleIndicator && showIndicator === true ? 'has-indicator' : '';
 
+	// Level 1–3: title nằm ngoài card. Subtitle đi cùng khối title để extra vẫn ở bên phải.
+	const outerTitleBlock = (title || subtitle) && (
+		<div className='page-card-title-block'>
+			{title ? (
+				<HeadingTag className='page-card-title' data-slot='card-title'>
+					{title}
+				</HeadingTag>
+			) : null}
+			{subtitle ? (
+				<div className='page-card-subtitle' data-slot='card-description'>
+					{subtitle}
+				</div>
+			) : null}
+		</div>
+	);
+
 	// Level 4 (Standard): title nằm TRONG Card, dùng Card/CardHeader của @vinuni/ui.
 	if (isLevel4) {
 		const cardClasses = ['page-card', 'page-card-standard', levelClass, indicatorClass, className]
@@ -242,24 +258,16 @@ const PageCard: React.FC<PageCardProps> = ({
 							<div
 								className='page-card-header-shell'
 								style={{
-									left: rect.left,
-									width: rect.width,
-									height: rect.shellHeight,
 									backgroundColor: bgColor || undefined,
 								}}
 							>
-								<div className='page-card-header-cap' style={{ height: rect.capHeight }} aria-hidden />
 								<div
 									ref={headerRef}
 									className='page-card-header page-card-header-fixed'
 									data-slot='page-card-header'
 									data-scrolled={scrolled}
 								>
-									{title && (
-										<HeadingTag className='page-card-title' data-slot='card-title'>
-											{title}
-										</HeadingTag>
-									)}
+									{outerTitleBlock}
 									{extraContent && (
 										<div className='page-card-action' data-slot='card-action'>
 											{extraContent}
@@ -270,11 +278,7 @@ const PageCard: React.FC<PageCardProps> = ({
 							</div>
 						) : (
 							<div className='page-card-header' data-slot='page-card-header'>
-								{title && (
-									<HeadingTag className='page-card-title' data-slot='card-title'>
-										{title}
-									</HeadingTag>
-								)}
+								{outerTitleBlock}
 								{extraContent && (
 									<div className='page-card-action' data-slot='card-action'>
 										{extraContent}
@@ -282,27 +286,17 @@ const PageCard: React.FC<PageCardProps> = ({
 								)}
 							</div>
 						)}
-						{stickyHeader && (
+						{/* {stickyHeader && (
 							<div
 								ref={placeholderRef}
 								className='page-card-header-placeholder'
-								style={{ height: rect.placeholderHeight }}
+								style={{ height: '60px' }}
 								aria-hidden
 							/>
-						)}
+						)} */}
 					</>
 				)}
-				{hideInnerCard ? (
-					children
-				) : (
-					<VinCard
-						className={['page-card-inner', bordered ? 'border border-ds-line-primary' : 'border-0 shadow-none']
-							.filter(Boolean)
-							.join(' ')}
-					>
-						<CardContent>{children}</CardContent>
-					</VinCard>
-				)}
+				<div className='page-card-body'>{children}</div>
 			</Spin>
 		</div>
 	);

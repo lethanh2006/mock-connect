@@ -1,11 +1,8 @@
+import { IconArrowRight } from '@/components/Icons';
 import DiemThiHocKy from '@/pages/KhaoThi/KyThi/DiemThiHocKy';
 import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Empty, Spin, Tag, Tooltip } from 'antd';
-import { ETrangThaiDuThi, trangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
-import { IconArrowRight } from '@/components/Icons';
-import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 

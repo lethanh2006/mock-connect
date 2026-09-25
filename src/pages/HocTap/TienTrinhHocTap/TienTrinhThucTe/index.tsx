@@ -1,18 +1,16 @@
-import ButtonExtend from '@/components/Table/ButtonExtend';
-import { getSearchStorage, updateSearchStorage } from '@/components/Table/utils';
-import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { primaryColor } from '@/services/base/constant';
-import { IconRotateArrow, IconMagnifyingGlass } from '@/components/Icons';
 import EmptyState from '@/components/EmptyState';
+import { IconRotateArrow } from '@/components/Icons';
 import Select from '@/components/MySelect';
-import type { InputRef } from 'antd';
-import { AutoComplete, Button, Divider, Input, Space, Spin, Tag, Tooltip, Typography } from 'antd';
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
+import { Divider, Space, Spin, Tag, Typography } from 'antd';
 import _ from 'lodash';
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
 import '../ChuongTrinhKhung/style.less';
 import CardHocPhanV2 from '../components/CardHocPhan';
+import SearchTienTrinh from '../components/SearchTienTrinh';
 
 const { Title } = Typography;
 
@@ -34,8 +32,6 @@ const TienTrinhThucTeV2 = () => {
 	const [tienTrinhHocKy, setTienTrinhHocKy] = useState<ChuongTrinhDaoTao.TTienTrinhThucTe[][]>();
 	const [maHocKyFilter, setMaHocKyFilter] = useState<string>();
 	const [searchText, setSearchText] = useState('');
-	const [searchOptions, setSearchOptions] = useState<{ value: string }[]>([]);
-	const searchInputRef = useRef<InputRef>(null);
 	const [recTienTrinh, setRecTienTrinh] = useState<ChuongTrinhDaoTao.TTienTrinhThucTe>();
 	const [visibleDiem, setVisibleDiem] = useState(false);
 
@@ -77,25 +73,6 @@ const TienTrinhThucTeV2 = () => {
 			.filter((data) => data.length > 0);
 	}, [filteredTienTrinhHocKy, searchText]);
 
-	useEffect(() => {
-		const history = getSearchStorage(GLOBAL_SEARCH_KEY);
-		setSearchOptions(history.map((value: string) => ({ value })));
-	}, []);
-
-	const handleSearchTrigger = useCallback((value: string) => {
-		const keyword = value?.trim() || '';
-		setSearchText(keyword);
-
-		if (keyword) updateSearchStorage(GLOBAL_SEARCH_KEY, keyword);
-
-		const history = getSearchStorage(GLOBAL_SEARCH_KEY);
-		setSearchOptions(history.map((val: string) => ({ value: val })));
-
-		setTimeout(() => {
-			searchInputRef.current?.blur();
-		}, 0);
-	}, []);
-
 	const renderKhoiKienThucLabel = (item: ChuongTrinhDaoTao.TTienTrinhThucTe) => {
 		const isNgoaiCtdt = item.isNgoaiCtdt;
 		const name = isNgoaiCtdt
@@ -121,52 +98,7 @@ const TienTrinhThucTeV2 = () => {
 	return (
 		<div>
 			<div className='view-switch-container' style={{ marginBottom: 16 }}>
-				<AutoComplete
-					className='view-switch-search'
-					options={searchOptions}
-					value={searchText}
-					onSelect={handleSearchTrigger}
-					onChange={(value: string) => setSearchText(value)}
-				>
-					<Input.Search
-						ref={searchInputRef}
-						className='global-search'
-						allowClear
-						value={searchText}
-						placeholder={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.search.placeholder' })}
-						style={
-							searchText
-								? {
-									width: 320,
-									borderColor: primaryColor,
-									outline: `1px solid ${primaryColor}`,
-									borderRadius: 4,
-								}
-								: { width: 320 }
-						}
-						enterButton={
-							<Button
-								loading={loading}
-								icon={
-									<Tooltip title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.search.tooltip' })}>
-										<IconMagnifyingGlass />
-									</Tooltip>
-								}
-							/>
-						}
-						onSearch={handleSearchTrigger}
-						onChange={(e) => {
-							if (e.type === 'click') {
-								handleSearchTrigger('');
-								return;
-							}
-
-							const value = e.target.value;
-							setSearchText(value);
-							if (!value.trim()) handleSearchTrigger('');
-						}}
-					/>
-				</AutoComplete>
+				<SearchTienTrinh storageKey={GLOBAL_SEARCH_KEY} value={searchText} onChange={setSearchText} />
 				<Space>
 					<ButtonExtend
 						icon={<IconRotateArrow />}
@@ -179,7 +111,8 @@ const TienTrinhThucTeV2 = () => {
 						allowClear
 						showSearch
 						optionFilterProp='label'
-						style={{ minWidth: 220, fontWeight: 600 }}
+						size='small'
+						style={{ minWidth: 250, height: 36, fontWeight: 600 }}
 						placeholder={intl.formatMessage({ id: 'tientrinhhoctap.filter.hocKy' })}
 						value={maHocKyFilter ?? ''}
 						onChange={(val) => setMaHocKyFilter(val || undefined)}
@@ -200,7 +133,7 @@ const TienTrinhThucTeV2 = () => {
 						<Fragment key={data[0]?.kyHoc?.ma ?? data[0]?.diemHpSvHk?._id}>
 							<Divider orientation='left' className='divider-big-title' dashed>
 								<div className='header-content'>
-									<Title level={5} style={{ margin: 0, color: '#262626' }}>
+									<Title level={5} style={{ margin: 0, color: APP_CONFIG_PRIMARY_COLOR }}>
 										{data[0].kyHoc?.ten}
 									</Title>
 									<Tag color='blue'>
@@ -252,9 +185,9 @@ const TienTrinhThucTeV2 = () => {
 				khoiChuongTrinh={
 					recTienTrinh?.khoiKienThuc
 						? {
-							maKhoiKienThuc: recTienTrinh.maKhoiKienThuc ?? recTienTrinh.khoiKienThuc.ma,
-							khoiKienThuc: recTienTrinh.khoiKienThuc,
-						}
+								maKhoiKienThuc: recTienTrinh.maKhoiKienThuc ?? recTienTrinh.khoiKienThuc.ma,
+								khoiKienThuc: recTienTrinh.khoiKienThuc,
+							}
 						: undefined
 				}
 			/>

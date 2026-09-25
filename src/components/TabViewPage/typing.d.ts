@@ -54,6 +54,9 @@ export type TabViewPageComponentProps = {
 	/** Style bọc toàn bộ */
 	style?: CSSProperties;
 
+	/** Style bọc nội dung tab. Mặc định wrapper có margin-top 16px */
+	contentStyle?: CSSProperties;
+
 	offsetTop?: number;
 
 	cardBigTitle?: boolean;

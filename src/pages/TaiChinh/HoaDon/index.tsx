@@ -1,7 +1,10 @@
+import EmptyState from '@/components/EmptyState';
+import { Badge, Icon3Dot3Line, IconEyeOpen } from '@/components/Icons';
 import PDFViewerV2 from '@/components/PDFViewerV2';
 import PageCard from '@/components/PageCard';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import { Modal } from '@/components/Table/ModalExpandable';
 import { EOperatorType } from '@/components/Table/constant';
 import { type IColumn } from '@/components/Table/typing';
 import { getExportBillUrl } from '@/services/TaiChinh/HoaDon';
@@ -11,18 +14,17 @@ import {
 	ETrangThaiDuyetYeuCau,
 	ETrangThaiTraGopBill,
 } from '@/services/TaiChinh/TraGop/constant';
-import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable } from '@/services/TaiChinh/constant';
+import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import {
 	EditOutlined,
-	EyeOutlined,
 	FieldTimeOutlined,
 	FilePdfOutlined,
 	ScheduleOutlined,
 	UnorderedListOutlined,
 } from '@ant-design/icons';
-import { IconEyeOpen, Icon3Dot3Line, Badge } from '@/components/Icons';
-import { Alert, Empty, Tabs, Tag, notification } from 'antd';
+import { Card, CardContent } from '@vinuni/ui';
+import { Alert, Tabs, Tag, notification } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState, type Key, type ReactNode } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -31,8 +33,6 @@ import ModalThanhToan from './ThanhToan/ModalThanhToan';
 import ThongTinThanhToan from './ThanhToan/ThongTinThanhToan';
 import ModalDangKyTraGop from './TraGop/ModalDangKyTraGop';
 import ModalTienDoTraGop from './TraGop/ModalTienDoTraGop';
-import EmptyState from '@/components/EmptyState';
-import { Modal } from '@/components/Table/ModalExpandable';
 
 const mapPaymentBadgeVariant = (val: EMaTrangThaiThanhToan): 'complete' | 'warning' | 'negative' | 'secondary' => {
 	switch (val) {
@@ -260,7 +260,12 @@ const HoaDonPage = () => {
 				const isKtxDeposit = rec.transactions?.some((transaction) => transaction.isKtxDeposit === true);
 				if (isKtxDeposit) return <PaymentDeadlineCountdown deadline={val} />;
 
-				const dateValue = val || rec?.ngayHetHanThanhToan || (rec as any)?.dueDate || (rec as any)?.hanThanhToan || (rec?.dotThu as any)?.ngayKetThuc;
+				const dateValue =
+					val ||
+					rec?.ngayHetHanThanhToan ||
+					(rec as any)?.dueDate ||
+					(rec as any)?.hanThanhToan ||
+					(rec?.dotThu as any)?.ngayKetThuc;
 				if (!dateValue || !dayjs(dateValue).isValid()) {
 					return <div>--</div>;
 				}
@@ -534,6 +539,104 @@ const HoaDonPage = () => {
 
 	return (
 		<PageCard stickyHeader title={intl.formatMessage({ id: 'taichinh.hoadon.title' })}>
+			<Card>
+				<CardContent>
+					<Tabs
+						activeKey={activeKey}
+						onChange={(tab) => {
+							setActiveKey(tab as 'chua_thanh_toan' | 'da_thanh_toan');
+						}}
+					>
+						<Tabs.TabPane key='chua_thanh_toan' tab={intl.formatMessage({ id: 'taichinh.hoadon.tab.unpaid' })} />
+						<Tabs.TabPane key='da_thanh_toan' tab={intl.formatMessage({ id: 'taichinh.hoadon.tab.paid' })} />
+					</Tabs>
+
+					<TableBase
+						addStt={false}
+						rowSelection={activeKey === 'chua_thanh_toan'}
+						columns={columns}
+						getData={() => getData(activeKey)}
+						buttons={{ create: false }}
+						dependencies={[page, limit, activeKey]}
+						modelName='taichinh.hoadon'
+						widthDrawer={1000}
+						otherButtons={[
+							...(selectedIds && selectedIds?.length > 0
+								? [
+										<ButtonExtend
+											key={'thanh-toan'}
+											icon={<UnorderedListOutlined />}
+											onClick={() => {
+												const bills = allTableBills.filter(
+													(item) =>
+														selectedIds.includes(item._id) &&
+														!item.transactions?.some((transaction) => transaction.isKtxDeposit === true),
+												);
+												if (!bills.length) return;
+												if (bills.length === 1) {
+													setRecord(bills[0]);
+													setSelectedBills([]);
+													setPaymentMode('single');
+												} else {
+													setSelectedBills(bills);
+													setPaymentMode('multi');
+												}
+												setInitialPaymentAmount(undefined);
+												setLockPaymentAmount(false);
+												setVisibleModalThanhToan(true);
+											}}
+											type='primary'
+										>
+											{intl.formatMessage({ id: 'taichinh.hoadon.action.paySelected' }, { count: selectedIds?.length })}
+										</ButtonExtend>,
+									]
+								: []),
+						]}
+						otherProps={{
+							dataSource: tableData,
+							rowKey: (rec: BillTableRecord) => rec._id,
+							rowClassName: (rec: BillTableRecord) => {
+								if (rec._isKtxDepositNotice) return 'ktx-deposit-notice-row';
+								// Check hạn thanh toán từ hóa đơn
+								if (rec.ngayHetHanThanhToan && dayjs().isAfter(dayjs(rec.ngayHetHanThanhToan), 'day'))
+									return 'row-qua-han';
+
+								return '';
+							},
+							onRow: (rec: BillTableRecord) => ({
+								onClick: rec._isKtxDepositNotice
+									? undefined
+									: () => history.push(`/finance/tuition-billing/${rec.identityCode}`),
+								style: { cursor: rec._isKtxDepositNotice ? 'default' : 'pointer' },
+							}),
+						}}
+						detailRow={{
+							checkStrictly: true,
+							getCheckboxProps: (rec: BillTableRecord) => ({
+								disabled: Boolean(
+									rec._isKtxDepositNotice || rec.transactions?.some((transaction) => transaction.isKtxDeposit === true),
+								),
+							}),
+							onChange: (selectedRowKeys: Key[]) => {
+								const nextSelectedIds = new Set(selectedRowKeys.map(String));
+
+								allTableBills.forEach((bill) => {
+									if (bill.transactions?.some((transaction) => transaction.isKtxDeposit === true)) {
+										nextSelectedIds.delete(bill._id);
+									}
+								});
+
+								setSelectedIds(Array.from(nextSelectedIds));
+							},
+							renderCell: (_checked: boolean, rec: BillTableRecord, _index: number, originNode: ReactNode) => {
+								if (rec._isKtxDepositNotice) return renderKtxDepositNotice();
+								return originNode;
+							},
+							onCell: (rec: BillTableRecord) => (rec._isKtxDepositNotice ? { colSpan: baseColumns.length + 1 } : {}),
+						}}
+					></TableBase>
+				</CardContent>
+			</Card>
 			<style>{`
 				.row-qua-han > td { background-color: #fff1f0 !important; }
 				.ant-table-wrapper .ant-table-tbody > tr.ktx-deposit-notice-row > td {
@@ -548,102 +651,6 @@ const HoaDonPage = () => {
 				}
 				.ktx-deposit-notice { width: 100%; }
 			`}</style>
-
-			<Tabs
-				activeKey={activeKey}
-				onChange={(tab) => {
-					setActiveKey(tab as 'chua_thanh_toan' | 'da_thanh_toan');
-				}}
-			>
-				<Tabs.TabPane key='chua_thanh_toan' tab={intl.formatMessage({ id: 'taichinh.hoadon.tab.unpaid' })} />
-				<Tabs.TabPane key='da_thanh_toan' tab={intl.formatMessage({ id: 'taichinh.hoadon.tab.paid' })} />
-			</Tabs>
-
-			<TableBase
-				addStt={false}
-				rowSelection={activeKey === 'chua_thanh_toan'}
-				columns={columns}
-				getData={() => getData(activeKey)}
-				buttons={{ create: false }}
-				dependencies={[page, limit, activeKey]}
-				modelName='taichinh.hoadon'
-				widthDrawer={1000}
-				otherButtons={[
-					...(selectedIds && selectedIds?.length > 0
-						? [
-								<ButtonExtend
-									key={'thanh-toan'}
-									icon={<UnorderedListOutlined />}
-									onClick={() => {
-										const bills = allTableBills.filter(
-											(item) =>
-												selectedIds.includes(item._id) &&
-												!item.transactions?.some((transaction) => transaction.isKtxDeposit === true),
-										);
-										if (!bills.length) return;
-										if (bills.length === 1) {
-											setRecord(bills[0]);
-											setSelectedBills([]);
-											setPaymentMode('single');
-										} else {
-											setSelectedBills(bills);
-											setPaymentMode('multi');
-										}
-										setInitialPaymentAmount(undefined);
-										setLockPaymentAmount(false);
-										setVisibleModalThanhToan(true);
-									}}
-									type='primary'
-								>
-									{intl.formatMessage({ id: 'taichinh.hoadon.action.paySelected' }, { count: selectedIds?.length })}
-								</ButtonExtend>,
-							]
-						: []),
-				]}
-				otherProps={{
-					dataSource: tableData,
-					rowKey: (rec: BillTableRecord) => rec._id,
-					rowClassName: (rec: BillTableRecord) => {
-						if (rec._isKtxDepositNotice) return 'ktx-deposit-notice-row';
-						// Check hạn thanh toán từ hóa đơn
-						if (rec.ngayHetHanThanhToan && dayjs().isAfter(dayjs(rec.ngayHetHanThanhToan), 'day')) return 'row-qua-han';
-
-						return '';
-					},
-					onRow: (rec: BillTableRecord) => ({
-						onClick: rec._isKtxDepositNotice
-							? undefined
-							: () => history.push(`/finance/tuition-billing/${rec.identityCode}`),
-						style: { cursor: rec._isKtxDepositNotice ? 'default' : 'pointer' },
-					}),
-				}}
-				detailRow={{
-					checkStrictly: true,
-					getCheckboxProps: (rec: BillTableRecord) => ({
-						disabled: Boolean(
-							rec._isVirtualBillNotice ||
-							rec._isKtxDepositNotice ||
-							rec.transactions?.some((transaction) => transaction.isKtxDeposit === true),
-						),
-					}),
-					onChange: (selectedRowKeys: Key[]) => {
-						const nextSelectedIds = new Set(selectedRowKeys.map(String));
-
-						allTableBills.forEach((bill) => {
-							if (bill.transactions?.some((transaction) => transaction.isKtxDeposit === true)) {
-								nextSelectedIds.delete(bill._id);
-							}
-						});
-
-						setSelectedIds(Array.from(nextSelectedIds));
-					},
-					renderCell: (_checked: boolean, rec: BillTableRecord, _index: number, originNode: ReactNode) => {
-						if (rec._isKtxDepositNotice) return renderKtxDepositNotice();
-						return originNode;
-					},
-					onCell: (rec: BillTableRecord) => (rec._isKtxDepositNotice ? { colSpan: baseColumns.length + 1 } : {}),
-				}}
-			></TableBase>
 
 			<Modal
 				open={visibleModal}
@@ -663,7 +670,11 @@ const HoaDonPage = () => {
 				title={intl.formatMessage({ id: 'taichinh.hoadon.tooltip.xemhuongdan' })}
 			>
 				{/* <PreviewFile file={pdfUrl ?? ''} /> */}
-				{pdfUrl ? <PDFViewerV2 url={pdfUrl} height='80vh' /> : <EmptyState compact description={intl.formatMessage({ id: 'global.table.index.empty' })} />}
+				{pdfUrl ? (
+					<PDFViewerV2 url={pdfUrl} height='80vh' />
+				) : (
+					<EmptyState compact description={intl.formatMessage({ id: 'global.table.index.empty' })} />
+				)}
 			</Modal>
 
 			<ModalThanhToan

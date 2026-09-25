@@ -3,6 +3,7 @@ import { Flex, Progress, Typography } from 'antd';
 import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
 
+import { CardContent, Card as VinCard } from '@vinuni/ui';
 interface CreditProgressRowProps {
 	title: string;
 	current?: number;
@@ -47,23 +48,27 @@ const CreditProgress = () => {
 	const thongKeMinor = useMemo(() => tinhThongKeMinor(tienTrinhKhungMinors), [tienTrinhKhungMinors]);
 
 	return (
-		<Flex vertical gap={16}>
-			<CreditProgressRow
-				title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt' })}
-				current={recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa}
-				total={recTienTrinh?.ctdtKeHoach?.tongSoTinChi}
-				color='#134d8b'
-			/>
+		<VinCard>
+			<CardContent>
+				<Flex vertical gap={16}>
+					<CreditProgressRow
+						title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt' })}
+						current={recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa}
+						total={recTienTrinh?.ctdtKeHoach?.tongSoTinChi}
+						color='#134d8b'
+					/>
 
-			{!!thongKeMinor.tong && (
-				<CreditProgressRow
-					title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}
-					current={thongKeMinor.daDat}
-					total={thongKeMinor.tong}
-					color='#d9a45f'
-				/>
-			)}
-		</Flex>
+					{!!thongKeMinor.tong && (
+						<CreditProgressRow
+							title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}
+							current={thongKeMinor.daDat}
+							total={thongKeMinor.tong}
+							color='#d9a45f'
+						/>
+					)}
+				</Flex>
+			</CardContent>
+		</VinCard>
 	);
 };
 

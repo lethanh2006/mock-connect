@@ -379,7 +379,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 							onClick={() => setVisibleTranscript(true)}
 						/>
 						<Select
-							style={{ minWidth: 220 }}
+							style={{ minWidth: 250, height: 36 }}
 							value={maHocKyFilter}
 							onChange={setMaHocKyFilter}
 							options={[

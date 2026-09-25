@@ -6,14 +6,13 @@
 .app-shell-content {
 	width: 100%;
 	min-width: 0;
-	padding: 12px;
 	box-sizing: border-box;
 }
 
 // =============================================================================
 // Sidebar Dock Styling (Chuẩn màu trắng sáng trên nền xanh gradient)
 // =============================================================================
-[data-slot="sidebar-dock"] {
+[data-slot='sidebar-dock'] {
 	color: rgba(255, 255, 255, 0.6) !important;
 
 	svg {
@@ -21,7 +20,7 @@
 	}
 
 	// 1. Các nút bấm điều hướng (Toggle sidebar, Thông báo, Danh sách chức năng)
-	[data-slot="sidebar-dock-item"],
+	[data-slot='sidebar-dock-item'],
 	[data-dock-toggle] {
 		color: rgba(255, 255, 255, 0.6) !important;
 		cursor: pointer;
@@ -34,7 +33,9 @@
 			fill: currentColor !important;
 			width: 22px !important;
 			height: 22px !important;
-			transition: transform 0.2s ease, color 0.2s ease;
+			transition:
+				transform 0.2s ease,
+				color 0.2s ease;
 		}
 
 		&:hover {
@@ -47,7 +48,7 @@
 			}
 		}
 
-		&[data-active="true"] {
+		&[data-active='true'] {
 			color: #ffffff !important;
 			background-color: rgba(255, 255, 255, 0.2) !important;
 
@@ -58,7 +59,7 @@
 	}
 
 	// Huy hiệu đếm thông báo trên icon chuông
-	[data-slot="sidebar-dock-badge"] {
+	[data-slot='sidebar-dock-badge'] {
 		position: absolute;
 		top: 4px;
 		right: 2px;
@@ -79,7 +80,7 @@
 	}
 
 	// 2. Logo thương hiệu chữ dọc "VINUNIVERSITY" (chuyển sang màu trắng sáng 60%)
-	[data-slot="sidebar-dock-wordmark"] {
+	[data-slot='sidebar-dock-wordmark'] {
 		color: rgba(255, 255, 255, 0.6) !important;
 
 		img,
@@ -90,7 +91,7 @@
 	}
 
 	// 3. Footer chứa 2 bộ chuyển Theme (Sáng / Tối) & Ngôn ngữ (VI / EN)
-	[data-slot="sidebar-dock-footer"] {
+	[data-slot='sidebar-dock-footer'] {
 		display: flex !important;
 		flex-direction: column !important;
 		align-items: center !important;
@@ -98,7 +99,7 @@
 	}
 
 	// Bộ chuyển dạng viên thuốc (Pill Capsule) - màu trắng sáng trên nền kính mờ
-	[data-slot="sidebar-dock-switcher"] {
+	[data-slot='sidebar-dock-switcher'] {
 		display: flex !important;
 		flex-direction: column !important;
 		align-items: center !important;
@@ -110,7 +111,7 @@
 		border: 1px solid rgba(255, 255, 255, 0.15) !important;
 		box-sizing: border-box !important;
 
-		[data-slot="sidebar-dock-switcher-item"] {
+		[data-slot='sidebar-dock-switcher-item'] {
 			display: flex !important;
 			align-items: center !important;
 			justify-content: center !important;
@@ -139,7 +140,9 @@
 				fill: currentColor !important;
 				width: 16px !important;
 				height: 16px !important;
-				transition: transform 0.2s ease, color 0.2s ease;
+				transition:
+					transform 0.2s ease,
+					color 0.2s ease;
 			}
 
 			&:hover {
@@ -152,7 +155,7 @@
 				}
 			}
 
-			&[data-state="on"] {
+			&[data-state='on'] {
 				color: #ffffff !important;
 				background-color: rgba(255, 255, 255, 0.28) !important;
 				font-weight: 700 !important;
@@ -182,17 +185,16 @@
 }
 
 .app-shell-sidebar-title,
-[data-slot="sidebar-title"] {
+[data-slot='sidebar-title'] {
 	font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
 	color: var(--color-primary, #134d8b) !important;
 	padding: 0 !important;
 	margin: 0 !important;
 }
 
-[data-vinuni-theme="dark"] {
-
+[data-vinuni-theme='dark'] {
 	.app-shell-sidebar-title,
-	[data-slot="sidebar-title"] {
+	[data-slot='sidebar-title'] {
 		color: var(--color-text, #111827) !important;
 	}
 }
@@ -200,12 +202,12 @@
 // =============================================================================
 // Sidebar Groups & Spacing (Triệt tiêu khoảng cách thừa khổng lồ 56px)
 // =============================================================================
-[data-slot="sidebar-content"] {
+[data-slot='sidebar-content'] {
 	gap: 0 !important;
 }
 
-[data-slot="sidebar-group"],
-[data-slot="sidebar-collapsible-group"],
+[data-slot='sidebar-group'],
+[data-slot='sidebar-collapsible-group'],
 .app-shell-default-group,
 .app-shell-collapsible-group {
 	padding: 0 8px !important;
@@ -219,7 +221,7 @@
 	margin-bottom: 0 !important;
 }
 
-[data-slot="sidebar-group-trigger"],
+[data-slot='sidebar-group-trigger'],
 .app-shell-group-trigger {
 	text-transform: uppercase !important;
 	font-size: 11px !important;
@@ -247,8 +249,8 @@
 // =============================================================================
 // Menu Items (Đồng bộ 44px, bo góc 999px, chữ 16px, triệt tiêu 2 viền)
 // =============================================================================
-[data-slot="sidebar-menu-button"],
-[data-slot="sidebar-menu-sub-button"],
+[data-slot='sidebar-menu-button'],
+[data-slot='sidebar-menu-sub-button'],
 .app-shell-sub-group-btn {
 	height: 44px !important;
 	padding: 0 16px !important;
@@ -282,7 +284,7 @@
 		}
 	}
 
-	&[data-active="true"] {
+	&[data-active='true'] {
 		font-weight: 600 !important;
 		color: var(--color-primary, #134d8b) !important;
 		background-color: rgba(19, 77, 139, 0.08) !important;
@@ -294,7 +296,7 @@
 }
 
 // Reset khoảng cách cho menu con
-[data-slot="sidebar-menu-sub"] {
+[data-slot='sidebar-menu-sub'] {
 	margin: 0 !important;
 	padding: 2px 0 !important;
 }
@@ -326,7 +328,7 @@ svg.app-shell-chevron {
 // =============================================================================
 // Menu Badge (Thông báo đỏ tròn / pill)
 // =============================================================================
-[data-slot="sidebar-menu-badge"],
+[data-slot='sidebar-menu-badge'],
 .app-shell-badge {
 	position: absolute !important;
 	right: 14px !important;
@@ -355,16 +357,15 @@ svg.app-shell-chevron {
 // (algorithm: darkAlgorithm) nên không cần lặp lại ở đây nữa. Active state giữ
 // nguyên #ffffff riêng cho dark mode vì var(--color-primary) không tự đổi độ
 // tương phản theo theme (primary color giữ nguyên hex bất kể light/dark).
-[data-vinuni-theme="dark"] {
-
-	[data-slot="sidebar-menu-button"],
-	[data-slot="sidebar-menu-sub-button"],
+[data-vinuni-theme='dark'] {
+	[data-slot='sidebar-menu-button'],
+	[data-slot='sidebar-menu-sub-button'],
 	.app-shell-sub-group-btn {
 		&:hover {
 			background-color: rgba(255, 255, 255, 0.08) !important;
 		}
 
-		&[data-active="true"] {
+		&[data-active='true'] {
 			color: #ffffff !important;
 			background-color: rgba(59, 129, 218, 0.28) !important;
 

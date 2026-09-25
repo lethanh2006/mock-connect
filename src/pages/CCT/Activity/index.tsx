@@ -1,12 +1,11 @@
 import background from '@/assets/cct/background.png';
+import EmptyState from '@/components/EmptyState';
+import { Col, Row } from '@/components/MyGrid';
 import PageCard from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { EApprovalStatus } from '@/services/CCT/constant';
-import { getPublicAssetPath } from '@/utils/path';
 import { Button } from '@vinuni/ui';
-import { Col, Row } from '@/components/MyGrid';
-import EmptyState from '@/components/EmptyState';
 import { Pagination, Popconfirm, Spin, Tabs } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -119,16 +118,16 @@ const ActivityPage = () => {
 			filters,
 			activeKey === '2'
 				? {
-					startDate: -1,
-				}
+						startDate: -1,
+					}
 				: activeKey === '1'
 					? {
-						startDate: 1,
-					}
+							startDate: 1,
+						}
 					: activeKey === '3'
 						? {
-							endDate: -1,
-						}
+								endDate: -1,
+							}
 						: undefined,
 			undefined,
 			9,

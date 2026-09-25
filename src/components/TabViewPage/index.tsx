@@ -1,16 +1,16 @@
 import useCheckAccess from '@/hooks/useCheckAccess';
 import NotAccessible from '@/pages/exception/403';
 import { Affix, Card, Space, Steps, Tabs } from 'antd';
-import { JSX, useEffect, useState } from 'react';
+import { CSSProperties, JSX, useEffect, useState } from 'react';
 import './style.less';
 import type { TabViewPageComponentProps } from './typing';
 
-const PermissionWrapper = (props: { content: JSX.Element; accessCode?: string }) => {
-	const { accessCode, content } = props;
+const PermissionWrapper = (props: { content: JSX.Element; accessCode?: string; style?: CSSProperties }) => {
+	const { accessCode, content, style } = props;
 	const allowAccessCode = useCheckAccess(accessCode!);
 	const allow = accessCode ? allowAccessCode : true;
 
-	return allow ? <div style={{ marginTop: 16 }}>{content}</div> : <NotAccessible />;
+	return allow ? <div style={{ marginTop: 16, ...style }}>{content}</div> : <NotAccessible />;
 };
 
 export const getTitle = (title?: string, menuTitle?: string) => [title, menuTitle].filter(Boolean).join(' - ');
@@ -26,6 +26,7 @@ export const TabViewPage = (props: TabViewPageComponentProps) => {
 		tabType = 'card',
 		tabStyle,
 		style,
+		contentStyle,
 		offsetTop,
 		cardBigTitle,
 		extraCard,
@@ -86,7 +87,7 @@ export const TabViewPage = (props: TabViewPageComponentProps) => {
 						onChange={(key) => onChangeTab(key)}
 						className='tab-view-menu'
 						type={tabType}
-						style={{ ...tabStyle }}
+						style={{ ...tabStyle, '--tabs-ink-bar-color': APP_CONFIG_PRIMARY_COLOR } as CSSProperties}
 					>
 						{activeMenu.map((item) => (
 							<Tabs.TabPane
@@ -105,7 +106,14 @@ export const TabViewPage = (props: TabViewPageComponentProps) => {
 
 			{activeMenu.map((item) => {
 				if (tabActive === item.menuKey) {
-					return <PermissionWrapper key={item.menuKey} content={item.content} accessCode={item.accessCode} />;
+					return (
+						<PermissionWrapper
+							key={item.menuKey}
+							content={item.content}
+							accessCode={item.accessCode}
+							style={contentStyle}
+						/>
+					);
 				}
 				return null;
 			})}

@@ -1,5 +1,5 @@
-import PageCard from '@/components/PageCard';
 import { Col, Row } from '@/components/MyGrid';
+import { CardContent, CardHeader, CardTitle, Card as VinCard } from '@vinuni/ui';
 import { Flex, Typography } from 'antd';
 import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -85,20 +85,20 @@ const CardTienTrinh = () => {
 	}, [intl, recTienTrinh, danhSachActivity]);
 
 	return (
-		<PageCard
-			level={3}
-			hideInnerCard
-			title={intl.formatMessage({ id: 'trangchu.v2.academicProgress.title' })}
-			loading={loadingTienTrinh}
-		>
-			<Row gutter={[12, 12]}>
-				{stats.map((item) => (
-					<Col xs={24} sm={12} key={item.title}>
-						<StatCard {...item} />
-					</Col>
-				))}
-			</Row>
-		</PageCard>
+		<VinCard>
+			<CardHeader>
+				<CardTitle>{intl.formatMessage({ id: 'trangchu.v2.academicProgress.title' })}</CardTitle>
+			</CardHeader>
+			<CardContent>
+				<Row gutter={[12, 12]}>
+					{stats.map((item) => (
+						<Col xs={24} sm={12} key={item.title}>
+							<StatCard {...item} />
+						</Col>
+					))}
+				</Row>
+			</CardContent>
+		</VinCard>
 	);
 };
 

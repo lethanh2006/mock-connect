@@ -5,9 +5,58 @@
 	gap: 16px;
 }
 
-.view-switch-search {
-	flex: 1;
-	max-width: 320px;
+.view-switch-segmented.my-segmented {
+	box-sizing: border-box;
+	display: flex !important;
+	flex: none;
+	flex-direction: row;
+	align-items: flex-start;
+	width: 200px !important;
+	height: 36px !important;
+	padding: 0;
+	background: rgba(0, 0, 0, 0.05) !important;
+	border-radius: 1000px !important;
+
+	[data-slot='segmented-control-track'] {
+		flex: 1 1 auto !important;
+		align-items: stretch;
+		width: 100% !important;
+		height: 100%;
+		padding: 4px !important;
+	}
+
+	[data-slot='segmented-control-indicator'] {
+		top: 4px !important;
+		bottom: 4px !important;
+		height: 28px;
+		background: #ffffff !important;
+		border: none !important;
+		border-radius: 1000px !important;
+	}
+
+	[data-slot='segmented-control-item'] {
+		flex: 1 1 0 !important;
+		align-self: stretch;
+		justify-content: center;
+		width: auto !important;
+		height: 28px !important;
+		padding: 0 12px !important;
+		gap: 8px;
+		border-radius: 1000px;
+		color: #000000 !important;
+		font-family: 'Inter', sans-serif;
+		font-size: 14px !important;
+		line-height: 20px !important;
+		text-align: center;
+
+		&[data-state='on'] {
+			font-weight: 500;
+		}
+
+		&[data-state='off'] {
+			font-weight: 400;
+		}
+	}
 }
 
 .header-content {

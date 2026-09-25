@@ -1,22 +1,21 @@
 import background from '@/assets/cct/background.png';
+import EmptyState from '@/components/EmptyState';
+import { Icon2LineHorizontal, IconSend, IconTrash } from '@/components/Icons';
 import PageCard from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
+import { TabViewPage } from '@/components/TabViewPage';
+import ActivityCard from '@/pages/TrangChuV2/components/ActivityCard';
 import { Activity } from '@/services/CCT/Activity/typing';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EActivityCategory, EActivityStatus, EApprovalStatus, mapNameActivityCategory } from '@/services/CCT/constant';
 import dayjs from '@/utils/dayjs';
-import { getPublicAssetPath } from '@/utils/path';
-import { Icon2LineHorizontal, IconSend, IconTrash } from '@/components/Icons';
 import { Button } from '@vinuni/ui';
-import { Col, Row } from '@/components/MyGrid';
-import EmptyState from '@/components/EmptyState';
-import { Pagination, Popconfirm, Popover, Space, Spin, Tabs } from 'antd';
+import { Divider, Pagination, Popconfirm, Popover, Space, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import { FilterSuKienValue } from '../Activity';
 import CardChiTietSuKien from '../Activity/components/CardChiTietSuKien';
-import CardSuKienCCT from '../Activity/components/CardSuKien';
 import FilterSuKien from '../Activity/components/FilterSuKien';
 import '../Activity/style.less';
 import ChiTietActivityOutCome from './components/ChiTiet';
@@ -50,9 +49,12 @@ const HistoryActivityPage = () => {
 		record,
 		filters,
 	} = useModel('cct.activityoutcome');
-	const { getAllModel: getAllAtributes } = useModel('cct.attributes');
+	const { getAllModel: getAllAtributes, danhSach: dsAttribute } = useModel('cct.attributes');
 
-	const [tabActive, setTabActive] = useState<EActivityCategory>(EActivityCategory.REGISTERED);
+	const [tabActive, setTabActive] = useState<EActivityCategory>(() => {
+		const hash = window.location.hash.replace('#', '') as EActivityCategory;
+		return Object.values(EActivityCategory).includes(hash) ? hash : EActivityCategory.REGISTERED;
+	});
 	const [filter, setFilter] = useState<FilterSuKienValue>({
 		search: undefined,
 		dateRange: [],
@@ -165,244 +167,234 @@ const HistoryActivityPage = () => {
 
 	return (
 		<PageCard stickyHeader title={intl.formatMessage({ id: 'activity.history.title' })}>
-			<Tabs
-				activeKey={tabActive}
-				onChange={(tab) => {
-					setTabActive(tab as EActivityCategory);
-					setPage(1);
-					setLimit(9);
-				}}
-			>
-				{Object.values(EActivityCategory).map((item) => (
-					<Tabs.TabPane tab={mapNameActivityCategory[item]} key={item} />
-				))}
-			</Tabs>
+			<div className='page-card-custom'>
+				<TabViewPage
+					hideCard
+					offsetTop={64}
+					tabType='line'
+					tabStyle={{ padding: '12px 0 2px 8px' }}
+					contentStyle={{ marginTop: 0 }}
+					onChange={(tab) => {
+						setTabActive(tab as EActivityCategory);
+						setPage(1);
+						setLimit(9);
+					}}
+					menu={Object.values(EActivityCategory).map((item) => ({
+						title: mapNameActivityCategory[item],
+						menuKey: item,
+						content: (
+							<>
+								<div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: '16px 24px' }}>
+									<FilterSuKien
+										value={filter}
+										onChange={setFilter}
+										onReload={() => {
+											getData();
+											getThongKe();
+										}}
+										button={
+											tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR ? (
+												<Button
+													variant='default'
+													size='sm'
+													onClick={() => {
+														setRecord({} as ActivityOutCome.IRecord);
+														setEdit(false);
+														setIsView(false);
+														setVisibleForm(true);
+													}}
+												>
+													{intl.formatMessage({ id: 'activity.history.addNew' })}
+												</Button>
+											) : undefined
+										}
+										hideSelect
+									/>
 
-			<FilterSuKien
-				value={filter}
-				onChange={setFilter}
-				onReload={() => {
-					getData();
-					getThongKe();
-				}}
-				button={
-					tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR ? (
-						<Button
-							variant='default'
-							onClick={() => {
-								setRecord({} as ActivityOutCome.IRecord);
-								setEdit(false);
-								setIsView(false);
-								setVisibleForm(true);
-							}}
-						>
-							{intl.formatMessage({ id: 'activity.history.addNew' })}
-						</Button>
-					) : undefined
-				}
-				hideSelect
-			/>
+									<StatActivityOutCome
+										getData={getThongKe}
+										tabActive={tabActive}
+										onChangeWorkflow={setWorkflowQuery}
+										currentWorkflow={workflowQuery}
+									/>
+								</div>
 
-			<hr
-				style={{
-					marginTop: 16,
-					marginBottom: 16,
-					border: 'none',
-					borderTop: '1px solid #f0f0f0',
-				}}
-			/>
+								<Divider style={{ margin: 0 }} />
 
-			<StatActivityOutCome
-				getData={getThongKe}
-				tabActive={tabActive}
-				onChangeWorkflow={setWorkflowQuery}
-				currentWorkflow={workflowQuery}
-			/>
-			<hr
-				style={{
-					marginTop: 16,
-					marginBottom: 16,
-					border: 'none',
-					borderTop: '1px solid #f0f0f0',
-				}}
-			/>
+								<Spin spinning={loading}>
+									{danhSach?.length ? (
+										<>
+											<div className='history-activity-grid'>
+												{danhSach?.map((item) => {
+													const isRegistered = tabActive === EActivityCategory.REGISTERED;
+													const equivalencyAttributeIds = isRegistered
+														? item?.activities?.coCurricularActivityEquivalency?.map((x) => x.attributesId)
+														: item?.activitiesType?.attributes?.map((x) => x?._id);
+													const attributes = (dsAttribute ?? []).map((attribute: AttributesManagement.IRecord) => ({
+														id: attribute._id,
+														letter: attribute.code?.charAt(0)?.toUpperCase() ?? '',
+														active: equivalencyAttributeIds?.includes(attribute._id),
+													}));
 
-			<Spin spinning={loading}>
-				{danhSach?.length ? (
-					<>
-						<Row gutter={[12, 12]}>
-							{danhSach?.map((item) => {
-								const equivalencyAttributeIds = item?.activities?.coCurricularActivityEquivalency?.map(
-									(x) => x.attributesId,
-								);
+													const canDelete =
+														item?.workflow === EApprovalStatus.DRAFT ||
+														item?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
+													const now = dayjs();
 
-								const canDelete =
-									item?.workflow === EApprovalStatus.DRAFT || item?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
-								const now = dayjs();
+													const startDate = isRegistered
+														? item?.activities?.startDate
+															? dayjs(item.activities.startDate)
+															: null
+														: item?.startDate
+															? dayjs(item.startDate)
+															: null;
+													const endDateUpdateEvidence = item?.dueDate ? dayjs(item.dueDate) : null;
+													const isOngoing = now.isAfter(startDate) && now.isBefore(endDateUpdateEvidence);
+													const isOngoingPerstion =
+														item?.workflow === EApprovalStatus.CHANGES_REQUIRED
+															? now.isBefore(dayjs(item?.dueDate ? dayjs(item.dueDate) : null))
+															: true;
 
-								const startDate = item?.activities?.startDate ? dayjs(item?.activities.startDate) : null;
-								const endDateUpdateEvidence = item?.dueDate ? dayjs(item?.dueDate) : null;
-								const isOngoing = now.isAfter(startDate) && now.isBefore(endDateUpdateEvidence);
-								const isOngoingPerstion =
-									item?.workflow === EApprovalStatus.CHANGES_REQUIRED
-										? now.isBefore(dayjs(item?.dueDate ? dayjs(item?.dueDate) : null))
-										: true;
+													const editableWorkflow =
+														item?.workflow === EApprovalStatus.DRAFT ||
+														item?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
+														item?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
 
-								const endDateSource = item?.activities?.dueDateRegistration ?? item?.activities?.endDate;
-								const endDate = endDateSource ? dayjs(endDateSource) : null;
-								const outTimeRegis = now.isAfter(endDate) && !item?.workflow;
+													const renderButton =
+														editableWorkflow && (isRegistered ? isOngoing : isOngoingPerstion) ? (
+															<Button style={{ width: '100%' }} variant='default' onClick={() => handleEdit(item)}>
+																{intl.formatMessage({ id: 'activity.history.updateEvidence' })}
+															</Button>
+														) : (
+															<Button style={{ width: '100%' }} variant='outline' onClick={() => handleView(item)}>
+																{intl.formatMessage({ id: 'activity.history.seeMore' })}
+															</Button>
+														);
 
-								const editableWorkflow =
-									item?.workflow === EApprovalStatus.DRAFT ||
-									item?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
-									item?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
+													const dateFormat = 'DD/MM/YYYY, HH:mm';
+													const startSource = isRegistered ? item?.activities?.startDate : item?.startDate;
+													const endSource = isRegistered ? item?.activities?.endDate : item?.endDate;
+													const registerSource = isRegistered
+														? (item?.activities?.dueDateRegistration ?? item?.activities?.endDate)
+														: (item?.dueDate ?? item?.endDate);
+													const createdAt = isRegistered ? item?.activities?.createdAt : item?.createdAt;
+													const isNew = createdAt && now.isBefore(dayjs(createdAt).add(3, 'day'));
+													const title = isRegistered
+														? item?.activities?.name
+														: item?.isAwardRecognition
+															? item?.competition
+															: item?.activitiesOutcomeName;
+													const location = isRegistered
+														? item?.activities?.onCampus
+															? item?.activities?.facilityName
+															: item?.activities?.otherAddress
+														: [item?.organizer, item?.location].filter(Boolean).join(', ');
 
-								const renderButton =
-									editableWorkflow && (tabActive === EActivityCategory.REGISTERED ? isOngoing : isOngoingPerstion) ? (
-										<Button style={{ width: '100%' }} variant='default' onClick={() => handleEdit(item)}>
-											{intl.formatMessage({ id: 'activity.history.updateEvidence' })}
-										</Button>
+													return (
+														<ActivityCard
+															key={item._id}
+															title={title || '--'}
+															banner={(isRegistered ? item?.activities?.banner : item?.banner) ?? background}
+															isNew={!!isNew}
+															attributes={attributes}
+															startDate={startSource ? dayjs(startSource).format(dateFormat) : '--'}
+															endDate={endSource ? dayjs(endSource).format(dateFormat) : '--'}
+															location={location}
+															registerBefore={registerSource ? dayjs(registerSource).format(dateFormat) : '--'}
+															approvalStatus={item?.workflow}
+															onClick={() => handleView(item)}
+															action={
+																isRegistered ? (
+																	renderButton
+																) : (
+																	<div style={{ display: 'flex', gap: 8, width: '100%' }}>
+																		<Popover
+																			placement='bottom'
+																			content={
+																				<Space direction='vertical' size={4} className='action-popover'>
+																					<Popconfirm
+																						onConfirm={() =>
+																							putModel(
+																								`me/${item?._id}`,
+																								{ workflow: EApprovalStatus.SUBMITTED },
+																								getData,
+																							)
+																						}
+																						title={intl.formatMessage({ id: 'activity.history.confirm.duyet' })}
+																						placement='topLeft'
+																					>
+																						<Button
+																							className='btn-success'
+																							disabled={!canEdit(item)}
+																							variant='link'
+																							icon={<IconSend />}
+																							size='sm'
+																						>
+																							{intl.formatMessage({ id: 'activity.history.button.duyet' })}
+																						</Button>
+																					</Popconfirm>
+
+																					<Popconfirm
+																						onConfirm={() =>
+																							deleteActivityModel(
+																								item?._id,
+																								() => {
+																									getData();
+																									getThongKe();
+																								},
+																								intl.formatMessage({ id: 'global.message.xoathanhcong' }),
+																							)
+																						}
+																						title={intl.formatMessage({ id: 'activity.history.confirm.xoa' })}
+																						placement='topLeft'
+																					>
+																						<Button disabled={!canDelete} variant='link' icon={<IconTrash />} size='sm'>
+																							{intl.formatMessage({ id: 'activity.history.button.xoa' })}
+																						</Button>
+																					</Popconfirm>
+																				</Space>
+																			}
+																		>
+																			<Button variant='outline' icon={<Icon2LineHorizontal />} />
+																		</Popover>
+																		<div style={{ flex: 1 }}>{renderButton}</div>
+																	</div>
+																)
+															}
+														/>
+													);
+												})}
+											</div>
+
+											{total > 0 && (
+												<div className='pagination-container'>
+													<Pagination
+														current={page}
+														pageSize={limit}
+														total={total}
+														onChange={handlePaginationChange}
+														onShowSizeChange={handlePageSizeChange}
+														pageSizeOptions={['5', '10', '20', '50']}
+														showSizeChanger={false}
+														disabled={loading}
+														size='default'
+														className='pagination'
+													/>
+												</div>
+											)}
+										</>
 									) : (
-										<Button style={{ width: '100%' }} variant='outline' onClick={() => handleView(item)}>
-											{intl.formatMessage({ id: 'activity.history.seeMore' })}
-										</Button>
-									);
-
-								return (
-									<Col key={item._id} xs={24} sm={12} md={8} lg={8}>
-										{tabActive === EActivityCategory.REGISTERED ? (
-											<CardSuKienCCT
-												record={{
-													...item?.activities,
-													activityOutcome: item,
-												}}
-												banner={item?.activities?.banner ?? background}
-												name={item?.activities?.name}
-												startDate={
-													item?.activities?.startDate
-														? dayjs(item?.activities?.startDate).format('HH:mm DD/MM/YYYY')
-														: '--'
-												}
-												endDate={
-													item?.activities?.endDate ? dayjs(item?.activities?.endDate).format('HH:mm DD/MM/YYYY') : '--'
-												}
-												equivalencyAttributeIds={equivalencyAttributeIds}
-												onClick={() => handleView(item)}
-												button={
-													<Row style={{ marginTop: 12 }} gutter={[6, 0]}>
-														<Col span={24}>{renderButton}</Col>
-													</Row>
-												}
-												outTimeRegis={outTimeRegis}
-												isExpired={editableWorkflow && now.isAfter(endDateUpdateEvidence)}
-												isRegister
-											/>
-										) : (
-											<CardSuKienCCT
-												record={{
-													...item?.activities,
-													activityOutcome: item,
-												}}
-												banner={item?.banner ?? background}
-												name={item?.isAwardRecognition ? item?.competition : item?.activitiesOutcomeName}
-												startDate={item?.startDate ? dayjs(item?.startDate).format('HH:mm DD/MM/YYYY') : '--'}
-												endDate={item?.endDate ? dayjs(item?.endDate).format('HH:mm DD/MM/YYYY') : '--'}
-												equivalencyAttributeIds={item?.activitiesType?.attributes?.map((x) => x?._id)}
-												onClick={() => handleView(item)}
-												button={
-													<Row style={{ marginTop: 12 }} gutter={[6, 0]}>
-														<Col span={3}>
-															<Popover
-																placement='bottom'
-																content={
-																	<Space direction='vertical' size={4} className='action-popover'>
-																		<Popconfirm
-																			onConfirm={(e) =>
-																				putModel(`me/${item?._id}`, { workflow: EApprovalStatus.SUBMITTED }, getData)
-																			}
-																			title={intl.formatMessage({ id: 'activity.history.confirm.duyet' })}
-																			placement='topLeft'
-																		>
-																			<Button
-																				className='btn-success'
-																				disabled={!canEdit(item)}
-																				variant='link'
-																				icon={<IconSend />}
-																				size='sm'
-																			>
-																				{intl.formatMessage({ id: 'activity.history.button.duyet' })}
-																			</Button>
-																		</Popconfirm>
-
-																		<Popconfirm
-																			onConfirm={() =>
-																				deleteActivityModel(
-																					item?._id,
-																					() => {
-																						getData();
-																						getThongKe();
-																					},
-																					intl.formatMessage({ id: 'global.message.xoathanhcong' }),
-																				)
-																			}
-																			title={intl.formatMessage({ id: 'activity.history.confirm.xoa' })}
-																			placement='topLeft'
-																		>
-																			<Button
-																				disabled={!canDelete}
-																				variant='link'
-																				icon={<IconTrash />}
-																				size='sm'
-																			>
-																				{intl.formatMessage({ id: 'activity.history.button.xoa' })}
-																			</Button>
-																		</Popconfirm>
-																	</Space>
-																}
-															>
-																<Button variant='outline' icon={<Icon2LineHorizontal />} />
-															</Popover>
-														</Col>
-														<Col span={21}>{renderButton}</Col>
-													</Row>
-												}
-												isPersonal
-												isExpired={
-													item?.workflow === EApprovalStatus.CHANGES_REQUIRED && now.isAfter(dayjs(item?.dueDate))
-												}
-												isAward={item?.isAwardRecognition}
-											/>
-										)}
-									</Col>
-								);
-							})}
-						</Row>
-
-						{total > 0 && (
-							<div className='pagination-container'>
-								<Pagination
-									current={page}
-									pageSize={limit}
-									total={total}
-									onChange={handlePaginationChange}
-									onShowSizeChange={handlePageSizeChange}
-									pageSizeOptions={['5', '10', '20', '50']}
-									showSizeChanger={false}
-									disabled={loading}
-									size='default'
-									className='pagination'
-								/>
-							</div>
-						)}
-					</>
-				) : (
-					<EmptyState
-						style={{ marginTop: 32, marginBottom: 32 }}
-						description={intl.formatMessage({ id: 'global.table.index.empty' })}
-					/>
-				)}
-			</Spin>
-
+										<EmptyState
+											style={{ marginTop: 32, marginBottom: 32 }}
+											description={intl.formatMessage({ id: 'global.table.index.empty' })}
+										/>
+									)}
+								</Spin>
+							</>
+						),
+					}))}
+				/>
+			</div>
 			<ModalExpandable
 				title={
 					edit
@@ -418,9 +410,9 @@ const HistoryActivityPage = () => {
 				styles={
 					isView
 						? {
-							body: { backgroundColor: '#F8F8F8', borderRadius: 2 },
-							header: { backgroundColor: '#F8F8F8' },
-						}
+								body: { backgroundColor: '#F8F8F8', borderRadius: 2 },
+								header: { backgroundColor: '#F8F8F8' },
+							}
 						: undefined
 				}
 				destroyOnClose

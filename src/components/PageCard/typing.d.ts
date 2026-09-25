@@ -2,7 +2,7 @@ import React from 'react';
 
 export interface PageCardProps {
 	title?: React.ReactNode | boolean;
-	/** Dòng mô tả dưới title. Chỉ render ở level 4 (Standard Card). */
+	/** Dòng mô tả ngay dưới title. */
 	subtitle?: React.ReactNode;
 	/**
 	 * Kiểu header level 4.

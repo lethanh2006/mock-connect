@@ -1,0 +1,48 @@
+.view-switch-search {
+	flex: none;
+	width: 250px;
+	min-width: 0;
+
+	.global-search {
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		isolation: isolate;
+		width: 250px;
+		height: 36px;
+		padding: 2px 16px;
+		gap: 8px;
+		background: #ffffff !important;
+		border: 1px solid rgba(0, 0, 0, 0.1) !important;
+		border-radius: 1000px !important;
+		box-shadow: none !important;
+
+		&:focus-within {
+			border-color: rgba(0, 0, 0, 0.1) !important;
+			box-shadow: none !important;
+		}
+
+		[data-slot='mask-icon'] {
+			width: 17.75px;
+			height: 17.75px;
+			color: rgba(0, 0, 0, 0.6);
+		}
+
+		input {
+			height: 20px;
+			padding: 0;
+			font-family: 'Inter', sans-serif;
+			font-style: normal;
+			font-weight: 400;
+			font-size: 14px;
+			line-height: 20px;
+			color: rgba(0, 0, 0, 0.6);
+
+			&::placeholder {
+				color: rgba(0, 0, 0, 0.6);
+				opacity: 1;
+			}
+		}
+	}
+}

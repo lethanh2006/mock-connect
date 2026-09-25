@@ -1,4 +1,5 @@
 export default {
+	'trangchu.title': 'Trang chủ',
 	'trangchu.title.xinchao': 'Xin chào {ten}',
 	'trangchu.title.quaylai': 'Mừng bạn quay lại',
 	'trangchu.v2.welcome.semester.spring': 'Học kỳ Xuân',

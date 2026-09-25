@@ -1,4 +1,5 @@
 export default {
+	'trangchu.title': 'Home',
 	'trangchu.title.xinchao': 'Hello {ten}',
 	'trangchu.title.quaylai': 'Welcome back',
 	'trangchu.v2.welcome.semester.spring': 'Spring',

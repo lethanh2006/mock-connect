@@ -1,3 +1,4 @@
+import { Col, Row } from '@/components/MyGrid';
 import PageCard from '@/components/PageCard';
 import { TabViewPage } from '@/components/TabViewPage';
 import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
@@ -5,10 +6,8 @@ import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { formatDate } from '@/utils/formatDate';
 import { getLocalizedName } from '@/utils/localeName';
 import { getPublicAssetPath } from '@/utils/path';
-import { BookOutlined, ScheduleOutlined } from '@ant-design/icons';
-import { IconBookOpen, IconCalendar } from '@/components/Icons';
-import { Alert, Descriptions, Divider, Spin } from 'antd';
-import { Col, Row } from '@/components/MyGrid';
+import { CardContent, Card as VinCard } from '@vinuni/ui';
+import { Alert, Divider, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { getLocale, useAccess, useIntl, useModel } from 'umi';
 import TienTrinhChuongTrinhKhung from './ChuongTrinhKhung';
@@ -66,167 +65,182 @@ const TienTrinhHocTap = () => {
 			title={intl.formatMessage({ id: 'menu.HocTap.DegreeAudit' })}
 			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
 		>
-			<Spin spinning={loadingChuongTrinh || loading}>
-				<Descriptions
-					column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }}
-					layout='vertical'
-					className='highlight'
-					colon={false}
-					style={{ marginBottom: 16 }}
-				>
-					<Descriptions.Item label={intl.formatMessage({ id: 'thongtincanhan.hoso.trainingProgram' })}>
-						<a onClick={() => setVisibleChuongTrinh(true)}>{getLocalizedName(recTienTrinh?.ctdtKeHoach) || '-'}</a>
-					</Descriptions.Item>
+			<VinCard>
+				<CardContent>
+					<Spin spinning={loadingChuongTrinh || loading}>
+						<div className='ctdt-summary'>
+							<div className='ctdt-summary__row'>
+								<div className='ctdt-summary__item'>
+									<span className='ctdt-summary__label'>
+										{intl.formatMessage({ id: 'thongtincanhan.hoso.trainingProgram' })}
+									</span>
+									<a className='ctdt-summary__value' onClick={() => setVisibleChuongTrinh(true)}>
+										{getLocalizedName(recTienTrinh?.ctdtKeHoach) || '-'}
+									</a>
+								</div>
 
-					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.college' })}>
-						{chuongTrinhHienTai?.nganh?.tenDonViPhuTrach ||
-							chuongTrinhHienTai?.nganh?.donVi?.ten ||
-							chuongTrinhHienTai?.nganh?.maDonVi ||
-							khoaNganhMe?.khoaNganhChinh?.nganh?.maDonVi ||
-							khoaNganhMe?.khoaNganhChinh?.nganh?.tenDonViPhuTrach ||
-							'--'}
-					</Descriptions.Item>
-					{chuyenNganhHienTai?.ten && (
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })}>
-							{chuyenNganhHienTai.ten}
-						</Descriptions.Item>
-					)}
+								<div className='ctdt-summary__item'>
+									<span className='ctdt-summary__label'>
+										{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.college' })}
+									</span>
+									<span className='ctdt-summary__value'>
+										{chuongTrinhHienTai?.nganh?.tenDonViPhuTrach ||
+											chuongTrinhHienTai?.nganh?.donVi?.ten ||
+											chuongTrinhHienTai?.nganh?.maDonVi ||
+											khoaNganhMe?.khoaNganhChinh?.nganh?.maDonVi ||
+											khoaNganhMe?.khoaNganhChinh?.nganh?.tenDonViPhuTrach ||
+											'--'}
+									</span>
+								</div>
 
-					{access.cctFilter() && tenChuyenNganhPhu && (
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}>
-							{tenChuyenNganhPhu}
-						</Descriptions.Item>
-					)}
-				</Descriptions>
+								{chuyenNganhHienTai?.ten && (
+									<div className='ctdt-summary__item'>
+										<span className='ctdt-summary__label'>
+											{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })}
+										</span>
+										<span className='ctdt-summary__value'>{chuyenNganhHienTai.ten}</span>
+									</div>
+								)}
 
-				{/* <Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuongtrinh' })} span={2}>
+								{access.cctFilter() && tenChuyenNganhPhu && (
+									<div className='ctdt-summary__item'>
+										<span className='ctdt-summary__label'>
+											{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}
+										</span>
+										<span className='ctdt-summary__value'>{tenChuyenNganhPhu}</span>
+									</div>
+								)}
+							</div>
+						</div>
+
+						{/* <Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuongtrinh' })} span={2}>
 					<Link to='#' onClick={(e) => { e.preventDefault(); setVisibleChuongTrinh(true); }}>
 						{recTienTrinh?.ctdtKeHoach?.ten || '-'}
 					</Link>{' '}
 					-{' '}
 					{chuongTrinhHienTai?.loai ? LoaiChuongTrinhDaoTao[chuongTrinhHienTai.loai] : chuongTrinhHienTai?.loai || '-'}
 				</Descriptions.Item> */}
-			</Spin>
+					</Spin>
 
-			{recDotQuyDoi?._id ? (
-				<Alert
-					style={{ marginBottom: 12 }}
-					type='info'
-					showIcon
-					message={intl.formatMessage(
-						{ id: 'tientrinhhoctap.message' },
-						{
-							tenDot: <b>{recDotQuyDoi?.tenDot}</b>,
-							tuNgay: <b>{formatDate(recDotQuyDoi?.thoiGianBatDau)}</b>,
-							denNgay: <b>{formatDate(recDotQuyDoi?.thoiGianKetThuc)}</b>,
-						},
-					)}
-				/>
-			) : null}
+					{recDotQuyDoi?._id ? (
+						<Alert
+							style={{ marginBottom: 12 }}
+							type='info'
+							showIcon
+							message={intl.formatMessage(
+								{ id: 'tientrinhhoctap.message' },
+								{
+									tenDot: <b>{recDotQuyDoi?.tenDot}</b>,
+									tuNgay: <b>{formatDate(recDotQuyDoi?.thoiGianBatDau)}</b>,
+									denNgay: <b>{formatDate(recDotQuyDoi?.thoiGianKetThuc)}</b>,
+								},
+							)}
+						/>
+					) : null}
 
-			<Spin spinning={loading}>
-				<Divider dashed orientation='left' className='divider-big-title'>
-					{intl.formatMessage({ id: 'tientrinhhoctap.scttichluy' })}
-				</Divider>
+					<Spin spinning={loading}>
+						<Divider dashed orientation='left' className='divider-big-title' style={{ color: '#2E548A' }}>
+							{intl.formatMessage({ id: 'tientrinhhoctap.scttichluy' })}
+						</Divider>
 
-				<Row align='middle' gutter={[12, 12]}>
-					<Col span={24}>
-						<div className='progress-section'>
-							<div className='progress-row'>
-								<div className='progress-wrapper'>
-									<div
-										className='proress-bar'
-										style={{
-											width: `${phanTramTinChi}%`,
-										}}
-									/>
-								</div>
-								<div className='progress-logo'>
-									<img src={getPublicAssetPath('logo.png')} alt='' style={{ objectFit: 'contain' }} />
-								</div>
-							</div>
-							<div className='progress-meta'>
-								<div className='progress-legend'>
-									<div className='progress-legend__item'>
-										<span className='progress-legend__dot progress-legend__dot--primary' />
-										<span className='progress-legend__text'>
-											<b>{recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? '--'}</b>
-											<span>
-												{' '}
-												/ {recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? '--'}{' '}
-												{intl.formatMessage({ id: 'tientrinhhoctap.ctdt' })}
-											</span>
-										</span>
+						<Row align='middle' gutter={[12, 12]}>
+							<Col span={24}>
+								<div className='progress-section'>
+									<div className='progress-row'>
+										<div className='progress-wrapper'>
+											<div
+												className='proress-bar'
+												style={{
+													width: `${phanTramTinChi}%`,
+												}}
+											/>
+										</div>
+										<div className='progress-logo'>
+											<img src={getPublicAssetPath('logo.png')} alt='' style={{ objectFit: 'contain' }} />
+										</div>
 									</div>
-									{!!thongKeMinor.tong && (
-										<div className='progress-legend__item'>
-											<span className='progress-legend__dot progress-legend__dot--minor' />
-											<span className='progress-legend__text'>
-												<b>{thongKeMinor.daDat}</b>
+									<div className='progress-meta'>
+										<div className='progress-legend'>
+											<div className='progress-legend__item'>
+												<span className='progress-legend__dot progress-legend__dot--primary' />
+												<span className='progress-legend__text'>
+													<b>{recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? '--'}</b>
+													<span>
+														{' '}
+														/ {recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? '--'}{' '}
+														{intl.formatMessage({ id: 'tientrinhhoctap.ctdt' })}
+													</span>
+												</span>
+											</div>
+											{!!thongKeMinor.tong && (
+												<div className='progress-legend__item'>
+													<span className='progress-legend__dot progress-legend__dot--minor' />
+													<span className='progress-legend__text'>
+														<b>{thongKeMinor.daDat}</b>
+														<span>
+															{' '}
+															/ {thongKeMinor.tong} {intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}
+														</span>
+													</span>
+												</div>
+											)}
+										</div>
+										<div className='progress-meta__logo'>
+											<div className='progress-credits'>
+												<b>{tongTinChiTatCa ? tongTinChiDaDat : '--'}</b>
 												<span>
 													{' '}
-													/ {thongKeMinor.tong} {intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}
+													/ {tongTinChiTatCa || '--'}{' '}
+													{intl.formatMessage({ id: 'tientrinhhoctap.progress.tongtinchi' })}
 												</span>
-											</span>
+											</div>
 										</div>
-									)}
-								</div>
-								<div className='progress-meta__logo'>
-									<div className='progress-credits'>
-										<b>{tongTinChiTatCa ? tongTinChiDaDat : '--'}</b>
-										<span>
-											{' '}
-											/ {tongTinChiTatCa || '--'} {intl.formatMessage({ id: 'tientrinhhoctap.progress.tongtinchi' })}
-										</span>
 									</div>
 								</div>
-							</div>
-						</div>
-					</Col>
-				</Row>
-			</Spin>
+							</Col>
+						</Row>
+					</Spin>
 
-			<TabViewPage
-				offsetTop={64}
-				hideCard
-				tabType='line'
-				style={{ marginTop: 8 }}
-				menu={[
-					{
-						title: intl.formatMessage({ id: 'tientrinhhoctap.curriculumPlanner' }),
-						menuKey: 'chuong-trinh-dao-tao',
-						content: <TienTrinhChuongTrinhKhung />,
-						icon: <IconBookOpen />,
-					},
-					{
-						title: intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte' }),
-						menuKey: 'tien-trinh-thuc-te',
-						content: <TienTrinhThucTe />,
-						icon: <IconCalendar />,
-					},
-					// {
-					// 	title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.title' }),
-					// 	menuKey: 'dang-ky-chuyen-nganh',
-					// 	content: access.cctFilter() ? <DangKyChuyenNganhHistory type='concentration' /> : <DangKyChuyenNganh />,
-					// 	icon: <ProfileOutlined />,
-					// },
-					// {
-					// 	title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganhhep.title' }),
-					// 	menuKey: 'dang-ky-chuyen-nganh-hep',
-					// 	content: <DangKyChuyenNganhHistory type='minor' />,
-					// 	icon: <ProfileOutlined />,
-					// 	hide: !access.cctFilter(),
-					// },
-					// {
-					// 	title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan' }),
-					// 	menuKey: 'cong-nhan-kqht',
-					// 	content: <LichSuQuyDoiDiemPage />,
-					// 	icon: <CheckCircleOutlined />,
-					// },
-				]}
-			/>
+					<TabViewPage
+						offsetTop={64}
+						hideCard
+						tabType='line'
+						style={{ marginTop: 8 }}
+						menu={[
+							{
+								title: intl.formatMessage({ id: 'tientrinhhoctap.curriculumPlanner' }),
+								menuKey: 'chuong-trinh-dao-tao',
+								content: <TienTrinhChuongTrinhKhung />,
+								// icon: <IconBookOpen />,
+							},
+							{
+								title: intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte' }),
+								menuKey: 'tien-trinh-thuc-te',
+								content: <TienTrinhThucTe />,
+								// icon: <IconCalendar />,
+							},
+							// {
+							// 	title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.title' }),
+							// 	menuKey: 'dang-ky-chuyen-nganh',
+							// 	content: access.cctFilter() ? <DangKyChuyenNganhHistory type='concentration' /> : <DangKyChuyenNganh />,
+							// },
+							// {
+							// 	title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganhhep.title' }),
+							// 	menuKey: 'dang-ky-chuyen-nganh-hep',
+							// 	content: <DangKyChuyenNganhHistory type='minor' />,
+							// 	hide: !access.cctFilter(),
+							// },
+							// {
+							// 	title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan' }),
+							// 	menuKey: 'cong-nhan-kqht',
+							// 	content: <LichSuQuyDoiDiemPage />,
+							// },
+						]}
+					/>
 
-			<ChuongTrinhDaoTaoModalView visible={visibleChuongTrinh} setVisible={setVisibleChuongTrinh} />
+					<ChuongTrinhDaoTaoModalView visible={visibleChuongTrinh} setVisible={setVisibleChuongTrinh} />
+				</CardContent>
+			</VinCard>
 		</PageCard>
 	);
 };

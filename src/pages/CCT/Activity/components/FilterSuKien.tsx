@@ -1,13 +1,12 @@
+import { IconFilter01, IconRotateArrow, SearchInput } from '@/components/Icons';
 import MyDateRangePicker from '@/components/MyDatePicker/RangePicker';
-import { Button, IconFilter01, IconRotateArrow } from '@/components/Icons';
 import Select from '@/components/MySelect';
-import { Flex, Input, Space } from 'antd';
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import { Flex, Space } from 'antd';
 import dayjs from 'dayjs';
-import { JSX } from 'react';
+import { JSX, useEffect, useState } from 'react';
 import { useIntl } from 'umi';
 import { FilterSuKienValue } from '..';
-
-const { Search } = Input;
 
 interface FilterSuKienProps {
 	value?: FilterSuKienValue;
@@ -19,34 +18,45 @@ interface FilterSuKienProps {
 
 const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, button, hideSelect }) => {
 	const intl = useIntl();
+	const [keyword, setKeyword] = useState(value?.search ?? '');
+
+	useEffect(() => {
+		setKeyword(value?.search ?? '');
+	}, [value?.search]);
 
 	return (
-		<Flex justify='space-between' align='center' style={{ marginBottom: 8 }}>
+		<Flex justify='space-between' align='center'>
 			<Space wrap>
-				<Button variant='outline' className='btn-filter' icon={<IconFilter01 />} size='sm' />
+				<ButtonExtend icon={<IconFilter01 />} size='small' />
 
-				<Search
-					placeholder={intl.formatMessage({ id: 'activity.filter.name' })}
-					style={{ width: 280 }}
-					allowClear
-					value={value?.search}
-					onSearch={(val) =>
-						onChange?.({
-							...value,
-							search: val,
-						})
-					}
-					onClear={() => {
-						onChange?.({
-							...value,
-							search: undefined,
-						});
-					}}
-					size='small'
-				/>
+				<div className='search-input-custom-sm'>
+					<SearchInput
+						variant='tiled'
+						size='small'
+						clearable
+						value={keyword}
+						placeholder={intl.formatMessage({ id: 'activity.filter.name' })}
+						onChange={(e) => setKeyword(e.target.value)}
+						onKeyDown={(e) => {
+							if (e.key !== 'Enter') return;
+							const next = (e.target as HTMLInputElement).value.trim();
+							onChange?.({
+								...value,
+								search: next || undefined,
+							});
+						}}
+						onClear={() => {
+							setKeyword('');
+							onChange?.({
+								...value,
+								search: undefined,
+							});
+						}}
+					/>
+				</div>
 
 				<MyDateRangePicker
-					style={{ width: 250 }}
+					style={{ width: 250, height: 36, background: 'none' }}
 					value={value?.dateRange?.length === 2 ? [dayjs(value.dateRange[0]), dayjs(value.dateRange[1])] : null}
 					onChange={(val) =>
 						onChange?.({
@@ -70,7 +80,7 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 				{!hideSelect && (
 					<Select
 						value={value?.regiStatus}
-						style={{ width: 200 }}
+						style={{ width: 250, height: 36 }}
 						placeholder={intl.formatMessage({ id: 'activity.filter.trangthai' })}
 						options={[
 							{
@@ -99,7 +109,7 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 			</Space>
 
 			<Space wrap>
-				<Button variant='outline' icon={<IconRotateArrow />} onClick={onReload} />
+				<ButtonExtend icon={<IconRotateArrow />} onClick={onReload} />
 				{button}
 			</Space>
 		</Flex>

@@ -1,21 +1,13 @@
-import dayjs from '@/utils/dayjs';
-import { Card } from '@/components/PageCard';
+import { Button } from '@/components/Icons';
 import { Col, Row } from '@/components/MyGrid';
-import { Badge } from '@/components/Icons';
+import { Card } from '@/components/PageCard';
+import dayjs from '@/utils/dayjs';
 import { Flex, Typography } from 'antd';
 import { useIntl, useModel } from 'umi';
 
 const pillStyle = {
-	background: 'rgba(255, 255, 255, 0.2)',
-	border: 'none',
-	color: '#fff',
-	borderRadius: 20,
-	padding: '8px 16px',
-	fontSize: 13,
-	fontWeight: 600,
-	margin: 0,
-	display: 'inline-flex',
-	alignItems: 'center',
+	background: '#2a5e96',
+	cursor: 'default',
 } as const;
 
 const getSemesterKey = (month: number) => {
@@ -59,25 +51,25 @@ const WelcomeCard = () => {
 			hideInnerCard
 			style={{
 				background: 'var(--color-official-300)',
-				borderRadius: 'var(--vin-border-radius, 16px)',
-				padding: '20px 24px',
+				borderRadius: 'var(--rd-primary, 22px)',
+				padding: '12px 24px',
 			}}
 		>
 			<Row gutter={[16, 16]} align='middle' justify='space-between'>
 				<Col xs={24} lg={14}>
-					<Flex vertical gap={4}>
-						<Typography.Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{metaText}</Typography.Text>
-						<h1 style={{ color: '#fff', margin: 0, fontWeight: 700, fontSize: 20, lineHeight: 1.4 }}>
-							{greeting}
-						</h1>
+					<Flex vertical gap={'8px'}>
+						<Typography.Text style={{ color: '#FFFFFF99', fontSize: 14, lineHeight: '20px', fontWeight: 400 }}>
+							{metaText}
+						</Typography.Text>
+						<h1 style={{ color: '#fff', margin: 0, fontWeight: 600, fontSize: 16, lineHeight: '24px' }}>{greeting}</h1>
 					</Flex>
 				</Col>
 
 				<Col xs={24} lg={10}>
 					<Flex gap={8} wrap justify='flex-end'>
-						<Badge style={pillStyle}>
+						<Button style={{ ...pillStyle, pointerEvents: 'none' }} tabIndex={-1}>
 							{intl.formatMessage({ id: 'trangchu.v2.welcome.classesToday' }, { count: danhSach?.length ?? 0 })}
-						</Badge>
+						</Button>
 					</Flex>
 				</Col>
 			</Row>
