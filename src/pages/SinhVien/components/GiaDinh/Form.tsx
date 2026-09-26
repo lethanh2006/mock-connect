@@ -11,7 +11,7 @@ import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button } from '@/components/Icons';
 import { Col, Row } from '@/components/MyGrid';
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { Card } from '@/components/PageCard';
 import Input from '@/components/MyInput';
 import { Form } from 'antd';
@@ -62,7 +62,7 @@ const FormThongTinGiaDinh = (props: {
 							label={intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.form.loaithanhvien' })}
 							rules={[...rules.required]}
 						>
-							<Select
+							<VinSelect
 								placeholder={intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.form.loaithanhvien.place' })}
 								options={Object.values(ELoaiThanhVienGiaDinh).map((item) => ({ key: item, value: item, label: item }))}
 							/>
@@ -74,7 +74,7 @@ const FormThongTinGiaDinh = (props: {
 							label={intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.form.trangthai' })}
 							rules={[...rules.required]}
 						>
-							<Select
+							<VinSelect
 								placeholder={intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.form.trangthai.place' })}
 								options={Object.values(ETrangThaiThanhVienGiaDinh).map((item) => ({
 									key: item,

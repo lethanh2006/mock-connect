@@ -4,7 +4,7 @@ import { resetFieldsForm } from '@/utils/utils';
 import { Button } from '@/components/Icons';
 import { Col, Row } from '@/components/MyGrid';
 import Input from '@/components/MyInput';
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { Form } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -116,7 +116,7 @@ const FormNguoiThanKTX = (props: {
 							),
 						]}
 					>
-						<Select
+						<VinSelect
 							placeholder={intl.formatMessage({ id: 'kytucxa.dangky.nguoithan.field.relationship.placeholder' })}
 							options={[
 								{

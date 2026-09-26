@@ -1,13 +1,12 @@
 import { IconFilter01, IconRotateArrow, SearchInput } from '@/components/Icons';
 import MyDateRangePicker from '@/components/MyDatePicker/RangePicker';
-import Select from '@/components/MySelect';
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import VinSelect from '@/components/VinSelect';
 import { Flex, Space } from 'antd';
 import dayjs from 'dayjs';
 import { JSX, useEffect, useState } from 'react';
 import { useIntl } from 'umi';
 import { FilterSuKienValue } from '..';
-
 interface FilterSuKienProps {
 	value?: FilterSuKienValue;
 	onChange?: (val: FilterSuKienValue) => void;
@@ -25,7 +24,7 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 	}, [value?.search]);
 
 	return (
-		<Flex justify='space-between' align='center'>
+		<Flex className='filter-bar' justify='space-between' align='center'>
 			<Space wrap>
 				<ButtonExtend icon={<IconFilter01 />} size='small' />
 
@@ -56,7 +55,8 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 				</div>
 
 				<MyDateRangePicker
-					style={{ width: 250, height: 36, background: 'none' }}
+					className='field-w-250'
+					style={{ height: 36, background: 'none' }}
 					value={value?.dateRange?.length === 2 ? [dayjs(value.dateRange[0]), dayjs(value.dateRange[1])] : null}
 					onChange={(val) =>
 						onChange?.({
@@ -78,9 +78,10 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 				/>
 
 				{!hideSelect && (
-					<Select
+					<VinSelect
 						value={value?.regiStatus}
-						style={{ width: 250, height: 36 }}
+						className='field-w-250'
+						size='sm'
 						placeholder={intl.formatMessage({ id: 'activity.filter.trangthai' })}
 						options={[
 							{
@@ -96,12 +97,10 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 								label: intl.formatMessage({ id: 'activity.filter.chuadangky' }),
 							},
 						]}
-						allowClear
-						size='small'
 						onChange={(val) =>
 							onChange?.({
 								...value,
-								regiStatus: val,
+								regiStatus: val as FilterSuKienValue['regiStatus'],
 							})
 						}
 					/>

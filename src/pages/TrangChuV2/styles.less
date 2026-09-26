@@ -223,6 +223,13 @@
 		.vin-hotline-card__phone {
 			color: var(--color-text, #ffffff) !important;
 		}
+
+		// SVG hotline là file ảnh, stroke #2E2E2E cố định — không kế thừa màu chữ.
+		// brightness(0) invert(1) đổi nét tối thành trắng cho khớp nền dark.
+		.vin-hotline-card__icon,
+		.ant-image-img {
+			filter: brightness(0) invert(1);
+		}
 	}
 
 	.loading-background {

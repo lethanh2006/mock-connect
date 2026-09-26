@@ -2,7 +2,7 @@ import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
 import type { ThongBao } from '@/services/ThongBao/typing';
 import { Badge } from '@/components/Icons';
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { useModel } from 'umi';
 import { thongKeNotificationNguoiNhan } from '@/services/ThongBao';
 import { useEffect, useState } from 'react';
@@ -64,7 +64,7 @@ const TableReceiverThongBao = (props: { record?: ThongBao.IRecord }) => {
 				hideCard
 				buttons={{ create: false }}
 				otherButtons={[
-					<Select
+					<VinSelect
 						key={'1'}
 						placeholder={'Chọn trạng thái'}
 						onChange={(val) => {

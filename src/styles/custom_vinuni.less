@@ -256,10 +256,56 @@ button:not(:disabled),
 	}
 }
 
+// Ô lọc 250px trên desktop; màn hẹp giãn hết chiều ngang chỗ chứa.
+.field-w-250 {
+	width: 250px;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+.field-fill {
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+@media (max-width: 767px) {
+	.field-w-250,
+	.search-input-custom-sm,
+	.search-input-custom-sm [data-slot='search-input'] {
+		width: 100% !important;
+	}
+
+	.filter-bar.ant-flex {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 8px;
+	}
+
+	.filter-bar.ant-space,
+	.filter-bar .ant-space {
+		width: 100%;
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.filter-bar .ant-space-item {
+		width: 100%;
+		max-width: 100%;
+	}
+}
+
 .page-card-custom {
 	background-color: #fff;
 	border-radius: 22px;
 	overflow: hidden;
+
+	// #fff tĩnh, dark mode giữ nguyên trắng dù cả trang đã sang nền đen
+	// (html[data-vinuni-theme='dark'] body). Dùng --color-bg-container (theme-aware) cho khớp
+	// bề mặt card antd trong dark mode.
+	[data-vinuni-theme='dark'] & {
+		background-color: var(--color-bg-container, #1f1f1f);
+	}
 }
 
 .history-activity-grid {

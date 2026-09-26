@@ -20,7 +20,7 @@ import { buildDisabledDateTime, resetFieldsForm } from '@/utils/utils';
 import { Button, IconTrash, IconPlus } from '@/components/Icons';
 import { Col, Row } from '@/components/MyGrid';
 import Input from '@/components/MyInput';
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { toast } from '@/utils/toast';
 import { Checkbox, RadioGroup, RadioGroupItem } from '@/components/Icons';
 import { Form, Space, Typography, Tag } from 'antd';
@@ -275,7 +275,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 										<>
 											<Col span={24} md={12}>
 												<Form.Item name='scope' label={msg('scope')} rules={[...rules.required]}>
-													<Select
+													<VinSelect
 														placeholder={msg('selectScope')}
 														options={Object.values(EScopeAward).map((value) => ({
 															value,

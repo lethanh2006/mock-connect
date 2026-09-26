@@ -1,4 +1,4 @@
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -21,7 +21,7 @@ const SelectTonGiao = (props: {
 	}, []);
 
 	return (
-		<Select
+		<VinSelect
 			mode={multiple ? 'multiple' : undefined}
 			value={value}
 			allowClear={allowClear}

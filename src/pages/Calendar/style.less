@@ -588,6 +588,13 @@
 }
 
 [data-vinuni-theme='dark'] {
+	.calendar-layout {
+		.page-card.page-card-standard.calendar-board,
+		.page-card.page-card-standard.calendar-setting {
+			background: var(--color-bg-container, #1f1f1f);
+		}
+	}
+
 	.calendar-toolbar__title,
 	.calendar-toolbar__icon-btn,
 	.calendar-toolbar__today,
@@ -596,15 +603,42 @@
 		color: var(--color-text-base, #ffffff);
 	}
 
+	.calendar-toolbar__icon-btn,
+	.calendar-toolbar__today,
+	.calendar-toolbar__segments {
+		background: rgba(255, 255, 255, 0.08);
+	}
+
+	.calendar-toolbar__today.is-current {
+		background: rgba(255, 255, 255, 0.06);
+		color: rgba(255, 255, 255, 0.35);
+	}
+
 	.calendar-toolbar__segment.is-active {
-		background: rgba(255, 255, 255, 0.12);
+		background: rgba(255, 255, 255, 0.16);
 	}
 
 	.calendar-surface {
+		.rbc-calendar,
+		.rbc-time-view,
+		.rbc-time-content,
+		.rbc-time-header,
+		.rbc-month-view,
+		.rbc-month-row {
+			background: transparent;
+		}
+
 		.rbc-header,
 		.rbc-label,
-		.rbc-time-gutter {
+		.rbc-time-gutter,
+		.rbc-time-header-gutter {
 			color: rgba(255, 255, 255, 0.6);
+		}
+
+		.rbc-header.rbc-today,
+		.rbc-now .rbc-button-link,
+		.rbc-show-more {
+			color: #8eb6ef;
 		}
 
 		.rbc-date-cell .rbc-button-link {
@@ -615,8 +649,55 @@
 			color: rgba(255, 255, 255, 0.28);
 		}
 
+		.rbc-day-bg,
+		.rbc-off-range-bg {
+			background: rgba(255, 255, 255, 0.04) !important;
+		}
+
+		.rbc-today {
+			background: rgba(142, 182, 239, 0.12) !important;
+		}
+
+		.rbc-day-bg.rbc-today {
+			box-shadow: inset 0 0 0 1px #8eb6ef;
+		}
+
+		.rbc-time-header-content,
+		.rbc-time-content,
+		.rbc-day-slot,
+		.rbc-timeslot-group {
+			border-color: rgba(255, 255, 255, 0.08);
+		}
+
+		.rbc-day-slot {
+			border-left-color: rgba(255, 255, 255, 0.08);
+		}
+
+		.rbc-current-time-indicator {
+			background-color: #8eb6ef;
+		}
+
+		// Màu sự kiện có alpha, trộn với nền tối thành khối đậm — chữ đen không còn đọc được.
+		.rbc-event.is-timed {
+			color: #ffffff !important;
+		}
+
 		.calendar-event-card__title {
-			color: #000000;
+			color: #ffffff;
+		}
+
+		.calendar-event-card__location {
+			color: rgba(255, 255, 255, 0.75);
+		}
+
+		.rbc-overlay {
+			background: var(--color-bg-elevated, #1f1f1f);
+			border-color: var(--color-border-secondary, rgba(255, 255, 255, 0.12));
+			color: var(--color-text, #ffffff);
+		}
+
+		.rbc-overlay-header {
+			border-bottom-color: var(--color-border-secondary, rgba(255, 255, 255, 0.12));
 		}
 	}
 

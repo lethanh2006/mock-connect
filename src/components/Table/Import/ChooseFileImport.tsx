@@ -9,7 +9,7 @@ import {
 import rules from '@/utils/rules';
 import { Button, IconArrowRight, IconDownload } from '@/components/Icons';
 import { InputNumber } from '@/components/MyInput';
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { Form } from 'antd';
 import { Col, Row } from '@/components/MyGrid';
 import { toast } from '@/utils/toast';
@@ -191,7 +191,7 @@ const ChooseFileImport = (props: { onChange: () => void; onCancel: any; getTempl
 						label={intl.formatMessage({ id: 'global.table.import.choose.trangtinh' })}
 						rules={[...rules.required]}
 					>
-						<Select
+						<VinSelect
 							style={{ width: '100%' }}
 							placeholder={intl.formatMessage({ id: 'global.table.import.choose.trangtinh.placeholder' })}
 							options={sheetNames?.map((item) => ({

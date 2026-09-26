@@ -7,7 +7,7 @@ import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { Col, Row } from '@/components/MyGrid';
 import Input from '@/components/MyInput';
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { Button } from '@/components/Icons';
 import { Divider, Form } from 'antd';
 import { useEffect, useState } from 'react';
@@ -155,7 +155,7 @@ const FormDangKyBHYT = ({ record, isView, onCancel, getData }: IProps) => {
 				</Col>
 				<Col span={24} md={8}>
 					<Form.Item name={['diaChiThuongTru', 'maTinh']} label={t('donvihanhchinh.tp')} rules={[...rules.required]}>
-						<Select
+						<VinSelect
 							disabled={readOnly}
 							placeholder={t('donvihanhchinh.tp.place')}
 							allowClear
@@ -172,7 +172,7 @@ const FormDangKyBHYT = ({ record, isView, onCancel, getData }: IProps) => {
 						label={t('donvihanhchinh.xa')}
 						rules={[...rules.required]}
 					>
-						<Select
+						<VinSelect
 							disabled={readOnly}
 							placeholder={t('donvihanhchinh.xa.place')}
 							allowClear

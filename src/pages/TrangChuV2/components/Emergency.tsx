@@ -37,7 +37,7 @@ const Emergency = () => {
 							<Col xs={24} sm={12} key={item.id}>
 								<a className='vin-hotline-card' href={`tel:${item.phone.replace(/\D/g, '')}`}>
 									<Flex vertical gap={8} align='flex-start'>
-										<Image src={item.icon} alt={title} width={20} height={20} preview={false} />
+										<Image className='vin-hotline-card__icon' src={item.icon} alt={title} width={20} height={20} preview={false} />
 										<Typography.Text strong className='vin-hotline-card__title'>
 											{title}
 										</Typography.Text>

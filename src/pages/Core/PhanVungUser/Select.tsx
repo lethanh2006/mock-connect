@@ -1,4 +1,4 @@
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import React, { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -50,7 +50,7 @@ const SelectPhanVungCuaToi = (props: {
 	}, []);
 
 	return (
-		<Select
+		<VinSelect
 			disabled={disabled}
 			mode={multiple ? 'multiple' : undefined}
 			allowClear={allowClear}

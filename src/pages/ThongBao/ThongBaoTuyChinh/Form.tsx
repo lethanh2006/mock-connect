@@ -11,6 +11,7 @@ import { EVaiTroKhaoSat, TenVaiTroKhaoSat } from '@/services/ThongBao/constant';
 import { currentRole } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
+import VinSelect from '@/components/VinSelect';
 import { Form, Space } from 'antd';
 import DOMPurify from 'dompurify';
 import fileDownload from 'js-file-download';
@@ -73,7 +74,7 @@ const FormThongBaoTuyChinh = (props: any) => {
 					</Col>
 					<Col span={24} md={12}>
 						<Form.Item name='vaiTroNguoiNhan' label='Vai trò người nhận' rules={[...rules.required]}>
-							<Select
+							<VinSelect
 								placeholder='Chọn vai trò người nhận'
 								options={Object.values([EVaiTroKhaoSat.SINH_VIEN, EVaiTroKhaoSat.NHAN_VIEN]).map((item) => ({
 									value: item,

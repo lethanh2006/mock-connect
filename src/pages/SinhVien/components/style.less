@@ -247,3 +247,66 @@
 	width: 100%;
 	padding: 0 24px 24px;
 }
+
+// Màu tĩnh (#fff / #000 / rgba đen) không đổi theo theme — dark mode chữ đen chìm trên nền tối,
+// viền và vòng avatar trắng nổi lạc. Dùng token antd (theme-aware) để khớp bề mặt card.
+[data-vinuni-theme='dark'] {
+	.sv-profile-card {
+		background: var(--color-bg-container, #1f1f1f);
+	}
+
+	.sv-profile-menu {
+		border-color: var(--color-border-secondary, rgba(255, 255, 255, 0.12));
+	}
+
+	.sv-profile-avatar-outline {
+		border-color: var(--color-bg-container, #1f1f1f);
+	}
+
+	.sv-profile-role,
+	.sv-profile-email,
+	.sv-profile-name,
+	.sv-profile-section-title,
+	.sv-profile-group-title,
+	.sv-profile-field-value {
+		color: var(--color-text, #ffffff);
+	}
+
+	.sv-profile-section-title svg {
+		color: var(--color-text, #ffffff);
+	}
+
+	.sv-profile-field-label {
+		color: var(--color-text-secondary, rgba(255, 255, 255, 0.65));
+	}
+
+	.sv-profile-divider::before {
+		border-top-color: var(--color-border-secondary, rgba(255, 255, 255, 0.12));
+	}
+
+	.sv-profile-status {
+		color: #60a5fa;
+
+		&.is-green {
+			color: #4ade80;
+		}
+
+		&.is-orange,
+		&.is-gold {
+			color: #fb923c;
+		}
+
+		&.is-red,
+		&.is-volcano {
+			color: #f87171;
+		}
+
+		&.is-purple {
+			color: #c084fc;
+		}
+
+		&.is-geekblue {
+			color: #60a5fa;
+		}
+	}
+}

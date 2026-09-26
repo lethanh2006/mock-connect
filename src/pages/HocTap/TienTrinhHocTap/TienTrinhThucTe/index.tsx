@@ -1,6 +1,6 @@
 import EmptyState from '@/components/EmptyState';
 import { IconRotateArrow } from '@/components/Icons';
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { Divider, Space, Spin, Tag, Typography } from 'antd';
@@ -107,7 +107,7 @@ const TienTrinhThucTeV2 = () => {
 						className='btn-reload'
 						tooltip={intl.formatMessage({ id: 'global.table.index.button.tailai.tooltip' })}
 					/>
-					<Select
+					<VinSelect
 						allowClear
 						showSearch
 						optionFilterProp='label'

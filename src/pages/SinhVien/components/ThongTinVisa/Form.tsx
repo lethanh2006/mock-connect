@@ -7,7 +7,7 @@ import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button } from '@/components/Icons';
 import { Col, Row } from '@/components/MyGrid';
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { Card } from '@/components/PageCard';
 import Input from '@/components/MyInput';
 import { Checkbox, Form } from 'antd';
@@ -96,7 +96,7 @@ const FormThongTinVisa = (props: {
 							label={intl.formatMessage({ id: 'thongtincanhan.form.thongtinvisa.solannhapcanh' })}
 							rules={[...rules.required]}
 						>
-							<Select
+							<VinSelect
 								placeholder={intl.formatMessage({
 									id: 'thongtincanhan.form.thongtinvisa.solannhapcanh.place',
 								})}

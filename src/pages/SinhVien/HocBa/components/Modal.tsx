@@ -34,7 +34,7 @@ const ModalHocBaSinhVien = (props: { visible: boolean; setVisible: (val: boolean
 						Học bạ số{' '}
 						<SelectSongNganh
 							size='small'
-							style={{ width: 250 }}
+							className='field-w-250'
 							value={maKhoaNganh}
 							onChange={(val) => setMaKhoaNganh(val)}
 						/>

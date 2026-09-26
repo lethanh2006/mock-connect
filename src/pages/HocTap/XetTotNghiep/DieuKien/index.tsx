@@ -29,7 +29,7 @@ const CardDieuKienTotNghiep = () => {
 	return (
 		<PageCard
 			title='Graduation Review'
-			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
+			extra={<SelectSongNganh className='field-w-250' value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
 		>
 			<Spin spinning={loading}>
 				<DieuKienKqhtSection />

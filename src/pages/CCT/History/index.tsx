@@ -407,14 +407,6 @@ const HistoryActivityPage = () => {
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
 				open={visibleForm}
-				styles={
-					isView
-						? {
-								body: { backgroundColor: '#F8F8F8', borderRadius: 2 },
-								header: { backgroundColor: '#F8F8F8' },
-							}
-						: undefined
-				}
 				destroyOnClose
 			>
 				{tabActive === EActivityCategory.REGISTERED ? (
@@ -434,8 +426,8 @@ const HistoryActivityPage = () => {
 							/>
 
 							<div
+								className='modal-expandable-surface'
 								style={{
-									backgroundColor: '#fff',
 									display: 'flex',
 									gap: 8,
 									justifyContent: 'flex-end',
@@ -466,8 +458,8 @@ const HistoryActivityPage = () => {
 						<ChiTietActivityOutCome recOutcome={record ?? ({} as ActivityOutCome.IRecord)} />
 
 						<div
+							className='modal-expandable-surface'
 							style={{
-								backgroundColor: '#fff',
 								display: 'flex',
 								gap: 8,
 								justifyContent: 'flex-end',

@@ -326,3 +326,64 @@
 		}
 	}
 }
+
+// Thanh đáy / khối nền trắng lồng trong modal (footer xem chi tiết, v.v.).
+.modal-expandable-surface {
+	background-color: #ffffff;
+}
+
+// #f2f2f8 / #000 / nền kính trắng là màu tĩnh và có !important, specificity cao hơn
+// rule dark ở custom_vinuni.less — phải override ngay tại đây thì dark mode mới thắng.
+[data-vinuni-theme='dark'] {
+	.modal-expandable {
+		background: var(--color-bg-elevated, #1f1f1f) !important;
+		border-color: var(--color-border-secondary, rgba(255, 255, 255, 0.12)) !important;
+		color: var(--color-text, #ffffff);
+	}
+
+	.modal-expandable .modal-expandable-header .modal-expandable-title {
+		color: var(--color-text, #ffffff) !important;
+	}
+
+	.modal-expandable .modal-buttons .button {
+		color: var(--color-text, #ffffff) !important;
+		background: rgba(255, 255, 255, 0.08) !important;
+		box-shadow:
+			0 0 0 0.5px rgba(255, 255, 255, 0.12),
+			0 2px 24px rgba(0, 0, 0, 0.4) !important;
+
+		&:hover {
+			color: var(--color-text, #ffffff) !important;
+			background: rgba(255, 255, 255, 0.16) !important;
+		}
+	}
+
+	.modal-expandable-surface {
+		background-color: var(--color-bg-elevated, #1f1f1f);
+	}
+
+	// Nội dung antd lồng trong mọi ModalExpandable — token tĩnh hoặc chữ mặc định tối.
+	.modal-expandable {
+		.ant-form-item-label > label,
+		.ant-descriptions-item-content,
+		.ant-list-item-meta-title,
+		.ant-typography {
+			color: var(--color-text, #ffffff);
+		}
+
+		.ant-descriptions-item-label,
+		.ant-form-item-extra,
+		.ant-typography.ant-typography-secondary,
+		.ant-empty-description {
+			color: var(--color-text-secondary, rgba(255, 255, 255, 0.65));
+		}
+
+		.ant-divider {
+			border-color: var(--color-border-secondary, rgba(255, 255, 255, 0.12));
+		}
+
+		a:not([data-slot='button']):not(.ant-btn) {
+			color: var(--color-link, #8eb6ef);
+		}
+	}
+}

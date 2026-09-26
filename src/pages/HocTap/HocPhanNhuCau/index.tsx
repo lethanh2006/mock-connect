@@ -108,12 +108,12 @@ const DangKyNhuCauHocPhan = () => {
 			title={intl.formatMessage({ id: 'menu.HocTap.NhuCauHocPhan' })}
 			extra={
 				<FilterHocKy isSetHocKy selectLatest>
-					<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
+					<SelectSongNganh className='field-w-250' value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
 					<SelectDotDangKyHocPhanNhuCau
 						isSetRecord
 						value={recDot?._id}
 						onChange={(val) => setRecDot(danhSachDot.find((item) => item._id === val))}
-						style={{ width: 250 }}
+						className='field-w-250'
 					/>
 				</FilterHocKy>
 			}

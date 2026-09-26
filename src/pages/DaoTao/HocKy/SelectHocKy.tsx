@@ -1,5 +1,6 @@
 import { getLocalizedName } from '@/utils/localeName';
 import { Select } from 'antd';
+import VinSelect from '@/components/VinSelect';
 import React, { useEffect } from 'react';
 import { useModel, useIntl } from 'umi';
 
@@ -12,6 +13,7 @@ const SelectHocKy = (props: {
 	multiple?: boolean;
 	disabled?: boolean;
 	allowClear?: boolean;
+	className?: string;
 	style?: React.CSSProperties;
 	isSetRecord?: boolean;
 	selectMa?: boolean;
@@ -23,8 +25,8 @@ const SelectHocKy = (props: {
 	const {
 		value,
 		onChange,
-		multiple,
 		allowClear,
+		className,
 		style,
 		isSetRecord,
 		selectMa,
@@ -76,11 +78,10 @@ const SelectHocKy = (props: {
 	}, [fromLhc]);
 
 	return (
-		<Select
-			mode={multiple ? 'multiple' : undefined}
-			disabled={disabled}
+		<VinSelect
+			disabled={disabled || loading}
 			value={value}
-			onChange={onChange}
+			onChange={(val) => onChange?.((val ?? undefined) as string)}
 			options={danhSachHienThi.map((item) => ({
 				key: item._id,
 				value: selectMa ? item.ma : item._id,
@@ -90,8 +91,8 @@ const SelectHocKy = (props: {
 			optionFilterProp='label'
 			placeholder={placeholder ?? intl.formatMessage({ id: 'daotao.hocky.select' })}
 			allowClear={allowClear ?? false}
-			style={{ width: '100%', ...style }}
-			loading={loading}
+			className={className ?? (style?.width == null ? 'field-fill' : undefined)}
+			style={style}
 		/>
 	);
 };

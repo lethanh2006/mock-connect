@@ -55,10 +55,6 @@ const ChiTietActivity = (props: {
 			onCancel={() => setVisibleForm(false)}
 			width={1000}
 			footer={null}
-			styles={{
-				body: { backgroundColor: '#F8F8F8', borderRadius: 2 },
-				header: { backgroundColor: '#F8F8F8' },
-			}}
 		>
 			<CardChiTietSuKien
 				record={
@@ -89,8 +85,8 @@ const ChiTietActivity = (props: {
 			/>
 
 			<div
+				className='modal-expandable-surface'
 				style={{
-					backgroundColor: '#fff',
 					display: 'flex',
 					gap: 8,
 					justifyContent:

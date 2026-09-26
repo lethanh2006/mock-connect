@@ -13,12 +13,12 @@ const FilterHocKy = (props: {
 	selectLatest?: boolean;
 }) => {
 	const { record: recHocKy, danhSach: danhSachHocKy, setRecord: setHocKy } = useModel('daotao.hocky');
-	const width = props.width ?? 250;
 
 	return (
-		<Space wrap style={props.style}>
+		<Space wrap className='filter-bar' style={props.style}>
 			<SelectHocKy
-				style={{ width }}
+				className={props.width == null ? 'field-w-250' : undefined}
+				style={props.width != null ? { width: props.width } : undefined}
 				allowClear={props.allowClear}
 				value={recHocKy?._id}
 				onChange={(val) => {

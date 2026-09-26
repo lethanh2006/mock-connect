@@ -1,4 +1,4 @@
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -31,7 +31,7 @@ const SelectDanhMucChungKTX = (props: {
 	}));
 
 	return (
-		<Select
+		<VinSelect
 			loading={loading}
 			disabled={disabled}
 			mode={multiple ? 'multiple' : undefined}

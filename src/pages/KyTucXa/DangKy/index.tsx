@@ -1,7 +1,7 @@
 import EmptyState from '@/components/EmptyState';
 import { Button, IconRotateArrow, IconShieldInfo } from '@/components/Icons';
 import { Col, Row } from '@/components/MyGrid';
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import PageCard from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
 import { ETrangThaiMinhChung } from '@/services/KyTucXa/MienKyTucXa/constants';
@@ -322,7 +322,7 @@ const DangKyKyTucXa = () => {
 							allowClear
 							onChange={(val) => handleFilterChange(['maLoaiPhongKtx'], val, EOperatorType.INCLUDE)}
 						/>
-						<Select
+						<VinSelect
 							style={{ width: 250 }}
 							placeholder={intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.placeholder' })}
 							onChange={(val) => {

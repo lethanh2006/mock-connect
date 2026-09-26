@@ -9,7 +9,7 @@ const FilterKyThi = () => {
 	const { record: recordHocKy, setRecord: setRecordHocKy, danhSach: danhSachHocKy } = useModel('daotao.hocky');
 
 	return (
-		<Space>
+		<Space className='filter-bar'>
 			<SelectHocKy
 				isSetRecord
 				selectMa
@@ -18,7 +18,7 @@ const FilterKyThi = () => {
 					setRecordHocKy(danhSachHocKy.find((item) => item.ma === val));
 					setRecordKyThi(undefined);
 				}}
-				style={{ width: 250 }}
+				className='field-w-250'
 			/>
 			{recordHocKy?._id ? (
 				<SelectKyThi

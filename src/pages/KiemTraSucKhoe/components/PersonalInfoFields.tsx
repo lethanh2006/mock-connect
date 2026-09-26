@@ -3,7 +3,7 @@ import { EGioiTinh, ktscNationalityOptionsIntlId } from '@/services/KiemTraSucKh
 import rules from '@/utils/rules';
 import { Col } from '@/components/MyGrid';
 import Input from '@/components/MyInput';
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { Form } from 'antd';
 import { useIntl } from 'umi';
 import type { IPersonalInfo } from '../hooks/usePersonalInfo';
@@ -53,12 +53,12 @@ const PersonalInfoFields = ({ info }: IProps) => {
 			) : null}
 			<Col span={24} md={12}>
 				<Form.Item rules={[...rules.required]} name='nationality' label={t('kiemtrasuckhoe.dangky.quocTich')}>
-					<Select disabled={info.isPersonalFieldDisabled(info.studentNationality)} options={nationalityOptions} />
+					<VinSelect disabled={info.isPersonalFieldDisabled(info.studentNationality)} options={nationalityOptions} />
 				</Form.Item>
 			</Col>
 			<Col span={24} md={12}>
 				<Form.Item rules={[...rules.required]} name='gioiTinh' label={t('kiemtrasuckhoe.dangky.gioiTinh')}>
-					<Select disabled={info.isPersonalFieldDisabled(info.studentGioiTinh)} options={genderOptions} />
+					<VinSelect disabled={info.isPersonalFieldDisabled(info.studentGioiTinh)} options={genderOptions} />
 				</Form.Item>
 			</Col>
 			<Col span={24} md={12}>

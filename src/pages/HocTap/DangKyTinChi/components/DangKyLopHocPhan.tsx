@@ -33,6 +33,7 @@ import { Descriptions, Modal, Popconfirm, Popover, Space, Tag } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { IconShieldInfo } from '@/components/Icons';
 import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { useAccess, useIntl, useModel } from 'umi';
 import {
 	buildLopDangKy,
@@ -662,7 +663,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 						},
 					}}
 					otherButtons={[
-						<Select
+						<VinSelect
 							key='loai-dang-ky'
 							options={allLoaiDangKy.map((item) => ({
 								key: item,

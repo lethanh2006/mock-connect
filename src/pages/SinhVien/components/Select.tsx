@@ -1,6 +1,6 @@
 import { EOperatorType } from '@/components/Table/constant';
 import EmptyState from '@/components/EmptyState';
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { Spin } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
@@ -83,7 +83,7 @@ const SelectSinhVienDebounce = (props: {
 	return props.isView ? (
 		`${dataView?.ten ?? ''} - ${dataView?.ma ?? ''}`
 	) : (
-		<Select
+		<VinSelect
 			mode={multiple ? 'multiple' : undefined}
 			value={value}
 			onChange={onChange}

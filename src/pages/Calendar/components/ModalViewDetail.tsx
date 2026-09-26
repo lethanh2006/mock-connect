@@ -22,9 +22,7 @@ const DetailView = ({ label, children }: { label: string; children?: ReactNode }
 const DetailRow = ({ children }: { children: ReactNode }) => <div className='calendar-detail-row'>{children}</div>;
 
 const StatusTag = ({ children, tone = 'success' }: { children: ReactNode; tone?: keyof typeof STATUS_TONE }) => (
-	<span className='calendar-detail-status' style={STATUS_TONE[tone]}>
-		{children}
-	</span>
+	<span className={`calendar-detail-status is-${tone}`}>{children}</span>
 );
 
 // Configuration interface for event type handlers

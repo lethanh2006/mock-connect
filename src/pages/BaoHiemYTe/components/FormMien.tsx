@@ -13,7 +13,7 @@ import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { Col, Row } from '@/components/MyGrid';
 import Input from '@/components/MyInput';
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { Button } from '@/components/Icons';
 import { Divider, Form } from 'antd';
 import { useEffect } from 'react';
@@ -210,7 +210,7 @@ const FormMienBHYT = ({ record, isView, edit, onCancel, getData }: IProps) => {
 								label={t('baohiemyte.mien.doiTuongThamGiaBHYT')}
 								rules={[...rules.required]}
 							>
-								<Select
+								<VinSelect
 									disabled={readOnly}
 									options={doiTuongThamGiaBHYTOptions}
 									placeholder={t('baohiemyte.mien.placeholder.select')}

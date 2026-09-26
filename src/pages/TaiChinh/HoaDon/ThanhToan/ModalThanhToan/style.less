@@ -345,3 +345,68 @@
 		opacity: 0.3;
 	}
 }
+
+[data-vinuni-theme='dark'] {
+	.payment-sidebar {
+		background: rgba(255, 255, 255, 0.04);
+
+		&__title,
+		&__group-title {
+			color: var(--color-text-secondary, rgba(255, 255, 255, 0.65));
+		}
+
+		&__group-title {
+			background: rgba(255, 255, 255, 0.06);
+		}
+
+		&__item:hover {
+			background: rgba(255, 255, 255, 0.08);
+		}
+
+		&__item--active {
+			background: rgba(24, 144, 255, 0.16);
+			color: #69b1ff;
+		}
+	}
+
+	.payment-detail {
+		&__subtitle,
+		&__provider-desc,
+		&__secure {
+			color: var(--color-text-secondary, rgba(255, 255, 255, 0.65));
+		}
+
+		&__provider-card,
+		&__invoice-form {
+			background: rgba(255, 255, 255, 0.04);
+			border-color: var(--color-border-secondary, rgba(255, 255, 255, 0.12));
+		}
+
+		&__total,
+		&__invoice-toggle {
+			border-top-color: var(--color-border-secondary, rgba(255, 255, 255, 0.12));
+		}
+	}
+
+	.payment-collect-view {
+		&__hint,
+		&__status,
+		&__expired-desc {
+			color: var(--color-text-secondary, rgba(255, 255, 255, 0.65));
+		}
+
+		&__info {
+			background: rgba(255, 255, 255, 0.04);
+			border-color: var(--color-border-secondary, rgba(255, 255, 255, 0.12));
+		}
+
+		&__info-row + &__info-row {
+			border-top-color: var(--color-border-secondary, rgba(255, 255, 255, 0.12));
+		}
+
+		&__timer-value,
+		&__expired-title {
+			color: var(--color-text, #ffffff);
+		}
+	}
+}

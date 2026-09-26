@@ -1,6 +1,6 @@
 import rules from '@/utils/rules';
 import { Button, IconArrowLeft, IconArrowRight } from '@/components/Icons';
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { Form } from 'antd';
 import { Col, Row } from '@/components/MyGrid';
 import { useEffect } from 'react';
@@ -39,7 +39,7 @@ const MatchColumns = (props: { onChange: () => void; onBack: any; importHeaders:
 				{importHeaders?.map((col) => (
 					<Col span={24} md={12} key={col.field}>
 						<Form.Item name={col.field} label={col.label} rules={[...(col.required ? rules.required : [])]}>
-							<Select
+							<VinSelect
 								options={Object.entries(headLine ?? {}).map(([colName, title]) => ({
 									value: title,
 									key: colName,
