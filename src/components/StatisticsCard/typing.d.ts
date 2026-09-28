@@ -1,5 +1,4 @@
-import { Breakpoint } from 'antd';
-import { ColSize } from 'antd/es/col';
+import type { MyColProps } from '@/components/MyGrid';
 import React, { JSX } from 'react';
 
 /**
@@ -94,7 +93,7 @@ export interface StatisticsCardProps {
 	 * @default { xs: 24, sm: 12, md: 8 }
 	 * @example { xs: 12, sm: 6, md: 4, lg: 3 }
 	 */
-	colSpan?: Partial<Record<Breakpoint, number | string | ColSize>>;
+	colSpan?: Pick<MyColProps, 'span' | 'offset' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'>;
 
 	/** Hiển thị borderleft 4px (tùy chọn) */
 	borderleft?: boolean;

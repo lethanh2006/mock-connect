@@ -1,18 +1,26 @@
-import ModalKhaoSatBatBuoc from '@/pages/TienIch/KhaoSat/components/ModalKhaoSatBatBuoc';
-import { landingUrl } from '@/services/base/constant';
+import {
+	AccountMenu,
+	AccountMenuItem,
+	AccountMenuOptions,
+	AccountMenuSeparator,
+	AccountMenuTrigger,
+	IconCheck,
+	IconDoor01,
+	IconEarth,
+	IconLogoMicrosoft,
+} from '@/components/Icons';
+import { AppModules, landingUrl } from '@/services/base/constant';
 import { ELoaiDot, EThoiGianDot } from '@/services/TienIch/KhaoSat/constants';
 import { formatDate } from '@/utils/formatDate';
+import { generateInitialsAvatar } from '@/utils/initialsAvatar';
+import { currentRole } from '@/utils/ip';
 import { getPublicAssetPath } from '@/utils/path';
-import { DatabaseOutlined, FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, Col, Dropdown, Modal, Row, Spin } from 'antd';
-import { ItemType } from 'antd/es/menu/interface';
-import { rgba } from 'polished';
+import { Button, Col, Modal, Row, Spin } from 'antd';
 import { useEffect, useState } from 'react';
-import { history, useIntl, useModel } from 'umi';
-import AuthImage from '../Image/AuthImage';
+import { useIntl, useModel } from 'umi';
 import { OIDCBounder } from '../OIDCBounder';
 import { EOperatorType } from '../Table/constant';
-import styles from './index.less';
+import './index.less';
 
 const AvatarDropdown = () => {
 	const intl = useIntl();
@@ -144,129 +152,67 @@ const AvatarDropdown = () => {
 
 	const loginOut = () => OIDCBounder?.getActions()?.dangXuat();
 
-	if (!initialState || !initialState.currentUser)
+	if (!initialState || !initialState.currentUser) {
 		return (
-			<span className={`${styles.action} ${styles.account}`}>
-				<Spin size='small' style={{ marginLeft: 8, marginRight: 8 }} />
-			</span>
+			<div className='avatar-dropdown-loading'>
+				<Spin size='small' />
+			</div>
 		);
+	}
 
 	const fullName = initialState.currentUser?.family_name
 		? `${initialState.currentUser.family_name} ${initialState.currentUser?.given_name ?? ''}`
 		: (initialState.currentUser?.name ?? (initialState.currentUser?.preferred_username || ''));
-	const lastNameChar = fullName.split(' ')?.at(-1)?.[0]?.toUpperCase();
 
-	const currentPartitionInfo = dsPhanVung?.find((item) => item?.dataPartitionCode === currentPartition);
-	const currentPartitionColor = currentPartitionInfo?.dataPartition?.maMau;
-	const currentPartitionName = currentPartitionInfo?.dataPartition?.name;
-
-	const partitionItems: ItemType[] =
-		dsPhanVung?.map((item) => {
-			const code = item?.dataPartitionCode;
-			const isActive = code === currentPartition;
-			const partitionColor = item?.dataPartition?.maMau;
-
-			const activeColor = partitionColor || 'var(--color-primary)';
-			const activeBgColor = partitionColor ? rgba(partitionColor, 0.1) : 'var(--color-primary-bg)';
-
-			return {
-				key: `partition-${code}`,
-				icon: <DatabaseOutlined />,
-				label: item?.dataPartition?.name ?? item?.dataPartition?.ma,
-				style: isActive
-					? {
-						backgroundColor: activeBgColor,
-						borderLeft: `3px solid ${activeColor}`,
-						color: activeColor,
-						fontWeight: 'bold',
-					}
-					: undefined,
-				onClick: () => {
-					localStorage.setItem('partitionCode', code);
-					window.location.reload();
-				},
-			};
-		}) ?? [];
-
-	const items: ItemType[] = [
-		...(partitionItems as any),
-		...(partitionItems.length > 0 ? [{ type: 'divider', key: 'divider' } as ItemType] : []),
-		{
-			key: 'name',
-			icon: <UserOutlined />,
-			label: fullName,
-			onClick: () => {
-				if (!initialState?.currentUser?.realm_access?.roles?.includes('QUAN_TRI_VIEN')) {
-					history.push('/thong-tin-ca-nhan');
-				}
-			},
-		},
-		// {
-		// 	key: 'password',
-		// 	icon: <SwapOutlined />,
-		// 	label: 'Đổi mật khẩu',
-		// 	onClick: () => {
-		// 		const redirect = window.location.href;
-		// 		window.location.href = `${keycloakAuthEndpoint}?client_id=${AppModules[currentRole].clientId}&redirect_uri=${redirect}&response_type=code&scope=openid&kc_action=UPDATE_PASSWORD`;
-		// 	},
-		// },
-		{
-			key: 'office',
-			icon: <FileWordOutlined />,
-			label: 'Office 365',
-			onClick: () => window.open('https://office.com/'),
-		},
-		{
-			key: 'portal',
-			icon: <GlobalOutlined />,
-			label: `${intl.formatMessage({ id: `modules.cong-thong-tin` }) ?? intl.formatMessage({ id: 'app.header.portal', defaultMessage: 'Cổng thông tin' })}`,
-			onClick: () => window.open(landingUrl),
-		},
-		{ type: 'divider', key: 'divider' },
-		{
-			key: 'logout',
-			icon: <LogoutOutlined />,
-			label: intl.formatMessage({ id: 'app.header.logout', defaultMessage: 'Đăng xuất' }),
-			onClick: loginOut,
-			danger: true,
-		},
-	];
+	const avatarSrc = initialState.currentUser?.picture || generateInitialsAvatar(fullName);
 
 	return (
-		<>
-			<Dropdown menu={{ items }}>
-				<span className={`${styles.action} ${styles.account}`}>
-					<div className={styles.avatarWrapper}>
-						<Avatar
-							className={styles.avatar}
-							src={
-								!!avatarUrl ? (
-									<AuthImage src={avatarUrl} alt='avatar' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-								) : undefined
-							}
-							icon={!avatarUrl ? (lastNameChar ?? <UserOutlined />) : undefined}
-							alt='avatar'
-						/>
-						{dsPhanVung?.length >= 2 && (
-							<span
-								className={styles.partitionBadge}
-								style={{
-									backgroundColor: currentPartitionColor || 'var(--color-primary)',
-									color: '#fff',
-								}}
-							>
-								{currentPartitionName?.[0]?.toUpperCase() ?? ''}
-							</span>
-						)}
-					</div>
-					<span className={`${styles.name}`}>{fullName}</span>
-				</span>
-			</Dropdown>
+		<AccountMenu>
+			<AccountMenuTrigger
+				name={fullName}
+				role={intl.formatMessage({ id: AppModules[currentRole].title })}
+				avatarSrc={avatarSrc}
+			/>
+			<AccountMenuOptions>
+				{dsPhanVung?.length >= 2 && (
+					<>
+						{dsPhanVung.map((item) => {
+							const code = item?.dataPartitionCode;
+							const isActive = code === currentPartition;
 
-			<ModalKhaoSatBatBuoc />
+							return (
+								<AccountMenuItem
+									key={`partition-${code}`}
+									icon={<IconCheck style={{ visibility: isActive ? 'visible' : 'hidden' }} />}
+									onClick={() => {
+										if (code) localStorage.setItem('partitionCode', code);
+										window.location.reload();
+									}}
+								>
+									{item?.dataPartition?.name ?? item?.dataPartition?.ma}
+								</AccountMenuItem>
+							);
+						})}
+						<AccountMenuSeparator />
+					</>
+				)}
 
-			{/* <ActivityUpComming visible={visibleOutCome} setVisible={setVisibleOutCome} /> */}
-		</>
+				<AccountMenuItem icon={<IconLogoMicrosoft />} onClick={() => window.open('https://office.com/')}>
+					Office 365
+				</AccountMenuItem>
+
+				<AccountMenuItem icon={<IconEarth />} onClick={() => window.open(landingUrl)}>
+					{intl.formatMessage({ id: 'modules.cong-thong-tin' }) ||
+						intl.formatMessage({ id: 'app.header.portal', defaultMessage: 'Cổng thông tin' })}
+				</AccountMenuItem>
+
+				<AccountMenuSeparator />
+
+				<AccountMenuItem icon={<IconDoor01 />} onClick={loginOut}>
+					{intl.formatMessage({ id: 'app.header.logout', defaultMessage: 'Đăng xuất' })}
+				</AccountMenuItem>
+			</AccountMenuOptions>
+		</AccountMenu>
 	);
 };
 

@@ -1,10 +1,10 @@
 import Footer from '@/components/Footer';
+import { Button, IconDoor01, IconEarth } from '@/components/Icons';
 import { OIDCBounder, OIDCBounder_ } from '@/components/OIDCBounder';
 import { landingUrl } from '@/services/base/constant';
 import { currentRole, financeApiClientId, qldtApiClientId } from '@/utils/ip';
 import { hasModulePermission } from '@/utils/keycloakRoles';
-import { GlobalOutlined, LogoutOutlined } from '@ant-design/icons';
-import { Button, Result, Space } from 'antd';
+import { Result } from 'antd';
 import { useEffect } from 'react';
 import { history, useIntl, useModel } from 'umi';
 
@@ -38,14 +38,14 @@ const NotAccessible = () => {
 					}}
 					subTitle={intl.formatMessage({ id: 'pages.exception.403.subtitle' })}
 					extra={
-						<Space>
-							<Button type='primary' onClick={() => (window.location.href = landingUrl)} icon={<GlobalOutlined />}>
+						<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
+							<Button variant='default' onClick={() => (window.location.href = landingUrl)} icon={<IconEarth />}>
 								{intl.formatMessage({ id: 'pages.exception.portal' })}
 							</Button>
-							<Button icon={<LogoutOutlined />} onClick={onLogout}>
+							<Button variant='outline' icon={<IconDoor01 />} onClick={onLogout}>
 								{intl.formatMessage({ id: 'pages.exception.logout' })}
 							</Button>
-						</Space>
+						</div>
 					}
 				/>
 

@@ -6,7 +6,7 @@ import {
 	type TImportResponse,
 } from '@/components/Table/typing';
 import { chuanHoaObject } from '@/utils/utils';
-import { message } from 'antd';
+import { toast } from '@/utils/toast';
 import { useState } from 'react';
 import { getIntl } from 'umi';
 import useInitService from './useInitService';
@@ -251,7 +251,7 @@ const useInitModel = <T extends object>(
 				path,
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 			);
-			message.success(messageText ?? formatIntlMsg('global.message.themmoithanhcong'));
+			toast.success(messageText ?? formatIntlMsg('global.message.themmoithanhcong'));
 			setLoading(false);
 			if (getData) getData();
 			else getModel();
@@ -284,7 +284,7 @@ const useInitModel = <T extends object>(
 				path,
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 			);
-			message.success(messageText ?? formatIntlMsg('global.message.luuthanhcong'));
+			toast.success(messageText ?? formatIntlMsg('global.message.luuthanhcong'));
 			setLoading(false);
 			if (getData) getData();
 			else if (!notGet) getModel();
@@ -315,7 +315,7 @@ const useInitModel = <T extends object>(
 				chuanHoaObject(payload),
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 			);
-			message.success(messageText ?? formatIntlMsg('global.message.luuthanhcong'));
+			toast.success(messageText ?? formatIntlMsg('global.message.luuthanhcong'));
 			setLoading(false);
 			if (getData) getData();
 			else if (!notGet) getModel();
@@ -343,7 +343,7 @@ const useInitModel = <T extends object>(
 				path,
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 			);
-			message.success(config?.messageText ?? formatIntlMsg('global.message.xoathanhcong'));
+			toast.success(config?.messageText ?? formatIntlMsg('global.message.xoathanhcong'));
 
 			const maxPage = Math.ceil((total - 1) / limit) || 1;
 			let newPage = page;
@@ -374,7 +374,7 @@ const useInitModel = <T extends object>(
 				undefined,
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 			);
-			message.success(formatIntlMsg('global.message.deletedcount', { count: ids.length }));
+			toast.success(formatIntlMsg('global.message.deletedcount', { count: ids.length }));
 
 			const maxPage = Math.ceil((total - ids.length) / limit) || 1;
 			let newPage = page;
@@ -474,7 +474,7 @@ const useInitModel = <T extends object>(
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 				params,
 			);
-			message.success(config?.messageText ?? formatIntlMsg('global.message.validated'));
+			toast.success(config?.messageText ?? formatIntlMsg('global.message.validated'));
 			return res.data?.data ?? [];
 		} catch (err) {
 			return Promise.reject(err);
@@ -500,7 +500,7 @@ const useInitModel = <T extends object>(
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 				params,
 			);
-			message.success(config?.messageText ?? formatIntlMsg('global.message.imported'));
+			toast.success(config?.messageText ?? formatIntlMsg('global.message.imported'));
 			return res.data?.data ?? [];
 		} catch (err) {
 			return Promise.reject(err);

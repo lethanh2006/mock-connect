@@ -1,9 +1,12 @@
+import { Button, IconEye, IconTrash, IconUpload } from '@/components/Icons';
+import { mapButtonSize } from '@/components/Table/utils/vinuniAdapters';
 import { isAllowedFile, parseAcceptString, validateFileBlob } from '@/utils/fileValidation';
 import { getSafeHref } from '@/utils/security';
+import { toast } from '@/utils/toast';
 import { blobToBase64, getNameFile, getPreviewUrl } from '@/utils/utils';
-import { DeleteOutlined, EyeOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
-import { Button, Image, Upload, message } from 'antd';
+import { Image, Upload } from 'antd';
 import type { RcFile } from 'antd/es/upload';
 import { useEffect, useState } from 'react';
 import Resizer from 'react-image-file-resizer';
@@ -50,7 +53,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 	const acceptString = accept || otherAccept || (showImage ? 'image/*' : '');
 	const allowedExtensions = acceptString ? parseAcceptString(acceptString) : [];
 
-	const showFormatError = () => message.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
+	const showFormatError = () => toast.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
 
 	const resolveBeforeUpload: UploadProps['beforeUpload'] = async (file, fileList) => {
 		if (allowedExtensions.length) {
@@ -154,7 +157,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 		let files = (val.fileList as TFileProps[]).filter((file) => file?.status !== 'removed');
 		const findLargeFile = files?.some((file) => file.size && file.size / 1024 / 1024 > maxFileSize);
 		if (findLargeFile) {
-			message.error(intl.formatMessage({ id: 'global.uploadfile.error.mb' }, { maxFileSize: maxFileSize }));
+			toast.error(intl.formatMessage({ id: 'global.uploadfile.error.mb' }, { maxFileSize: maxFileSize }));
 			return;
 		}
 
@@ -162,7 +165,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 			(file) => file?.remote !== true && allowedExtensions.length > 0 && !isAllowedFile(file, allowedExtensions),
 		);
 		if (findWrongTypeFile) {
-			message.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
+			toast.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
 			return;
 		}
 
@@ -236,8 +239,18 @@ const UploadFile: React.FC<TUploadProps> = ({
 			>
 				{!isDisabled ? (
 					<>
-						<p className='ant-upload-drag-icon'>
-							<UploadOutlined />
+						<p
+							className='ant-upload-drag-icon'
+							style={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+								width: '100%',
+								marginBottom: 16,
+								color: 'var(--vin-color-primary, #c72127)',
+							}}
+						>
+							<IconUpload size={48} style={{ color: 'inherit' }} />
 						</p>
 						<p className='ant-upload-text'>{intl.formatMessage({ id: 'global.uploadfile.text' })}</p>
 						<p className='ant-upload-hint'>{buttonDescription}</p>
@@ -285,12 +298,31 @@ const UploadFile: React.FC<TUploadProps> = ({
 
 												{!isDisabled && (
 													<div className='ant-upload-list-item-actions-custom'>
-														<span onClick={() => handlePreviewImage(file)}>
-															<EyeOutlined style={{ color: '#fff', marginRight: 12 }} />
-														</span>
-														<span onClick={() => actions.remove()}>
-															<DeleteOutlined style={{ color: '#fff' }} />
-														</span>
+														<button
+															type='button'
+															aria-label={intl.formatMessage({
+																id: 'global.upload.preview',
+																defaultMessage: 'Xem trước',
+															})}
+															style={{
+																background: 'none',
+																border: 'none',
+																padding: 0,
+																marginRight: 12,
+																cursor: 'pointer',
+															}}
+															onClick={() => handlePreviewImage(file)}
+														>
+															<IconEye size={18} style={{ color: '#fff' }} />
+														</button>
+														<button
+															type='button'
+															aria-label={intl.formatMessage({ id: 'global.upload.remove', defaultMessage: 'Xóa' })}
+															style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+															onClick={() => actions.remove()}
+														>
+															<IconTrash size={18} style={{ color: '#fff' }} />
+														</button>
 													</div>
 												)}
 											</div>
@@ -372,7 +404,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 				onPreview={hasPreviewFile ? handlePreviewFile : restOtherProps?.onPreview}
 			>
 				{!isDisabled ? (
-					<Button size={buttonSize || 'small'} icon={<UploadOutlined />}>
+					<Button variant='outline' size={mapButtonSize(buttonSize || 'small')} icon={<IconUpload />}>
 						{buttonDescription || intl.formatMessage({ id: 'global.uploadfile.button.chontep' }, { maxFileSize })}
 					</Button>
 				) : null}

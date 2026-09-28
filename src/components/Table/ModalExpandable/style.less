@@ -1,61 +1,197 @@
-.modal-full {
-	@media (min-width: 480px) {
-		top: 0;
-		width: 100vw !important;
-		max-width: 100vw !important;
-		height: 100vh;
-		margin: 0;
-		padding: 0;
+// DialogContent của @vinuni/ui ép mọi con không phải dialog-header/footer/close
+// nhận `flex:1; min-height:0; overflow-y:auto` (để vùng nội dung tự co giãn/cuộn).
+// title/footer ở đây chỉ là div thường (không gắn data-slot tương ứng) nên bị áp
+// nhầm luật đó, khiến chúng bị giãn ra và chừa khoảng trống thừa. Ép flex:none để
+// chỉ vùng nội dung mới co giãn.
+.modal-expandable-title {
+	font-weight: bold !important;
+	font-size: var(--font-size-lg);
+	padding: var(--padding-sm) 56px var(--padding-sm) 56px;
+	padding: 20px 72px 16px 72px;
+	text-align: center;
+	border-bottom: none !important;
+	flex: none !important;
+	overflow: visible !important;
+	min-height: auto !important;
+}
 
-		.ant-modal-content {
-			width: 100vw;
-			height: 100vh;
-			border-radius: 0;
-		}
-	}
+.modal-expandable-footer {
+	flex: none !important;
+	overflow: visible !important;
+	min-height: auto !important;
+	padding: 16px 24px 24px 24px;
+}
+
+// Padding mặc định cho vùng nội dung — để nơi dùng ModalExpandable không phải tự
+// bù padding riêng. Truyền `styles={{ body: { padding: ... } }}` khi cần khác đi
+// (inline style luôn thắng class, kể cả padding: 0 cho form tự quản padding riêng).
+.modal-expandable-body {
+	padding: 0 24px 24px 24px;
 }
 
 .modal-expandable {
-	.ant-modal-header,
-	.ant-modal-title {
-		padding-right: var(--padding-lg) !important;
+	&.modal-full {
+		inset: 0 !important;
+		top: 0 !important;
+		left: 0 !important;
+		transform: none !important;
+		translate: none !important;
+		--tw-translate-x: 0 !important;
+		--tw-translate-y: 0 !important;
+		width: 100vw !important;
+		max-width: 100vw !important;
+		height: 100vh !important;
+		max-height: 100vh !important;
+		border-radius: 0 !important;
+		border: none !important;
+
+		>div:not(.modal-buttons) {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			min-height: 0;
+
+			.ant-card {
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+
+				.ant-card-body {
+					flex: 1;
+					overflow: auto;
+				}
+			}
+
+			// Tương đương rule .ant-card ở trên, cho Form dùng Card của @vinuni/ui làm gốc
+			// (vd FormChucVu). Thiếu rule này thì khi bấm phóng to toàn màn hình, Card giữ
+			// nguyên chiều cao theo nội dung, để trống cả vùng full-screen phía dưới thay vì
+			// giãn ra và cho phần nội dung tự cuộn.
+			[data-slot='card'] {
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				min-height: 0;
+
+				[data-slot='card-content'] {
+					flex: 1;
+					overflow: auto;
+					min-height: 0;
+					display: flex;
+					flex-direction: column;
+
+					// antd Form render ra thẻ <form> thường (block), phải ép flex column thì
+					// margin-top: auto của .form-footer bên dưới mới có tác dụng đẩy xuống đáy.
+					form {
+						display: flex;
+						flex-direction: column;
+						flex: 1;
+						min-height: 0;
+					}
+				}
+
+				// custom_vinuni.less đặt margin-top: ... !important cho .form-footer (đẩy layout
+				// bình thường) nên phải !important ở đây mới đè được, đẩy footer xuống đáy Card.
+				.form-footer {
+					flex: none !important;
+					margin-top: auto !important;
+				}
+			}
+		}
+	}
+
+	// Bỏ scrollbar gutter thừa gây khoảng trống bên phải
+	>div {
+		scrollbar-gutter: auto !important;
+	}
+
+	.ant-card {
+		border: none !important;
+
+		.ant-card-head {
+			border-bottom: none !important;
+			text-align: center !important;
+
+			.ant-card-head-title {
+				text-align: center !important;
+				font-size: 18px !important;
+				font-weight: bold !important;
+				color: var(--color-text-base, var(--color-text)) !important;
+			}
+		}
+	}
+
+	.form-footer {
+		border-top: none !important;
+
+		&::before {
+			display: none !important;
+		}
 	}
 }
 
 // Modal buttons: Close, Expand fullscreen, Collapse fullscreen
 .modal-buttons {
 	position: absolute;
-	top: 0;
-	right: 0;
-	display: flex;
+	top: 16px;
+	right: 16px;
+	z-index: 20;
+	display: inline-flex;
 	align-items: center;
-	justify-content: center;
+	background: var(--color-bg-elevated);
+	border: 1px solid var(--color-border-secondary);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+	border-radius: 9999px; // Dạng viên thuốc khi có từ 2 nút
+	height: 36px;
+	padding: 2px 4px;
 	gap: 2px;
-	height: 56px;
-	padding: var(--padding-sm);
+	flex: none !important;
+	overflow: visible !important;
+
+	// Nếu chỉ có 1 nút: biến thành hình tròn hoàn hảo (36x36)
+	&:has(> .button:only-child),
+	&:has(> *:only-child) {
+		width: 36px;
+		padding: 0;
+		justify-content: center;
+		border-radius: 50% !important;
+
+		.button {
+			width: 100%;
+			height: 100%;
+		}
+	}
 
 	.button {
-		color: rgba(0, 0, 0, 0.45);
+		color: var(--color-text-secondary);
 		line-height: 1;
 		text-decoration: none;
 		background: transparent;
 		border: 0;
 		outline: 0;
 		cursor: pointer;
-		transition: color 0.3s;
-		font-size: var(--font-size-lg);
 		padding: 0;
+		width: 30px;
+		height: 30px;
+		min-width: 30px;
+		border-radius: 50%;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
-		border-radius: var(--border-radius-sm);
-		width: var(--control-height);
-		height: var(--control-height);
-		transition:
-			color var(--motion-duration-mid),
-			background-color var(--motion-duration-mid);
+		svg {
+			width: 14px;
+			height: 14px;
+			stroke-width: 2.2;
+		}
 
 		&:hover {
-			color: var(--color-icon-hover) rgba(0, 0, 0, 0.88);
-			background-color: var(--color-bg-text-hover);
+			color: var(--color-text);
+			background-color: var(--color-fill-secondary);
+		}
+
+		&:active {
+			transform: scale(0.92);
 		}
 	}
 }

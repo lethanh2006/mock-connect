@@ -472,6 +472,12 @@ export default [
 			// },
 		],
 	},
+	// GROUP: DANH MỤC & TỔ CHỨC (Collapsible Group)
+	{
+		name: 'DanhMucGroup',
+		path: '/__group__/danh-muc',
+		disabled: true,
+	},
 
 	// DANH MUC HE THONG
 	// {
@@ -1081,5 +1087,4 @@ export default [
 		component: 'exception/404',
 		layout: false,
 	},
-
 ];

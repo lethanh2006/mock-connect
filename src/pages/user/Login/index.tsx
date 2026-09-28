@@ -1,12 +1,14 @@
 import Footer from '@/components/Footer';
+import { Button, IconHuman, IconLockClose } from '@/components/Icons';
+import Input from '@/components/MyInput';
 import { OIDCBounder_ } from '@/components/OIDCBounder';
 import LoginWithKeycloak from '@/pages/user/Login/KeycloakLogin';
 import { adminlogin, getUserInfo } from '@/services/base/api';
 import { keycloakAuthority } from '@/utils/ip';
 import { getPublicAssetPath } from '@/utils/path';
 import rules from '@/utils/rules';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Tabs, message } from 'antd';
+import { toast } from '@/utils/toast';
+import { Form, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import styles from './index.less';
@@ -39,7 +41,7 @@ const Login: React.FC = () => {
 			id: 'pages.login.success',
 			defaultMessage: 'success',
 		});
-		message.success(defaultloginSuccessMessage);
+		toast.success(defaultloginSuccessMessage);
 		history.push('/dashboard');
 	};
 
@@ -58,7 +60,7 @@ const Login: React.FC = () => {
 				id: 'pages.login.failure',
 				defaultMessage: 'failure',
 			});
-			message.error(defaultloginFailureMessage);
+			toast.error(defaultloginFailureMessage);
 		}
 		setSubmitting(false);
 	};
@@ -107,7 +109,7 @@ const Login: React.FC = () => {
 											id: 'pages.login.username.placeholder',
 											defaultMessage: 'Nhập tên đăng nhập',
 										})}
-										prefix={<UserOutlined className={styles.prefixIcon} />}
+										prefix={<IconHuman className={styles.prefixIcon} />}
 										size='large'
 									/>
 								</Form.Item>
@@ -117,12 +119,12 @@ const Login: React.FC = () => {
 											id: 'pages.login.password.placeholder',
 											defaultMessage: 'Nhập mật khẩu',
 										})}
-										prefix={<LockOutlined className={styles.prefixIcon} />}
+										prefix={<IconLockClose className={styles.prefixIcon} />}
 										size='large'
 									/>
 								</Form.Item>
 
-								<Button type='primary' block size='large' loading={submitting}>
+								<Button variant='default' className='w-full' size='lg' loading={submitting}>
 									{intl.formatMessage({ id: 'pages.login.submit', defaultMessage: 'submit' })}
 								</Button>
 							</Form>
@@ -134,7 +136,7 @@ const Login: React.FC = () => {
 								onClick={() => {
 									window.open(keycloakAuthority + '/login-actions/reset-credentials');
 								}}
-								type='link'
+								variant='link'
 							>
 								Quên mật khẩu?
 							</Button>

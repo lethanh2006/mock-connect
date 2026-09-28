@@ -1,12 +1,18 @@
-import { Button, Card, Col, Form, Input, Row } from 'antd';
-import { useModel } from 'umi';
-import { useEffect } from 'react';
+import { Button } from '@/components/Icons';
+import Input from '@/components/MyInput';
+import { Card } from '@/components/PageCard';
 import rules from '@/utils/rules';
+import { Form } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import { useEffect } from 'react';
+import { useModel } from 'umi';
+
 const { TextArea } = Input;
 
 const FormTags = () => {
-	const { setVisibleForm, edit, record, postModel, putModel } = useModel('thongbao.tags');
+	const { setVisibleForm, edit, record, postModel, putModel, formSubmiting } = useModel('thongbao.tags');
 	const [form] = Form.useForm();
+
 	const handleFinish = async (values: any) => {
 		try {
 			if (edit) {
@@ -18,6 +24,7 @@ const FormTags = () => {
 			console.log(e);
 		}
 	};
+
 	useEffect(() => {
 		if (edit) {
 			form.setFieldsValue({ ...record });
@@ -26,37 +33,37 @@ const FormTags = () => {
 
 	return (
 		<Card title={edit ? 'Chỉnh sửa' : 'Thêm mới'}>
-			<Form onFinish={handleFinish} form={form} layout={'vertical'}>
+			<Form onFinish={handleFinish} form={form} layout='vertical'>
 				<Row gutter={16}>
 					<Col span={24}>
-						<Form.Item label={'Tên nhãn dán'} name={'ten'} rules={[...rules.required]}>
-							<Input placeholder={'Nhập tên nhãn'} />
+						<Form.Item label='Tên nhãn dán' name='ten' rules={[...rules.required]}>
+							<Input placeholder='Nhập tên nhãn' />
 						</Form.Item>
 					</Col>
 					<Col span={24}>
-						<Form.Item label={'Mô tả'} name={'moTa'} rules={[...rules.required]}>
-							<TextArea placeholder={'Nhập mô tả'} rows={3} />
+						<Form.Item label='Mô tả' name='moTa' rules={[...rules.required]}>
+							<TextArea placeholder='Nhập mô tả' rows={3} />
 						</Form.Item>
-					</Col>
-					<Col span={24}>
-						<div style={{ display: 'flex', justifyContent: 'center' }}>
-							<Form.Item>
-								<Button style={{ marginRight: 8 }} htmlType={'submit'} type={'primary'}>
-									Lưu
-								</Button>
-								<Button
-									onClick={() => {
-										setVisibleForm(false);
-									}}
-								>
-									Đóng
-								</Button>
-							</Form.Item>
-						</div>
 					</Col>
 				</Row>
+
+				<div className='form-footer'>
+					<Button type='submit' variant='default' loading={formSubmiting}>
+						Lưu
+					</Button>
+					<Button
+						type='button'
+						variant='outline'
+						onClick={() => {
+							setVisibleForm(false);
+						}}
+					>
+						Đóng
+					</Button>
+				</div>
 			</Form>
 		</Card>
 	);
 };
+
 export default FormTags;

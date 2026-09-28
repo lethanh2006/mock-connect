@@ -3,7 +3,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import { type ThongBao } from '@/services/ThongBao/typing';
 import { EVaiTroKhaoSat } from '@/services/ThongBao/constant';
-import { CloseOutlined } from '@ant-design/icons';
+import { IconXmark } from '@/components/Icons';
 
 const GroupTagUsers = (props: {
 	users?: ThongBao.IUser[];
@@ -35,7 +35,7 @@ const GroupTagUsers = (props: {
 			align: 'center',
 			width: 60,
 			render: (val, rec) => (
-				<ButtonExtend onClick={() => onClose(rec?.username)} type='link' danger icon={<CloseOutlined />} />
+				<ButtonExtend onClick={() => onClose(rec?.username)} type='link' danger icon={<IconXmark />} tooltip='Xóa' />
 			),
 		},
 	];

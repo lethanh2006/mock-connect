@@ -1,21 +1,20 @@
-import Footer from '@/components/Footer';
-import { default as GlobalHeaderRight } from '@/components/RightContent';
-import { PageContainer } from '@ant-design/pro-components';
+import AppShell from '@/components/AppShell';
+import LoadingModal from '@/components/Loading/LoadingModal';
+import '@/utils/dayjs';
 import '@ant-design/v5-patch-for-react-19';
+import { Toaster, UiProvider } from '@vinuni/ui';
 import { App } from 'antd';
-import 'dayjs/locale/vi';
 import React from 'react'; // Bổ sung import React
 import type { RunTimeLayoutConfig } from 'umi';
-import './observability/otel';
 import { getIntl, history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 import EnrollmentPrompt from './components/EnrollmentPrompt';
 import ErrorBoundary from './components/ErrorBoundary';
 import { OIDCBounder_, OIDCProvider } from './components/OIDCBounder';
 import { unCheckPermissionPaths } from './components/OIDCBounder/constant';
-import HeaderContentPage from './components/RightContent/Header';
 import TechnicalSupportBounder from './components/TechnicalSupportBounder';
 import ConfigBounder from './components/TechnicalSupportBounder/ConfigBounder';
+import './observability/otel';
 import NotAccessible from './pages/exception/403';
 import NotFoundContent from './pages/exception/404';
 import { AppModules } from './services/base/constant';
@@ -25,14 +24,25 @@ import { currentRole, financeApiClientId, qldtApiClientId, replaceRole } from '.
 import { hasModulePermission } from './utils/keycloakRoles';
 
 export function rootContainer(container: React.ReactNode) {
+	const currentTheme = (localStorage.getItem('theme') as any) || 'light';
+	document.documentElement.setAttribute('data-vinuni-theme', currentTheme);
+
 	return (
-		<ConfigBounder>
-			<App>
-				<OIDCProvider>
-					<>{container}</>
-				</OIDCProvider>
-			</App>
-		</ConfigBounder>
+		<UiProvider
+			defaultTheme={currentTheme}
+			onThemeChange={(theme) => {
+				localStorage.setItem('theme', theme);
+				document.documentElement.setAttribute('data-vinuni-theme', theme);
+			}}
+		>
+			<ConfigBounder>
+				<App>
+					<OIDCProvider>{container}</OIDCProvider>
+				</App>
+			</ConfigBounder>
+			<Toaster />
+			<LoadingModal />
+		</UiProvider>
 	);
 }
 
@@ -40,6 +50,8 @@ export async function getInitialState(): Promise<IInitialState> {
 	const initialState: IInitialState = {
 		settings: defaultSettings,
 		permissionLoading: true,
+		authorizedRoles: [],
+		authorizedRolesByClient: {},
 	};
 	try {
 		const raw = sessionStorage.getItem('initialState');
@@ -66,11 +78,10 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 			</OIDCBounder_>
 		),
 		noFound: <NotFoundContent />,
-		// rightContentRender: () => <RightContent />,
-		headerContentRender: () => <HeaderContentPage />,
+		menuRender: false,
+		headerRender: false,
+		footerRender: false,
 		disableContentMargin: true,
-
-		footerRender: () => <Footer />,
 
 		onPageChange: () => {
 			if (initialState?.currentUser) {
@@ -98,14 +109,13 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 
 		menuItemRender: (item: any, dom: any) => (
 			<a
-				className='not-underline'
+				className='not-underline menu-item-link'
 				key={item?.path}
 				href={item?.path}
 				onClick={(e) => {
 					e.preventDefault();
 					history.push(item?.path ?? '/');
 				}}
-				style={{ display: 'block' }}
 			>
 				{dom}
 			</a>
@@ -124,22 +134,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 				</OIDCBounder_>
 			);
 
-			if (initialState?.settings?.layout === 'side') {
-				return (
-					<PageContainer
-						ghost
-						breadcrumbRender={false}
-						title={false}
-						extra={<GlobalHeaderRight />}
-						header={{}}
-						className={isDashboard ? 'page-dashboard-no-header-bg' : undefined}
-					>
-						{content}
-					</PageContainer>
-				);
-			}
-
-			return content;
+			return <AppShell>{content}</AppShell>;
 		},
 
 		title: intl.formatMessage({ id: AppModules[currentRole].title }),

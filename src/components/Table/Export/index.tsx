@@ -1,12 +1,15 @@
-import { FileExcelOutlined } from '@ant-design/icons';
-import { Button, Col, Empty, Modal, Row } from 'antd';
+import EmptyState from '@/components/EmptyState';
+import { Button, IconDownload } from '@/components/Icons';
+import { Spin } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import ModalExpandable from '../ModalExpandable';
 import { type TExportField } from '../typing';
 import CardChooseFields from './CardChooseFields';
 import CardExportFields from './CardExportFields';
-import { type ModalExportProps } from './typing';
+import './style.less';
+import { ModalExportProps } from './typing';
 
 const ModalExport = (props: ModalExportProps) => {
 	const intl = useIntl();
@@ -75,61 +78,50 @@ const ModalExport = (props: ModalExportProps) => {
 	};
 
 	return (
-		<Modal
-			title={intl.formatMessage({ id: 'global.table.export.title' })}
+		<ModalExpandable
 			open={visible}
 			onCancel={onCancelModal}
-			footer={null}
+			title={intl.formatMessage({ id: 'global.table.export.title' })}
 			width={800}
-			destroyOnClose
-			maskClosable={maskCloseableForm || false}
-			loading={loading}
+			allowExpand={false}
+			maskClosable={maskCloseableForm}
 		>
-			{!!exportFields.length ? (
-				<>
-					<Row gutter={[12, 12]} style={{ marginBottom: 16 }}>
-						{/* {selectedIds?.length > 0 ? (
-							<Col span={24}>
-								{intl.formatMessage({ id: 'global.table.export.index.trichxuat' }, { count: selectedIds?.length })}
-							</Col>
-						) : null} */}
-
-						<Col
-							span={24}
-							style={{
-								marginBottom: '-15px',
-							}}
-						>
-							{intl.formatMessage({ id: 'global.table.export.index.choncactruong' })}:
-						</Col>
-
-						<Col span={24} md={12}>
-							<CardChooseFields allFields={allFields} fields={exportFields} setFields={setExportFields} />
-						</Col>
-						<Col span={24} md={12}>
-							<CardExportFields fields={exportFields} setFields={setExportFields} />
-						</Col>
-					</Row>
-
-					<div className='form-footer'>
-						<Button
-							type='primary'
-							icon={<FileExcelOutlined />}
-							onClick={onFinish}
-							disabled={!finalFields.length}
-							loading={formSubmiting}
-						>
-							{intl.formatMessage({ id: 'global.table.export.index.button.taixuong' })}
-						</Button>
-						<Button onClick={onCancelModal}>
-							{intl.formatMessage({ id: 'global.table.export.index.button.huy' })}
-						</Button>
+			<div>
+				{loading ? (
+					<div className='export-modal-loading'>
+						<Spin />
 					</div>
-				</>
-			) : (
-				<Empty description={intl.formatMessage({ id: 'global.table.export.index.empty' })} />
-			)}
-		</Modal>
+				) : !!exportFields.length ? (
+					<>
+						<div className='export-modal-fields-label'>
+							{intl.formatMessage({ id: 'global.table.export.index.choncactruong' })}:
+						</div>
+
+						<div className='export-modal-fields-grid'>
+							<CardChooseFields allFields={allFields} fields={exportFields} setFields={setExportFields} />
+							<CardExportFields fields={exportFields} setFields={setExportFields} />
+						</div>
+
+						<div className='form-footer'>
+							<Button
+								variant='default'
+								icon={<IconDownload />}
+								onClick={onFinish}
+								disabled={!finalFields.length}
+								loading={formSubmiting}
+							>
+								{intl.formatMessage({ id: 'global.table.export.index.button.taixuong' })}
+							</Button>
+							<Button variant='outline' onClick={onCancelModal}>
+								{intl.formatMessage({ id: 'global.table.export.index.button.huy' })}
+							</Button>
+						</div>
+					</>
+				) : (
+					<EmptyState description={intl.formatMessage({ id: 'global.table.export.index.empty' })} />
+				)}
+			</div>
+		</ModalExpandable>
 	);
 };
 

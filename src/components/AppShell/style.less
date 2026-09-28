@@ -1,0 +1,376 @@
+// overflow-x: auto trước đây đặt ở đây bị bỏ vì 2 lý do: (1) @vinuni/ui Table đã tự bọc
+// "overflow-x-auto" cho riêng nó rồi, không cần lặp lại ở cấp trang; (2) theo spec CSS, đặt
+// overflow-x khác visible sẽ tự ép overflow-y (đang mặc định visible) thành auto, biến div này
+// thành 1 "scroll container" không có chiều cao cố định — phá position: sticky của page header
+// (PageCard stickyHeader) vì trình duyệt không còn coi document là gốc cuộn thật sự nữa.
+.app-shell-content {
+	width: 100%;
+	min-width: 0;
+	padding: 12px;
+	box-sizing: border-box;
+}
+
+// =============================================================================
+// Sidebar Dock Styling (Chuẩn màu trắng sáng trên nền xanh gradient)
+// =============================================================================
+[data-slot="sidebar-dock"] {
+	color: rgba(255, 255, 255, 0.6) !important;
+
+	svg {
+		fill: currentColor !important;
+	}
+
+	// 1. Các nút bấm điều hướng (Toggle sidebar, Thông báo, Danh sách chức năng)
+	[data-slot="sidebar-dock-item"],
+	[data-dock-toggle] {
+		color: rgba(255, 255, 255, 0.6) !important;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		background: transparent;
+		border: none;
+
+		svg {
+			color: rgba(255, 255, 255, 0.6) !important;
+			fill: currentColor !important;
+			width: 22px !important;
+			height: 22px !important;
+			transition: transform 0.2s ease, color 0.2s ease;
+		}
+
+		&:hover {
+			color: #ffffff !important;
+			background-color: rgba(255, 255, 255, 0.1) !important;
+
+			svg {
+				color: #ffffff !important;
+				transform: scale(1.08);
+			}
+		}
+
+		&[data-active="true"] {
+			color: #ffffff !important;
+			background-color: rgba(255, 255, 255, 0.2) !important;
+
+			svg {
+				color: #ffffff !important;
+			}
+		}
+	}
+
+	// Huy hiệu đếm thông báo trên icon chuông
+	[data-slot="sidebar-dock-badge"] {
+		position: absolute;
+		top: 4px;
+		right: 2px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 18px;
+		height: 18px;
+		padding: 0 4px;
+		font-size: 11px;
+		font-weight: 700;
+		line-height: 1;
+		color: #ffffff !important;
+		background-color: #e20404 !important;
+		border-radius: 9999px;
+		border: 1.5px solid #004b90;
+		pointer-events: none;
+	}
+
+	// 2. Logo thương hiệu chữ dọc "VINUNIVERSITY" (chuyển sang màu trắng sáng 60%)
+	[data-slot="sidebar-dock-wordmark"] {
+		color: rgba(255, 255, 255, 0.6) !important;
+
+		img,
+		svg {
+			opacity: 0.6 !important;
+			filter: brightness(0) invert(1) !important;
+		}
+	}
+
+	// 3. Footer chứa 2 bộ chuyển Theme (Sáng / Tối) & Ngôn ngữ (VI / EN)
+	[data-slot="sidebar-dock-footer"] {
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: center !important;
+		gap: 12px !important;
+	}
+
+	// Bộ chuyển dạng viên thuốc (Pill Capsule) - màu trắng sáng trên nền kính mờ
+	[data-slot="sidebar-dock-switcher"] {
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: center !important;
+		width: 36px !important;
+		padding: 4px !important;
+		gap: 3px !important;
+		border-radius: 9999px !important;
+		background-color: rgba(0, 0, 0, 0.28) !important;
+		border: 1px solid rgba(255, 255, 255, 0.15) !important;
+		box-sizing: border-box !important;
+
+		[data-slot="sidebar-dock-switcher-item"] {
+			display: flex !important;
+			align-items: center !important;
+			justify-content: center !important;
+			width: 28px !important;
+			height: 28px !important;
+			min-width: 28px !important;
+			min-height: 28px !important;
+			border-radius: 9999px !important;
+			color: rgba(255, 255, 255, 0.6) !important;
+			font-family: inherit;
+			font-size: 11px !important;
+			font-weight: 700 !important;
+			line-height: 1 !important;
+			letter-spacing: 0.3px;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			border: none !important;
+			outline: none !important;
+			background: transparent !important;
+			padding: 0 !important;
+			margin: 0 !important;
+			box-sizing: border-box !important;
+
+			svg {
+				color: rgba(255, 255, 255, 0.6) !important;
+				fill: currentColor !important;
+				width: 16px !important;
+				height: 16px !important;
+				transition: transform 0.2s ease, color 0.2s ease;
+			}
+
+			&:hover {
+				color: #ffffff !important;
+				background-color: rgba(255, 255, 255, 0.12) !important;
+
+				svg {
+					color: #ffffff !important;
+					transform: scale(1.08);
+				}
+			}
+
+			&[data-state="on"] {
+				color: #ffffff !important;
+				background-color: rgba(255, 255, 255, 0.28) !important;
+				font-weight: 700 !important;
+				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+
+				svg {
+					color: #ffffff !important;
+				}
+			}
+
+			&:focus-visible {
+				outline: 2px solid rgba(255, 255, 255, 0.6) !important;
+			}
+		}
+	}
+}
+
+.app-shell-dock-nav {
+	margin-top: 16px;
+}
+
+// =============================================================================
+// Sidebar Header & Title (Playfair Display)
+// =============================================================================
+.app-shell-sidebar-header:has(.app-shell-sidebar-title) {
+	padding: 20px 20px 16px 20px !important;
+}
+
+.app-shell-sidebar-title,
+[data-slot="sidebar-title"] {
+	font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
+	color: var(--color-primary, #134d8b) !important;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+[data-vinuni-theme="dark"] {
+
+	.app-shell-sidebar-title,
+	[data-slot="sidebar-title"] {
+		color: var(--color-text, #111827) !important;
+	}
+}
+
+// =============================================================================
+// Sidebar Groups & Spacing (Triệt tiêu khoảng cách thừa khổng lồ 56px)
+// =============================================================================
+[data-slot="sidebar-content"] {
+	gap: 0 !important;
+}
+
+[data-slot="sidebar-group"],
+[data-slot="sidebar-collapsible-group"],
+.app-shell-default-group,
+.app-shell-collapsible-group {
+	padding: 0 8px !important;
+	padding-block: 0 !important;
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+	margin: 0 !important;
+}
+
+.app-shell-collapsible-group {
+	margin-bottom: 0 !important;
+}
+
+[data-slot="sidebar-group-trigger"],
+.app-shell-group-trigger {
+	text-transform: uppercase !important;
+	font-size: 11px !important;
+	font-weight: 600 !important;
+	letter-spacing: 0.05em !important;
+	color: var(--color-text-tertiary, #6b7280) !important;
+	padding: 4px 16px 2px 16px !important;
+	padding-block: 4px 2px !important;
+	padding-top: 4px !important;
+	padding-bottom: 2px !important;
+	height: auto !important;
+	min-height: 0 !important;
+
+	&:hover {
+		color: var(--color-text-secondary, #374151) !important;
+	}
+
+	svg {
+		width: 16px !important;
+		height: 16px !important;
+		color: var(--color-text-tertiary, #6b7280) !important;
+	}
+}
+
+// =============================================================================
+// Menu Items (Đồng bộ 44px, bo góc 999px, chữ 16px, triệt tiêu 2 viền)
+// =============================================================================
+[data-slot="sidebar-menu-button"],
+[data-slot="sidebar-menu-sub-button"],
+.app-shell-sub-group-btn {
+	height: 44px !important;
+	padding: 0 16px !important;
+	border-radius: 999px !important;
+	font-size: 16px !important;
+	font-weight: 400 !important;
+	color: var(--color-text-secondary, #374151) !important;
+	gap: 12px !important;
+	transition: all 0.15s ease !important;
+
+	// Triệt tiêu hoàn toàn pseudo-element để tránh 2 viền lồng nhau
+	&::before,
+	&::after {
+		display: none !important;
+	}
+
+	svg:not(.app-shell-chevron) {
+		width: 20px !important;
+		height: 20px !important;
+		min-width: 20px !important;
+		flex-shrink: 0 !important;
+		color: var(--color-text-tertiary, #4b5563) !important;
+	}
+
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.04) !important;
+		color: var(--color-text, #111827) !important;
+
+		svg {
+			color: var(--color-text, #111827) !important;
+		}
+	}
+
+	&[data-active="true"] {
+		font-weight: 600 !important;
+		color: var(--color-primary, #134d8b) !important;
+		background-color: rgba(19, 77, 139, 0.08) !important;
+
+		svg {
+			color: var(--color-primary, #134d8b) !important;
+		}
+	}
+}
+
+// Reset khoảng cách cho menu con
+[data-slot="sidebar-menu-sub"] {
+	margin: 0 !important;
+	padding: 2px 0 !important;
+}
+
+// Placeholder giữ chỗ icon 20px (giúp text luôn thẳng hàng tuyệt đối)
+.app-shell-menu-icon-placeholder {
+	width: 20px !important;
+	height: 20px !important;
+	min-width: 20px !important;
+	flex-shrink: 0 !important;
+	display: inline-block !important;
+}
+
+// Chevron xoay khi mở accordion
+.app-shell-chevron,
+svg.app-shell-chevron {
+	margin-left: auto !important;
+	width: 16px !important;
+	height: 16px !important;
+	flex-shrink: 0;
+	transform: rotate(-90deg);
+	transition: transform 0.2s ease;
+
+	&.open {
+		transform: rotate(0deg) !important;
+	}
+}
+
+// =============================================================================
+// Menu Badge (Thông báo đỏ tròn / pill)
+// =============================================================================
+[data-slot="sidebar-menu-badge"],
+.app-shell-badge {
+	position: absolute !important;
+	right: 14px !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	height: 20px !important;
+	min-width: 20px !important;
+	padding: 0 6px !important;
+	border-radius: 999px !important;
+	background-color: var(--color-error, #d9383a) !important;
+	color: #ffffff !important;
+	font-size: 11px !important;
+	font-weight: 700 !important;
+	pointer-events: none !important;
+}
+
+.app-shell-menu-btn .app-shell-badge,
+.app-shell-sub-group-btn .app-shell-badge {
+	right: 36px !important;
+}
+
+// Dark Theme Overrides
+// Chỉ còn background của hover/active — màu chữ/icon đã chuyển sang token
+// var(--color-text...) ở rule gốc bên trên, tự đổi theo theme qua ConfigProvider
+// (algorithm: darkAlgorithm) nên không cần lặp lại ở đây nữa. Active state giữ
+// nguyên #ffffff riêng cho dark mode vì var(--color-primary) không tự đổi độ
+// tương phản theo theme (primary color giữ nguyên hex bất kể light/dark).
+[data-vinuni-theme="dark"] {
+
+	[data-slot="sidebar-menu-button"],
+	[data-slot="sidebar-menu-sub-button"],
+	.app-shell-sub-group-btn {
+		&:hover {
+			background-color: rgba(255, 255, 255, 0.08) !important;
+		}
+
+		&[data-active="true"] {
+			color: #ffffff !important;
+			background-color: rgba(59, 129, 218, 0.28) !important;
+
+			svg {
+				color: #ffffff !important;
+			}
+		}
+	}
+}

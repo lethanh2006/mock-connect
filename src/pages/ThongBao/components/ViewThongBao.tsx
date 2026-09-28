@@ -1,3 +1,6 @@
+import { Avatar, AvatarImage, Button, IconCalendar, IconHuman } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import { Card } from '@/components/PageCard';
 import { EModuleKey } from '@/services/base/constant';
 import { type ESourceTypeNotification, mapModuleKey } from '@/services/ThongBao/constant';
 import { type ThongBao } from '@/services/ThongBao/typing';
@@ -5,8 +8,6 @@ import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { currentRole } from '@/utils/ip';
 import { getSafeHref } from '@/utils/security';
 import { getNameFile } from '@/utils/utils';
-import { CalendarOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Col, Divider, Row } from 'antd';
 import DOMPurify from 'dompurify';
 import { history, useIntl } from 'umi';
 import './style.less';
@@ -53,17 +54,26 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 	};
 
 	const content = (
-		<>
-			<Card.Meta
-				avatar={record?.imageUrl ? <Avatar src={record?.imageUrl} size='large' /> : false}
-				description={
-					<>
-						<div style={{ marginBottom: 8 }}>{record?.description}</div>
-						<UserOutlined /> {record?.senderName ?? ''} <Divider type='vertical' />
-						<CalendarOutlined /> {formatDateTime(record?.createdAt)}
-					</>
-				}
-			/>
+		<div>
+			<div className='notif-meta'>
+				{record?.imageUrl ? (
+					<Avatar size='40'>
+						<AvatarImage src={record?.imageUrl} />
+					</Avatar>
+				) : null}
+				<div className='notif-meta-body'>
+					{record?.description ? <div style={{ marginBottom: 8 }}>{record.description}</div> : null}
+					<div className='notif-meta-row'>
+						<span className='notif-meta-item'>
+							<IconHuman size={15} /> {record?.senderName || 'Hệ thống'}
+						</span>
+						<span className='notif-meta-divider' />
+						<span className='notif-meta-item'>
+							<IconCalendar size={15} /> {formatDateTime(record?.createdAt)}
+						</span>
+					</div>
+				</div>
+			</div>
 
 			<br />
 			<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(record?.content ?? '') }} className='notif-content' />
@@ -94,13 +104,13 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 
 				{record?.metadata?.pathWeb && record?.metadata?.phanHe ? (
 					<Col span={24}>
-						<Button type='primary' onClick={() => redirectNotif()}>
+						<Button variant='default' style={{ textTransform: 'none' }} onClick={() => redirectNotif()}>
 							{intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao.xemchitiet' })}
 						</Button>
 					</Col>
 				) : null}
 			</Row>
-		</>
+		</div>
 	);
 
 	if (hideCard) return content;

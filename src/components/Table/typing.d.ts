@@ -360,7 +360,7 @@ export type TableStaticProps = Pick<
 	| 'otherTextButtons'
 	| 'otherExtra'
 	| 'scroll'
-	| 'header'
+	| 'rowSelection'
 > & {
 	data: any[];
 	loading?: boolean;
@@ -370,6 +370,8 @@ export type TableStaticProps = Pick<
 	setShowEdit?: (vi: boolean) => void;
 
 	hasCreate?: boolean;
+	/** Vô hiệu hóa nút Thêm mới nhưng vẫn hiển thị nút */
+	createDisabled?: boolean;
 	hasTotal?: boolean;
 	totalComponent?: React.ReactNode;
 	/** Có nút cấu hình cột ko? Mặc định: Có */
@@ -377,6 +379,12 @@ export type TableStaticProps = Pick<
 	size?: 'small' | 'middle';
 	totalComponent?: any;
 	globalSearch?: boolean;
+	border?: boolean;
+	bordered?: boolean;
+	cardProps?: any;
+	cardExtra?: React.ReactNode;
+	selectedIds?: (string | number)[];
+	onSelectChange?: (selectedIds: (string | number)[]) => void;
 };
 
 // IMPORT HEADER

@@ -1,0 +1,92 @@
+.column-filter-trigger-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	padding: 2px;
+}
+
+.column-filter-popover-content {
+	width: 250px;
+	padding: 8px;
+	overflow-x: hidden;
+
+	&.custom-select {
+		width: 300px;
+	}
+}
+
+.column-filter-search-input {
+	margin-bottom: 6px;
+}
+
+.column-filter-options-list {
+	max-height: 200px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.column-filter-empty {
+	text-align: center;
+	padding: 16px 8px;
+	color: var(--color-text-secondary); // Antd cssVar: adapts to dark mode
+	font-size: 13px;
+}
+
+.column-filter-option-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 6px 8px;
+	border-radius: 6px;
+	cursor: pointer;
+	user-select: none;
+	font-size: 14px;
+	background-color: transparent;
+	transition: background-color 0.15s ease;
+
+	&:hover {
+		background-color: var(--color-fill-quaternary); // Antd cssVar: adapts to dark mode
+	}
+
+	&.is-checked {
+		background-color: var(--color-fill-tertiary); // Antd cssVar: adapts to dark mode
+
+		&:hover {
+			background-color: var(--color-fill-secondary); // Antd cssVar: adapts to dark mode
+		}
+	}
+}
+
+.column-filter-option-label {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin-right: 8px;
+	min-width: 0;
+	flex: 1;
+}
+
+.column-filter-option-checkbox {
+	flex-shrink: 0;
+}
+
+.column-filter-footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+	margin-top: 8px;
+	padding-top: 8px;
+	border-top: 1px solid var(--color-border-secondary); // Antd cssVar: adapts to dark mode
+	flex-wrap: nowrap;
+
+	.column-filter-footer-btn {
+		flex-shrink: 0;
+	}
+}

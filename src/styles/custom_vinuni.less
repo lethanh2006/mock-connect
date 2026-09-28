@@ -1,17 +1,17 @@
 @font-face {
-	font-family: 'Montserrat';
-	src: url('@{base-path}font/Montserrat.ttf') format('truetype');
+	font-family: 'Inter';
+	src: url('@{base-path}font/Inter.ttf') format('truetype');
 	font-weight: 100 900;
 	font-style: normal;
 	font-display: swap;
 }
 
 @font-face {
-  font-family: 'Lora';
-  src: url('@{base-path}font/Lora.ttf') format('truetype');
-  font-weight: 400 700;
-  font-style: normal;
-  font-display: swap;
+	font-family: 'Lora';
+	src: url('@{base-path}font/Lora.ttf') format('truetype');
+	font-weight: 400 700;
+	font-style: normal;
+	font-display: swap;
 }
 
 // =============================================================================
@@ -28,6 +28,9 @@
 	--vin-color-primary-200: var(--color-official-200);
 	--vin-color-primary-300: var(--color-official-300);
 	--vin-color-primary-bg: var(--color-official-500);
+
+	--color-primary: var(--vin-color-primary);
+	--color-primary-bg: var(--vin-color-primary-bg);
 
 	--color-accent-100: #0087c3;
 	--color-accent-200: #4890bd;
@@ -74,17 +77,252 @@
 	--color-bg-layout: var(--color-accent-700);
 	--color-icon-hover: var(--vin-color-primary-300);
 	--color-bg-text-hover: var(--vin-color-primary-bg);
+
+	// Bo góc chuẩn VinUni
+	--vin-border-radius: 16px;
+	--vin-border-radius-sm: 8px;
+	--vin-border-radius-lg: 24px;
+	--vin-border-radius-pill: 9999px;
+
+	// Spacing & Padding tham số hóa
+	--spacing-xs: 4px;
+	--spacing-sm: 8px;
+	--spacing-md: 12px;
+	--spacing-lg: 16px;
+	--spacing-xl: 20px;
+	--spacing-xxl: 24px;
+
+	--page-card-padding: 18px;
+	--page-card-padding-xs: 12px;
+	--modal-padding: 24px;
+	--modal-padding-xs: 16px;
+
+	// Font chuẩn toàn hệ thống VinUni (Inter)
+	--font-family-base:
+		'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+	--vinuni-font-sans:
+		'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+	--default-font-family:
+		'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 // =============================================================================
 // 2. Base & Form
 // =============================================================================
-* {
-	font-family: 'Montserrat', sans-serif !important;
+html,
+body,
+#root,
+[data-vinuni-ui],
+.ant-app {
+	font-family: var(--font-family-base) !important;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea,
+a,
+p,
+span,
+label,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-sans,
+[data-slot='sidebar-menu-button'],
+[data-slot='sidebar-menu-sub-button'] {
+	font-family: var(--font-family-base);
 }
 
 body {
 	font-weight: 500;
+}
+
+html[data-vinuni-theme='dark'],
+html[data-vinuni-theme='dark'] body {
+	background-color: #000000;
+}
+
+// --color-accent-700 (#f4f4f4) là token tĩnh dùng làm viền/divider mờ khắp nơi (viền card bảng
+// [data-slot='table-pin-root'], viền .ant-table, ô "Tổng số"...) — không tự đổi theo dark mode nên
+// các viền đó nổi sáng lạc quẻ trên nền tối. Định nghĩa lại NGAY TẠI GỐC (thay vì override từng
+// nơi dùng nó) để mọi chỗ đang tham chiếu var(--color-accent-700) tự động ra đúng màu tối.
+html[data-vinuni-theme='dark'] {
+	--color-accent-700: rgba(255, 255, 255, 0.12);
+
+	// --color-*-bg (success/info/warning/error/highlight/teal) là các token nền pastel tĩnh (dùng cho
+	// item chưa đọc trong NoticeList, badge trạng thái, ô info trong Filter/StatisticsCard...) —
+	// không tự đổi theo dark mode nên nổi sáng như 1 khối trắng lạc quẻ trên nền tối. Định nghĩa lại
+	// bằng đúng màu trạng thái ở opacity thấp để vẫn giữ được sắc thái (đỏ/xanh/vàng...) nhưng đọc
+	// được trên nền tối, khớp cùng cách antd tự tính màu -bg theo theme (darkAlgorithm).
+	--color-success-bg: rgba(68, 177, 15, 0.16);
+	--color-info-bg: rgba(0, 81, 255, 0.16);
+	--color-warning-bg: rgba(250, 174, 19, 0.16);
+	--color-error-bg: rgba(226, 4, 4, 0.16);
+	--color-highlight-bg: rgba(166, 26, 222, 0.16);
+	--color-teal-bg: rgba(24, 187, 194, 0.16);
+
+	// --color-official-500 (#f4f9ff, gốc của --vin-color-primary-bg/--color-primary-bg) là màu tĩnh
+	// tương tự — dùng ở >10 nơi làm nền hover/highlight nhạt (item NoticeList, hover row Table,
+	// StatisticsCard, TinyEditor, AuditLog dòng đang chọn, viền split-panel...), không tự đổi theo
+	// dark mode nên hover/highlight loá trắng trên nền tối, chữ theo màu tối cũ đọc không được nữa.
+	// Cùng tông với .highlight (PageCard Level 2) đã tự vá riêng bên dưới.
+	--color-official-500: rgba(59, 129, 218, 0.16);
+}
+
+button:not(:disabled),
+[data-slot='button']:not(:disabled),
+[data-slot='tooltip-trigger']:not(:disabled) {
+	cursor: pointer;
+}
+
+[data-vinuni-ui] {
+	--vinuni-font-sans: 'Inter', sans-serif;
+	--vinuni-font-heading: 'Inter', sans-serif;
+	min-height: 100vh;
+}
+
+// Antd <App> tiêm reset màu `a` toàn cục qua cssinjs, không nằm trong @layer nào nên luôn
+// thắng CSS có layer của @vinuni/ui bất kể specificity — ép link bên trong sidebar/menu của
+// @vinuni/ui về lại đúng màu chữ nó tự định nghĩa (kế thừa từ phần tử cha) thay vì màu link antd.
+[data-vinuni-ui] a {
+	color: inherit !important;
+}
+
+[data-slot='search-input'] input {
+	outline: none !important;
+	box-shadow: none !important;
+
+	&:focus,
+	&:focus-visible {
+		outline: none !important;
+		box-shadow: none !important;
+	}
+}
+
+// Nút bấm primary của @vinuni/ui (variant="default") và token text-ds-always-light-primary
+// Đảm bảo chữ và icon luôn hiển thị màu trắng (#ffffff), không bị reset antd ghi đè.
+.text-ds-always-light-primary,
+[data-slot='button'][data-variant='default'] {
+	color: #ffffff !important;
+
+	&:hover,
+	&:focus,
+	&:active {
+		color: #ffffff !important;
+	}
+
+	svg {
+		color: #ffffff !important;
+		fill: currentColor !important;
+	}
+
+	span {
+		color: inherit !important;
+	}
+}
+
+// Nút bấm trong Modal Bộ lọc (#custom-filter-form)
+// Do Modal portal ra ngoài body, bọc qua TooltipTrigger nên định dạng riêng cho nút trong form lọc.
+#custom-filter-form {
+	.ant-card {
+		border-radius: 8px;
+	}
+
+	.ant-card-extra button,
+	.filter-item-actions button,
+	.ant-col-2 > .ant-space-vertical button,
+	.ant-col-md-1 > .ant-space-vertical button {
+		border: none !important;
+		outline: none !important;
+		cursor: pointer;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+		background: transparent !important;
+		box-shadow: none !important;
+		width: 28px !important;
+		height: 28px !important;
+		min-width: 28px !important;
+		padding: 0 !important;
+		border-radius: 6px !important;
+		vertical-align: middle;
+		color: #595959 !important;
+
+		svg {
+			width: 15px !important;
+			height: 15px !important;
+			display: block;
+			fill: currentColor;
+		}
+
+		&:hover {
+			background: rgba(0, 0, 0, 0.06) !important;
+			color: #1f2937 !important;
+		}
+
+		&:active {
+			transform: scale(0.92);
+			background: rgba(0, 0, 0, 0.1) !important;
+		}
+
+		&[data-variant='destructive'],
+		&.ant-btn-dangerous {
+			color: #8c8c8c !important;
+
+			&:hover {
+				background: #fff1f0 !important;
+				color: #ff4d4f !important;
+			}
+
+			&:active {
+				background: #ffccc7 !important;
+			}
+		}
+	}
+}
+
+// Bản dark mode của #custom-filter-form ở trên — không có override thì nút icon chìm vào nền tối.
+[data-vinuni-theme='dark'] #custom-filter-form {
+	.ant-card-extra button,
+	.filter-item-actions button,
+	.ant-col-2 > .ant-space-vertical button,
+	.ant-col-md-1 > .ant-space-vertical button {
+		color: rgba(255, 255, 255, 0.65) !important;
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.08) !important;
+			color: #ffffff !important;
+		}
+
+		&:active {
+			background: rgba(255, 255, 255, 0.14) !important;
+		}
+
+		&[data-variant='destructive'],
+		&.ant-btn-dangerous {
+			color: rgba(255, 255, 255, 0.45) !important;
+
+			&:hover {
+				background: rgba(255, 77, 79, 0.16) !important;
+				color: #ff7875 !important;
+			}
+
+			&:active {
+				background: rgba(255, 77, 79, 0.28) !important;
+			}
+		}
+	}
+}
+
+// Bỏ hover riêng nút trang hiện tại trong phân trang
+[data-slot='pagination-link'][data-active='true'] {
+	pointer-events: none;
 }
 
 .ant-form-item-label > label {
@@ -95,6 +333,23 @@ body {
 	color: var(--form-label-required-mark-color) !important;
 	visibility: visible !important;
 	content: '*' !important;
+}
+
+.ant-upload-drag-icon {
+	display: flex !important;
+	width: 100% !important;
+	justify-content: center !important;
+	align-items: center !important;
+	text-align: center !important;
+	margin: 0 auto 16px auto !important;
+
+	svg,
+	.vui-icon,
+	.anticon {
+		display: inline-block !important;
+		color: var(--vin-color-primary, #c72127) !important;
+		margin: 0 auto !important;
+	}
 }
 
 // =============================================================================
@@ -111,14 +366,6 @@ body {
 .ant-pro-layout,
 .ant-layout {
 	overflow-x: hidden !important;
-}
-
-.ant-pro-layout-container {
-	margin-top: 80px !important;
-
-	@media (max-width: 767px) {
-		margin-top: 16px !important;
-	}
 }
 
 .ant-pro-layout {
@@ -139,6 +386,13 @@ body {
 	background-color: var(--color-accent-800) !important;
 	border-right: 1px solid var(--color-accent-700);
 	overflow: visible !important;
+
+	// --color-accent-800 (#f8f8f8) tĩnh, dark mode giữ nguyên gần trắng dù cả trang đã sang nền đen
+	// (html[data-vinuni-theme='dark'] body, ~line 138). Không đổi token gốc vì nó còn dùng đúng cho
+	// chữ trên ảnh banner cố định .ant-page-header (~line 1105-1140) — chỉ ghi đè riêng ở đây.
+	[data-vinuni-theme='dark'] & {
+		background-color: #0a0a0a;
+	}
 
 	.ant-layout-sider-children {
 		overflow: visible !important;
@@ -222,6 +476,10 @@ body {
 	}
 }
 
+.ant-table-selection-column {
+	text-align-last: center !important;
+}
+
 .ant-table-cell {
 	text-align: left !important;
 
@@ -272,8 +530,13 @@ body {
 	> .ant-btn {
 		padding: 4px !important;
 		margin-right: 6px !important;
-		margin-bottom: 6px !important;
-		background-color: var(--color-info-bg) !important;
+		background-color: transparent !important;
+		box-shadow: none !important;
+		border: none !important;
+
+		&:hover {
+			background-color: var(--color-accent-700) !important;
+		}
 	}
 
 	.ant-btn-icon,
@@ -284,82 +547,336 @@ body {
 	}
 }
 
+// =============================================================================
+// Card & TableCard - Chuẩn hóa typography, header & indicator VinUni
+// =============================================================================
+[data-slot='card'],
+[data-slot='table-card'],
+.page-card {
+	font-family: var(--font-family-base);
+}
+
+[data-slot='card-title'] {
+	// PageCard giờ render title bằng h1/h2/h3 thật (accessibility) thay vì div — heading có margin
+	// mặc định của trình duyệt, reset về 0 để không lệch phép đo pixel-perfect của stickyHeader.
+	// Các rule margin-top cụ thể hơn bên dưới (card-big-title...) vẫn override đè lên giá trị này.
+	margin: 0;
+	white-space: pre-wrap;
+	font-family: var(--font-family-base);
+	font-size: 18px;
+	font-weight: 600;
+	color: var(--color-text-base, var(--color-text-100, #2e2e2e));
+	line-height: 1.4;
+}
+
+[data-slot='card-header'],
+[data-slot='page-card-header'],
+.page-card-header {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: space-between !important;
+	flex-wrap: wrap !important;
+	gap: 12px !important;
+	width: 100% !important;
+
+	[data-slot='card-title'],
+	.page-card-title {
+		flex: 1 1 auto;
+		min-width: 0;
+		font-family: var(--font-family-base);
+		font-size: 18px;
+		font-weight: 600;
+		color: var(--color-text-base, var(--color-text-100, #2e2e2e));
+		line-height: 1.4;
+	}
+
+	[data-slot='card-action'],
+	.page-card-action {
+		flex: 0 0 auto;
+		margin-left: auto;
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+	}
+}
+
+.page-card {
+	width: 100%;
+
+	.page-card-header {
+		display: flex !important;
+		align-items: center !important;
+		justify-content: space-between !important;
+		flex-wrap: wrap !important;
+		gap: 12px !important;
+		width: 100% !important;
+		min-height: 32px !important;
+		margin-top: 8px !important;
+		margin-bottom: 16px !important;
+	}
+
+	// Level 2/3 hẹp khoảng cách với card nội dung bên dưới hơn Level 1 (16px -> 8px).
+	&.normal .page-card-header,
+	&.highlight .page-card-header {
+		margin-bottom: 8px !important;
+	}
+
+	.page-card-inner {
+		border-radius: var(--vin-border-radius);
+		background-color: var(--color-bg-container, var(--ds-bg-mortared, #ffffff));
+		padding: 0 !important;
+
+		[data-slot='card-content'],
+		> .card-content {
+			padding: var(--page-card-padding, 18px) !important;
+		}
+
+		@media (max-width: @screen-xs) {
+			[data-slot='card-content'],
+			> .card-content {
+				padding: var(--page-card-padding-xs, 12px) !important;
+			}
+		}
+	}
+}
+
+// Table Toolbar: Extra (Bộ lọc/Tìm kiếm/Tổng số) bên trái, Action (Tác vụ) bên phải (Dùng CSS order)
+[data-slot='table-card-toolbar'],
+.table-base .header {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: space-between !important;
+	flex-direction: row !important;
+	flex-wrap: wrap !important;
+	gap: 12px !important;
+	width: 100% !important;
+
+	.extra {
+		order: 1 !important; // Hiển thị BÊN TRÁI
+		display: flex !important;
+		align-items: center !important;
+		flex-direction: row !important;
+		flex-wrap: wrap !important;
+		gap: 8px !important;
+
+		.total {
+			display: inline-flex !important;
+			align-items: center !important;
+			margin-left: var(--spacing-md, 12px) !important; // Tách bạch rõ ràng khỏi ô tìm kiếm
+			white-space: nowrap !important;
+			border: none !important;
+			padding: 0 !important;
+
+			span {
+				margin-left: var(--spacing-xs, 4px) !important;
+				color: var(--color-highlight) !important;
+				font-weight: 700 !important;
+			}
+		}
+	}
+
+	.action {
+		order: 2 !important; // Hiển thị BÊN PHẢI
+		display: flex !important;
+		align-items: center !important;
+		flex-direction: row-reverse !important; // Tải lại ở trái nhóm, Thêm mới ở ngoài cùng bên phải
+		flex-wrap: wrap !important;
+		gap: 8px !important;
+		justify-content: flex-end !important;
+		margin-left: auto !important;
+	}
+}
+
+// Indicator bar khi Card/TableCard/PageCard có class has-indicator
+[data-slot='card'].has-indicator,
+[data-slot='table-card'].has-indicator,
+.table-base-card.has-indicator,
+.page-card.has-indicator,
+.ant-card.has-indicator {
+	.page-card-title,
+	[data-slot='card-title'],
+	> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
+		position: relative;
+		padding-left: 18px !important;
+
+		&::after {
+			// Chỉ định rõ màu đỏ VinUni — mặc định của mixin (var(--color-primary)) bị antd
+			// ConfigProvider tiêm đè thành xanh.
+			.indicator(@color: ~'var(--color-official-100)');
+			left: 0 !important;
+			top: 50% !important;
+			// Tam giác cao 2×h quanh top — margin-top: -h (luôn khớp h đang dùng) để tâm hình
+			// trùng tâm tiêu đề.
+			margin-top: -10px !important;
+		}
+	}
+}
+
+// Level 1: tiêu đề giữ nguyên vị trí, chấm chỉ báo kéo hẳn ra ngoài bằng left âm, sát nav.
+[data-slot='card'].card-big-title.has-indicator,
+[data-slot='table-card'].card-big-title.has-indicator,
+.table-base-card.card-big-title.has-indicator,
+.page-card.card-big-title.has-indicator,
+.ant-card.card-big-title.has-indicator {
+	.page-card-title,
+	[data-slot='card-title'] {
+		padding-left: 0 !important;
+
+		&::after {
+			.indicator(@color: ~'var(--color-official-100)'; @w: 10px; @h: 10px);
+			margin-top: -10px !important;
+			left: -12px !important;
+		}
+	}
+}
+
+// Level 3: dùng chung card-big-title nhưng chỉ báo nằm trong đệm của card (như Level 2), không
+// tràn ra ngoài như Level 1. Gộp 3 class để chắc thắng rule .card-big-title.has-indicator ở trên.
+[data-slot='card'].card-big-title.normal.has-indicator,
+[data-slot='table-card'].card-big-title.normal.has-indicator,
+.table-base-card.card-big-title.normal.has-indicator,
+.page-card.card-big-title.normal.has-indicator,
+.ant-card.card-big-title.normal.has-indicator {
+	.page-card-title,
+	[data-slot='card-title'] {
+		padding-left: 18px !important;
+
+		&::after {
+			.indicator(@color: ~'var(--color-official-100)'; @w: 10px; @h: 7px);
+			margin-top: -7px !important;
+			left: 0 !important;
+		}
+	}
+}
+
+[data-slot='card'].highlight.has-indicator,
+[data-slot='table-card'].highlight.has-indicator,
+.table-base-card.highlight.has-indicator,
+.page-card.highlight.has-indicator,
+.ant-card.highlight.has-indicator {
+	.page-card-title,
+	[data-slot='card-title'] {
+		&::after {
+			.indicator(@color: ~'var(--color-official-100)'; @w: 10px; @h: 7px);
+			margin-top: -7px !important;
+		}
+	}
+}
+
+// Card & TableCard & PageCard highlight (Level 2: Section Title 18px)
+[data-slot='card'].highlight,
+[data-slot='table-card'].highlight,
+.table-base-card.highlight,
+.page-card.highlight,
+.ant-card.highlight {
+	.page-card-title,
+	[data-slot='card-title'],
+	> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
+		font-size: 18px !important;
+		font-weight: 600 !important;
+		color: var(--color-official-300, var(--color-text-base)) !important;
+	}
+}
+
+// --color-official-300 (navy #134d8b) là token tĩnh, không tự đổi theo dark mode như
+// --color-text-base (antd cssVar). Dark mode: bỏ màu navy tĩnh, dùng lại --color-text-base để chữ
+// title Level 2/3 sáng lên đúng theme thay vì tối om trên nền tối. Level 4 (standard) không bị vì
+// không có rule riêng ghi đè, đã tự dùng --color-text-base từ rule gốc.
+[data-vinuni-theme='dark'] {
+	[data-slot='card'].highlight .page-card-title,
+	[data-slot='card'].highlight [data-slot='card-title'],
+	[data-slot='table-card'].highlight .page-card-title,
+	[data-slot='table-card'].highlight [data-slot='card-title'],
+	.table-base-card.highlight .page-card-title,
+	.table-base-card.highlight [data-slot='card-title'],
+	.page-card.highlight .page-card-title,
+	.page-card.highlight [data-slot='card-title'],
+	[data-slot='card'].normal .page-card-title,
+	[data-slot='card'].normal [data-slot='card-title'],
+	[data-slot='table-card'].normal .page-card-title,
+	[data-slot='table-card'].normal [data-slot='card-title'],
+	.table-base-card.normal .page-card-title,
+	.table-base-card.normal [data-slot='card-title'],
+	.page-card.normal .page-card-title,
+	.page-card.normal [data-slot='card-title'],
+	// PageCard Level 3 thực ra mang CẢ 2 class card-big-title + normal cùng lúc (xem
+	// PageCard/index.tsx) — rule .card-big-title.normal ở dưới có specificity NGANG với .normal
+	// đơn ở trên và khai báo SAU nên thắng, khiến override .normal đơn phía trên vô tác dụng với
+	// Level 3 thật. Phải liệt kê thêm đúng tổ hợp .card-big-title.normal ở đây mới thắng được.
+	[data-slot='card'].card-big-title.normal [data-slot='card-title'],
+	[data-slot='table-card'].card-big-title.normal [data-slot='card-title'],
+	.table-base-card.card-big-title.normal [data-slot='card-title'],
+	.page-card.card-big-title.normal [data-slot='card-title'],
+	.ant-card.card-big-title.normal [data-slot='card-title'] {
+		color: var(--color-text-base) !important;
+	}
+}
+
+// Card & TableCard & PageCard normal (Level 3: Sub-section Title 18px)
+[data-slot='card'].normal,
+[data-slot='table-card'].normal,
+.table-base-card.normal,
+.page-card.normal,
+.ant-card.normal {
+	.page-card-title,
+	[data-slot='card-title'],
+	> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
+		font-size: 18px !important;
+		font-weight: 600 !important;
+		color: var(--color-official-300, var(--color-text-base)) !important;
+
+		&::after {
+			display: none !important;
+		}
+	}
+}
+
+// Card & TableCard & PageCard card-big-title (Level 1 & 2)
+[data-slot='card'].card-big-title,
+[data-slot='table-card'].card-big-title,
+.table-base-card.card-big-title,
+.page-card.card-big-title,
+.page-card:not(.normal):not(.highlight):not(.standard):not(.page-card-standard) {
+	.page-card-title,
+	[data-slot='card-title'] {
+		font-size: 24px !important;
+		margin-top: 4px !important;
+		font-weight: 600 !important;
+		color: var(--color-text-base, var(--color-text-100, #2e2e2e)) !important;
+		line-height: 1.4;
+	}
+}
+
+// Level 3 nhận cả card-big-title (size/indicator chung Level 1) và normal (màu/cỡ chữ riêng) —
+// gộp 2 class ở đây vì .normal/.card-big-title specificity ngang nhau, không phụ thuộc thứ tự file.
+[data-slot='card'].card-big-title.normal,
+[data-slot='table-card'].card-big-title.normal,
+.table-base-card.card-big-title.normal,
+.page-card.card-big-title.normal,
+.ant-card.card-big-title.normal {
+	.page-card-title,
+	[data-slot='card-title'] {
+		font-size: 18px !important;
+		margin-top: 0 !important;
+		color: var(--color-official-300, var(--color-text-base)) !important;
+	}
+}
+
+// Card & TableCard & PageCard card-borderless
+[data-slot='card'].card-borderless,
+[data-slot='table-card'].card-borderless,
+.table-base-card.card-borderless,
+.page-card.card-borderless {
+	border: none !important;
+	box-shadow: none !important;
+}
+
+// Giữ .ant-card cho tương thích ngược nếu còn component ngoài phân hệ dùng
 .ant-card {
 	> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
 		white-space: pre-wrap;
 		font-size: 18px !important;
 		font-weight: bold !important;
-		color: var(--color-primary) !important;
-	}
-
-	&.has-indicator {
-		> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
-			&::after {
-				.indicator();
-				left: -18px !important;
-				top: 8px !important;
-				transform: translateY(-50%) !important;
-			}
-		}
-	}
-
-	&.card-big-title {
-		> .ant-card-head {
-			> .ant-card-head-wrapper > .ant-card-head-title {
-				font-size: 22px !important;
-				color: var(--color-accent-800) !important;
-				margin-left: 0 !important;
-				padding-left: 0 !important;
-			}
-		}
-
-		&.has-indicator {
-			> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
-				margin-left: 2px !important;
-
-				&::after {
-					.indicator(@color: ~'var(--color-official-100)'; @w: 10px; @h: 10px; @side: right);
-					left: -18px !important;
-					top: 8px !important;
-					transform: translateY(-50%) !important;
-				}
-			}
-		}
-	}
-
-	&.highlight {
-		> .ant-card-head {
-			> .ant-card-head-wrapper > .ant-card-head-title {
-				color: var(--color-official-300) !important;
-				padding-left: 0 !important;
-			}
-		}
-
-		&.has-indicator {
-			.ant-card-head .ant-card-head-title {
-				padding-left: 18px !important;
-
-				&::after {
-					.indicator(@color: ~'var(--color-official-100)'; @w: 10px; @h: 7px; @side: right);
-					left: 0 !important;
-					top: 14px !important;
-					transform: translateY(-50%) !important;
-				}
-			}
-		}
-	}
-
-	&.normal {
-		> .ant-card-head {
-			> .ant-card-head-wrapper > .ant-card-head-title {
-				font-size: 16px !important;
-				color: var(--color-official-300) !important;
-
-				&::after {
-					display: none !important;
-				}
-			}
-		}
 	}
 }
 
@@ -368,7 +885,7 @@ body {
 	flex: auto;
 	font-size: 18px !important;
 	font-weight: bold !important;
-	color: var(--color-primary) !important;
+	color: var(--color-text-base, var(--color-text)) !important;
 }
 
 /* Các class button tùy chỉnh - VinUni */
@@ -377,7 +894,12 @@ body {
 	justify-content: center !important;
 	align-items: center !important;
 	box-shadow: none !important;
-	text-transform: uppercase !important;
+	/* Code cũ: text-transform: uppercase !important; */
+	text-transform: none !important;
+
+	&:not(.ant-btn-circle) {
+		border-radius: var(--vin-border-radius) !important;
+	}
 
 	&:disabled,
 	&.ant-btn-disabled {
@@ -385,8 +907,71 @@ body {
 	}
 }
 
+.ant-btn-group {
+	> .ant-btn:first-child:not(:last-child) {
+		border-top-left-radius: var(--vin-border-radius) !important;
+		border-bottom-left-radius: var(--vin-border-radius) !important;
+		border-top-right-radius: 0 !important;
+		border-bottom-right-radius: 0 !important;
+	}
+
+	> .ant-btn:last-child:not(:first-child) {
+		border-top-right-radius: var(--vin-border-radius) !important;
+		border-bottom-right-radius: var(--vin-border-radius) !important;
+		border-top-left-radius: 0 !important;
+		border-bottom-left-radius: 0 !important;
+	}
+}
+
 .ant-btn-sm {
 	text-transform: none !important;
+}
+
+/* Các ô input & select tùy chỉnh (border-radius: 16px) - VinUni */
+.ant-input:not(.ant-input-affix-wrapper .ant-input),
+.ant-input-affix-wrapper,
+.ant-input-number,
+.ant-picker,
+.ant-select:not(.ant-select-customize-input) .ant-select-selector,
+.ant-select-single .ant-select-selector,
+.ant-select-multiple .ant-select-selector {
+	border-radius: var(--vin-border-radius) !important;
+}
+
+.ant-input-number-handler-wrap {
+	border-top-right-radius: 15px !important;
+	border-bottom-right-radius: 15px !important;
+}
+
+.ant-input-group {
+	> .ant-input:first-child:not(:last-child),
+	> .ant-input-affix-wrapper:first-child:not(:last-child) {
+		border-top-right-radius: 0 !important;
+		border-bottom-right-radius: 0 !important;
+	}
+
+	> .ant-input:last-child:not(:first-child),
+	> .ant-input-affix-wrapper:last-child:not(:first-child) {
+		border-top-left-radius: 0 !important;
+		border-bottom-left-radius: 0 !important;
+	}
+
+	.ant-input-group-addon:first-child {
+		border-top-left-radius: var(--vin-border-radius) !important;
+		border-bottom-left-radius: var(--vin-border-radius) !important;
+	}
+
+	.ant-input-group-addon:last-child {
+		border-top-right-radius: var(--vin-border-radius) !important;
+		border-bottom-right-radius: var(--vin-border-radius) !important;
+	}
+
+	.ant-input-search-button {
+		border-top-left-radius: 0 !important;
+		border-bottom-left-radius: 0 !important;
+		border-top-right-radius: var(--vin-border-radius) !important;
+		border-bottom-right-radius: var(--vin-border-radius) !important;
+	}
 }
 
 // Ghi đè màu primary cho button - VinUni
@@ -404,9 +989,18 @@ body {
 	}
 
 	&:active {
-		background-color: #f5f5f5 !important;
+		background-color: var(--color-fill-tertiary) !important;
 		border-color: var(--color-primary) !important;
 		color: var(--color-primary) !important;
+	}
+
+	// --color-accent-800 (#f8f8f8) tĩnh — hover/focus bật lên 1 khối gần trắng giữa UI đã tối,
+	// lệch hẳn với mọi state khác của button (đều theme-aware qua --color-fill-*).
+	[data-vinuni-theme='dark'] & {
+		&:hover,
+		&:focus {
+			background-color: rgba(255, 255, 255, 0.08) !important;
+		}
 	}
 }
 
@@ -457,7 +1051,7 @@ body {
 
 		.ant-page-header {
 			background-image: none !important;
-			background-color: #fff !important;
+			background-color: var(--color-bg-container) !important;
 			border-bottom: none !important;
 			box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.06) !important;
 
@@ -469,15 +1063,30 @@ body {
 							.menu_right {
 								color: var(--color-text-100) !important;
 
+								// Nền của .page-dashboard-no-header-bg .ant-page-header đã đổi sang
+								// --color-bg-container (theme-aware, tối trong dark mode ở dòng trên), nhưng
+								// chữ vẫn giữ --color-text-100 tĩnh (xám đậm) → xám đậm trên nền tối = khó đọc.
+								[data-vinuni-theme='dark'] & {
+									color: var(--color-text-base) !important;
+								}
+
 								[class*='account'],
 								.account {
 									color: var(--color-text-100) !important;
 									font-weight: 700 !important;
 
+									[data-vinuni-theme='dark'] & {
+										color: var(--color-text-base) !important;
+									}
+
 									[class*='name'],
 									.name {
 										color: var(--color-text-100) !important;
 										font-weight: 700 !important;
+
+										[data-vinuni-theme='dark'] & {
+											color: var(--color-text-base) !important;
+										}
 									}
 								}
 
@@ -618,13 +1227,63 @@ body {
 
 .table-base {
 	.header {
+		/* Code cũ:
 		display: flex;
 		flex-direction: row-reverse;
+		*/
+		display: flex !important;
+		align-items: center !important;
 		justify-content: space-between !important;
+		flex-direction: row !important;
+		flex-wrap: wrap !important;
+		gap: 12px !important;
+
+		.extra {
+			order: 1 !important;
+			display: flex !important;
+			align-items: center !important;
+			flex-direction: row !important;
+			flex-wrap: wrap !important;
+			gap: 8px !important;
+
+			.ant-btn {
+				.ant-btn-icon,
+				.anticon {
+					margin: 0 !important;
+					line-height: 1 !important;
+				}
+
+				.span-extend {
+					display: none !important;
+				}
+			}
+
+			.total {
+				z-index: 1 !important;
+				border: none !important;
+				padding: 0 !important;
+				margin-left: 12px !important;
+				display: inline-flex !important;
+				align-items: center !important;
+				white-space: nowrap !important;
+
+				span {
+					margin-left: 4px !important;
+					color: var(--color-highlight) !important;
+					font-weight: 700 !important;
+				}
+			}
+		}
 
 		.action {
+			order: 2 !important;
 			display: flex !important;
-			flex-direction: row-reverse;
+			align-items: center !important;
+			flex-direction: row-reverse !important;
+			flex-wrap: wrap !important;
+			gap: 8px !important;
+			justify-content: flex-end !important;
+			margin-left: auto !important;
 
 			button.ant-btn:has(> .span-extend) {
 				> span.ant-btn-icon {
@@ -645,6 +1304,7 @@ body {
 			}
 		}
 
+		/* Code cũ:
 		.extra {
 			display: flex !important;
 			align-items: center !important;
@@ -671,6 +1331,7 @@ body {
 				color: var(--color-highlight) !important;
 			}
 		}
+		*/
 	}
 }
 
@@ -694,6 +1355,12 @@ body {
 		margin-left: auto !important;
 		margin-right: 0 !important;
 		width: 300px !important;
+	}
+
+	// --color-official-200 (navy tĩnh) làm border trên nền canvas theme-aware (--color-bg-layout,
+	// tối trong dark mode) → border mờ hẳn, gần như biến mất trên nền tối.
+	[data-vinuni-theme='dark'] & {
+		border-color: var(--color-border-secondary) !important;
 	}
 }
 
@@ -730,6 +1397,24 @@ body {
 
 .ant-card-extra .anticon {
 	color: var(--color-text-100) !important;
+}
+
+// --color-text-100 (#2e2e2e) tĩnh — các icon trên nằm trên bề mặt theme-aware của antd (collapse
+// header, table row, card header đều tự đổi tối qua cssVar), icon xám đậm bị chìm. .ant-modal-close/
+// .ant-drawer-close KHÔNG đưa vào đây vì đã có rule riêng specificity cao hơn dùng
+// --color-text-secondary ở chỗ khác (đã đúng theme sẵn).
+[data-vinuni-theme='dark'] {
+	.ant-menu-submenu-arrow,
+	.ant-collapse-expand-icon,
+	.ant-collapse-arrow,
+	.ant-table-expand-icon,
+	.ant-table-row-expand-icon {
+		color: var(--color-text-secondary) !important;
+	}
+
+	.ant-card-extra .anticon {
+		color: var(--color-text-secondary) !important;
+	}
 }
 
 .ant-card-extra .ant-btn-primary .anticon {
@@ -775,22 +1460,97 @@ body {
 // =============================================================================
 // 8. Modal, Drawer, Form footer, Popover
 // =============================================================================
-.ant-modal-title {
+.ant-modal-title,
+[data-slot='dialog-title'],
+.modal-expandable-title,
+.modal-expandable .ant-card .ant-card-head .ant-card-head-title,
+.modal-expandable [data-slot='card'] [data-slot='card-title'] {
 	white-space: pre-wrap;
 	flex: auto;
 	font-size: 18px !important;
 	font-weight: bold !important;
-	color: var(--color-primary) !important;
+	color: var(--color-text-base, var(--color-text)) !important;
+	text-align: center !important;
+}
+
+[data-vinuni-theme='dark'] {
+	.ant-modal-title,
+	[data-slot='dialog-title'],
+	.modal-expandable-title,
+	.modal-expandable .ant-card .ant-card-head .ant-card-head-title,
+	.modal-expandable [data-slot='card'] [data-slot='card-title'],
+	[data-slot='card-title'] {
+		color: #ffffff !important;
+	}
 }
 
 .ant-modal {
 	top: 60px;
 }
 
+.ant-modal-close,
+.ant-drawer-close {
+	top: 16px !important;
+	right: 16px !important;
+	width: 36px !important;
+	height: 36px !important;
+	border-radius: 50% !important;
+	background: var(--color-bg-elevated) !important;
+	border: 1px solid var(--color-border-secondary) !important;
+	box-shadow:
+		0 2px 8px rgba(0, 0, 0, 0.08),
+		0 1px 2px rgba(0, 0, 0, 0.04) !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	color: var(--color-text-secondary) !important;
+	padding: 0 !important;
+	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+	z-index: 20;
+
+	.ant-modal-close-x,
+	.ant-drawer-close-x {
+		display: inline-flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		width: 100% !important;
+		height: 100% !important;
+		font-size: 14px !important;
+		line-height: 1 !important;
+
+		svg {
+			width: 14px !important;
+			height: 14px !important;
+			stroke-width: 2.2 !important;
+		}
+	}
+
+	svg {
+		width: 14px !important;
+		height: 14px !important;
+		stroke-width: 2.2 !important;
+	}
+
+	&:hover {
+		color: var(--color-text) !important;
+		background: var(--color-fill-secondary) !important;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+	}
+
+	&:active {
+		transform: scale(0.92);
+	}
+}
+
 .ant-modal .ant-modal-content {
+	border-radius: 20px !important;
+	overflow: hidden;
+
 	.ant-modal-header {
-		border-bottom: 1.5px solid var(--color-accent-700) !important;
-		padding: 16px !important;
+		border-bottom: none !important;
+		background: transparent !important;
+		padding: 20px 72px 16px 72px !important;
+		text-align: center !important;
 	}
 
 	.table-export-modal-body {
@@ -798,16 +1558,27 @@ body {
 	}
 
 	.ant-modal-body {
-		padding: 16px;
+		padding: 16px 24px;
 
-		.ant-card .ant-card-head {
-			background-color: var(--vin-color-primary-bg) !important;
+		.ant-card {
+			border: none !important;
+
+			.ant-card-head {
+				border-bottom: none !important;
+				text-align: center !important;
+
+				.ant-card-head-title {
+					text-align: center !important;
+					font-size: 18px !important;
+					font-weight: 600 !important;
+				}
+			}
 		}
 	}
 
 	.ant-modal-footer {
-		border-top: 1.5px solid var(--color-accent-700) !important;
-		padding: 16px !important;
+		border-top: none !important;
+		padding: 16px 24px 24px !important;
 		justify-content: end;
 		flex-direction: row-reverse;
 	}
@@ -821,18 +1592,22 @@ body {
 
 .form-footer {
 	position: relative;
+	/* Code cũ:
 	padding: 16px 0 0 !important;
 	justify-content: flex-start !important;
 	flex-direction: row-reverse;
+	*/
+	margin-top: var(--modal-padding, 24px) !important;
+	padding: 0 !important;
+	display: flex !important;
+	justify-content: flex-start !important; // Trong row-reverse, flex-start đưa các nút về BÊN PHẢI modal
+	align-items: center !important;
+	gap: var(--spacing-md, 12px) !important;
+	flex-direction: row-reverse !important; // Nút primary ở ngoài cùng bên phải, Hủy ở bên trái
+	border-top: none !important;
 
 	&::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: calc(-1 * var(--ant-modal-body-padding-horizontal, 16px)) !important;
-		right: calc(-1 * var(--ant-modal-body-padding-horizontal, 16px)) !important;
-		height: 1px;
-		background-color: var(--color-accent-700);
+		display: none !important;
 	}
 }
 
@@ -867,6 +1642,32 @@ body {
 
 		&:hover {
 			opacity: 0.8;
+		}
+	}
+
+	// Dropdown picker portal ra ngoài, dùng bề mặt theme-aware của antd (tối trong dark mode) —
+	// số ngày (--color-text-100, xám đậm) và nút chuyển tháng/năm (--color-official-300, navy tĩnh)
+	// đều là màu tĩnh, chìm hẳn trên nền dropdown đã tối.
+	[data-vinuni-theme='dark'] & {
+		.ant-picker-range-wrapper
+			.ant-picker-panel-container
+			.ant-picker-panel-layout
+			.ant-picker-panels
+			.ant-picker-panel
+			.ant-picker-body
+			.ant-picker-content
+			tbody
+			tr {
+			.ant-picker-cell-in-view {
+				color: var(--color-text-base) !important;
+			}
+		}
+
+		.ant-picker-header .ant-picker-decade-btn,
+		.ant-picker-header .ant-picker-year-btn,
+		.ant-picker-header .ant-picker-month-btn,
+		.ant-picker-header .ant-picker-header-view button {
+			color: var(--color-text-base) !important;
 		}
 	}
 
@@ -930,11 +1731,24 @@ body {
 }
 
 .highlight {
-	background-color: var(--color-accent-700) !important;
+	border-radius: var(--vin-border-radius) !important;
+	background-color: var(--color-official-500) !important;
+	// Bù đối xứng với margin-bottom:8px của .page-card-header (nền màu bọc quanh nên lệch trên/dưới
+	// sẽ lộ rõ) — dùng padding thay vì margin để không ảnh hưởng capHeight của sticky header.
+	padding-top: 8px !important;
+}
+
+// --color-official-500 là màu tĩnh, không tự đổi theo theme — đổi nền Level 2 sang lớp phủ xanh
+// mờ cho dark mode.
+[data-vinuni-theme='dark'] {
+	.highlight {
+		background-color: rgba(59, 129, 218, 0.16) !important;
+	}
 }
 
 .loading-content {
-	height: 70vh;
+	min-height: 100vh;
+	margin: 0;
 }
 
 .ant-table-selection-column {
@@ -946,6 +1760,31 @@ body {
 }
 
 .ant-steps {
+	.ant-steps-item-icon {
+		display: inline-flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+
+		.ant-steps-icon {
+			display: inline-flex !important;
+			align-items: center !important;
+			justify-content: center !important;
+			line-height: 1 !important;
+			top: 0 !important;
+
+			.anticon {
+				display: inline-flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+			}
+		}
+	}
+
+	.ant-steps-item-title {
+		font-size: 14px !important;
+		font-weight: 500 !important;
+	}
+
 	.ant-steps-item-finish,
 	.ant-steps-item-process {
 		.ant-steps-item-icon {
@@ -962,6 +1801,311 @@ body {
 	height: 35px !important;
 }
 
+// Đảm bảo popups & dropdowns của Ant Design luôn tương tác chuột bình thường khi mở trong Modal/Dialog (@vinuni/ui)
+.ant-select-dropdown,
+.ant-picker-dropdown,
+.ant-dropdown,
+.ant-popover,
+.ant-tooltip,
+.ant-cascader-dropdown,
+.ant-tree-select-dropdown,
+.ant-color-picker-dropdown,
+.ant-tour {
+	pointer-events: auto !important;
+}
+
 .ant-pro-global-footer {
 	margin-block-start: 24;
+}
+
+/* Bo góc cho Bảng và Card chứa Bảng - VinUni */
+/* Code cũ:
+.ant-card:has(.table-base),
+.card-big-title:has(.table-base),
+.card-big-title .ant-card,
+.table-card {
+	border-radius: var(--vin-border-radius) !important;
+	overflow: hidden;
+
+	>.ant-card-body {
+		border-radius: var(--vin-border-radius) !important;
+	}
+}
+*/
+.table-card,
+.table-base-card {
+	border-radius: var(--vin-border-radius) !important;
+}
+
+.table-base {
+	[data-slot='table-pin-root'] {
+		border-radius: var(--vin-border-radius) !important;
+		overflow: hidden !important;
+		border: 1px solid var(--color-accent-700) !important;
+		background: var(--color-bg-container);
+	}
+
+	[data-slot='table-container'] {
+		border-radius: var(--vin-border-radius) !important;
+		overflow-x: auto !important;
+	}
+
+	table[data-slot='table'],
+	table.table-custom {
+		border-collapse: separate !important;
+		border-spacing: 0 !important;
+
+		thead tr:first-child th:first-child {
+			border-top-left-radius: var(--vin-border-radius) !important;
+		}
+
+		thead tr:first-child th:last-child {
+			border-top-right-radius: var(--vin-border-radius) !important;
+		}
+
+		tbody tr:last-child td:first-child {
+			border-bottom-left-radius: var(--vin-border-radius) !important;
+		}
+
+		tbody tr:last-child td:last-child {
+			border-bottom-right-radius: var(--vin-border-radius) !important;
+		}
+	}
+}
+
+.ant-table-wrapper {
+	.ant-table {
+		border-radius: var(--vin-border-radius) !important;
+		border: 1px solid var(--color-accent-700) !important;
+		overflow: hidden !important;
+	}
+
+	.ant-table-container {
+		border-radius: var(--vin-border-radius) !important;
+		overflow: hidden !important;
+	}
+}
+
+/* =============================================================================
+ * Chuẩn hóa Segmented Control theo hệ thiết kế VinUni (@vinuni/ui)
+ * Tự động áp dụng cho toàn bộ phân hệ: Lịch, Tiến trình học tập, Thư viện, Bài tập...
+ * Chuẩn bo góc VinUni: 16px ngoài (--vin-border-radius), 12px cho tab con bên trong
+ * ============================================================================= */
+.ant-segmented {
+	background-color: var(--color-accent-700, #f4f4f4) !important;
+	border-radius: var(--vin-border-radius, 16px) !important;
+	padding: 4px !important;
+	font-family: var(--font-family-base, 'Inter', sans-serif) !important;
+	color: var(--color-text-100, #2e2e2e) !important;
+	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+	.ant-segmented-group {
+		gap: 4px;
+	}
+
+	.ant-segmented-item {
+		border-radius: 12px !important;
+		font-family: var(--font-family-base, 'Inter', sans-serif) !important;
+		font-weight: 500;
+		color: var(--color-text-100, #4a4a4a) !important;
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+		.ant-segmented-item-label {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			min-height: 28px;
+			padding: 0 12px;
+			line-height: 1.5;
+			font-family: inherit;
+		}
+
+		.ant-segmented-item-icon {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 16px;
+			color: inherit;
+		}
+
+		&:hover:not(.ant-segmented-item-selected):not(.ant-segmented-item-disabled) {
+			color: var(--color-official-300, #134d8b) !important;
+			background-color: rgba(0, 0, 0, 0.04);
+		}
+
+		&.ant-segmented-item-selected {
+			background-color: #ffffff !important;
+			color: var(--color-official-300, #134d8b) !important;
+			font-weight: 600 !important;
+			box-shadow:
+				0 1px 3px rgba(0, 0, 0, 0.08),
+				0 1px 2px rgba(0, 0, 0, 0.04) !important;
+
+			.ant-segmented-item-icon,
+			svg {
+				color: var(--color-official-300, #134d8b) !important;
+			}
+		}
+
+		&.ant-segmented-item-disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+	}
+
+	// Ant Design thumb indicator (animated slider)
+	.ant-segmented-thumb {
+		background-color: #ffffff !important;
+		border-radius: 12px !important;
+		box-shadow:
+			0 1px 3px rgba(0, 0, 0, 0.08),
+			0 1px 2px rgba(0, 0, 0, 0.04) !important;
+	}
+
+	// Kích thước nhỏ (size="small")
+	&.ant-segmented-sm {
+		border-radius: 12px !important;
+		padding: 3px !important;
+
+		.ant-segmented-group {
+			gap: 3px;
+		}
+
+		.ant-segmented-item {
+			border-radius: 8px !important;
+
+			.ant-segmented-item-label {
+				min-height: 24px;
+				padding: 0 8px;
+				font-size: 13px;
+			}
+
+			.ant-segmented-item-icon {
+				font-size: 14px;
+			}
+		}
+
+		.ant-segmented-thumb {
+			border-radius: 8px !important;
+		}
+	}
+
+	// Kích thước lớn (size="large")
+	&.ant-segmented-lg {
+		border-radius: var(--vin-border-radius, 16px) !important;
+		padding: 4px !important;
+
+		.ant-segmented-item {
+			border-radius: 12px !important;
+
+			.ant-segmented-item-label {
+				min-height: 36px;
+				padding: 0 16px;
+				font-size: 15px;
+			}
+		}
+
+		.ant-segmented-thumb {
+			border-radius: 12px !important;
+		}
+	}
+}
+
+[data-vinuni-theme='dark'] {
+	.ant-segmented {
+		background-color: rgba(255, 255, 255, 0.08) !important;
+
+		.ant-segmented-item {
+			color: rgba(255, 255, 255, 0.65) !important;
+
+			&:hover:not(.ant-segmented-item-selected):not(.ant-segmented-item-disabled) {
+				color: #ffffff !important;
+				background-color: rgba(255, 255, 255, 0.08);
+			}
+
+			&.ant-segmented-item-selected {
+				background-color: #262626 !important;
+				color: #ffffff !important;
+
+				.ant-segmented-item-icon,
+				svg {
+					color: #ffffff !important;
+				}
+			}
+		}
+
+		.ant-segmented-thumb {
+			background-color: #262626 !important;
+		}
+	}
+}
+
+// @vinuni/ui Button/IconButton dùng `disabled:pointer-events-none`, nên khi hover
+// vào nút disabled, trình duyệt bỏ qua hit-test và không hiện cursor "not-allowed"
+// (fallback về cursor mặc định của phần tử bên dưới). Bật lại pointer-events để
+// hiện đúng cursor, `disabled` gốc của thẻ <button> vẫn chặn click/focus như cũ.
+[data-slot='button']:disabled,
+[data-slot='liquid-button']:disabled {
+	pointer-events: auto !important;
+	cursor: not-allowed !important;
+}
+
+// ============================================================================
+// Chuẩn hóa trạng thái disabled cho Form Fields VinUni (@vinuni/ui)
+// Package @vinuni/ui build thiếu các class Tailwind cho data-[field-state=disable]
+// dẫn đến input/textarea/select khi disabled không ăn style: vẫn giữ màu chữ đen,
+// nền trong suốt và không hiện cursor not-allowed. Bổ sung style đồng bộ token VinUni.
+// ============================================================================
+[data-slot='input']:disabled,
+[data-slot='input'][data-field-state='disable'],
+[data-slot='textarea']:disabled,
+[data-slot='textarea'][data-field-state='disable'],
+[data-slot='select-trigger']:disabled,
+[data-slot='select-trigger'][data-field-state='disable'],
+input[data-slot='input']:disabled,
+input[data-slot='input-group-control']:disabled {
+	cursor: not-allowed !important;
+	background-color: var(--ds-bg-disable, rgba(0, 0, 0, 0.06)) !important;
+	color: var(--ds-content-tertiary, rgba(0, 0, 0, 0.45)) !important;
+	-webkit-text-fill-color: var(--ds-content-tertiary, rgba(0, 0, 0, 0.45)) !important;
+	border-color: var(--ds-line-primary, rgba(0, 0, 0, 0.1)) !important;
+	user-select: none;
+	opacity: 1 !important;
+
+	&::placeholder {
+		color: var(--ds-content-disable, rgba(0, 0, 0, 0.25)) !important;
+		-webkit-text-fill-color: var(--ds-content-disable, rgba(0, 0, 0, 0.25)) !important;
+	}
+}
+
+// Đối với InputGroup có chứa input disabled hoặc có data-disabled='true'
+[data-slot='input-group'][data-disabled='true'],
+[data-slot='input-group']:has(input:disabled) {
+	cursor: not-allowed !important;
+	background-color: var(--ds-bg-disable, rgba(0, 0, 0, 0.06)) !important;
+	border-color: var(--ds-line-primary, rgba(0, 0, 0, 0.1)) !important;
+
+	[data-slot='input-group-addon'] {
+		cursor: not-allowed !important;
+		background-color: transparent !important;
+		opacity: 0.5;
+		color: var(--ds-content-tertiary, rgba(0, 0, 0, 0.45)) !important;
+	}
+
+	[data-slot='input-group-control'],
+	input {
+		cursor: not-allowed !important;
+		background-color: transparent !important;
+		color: var(--ds-content-tertiary, rgba(0, 0, 0, 0.45)) !important;
+		-webkit-text-fill-color: var(--ds-content-tertiary, rgba(0, 0, 0, 0.45)) !important;
+		opacity: 1 !important;
+	}
+
+	button,
+	[data-slot='input-group-button'] {
+		cursor: not-allowed !important;
+		pointer-events: none !important;
+		opacity: 0.5;
+	}
 }

@@ -56,6 +56,14 @@
 	}
 }
 
+// Tay cầm resizer là 1 pill sáng (#f0f0f0) cố định — không có override thì nổi bật kiểu sai giữa
+// nền tối.
+[data-vinuni-theme='dark'] [data-type='Resizer']:after {
+	color: rgba(255, 255, 255, 0.85) !important;
+	background: #303030;
+	border-color: rgba(255, 255, 255, 0.35) !important;
+}
+
 [data-type='SplitPane'] {
 	&[data-split='horizontal'] > div {
 		height: auto !important;

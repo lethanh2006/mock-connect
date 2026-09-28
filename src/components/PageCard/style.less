@@ -1,0 +1,42 @@
+// position: fixed đo bằng JS thay vì CSS position: sticky — DOM còn tàn dư wrapper của ProLayout
+// khai overflow khác visible dù không cuộn thật, khiến sticky bị neo nhầm chỗ.
+//
+// Header + spacer gộp chung 1 khối fixed (không tách 2 mảnh) để tránh hở mí do sai số đo lường.
+.page-card-header-shell {
+	position: fixed;
+	top: 0;
+	// z-30: dưới Dialog/overlay của @vinuni/ui (z-50) để bị che khi mở modal, trên z-10/z-20 của
+	// Table (header/cột ghim) để không bị nội dung bảng cuộn đè lên.
+	z-index: 30;
+	// Không overflow: hidden — ScrollEdgeEffect tràn 12px xuống dưới mép header để tạo hiệu ứng mờ.
+}
+
+// Bỏ margin-top mặc định (custom_vinuni.less) cho mọi chế độ — capHeight (đo bằng JS) đã lấy
+// trực tiếp container.top nên không cần margin này nữa.
+.page-card .page-card-header {
+	margin-top: 0 !important;
+}
+
+// Spacer đẩy header xuống đúng vị trí trong shell.
+.page-card-header-cap {
+	flex: none;
+}
+
+// Reset margin gốc để không bị đẩy lệch khỏi vị trí đã đo bằng spacer.
+.page-card-header-fixed {
+	margin: 0 !important;
+}
+
+.page-card-header-placeholder {
+	flex: none;
+}
+
+// !important vì @vinuni/ui tự đặt top-0 cho edge='top', cùng specificity với class này. Không tự
+.page-card-scroll-edge {
+	top: 100% !important;
+	height: 12px !important;
+}
+
+.page-card-header[data-scrolled='true'] .page-card-scroll-edge {
+	opacity: 1;
+}

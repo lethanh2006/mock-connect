@@ -1,13 +1,10 @@
-import { FilterOutlined, SearchOutlined } from '@ant-design/icons';
-import { AutoComplete, Button, Input, Space } from 'antd';
-import type { SortOrder } from 'antd/lib/table/interface';
 import _ from 'lodash';
-import React, { JSX, useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useIntl } from 'umi';
 import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
-import type { IColumn, TDataOption, TFilter } from '../typing';
-import { applyColumnStringSearch, sanitizeFilterValues, updateSearchStorage } from '../utils';
+import type { IColumn, TFilter } from '../typing';
+import { applyColumnStringSearch, sanitizeFilterValues } from '../utils';
 import { findFilterInTree, isExternalFilterNode, isSameFilterField, updateFiltersByField } from '../utils/filterTree';
 import { useApplyColumnSettings } from './useApplyColumnSettings';
 
@@ -18,27 +15,22 @@ interface UseTableColumnsProps {
 	dsPhanVung?: any[];
 }
 
+export type TableSortDirection = 'asc' | 'desc' | false;
+
 export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableColumnsProps) => {
 	const intl = useIntl();
 	const {
-		searchInputRef,
 		filters,
 		setFilters,
 		setFinalColumns,
-		buttons,
-		hasFilter,
-		setVisibleFilter,
 		size,
 		columnsWidth,
 		setColumnsWidth,
 		hideFilterColumn,
 		columnSettings,
 		setColumnSettings,
-		disableFilterModal,
 		syncExternalToColumnFilter,
 	} = useTableContext();
-	const canOpenModalFilter = false;
-	// buttons?.filter !== false && hasFilter && disableFilterModal !== true;
 	const shouldSyncExternalToColumnFilter = syncExternalToColumnFilter !== false;
 	const isExternalFilter = isExternalFilterNode;
 
@@ -72,39 +64,22 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		[filters, shouldSyncExternalToColumnFilter],
 	);
 
-	//#region Lấy các thuộc tính sắp xếp của cột
-	const getCondValue = useCallback(
-		(dataIndex: any) => {
+	//#region Lấy hướng sắp xếp hiện tại của cột
+	const getSortDirection = useCallback(
+		(dataIndex: any): TableSortDirection => {
 			const type = typeof dataIndex;
-			return _.get(sort, type === 'string' ? dataIndex : dataIndex?.join('.'), []);
+			const value = _.get(sort, type === 'string' ? dataIndex : dataIndex?.join('.'));
+			return value === 1 ? 'asc' : value === -1 ? 'desc' : false;
 		},
 		[sort],
-	);
-
-	const getSortValue = useCallback(
-		(dataIndex: any): SortOrder => {
-			const value = getCondValue(dataIndex);
-			return value === 1 ? 'ascend' : value === -1 ? 'descend' : null;
-		},
-		[getCondValue],
-	);
-
-	const getSort = useCallback(
-		(dataIndex: any): Partial<IColumn<unknown>> => ({
-			sorter: true,
-			sortDirections: ['ascend', 'descend'],
-			sortOrder: getSortValue(dataIndex),
-		}),
-		[getSortValue],
 	);
 	//#endregion
 
 	//#region Lấy các thuộc tính tìm kiếm của cột
 	const handleSearch = useCallback(
-		(dataIndex: any, value: string, confirm?: () => void) => {
+		(dataIndex: any, value: string) => {
 			if (searchableFieldKeys.has(JSON.stringify(dataIndex))) {
 				setFilters?.(applyColumnStringSearch(filters ?? [], dataIndex, value, searchableFieldKeys));
-				if (confirm) confirm();
 				return;
 			}
 
@@ -162,92 +137,11 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 					]);
 				}
 			}
-			if (confirm) confirm();
+
+			const column = columns.find((col: IColumn<any>) => JSON.stringify(col.dataIndex) === JSON.stringify(dataIndex));
+			if (column?.handleFilter) column.handleFilter(value);
 		},
 		[columns, filters, setFilters, shouldSyncExternalToColumnFilter, searchableFieldKeys],
-	);
-
-	const getColumnSearchProps = useCallback(
-		(dataIndex: any, columnTitle: any): Partial<IColumn<unknown>> => {
-			const filterColumn = getFilterColumn(dataIndex, EOperatorType.CONTAIN, true);
-			const currentFilterValue = filterColumn?.values?.[0] as string | undefined;
-
-			return {
-				filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
-					const options = (JSON.parse(localStorage.getItem('dataTimKiem') || '{}')[dataIndex] || []).map(
-						(value: string) => ({
-							value,
-							label: value,
-						}),
-					);
-					const selectedValue = selectedKeys?.[0];
-					const inputValue =
-						selectedValue !== undefined && selectedValue !== null
-							? (selectedValue as string)
-							: (currentFilterValue ?? '');
-
-					return (
-						<div className='column-search-box' onKeyDown={(e) => e.stopPropagation()}>
-							<AutoComplete
-								options={options}
-								onSelect={(value: string) => {
-									setSelectedKeys([value]);
-									handleSearch(dataIndex, value, confirm);
-								}}
-							>
-								<Input.Search
-									placeholder={intl.formatMessage(
-										{ id: 'global.table.index.search.placeholder.short' },
-										{ field: columnTitle },
-									)}
-									allowClear
-									enterButton
-									value={inputValue}
-									onChange={(e) => {
-										if (e.type === 'click') {
-											setSelectedKeys([]);
-											confirm();
-										} else {
-											setSelectedKeys(e.target.value ? [e.target.value] : []);
-										}
-									}}
-									onSearch={(value) => {
-										if (value) updateSearchStorage(dataIndex, value);
-										handleSearch(dataIndex, value, confirm);
-									}}
-									ref={searchInputRef}
-								/>
-							</AutoComplete>
-
-							{canOpenModalFilter ? (
-								<div>
-									{intl.formatMessage({ id: 'global.table.filterdropdown.xemthem' })}{' '}
-									<a
-										onClick={() => {
-											setVisibleFilter?.(true);
-											confirm();
-										}}
-									>
-										{intl.formatMessage({ id: 'global.table.filterdropdown.boloc' })}
-									</a>
-								</div>
-							) : null}
-						</div>
-					);
-				},
-
-				filteredValue: filterColumn?.values ?? [],
-				filterIcon: () => {
-					const values = getFilterColumn(dataIndex, undefined, true)?.values;
-					const filtered = values && values[0];
-					return <SearchOutlined className={filtered ? 'text-primary' : undefined} />;
-				},
-				filterDropdownProps: {
-					onOpenChange: (vis) => vis && setTimeout(() => searchInputRef?.current?.select(), 100),
-				},
-			};
-		},
-		[getFilterColumn, handleSearch, searchInputRef, canOpenModalFilter, intl, setVisibleFilter],
 	);
 	//#endregion
 
@@ -309,71 +203,11 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 					]);
 				}
 			}
+
+			const column = columns.find((col: IColumn<any>) => JSON.stringify(col.dataIndex) === JSON.stringify(dataIndex));
+			if (column?.handleFilter) column.handleFilter(sanitizedValues);
 		},
 		[columns, filters, setFilters, shouldSyncExternalToColumnFilter],
-	);
-
-	const getFilterColumnProps = useCallback(
-		(dataIndex: any, filterData?: any[]): Partial<IColumn<unknown>> => {
-			const filterColumn = getFilterColumn(dataIndex, EOperatorType.INCLUDE, true);
-			return {
-				filters: filterData?.map((item: string | TDataOption) =>
-					typeof item === 'string'
-						? { key: item, value: item, text: item }
-						: { key: item.value, value: item.value, text: item.label },
-				),
-				filteredValue: filterColumn?.values ?? [],
-				filterSearch: true,
-			};
-		},
-		[getFilterColumn],
-	);
-	//#endregion
-
-	const getColumnSelectProps = useCallback(
-		(dataIndex: any, filterCustomSelect?: JSX.Element): Partial<IColumn<unknown>> => {
-			if (!filterCustomSelect) return {};
-			const filterColumn = getFilterColumn(dataIndex, EOperatorType.INCLUDE, true);
-
-			return {
-				filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => (
-					<div className='column-search-box' onKeyDown={(e) => e.stopPropagation()}>
-						<Space size={0}>
-							<div style={{ width: 300 }}>
-								{React.cloneElement(filterCustomSelect, {
-									value: selectedKeys,
-									onChange: (value: any) => setSelectedKeys(Array.isArray(value) ? value : [value]),
-									style: { width: '100%' },
-								})}
-							</div>
-							<Button
-								type='primary'
-								icon={<FilterOutlined />}
-								onClick={() => {
-									handleFilter(dataIndex, selectedKeys as string[]);
-									confirm();
-								}}
-							/>
-						</Space>
-						{canOpenModalFilter ? (
-							<div>
-								{intl.formatMessage({ id: 'global.table.filterdropdown.xemthem' })}{' '}
-								<a
-									onClick={() => {
-										setVisibleFilter?.(true);
-										confirm();
-									}}
-								>
-									{intl.formatMessage({ id: 'global.table.filterdropdown.boloc' })}
-								</a>
-							</div>
-						) : null}
-					</div>
-				),
-				filteredValue: filterColumn?.values ?? [],
-			};
-		},
-		[getFilterColumn, handleFilter, canOpenModalFilter, intl, setVisibleFilter],
 	);
 	//#endregion
 
@@ -381,29 +215,15 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		columns: useMemo(() => {
 			return columns.map((item: IColumn<any>) => ({
 				...item,
-				...(item.sortable && getSort(item.dataIndex)),
-				...(!hideFilterColumn &&
-					(item.filterType === 'string'
-						? getColumnSearchProps(item.dataIndex, item.title)
-						: item.filterType === 'select'
-							? getFilterColumnProps(item.dataIndex, item.filterData)
-							: item.filterType === 'customselect'
-								? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
-								: undefined)),
+				_sortDirection: item.sortable ? getSortDirection(item.dataIndex) : false,
+				_hasFilter: !hideFilterColumn && !!item.filterType,
 				children: item.children?.map((child: IColumn<any>) => ({
 					...child,
-					...(child.sortable && getSort(child.dataIndex)),
-					...(!hideFilterColumn &&
-						(child.filterType === 'string'
-							? getColumnSearchProps(child.dataIndex, child.title)
-							: child.filterType === 'select'
-								? getFilterColumnProps(child.dataIndex, child.filterData)
-								: child.filterType === 'customselect'
-									? getColumnSelectProps(child.dataIndex, child.filterCustomSelect)
-									: undefined)),
+					_sortDirection: child.sortable ? getSortDirection(child.dataIndex) : false,
+					_hasFilter: !hideFilterColumn && !!child.filterType,
 				})),
 			}));
-		}, [columns, getSort, getColumnSearchProps, getFilterColumnProps, getColumnSelectProps, hideFilterColumn]),
+		}, [columns, getSortDirection, hideFilterColumn]),
 		columnSettings,
 		columnsWidth,
 		setColumnsWidth,
@@ -420,6 +240,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 				key: 'index',
 				align: 'center',
 				width: 60,
+				resizable: false,
 				render: (val, rec) => {
 					const phanVungHienTai = dsPhanVung?.find((it: any) => it?.ma === rec?.dataPartitionCode);
 					const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';
@@ -451,5 +272,5 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		}
 	}, [finalColumns, setFinalColumns]);
 
-	return { finalColumns, handleFilter, handleSearch, onResize };
+	return { finalColumns, handleFilter, handleSearch, getFilterColumn, onResize };
 };

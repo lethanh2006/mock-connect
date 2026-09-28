@@ -1,21 +1,35 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { getDateTimeFormat } from '@/utils/formatDate';
 import rules from '@/utils/rules';
-import { CloseOutlined, PlusSquareOutlined } from '@ant-design/icons';
-import { Card, Checkbox, Col, Form, Input, InputNumber, Row, Select, Space } from 'antd';
-import { useEffect, useState } from 'react';
+import { Icon3SquarePlusmark, IconXmark } from '@/components/Icons';
+import { Card } from '@/components/PageCard';
+import Input, { InputNumber } from '@/components/MyInput';
+import Select from '@/components/MySelect';
+import { Form } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'umi';
 import MyDatePicker from '../../MyDatePicker';
 import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
 import { useFilterFields } from '../hooks/useFilterFields';
 import { type RowFilterProps, type TDataOption } from '../typing';
+import FormCheckbox from './FormCheckbox';
+import './style.less';
 
 const FilterItem = (props: RowFilterProps) => {
 	const intl = useIntl();
 	const { name, onRemove, allowGrouping = true, level = 0, formOwner, parentPath, ...restProps } = props;
-	const { finalColumns } = useTableContext();
-	const columns = finalColumns;
+	const { columns: rawColumns, finalColumns } = useTableContext();
+	const targetColumns = useMemo(() => rawColumns || finalColumns || [], [rawColumns, finalColumns]);
+	const columns = useMemo(
+		() =>
+			targetColumns
+				.map((item) => (item.children?.length ? [item, ...item.children] : [item]))
+				.flat()
+				.filter((item) => item?.hide !== true),
+		[targetColumns],
+	);
 	const formInstance = Form.useFormInstance();
 	const { fieldsFiltered } = useFilterFields(columns, formOwner);
 	const [operators, setOperators] = useState<EOperatorType[]>([]);
@@ -88,7 +102,7 @@ const FilterItem = (props: RowFilterProps) => {
 			case 'number':
 				return (
 					<InputNumber
-						style={{ width: '100%' }}
+						className='filter-item-value-input'
 						placeholder={intl.formatMessage({ id: 'global.table.customfilter.label.giatri' })}
 						disabled={isReadOnly}
 					/>
@@ -117,7 +131,7 @@ const FilterItem = (props: RowFilterProps) => {
 	};
 
 	return (
-		<Card styles={{ body: { padding: 8 } }} style={{ marginTop: 8 }} variant='borderless'>
+		<Card size='sm'>
 			<Row gutter={[8, 8]}>
 				<Col span={22} md={isReadOnly ? 24 : 23}>
 					<Row gutter={[8, 0]}>
@@ -127,13 +141,11 @@ const FilterItem = (props: RowFilterProps) => {
 								rules={[...rules.required]}
 								{...restProps}
 								label={
-									<Space>
-										<Form.Item valuePropName='checked' initialValue={true} name={[...namePath, 'active']} noStyle>
-											<Checkbox disabled={isReadOnly}>
-												{intl.formatMessage({ id: 'global.table.customfilter.label.thuoctinh' })}
-											</Checkbox>
-										</Form.Item>
-									</Space>
+									<Form.Item valuePropName='checked' initialValue={true} name={[...namePath, 'active']} noStyle>
+										<FormCheckbox disabled={isReadOnly}>
+											{intl.formatMessage({ id: 'global.table.customfilter.label.thuoctinh' })}
+										</FormCheckbox>
+									</Form.Item>
 								}
 							>
 								<Select
@@ -159,10 +171,12 @@ const FilterItem = (props: RowFilterProps) => {
 											return item.filterType && item.dataIndex && item.dataIndex !== 'index' && !isSelectedByOther;
 										})
 										.map((item) => ({
-											label: item.title,
-											value: Array.isArray(item.dataIndex)
+											// item.title có kiểu ColumnTitle<any> (có thể là render function), nhưng cột filterable
+											// trong thực tế luôn đặt title tĩnh — ép kiểu cho khớp MySelectOption.
+											label: item.title as React.ReactNode,
+											value: (Array.isArray(item.dataIndex)
 												? item.dataIndex.join('.') // string
-												: item.dataIndex,
+												: item.dataIndex) as string,
 										}))}
 								/>
 							</Form.Item>
@@ -233,12 +247,12 @@ const FilterItem = (props: RowFilterProps) => {
 				</Col>
 				{!isReadOnly && (
 					<Col span={2} md={1}>
-						<Space direction='vertical' align='center' style={{ width: '100%' }} size={4}>
+						<div className='filter-item-actions'>
 							{allowGrouping && level === 0 && (
 								<ButtonExtend
 									type='text'
 									size='small'
-									icon={<PlusSquareOutlined />}
+									icon={<Icon3SquarePlusmark />}
 									onClick={() => {
 										const newGroupValue = {
 											active: currentFilter.active !== false,
@@ -255,13 +269,13 @@ const FilterItem = (props: RowFilterProps) => {
 								<ButtonExtend
 									type='text'
 									size='small'
-									icon={<CloseOutlined />}
+									icon={<IconXmark />}
 									onClick={onRemove}
-									danger
+									className='filter-danger-action'
 									tooltip={intl.formatMessage({ id: 'global.table.customfilter.button.xoadieukien' })}
 								/>
 							)}
-						</Space>
+						</div>
 					</Col>
 				)}
 			</Row>

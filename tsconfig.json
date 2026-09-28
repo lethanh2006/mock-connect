@@ -5,10 +5,7 @@
 		"moduleResolution": "bundler",
 		"baseUrl": ".",
 		"target": "esnext",
-		"lib": [
-			"esnext",
-			"dom"
-		],
+		"lib": ["esnext", "dom"],
 		"sourceMap": true,
 		"jsx": "react-jsx",
 		"resolveJsonModule": true,
@@ -21,15 +18,12 @@
 		"experimentalDecorators": true,
 		"strict": true,
 		"paths": {
-			"@/*": [
-				"./src/*"
-			],
-			"@@/*": [
-				"./src/.umi/*"
-			],
-			"react": [
-				"./node_modules/@types/react"
-			]
+			"@/*": ["./src/*"],
+			"@@/*": ["./src/.umi/*"],
+			"react": ["./node_modules/@types/react"],
+			"@/icons": ["./src/components/Icons"],
+			"@vinuni/ui": ["./node_modules/@vinuni/ui/dist/index.d.ts"],
+			"@vinuni/ui/*": ["./node_modules/@vinuni/ui/dist/*"]
 		}
 	},
 	"include": [
@@ -45,13 +39,5 @@
 		".prettierrc.js",
 		"mock/*"
 	],
-	"exclude": [
-		"node_modules",
-		"build",
-		"dist",
-		"scripts",
-		"src/.umi/*",
-		"webpack",
-		"jest"
-	]
+	"exclude": ["node_modules", "build", "dist", "scripts", "src/.umi/*", "webpack", "jest"]
 }

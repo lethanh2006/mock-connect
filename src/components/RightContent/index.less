@@ -1,5 +1,12 @@
 @pro-header-hover-bg: rgba(122, 127, 141, 0.1);
 
+.avatar-dropdown-loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 64px;
+}
+
 .menu_right {
 	display: flex;
 	gap: 8px;
@@ -31,6 +38,7 @@
 	}
 
 	:global(.anticon),
+	> svg,
 	a > img {
 		display: flex;
 
@@ -47,6 +55,13 @@
 	.action {
 		display: flex;
 		align-items: center;
+
+		// Là <button> thật (accessible name qua aria-label) — reset style mặc định của trình duyệt
+		// để trông giống hệt span cũ.
+		background: none;
+		border: none;
+		padding: 0;
+		font: inherit;
 
 		cursor: pointer;
 		transition: all 0.3s;

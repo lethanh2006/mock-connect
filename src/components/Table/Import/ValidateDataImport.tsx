@@ -1,6 +1,18 @@
 import { genExcelFile } from '@/utils/utils';
-import { ArrowLeftOutlined, CheckCircleOutlined, DownloadOutlined, SaveOutlined } from '@ant-design/icons';
-import { Button, Col, Collapse, Popconfirm, Row, Space, Spin, Tag } from 'antd';
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+	Badge,
+	Button,
+	IconArrowLeft,
+	IconCheck,
+	IconCheckCircle,
+	IconDownload,
+} from '@/components/Icons';
+import { Popconfirm, Spin } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ButtonExtend from '../ButtonExtend';
@@ -37,17 +49,17 @@ const ValidateDataImport = (props: {
 			align: 'center',
 			render: (val, rec) =>
 				!!rec.rowErrors?.length ? (
-					<Tag color='red'>
+					<Badge variant='negative'>
 						{step === 0
 							? intl.formatMessage({ id: 'global.table.import.validate.table.khonghople' })
 							: intl.formatMessage({ id: 'global.table.import.validate.table.khongthanhcong' })}
-					</Tag>
+					</Badge>
 				) : (
-					<Tag color='green'>
+					<Badge variant='complete'>
 						{step === 0
 							? intl.formatMessage({ id: 'global.table.import.validate.table.hople' })
 							: intl.formatMessage({ id: 'global.table.import.validate.table.thanhcong' })}
-					</Tag>
+					</Badge>
 				),
 		},
 	];
@@ -122,7 +134,7 @@ const ValidateDataImport = (props: {
 				{importResponses.length ? (
 					<ButtonExtend
 						size='small'
-						icon={<DownloadOutlined />}
+						icon={<IconDownload />}
 						onClick={() => genExcelFile(transformDataToExcelFormat(), 'Kết quả Import.xlsx')}
 						loading={formSubmiting}
 					>
@@ -137,9 +149,9 @@ const ValidateDataImport = (props: {
 						{step === 0 ? (
 							<>
 								<span className='fw500'>{intl.formatMessage({ id: 'global.table.import.validate.hientaico' })}</span>
-								<Tag color='red'>
+								<Badge variant='negative'>
 									{errorCount} {intl.formatMessage({ id: 'global.table.import.validate.dongkhonghople' })}
-								</Tag>
+								</Badge>
 								<br />
 								{intl.formatMessage({ id: 'global.table.import.validate.kiemtralaidulieu' })}
 								{/* Bạn có thể kiểm tra lại trước khi Lưu dữ liệu vào hệ thống! */}
@@ -147,20 +159,27 @@ const ValidateDataImport = (props: {
 						) : (
 							<>
 								<span className='fw500'>{intl.formatMessage({ id: 'global.table.import.validate.thuchienluu' })}</span>
-								<Tag color='red'>
+								<Badge variant='negative'>
 									{errorCount} {intl.formatMessage({ id: 'global.table.import.validate.dongkhongthanhcong' })}
-								</Tag>
+								</Badge>
 							</>
 						)}
 					</Col>
 				) : !isError ? (
 					<Col span={24}>
-						<Space
-							style={{ marginTop: 12, marginBottom: 12, justifyContent: 'center', width: '100%' }}
-							align='center'
+						<div
+							style={{
+								display: 'flex',
+								alignItems: 'center',
+								gap: 8,
+								marginTop: 12,
+								marginBottom: 12,
+								justifyContent: 'center',
+								width: '100%',
+							}}
 							className='text-success'
 						>
-							<CheckCircleOutlined style={{ fontSize: 24 }} />
+							<IconCheckCircle size={24} />
 							<span className='fw500' style={{ fontSize: 18 }}>
 								{intl.formatMessage(
 									{ id: 'global.table.import.result' },
@@ -172,7 +191,7 @@ const ValidateDataImport = (props: {
 									},
 								)}
 							</span>
-						</Space>
+						</div>
 					</Col>
 				) : (
 					<Col span={24}>
@@ -187,56 +206,60 @@ const ValidateDataImport = (props: {
 
 			{importResponses.length ? (
 				<Col span={24}>
-					<Collapse defaultActiveKey={errorCount ? 1 : undefined}>
-						<Collapse.Panel
-							key={0}
-							header={intl.formatMessage(
-								{ id: 'global.table.import.validate.thanhcong' },
-								{
-									count: importResponses.length - (errorCount ?? 0),
-								},
-							)}
-						>
-							<TableStaticData
-								columns={columns}
-								data={importResponses.filter((item) => !item?.rowErrors?.length)}
-								loading={formSubmiting}
-								size='small'
-								hasTotal
-							/>
-						</Collapse.Panel>
-						<Collapse.Panel
-							key={1}
-							header={intl.formatMessage(
-								{ id: 'global.table.import.validate.thatbai' },
-								{
-									count: errorCount,
-								},
-							)}
-						>
-							<TableStaticData
-								columns={[
-									...columns,
+					<Accordion type='multiple' defaultValue={errorCount ? ['fail'] : undefined}>
+						<AccordionItem value='success'>
+							<AccordionTrigger>
+								{intl.formatMessage(
+									{ id: 'global.table.import.validate.thanhcong' },
 									{
-										dataIndex: 'rowErrors',
-										title: intl.formatMessage({ id: 'global.table.import.validate.excel.thongtinloi' }),
-										width: 350,
-										render: (val) => val?.join(', '),
+										count: importResponses.length - (errorCount ?? 0),
 									},
-								]}
-								data={importResponses.filter((item) => item.rowErrors?.length)}
-								loading={formSubmiting}
-								size='small'
-								hasTotal
-							/>
-						</Collapse.Panel>
-					</Collapse>
+								)}
+							</AccordionTrigger>
+							<AccordionContent>
+								<TableStaticData
+									columns={columns}
+									data={importResponses.filter((item) => !item?.rowErrors?.length)}
+									loading={formSubmiting}
+									size='small'
+									hasTotal
+								/>
+							</AccordionContent>
+						</AccordionItem>
+						<AccordionItem value='fail'>
+							<AccordionTrigger>
+								{intl.formatMessage(
+									{ id: 'global.table.import.validate.thatbai' },
+									{
+										count: errorCount,
+									},
+								)}
+							</AccordionTrigger>
+							<AccordionContent>
+								<TableStaticData
+									columns={[
+										...columns,
+										{
+											dataIndex: 'rowErrors',
+											title: intl.formatMessage({ id: 'global.table.import.validate.excel.thongtinloi' }),
+											width: 350,
+											render: (val) => val?.join(', '),
+										},
+									]}
+									data={importResponses.filter((item) => item.rowErrors?.length)}
+									loading={formSubmiting}
+									size='small'
+									hasTotal
+								/>
+							</AccordionContent>
+						</AccordionItem>
+					</Accordion>
 				</Col>
 			) : null}
 
 			<Col span={24}>
-				<Space style={{ marginTop: 12, justifyContent: 'space-between', width: '100%' }}>
-					<Button onClick={() => onBack()} icon={<ArrowLeftOutlined />}>
+				<div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginTop: 16 }}>
+					<Button variant='outline' type='button' onClick={() => onBack()} icon={<IconArrowLeft />}>
 						{intl.formatMessage({ id: 'global.table.import.math.button.quaylai' })}
 					</Button>
 
@@ -257,10 +280,10 @@ const ValidateDataImport = (props: {
 							// disabled={isError || !!errorCount}
 						>
 							<Button
-								htmlType='submit'
-								type='primary'
+								type='button'
+								variant='default'
 								loading={formSubmiting}
-								icon={<SaveOutlined />}
+								icon={<IconCheck />}
 								// disabled={isError || !!errorCount}
 							>
 								{intl.formatMessage({ id: 'global.table.import.validate.button.luudulieu' })}
@@ -268,6 +291,8 @@ const ValidateDataImport = (props: {
 						</Popconfirm>
 					) : (
 						<Button
+							type='button'
+							variant='default'
 							onClick={() => {
 								if (onOk) onOk(); // Get data
 								onCancel();
@@ -276,7 +301,7 @@ const ValidateDataImport = (props: {
 							{intl.formatMessage({ id: 'global.table.import.validate.button.hoanthanh' })}
 						</Button>
 					)}
-				</Space>
+				</div>
 			</Col>
 		</Row>
 	);

@@ -1,4 +1,5 @@
 import ExpandText from '@/components/ExpandText';
+import { Button } from '@/components/Icons';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import { AppModules } from '@/services/base/constant';
@@ -7,7 +8,6 @@ import type { ThongBao } from '@/services/ThongBao/typing';
 import { formatDateTime } from '@/utils/formatDate';
 import { currentRole } from '@/utils/ip';
 import DOMPurify from 'dompurify';
-import { Button } from 'antd';
 import { useIntl, useModel } from 'umi';
 
 const ConfirmThongBaoTuyChinh = (props: { getData: () => void; type: NotificationType }) => {
@@ -72,10 +72,12 @@ const ConfirmThongBaoTuyChinh = (props: { getData: () => void; type: Notificatio
 			<TableStaticData columns={columns} data={danhSachThongBaoDanhSach ?? []} addStt hasTotal />
 
 			<div className='form-footer'>
-				<Button loading={formSubmiting} onClick={() => handleGui()} type='primary'>
+				<Button loading={formSubmiting} onClick={() => handleGui()} variant='default'>
 					Gửi thông báo
 				</Button>
-				<Button onClick={() => setVisibleThongBaoDanhSach(false)}>Hủy</Button>
+				<Button variant='outline' onClick={() => setVisibleThongBaoDanhSach(false)}>
+					Hủy
+				</Button>
 			</div>
 		</>
 	);

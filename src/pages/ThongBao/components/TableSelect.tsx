@@ -3,8 +3,9 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
 import { EReceiverType, EVaiTroKhaoSat } from '@/services/ThongBao/constant';
 import { type ThongBao } from '@/services/ThongBao/typing';
-import { ImportOutlined } from '@ant-design/icons';
-import { Checkbox, Col, Empty, Row } from 'antd';
+import EmptyState from '@/components/EmptyState';
+import { Checkbox, IconUpload } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
 import _ from 'lodash';
 import { Key, useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -151,20 +152,16 @@ const TableSelectUser = (props: {
 						}}
 						otherButtons={[
 							type === EVaiTroKhaoSat.NHAN_VIEN && receiverType === EReceiverType.All ? (
-								<Checkbox
-									key='check'
-									disabled={loading}
-									checked={checked}
-									onChange={(e) => handleCheckBox(e.target.checked)}
-								>
+								<label key='check' className='form-checkbox-label'>
+									<Checkbox disabled={loading} checked={checked} onCheckedChange={handleCheckBox} />
 									Cán bộ chủ chốt
-								</Checkbox>
+								</label>
 							) : (
 								<></>
 							),
 							<ButtonExtend
 								key='import'
-								icon={<ImportOutlined />}
+								icon={<IconUpload />}
 								onClick={() => setVisibleImport(true)}
 								type='default'
 								size='small'
@@ -179,7 +176,7 @@ const TableSelectUser = (props: {
 						{selectedUsers?.length ? (
 							<GroupTagUsers users={selectedUsers} setUsers={setSelectedUsers} type={type} />
 						) : (
-							<Empty style={{ marginTop: 32, marginBottom: 32 }} description='Không có dữ liệu' />
+							<EmptyState description='Không có dữ liệu' />
 						)}
 					</div>
 				</Col>

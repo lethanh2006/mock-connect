@@ -76,9 +76,7 @@ const TrangChu = () => {
 							<CardCuocThiDashboard />
 						</Col> */}
 							<Col span={24}>{/* <VaoRaThuVienDashboardCard /> */}</Col>
-							<Col span={24}>
-								{/* <ThongKeMuonSachCard /> */}
-							</Col>
+							<Col span={24}>{/* <ThongKeMuonSachCard /> */}</Col>
 						</Row>
 					</Col>
 				</Row>

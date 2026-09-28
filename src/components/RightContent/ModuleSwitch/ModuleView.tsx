@@ -1,3 +1,4 @@
+import { IconDoubleHumanCard, SidebarView } from '@/components/Icons';
 import {
 	AppModules,
 	EModuleKey,
@@ -6,10 +7,8 @@ import {
 	moduleTapChiKhoaHoc,
 } from '@/services/base/constant';
 import type { Login } from '@/services/base/typing';
-import { hasModulePermission } from '@/utils/keycloakRoles';
 import { financeApiClientId, qldtApiClientId } from '@/utils/ip';
-import { UserSwitchOutlined } from '@ant-design/icons';
-import { Col, Row } from 'antd';
+import { hasModulePermission } from '@/utils/keycloakRoles';
 import { useIntl, useModel } from 'umi';
 import './style.less';
 
@@ -29,50 +28,50 @@ const ModuleView = () => {
 		const clientIds =
 			name === EModuleKey.QLDT ? [qldtApiClientId] : name === EModuleKey.TC ? [financeApiClientId] : undefined;
 
-		return (permissions?.includes(name as EModuleKey) || (clientIds && hasModulePermission(initialState, name, clientIds))) && !!value.url;
+		return (
+			(permissions?.includes(name as EModuleKey) ||
+				(clientIds && hasModulePermission(initialState, name, clientIds))) &&
+			!!value.url
+		);
 	});
 	const cntModules = allowedModules.length + extendModules.length;
 
 	return (
-		<div className='module-view'>
+		<SidebarView value='app-drawer' className='module-view'>
 			<div className='module-header'>
 				{intl.formatMessage({ id: 'global.rightcontent.moduleswitch.dschungnang' })} ({cntModules})
 			</div>
 
 			<div className='module-container' style={{ padding: '0 12px 12px' }}>
-				<Row gutter={[5, 5]}>
+				<div className='module-grid'>
 					{allowedModules.map(([name, value]) => (
-						<Col span={8} key={name}>
-							<a href={value?.url} target='_blank' rel='noreferrer'>
-								<div className='module-item'>
-									{value?.icon ? (
-										<img src={`${AppModules[EModuleKey.CTSV].url}modules/${value.icon}`} />
-									) : (
-										<UserSwitchOutlined />
-									)}
-									<span className='module-name'>{intl.formatMessage({ id: value?.title ?? name })}</span>
-								</div>
-							</a>
-						</Col>
+						<a key={name} href={value?.url} target='_blank' rel='noreferrer'>
+							<div className='module-item'>
+								{value?.icon ? (
+									<img src={`${AppModules[EModuleKey.CORE].url}modules/${value.icon}`} />
+								) : (
+									<IconDoubleHumanCard size={36} className='module-icon' />
+								)}
+								<span className='module-name'>{intl.formatMessage({ id: value?.title ?? name })}</span>
+							</div>
+						</a>
 					))}
 
 					{extendModules.map((mod) => (
-						<Col span={8} key={mod.url}>
-							<a href={mod.url} target='_blank' rel='noreferrer'>
-								<div className='module-item'>
-									{mod.icon ? (
-										<img src={`${AppModules[EModuleKey.CTSV].url}modules/${mod.icon}`} />
-									) : (
-										<UserSwitchOutlined />
-									)}
-									<span className='module-name'>{intl.formatMessage({ id: mod.title })}</span>
-								</div>
-							</a>
-						</Col>
+						<a key={mod.url} href={mod.url} target='_blank' rel='noreferrer'>
+							<div className='module-item'>
+								{mod.icon ? (
+									<img src={`${AppModules[EModuleKey.CORE].url}modules/${mod.icon}`} />
+								) : (
+									<IconDoubleHumanCard size={36} className='module-icon' />
+								)}
+								<span className='module-name'>{intl.formatMessage({ id: mod.title })}</span>
+							</div>
+						</a>
 					))}
-				</Row>
+				</div>
 			</div>
-		</div>
+		</SidebarView>
 	);
 };
 

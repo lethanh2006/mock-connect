@@ -1,12 +1,12 @@
-/** Font mặc định TinyEditor — Montserrat khi tenant VinUni (access.vinuniAccessFilter) */
+/** Font mặc định TinyEditor — Inter khi tenant VinUni (access.vinuniAccessFilter) */
 export const TINY_EDITOR_DEFAULT_FONT_LABEL = 'Mặc định';
 
 const LEGACY_DEFAULT_FONT_FAMILY =
 	'-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif';
 
-const VINUNI_DEFAULT_FONT_FAMILY = 'Montserrat, sans-serif';
+const VINUNI_DEFAULT_FONT_FAMILY = 'Inter, sans-serif';
 
-/** Font "Mặc định" — VinUni dùng Montserrat, các tenant khác dùng stack hệ thống */
+/** Font "Mặc định" — VinUni dùng Inter, các tenant khác dùng stack hệ thống */
 export const getTinyEditorDefaultFontFamily = (isVinUni: boolean): string =>
 	isVinUni ? VINUNI_DEFAULT_FONT_FAMILY : LEGACY_DEFAULT_FONT_FAMILY;
 
@@ -29,6 +29,6 @@ export const getTinyEditorFontFamilyFormats = (resolvedDefaultFont: string, isVi
 ${OTHER_FONT_FAMILY_FORMATS}`;
 	}
 	return `${defaultEntry};
-Montserrat=Montserrat,sans-serif;
+Inter=Inter,sans-serif;
 ${OTHER_FONT_FAMILY_FORMATS}`;
 };

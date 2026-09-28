@@ -1,5 +1,4 @@
-import { CloseOutlined } from '@ant-design/icons';
-import { Button, Drawer } from 'antd';
+import { Drawer, DrawerContent, IconButton, IconXmark } from '@/components/Icons';
 import React from 'react';
 import { useTableContext } from './TableContext';
 
@@ -9,21 +8,26 @@ export const TableFormDrawer: React.FC = () => {
 
 	if (!Form) return null;
 
+	const width = widthDrawer === 'full' ? '100vw' : typeof widthDrawer === 'number' ? `${widthDrawer}px` : '520px';
+
 	return (
 		<Drawer
-			className={widthDrawer === 'full' ? 'drawer-full' : ''}
-			maskClosable={maskCloseableForm || false}
-			width={widthDrawer !== 'full' ? widthDrawer : undefined}
-			footer={false}
-			styles={{ body: { padding: 0 } }}
+			direction='right'
 			open={visibleForm}
-			destroyOnClose={destroyModal || false}
+			onOpenChange={(open) => {
+				if (!open) setVisibleForm?.(false);
+			}}
+			dismissible={maskCloseableForm || false}
 		>
-			<Form title={title ?? ''} {...formProps} />
+			<DrawerContent style={{ width, maxWidth: '100vw' }} key={destroyModal ? String(visibleForm) : undefined}>
+				<Form title={title ?? ''} {...formProps} />
 
-			<div className='modal-buttons'>
-				<Button type='text' icon={<CloseOutlined />} onClick={() => setVisibleForm?.(false)} className='button' />
-			</div>
+				<div className='modal-buttons'>
+					<IconButton label='Đóng' variant='ghost' onClick={() => setVisibleForm?.(false)} className='button'>
+						<IconXmark />
+					</IconButton>
+				</div>
+			</DrawerContent>
 		</Drawer>
 	);
 };

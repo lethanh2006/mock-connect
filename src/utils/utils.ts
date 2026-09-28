@@ -1,6 +1,6 @@
 import { EDinhDangFile } from '@/services/base/constant';
-import { EFileScope, getFileInfo, getFileRouteBase, uploadFile } from '@/services/uploadFile';
-import { message, type FormInstance } from 'antd';
+import { EFileScope, uploadFile } from '@/services/uploadFile';
+import { type FormInstance } from 'antd';
 import { type AxiosResponse } from 'axios';
 import type dayjs from 'dayjs';
 import { Dayjs } from 'dayjs';
@@ -9,6 +9,7 @@ import * as XLSX from 'xlsx';
 import dayjsLib from './dayjs';
 import { ipFile } from './ip';
 import { isSafeUrl } from './security';
+import { toast } from './toast';
 
 export const urlRegex =
 	/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.,~#?&//=]*)$/;
@@ -298,7 +299,7 @@ export const checkFileSize = (arrFile: any[], fileSize?: number) => {
 		?.forEach((item) => {
 			if (item?.size / 1024 / 1024 > size) {
 				check = false;
-				message.error(`file ${item?.name} có dung lượng > ${size}Mb`);
+				toast.error(`file ${item?.name} có dung lượng > ${size}Mb`);
 			}
 		});
 	return check;
@@ -378,10 +379,10 @@ export const range = (start: number, end: number) => {
 export const disabledRangeTime = (current: dayjs.Dayjs, type: 'start' | 'end', hour: string, minute: string) => {
 	return current && current.format('DDMMYYYY') === dayjsLib().format('DDMMYYYY')
 		? {
-			disabledHours: () => range(0, Number(hour)),
-			disabledMinutes: () => range(0, hour === current.format('HH') ? Number(minute) : 0),
-			disabledSeconds: () => [55, 56],
-		}
+				disabledHours: () => range(0, Number(hour)),
+				disabledMinutes: () => range(0, hour === current.format('HH') ? Number(minute) : 0),
+				disabledSeconds: () => [55, 56],
+			}
 		: {};
 };
 

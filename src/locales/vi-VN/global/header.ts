@@ -5,6 +5,7 @@ export default {
 	'app.header.noti': 'Thông báo của tôi',
 	'app.header.reload': 'Làm mới',
 	'app.header.readAll': 'Đánh dấu tất cả là đã đọc',
+	'app.header.scrolltop': 'Lên đầu trang',
 
 	'app.header.userpage': 'Thông tin cá nhân',
 	'app.header.portal': 'Cổng thông tin',

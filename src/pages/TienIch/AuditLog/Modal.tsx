@@ -5,7 +5,10 @@ import type { IColumn } from '@/components/Table/typing';
 import type { AuditLog } from '@/services/TienIch/AuditLog/typing';
 import { formatDateTime } from '@/utils/formatDate';
 import type { models as rawModels } from '@@/plugin-model/model';
-import { Button, Card, Col, Descriptions, Row, Spin } from 'antd';
+import { Button } from '@/components/Icons';
+import { Card } from '@/components/PageCard';
+import { Descriptions, Spin } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
 import React, { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
@@ -160,7 +163,7 @@ const ModalAuditLog = (props: {
 
 			<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange}>
 				<Pane initialSize={paneSize} minSize='30%'>
-					<Card title='Danh sách thao tác' variant='borderless' className='card-borderless'>
+					<Card title='Danh sách thao tác'>
 						<TableBase
 							columns={columns}
 							dependencies={[page, limit, JSON.stringify(condition)]}
@@ -175,12 +178,7 @@ const ModalAuditLog = (props: {
 				</Pane>
 
 				<Pane minSize='30%'>
-					<Card
-						title='Chi tiết thao tác'
-						variant='borderless'
-						className='card-borderless'
-						styles={{ body: { maxHeight: 630, overflowY: 'auto' } }}
-					>
+					<Card title='Chi tiết thao tác' styles={{ body: { maxHeight: 630, overflowY: 'auto' } }}>
 						<Spin spinning={loading}>
 							<Descriptions column={1} style={{ marginBottom: 16 }}>
 								<Descriptions.Item label='Mã người dùng'>{record?.uCode ?? '--'}</Descriptions.Item>
@@ -224,7 +222,7 @@ const ModalAuditLog = (props: {
 			</SplitPane>
 
 			<div className='form-footer' style={{ marginTop: 18 }}>
-				<Button onClick={() => setVisible(false)}>Đóng</Button>
+				<Button variant='outline' onClick={() => setVisible(false)}>Đóng</Button>
 			</div>
 		</ModalExpandable>
 	);

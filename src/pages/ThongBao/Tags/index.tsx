@@ -3,7 +3,7 @@ import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import type { IColumn } from '@/components/Table/typing';
 import { ThongBao } from '@/services/ThongBao/typing';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { IconPen, IconTrash } from '@/components/Icons';
 import { Popconfirm } from 'antd';
 import { useModel } from 'umi';
 import { kiemTraPhanVung } from '../../../utils/constants';
@@ -42,7 +42,7 @@ const Tags = () => {
 							}}
 							shape='circle'
 							type={'link'}
-							icon={<EditOutlined />}
+							icon={<IconPen />}
 						/>
 
 						<Popconfirm
@@ -57,7 +57,7 @@ const Tags = () => {
 								shape='circle'
 								type='link'
 								danger
-								icon={<DeleteOutlined />}
+								icon={<IconTrash />}
 							/>
 						</Popconfirm>
 					</>

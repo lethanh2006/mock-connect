@@ -1,5 +1,6 @@
-import { DownOutlined } from '@ant-design/icons';
-import { Button, Card, Space, Tree } from 'antd';
+import { Button, IconChervolDown } from '@/components/Icons';
+import { Card } from '@/components/PageCard';
+import { Tree } from 'antd';
 import { useIntl } from 'umi';
 import { type TExportField } from '../typing';
 
@@ -30,24 +31,30 @@ const CardChooseFields = (props: {
 	const onUnCheckAll = () => setFields(fields.map((item) => ({ ...item, selected: false })));
 
 	return (
-		<Card
-			title={intl.formatMessage({ id: 'global.table.export.khadung' })}
-			variant='borderless'
-			className='card-borderless'
-		>
-			<Space style={{ marginBottom: 8 }} wrap>
-				<Button size='small' type={isAllSelected ? 'primary' : 'default'} onClick={onCheckAll}>
+		<Card title={intl.formatMessage({ id: 'global.table.export.khadung' })}>
+			<div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+				<Button
+					size='sm'
+					variant={isAllSelected ? 'default' : 'outline'}
+					onClick={onCheckAll}
+					type='button'
+				>
 					{intl.formatMessage({ id: 'global.table.export.choose.chontatca' })}
 				</Button>
-				<Button size='small' type={isAllUnSelected ? 'primary' : 'default'} onClick={onUnCheckAll}>
+				<Button
+					size='sm'
+					variant={isAllUnSelected ? 'default' : 'outline'}
+					onClick={onUnCheckAll}
+					type='button'
+				>
 					{intl.formatMessage({ id: 'global.table.export.choose.bochontatca' })}
 				</Button>
-			</Space>
+			</div>
 
-			<div style={{ maxHeight: 385, overflowY: 'scroll', border: '1px solid #f0f0f0' }}>
+			<div style={{ maxHeight: 340, overflowY: 'auto', border: '1px solid var(--color-border-secondary)', borderRadius: 8, padding: 4 }}>
 				<Tree
 					treeData={treeData}
-					switcherIcon={<DownOutlined />}
+					switcherIcon={<IconChervolDown />}
 					checkable
 					checkedKeys={fields.filter((item) => item.selected).map((item) => item._id)}
 					onCheck={(keys) => {

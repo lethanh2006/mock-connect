@@ -1,7 +1,8 @@
 import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
 import type { ThongBao } from '@/services/ThongBao/typing';
-import { Select, Tag } from 'antd';
+import { Badge } from '@/components/Icons';
+import Select from '@/components/MySelect';
 import { useModel } from 'umi';
 import { thongKeNotificationNguoiNhan } from '@/services/ThongBao';
 import { useEffect, useState } from 'react';
@@ -45,7 +46,7 @@ const TableReceiverThongBao = (props: { record?: ThongBao.IRecord }) => {
 			width: 100,
 			align: 'center',
 			render: (val) => {
-				return <>{val ? <Tag color={'green'}>Đã đọc</Tag> : <Tag color={'red'}>Chưa đọc</Tag>}</>;
+				return <>{val ? <Badge variant='complete'>Đã đọc</Badge> : <Badge variant='negative'>Chưa đọc</Badge>}</>;
 			},
 		},
 	];

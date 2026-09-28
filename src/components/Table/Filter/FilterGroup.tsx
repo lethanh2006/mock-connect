@@ -1,18 +1,32 @@
-import ButtonExtend from '@/components/Table/ButtonExtend';
-import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Checkbox, Form, Select, Space } from 'antd';
+import { Button, IconPlus, IconXmark } from '@/components/Icons';
+import Select from '@/components/MySelect';
+import { Card } from '@/components/PageCard';
+import { Form } from 'antd';
+import classNames from 'classnames';
+import { useMemo } from 'react';
 import { useIntl } from 'umi';
+import ButtonExtend from '../ButtonExtend';
 import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
 import { useFilterFields } from '../hooks/useFilterFields';
 import { type RowFilterProps } from '../typing';
+import FormCheckbox from './FormCheckbox';
 import RowFilter from './RowFilter';
+import './style.less';
 
 const FilterGroup = (props: RowFilterProps) => {
 	const intl = useIntl();
 	const { name, onRemove, allowGrouping = true, level = 0, formOwner, parentPath, ...restProps } = props;
-	const { finalColumns } = useTableContext();
-	const columns = finalColumns;
+	const { columns: rawColumns, finalColumns } = useTableContext();
+	const targetColumns = useMemo(() => rawColumns || finalColumns || [], [rawColumns, finalColumns]);
+	const columns = useMemo(
+		() =>
+			targetColumns
+				.map((item) => (item.children?.length ? [item, ...item.children] : [item]))
+				.flat()
+				.filter((item) => item?.hide !== true),
+		[targetColumns],
+	);
 	const formInstance = Form.useFormInstance();
 	const { fieldsFilterable } = useFilterFields(columns, formInstance);
 
@@ -23,49 +37,44 @@ const FilterGroup = (props: RowFilterProps) => {
 
 	return (
 		<Card
-			size='small'
-			styles={{ body: { padding: 8 } }}
-			style={{
-				backgroundColor: level === 0 ? '#f9f9f9' : '#f0f8ff',
-				border: level === 0 ? '1px solid #d9d9d9' : '1px solid #91d5ff',
-			}}
+			size='sm'
+			className={classNames('filter-group-card', level === 0 ? 'filter-group-card-root' : 'filter-group-card-nested')}
 			title={
-				<Space>
+				<div className='filter-group-header-fields'>
 					<Form.Item valuePropName='checked' initialValue={true} name={[...namePath, 'active']} noStyle>
-						<Checkbox disabled={isReadOnly}>
+						<FormCheckbox disabled={isReadOnly}>
 							{intl.formatMessage({ id: 'global.table.customfilter.label.nhomdieukien' })}
-						</Checkbox>
+						</FormCheckbox>
 					</Form.Item>
-					<Form.Item name={[...namePath, 'operator']} initialValue='and' style={{ margin: 0 }} noStyle>
+					<Form.Item name={[...namePath, 'operator']} initialValue='and' className='filter-group-operator-item' noStyle>
 						<Select
 							options={[
 								{ label: intl.formatMessage({ id: `global.table.operator.${EOperatorType.AND}` }), value: 'and' },
 								{ label: intl.formatMessage({ id: `global.table.operator.${EOperatorType.OR}` }), value: 'or' },
 							]}
-							style={{ width: 100 }}
+							className='filter-group-operator-select'
 							size='small'
 							disabled={isReadOnly}
 						/>
 					</Form.Item>
-				</Space>
+				</div>
 			}
 			extra={
-				onRemove &&
-				!isReadOnly && (
+				onRemove && !isReadOnly ? (
 					<ButtonExtend
 						type='text'
 						size='small'
-						icon={<CloseOutlined />}
+						icon={<IconXmark />}
 						onClick={onRemove}
-						danger
+						className='filter-danger-action'
 						tooltip={intl.formatMessage({ id: 'global.table.customfilter.button.xoanhomdieukien' })}
 					/>
-				)
+				) : undefined
 			}
 		>
 			<Form.List name={[...namePath, 'filters']}>
 				{(fields, { remove, add }) => (
-					<>
+					<div className='filter-group-rows-list'>
 						{fields.map((field, index) => {
 							return (
 								<RowFilter
@@ -82,27 +91,36 @@ const FilterGroup = (props: RowFilterProps) => {
 							);
 						})}
 
-						<Space style={{ marginTop: '12px' }}>
-							<Button
-								type='dashed'
-								size='small'
-								icon={<PlusOutlined />}
-								onClick={() => {
-									const firstAvailableField = fieldsFilterable[0]?.replace(/"/g, '') ?? '';
-									if (!firstAvailableField) return;
-									add({
-										active: true,
-										field: firstAvailableField,
-										operator: undefined,
-										values: [],
-									});
-								}}
-								disabled={isReadOnly || !fieldsFilterable.length}
-							>
-								{intl.formatMessage({ id: 'global.table.customfilter.button.them' })}
-							</Button>
-						</Space>
-					</>
+						<Button
+							variant='outline'
+							type='button'
+							size='sm'
+							className='filter-group-add-button'
+							icon={<IconPlus />}
+							onClick={() => {
+								const rawField = fieldsFilterable[0];
+								let firstAvailableField = '';
+								if (rawField) {
+									try {
+										const parsed = JSON.parse(rawField);
+										firstAvailableField = Array.isArray(parsed) ? parsed.join('.') : parsed;
+									} catch {
+										firstAvailableField = rawField.replace(/"/g, '');
+									}
+								}
+								if (!firstAvailableField) return;
+								add({
+									active: true,
+									field: firstAvailableField,
+									operator: undefined,
+									values: [],
+								});
+							}}
+							disabled={isReadOnly || !fieldsFilterable.length}
+						>
+							{intl.formatMessage({ id: 'global.table.customfilter.button.them' })}
+						</Button>
+					</div>
 				)}
 			</Form.List>
 		</Card>

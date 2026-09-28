@@ -1,4 +1,5 @@
-import { Empty, Steps } from 'antd';
+import EmptyState from '@/components/EmptyState';
+import { Steps } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalExpandable from '../ModalExpandable';
@@ -6,7 +7,7 @@ import ChooseFileImport from './ChooseFileImport';
 import MatchColumns from './MatchColumns';
 import PreviewDataImport from './PreviewDataImport';
 import ValidateDataImport from './ValidateDataImport';
-import { type ModalImportProps } from './typing';
+import { ModalImportProps } from './typing';
 
 const ModalImport = (props: ModalImportProps) => {
 	const intl = useIntl();
@@ -65,14 +66,15 @@ const ModalImport = (props: ModalImportProps) => {
 			open={visible}
 			onCancel={() => onCancelModal()}
 			footer={null}
-			width={800}
+			width={900}
 			destroyOnClose
 			maskClosable={maskCloseableForm || false}
 			loading={loading}
+			allowExpand={false}
 		>
 			{!!importHeaders.length ? (
 				<>
-					<Steps current={currentStep} style={{ marginBottom: 18 }}>
+					<Steps current={currentStep} style={{ marginBottom: 24, padding: '0 16px' }}>
 						<Steps.Step title={intl.formatMessage({ id: 'global.table.import.index.step.chontaptin' })} />
 						<Steps.Step title={intl.formatMessage({ id: 'global.table.import.index.step.ghepcotdulieu' })} />
 						<Steps.Step title={intl.formatMessage({ id: 'global.table.import.index.step.xemtruocdulieu' })} />
@@ -114,7 +116,7 @@ const ModalImport = (props: ModalImportProps) => {
 					)}
 				</>
 			) : (
-				<Empty description={intl.formatMessage({ id: 'global.table.import.index.empty' })} />
+				<EmptyState description={intl.formatMessage({ id: 'global.table.import.index.empty' })} />
 			)}
 		</ModalExpandable>
 	);

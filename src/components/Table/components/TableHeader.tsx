@@ -1,16 +1,22 @@
+import {
+	Command,
+	CommandItem,
+	CommandList,
+	IconDownload,
+	IconMagnifyingglass,
+	IconPlus,
+	IconRotateArrow,
+	IconUpload,
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+	SearchInput,
+} from '@/components/Icons';
+import MyTooltip from '@/components/MyTooltip';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { primaryColor } from '@/services/base/constant';
 import { inputFormat } from '@/utils/utils';
-import {
-	ExportOutlined,
-	FilterOutlined,
-	FilterTwoTone,
-	ImportOutlined,
-	PlusCircleOutlined,
-	ReloadOutlined,
-	SearchOutlined,
-} from '@ant-design/icons';
-import { AutoComplete, Button, Input, Popover, Tooltip } from 'antd';
+import { Popconfirm } from 'antd';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -19,7 +25,7 @@ import { useIntl } from 'umi';
 import type { TFilter } from '../typing';
 import {
 	buildGlobalSearchFilter,
-	findFiltersInColumns,
+	formatSearchPlaceholderFields,
 	getGlobalSearchKeyword,
 	getSearchStorage,
 	getStandaloneSearchableFields,
@@ -36,11 +42,12 @@ export const TableHeader: React.FC = () => {
 		otherButtons,
 		otherTextButtons,
 		otherExtra,
-		// rowSelection,
-		// deleteMany,
-		// selectedIds,
-		// handleDeleteMany,
-		// hasFilter,
+		rowSelection,
+		deleteMany,
+		selectedIds,
+		handleDeleteMany,
+		hasFilter,
+		columns: rawColumns,
 		finalColumns,
 		filters,
 		setFilters,
@@ -70,23 +77,25 @@ export const TableHeader: React.FC = () => {
 	} = buttons || {};
 	const [globalSearchText, setGlobalSearchText] = useState<string>('');
 	const [globalOptions, setGlobalOptions] = useState<{ value: string }[]>([]);
+	const [globalSearchHistoryOpen, setGlobalSearchHistoryOpen] = useState(false);
 	const searchInputRef = useRef<any>(null);
 	const currentPath = window.location.pathname;
 	const globalDataIndex = useMemo(() => `GLOBAL_SEARCH_${currentPath}`, [currentPath]);
-	const canOpenModalFilter = false;
-	// btnFilter && hasFilter && disableFilterModal !== true;
+	// const canOpenModalFilter = btnFilter && hasFilter && disableFilterModal !== true;
 
 	//#region Global Search Logic
 
+	const targetColumns = useMemo(() => rawColumns || finalColumns || [], [rawColumns, finalColumns]);
+
 	const searchableColumns = useMemo(() => {
-		const flatColumns = finalColumns.map((item) => (item.children?.length ? [item, ...item.children] : [item])).flat();
+		const flatColumns = targetColumns.map((item) => (item.children?.length ? [item, ...item.children] : [item])).flat();
 
 		const seen = new Set<string>();
 		return flatColumns
 			.filter((item) => {
 				const isDefaultSearchable = item?.filterType === 'string';
 				const enableGlobalSearch = item?.enableGlobalSearch ?? isDefaultSearchable;
-				return enableGlobalSearch && item?.dataIndex && item.dataIndex !== 'index';
+				return enableGlobalSearch && item?.dataIndex && item.dataIndex !== 'index' && item?.hide !== true;
 			})
 			.reduce(
 				(result, item) => {
@@ -98,7 +107,7 @@ export const TableHeader: React.FC = () => {
 				},
 				[] as Array<{ field: any; title?: any }>,
 			);
-	}, [finalColumns]);
+	}, [targetColumns]);
 
 	const searchableFieldKeys = useMemo(
 		() => new Set(searchableColumns.map((item) => JSON.stringify(item.field))),
@@ -162,11 +171,10 @@ export const TableHeader: React.FC = () => {
 				if (Array.isArray(item.field)) return item.field.join('.');
 				return item.field ? String(item.field) : '';
 			})
-			.filter(Boolean)
-			.slice(0, 3)
-			.join(', ');
+			.filter(Boolean);
 
-		if (!labels)
+		const fields = formatSearchPlaceholderFields(labels);
+		if (!fields)
 			return intl.formatMessage({
 				id: 'global.table.index.search.placeholder.default',
 			});
@@ -175,7 +183,7 @@ export const TableHeader: React.FC = () => {
 			{
 				id: 'global.table.index.search.placeholder',
 			},
-			{ fields: labels },
+			{ fields },
 		);
 	}, [intl, searchableColumns]);
 
@@ -230,51 +238,63 @@ export const TableHeader: React.FC = () => {
 	);
 
 	const renderGlobalSearch = (minimized: boolean) => (
-		<AutoComplete
-			options={globalOptions}
-			value={globalSearchText}
-			onSelect={handleGlobalSearchTrigger}
-			onChange={(val) => setGlobalSearchText(val)}
-		>
-			<Input.Search
-				ref={searchInputRef}
-				className='global-search'
-				size={size}
-				allowClear
-				value={globalSearchText}
-				placeholder={globalSearchPlaceholder}
-				autoFocus={minimized}
-				style={
-					minimized
-						? { width: 250 }
-						: globalSearchText
-							? { borderColor: primaryColor, outline: '1px solid ' + primaryColor, borderRadius: 4 }
-							: undefined
-				}
-				enterButton={
-					<Button
-						loading={loading}
-						icon={
-							<Tooltip title={globalSearchTooltip}>
-								<SearchOutlined />
-							</Tooltip>
-						}
+		<Popover open={globalSearchHistoryOpen && globalOptions.length > 0} onOpenChange={setGlobalSearchHistoryOpen}>
+			{/* SearchInput không phải 1 phần tử đơn (icon + input + nút xóa) nên không asChild thẳng lên
+			nó được — Slot sẽ gộp nhầm prop. Bọc thêm 1 div trơn làm trigger thật để Radix đăng ký đúng
+			"vùng an toàn", SearchInput bên trong không bị đụng tới prop nào cả. */}
+			<PopoverTrigger asChild>
+				<div className='global-search-trigger'>
+					<SearchInput
+						ref={searchInputRef}
+						variant='tiled'
+						className={classNames('global-search', { 'has-value': !!globalSearchText })}
+						size={size === 'large' ? 'large' : size === 'small' ? 'small' : 'medium'}
+						clearable
+						value={globalSearchText}
+						placeholder={globalSearchPlaceholder}
+						autoFocus={minimized}
+						title={globalSearchTooltip}
+						autoComplete='off'
+						onFocus={() => setGlobalSearchHistoryOpen(true)}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter') {
+								handleGlobalSearchTrigger((e.target as HTMLInputElement).value);
+								setGlobalSearchHistoryOpen(false);
+							}
+						}}
+						onClear={() => {
+							debounceSearch.cancel();
+							handleGlobalSearchTrigger('');
+						}}
+						onChange={(e) => {
+							const val = e.target.value;
+							setGlobalSearchText(val);
+							debounceSearch(val);
+						}}
 					/>
-				}
-				onSearch={handleGlobalSearchTrigger}
-				onChange={(e) => {
-					if (e.type === 'click') {
-						debounceSearch.cancel();
-						setGlobalSearchText('');
-						handleGlobalSearchTrigger('');
-					} else {
-						const val = e.target.value;
-						setGlobalSearchText(val);
-						debounceSearch(val);
-					}
-				}}
-			/>
-		</AutoComplete>
+				</div>
+			</PopoverTrigger>
+			<PopoverContent align='start' className='p-0' onOpenAutoFocus={(e) => e.preventDefault()}>
+				{/* surface=false — PopoverContent đã tự có bề mặt kính (FloatedPanel), Command lồng
+				thêm 1 lớp kính nữa sẽ bị mờ chồng mờ, giống hệt cách SelectPopover xử lý. */}
+				<Command surface={false}>
+					<CommandList>
+						{globalOptions.map((opt) => (
+							<CommandItem
+								key={opt.value}
+								variant='cell'
+								onSelect={() => {
+									handleGlobalSearchTrigger(opt.value);
+									setGlobalSearchHistoryOpen(false);
+								}}
+							>
+								{opt.value}
+							</CommandItem>
+						))}
+					</CommandList>
+				</Command>
+			</PopoverContent>
+		</Popover>
 	);
 
 	const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -290,7 +310,7 @@ export const TableHeader: React.FC = () => {
 					<ButtonExtend
 						size={size}
 						onClick={onCreate}
-						icon={<PlusCircleOutlined />}
+						icon={<IconPlus />}
 						className='btn-add'
 						type='primary'
 						tooltip={createButtonTooltip ?? intl.formatMessage({ id: 'global.table.index.button.themmoi.tooltip' })}
@@ -302,7 +322,7 @@ export const TableHeader: React.FC = () => {
 				{btnImport && (
 					<ButtonExtend
 						size={size}
-						icon={<ImportOutlined />}
+						icon={<IconUpload />}
 						onClick={() => setVisibleImport?.(true)}
 						className='btn-import'
 					>
@@ -312,7 +332,7 @@ export const TableHeader: React.FC = () => {
 				{btnExport && (
 					<ButtonExtend
 						size={size}
-						icon={<ExportOutlined />}
+						icon={<IconDownload />}
 						onClick={() => setVisibleExport?.(true)}
 						className='btn-export'
 					>
@@ -326,7 +346,7 @@ export const TableHeader: React.FC = () => {
 				{btnReload && (
 					<ButtonExtend
 						size={size}
-						icon={<ReloadOutlined />}
+						icon={<IconRotateArrow />}
 						onClick={onReload}
 						loading={loading}
 						className='btn-reload'
@@ -338,9 +358,6 @@ export const TableHeader: React.FC = () => {
 
 				{otherTextButtons}
 
-				{/* {rowSelection && deleteMany && selectedIds?.length ? (
-				{otherTextButtons}
-
 				{rowSelection && deleteMany && selectedIds?.length ? (
 					<Popconfirm
 						title={intl.formatMessage({ id: 'global.table.index.button.xoa.title' }, { count: selectedIds?.length })}
@@ -350,42 +367,41 @@ export const TableHeader: React.FC = () => {
 							{intl.formatMessage({ id: 'global.table.index.button.xoa' }, { count: selectedIds?.length })}
 						</ButtonExtend>
 					</Popconfirm>
-				) : null} */}
+				) : null}
 			</div>
 
 			<div className='extra no-print'>
 				{btnColumnSetting && <ColumnSettings />}
 
-				{canOpenModalFilter && (
+				{/* {canOpenModalFilter && (
 					<ButtonExtend
 						className='btn-filter'
 						size={size}
-						icon={
-							findFiltersInColumns(finalColumns, filters)?.length ? (
-								<FilterTwoTone twoToneColor={primaryColor} />
-							) : (
-								<FilterOutlined />
-							)
-						}
+						icon={<IconFilter />}
 						onClick={() => setVisibleFilter?.(true)}
 						tooltip={intl.formatMessage({ id: 'global.table.index.button.boloc.tooltip' })}
-						style={findFiltersInColumns(finalColumns, filters)?.length ? { borderColor: primaryColor } : undefined}
+						style={findFiltersInColumns(targetColumns, filters)?.length ? { borderColor: primaryColor } : undefined}
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.boloc' })}
 					</ButtonExtend>
-				)}
+				)} */}
 
 				{canShowGlobalSearch ? (
 					isMinimize ? (
-						<Popover content={renderGlobalSearch(isMinimize)} trigger='click' placement='bottom'>
-							<ButtonExtend
-								className='btn-minimize-search'
-								size={size}
-								loading={loading}
-								tooltip={globalSearchTooltip}
-								icon={<SearchOutlined />}
-								style={globalSearchText ? { borderColor: primaryColor, color: primaryColor } : undefined}
-							/>
+						<Popover>
+							<PopoverTrigger asChild>
+								<ButtonExtend
+									className='btn-minimize-search'
+									size={size}
+									loading={loading}
+									tooltip={globalSearchTooltip}
+									icon={<IconMagnifyingglass />}
+									style={globalSearchText ? { borderColor: primaryColor, color: primaryColor } : undefined}
+								/>
+							</PopoverTrigger>
+							<PopoverContent align='end' style={{ padding: 8, width: 280 }}>
+								{renderGlobalSearch(isMinimize)}
+							</PopoverContent>
 						</Popover>
 					) : (
 						renderGlobalSearch(isMinimize)
@@ -393,7 +409,7 @@ export const TableHeader: React.FC = () => {
 				) : null}
 
 				{!hideTotal && (
-					<Tooltip title={intl.formatMessage({ id: 'global.table.index.button.tongso.tooltip' })}>
+					<MyTooltip title={intl.formatMessage({ id: 'global.table.index.button.tongso.tooltip' })}>
 						<div className={classNames({ total: true, small: size === 'small' })}>
 							{intl.formatMessage({ id: 'global.table.index.button.tongso' })}:{' '}
 							<span style={{ fontSize: 15 }}>
@@ -403,7 +419,7 @@ export const TableHeader: React.FC = () => {
 								) : null}
 							</span>
 						</div>
-					</Tooltip>
+					</MyTooltip>
 				)}
 
 				{otherExtra}

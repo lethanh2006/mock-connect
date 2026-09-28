@@ -26,7 +26,7 @@ export const TabViewPage = (props: TabViewPageComponentProps) => {
 		tabType = 'card',
 		tabStyle,
 		style,
-		offsetTop = 56,
+		offsetTop,
 		cardBigTitle,
 		extraCard,
 		cardProps,

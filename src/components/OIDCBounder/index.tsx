@@ -8,7 +8,7 @@ import type { AuthorizedRolesByClient } from '@/utils/keycloakRoles';
 import { getKeycloakRoleContext, hasModulePermission } from '@/utils/keycloakRoles';
 import { getOidcRedirectUri, oidcConfig } from '@/utils/oidcConfig';
 import { getAppBasePath, getPublicAssetPath } from '@/utils/path';
-import { notification } from 'antd';
+import { toast } from '@/utils/toast';
 import { useEffect, useRef, type FC, type ReactNode } from 'react';
 import { AuthProvider, hasAuthParams, useAuth } from 'react-oidc-context';
 import { history, useIntl, useModel } from 'umi';
@@ -140,14 +140,14 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 						redirectLocation();
 				}
 			} catch {
-				setInitialState((prev) => ({ ...prev, permissionLoading: false }));
-				notification.warning({
-					message: intl.formatMessage({ id: 'global.OIDCBounder.message' }),
-					description: intl.formatMessage({ id: 'global.OIDCBounder.description' }),
-				});
-				history.replace(`${getPublicAssetPath('user/login')}`);
-			} finally {
-				loginInProgressRef.current = false;
+				if (auth.isAuthenticated) auth.removeUser();
+				else {
+					toast.warning({
+						message: intl.formatMessage({ id: 'global.OIDCBounder.message' }),
+						description: intl.formatMessage({ id: 'global.OIDCBounder.description' }),
+					});
+					history.replace('/user/login');
+				}
 			}
 		} else {
 			loginInProgressRef.current = false;

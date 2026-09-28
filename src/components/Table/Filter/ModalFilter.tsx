@@ -1,12 +1,15 @@
-import { PlusOutlined, PlusSquareOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Descriptions, Form, Modal, Space, Tooltip, Typography } from 'antd';
+import { Button, Icon3SquarePlusmark, IconPlus, IconQuestionCircle } from '@/components/Icons';
+import MyTooltip from '@/components/MyTooltip';
+import { Descriptions, Form, Typography } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'umi';
+import ModalExpandable from '../ModalExpandable';
 import { useTableContext } from '../components/TableContext';
 import { useFilterFields } from '../hooks/useFilterFields';
 import { normalizeFilters } from '../utils';
 import { ModalFooter } from './ModalFooter';
 import RowFilter from './RowFilter';
+import './style.less';
 
 const { Text } = Typography;
 
@@ -21,21 +24,22 @@ const ModalFilter = () => {
 		filters,
 		externalConditions,
 	} = useTableContext();
-	const columns = originalColumns || finalColumns;
+	const targetColumns = useMemo(() => originalColumns || finalColumns || [], [originalColumns, finalColumns]);
+	const columns = useMemo(
+		() =>
+			targetColumns
+				.map((item) => (item.children?.length ? [item, ...item.children] : [item]))
+				.flat()
+				.filter((item) => item?.hide !== true),
+		[targetColumns],
+	);
 	const [form] = Form.useForm();
 	const { fieldsFilterable } = useFilterFields(columns, form);
 
 	const fieldMetaMap = useMemo(() => {
 		const map: Record<string, { label: string; valueLabelMap: Record<string, string> }> = {};
 
-		const allColumns = columns
-			.map((item) => {
-				if (item.children?.length) return [item, ...item.children];
-				return [item];
-			})
-			.flat();
-
-		allColumns.forEach((column: any) => {
+		columns.forEach((column: any) => {
 			if (!column?.dataIndex || column.dataIndex === 'index') return;
 
 			const fieldKey = Array.isArray(column.dataIndex) ? column.dataIndex.join('.') : String(column.dataIndex);
@@ -69,8 +73,7 @@ const ModalFilter = () => {
 		}
 
 		const formatScalarValue = (item: any): string => {
-			if (item.value === null || item.value === undefined)
-					return '-';
+			if (item.value === null || item.value === undefined) return '-';
 
 			if (typeof item.valueLabel === 'string') return item.valueLabel;
 			if (typeof item.valueLabel === 'object' && item.valueLabel[String(item.value)])
@@ -160,38 +163,33 @@ const ModalFilter = () => {
 	};
 
 	return (
-		<Modal
+		<ModalExpandable
 			open={visibleFilter}
 			onCancel={() => setVisibleFilter?.(false)}
 			footer={<ModalFooter onReset={handleReset} onCancel={() => setVisibleFilter?.(false)} />}
 			title={intl.formatMessage({ id: 'global.table.customfilter.title' })}
 			width={800}
+			allowExpand={false}
 		>
 			{visibleConditionRows.length ? (
-				<div
-					style={{
-						marginBottom: 12,
-						padding: '8px 8px',
-						borderRadius: 6,
-						background: '#fafafa',
-						border: '1px solid #f0f0f0',
-					}}
-				>
-					<div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-						<Tooltip
+				<div className='filter-conditions-box'>
+					<div className='filter-conditions-header'>
+						<MyTooltip
 							title={intl.formatMessage({
 								id: 'global.table.customfilter.tooltip.applied',
 								defaultMessage: 'Filter conditions currently applied to the table',
 							})}
 						>
-							<Text strong>
-								{intl.formatMessage({ id: 'global.table.customfilter.dieukien', defaultMessage: 'Conditions' })}{' '}
-							</Text>
-							<QuestionCircleOutlined style={{ fontSize: 12, color: '#999' }} />
-						</Tooltip>
+							<span className='filter-conditions-tooltip-trigger'>
+								<Text strong>
+									{intl.formatMessage({ id: 'global.table.customfilter.dieukien', defaultMessage: 'Conditions' })}{' '}
+								</Text>
+								<IconQuestionCircle className='filter-conditions-icon' />
+							</span>
+						</MyTooltip>
 						<Text strong>:</Text>
 					</div>
-					<div style={{ marginTop: 8 }}>
+					<div className='filter-conditions-descriptions'>
 						<Descriptions
 							column={
 								visibleConditionRows.length === 1 || visibleConditionRows.some((row) => row.expression.length > 50)
@@ -210,17 +208,18 @@ const ModalFilter = () => {
 					</div>
 
 					{hiddenConditionRows > 0 ? (
-						<div style={{ marginTop: 4 }}>
-							<Text type='secondary' style={{ marginRight: 8 }}>
+						<div className='filter-conditions-more'>
+							<Text type='secondary' className='filter-more-text'>
 								{intl.formatMessage(
 									{ id: 'global.table.customfilter.moreconditions', defaultMessage: '+{count} more conditions' },
 									{ count: hiddenConditionRows },
 								)}
 							</Text>
 							<Button
-								size='small'
-								type='link'
-								style={{ padding: 0 }}
+								size='sm'
+								variant='link'
+								type='button'
+								className='filter-more-button'
 								onClick={() => setMaxConditionRows((prev) => prev + LOAD_MORE_STEP)}
 							>
 								{intl.formatMessage({ id: 'global.table.customfilter.button.xemthem', defaultMessage: 'View more' })}
@@ -242,7 +241,7 @@ const ModalFilter = () => {
 						return (
 							<>
 								{fields.length > 0 && (
-									<Space direction='vertical' size={8} style={{ marginBottom: '16px', width: '100%' }}>
+									<div className='filter-rows-list'>
 										{fields.map(({ key, name, ...restField }) => {
 											return (
 												<RowFilter
@@ -256,17 +255,27 @@ const ModalFilter = () => {
 												/>
 											);
 										})}
-									</Space>
+									</div>
 								)}
 
-								<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+								<div className='filter-actions-row'>
 									<Button
-										block
-										type='dashed'
+										className='filter-add-button'
+										variant='outline'
+										type='button'
 										disabled={!fieldsFilterable.length}
-										icon={<PlusOutlined />}
+										icon={<IconPlus />}
 										onClick={() => {
-											const firstAvailableField = fieldsFilterable[0]?.replace(/"/g, '') ?? '';
+											const rawField = fieldsFilterable[0];
+											let firstAvailableField = '';
+											if (rawField) {
+												try {
+													const parsed = JSON.parse(rawField);
+													firstAvailableField = Array.isArray(parsed) ? parsed.join('.') : parsed;
+												} catch {
+													firstAvailableField = rawField.replace(/"/g, '');
+												}
+											}
 											if (firstAvailableField) {
 												add({
 													field: firstAvailableField,
@@ -280,10 +289,11 @@ const ModalFilter = () => {
 										{intl.formatMessage({ id: 'global.table.customfilter.button.them' })}
 									</Button>
 									<Button
-										type='dashed'
-										block
+										variant='outline'
+										type='button'
+										className='filter-add-button'
 										disabled={!fieldsFilterable.length}
-										icon={<PlusSquareOutlined />}
+										icon={<Icon3SquarePlusmark />}
 										onClick={() => {
 											add({
 												operator: 'and',
@@ -300,7 +310,7 @@ const ModalFilter = () => {
 					}}
 				</Form.List>
 			</Form>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

@@ -1,4 +1,4 @@
-import FormWaiting from '@/components/Loading/FormWaiting';
+import FormWaiting, { hideFormWaiting } from '@/components/Loading/FormWaiting';
 import MyDatePicker from '@/components/MyDatePicker';
 import TinyEditor from '@/components/TinyEditor';
 import UploadFile from '@/components/Upload/UploadFile';
@@ -15,7 +15,13 @@ import { buildUpLoadFileMultipart, buildUpLoadMultiFileMultipart, EFileScope } f
 import { currentRole } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Card, Col, Form, Input, message, Modal, Row, Segmented, Select, Tabs } from 'antd';
+import { Button } from '@/components/Icons';
+import Input from '@/components/MyInput';
+import MySegmented from '@/components/MySegmented';
+import Select from '@/components/MySelect';
+import { Card, Form, Tabs } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import { toast } from '@/utils/toast';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import SelectTag from '../Tags/components/Select';
@@ -80,7 +86,7 @@ const FormThongBao = (props: any) => {
 					email365: item.email365,
 				}));
 				if (!values.userList?.length) {
-					message.warning('Vui lòng chọn người nhận');
+					toast.warning('Vui lòng chọn người nhận');
 					return;
 				}
 			}
@@ -108,7 +114,7 @@ const FormThongBao = (props: any) => {
 			console.log(er);
 		} finally {
 			setFormSubmiting(false);
-			Modal.destroyAll();
+			hideFormWaiting();
 		}
 	};
 
@@ -191,7 +197,7 @@ const FormThongBao = (props: any) => {
 					{roles?.length ? (
 						<Col span={24} md={8}>
 							<Form.Item name='loaiNguoiDung' label='Danh sách người dùng'>
-								<Segmented
+								<MySegmented
 									options={[
 										{ value: EReceiverType.All, label: 'Tất cả' },
 										{ value: EReceiverType.User, label: 'Người dùng cụ thể' },
@@ -277,10 +283,10 @@ const FormThongBao = (props: any) => {
 				</Row>
 
 				<div className='form-footer'>
-					<Button loading={formSubmiting} htmlType='submit' type='primary'>
+					<Button loading={formSubmiting} type='submit' variant='default'>
 						{!edit ? 'Thêm mới ' : 'Lưu lại'}
 					</Button>
-					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+					<Button variant='outline' onClick={() => setVisibleForm(false)}>Hủy</Button>
 				</div>
 			</Form>
 		</Card>

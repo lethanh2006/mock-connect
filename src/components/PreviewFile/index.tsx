@@ -1,12 +1,14 @@
+import EmptyState from '@/components/EmptyState';
+import { Button, IconChervolLeft, IconChervolRight, IconDownload, IconMagnifyingglass } from '@/components/Icons';
 import { EDinhDangFile } from '@/services/base/constant';
 import type { IFileInfo } from '@/services/base/typing';
 import { getFileContent, getFileInfo, getFileRouteBase } from '@/services/uploadFile';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { getSafeHref, openSafeUrl } from '@/utils/security';
+import { toast } from '@/utils/toast';
 import { getFileType, getNameFile } from '@/utils/utils';
-import { DownloadOutlined, FileSearchOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Button, Empty, message, Spin } from 'antd';
+import { Spin } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
@@ -210,7 +212,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 			navigator.clipboard
 				.writeText(frameData?.url)
 				.then(() => {
-					message.success(intl.formatMessage({ id: 'global.previewfile.message.saochep' }));
+					toast.success(intl.formatMessage({ id: 'global.previewfile.message.saochep' }));
 				})
 				.catch((error) => {
 					console.error(error);
@@ -252,7 +254,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	}
 
 	if (!file) {
-		return <Empty style={{ marginTop: 32, marginBottom: 32 }} description='No file data available' />;
+		return <EmptyState description='Không tồn tại dữ liệu tệp tin' />;
 	}
 
 	return (
@@ -268,8 +270,12 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 							<ButtonExtend
 								type='link'
 								disabled={currentFileIndex === 0}
-								icon={<LeftOutlined />}
+								icon={<IconChervolLeft />}
 								onClick={handlePrev}
+								tooltip={intl.formatMessage({
+									id: 'global.previewfile.button.trentruoc',
+									defaultMessage: 'File trước',
+								})}
 							/>
 							<span>
 								{currentFileIndex + 1} / {fileList.length}
@@ -277,8 +283,12 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 							<ButtonExtend
 								type='link'
 								disabled={currentFileIndex === fileList.length - 1}
-								icon={<RightOutlined />}
+								icon={<IconChervolRight />}
 								onClick={handleNext}
+								tooltip={intl.formatMessage({
+									id: 'global.previewfile.button.tieptheo',
+									defaultMessage: 'File tiếp theo',
+								})}
 							/>
 						</div>
 					)}
@@ -289,13 +299,13 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 								<ButtonExtend
 									type='link'
 									tooltip={intl.formatMessage({ id: 'global.previewfile.button.taixuong' })}
-									icon={<DownloadOutlined />}
+									icon={<IconDownload />}
 									onClick={handleDownloadOrView}
 								/>
 								{/* <ButtonExtend
 									type='link'
 									tooltip={intl.formatMessage({ id: 'global.previewfile.button.saochep' })}
-									icon={<CopyOutlined />}
+									icon={<Icon2SquareCopy />}
 									onClick={handleCopy}
 								/> */}
 							</>
@@ -305,8 +315,8 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 							<ButtonExtend
 								type='link'
 								tooltip={intl.formatMessage({ id: 'global.previewfile.button.morong' })}
-								icon={<ExpandOutlined />}
-								onClick={() => openSafeUrl(frameData?.src)}
+								icon={<IconOpenrectagleToprightarrow />}
+								onClick={() => window.open(frameData?.src, '_blank')}
 							/>
 						)} */}
 
@@ -340,12 +350,8 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 				) : frameData?.type !== EDinhDangFile.UNKNOWN && !!frameData?.src ? (
 					isPrivate || isLocalObjectUrl(frameData?.url) ? (
 						<div className='preview-error'>
-							<p>
-								{isLocalObjectUrl(frameData?.url)
-									? 'This document is only available on your device and cannot be previewed via Office Online.'
-									: 'This document is protected and cannot be previewed directly via Office Online.'}
-							</p>
-							<Button type='primary' icon={<DownloadOutlined />} onClick={handleDownloadOrView}>
+							<p>This document is protected and cannot be previewed directly via Office Online.</p>
+							<Button variant='default' icon={<IconDownload />} onClick={handleDownloadOrView}>
 								Download to view
 							</Button>
 						</div>
@@ -369,7 +375,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 								notHideText
 								type='link'
 								tooltip={intl.formatMessage({ id: 'global.previewfile.button.taixuong' })}
-								icon={<FileSearchOutlined />}
+								icon={<IconMagnifyingglass />}
 								onClick={handleDownloadOrView}
 							>
 								{intl.formatMessage({ id: 'global.previewfile.button.taixuong' })}

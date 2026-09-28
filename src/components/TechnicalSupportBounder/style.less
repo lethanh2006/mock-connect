@@ -1,0 +1,12 @@
+// antd FloatButton tự định vị fixed góc dưới-phải; IconButton của @vinuni/ui là button
+// thường, phải tự lo phần này. z-index thấp hơn Dialog (z-50 của @vinuni/ui) để không
+// nổi đè lên modal đang mở.
+.technical-support-button {
+	position: fixed;
+	right: 24px;
+	bottom: 24px;
+	z-index: 40;
+	box-shadow:
+		0 6px 16px rgba(0, 0, 0, 0.12),
+		0 3px 6px rgba(0, 0, 0, 0.08);
+}

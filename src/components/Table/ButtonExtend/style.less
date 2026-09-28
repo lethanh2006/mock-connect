@@ -1,6 +1,16 @@
+button[data-slot='button'],
+button[data-slot='tooltip-trigger'],
+[data-slot='button'] {
+	cursor: pointer;
+
+	&:disabled {
+		cursor: not-allowed;
+	}
+}
+
 @media (max-width: 575px) {
 	// @screen-xs
-	.ant-btn:has(.span-extend) {
+	[data-slot='button']:has(.span-extend) {
 		width: 32px;
 		height: 32px;
 		padding: 2.4px 0;

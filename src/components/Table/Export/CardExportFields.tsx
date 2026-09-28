@@ -1,5 +1,5 @@
-import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Card } from 'antd';
+import { IconButton, IconTrash } from '@/components/Icons';
+import { Card } from '@/components/PageCard';
 import { useIntl } from 'umi';
 import TableStaticData from '../TableStaticData';
 import { type IColumn, type TExportField } from '../typing';
@@ -20,12 +20,13 @@ const CardExportFields = (props: { fields: TExportField[]; setFields: (val: TExp
 			align: 'center',
 			hide: true,
 			render: (val, rec) => (
-				<Button
-					icon={<DeleteOutlined />}
-					type='link'
-					danger
+				<IconButton
+					label={intl.formatMessage({ id: 'global.button.xoa', defaultMessage: 'Xoá' })}
+					variant='ghost'
 					onClick={() => setFields(fields.map((item) => (item._id === rec._id ? { ...item, selected: false } : item)))}
-				/>
+				>
+					<IconTrash />
+				</IconButton>
 			),
 		},
 	];
@@ -38,21 +39,22 @@ const CardExportFields = (props: { fields: TExportField[]; setFields: (val: TExp
 		setFields(tmp);
 	};
 
+	const selectedFields = fields.filter((item) => item.selected);
+
 	return (
-		<Card
-			title={intl.formatMessage({ id: 'global.table.export.field.title' })}
-			variant='borderless'
-			className='card-borderless'
-		>
+		<Card title={intl.formatMessage({ id: 'global.table.export.field.title' })}>
 			<TableStaticData
 				columns={columns}
-				data={fields.filter((item) => item.selected)}
+				data={selectedFields}
 				size='small'
 				addStt
 				columnSetting={false}
 				rowSortable
 				onSortEnd={onSortEnd}
-				otherProps={{ scroll: { y: 380 }, pagination: false }}
+				otherProps={{
+					scroll: selectedFields.length > 7 ? { y: 300 } : undefined,
+					pagination: false,
+				}}
 			/>
 		</Card>
 	);

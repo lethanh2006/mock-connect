@@ -12,6 +12,9 @@ export default function access(initialState: IInitialState) {
 	// const scopes = initialState.authorizedPermissions?.find((item) => item.rsname === currentRole)?.scopes;
 	const scopes = initialState.authorizedPermissions?.map((item) => item.scopes).flat();
 
+	const isPending = !!initialState?.permissionLoading && !scopes?.length;
+	const checkAccess = (allowed: boolean) => isPending || allowed;
+
 	return {
 		// canBoQLKH: token && vaiTro && vaiTro === 'can_bo_qlkh',
 		// lanhDao: token && vaiTro && vaiTro === 'lanh_dao',

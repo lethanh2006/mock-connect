@@ -6,7 +6,7 @@ import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import { sanitizeObject } from '@/utils/utils';
-import { message } from 'antd';
+import { toast } from '@/utils/toast';
 import { useState } from 'react';
 
 type TSettingType = Partial<{
@@ -47,7 +47,7 @@ export default () => {
 			const res = await putSetting(data, ip);
 			const temp = Object.assign(settings, { [data.key]: data.value });
 			setSettings(temp);
-			message.success('Cập nhật thành công');
+			toast.success('Cập nhật thành công');
 
 			return res.data?.data;
 		} catch (error) {
@@ -89,7 +89,7 @@ export default () => {
 				set[payload.key] = { ...set[payload.key], ...payload.value };
 				return set;
 			});
-			if (!payload?.noNotif) message.success('Lưu thành công');
+			if (!payload?.noNotif) toast.success('Lưu thành công');
 		} catch (err) {
 			return Promise.reject(err);
 		} finally {

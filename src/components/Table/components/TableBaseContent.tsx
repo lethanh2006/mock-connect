@@ -1,22 +1,68 @@
+import EmptyState from '@/components/EmptyState';
+import {
+	Icon6DotGridVertical,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader as TableHeaderEl,
+	TableRow,
+	TableSelectionCell,
+	TableSortButton,
+} from '@/components/Icons';
 import PageCard from '@/components/PageCard';
 import { useTableColumns } from '@/components/Table/hooks/useTableColumns';
-import { MenuOutlined } from '@ant-design/icons';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { ConfigProvider, Space, Table, type PaginationProps } from 'antd';
-import type { FilterValue } from 'antd/lib/table/interface';
+import { Spin } from 'antd';
 import _ from 'lodash';
-import { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalExport from '../Export';
 import ModalFilter from '../Filter/ModalFilter';
+import type { TableSortDirection } from '../hooks/useTableColumns';
 import ModalImport from '../Import';
 import type { IColumn, TableBaseProps } from '../typing';
-import { ResizableTitle } from './ResizableTitle';
+import { ColumnFilterPopover } from './ColumnFilterPopover';
+import { ResizableTableHead } from './ResizableTableHead';
 import { useTableContext } from './TableContext';
 import { TableFormModal } from './TableFormModal';
 import { TableHeader } from './TableHeader';
+import { TablePagination } from './TablePagination';
+
+type FlatColumn = IColumn<any> & { _sortDirection?: TableSortDirection; _hasFilter?: boolean; _isSortHandle?: boolean };
+
+/** `TableHead`/`TableCell` của vinuni đặt cứng `text-align` qua class CSS (thắng thuộc tính HTML `align`), nên phải canh lề bằng style inline. */
+const alignStyle = (align?: string): React.CSSProperties | undefined =>
+	align ? { textAlign: align as React.CSSProperties['textAlign'] } : undefined;
+
+/**
+ * Cột pin (fixed) hoặc cho phép kéo giãn tay (resizable, mặc định true — xem
+ * useApplyColumnSettings) phải giữ đúng width đã cấu hình để không phá tính năng
+ * kéo giãn. Chỉ cột khai báo rõ `resizable: false` mới được co giãn theo tỷ lệ.
+ */
+const isColumnLocked = (col: FlatColumn): boolean =>
+	col.fixed === 'left' ||
+	col.fixed === 'right' ||
+	col.key === 'index' ||
+	(col.dataIndex as string) === 'index' ||
+	col.resizable !== false;
+
+const SortableTableRow: React.FC<{ id: string | number; children: React.ReactNode }> = ({ id, children }) => {
+	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+	const style: React.CSSProperties = {
+		transform: CSS.Transform.toString(transform),
+		transition,
+		cursor: 'grab',
+		...(isDragging ? { background: 'var(--color-fill-quaternary)' } : {}),
+	};
+	return (
+		<TableRow ref={setNodeRef as any} style={style} {...attributes} {...listeners}>
+			{children}
+		</TableRow>
+	);
+};
 
 export const TableBaseContent = (props: TableBaseProps) => {
 	const intl = useIntl();
@@ -45,7 +91,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	const externalConditionsDependency = JSON.stringify(externalConditions ?? {});
 	const previousFiltersDependencyRef = useRef(filtersDependency);
 
-	const { handleFilter, handleSearch, finalColumns } = useTableColumns({
+	const { handleFilter, handleSearch, getFilterColumn, finalColumns } = useTableColumns({
 		columns: props.columns,
 		sort,
 		addStt: props.addStt,
@@ -54,7 +100,6 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 	const sensor = useSensor(PointerSensor, { activationConstraint: { distance: 5 } });
 	const sensors = useSensors(sensor);
-	const lastResizeEndTimeRef = useRef<number>(0);
 	const isResizingRef = useRef(false);
 
 	const tableData: any[] = useMemo(
@@ -105,7 +150,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		};
 	}, []);
 
-	const actualColumns = useMemo(() => {
+	const actualColumns: FlatColumn[] = useMemo(() => {
 		const cols = [...finalColumns];
 		if (rowSortable && !cols.find((c: any) => c._isSortHandle))
 			cols.unshift({
@@ -114,10 +159,31 @@ export const TableBaseContent = (props: TableBaseProps) => {
 				align: 'center',
 				fixed: 'left',
 				_isSortHandle: true,
-				render: () => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />,
+				render: () => <Icon6DotGridVertical style={{ cursor: 'grab', color: '#999' }} />,
 			} as any);
 		return cols;
 	}, [finalColumns, rowSortable]);
+
+	const hasGroupedColumns = actualColumns.some((c) => c.children?.length);
+	const leafColumns: FlatColumn[] = useMemo(
+		() => actualColumns.flatMap((c) => (c.children?.length ? (c.children as FlatColumn[]) : [c])),
+		[actualColumns],
+	);
+
+	/**
+	 * Cột pin/resizable giữ nguyên width cấu hình; các cột còn lại chia nhau phần
+	 * không gian dư ra theo đúng tỷ lệ width đã khai báo (để bảng lấp đầy 100% mà
+	 * không làm co giãn/xô lệch các cột pin).
+	 */
+	const pinnedWidth = useMemo(
+		() =>
+			(props?.rowSelection ? 56 : 0) + leafColumns.filter(isColumnLocked).reduce((sum, c) => sum + (c.width ?? 80), 0),
+		[leafColumns, props?.rowSelection],
+	);
+	const flexibleWidth = useMemo(
+		() => leafColumns.filter((c) => !isColumnLocked(c)).reduce((sum, c) => sum + (c.width ?? 80), 0),
+		[leafColumns],
+	);
 
 	const handleDragEnd = (event: any) => {
 		const { active, over } = event;
@@ -128,187 +194,261 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		}
 	};
 
-	const SortableRow = useMemo(() => {
-		return (componentProps: any) => {
-			const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-				id: componentProps['data-row-key'],
-			});
-			const style = {
-				...componentProps.style,
-				transform: CSS.Transform.toString(transform),
-				transition,
-				cursor: 'grab',
-				...(isDragging ? { background: '#fafafa' } : {}),
-			};
-			return <tr {...componentProps} ref={setNodeRef} style={style} {...attributes} {...listeners} />;
-		};
-	}, []);
+	//#region Chọn dòng (rowSelection)
+	const currentPageKeys = useMemo(() => tableData.map((r) => r.key), [tableData]);
+	const selectedSet = useMemo(() => new Set(selectedIds ?? []), [selectedIds]);
+	const selectedOnPageCount = currentPageKeys.filter((k) => selectedSet.has(k)).length;
+	const allCurrentSelected = currentPageKeys.length > 0 && selectedOnPageCount === currentPageKeys.length;
+	const someCurrentSelected = selectedOnPageCount > 0 && !allCurrentSelected;
 
-	const ResizableHeaderCell = useMemo(() => {
-		return (componentProps: any) => (
-			<ResizableTitle
-				{...componentProps}
-				onResizeStart={(e: any) => {
-					isResizingRef.current = true;
-					document.body.style.userSelect = 'none';
-					const titleEl = (e.target as HTMLElement)?.closest('th')?.querySelector('.ant-table-column-title');
-					if (titleEl) {
-						(titleEl as HTMLElement).style.pointerEvents = 'none';
-					}
-				}}
-				onResizeStop={(e: any) => {
-					isResizingRef.current = false;
-					document.body.style.userSelect = '';
-					const titleEl = (e.target as HTMLElement)?.closest('th')?.querySelector('.ant-table-column-title');
-					if (titleEl) {
-						(titleEl as HTMLElement).style.pointerEvents = '';
-					}
-					lastResizeEndTimeRef.current = Date.now();
-				}}
-			/>
-		);
-	}, []);
-
-	const onChange = (
-		pagination: PaginationProps,
-		fil: Record<string, FilterValue | null>,
-		sorter: any,
-		extra?: { action?: 'paginate' | 'sort' | 'filter' },
-	) => {
-		const { current, pageSize } = pagination;
-
-		if (extra?.action === 'paginate') {
-			setPage(current);
-			setLimit(pageSize);
-			return;
-		}
-
-		// Skip sort if triggered within 300ms after resize (avoid resize->sort on mouseup)
-		const skipSort = sorter?.field && Date.now() - lastResizeEndTimeRef.current < 300;
-		if (skipSort) {
-			fil = {}; // Also skip filters
-		}
-
-		const allColumns = finalColumns
-			.map((col: IColumn<any>) => {
-				if (col.children?.length) return [col, ...col.children];
-				else return [col];
-			})
-			.flat();
-
-		Object.entries(fil).map(([field, values]) => {
-			// tìm col có key trùng với dataIndex đã hash của fil
-			const col = allColumns.find((item) => field === item.key);
-			// lấy dataIndex gốc
-			const cleanDataIndex = col ? col.dataIndex : field.includes('.') ? field.split('.') : field;
-
-			if (col?.handleFilter) {
-				col.handleFilter(values?.[0] as any);
-				if (col?.filterType === 'string') {
-					handleSearch(cleanDataIndex, values?.[0] as any);
-				} else if (col?.filterType === 'select') {
-					handleFilter(cleanDataIndex, values as any);
-				}
-			} else if (col?.filterType === 'select') {
-				handleFilter(cleanDataIndex, values as any);
-			} else if (col?.filterType === 'string') {
-				handleSearch(cleanDataIndex, values?.[0] as any);
-			} else if (col?.filterType === 'customselect') {
-				handleFilter(cleanDataIndex, values as any);
-			}
-		});
-
-		// Only apply sort if not within resize window
-		if (!skipSort) {
-			const { order, field } = sorter;
-			const orderValue = order === 'ascend' ? 1 : order === 'descend' ? -1 : undefined;
-			const sortField = field ?? sorter?.column?.dataIndex;
-			if (setSort) {
-				if (!orderValue && extra?.action === 'sort') {
-					setSort({});
-				} else if (sortField) {
-					setSort({ [Array.isArray(sortField) ? sortField.join('.') : sortField]: orderValue });
-				}
-			}
-		}
-
-		setPage(current);
-		setLimit(pageSize);
+	const toggleSelectAll = (checked: boolean) => {
+		const next = new Set(selectedIds ?? []);
+		currentPageKeys.forEach((k) => (checked ? next.add(k) : next.delete(k)));
+		setSelectedIds?.(Array.from(next));
 	};
 
-	const renderTable = () => {
-		const totalWidth = _.sum(actualColumns.map((item: any) => item.width ?? 80)) + (props?.rowSelection ? 40 : 0);
+	const toggleSelectRow = (key: string | number, checked: boolean) => {
+		const next = new Set(selectedIds ?? []);
+		if (checked) next.add(key);
+		else next.delete(key);
+		setSelectedIds?.(Array.from(next));
+	};
+	//#endregion
+
+	//#region Sắp xếp
+	const handleSortClick = (col: FlatColumn) => {
+		const fieldKey = Array.isArray(col.dataIndex) ? col.dataIndex.join('.') : (col.dataIndex as string);
+		if (!fieldKey) return;
+		const direction = col._sortDirection ?? false;
+		const next: TableSortDirection = direction === false ? 'asc' : direction === 'asc' ? 'desc' : false;
+		if (next === false) setSort?.({});
+		else setSort?.({ [fieldKey]: next === 'asc' ? 1 : -1 });
+	};
+	//#endregion
+
+	const renderColumnLabel = (col: FlatColumn) => {
+		const isEnd = col.align === 'right';
+		const titleNode = <span className='table-header-cell-title'>{col.title as any}</span>;
 
 		return (
-			<Table
-				scroll={{ x: totalWidth ?? props.scroll?.x ?? 'max-content', ...props.scroll }}
-				rowSelection={
-					props?.rowSelection
-						? {
-								type: 'checkbox',
-								selectedRowKeys: selectedIds ?? [],
-								preserveSelectedRowKeys: true,
-								onChange: (selectedRowKeys) => setSelectedIds?.(selectedRowKeys as (string | number)[]),
-								columnWidth: 40,
-								fixed: 'left',
-								...props.detailRow,
-							}
-						: undefined
-				}
-				loading={loading}
-				bordered={props.border ?? true}
-				pagination={{
-					current: page,
-					pageSize: limit,
-					position: ['bottomRight'],
-					total,
-					showSizeChanger: true,
-					pageSizeOptions: ['5', '10', '25', '50', '100'],
-					showTotal: (tongSo: number) => (
-						<Space>
-							{props?.rowSelection ? (
-								<>
-									<span>
-										{intl.formatMessage({ id: 'global.table.index.dachon' })}: {selectedIds?.length ?? 0}
-									</span>
-									{selectedIds && selectedIds.length > 0 ? (
-										<span>
-											(
-											<a href='#!' onClick={() => setSelectedIds?.(undefined)}>
-												{intl.formatMessage({ id: 'global.table.index.bochon' })}
-											</a>
-											)
-										</span>
-									) : null}
-								</>
-							) : null}
-							<span>
-								{intl.formatMessage({ id: 'global.table.index.tongso' })}: {tongSo}
-							</span>
-						</Space>
-					),
-				}}
-				onChange={onChange}
-				dataSource={tableData}
-				columns={actualColumns as any[]}
-				components={{
-					...(rowSortable ? { body: { row: SortableRow } } : {}),
-					header: { cell: ResizableHeaderCell },
-				}}
-				tableLayout='fixed'
-				{...props?.otherProps}
-			/>
+			<div className={isEnd ? 'table-header-cell-label align-end' : 'table-header-cell-label'}>
+				{col.sortable ? (
+					<TableSortButton
+						direction={col._sortDirection ?? false}
+						align={isEnd ? 'end' : 'start'}
+						onClick={() => handleSortClick(col)}
+						style={{ minWidth: 0 }}
+					>
+						{titleNode}
+					</TableSortButton>
+				) : (
+					titleNode
+				)}
+				{col._hasFilter ? (
+					<span className='table-header-cell-filter'>
+						<ColumnFilterPopover
+							column={col}
+							getFilterColumn={getFilterColumn}
+							onSearch={handleSearch}
+							onFilter={handleFilter}
+						/>
+					</span>
+				) : null}
+			</div>
 		);
 	};
 
-	const tableContent = rowSortable ? (
-		<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-			<SortableContext items={tableData.map((item) => item.key)} strategy={verticalListSortingStrategy}>
-				{renderTable()}
-			</SortableContext>
-		</DndContext>
-	) : (
-		renderTable()
+	const renderHeadCell = (col: FlatColumn, extraProps?: Record<string, any>) => {
+		const resizeProps = (col as any).onHeaderCell?.(col) ?? {};
+		const colWidthPx = col.width ?? 80;
+		const locked = isColumnLocked(col);
+		// Cột resizable/pin: dùng nguyên resizeProps (giữ tính năng kéo giãn tay).
+		// Cột co giãn theo tỷ lệ: đè width bằng calc() và tắt resizable để ResizableTableHead render đúng nhánh không kéo tay.
+		const headProps = locked
+			? {
+					width: colWidthPx,
+					...resizeProps,
+				}
+			: {
+					...resizeProps,
+					width: flexibleWidth > 0 ? `calc((100% - ${pinnedWidth}px) * ${colWidthPx} / ${flexibleWidth})` : colWidthPx,
+					minWidth: colWidthPx,
+					resizable: false,
+				};
+		return (
+			<ResizableTableHead
+				key={col.key as any}
+				pinned={col.fixed === 'left' ? 'left' : col.fixed === 'right' ? 'right' : undefined}
+				truncate={false}
+				style={alignStyle(col.align as any)}
+				{...headProps}
+				onResizeStart={() => {
+					isResizingRef.current = true;
+					document.body.style.userSelect = 'none';
+				}}
+				onResizeStop={() => {
+					isResizingRef.current = false;
+					document.body.style.userSelect = '';
+				}}
+				{...extraProps}
+			>
+				{renderColumnLabel(col)}
+			</ResizableTableHead>
+		);
+	};
+
+	const totalWidth = _.sum(leafColumns.map((item) => item.width ?? 80)) + (props?.rowSelection ? 56 : 0);
+
+	const renderTable = () => (
+		<Table style={{ width: `max(${props.scroll?.x ?? totalWidth}px, 100%)`, tableLayout: 'fixed' }} density='compact'>
+			<TableHeaderEl>
+				{hasGroupedColumns ? (
+					<>
+						<TableRow>
+							{props?.rowSelection && (
+								<TableSelectionCell
+									rowSpan={2}
+									pinned='left'
+									checked={allCurrentSelected}
+									indeterminate={someCurrentSelected}
+									onCheckedChange={toggleSelectAll}
+									label={intl.formatMessage({ id: 'global.table.index.chontatca', defaultMessage: 'Chọn tất cả' })}
+								/>
+							)}
+							{actualColumns.map((col) =>
+								col.children?.length ? (
+									<TableHead key={col.key as any} colSpan={col.children.length} style={alignStyle(col.align as any)}>
+										{col.title as any}
+									</TableHead>
+								) : (
+									renderHeadCell(col, { rowSpan: 2 })
+								),
+							)}
+						</TableRow>
+						<TableRow>
+							{actualColumns.flatMap((col) =>
+								col.children?.length ? col.children.map((child) => renderHeadCell(child as FlatColumn)) : [],
+							)}
+						</TableRow>
+					</>
+				) : (
+					<TableRow>
+						{props?.rowSelection && (
+							<TableSelectionCell
+								pinned='left'
+								checked={allCurrentSelected}
+								indeterminate={someCurrentSelected}
+								onCheckedChange={toggleSelectAll}
+								label={intl.formatMessage({ id: 'global.table.index.chontatca', defaultMessage: 'Chọn tất cả' })}
+							/>
+						)}
+						{actualColumns.map((col) => renderHeadCell(col))}
+					</TableRow>
+				)}
+			</TableHeaderEl>
+
+			<TableBody>
+				{loading ? (
+					<TableRow>
+						<TableCell
+							colSpan={leafColumns.length + (props?.rowSelection ? 1 : 0)}
+							style={{ textAlign: 'center', padding: 32 }}
+						>
+							<Spin />
+						</TableCell>
+					</TableRow>
+				) : tableData.length === 0 ? (
+					<TableRow>
+						<TableCell
+							colSpan={leafColumns.length + (props?.rowSelection ? 1 : 0)}
+							style={{ textAlign: 'center', padding: 32 }}
+						>
+							<EmptyState description={intl.formatMessage({ id: 'global.table.index.empty' })} />
+						</TableCell>
+					</TableRow>
+				) : (
+					tableData.map((record, index) => {
+						const rowContent = (
+							<>
+								{props?.rowSelection && (
+									<TableSelectionCell
+										pinned='left'
+										checked={selectedSet.has(record.key)}
+										onCheckedChange={(checked) => toggleSelectRow(record.key, checked)}
+										label={intl.formatMessage(
+											{ id: 'global.table.index.chondong', defaultMessage: 'Chọn dòng {index}' },
+											{ index: index + 1 },
+										)}
+									/>
+								)}
+								{leafColumns.map((col, colIndex) => (
+									<TableCell
+										key={(col.key as any) ?? colIndex}
+										style={alignStyle(col.align as any)}
+										pinned={col.fixed === 'left' ? 'left' : col.fixed === 'right' ? 'right' : undefined}
+										truncate={false}
+									>
+										{col.render
+											? col.render(col.dataIndex ? _.get(record, col.dataIndex as any) : record, record, index)
+											: col.dataIndex
+												? _.get(record, col.dataIndex as any)
+												: null}
+									</TableCell>
+								))}
+							</>
+						);
+
+						return rowSortable ? (
+							<SortableTableRow key={record.key} id={record.key}>
+								{rowContent}
+							</SortableTableRow>
+						) : (
+							<TableRow key={record.key}>{rowContent}</TableRow>
+						);
+					})
+				)}
+			</TableBody>
+		</Table>
+	);
+
+	const paginationExtra = (
+		<span className='table-pagination-extra'>
+			{props?.rowSelection && selectedIds && selectedIds.length > 0 ? (
+				<>
+					<span>
+						{intl.formatMessage({ id: 'global.table.index.dachon' })}: {selectedIds.length}
+					</span>
+					<span>
+						(
+						<button
+							type='button'
+							role='button'
+							style={{
+								background: 'none',
+								border: 'none',
+								padding: 0,
+								color: 'var(--primary, #0052cc)',
+								cursor: 'pointer',
+								textDecoration: 'underline',
+							}}
+							onClick={(e) => {
+								e.preventDefault();
+								setSelectedIds?.(undefined);
+							}}
+						>
+							{intl.formatMessage({ id: 'global.table.index.bochon' })}
+						</button>
+						)
+					</span>
+				</>
+			) : null}
+			{/* Ẩn tổng số ở phân trang bên dưới (đã hiển thị trên thanh công cụ) */}
+			{false && (
+				<span>
+					{intl.formatMessage({ id: 'global.table.index.tongso' })}: {total ?? 0}
+				</span>
+			)}
+		</span>
 	);
 
 	const mainContent = (
@@ -317,12 +457,29 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 			<TableHeader />
 
-			<ConfigProvider>
-				<div className={props.tableFooterExtra ? 'table-base__footer-wrap' : undefined}>
-					{tableContent}
-					{props.tableFooterExtra ? <div className='table-base__footer-extra'>{props.tableFooterExtra}</div> : null}
-				</div>
-			</ConfigProvider>
+			{rowSortable ? (
+				<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+					<SortableContext items={tableData.map((item) => item.key)} strategy={verticalListSortingStrategy}>
+						{renderTable()}
+					</SortableContext>
+				</DndContext>
+			) : (
+				renderTable()
+			)}
+
+			{props.pageable !== false && (
+				<TablePagination
+					page={page}
+					limit={limit}
+					total={total ?? 0}
+					onPageChange={setPage}
+					onLimitChange={(nextLimit) => {
+						setLimit(nextLimit);
+						setPage(1);
+					}}
+					extra={paginationExtra}
+				/>
+			)}
 		</div>
 	);
 
@@ -337,6 +494,9 @@ export const TableBaseContent = (props: TableBaseProps) => {
 					title={props.title || false}
 					extra={props.cardExtra}
 					bordered={props.border}
+					className={props.cardProps?.className}
+					style={props.cardProps?.style}
+					stickyHeader={props.cardProps?.stickyHeader}
 				>
 					{mainContent}
 				</PageCard>

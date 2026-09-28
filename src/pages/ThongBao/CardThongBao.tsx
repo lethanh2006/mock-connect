@@ -1,4 +1,6 @@
 import ExpandText from '@/components/ExpandText';
+import { Button, IconChervolLeft, IconChervolRight, IconEye, IconPlus } from '@/components/Icons';
+import MySegmented from '@/components/MySegmented';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { EOperatorType } from '@/components/Table/constant';
@@ -9,8 +11,7 @@ import { type ThongBao } from '@/services/ThongBao/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime, getDateFormat } from '@/utils/formatDate';
 import { currentRole } from '@/utils/ip';
-import { EyeOutlined, LeftOutlined, PlusCircleOutlined, RightOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Segmented, Space } from 'antd';
+import { DatePicker, Space } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import news from '../../assets/new6.gif';
@@ -158,7 +159,7 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 								setVisible(true);
 							}}
 							type='link'
-							icon={<EyeOutlined />}
+							icon={<IconEye />}
 						/>
 					</>
 				);
@@ -169,13 +170,14 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 	return (
 		<>
 			<Space wrap style={{ marginBottom: 12 }}>
-				<Segmented
+				<MySegmented
+					size='small'
 					value={type}
-					onChange={(key: any) => {
-						if (key === 'WEEK') setStartDate(dayjs().startOf('week'));
-						if (key === 'DAY') setStartDate(dayjs());
-						if (key === 'MONTH') setStartDate(dayjs());
-						setType(key);
+					onChange={(val: string) => {
+						if (val === 'WEEK') setStartDate(dayjs().startOf('week'));
+						if (val === 'DAY') setStartDate(dayjs());
+						if (val === 'MONTH') setStartDate(dayjs());
+						setType(val);
 					}}
 					options={[
 						{ value: 'MONTH', label: 'Theo tháng' },
@@ -186,14 +188,14 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 
 				{type === 'WEEK' && (
 					<Space>
-						<Button onClick={() => setStartDate(startDate.subtract(7, 'day'))}>
-							<LeftOutlined /> Tuần trước
+						<Button variant='outline' onClick={() => setStartDate(startDate.subtract(7, 'day'))}>
+							<IconChervolLeft style={{ marginRight: 4, verticalAlign: 'middle' }} /> Tuần trước
 						</Button>
 						<span>
 							Tuần: {startDay} - {endDay}
 						</span>
-						<Button onClick={() => setStartDate(startDate.add(7, 'day'))}>
-							Tuần sau <RightOutlined />
+						<Button variant='outline' onClick={() => setStartDate(startDate.add(7, 'day'))}>
+							Tuần sau <IconChervolRight style={{ marginLeft: 4, verticalAlign: 'middle' }} />
 						</Button>
 						<a onClick={() => setStartDate(dayjs().startOf('week'))}>Tuần này</a>
 					</Space>
@@ -245,7 +247,7 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 									setIsView(false);
 									setVisibleForm(true);
 								}}
-								icon={<PlusCircleOutlined />}
+								icon={<IconPlus />}
 								type='primary'
 								notHideText
 								tooltip='Thêm mới dữ liệu'
@@ -271,8 +273,8 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 			<ModalExpandable
 				width={800}
 				styles={{ body: { padding: 0 } }}
-				okButtonProps={{ hidden: true }}
-				cancelText='Đóng'
+				// okButtonProps={{ hidden: true }}
+				// cancelText='Đóng'
 				open={visible}
 				onCancel={() => setVisible(false)}
 				destroyOnClose
@@ -283,8 +285,8 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 			<ModalExpandable
 				title='Danh sách người nhận'
 				width={800}
-				okButtonProps={{ hidden: true }}
-				cancelText='Đóng'
+				// okButtonProps={{ hidden: true }}
+				// cancelText='Đóng'
 				open={visibleNguoiNhan}
 				onCancel={() => setVisibleNguoiNhan(false)}
 				destroyOnClose

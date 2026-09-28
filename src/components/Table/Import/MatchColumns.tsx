@@ -1,6 +1,8 @@
 import rules from '@/utils/rules';
-import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Row, Select, Space } from 'antd';
+import { Button, IconArrowLeft, IconArrowRight } from '@/components/Icons';
+import Select from '@/components/MySelect';
+import { Form } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import { type TImportHeader } from '../typing';
@@ -57,14 +59,14 @@ const MatchColumns = (props: { onChange: () => void; onBack: any; importHeaders:
 				</Col>
 
 				<Col span={24}>
-					<Space style={{ marginTop: 12, justifyContent: 'space-between', width: '100%' }}>
-						<Button onClick={() => onBack()} icon={<ArrowLeftOutlined />}>
+					<div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginTop: 16 }}>
+						<Button variant='outline' type='button' onClick={() => onBack()} icon={<IconArrowLeft />}>
 							{intl.formatMessage({ id: 'global.table.import.math.button.quaylai' })}
 						</Button>
-						<Button htmlType='submit' type='primary'>
-							{intl.formatMessage({ id: 'global.table.import.math.button.tieptheo' })} <ArrowRightOutlined />
+						<Button variant='default' type='submit' iconRight={<IconArrowRight />}>
+							{intl.formatMessage({ id: 'global.table.import.math.button.tieptheo' })}
 						</Button>
-					</Space>
+					</div>
 				</Col>
 			</Row>
 		</Form>

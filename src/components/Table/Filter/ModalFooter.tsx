@@ -1,6 +1,6 @@
-import { CloseOutlined, FilterFilled } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Button, IconFilter, IconXmark } from '@/components/Icons';
 import { useIntl } from 'umi';
+import './style.less';
 
 interface ModalFooterProps {
 	onReset: () => void;
@@ -10,15 +10,23 @@ interface ModalFooterProps {
 export const ModalFooter = ({ onReset, onCancel }: ModalFooterProps) => {
 	const intl = useIntl();
 
-	return [
-		<Button key='submit' htmlType='submit' type='primary' icon={<FilterFilled />} form='custom-filter-form'>
-			{intl.formatMessage({ id: 'global.table.customfilter.button.apdung' })}
-		</Button>,
-		<Button key='reset' danger icon={<CloseOutlined />} onClick={onReset}>
-			{intl.formatMessage({ id: 'global.table.customfilter.button.xoa' })}
-		</Button>,
-		<Button key='cancel' onClick={onCancel}>
-			{intl.formatMessage({ id: 'global.table.customfilter.button.huy' })}
-		</Button>,
-	];
+	return (
+		<div className='filter-footer'>
+			<Button variant='default' type='submit' icon={<IconFilter />} form='custom-filter-form'>
+				{intl.formatMessage({ id: 'global.table.customfilter.button.apdung' })}
+			</Button>
+			<Button
+				variant='outline'
+				type='button'
+				className='filter-footer-danger'
+				icon={<IconXmark />}
+				onClick={onReset}
+			>
+				{intl.formatMessage({ id: 'global.table.customfilter.button.xoa' })}
+			</Button>
+			<Button variant='outline' type='button' onClick={onCancel}>
+				{intl.formatMessage({ id: 'global.table.customfilter.button.huy' })}
+			</Button>
+		</div>
+	);
 };

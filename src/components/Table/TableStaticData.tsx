@@ -1,41 +1,81 @@
+import EmptyState from '@/components/EmptyState';
+import {
+	Command,
+	CommandItem,
+	CommandList,
+	Drawer,
+	DrawerContent,
+	Icon6DotGridVertical,
+	IconMagnifyingglass,
+	IconPlus,
+	IconRotateArrow,
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+	SearchInput,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader as TableHeaderEl,
+	TableRow,
+	TableSelectionCell,
+	TableSortButton,
+} from '@/components/Icons';
+import MyTooltip from '@/components/MyTooltip';
+import PageCard from '@/components/PageCard';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { primaryColor } from '@/services/base/constant';
-import { MenuOutlined, PlusCircleOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import {
-	AutoComplete,
-	Button,
-	Card,
-	ConfigProvider,
-	Drawer,
-	Empty,
-	Input,
-	Popover,
-	Table,
-	Tooltip,
-	type InputRef,
-} from 'antd';
+import { Spin } from 'antd';
 import classNames from 'classnames';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Highlighter from 'react-highlight-words';
 import { useMediaQuery } from 'react-responsive';
 import { useIntl, useModel } from 'umi';
+import { ColumnFilterPopover } from './components/ColumnFilterPopover';
 import { ColumnSettings } from './components/ColumnSettings';
-import { ResizableTitle } from './components/ResizableTitle';
+import { ResizableTableHead } from './components/ResizableTableHead';
 import { TableProvider, useTableContext } from './components/TableContext';
+import { TablePagination } from './components/TablePagination';
+import { EOperatorType } from './constant/constant';
 import { useApplyColumnSettings } from './hooks/useApplyColumnSettings';
+import type { TableSortDirection } from './hooks/useTableColumns';
 import ModalExpandable from './ModalExpandable';
 import './style.less';
-import type { IColumn, TableStaticProps, TDataOption } from './typing';
-import { updateSearchStorage } from './utils';
+import type { IColumn, TableStaticProps, TFilter } from './typing';
+import { formatSearchPlaceholderFields, updateSearchStorage } from './utils';
 
-const getValueByDataIndex = (record: any, dataIndex: any) => {
-	if (Array.isArray(dataIndex)) return _.get(record, dataIndex);
-	return _.get(record, dataIndex);
+const alignStyle = (align?: string): React.CSSProperties | undefined =>
+	align ? { textAlign: align as React.CSSProperties['textAlign'] } : undefined;
+
+const isColumnLocked = (col: FlatColumn): boolean =>
+	col.fixed === 'left' ||
+	col.fixed === 'right' ||
+	col.key === 'index' ||
+	(col.dataIndex as string) === 'index' ||
+	col.resizable !== false;
+
+const getValueByDataIndex = (record: any, dataIndex: any) => (dataIndex ? _.get(record, dataIndex) : undefined);
+
+const SortableTableRow: React.FC<{ id: string | number; children: React.ReactNode }> = ({ id, children }) => {
+	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+	const style: React.CSSProperties = {
+		transform: CSS.Transform.toString(transform),
+		transition,
+		cursor: 'grab',
+		...(isDragging ? { background: '#fafafa' } : {}),
+	};
+	return (
+		<TableRow ref={setNodeRef as any} style={style} {...attributes} {...listeners}>
+			{children}
+		</TableRow>
+	);
 };
+
+type FlatColumn = IColumn<any> & { _sortDirection?: TableSortDirection; _hasFilter?: boolean; _isSortHandle?: boolean };
 
 const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 	const intl = useIntl();
@@ -44,13 +84,12 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		showEdit,
 		setShowEdit,
 		addStt,
-		data,
 		children,
 		hasCreate,
+		createDisabled,
 		hasTotal,
 		header,
 		rowSortable,
-		resizable,
 		globalSearch = true,
 	} = props;
 	const {
@@ -63,60 +102,66 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 	} = useTableContext();
 
 	const { danhSach: dsPhanVung } = useModel('core.phanvungdulieu');
-	const [searchText, setSearchText] = useState<string>('');
-	const [searchedColumn, setSearchedColumn] = useState<any>();
 	const [globalSearchText, setGlobalSearchText] = useState<string>('');
 	const [globalOptions, setGlobalOptions] = useState<{ value: string; label?: string }[]>([]);
-	const [total, setTotal] = useState<number>();
-	const searchInputRef = useRef<InputRef>(null);
+	const [globalSearchHistoryOpen, setGlobalSearchHistoryOpen] = useState(false);
+	const [sort, setSort] = useState<{ [key: string]: 1 | -1 }>({});
+	const [columnFilters, setColumnFilters] = useState<Record<string, { type: 'string' | 'select'; value: any }>>({});
+	const [selectedIds, setSelectedIds] = useState<(string | number)[]>(props.selectedIds ?? []);
 
-	// dnd-kit: sensors
+	useEffect(() => {
+		if (props.selectedIds !== undefined) {
+			setSelectedIds(props.selectedIds);
+		}
+	}, [props.selectedIds]);
+
+	const searchInputRef = useRef<any>(null);
+	const isResizingRef = useRef<boolean>(false);
+
+	// dnd-kit sensors
 	const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+
+	// Tương thích field antd THẬT (`sorter`, `filters`) — trước đây chỉ đọc field riêng của base-web
+	// (`sortable`, `filterType`/`filterData`), khiến `sorter`/`filters` kế thừa từ ColumnType antd tồn
+	// tại về type nhưng không có tác dụng gì (im lặng không sort/không filter). Chuẩn hóa 1 lần ở đây:
+	// backfill `sortable`/`filterType`/`filterData` từ `sorter`/`filters` khi cột chưa tự khai field
+	// riêng, để phần còn lại của component (đọc `sortable`/`filterType`) tự động nhận ra mà không cần
+	// sửa gì thêm. Riêng compare function của `sorter` (nhận (record,record), khác `customSort` nhận
+	// (value,value)) và `onFilter` (predicate tùy ý, khác includes-check) vẫn cần đọc field gốc tại
+	// nơi thực thi sort/filter — xem 2 chỗ dùng `.sorter`/`.onFilter` trực tiếp bên dưới.
+	const normalizeAntdColumn = useCallback((col: IColumn<any>): IColumn<any> => {
+		const normalized: IColumn<any> = { ...col };
+		if (normalized.sortable === undefined && col.sorter) {
+			normalized.sortable = true;
+		}
+		if (normalized.filterType === undefined && Array.isArray(col.filters) && col.filters.length > 0) {
+			normalized.filterType = 'select';
+			normalized.filterData = col.filters.map((f: any) => ({ label: f.text, value: String(f.value) }));
+		}
+		if (col.children?.length) {
+			normalized.children = col.children.map(normalizeAntdColumn);
+		}
+		return normalized;
+	}, []);
+
+	const normalizedColumns = useMemo(
+		() => (props.columns || []).map(normalizeAntdColumn),
+		[props.columns, normalizeAntdColumn],
+	);
 
 	const globalDataIndex = useMemo(() => `TABLE_STATIC_GLOBAL_SEARCH_${window.location.pathname}`, []);
 
 	const globalSearchColumns = useMemo(() => {
-		const flattenColumns = props.columns
-			?.map((item: IColumn<any>) => (item.children?.length ? [item, ...item.children] : [item]))
+		const flattenColumns = normalizedColumns
+			.map((item: IColumn<any>) => (item.children?.length ? [item, ...item.children] : [item]))
 			.flat();
 
-		return (
-			flattenColumns?.filter(
-				(item: IColumn<any>) => item?.filterType === 'string' && item?.dataIndex && item.dataIndex !== 'index',
-			) ?? []
-		);
-	}, [props.columns]);
-
-	// State cho tableData để sortable
-	const tableData = useMemo(() => {
-		const rawData = (props?.data ?? []).map((item: any, index: number) => ({
-			...item,
-			key: item?._id ?? String(index),
-			index: index + 1,
-			children:
-				!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
-					? item.children
-					: undefined,
-		}));
-
-		const keyword = globalSearchText.trim().toLowerCase();
-
-		if (!globalSearch || !keyword) return rawData;
-
-		return rawData.filter((record: any) =>
-			globalSearchColumns.some((col: IColumn<any>) => {
-				const value = getValueByDataIndex(record, col.dataIndex);
-				return value?.toString?.().toLowerCase?.().includes(keyword);
-			}),
-		);
-	}, [props.data, props.hideChildrenRows, globalSearch, globalSearchText, globalSearchColumns]);
-
-	useEffect(() => {
-		setTotal(data?.length);
-		setSearchText('');
-		setSearchedColumn(undefined);
-		setGlobalSearchText('');
-	}, [data?.length]);
+		return flattenColumns.filter((item: IColumn<any>) => {
+			const isDefaultSearchable = item?.filterType === 'string';
+			const enableGlobalSearch = item?.enableGlobalSearch ?? isDefaultSearchable;
+			return enableGlobalSearch && item?.dataIndex && item.dataIndex !== 'index' && item?.hide !== true;
+		});
+	}, [normalizedColumns]);
 
 	useEffect(() => {
 		const history = JSON.parse(localStorage.getItem('dataTimKiem') || '{}')?.[globalDataIndex] || [];
@@ -130,13 +175,12 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				if (Array.isArray(item.dataIndex)) return item.dataIndex.join('.');
 				return item.dataIndex ? String(item.dataIndex) : '';
 			})
-			.filter(Boolean)
-			.slice(0, 3)
-			.join(', ');
+			.filter(Boolean);
 
-		if (!labels) return intl.formatMessage({ id: 'global.table.index.search.placeholder.default' });
+		const fields = formatSearchPlaceholderFields(labels);
+		if (!fields) return intl.formatMessage({ id: 'global.table.index.search.placeholder.default' });
 
-		return intl.formatMessage({ id: 'global.table.index.search.placeholder' }, { fields: labels });
+		return intl.formatMessage({ id: 'global.table.index.search.placeholder' }, { fields });
 	}, [intl, globalSearchColumns]);
 
 	const globalSearchTooltip = useMemo(() => {
@@ -172,144 +216,96 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		[globalDataIndex],
 	);
 
-	const handleSearch = useCallback((confirm: any, dataIndex: any) => {
-		confirm();
-		setSearchedColumn(dataIndex);
+	// Sorter click handler
+	const handleSortClick = useCallback((col: FlatColumn) => {
+		const fieldKey = Array.isArray(col.dataIndex) ? col.dataIndex.join('.') : (col.dataIndex as string);
+		if (!fieldKey) return;
+		setSort((prev) => {
+			const current = prev[fieldKey];
+			if (!current) return { [fieldKey]: 1 };
+			if (current === 1) return { [fieldKey]: -1 };
+			return {};
+		});
 	}, []);
 
-	const getColumnSearchProps = useCallback(
-		(dataIndex: any, columnTitle: any, render: any): Partial<IColumn<unknown>> => ({
-			filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
-				const searchOptions = (JSON.parse(localStorage.getItem('dataTimKiem') || '{}')[dataIndex] || []).map(
-					(value: string) => ({ value, label: value }),
-				);
+	// Column filter handlers
+	const handleColumnSearch = useCallback((dataIndex: any, value: string) => {
+		const key = Array.isArray(dataIndex) ? dataIndex.join('.') : String(dataIndex);
+		setColumnFilters((prev) => {
+			const next = { ...prev };
+			if (!value) delete next[key];
+			else next[key] = { type: 'string', value };
+			return next;
+		});
+	}, []);
 
-				return (
-					<div className='column-search-box' onKeyDown={(e) => e.stopPropagation()}>
-						<AutoComplete
-							options={searchOptions}
-							onSelect={(value: string) => {
-								setSelectedKeys([value]);
-								handleSearch(confirm, dataIndex);
-							}}
-						>
-							<Input.Search
-								placeholder={intl.formatMessage(
-									{ id: 'global.table.index.search.placeholder.short' },
-									{ field: columnTitle },
-								)}
-								allowClear
-								enterButton
-								value={selectedKeys[0]}
-								onChange={(e) => {
-									if (e.type === 'click') {
-										setSelectedKeys([]);
-										confirm();
-									} else {
-										setSelectedKeys(e.target.value ? [e.target.value] : []);
-									}
-								}}
-								onSearch={(value: string) => {
-									if (value) updateSearchStorage(dataIndex, value);
-									handleSearch(confirm, dataIndex);
-								}}
-								ref={searchInputRef}
-							/>
-						</AutoComplete>
-					</div>
-				);
-			},
+	const handleColumnFilter = useCallback((dataIndex: any, values: string[]) => {
+		const key = Array.isArray(dataIndex) ? dataIndex.join('.') : String(dataIndex);
+		setColumnFilters((prev) => {
+			const next = { ...prev };
+			if (!values || values.length === 0) delete next[key];
+			else next[key] = { type: 'select', value: values };
+			return next;
+		});
+	}, []);
 
-			filterIcon: (filtered: boolean) => <SearchOutlined className={filtered ? 'text-primary' : undefined} />,
-			onFilter: (value: any, record: any) =>
-				typeof dataIndex === 'string'
-					? record[dataIndex]?.toString()?.toLowerCase()?.includes(value.toLowerCase())
-					: typeof dataIndex === 'object'
-						? record[dataIndex[0]][dataIndex?.[1]]?.toString()?.toLowerCase()?.includes(value.toLowerCase())
-						: '',
-			onFilterDropdownVisibleChange: (vis: boolean) => vis && setTimeout(() => searchInputRef?.current?.select(), 100),
-
-			render: (text: any, record: any) =>
-				render ? (
-					render(text, record)
-				) : searchedColumn === dataIndex ? (
-					<Highlighter
-						highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-						searchWords={[searchText]}
-						autoEscape
-						textToHighlight={text ? text.toString() : ''}
-					/>
-				) : (
-					text
-				),
-		}),
-		[handleSearch, searchText, searchedColumn],
+	const getFilterColumn = useCallback(
+		(dataIndex: any, operator?: EOperatorType, active?: boolean): TFilter<any> | undefined => {
+			const key = Array.isArray(dataIndex) ? dataIndex.join('.') : String(dataIndex);
+			const filter = columnFilters[key];
+			if (!filter) return undefined;
+			return {
+				field: key,
+				operator: filter.type === 'string' ? EOperatorType.CONTAIN : EOperatorType.INCLUDE,
+				values: filter.type === 'string' ? [filter.value] : filter.value,
+				active: true,
+			} as any;
+		},
+		[columnFilters],
 	);
 
-	const getFilterColumnProps = useCallback((dataIndex: any, filterData?: any[]): Partial<IColumn<unknown>> => {
-		return {
-			filters: filterData?.map((item: string | TDataOption) =>
-				typeof item === 'string'
-					? { key: item, value: item, text: item }
-					: { key: item.value, value: item.value, text: item.label },
-			),
-			onFilter: (value: any, record: any) => record[dataIndex]?.indexOf(value) === 0,
-			filterSearch: true,
-		};
-	}, []);
-
-	const baseColumns = useMemo(() => {
-		return props.columns?.map((item: IColumn<any>) => ({
-			...item,
-			resizable: item.resizable ?? resizable, // Apply default resizable if provided
-			...(item?.filterType === 'string'
-				? getColumnSearchProps(item.dataIndex, item.title, item.render)
-				: item?.filterType === 'select'
-					? getFilterColumnProps(item.dataIndex, item.filterData)
-					: undefined),
-			...(item?.sortable && {
-				sorter: (a: any, b: any) => {
-					const aValue = _.get(a, item?.dataIndex ?? '', undefined);
-					const bValue = _.get(b, item?.dataIndex ?? '', undefined);
-					return item.customSort ? item.customSort(aValue, bValue) : aValue > bValue ? 1 : -1;
-				},
-			}),
-			children: item.children?.map((child: IColumn<any>) => ({
-				...child,
-				resizable: child.resizable ?? resizable,
-				...(child?.filterType === 'string'
-					? getColumnSearchProps(child.dataIndex, item.title, item.render)
-					: child?.filterType === 'select'
-						? getFilterColumnProps(child.dataIndex, child.filterData)
-						: undefined),
-				...(child?.sortable && {
-					sorter: (a: any, b: any) =>
-						child.customSort
-							? child.customSort(a[child.dataIndex as string], b[child.dataIndex as string])
-							: a[child.dataIndex as string] > b[child.dataIndex as string]
-								? 1
-								: -1,
-				}),
-			})),
-		}));
-	}, [props.columns, resizable, getColumnSearchProps, getFilterColumnProps]);
-
+	// Base columns processing with useApplyColumnSettings
 	const { processedColumns } = useApplyColumnSettings({
-		columns: baseColumns,
+		columns: normalizedColumns,
 		columnSettings,
 		columnsWidth,
 		setColumnsWidth,
 		setColumnSettings,
 	});
 
-	const displayedColumns = useMemo(() => {
-		const cols = [...processedColumns];
-		if (addStt)
+	// Build actualColumns with STT & drag handle
+	const actualColumns: FlatColumn[] = useMemo(() => {
+		const cols: FlatColumn[] = processedColumns.map((item: IColumn<any>) => {
+			const fieldKey = Array.isArray(item.dataIndex) ? item.dataIndex.join('.') : (item.dataIndex as string);
+			const sortDir = fieldKey && sort[fieldKey] ? (sort[fieldKey] === 1 ? 'asc' : 'desc') : false;
+			const hasFilter =
+				item.filterType === 'string' || item.filterType === 'select' || item.filterType === 'customselect';
+
+			return {
+				...item,
+				_sortDirection: sortDir,
+				_hasFilter: hasFilter,
+				children: item.children?.map((child: IColumn<any>) => {
+					const childKey = Array.isArray(child.dataIndex) ? child.dataIndex.join('.') : (child.dataIndex as string);
+					const childSortDir = childKey && sort[childKey] ? (sort[childKey] === 1 ? 'asc' : 'desc') : false;
+					const childHasFilter =
+						child.filterType === 'string' || child.filterType === 'select' || child.filterType === 'customselect';
+					return {
+						...child,
+						_sortDirection: childSortDir,
+						_hasFilter: childHasFilter,
+					};
+				}),
+			};
+		});
+
+		if (addStt) {
 			cols.unshift({
 				title: intl.formatMessage({ id: 'global.table.column.tt' }),
 				dataIndex: 'index',
 				align: 'center',
 				width: 60,
+				resizable: false,
 				render: (val: string, rec: any) => {
 					const phanVungHienTai = dsPhanVung?.find((item: any) => item?.ma === rec?.dataPartitionCode);
 					const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';
@@ -319,26 +315,189 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							<span>{val}</span>
 
 							{phanVungHienTai?._id && (
-								<Tooltip title={phanVungHienTai?.name}>
+								<MyTooltip title={phanVungHienTai?.name}>
 									<div className='cornerTriangle' style={{ backgroundColor: maMau, top: size === 'small' ? -4 : -8 }} />
-								</Tooltip>
+								</MyTooltip>
 							)}
 						</div>
 					);
 				},
 			} as any);
+		}
 
-		//#region Get Drag Sortable column
-		if (rowSortable)
+		if (rowSortable && !cols.find((c: any) => c._isSortHandle)) {
 			cols.unshift({
 				width: 30,
+				key: 'sort-handle',
 				align: 'center',
 				fixed: 'left',
-				render: () => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />,
+				_isSortHandle: true,
+				render: () => <Icon6DotGridVertical style={{ cursor: 'grab', color: '#999' }} />,
 			} as any);
+		}
 
 		return cols;
-	}, [processedColumns, addStt, rowSortable, dsPhanVung, size, intl]);
+	}, [processedColumns, sort, addStt, rowSortable, dsPhanVung, size, intl]);
+
+	const hasGroupedColumns = actualColumns.some((c) => c.children?.length);
+	const leafColumns: FlatColumn[] = useMemo(
+		() => actualColumns.flatMap((c) => (c.children?.length ? (c.children as FlatColumn[]) : [c])),
+		[actualColumns],
+	);
+
+	const effectiveRowSelection = props.rowSelection ?? !!props.otherProps?.rowSelection;
+
+	const pinnedWidth = useMemo(
+		() =>
+			(effectiveRowSelection ? 56 : 0) +
+			leafColumns.filter(isColumnLocked).reduce((sum, c) => sum + (c.width ?? 80), 0),
+		[leafColumns, effectiveRowSelection],
+	);
+	const flexibleWidth = useMemo(
+		() => leafColumns.filter((c) => !isColumnLocked(c)).reduce((sum, c) => sum + (c.width ?? 80), 0),
+		[leafColumns],
+	);
+	const totalWidth = _.sum(leafColumns.map((item) => item.width ?? 80)) + (effectiveRowSelection ? 56 : 0);
+
+	// Filter and Sort tableData in memory
+	const tableData = useMemo(() => {
+		let result = (props?.data ?? []).map((item: any, index: number) => ({
+			...item,
+			key: item?._id ?? String(index),
+			index: index + 1,
+			children:
+				!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
+					? item.children
+					: undefined,
+		}));
+
+		// 1. Column filters
+		Object.entries(columnFilters).forEach(([key, filter]) => {
+			if (filter.type === 'string' && filter.value) {
+				const kw = String(filter.value).trim().toLowerCase();
+				result = result.filter((item) => {
+					const val = getValueByDataIndex(item, key);
+					return val?.toString()?.toLowerCase()?.includes(kw);
+				});
+			} else if (filter.type === 'select' && Array.isArray(filter.value) && filter.value.length > 0) {
+				const targetCol = normalizedColumns.find((c) =>
+					Array.isArray(c.dataIndex) ? c.dataIndex.join('.') === key : c.dataIndex === key,
+				);
+				result = result.filter((item) => {
+					// `onFilter` antd thật — predicate tùy ý (không chỉ so bằng), dùng khi có khai báo.
+					if (typeof targetCol?.onFilter === 'function') {
+						return filter.value.some((v: any) => targetCol.onFilter!(v, item));
+					}
+					const val = getValueByDataIndex(item, key);
+					return filter.value.includes(String(val));
+				});
+			}
+		});
+
+		// 2. Global search
+		const keyword = globalSearchText.trim().toLowerCase();
+		if (globalSearch && keyword) {
+			result = result.filter((record: any) =>
+				globalSearchColumns.some((col: IColumn<any>) => {
+					const value = getValueByDataIndex(record, col.dataIndex);
+					return value?.toString()?.toLowerCase()?.includes(keyword);
+				}),
+			);
+		}
+
+		// 3. Sorting
+		const sortKey = Object.keys(sort)[0];
+		const sortOrder = sortKey ? sort[sortKey] : 0;
+		if (sortKey && sortOrder !== 0) {
+			const targetCol = normalizedColumns.find((c) =>
+				Array.isArray(c.dataIndex) ? c.dataIndex.join('.') === sortKey : c.dataIndex === sortKey,
+			);
+			result.sort((a, b) => {
+				// `sorter` antd thật nhận (record, record) — khác `customSort` nhận (value, value).
+				if (typeof targetCol?.sorter === 'function') {
+					return targetCol.sorter(a, b) * sortOrder;
+				}
+				const aVal = getValueByDataIndex(a, sortKey);
+				const bVal = getValueByDataIndex(b, sortKey);
+				if (targetCol?.customSort) {
+					return targetCol.customSort(aVal, bVal) * sortOrder;
+				}
+				if (aVal === bVal) return 0;
+				if (aVal === undefined || aVal === null) return 1;
+				if (bVal === undefined || bVal === null) return -1;
+				if (typeof aVal === 'string' && typeof bVal === 'string') {
+					return aVal.localeCompare(bVal, 'vi', { numeric: true }) * sortOrder;
+				}
+				return aVal > bVal ? sortOrder : -sortOrder;
+			});
+		}
+
+		return result;
+	}, [
+		props.data,
+		props.hideChildrenRows,
+		normalizedColumns,
+		columnFilters,
+		globalSearch,
+		globalSearchText,
+		globalSearchColumns,
+		sort,
+	]);
+
+	// Pagination
+	const isPaginationEnabled = props.otherProps?.pagination !== false;
+	const initialPageSize =
+		typeof props.otherProps?.pagination === 'object' && props.otherProps?.pagination?.pageSize
+			? props.otherProps.pagination.pageSize
+			: 10;
+	const [currentPage, setCurrentPage] = useState<number>(1);
+	const [currentLimit, setCurrentLimit] = useState<number>(initialPageSize);
+
+	const pagedData = useMemo(() => {
+		const base = isPaginationEnabled
+			? tableData.slice((currentPage - 1) * currentLimit, currentPage * currentLimit)
+			: tableData;
+		const offset = isPaginationEnabled ? (currentPage - 1) * currentLimit : 0;
+		return base.map((item: any, idx: number) => ({
+			...item,
+			index: offset + idx + 1,
+		}));
+	}, [tableData, currentPage, currentLimit, isPaginationEnabled]);
+
+	useEffect(() => {
+		if (currentPage > 1 && (currentPage - 1) * currentLimit >= tableData.length) {
+			setCurrentPage(1);
+		}
+	}, [tableData.length, currentPage, currentLimit]);
+
+	// Row Selection
+	const currentPageKeys = useMemo(() => pagedData.map((r: any) => r.key), [pagedData]);
+	const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
+	const selectedOnPageCount = currentPageKeys.filter((k) => selectedSet.has(k)).length;
+	const allCurrentSelected = currentPageKeys.length > 0 && selectedOnPageCount === currentPageKeys.length;
+	const someCurrentSelected = selectedOnPageCount > 0 && !allCurrentSelected;
+
+	const triggerSelectChange = (arr: (string | number)[], type: 'all' | 'multiple' | 'single' = 'multiple') => {
+		setSelectedIds(arr);
+		props.onSelectChange?.(arr);
+		if (typeof props.otherProps?.rowSelection === 'object') {
+			const selectedRows = tableData.filter((item) => arr.includes(item.key));
+			props.otherProps.rowSelection.onChange?.(arr, selectedRows, { type });
+		}
+	};
+
+	const toggleSelectAll = (checked: boolean) => {
+		const next = new Set(selectedIds);
+		currentPageKeys.forEach((k) => (checked ? next.add(k) : next.delete(k)));
+		triggerSelectChange(Array.from(next), 'all');
+	};
+
+	const toggleSelectRow = (key: string | number, checked: boolean) => {
+		const next = new Set(selectedIds);
+		if (checked) next.add(key);
+		else next.delete(key);
+		triggerSelectChange(Array.from(next), 'single');
+	};
 
 	const handleDragEnd = (event: any) => {
 		const { active, over } = event;
@@ -349,128 +508,438 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		}
 	};
 
-	// dnd-kit: SortableRow component
-	const SortableRow = (rowProps: any) => {
-		const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-			id: rowProps['data-row-key'],
-		});
-		const style = {
-			...rowProps.style,
-			transform: CSS.Transform.toString(transform),
-			transition,
-			cursor: 'grab',
-			...(isDragging ? { background: '#fafafa' } : {}),
-		};
-		return <tr {...rowProps} ref={setNodeRef} style={style} {...attributes} {...listeners} />;
-	};
+	const renderColumnLabel = (col: FlatColumn) => {
+		const isEnd = col.align === 'right';
+		const titleNode = <span className='table-header-cell-title'>{col.title as any}</span>;
 
-	const renderTable = () => {
-		const totalWidth = _.sum(displayedColumns.map((item: any) => item.width ?? 80));
 		return (
-			<Table
-				columns={displayedColumns as any[]}
-				dataSource={tableData}
-				rowKey='key'
-				onChange={(pagination, filters, sorter, extra) => {
-					setTotal(extra.currentDataSource.length ?? pagination.total);
-				}}
-				loading={props?.loading}
-				size={size ?? props.size}
-				scroll={{
-					x: totalWidth ?? props.otherProps?.scroll?.x ?? 'max-content',
-					...props.scroll,
-					...props.otherProps?.scroll,
-				}}
-				bordered
-				components={{
-					...(rowSortable ? { body: { row: SortableRow } } : {}),
-					header: { cell: ResizableTitle },
-				}}
-				tableLayout='fixed'
-				{...props?.otherProps}
-			/>
+			<div className={isEnd ? 'table-header-cell-label align-end' : 'table-header-cell-label'}>
+				{col.sortable ? (
+					<TableSortButton
+						direction={col._sortDirection ?? false}
+						align={isEnd ? 'end' : 'start'}
+						onClick={() => handleSortClick(col)}
+						style={{ minWidth: 0 }}
+					>
+						{titleNode}
+					</TableSortButton>
+				) : (
+					titleNode
+				)}
+				{col._hasFilter ? (
+					<span className='table-header-cell-filter'>
+						<ColumnFilterPopover
+							column={col}
+							getFilterColumn={getFilterColumn}
+							onSearch={handleColumnSearch}
+							onFilter={handleColumnFilter}
+						/>
+					</span>
+				) : null}
+			</div>
 		);
 	};
 
-	const renderGlobalSearch = (minimized: boolean) => (
-		<AutoComplete
-			options={globalOptions}
-			value={globalSearchText}
-			size={size}
-			onSelect={handleGlobalSearchTrigger}
-			onChange={(val) => setGlobalSearchText(val)}
-		>
-			<Input.Search
-				ref={searchInputRef}
-				className='global-search'
-				size={size}
-				allowClear
-				value={globalSearchText}
-				placeholder={globalSearchPlaceholder}
-				autoFocus={minimized}
-				style={
-					globalSearchText
-						? {
-								width: 260,
-								borderColor: primaryColor,
-								outline: '1px solid ' + primaryColor,
-								borderRadius: 4,
-							}
-						: { width: 260 }
+	const getColKey = useCallback((col: FlatColumn, fallbackIndex: number): string | number => {
+		if (col.key !== undefined && col.key !== null) return String(col.key);
+		if (col.dataIndex !== undefined && col.dataIndex !== null) {
+			return Array.isArray(col.dataIndex) ? col.dataIndex.join('.') : String(col.dataIndex);
+		}
+		return fallbackIndex;
+	}, []);
+
+	const { leftPinnedOffsets, rightPinnedOffsets } = useMemo(() => {
+		const leftOffsets: Record<string | number, number> = {};
+		const rightOffsets: Record<string | number, number> = {};
+
+		let currentLeft = effectiveRowSelection ? 56 : 0;
+		leafColumns.forEach((col, idx) => {
+			if (col.fixed === 'left') {
+				const key = getColKey(col, idx);
+				leftOffsets[key] = currentLeft;
+				currentLeft += col.width ?? 80;
+			}
+		});
+
+		let currentRight = 0;
+		for (let i = leafColumns.length - 1; i >= 0; i--) {
+			const col = leafColumns[i];
+			if (col.fixed === 'right') {
+				const key = getColKey(col, i);
+				rightOffsets[key] = currentRight;
+				currentRight += col.width ?? 80;
+			}
+		}
+
+		return { leftPinnedOffsets: leftOffsets, rightPinnedOffsets: rightOffsets };
+	}, [leafColumns, effectiveRowSelection, getColKey]);
+
+	const renderHeadCell = (col: FlatColumn, extraProps?: Record<string, any>) => {
+		const resizeProps = (col as any).onHeaderCell?.(col) ?? {};
+		const colWidthPx = col.width ?? 80;
+		const locked = isColumnLocked(col);
+		const colKey = getColKey(col, 0);
+
+		const isPinnedLeft = col.fixed === 'left';
+		const isPinnedRight = col.fixed === 'right';
+
+		const pinnedHeadStyle: React.CSSProperties = isPinnedLeft
+			? {
+					position: 'sticky',
+					left: leftPinnedOffsets[colKey] ?? 0,
+					zIndex: 20,
+					backgroundColor: 'var(--color-bg-container, var(--ds-bg-mortared, #ffffff))',
 				}
-				enterButton={
-					<Button
-						size={size}
-						icon={
-							<Tooltip title={globalSearchTooltip}>
-								<SearchOutlined />
-							</Tooltip>
-						}
-					/>
-				}
-				onSearch={handleGlobalSearchTrigger}
-				onChange={(e) => {
-					if (e.type === 'click') {
-						setGlobalSearchText('');
-						handleGlobalSearchTrigger('');
-					} else {
-						const val = e.target.value;
-						setGlobalSearchText(val);
+			: isPinnedRight
+				? {
+						position: 'sticky',
+						right: rightPinnedOffsets[colKey] ?? 0,
+						zIndex: 20,
+						backgroundColor: 'var(--color-bg-container, var(--ds-bg-mortared, #ffffff))',
 					}
+				: {};
+
+		const headProps = locked
+			? {
+					width: colWidthPx,
+					...resizeProps,
+					resizable: !isPinnedLeft && !isPinnedRight && col.resizable !== false,
+				}
+			: {
+					...resizeProps,
+					width: flexibleWidth > 0 ? `calc((100% - ${pinnedWidth}px) * ${colWidthPx} / ${flexibleWidth})` : colWidthPx,
+					minWidth: colWidthPx,
+					resizable: false,
+				};
+
+		return (
+			<ResizableTableHead
+				key={colKey}
+				truncate={false}
+				style={{
+					...alignStyle(col.align as any),
+					...pinnedHeadStyle,
 				}}
-			/>
-		</AutoComplete>
+				className={classNames({
+					'table-cell-pinned-left': isPinnedLeft,
+					'table-cell-pinned-right': isPinnedRight,
+				})}
+				{...headProps}
+				onResizeStart={() => {
+					isResizingRef.current = true;
+					document.body.style.userSelect = 'none';
+				}}
+				onResizeStop={() => {
+					isResizingRef.current = false;
+					document.body.style.userSelect = '';
+				}}
+				{...extraProps}
+			>
+				{renderColumnLabel(col)}
+			</ResizableTableHead>
+		);
+	};
+
+	const renderTable = () => (
+		<Table style={{ width: `max(${props.scroll?.x ?? totalWidth}px, 100%)`, tableLayout: 'fixed' }} density='compact'>
+			<colgroup>
+				{effectiveRowSelection && <col style={{ width: 56, minWidth: 56 }} />}
+				{leafColumns.map((col, idx) => {
+					const locked = isColumnLocked(col);
+					const colWidthPx = col.width ?? 80;
+					const widthStyle = locked
+						? { width: colWidthPx, minWidth: colWidthPx }
+						: {
+								width:
+									flexibleWidth > 0 ? `calc((100% - ${pinnedWidth}px) * ${colWidthPx} / ${flexibleWidth})` : colWidthPx,
+								minWidth: colWidthPx,
+							};
+					return <col key={getColKey(col, idx)} style={widthStyle} />;
+				})}
+			</colgroup>
+
+			<TableHeaderEl>
+				{hasGroupedColumns ? (
+					<>
+						<TableRow>
+							{effectiveRowSelection && (
+								<TableSelectionCell
+									rowSpan={2}
+									pinned='left'
+									checked={allCurrentSelected}
+									indeterminate={someCurrentSelected}
+									onCheckedChange={toggleSelectAll}
+									label={intl.formatMessage({ id: 'global.table.index.chontatca', defaultMessage: 'Chọn tất cả' })}
+								/>
+							)}
+							{actualColumns.map((col, colIdx) =>
+								col.children?.length ? (
+									<TableHead
+										key={(col.key as any) ?? colIdx}
+										colSpan={col.children.length}
+										style={{
+											...alignStyle(col.align as any),
+											...(col.fixed === 'right'
+												? {
+														position: 'sticky',
+														right:
+															rightPinnedOffsets[
+																getColKey(col.children[col.children.length - 1] as FlatColumn, colIdx)
+															] ?? 0,
+														zIndex: 21,
+														backgroundColor: 'var(--color-bg-container, var(--ds-bg-mortared, #ffffff))',
+													}
+												: col.fixed === 'left'
+													? {
+															position: 'sticky',
+															left: leftPinnedOffsets[getColKey(col.children[0] as FlatColumn, colIdx)] ?? 0,
+															zIndex: 21,
+															backgroundColor: 'var(--color-bg-container, var(--ds-bg-mortared, #ffffff))',
+														}
+													: {}),
+										}}
+									>
+										{col.title as any}
+									</TableHead>
+								) : (
+									renderHeadCell(col, { rowSpan: 2 })
+								),
+							)}
+						</TableRow>
+						<TableRow>
+							{actualColumns.flatMap((col) =>
+								col.children?.length ? col.children.map((child) => renderHeadCell(child as FlatColumn)) : [],
+							)}
+						</TableRow>
+					</>
+				) : (
+					<TableRow>
+						{effectiveRowSelection && (
+							<TableSelectionCell
+								pinned='left'
+								checked={allCurrentSelected}
+								indeterminate={someCurrentSelected}
+								onCheckedChange={toggleSelectAll}
+								label={intl.formatMessage({ id: 'global.table.index.chontatca', defaultMessage: 'Chọn tất cả' })}
+							/>
+						)}
+						{actualColumns.map((col) => renderHeadCell(col))}
+					</TableRow>
+				)}
+			</TableHeaderEl>
+
+			<TableBody>
+				{props.loading ? (
+					<TableRow>
+						<TableCell
+							colSpan={leafColumns.length + (effectiveRowSelection ? 1 : 0)}
+							style={{ textAlign: 'center', padding: 32 }}
+						>
+							<Spin />
+						</TableCell>
+					</TableRow>
+				) : tableData.length === 0 ? (
+					<TableRow>
+						<TableCell
+							colSpan={leafColumns.length + (effectiveRowSelection ? 1 : 0)}
+							style={{ textAlign: 'center', padding: 32 }}
+						>
+							<EmptyState
+								compact={size === 'small'}
+								description={props.emptyText ?? intl.formatMessage({ id: 'global.table.index.empty' })}
+							/>
+						</TableCell>
+					</TableRow>
+				) : (
+					pagedData.map((record: any, index: number) => {
+						const rowProps = props.otherProps?.onRow ? props.otherProps.onRow(record, index) : undefined;
+						const rowContent = (
+							<>
+								{effectiveRowSelection && (
+									<TableSelectionCell
+										pinned='left'
+										checked={selectedSet.has(record.key)}
+										onCheckedChange={(checked) => toggleSelectRow(record.key, checked)}
+										label={intl.formatMessage(
+											{ id: 'global.table.index.chondong', defaultMessage: 'Chọn dòng {index}' },
+											{ index: index + 1 },
+										)}
+									/>
+								)}
+								{leafColumns.map((col: any, colIndex: number) => {
+									const cellProps = col.onCell ? col.onCell(record, index) : undefined;
+									if (cellProps?.colSpan === 0 || cellProps?.rowSpan === 0) {
+										return null;
+									}
+
+									const colKey = getColKey(col, colIndex);
+									const isSpanning = (cellProps?.colSpan ?? 1) > 1;
+									const isPinnedLeft = !isSpanning && col.fixed === 'left';
+									const isPinnedRight = !isSpanning && col.fixed === 'right';
+
+									const pinnedStyle: React.CSSProperties = isPinnedLeft
+										? {
+												position: 'sticky',
+												left: leftPinnedOffsets[colKey] ?? 0,
+												zIndex: 2,
+												backgroundColor: 'var(--color-bg-container, var(--ds-bg-mortared, #ffffff))',
+											}
+										: isPinnedRight
+											? {
+													position: 'sticky',
+													right: rightPinnedOffsets[colKey] ?? 0,
+													zIndex: 2,
+													backgroundColor: 'var(--color-bg-container, var(--ds-bg-mortared, #ffffff))',
+												}
+											: {};
+
+									const cellStyle: React.CSSProperties = {
+										...alignStyle(col.align as any),
+										...pinnedStyle,
+										...cellProps?.style,
+									};
+
+									return (
+										<TableCell
+											key={colKey}
+											colSpan={cellProps?.colSpan}
+											rowSpan={cellProps?.rowSpan}
+											style={cellStyle}
+											className={classNames(cellProps?.className, {
+												'table-cell-pinned-left': isPinnedLeft,
+												'table-cell-pinned-right': isPinnedRight,
+											})}
+											onClick={cellProps?.onClick}
+											truncate={false}
+										>
+											{col.render
+												? col.render(col.dataIndex ? getValueByDataIndex(record, col.dataIndex) : record, record, index)
+												: col.dataIndex
+													? getValueByDataIndex(record, col.dataIndex)
+													: null}
+										</TableCell>
+									);
+								})}
+							</>
+						);
+
+						return rowSortable ? (
+							<SortableTableRow key={record.key} id={record.key}>
+								{rowContent}
+							</SortableTableRow>
+						) : (
+							<TableRow key={record.key} {...rowProps} style={{ ...rowProps?.style }}>
+								{rowContent}
+							</TableRow>
+						);
+					})
+				)}
+			</TableBody>
+		</Table>
 	);
 
 	const isMobile = useMediaQuery({ maxWidth: 767 });
 	const isMinimize = size === 'small' || isMobile;
 	const canShowGlobalSearch = globalSearch && globalSearchColumns.length > 0;
 
+	const renderGlobalSearch = (minimized: boolean) => (
+		<Popover open={globalSearchHistoryOpen && globalOptions.length > 0} onOpenChange={setGlobalSearchHistoryOpen}>
+			{/* SearchInput không phải 1 phần tử đơn (icon + input + nút xóa) nên không asChild thẳng lên
+			nó được — Slot sẽ gộp nhầm prop. Bọc thêm 1 div trơn làm trigger thật để Radix đăng ký đúng
+			"vùng an toàn", SearchInput bên trong không bị đụng tới prop nào cả. */}
+			<PopoverTrigger asChild>
+				<div className='global-search-trigger'>
+					<SearchInput
+						ref={searchInputRef}
+						variant='tiled'
+						className={classNames('global-search-wrapper no-print', 'global-search')}
+						size={size === 'large' ? 'large' : size === 'small' ? 'small' : 'medium'}
+						clearable
+						value={globalSearchText}
+						placeholder={globalSearchPlaceholder}
+						autoFocus={minimized}
+						title={globalSearchTooltip}
+						style={
+							minimized
+								? { width: 250 }
+								: globalSearchText
+									? { borderColor: primaryColor, outline: '1px solid ' + primaryColor, borderRadius: 4 }
+									: undefined
+						}
+						onFocus={() => setGlobalSearchHistoryOpen(true)}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter') {
+								handleGlobalSearchTrigger((e.target as HTMLInputElement).value);
+								setGlobalSearchHistoryOpen(false);
+							}
+						}}
+						onClear={() => {
+							setGlobalSearchText('');
+							handleGlobalSearchTrigger('');
+						}}
+						onChange={(e) => {
+							setGlobalSearchText(e.target.value);
+						}}
+					/>
+				</div>
+			</PopoverTrigger>
+			<PopoverContent align='start' className='p-0' onOpenAutoFocus={(e) => e.preventDefault()}>
+				{/* surface=false — PopoverContent đã tự có bề mặt kính (FloatedPanel), Command lồng
+				thêm 1 lớp kính nữa sẽ bị mờ chồng mờ, giống hệt cách SelectPopover xử lý. */}
+				<Command surface={false}>
+					<CommandList>
+						{globalOptions.map((opt) => (
+							<CommandItem
+								key={opt.value}
+								variant='cell'
+								onSelect={() => {
+									handleGlobalSearchTrigger(opt.value);
+									setGlobalSearchHistoryOpen(false);
+								}}
+							>
+								{opt.label ?? opt.value}
+							</CommandItem>
+						))}
+					</CommandList>
+				</Command>
+			</PopoverContent>
+		</Popover>
+	);
+
+	const tableContainerStyle: React.CSSProperties = useMemo(() => {
+		const s: any = {};
+		if (props.scroll?.y) {
+			s['--table-scroll-max-height'] = typeof props.scroll.y === 'number' ? `${props.scroll.y}px` : props.scroll.y;
+		}
+		return s;
+	}, [props.scroll?.y]);
+
 	const mainContent = (
-		<div className='table-base'>
-			<div className='header'>
+		<div className='table-base' style={tableContainerStyle}>
+			<div className='header' data-slot='table-card-toolbar'>
 				{children}
-				<div className='action'>
+				<div className='action no-print'>
 					{hasCreate && (
 						<ButtonExtend
 							onClick={() => {
 								if (setShowEdit) setShowEdit(true);
 							}}
-							icon={<PlusCircleOutlined />}
+							icon={<IconPlus />}
+							className='btn-add'
 							type='primary'
+							disabled={createDisabled}
 							size={size}
 							tooltip={intl.formatMessage({ id: 'global.tablestatic.button.themmoi.tooltip' })}
 						>
 							{intl.formatMessage({ id: 'global.tablestatic.button.themmoi' })}
 						</ButtonExtend>
 					)}
-
 					{props.otherButtons}
 
 					{!!props.onReload ? (
 						<ButtonExtend
 							size={size}
-							icon={<ReloadOutlined />}
+							icon={<IconRotateArrow />}
 							onClick={() => (props.onReload ? props.onReload() : null)}
 							loading={props.loading}
 							className='btn-reload'
@@ -483,19 +952,24 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					{props.otherExtra}
 				</div>
 
-				<div className='extra'>
+				<div className='extra no-print'>
 					{columnSetting && <ColumnSettings />}
 
 					{canShowGlobalSearch ? (
 						isMinimize ? (
-							<Popover content={renderGlobalSearch(isMinimize)} trigger='click' placement='bottom'>
-								<ButtonExtend
-									className='btn-minimize-search'
-									size={size}
-									tooltip={globalSearchTooltip}
-									icon={<SearchOutlined />}
-									style={globalSearchText ? { borderColor: primaryColor, color: primaryColor } : undefined}
-								/>
+							<Popover>
+								<PopoverTrigger asChild>
+									<ButtonExtend
+										className='btn-minimize-search no-print'
+										size={size}
+										tooltip={globalSearchTooltip}
+										icon={<IconMagnifyingglass />}
+										style={globalSearchText ? { borderColor: primaryColor, color: primaryColor } : undefined}
+									/>
+								</PopoverTrigger>
+								<PopoverContent align='end' style={{ padding: 8, width: 280 }}>
+									{renderGlobalSearch(isMinimize)}
+								</PopoverContent>
 							</Popover>
 						) : (
 							renderGlobalSearch(isMinimize)
@@ -503,38 +977,48 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					) : null}
 
 					{hasTotal ? (
-						<Tooltip title={intl.formatMessage({ id: 'global.tablestatic.button.tongso.tooltip' })}>
-							<div className={classNames({ total: true, small: size === 'small' })}>
-								{intl.formatMessage({ id: 'global.tablestatic.button.tongso' })}:
-								<span style={{ fontSize: 15 }}>{total ?? tableData?.length ?? props.data?.length ?? 0}</span>
-								{header?.total?.prefix ? (
-									<span style={{ fontSize: 15, marginLeft: 6 }}>{header.total.prefix}</span>
-								) : null}
-							</div>
-						</Tooltip>
+						<MyTooltip title={intl.formatMessage({ id: 'global.tablestatic.button.tongso.tooltip' })}>
+							{props.totalComponent || (
+								<div className={classNames({ total: true, small: size === 'small' })}>
+									{intl.formatMessage({ id: 'global.tablestatic.button.tongso' })}:
+									<span>{tableData?.length ?? props.data?.length ?? 0}</span>
+								</div>
+							)}
+						</MyTooltip>
 					) : null}
 				</div>
 			</div>
 
-			<ConfigProvider
-				renderEmpty={() => (
-					<Empty
-						style={{ marginTop: 32, marginBottom: 32 }}
-						description={props.emptyText ?? intl.formatMessage({ id: 'global.table.index.empty' })}
-						image={size === 'small' ? Empty.PRESENTED_IMAGE_SIMPLE : undefined}
-					/>
-				)}
-			>
-				{rowSortable ? (
-					<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-						<SortableContext items={tableData.map((item: any) => item.key)} strategy={verticalListSortingStrategy}>
-							{renderTable()}
-						</SortableContext>
-					</DndContext>
-				) : (
-					renderTable()
-				)}
-			</ConfigProvider>
+			{rowSortable ? (
+				<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+					<SortableContext items={pagedData.map((item: any) => item.key)} strategy={verticalListSortingStrategy}>
+						{renderTable()}
+					</SortableContext>
+				</DndContext>
+			) : (
+				renderTable()
+			)}
+
+			{isPaginationEnabled && (
+				<TablePagination
+					page={currentPage}
+					limit={currentLimit}
+					total={tableData.length}
+					onPageChange={(nextPage) => {
+						setCurrentPage(nextPage);
+						if (typeof props.otherProps?.pagination === 'object') {
+							props.otherProps.pagination.onChange?.(nextPage, currentLimit);
+						}
+					}}
+					onLimitChange={(nextLimit) => {
+						setCurrentLimit(nextLimit);
+						setCurrentPage(1);
+						if (typeof props.otherProps?.pagination === 'object') {
+							props.otherProps.pagination.onShowSizeChange?.(1, nextLimit);
+						}
+					}}
+				/>
+			)}
 		</div>
 	);
 
@@ -543,29 +1027,47 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 			{props.title === undefined ? (
 				mainContent
 			) : (
-				<Card title={props.title || false} variant='borderless' className='card-borderless card-big-title'>
-					<Card>{mainContent}</Card>
-				</Card>
+				<PageCard
+					level={props.cardProps?.level}
+					showIndicator={props.cardProps?.showIndicator}
+					title={props.title || false}
+					extra={props.cardExtra}
+					bordered={props.border ?? props.bordered}
+					className={props.cardProps?.className}
+					style={props.cardProps?.style}
+				>
+					{mainContent}
+				</PageCard>
 			)}
 
 			{Form && (
 				<>
 					{props?.formType === 'Drawer' ? (
 						<Drawer
-							width={props?.widthDrawer}
-							onClose={() => {
-								if (setShowEdit) setShowEdit(false);
-							}}
-							destroyOnClose
-							footer={false}
+							direction='right'
 							open={showEdit}
+							onOpenChange={(open) => {
+								if (!open && setShowEdit) setShowEdit(false);
+							}}
 						>
-							<Form
-								onCancel={() => {
-									if (setShowEdit) setShowEdit(false);
+							<DrawerContent
+								style={{
+									width:
+										typeof props?.widthDrawer === 'number'
+											? `${props.widthDrawer}px`
+											: props?.widthDrawer === 'full'
+												? '100vw'
+												: '520px',
+									maxWidth: '100vw',
 								}}
-								{...props.formProps}
-							/>
+							>
+								<Form
+									onCancel={() => {
+										if (setShowEdit) setShowEdit(false);
+									}}
+									{...props.formProps}
+								/>
+							</DrawerContent>
 						</Drawer>
 					) : (
 						<ModalExpandable
@@ -574,7 +1076,6 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 								if (setShowEdit) setShowEdit(false);
 							}}
 							destroyOnClose
-							footer={false}
 							styles={{ body: { padding: 0 } }}
 							open={showEdit}
 						>

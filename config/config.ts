@@ -1,4 +1,6 @@
 // https://umijs.org/config/
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import routes from './routes';
@@ -19,6 +21,31 @@ const appConfigDefines = isDev
 			return result;
 		}, {})
 	: {};
+
+const getAppConfigDefine = (): Record<string, string> => {
+	const typings = readFileSync(join(__dirname, '../src/typings.d.ts'), 'utf-8');
+
+	//Lấy list key có prefix APP_CONFIG_ trong typings.d.ts
+	const declaredKeys = Array.from(typings.matchAll(/declare const (APP_CONFIG_\w+)/g), (m) => m[1]);
+
+	//Lấy list key có prefix APP_CONFIG_ trong process.env
+	const envKeys = Object.keys(process.env).filter((key) => key.startsWith('APP_CONFIG_'));
+
+	//Lấy list key có trong typings.d.ts nhưng không có trong process.env
+	const missingKeys = declaredKeys.filter((key) => process.env[key] === undefined);
+
+	const define: Record<string, string> = {};
+
+	new Set([...declaredKeys, ...envKeys]).forEach((key) => {
+		define[key] = process.env[key] ?? '';
+	});
+
+	if (missingKeys.length) {
+		console.warn(`[APP_CONFIG] Thiếu cấu hình env, fallback '': ${missingKeys.join(', ')}`);
+	}
+
+	return define;
+};
 
 export default defineConfig({
 	hash: true,
@@ -76,7 +103,9 @@ export default defineConfig({
 	fastRefresh: true,
 
 	theme: {
-		'@base-path': process.env.APP_CONFIG_BASE_PATH || '/student/',
+		'@base-path': process.env.APP_CONFIG_BASE_PATH || '/',
+		'@font-family':
+			"'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
 	},
 
 	// plugins: ['@react-dev-inspector/umi4-plugin'],
@@ -89,7 +118,7 @@ export default defineConfig({
 	exportStatic: {},
 	headScripts: [{ src: `${appBasePath}runtime-config/env.js` }],
 
-	define: appConfigDefines,
+	define: getAppConfigDefine(),
 
 	base: appBasePath,
 	publicPath: appBasePath,

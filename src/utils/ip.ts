@@ -25,7 +25,7 @@ const ipFileMultiPart = ipRoot + 'file';
 
 // const ipCCT = 'http://192.168.1.38:3010'; // ip dev
 // const ipCsvc = ipRoot + 'csvc';
-const ipCsvc = getConnectTarget("csvc");
+const ipCsvc = getConnectTarget('csvc');
 
 const currentRole = EModuleKey.CONNECT;
 const replaceRole: EModuleKey | undefined = EModuleKey.CONG_CAN_BO; //EModuleKey.CONG_CAN_BO; // Thay đổi theo từng phân hệ
@@ -42,8 +42,8 @@ const keycloakUserInfoEndpoint = APP_CONFIG_KEYCLOAK_AUTHORITY + '/protocol/open
 const moodleEndpoint = typeof APP_CONFIG_MOODLE_ENDPOINT !== 'undefined' ? APP_CONFIG_MOODLE_ENDPOINT : '';
 
 export {
-	currentRole,
 	ctsvApiClientId,
+	currentRole,
 	financeApiClientId,
 	ip3,
 	ipCCT,

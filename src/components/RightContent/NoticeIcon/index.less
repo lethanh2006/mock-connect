@@ -19,7 +19,11 @@
 		}
 
 		&.read {
-			background-color: #e6f6ffa6;
+			background-color: var(--color-info-bg, #e6f6ffa6);
+
+			[data-vinuni-theme='dark'] & {
+				background-color: rgba(0, 81, 255, 0.16);
+			}
 		}
 
 		&:last-child {
@@ -28,11 +32,25 @@
 
 		&:hover {
 			background: var(--color-primary-bg);
+
+			// Vá trực tiếp tại đây, không chỉ dựa vào --color-official-500 đổi ở gốc — tránh phụ thuộc
+			// HMR/cache của webpack less-loader với biến CSS lồng 3 tầng, chắc ăn không bị trắng lóa.
+			[data-vinuni-theme='dark'] & {
+				background: rgba(59, 129, 218, 0.16) !important;
+			}
 		}
 
 		.title {
 			color: var(--color-primary);
 			font-weight: 600;
+
+			// --color-primary có thể là màu brand tùy tenant (đỏ VinUni mặc định, có nơi cấu hình xanh
+			// khác) — không tự đổi theo dark mode, chữ tối lên nền tối đọc không nổi. Dùng lại đúng
+			// pattern đã áp cho tiêu đề PageCard Level 2/3: đổi sang --color-text-base (cssVar antd tự
+			// đổi theo theme) khi dark, đảm bảo luôn đọc được bất kể tenant chỉnh brand color gì.
+			[data-vinuni-theme='dark'] & {
+				color: var(--color-text-base);
+			}
 		}
 
 		.description {
@@ -45,7 +63,7 @@
 		}
 
 		.datetime {
-			color: rgb(211, 211, 211);
+			color: var(--color-text-quaternary, rgb(211, 211, 211));
 			font-size: 12px;
 			font-style: italic;
 			line-height: @line-height-base;
@@ -70,13 +88,20 @@
 		&.loadedAll {
 			color: rgba(0, 0, 0, 0.25);
 			cursor: unset;
+
+			[data-vinuni-theme='dark'] & {
+				color: rgba(255, 255, 255, 0.25);
+			}
 		}
 	}
 }
 
 .notFound {
 	padding: 73px 0 88px;
-	color: @text-color-secondary;
+	// @text-color-secondary là biến LESS (compile-time cố định), không phải CSS custom property —
+	// không thể đổi theo dark mode dù runtime toggle theme thế nào. Dùng --color-text-secondary
+	// (cssVar antd tự sinh, tự đổi theo algorithm sáng/tối) thay thế.
+	color: var(--color-text-secondary, @text-color-secondary);
 	text-align: center;
 
 	img {
@@ -88,10 +113,11 @@
 
 .bottomBar {
 	height: 46px;
-	color: @text-color;
+	// @text-color/@border-color-split cũng là biến LESS cố định, cùng lý do như .notFound ở trên.
+	color: var(--color-text-base, @text-color);
 	line-height: 46px;
 	text-align: center;
-	border-top: 1px solid @border-color-split;
+	border-top: 1px solid var(--color-border-secondary, @border-color-split);
 	border-radius: 0 0 var(--border-radius) var(--border-radius);
 	transition: all 0.3s;
 
@@ -123,6 +149,11 @@
 	.ringing {
 		animation: noti-shake 1s ease-in-out infinite;
 	}
+}
+
+.noticeContainer {
+	padding-bottom: 2px;
+	overflow: hidden;
 }
 
 .reloadIcon {

@@ -1,26 +1,16 @@
-import { primaryColor } from '@/services/base/constant';
-import { Modal, Progress } from 'antd';
+import type { ReactNode } from 'react';
+import { loadingModalStore } from './loadingModalStore';
 
-const FormWaiting = (s: string, intl?: any) => {
-	Modal.info({
-		title: intl?.formatMessage({ id: 'global.formWaiting.dangxuly' }) ?? 'Đang xử lý dữ liệu...',
-		centered: true,
-		icon: null,
-		okButtonProps: { hidden: true },
-		content: (
-			<div style={{ textAlign: 'center' }}>
-				<Progress percent={100} status='active' showInfo={false} strokeColor={primaryColor} />
-				<span>{s ?? intl?.formatMessage({ id: 'global.formWaiting.title' }) ?? 'Thông báo'}</span>
-				<br />
-				<small>
-					<i>
-						({intl?.formatMessage({ id: 'global.formWaiting.thongbao' }) ?? 'Vui lòng chờ đến khi tiến trình kết thúc!'}
-						)
-					</i>
-				</small>
-			</div>
-		),
-	});
+/**
+ * Hiện modal "Đang xử lý..." — gọi được từ bất kỳ đâu (không cần là component React), giống hệt
+ * cách `toast.success(...)` gọi được từ mọi nơi. Phần render thật nằm ở LoadingModal.tsx (mount
+ * 1 lần duy nhất trong app.tsx) — hàm này chỉ đẩy state vào loadingModalStore.
+ * Đóng lại bằng `hideFormWaiting()`.
+ */
+const FormWaiting = (message: ReactNode) => {
+	loadingModalStore.show(message);
 };
+
+export const hideFormWaiting = () => loadingModalStore.hide();
 
 export default FormWaiting;

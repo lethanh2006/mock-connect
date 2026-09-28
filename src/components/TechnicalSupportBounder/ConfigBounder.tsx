@@ -1,3 +1,5 @@
+import EmptyState from '@/components/EmptyState';
+import { IconXmark } from '@/components/Icons';
 import {
 	accentColors,
 	highlightColor,
@@ -7,24 +9,33 @@ import {
 	statusColors,
 	textColors,
 } from '@/services/base/constant';
-import { getPublicAssetPath } from '@/utils/path';
 import { getIntl, getLocale } from '@umijs/max';
-import { ConfigProvider, Empty, Spin } from 'antd';
+import { useUi } from '@vinuni/ui';
+import { ConfigProvider, Spin, theme } from 'antd';
 import { useEffect } from 'react';
 
 const ConfigBounder = (props: { children?: any }) => {
 	const intl = getIntl();
+	const { resolvedTheme } = useUi();
+	const isDark = resolvedTheme === 'dark';
 	useEffect(() => {
 		ConfigProvider.config({
 			theme: {
-				token: { borderRadius: 4, colorPrimary: primaryColor, colorLink: primaryColor },
+				algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
+				token: {
+					fontFamily:
+						"'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+					borderRadius: 4,
+					colorPrimary: primaryColor,
+					colorLink: primaryColor,
+				},
 				hashed: false,
 				cssVar: { prefix: '' },
 			},
 		});
 
 		Spin.setDefaultIndicator(<div className='circle-loader' />);
-	}, [primaryColor]);
+	}, [primaryColor, isDark]);
 
 	const locale = getLocale();
 
@@ -34,15 +45,18 @@ const ConfigBounder = (props: { children?: any }) => {
 			form={{
 				requiredMark: false,
 			}}
-			renderEmpty={() => (
-				<Empty
-					style={{ marginTop: 32, marginBottom: 32 }}
-					image={getPublicAssetPath('images/empty.png')}
-					description={intl.formatMessage({ id: 'global.table.index.empty' })}
-				/>
-			)}
+			modal={{
+				closeIcon: <IconXmark size={14} />,
+			}}
+			drawer={{
+				closeIcon: <IconXmark size={14} />,
+			}}
+			renderEmpty={() => <EmptyState description={intl.formatMessage({ id: 'global.table.index.empty' })} />}
 			theme={{
+				algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
 				token: {
+					fontFamily:
+						"'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
 					borderRadius: 4,
 					colorPrimary: primaryColor,
 					colorLink: primaryColor,
@@ -77,7 +91,7 @@ const ConfigBounder = (props: { children?: any }) => {
 					},
 					Button: {
 						textTextColor: primaryColor,
-						defaultColor: textColors.text100,
+						defaultColor: isDark ? undefined : textColors.text100,
 						borderColorDisabled: 'transparent',
 						paddingInline: 10,
 						borderRadius: 4,
@@ -99,18 +113,20 @@ const ConfigBounder = (props: { children?: any }) => {
 						colorPrimary: primaryColor,
 						borderRadius: 4,
 						fontWeightStrong: 700,
-						colorTextDisabled: textColors.text100,
+						colorTextDisabled: isDark ? undefined : textColors.text100,
 					},
 					Calendar: {
 						itemActiveBg: statusBgColors.statusBg400,
 						colorPrimary: primaryColor,
 					},
 					Modal: {
-						headerBg: officialColors.official500,
+						headerBg: 'transparent',
 						headerMarginBottom: 0,
+						titleColor: isDark ? '#ffffff' : textColors.text100,
+						titleFontSize: 18,
 					} as any,
 					Steps: {
-						colorSplit: accentColors.accent700,
+						colorSplit: isDark ? undefined : accentColors.accent700,
 						lineWidth: 2,
 						finishIconBgColor: statusColors.status100,
 					} as any,
@@ -126,7 +142,7 @@ const ConfigBounder = (props: { children?: any }) => {
 					},
 					Input: {
 						colorTextDisabled: textColors.text200,
-						activeBorderColor: accentColors.accent600,
+						activeBorderColor: isDark ? undefined : accentColors.accent600,
 					},
 					Segmented: {
 						itemSelectedColor: primaryColor,
@@ -138,7 +154,7 @@ const ConfigBounder = (props: { children?: any }) => {
 					Collapse: {
 						headerPadding: '16px 12px',
 						contentPadding: 12,
-						headerBg: accentColors.accent700,
+						headerBg: isDark ? undefined : accentColors.accent700,
 					},
 					Notification: {
 						paddingMD: 12,
@@ -159,19 +175,19 @@ const ConfigBounder = (props: { children?: any }) => {
 					Radio: {
 						colorPrimary: primaryColor,
 						radioColor: primaryColor,
-						radioBgColor: textColors.text400,
+						radioBgColor: isDark ? undefined : textColors.text400,
 						dotSize: 10,
 					} as any,
 					Tabs: {
 						fontWeightStrong: 600,
-						cardBg: officialColors.official500,
+						cardBg: isDark ? undefined : officialColors.official500,
 						inkBarColor: highlightColor,
 						cardGutter: 0,
 						horizontalItemPadding: '12px',
 						horizontalItemGutter: 8,
 					},
 					Divider: {
-						colorSplit: accentColors.accent700,
+						colorSplit: isDark ? undefined : accentColors.accent700,
 						lineWidth: 2,
 						orientationMargin: 0,
 						textPaddingInline: 2,
@@ -179,11 +195,11 @@ const ConfigBounder = (props: { children?: any }) => {
 					},
 					Select: {
 						optionSelectedColor: primaryColor,
-						optionSelectedBg: officialColors.official500,
+						optionSelectedBg: isDark ? undefined : officialColors.official500,
 					},
 					Table: {
-						borderColor: textColors?.text400,
-						headerBg: accentColors?.accent700,
+						borderColor: isDark ? undefined : textColors?.text400,
+						headerBg: isDark ? undefined : accentColors?.accent700,
 						cellPaddingBlock: 8,
 						cellPaddingInline: 8,
 						cellPaddingBlockSM: 3,
