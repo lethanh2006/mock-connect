@@ -140,6 +140,7 @@ export default {
 	'activity.filter.week': 'This Week',
 	'activity.filter.month': 'This Month',
 	'activity.filter.next': 'Next Month',
+	'activity.filter.dateRange': 'Date range',
 	'activity.filter.trangthai': 'All Registration Status',
 	'activity.filter.tatca': 'All',
 	'activity.filter.dangky': 'Registered',
@@ -182,6 +183,8 @@ export default {
 	'activity.chitiet.dangky.confirm': 'Confirm activity registration?',
 	'activity.chitiet.update': 'Update Evidence',
 	'activity.chitiet.dangkythanhcong': 'You have successfully registered',
+	'activity.chitiet.dangkythanhcong.desc':
+		'Track this activity in Activity Logging and remember to update your evidence after the event.',
 
 	'activity.chitiet.admin': 'Administrative Information',
 	'activity.chitiet.organizer': 'Organizer',
@@ -309,6 +312,8 @@ export default {
 	'activity.history.title': 'Activity Logging',
 	'activity.history.addNew': 'Add New',
 	'activity.history.updateEvidence': 'Update Evidence',
+	'activity.history.updateBefore': 'Update Evidence before',
+	'activity.history.approvedBy': 'Approved by',
 	'activity.history.seeMore': 'See More',
 	'activity.history.detailEvidence': 'Detail Evidence',
 	'activity.history.addEvidence': 'Add Evidence',

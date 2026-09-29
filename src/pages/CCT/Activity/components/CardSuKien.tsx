@@ -11,10 +11,12 @@ import {
 	mapEvalidation,
 	mapNameApprovalStatus,
 } from '@/services/CCT/constant';
+import { formatDateTime } from '@/utils/formatDate';
 import { Card, Flex, Space, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { JSX } from 'react';
 import { useIntl, useModel } from 'umi';
+import EllipsisText from '../../components/EllipsisText';
 
 const { Title } = Typography;
 
@@ -39,6 +41,9 @@ const CardSuKienCCT = (props: {
 
 	isExpired?: boolean;
 	isAward?: boolean;
+
+	attributes?: { _id: string; code?: string }[];
+	timeSeparator?: string;
 }) => {
 	const intl = useIntl();
 	const { danhSach: dsAttribute } = useModel('cct.attributes');
@@ -58,7 +63,10 @@ const CardSuKienCCT = (props: {
 		isExpired,
 		isRegister,
 		isAward,
+		attributes,
+		timeSeparator,
 	} = props;
+	const levelList = attributes ?? dsAttribute;
 
 	const now = dayjs();
 	const isNew = record?.createdAt && now.isBefore(dayjs(record.createdAt).add(3, 'day'));
@@ -116,33 +124,33 @@ const CardSuKienCCT = (props: {
 	const timeContent = (() => {
 		if (outTime && !isDetail && activeKey !== '3') {
 			return (
-				<div className={`text-danger ${!isDetail ? 'one-line' : ''}`}>
+				<EllipsisText as='div' className={`text-danger ${!isDetail ? 'one-line' : ''}`}>
 					{intl.formatMessage({ id: 'activity.card.quahan' })}
-				</div>
+				</EllipsisText>
 			);
 		}
 
 		if (isExpiringSoon && !record?.activityOutcome?.workflow) {
 			return (
-				<span className={`text-warning ${!isDetail ? 'one-line' : ''}`}>
+				<EllipsisText className={`text-warning ${!isDetail ? 'one-line' : ''}`}>
 					{intl.formatMessage({ id: 'activity.card.remain' })}: {remainingText}
-				</span>
+				</EllipsisText>
 			);
 		}
 
 		if (activeKey !== '1' && !!record?.activityOutcome?.workflow && !isDetail) {
 			return (
-				<span className={`${editableWorkflow ? 'text-danger' : ''} ${!isDetail ? 'one-line' : ''}`}>
+				<EllipsisText className={`${editableWorkflow ? 'text-danger' : ''} ${!isDetail ? 'one-line' : ''}`}>
 					{intl.formatMessage({ id: 'activity.card.update' })}{' '}
 					{endDateUpdateEvidence ? endDateUpdateEvidence.format('HH:mm DD/MM/YYYY') : '--'}
-				</span>
+				</EllipsisText>
 			);
 		}
 
 		return (
-			<span className={`${!isDetail ? 'one-line' : ''}`}>
-				{intl.formatMessage({ id: 'activity.card.dangky' })} {endDateRegi && endDateRegi.format('HH:mm DD/MM/YYYY')}
-			</span>
+			<EllipsisText className={`${!isDetail ? 'one-line' : ''}`}>
+				{intl.formatMessage({ id: 'activity.card.dangky' })} {formatDateTime(endDateRegi)}
+			</EllipsisText>
 		);
 	})();
 
@@ -171,9 +179,9 @@ const CardSuKienCCT = (props: {
 		>
 			<div className='activity-content-wrapper'>
 				<div className='activity-header'>
-					<Title level={5} className={`activity-title ${!isDetail ? 'activity-line' : ''}`}>
+					<EllipsisText as={Title} level={5} className={`activity-title ${!isDetail ? 'activity-line' : ''}`}>
 						{name}
-					</Title>
+					</EllipsisText>
 
 					<Flex justify='space-between' align='center' gap='small' wrap>
 						{isAward ? (
@@ -188,7 +196,7 @@ const CardSuKienCCT = (props: {
 							</Tag>
 						) : (
 							<div className='card-level'>
-								{dsAttribute?.map((lv, idx) => {
+								{levelList?.map((lv, idx) => {
 									const isActive = equivalencyAttributeIds?.includes(lv?._id);
 									return (
 										<span key={idx} className={`level-item ${isActive ? 'active' : ''} ${outTime ? 'disabled' : ''}`}>
@@ -235,28 +243,29 @@ const CardSuKienCCT = (props: {
 				<Space direction='vertical' className='activity-content'>
 					<Space size='small'>
 						<IconStopwatch className='icon-light' />
-						<span className={`${!isDetail ? 'one-line' : ''}`}>
-							<span className='text-semibold'>{startDate} </span> {intl.formatMessage({ id: 'activity.card.to' })}{' '}
+						<EllipsisText className={`${!isDetail ? 'one-line' : ''}`}>
+							<span className='text-semibold'>{startDate} </span>
+							{timeSeparator ?? intl.formatMessage({ id: 'activity.card.to' })}{' '}
 							<span className='text-semibold'>{endDate} </span>
-						</span>
+						</EllipsisText>
 					</Space>
 
 					{isPersonal ? (
 						isDetail ? (
 							<Space size='small'>
 								<IconPinLocation className='icon-light' />
-								<span className={`${!isDetail ? 'one-line' : ''}`}>
+								<EllipsisText className={`${!isDetail ? 'one-line' : ''}`}>
 									{[record?.activityOutcome?.organizer, record?.activityOutcome?.location].filter(Boolean).join(', ') ||
 										'--'}
-								</span>
+								</EllipsisText>
 							</Space>
 						) : (
 							<Space size='small'>
 								<IconHuman className='icon-light' />
-								<span className={`${!isDetail ? 'one-line' : ''}`}>
+								<EllipsisText className={`${!isDetail ? 'one-line' : ''}`}>
 									{intl.formatMessage({ id: 'activity.card.approver' })}:{' '}
 									{record?.activityOutcome?.studentDeclarationApproverName}
-								</span>
+								</EllipsisText>
 							</Space>
 						)
 					) : (
@@ -265,14 +274,14 @@ const CardSuKienCCT = (props: {
 								{showLocation ? (
 									<>
 										<IconPinLocation className='icon-light' />
-										<span className={`${!isDetail ? 'one-line' : ''}`}>
+										<EllipsisText className={`${!isDetail ? 'one-line' : ''}`}>
 											{record?.onCampus ? record?.facilityName : record?.otherAddress}
-										</span>
+										</EllipsisText>
 									</>
 								) : (
 									<>
 										<IconHuman className='icon-light' />
-										<span className={`${!isDetail ? 'one-line' : ''}`}>
+										<EllipsisText className={`${!isDetail ? 'one-line' : ''}`}>
 											{intl.formatMessage({ id: 'activity.card.approver' })}:{' '}
 											{record?.activityOutcome?.workflow === EApprovalStatus.APPROVED &&
 											!record?.activityOutcome?.studentDeclarationApproverName
@@ -283,7 +292,7 @@ const CardSuKienCCT = (props: {
 															?.map((item) => item?.name)
 															.filter(Boolean)
 															.join(', ')}
-										</span>
+										</EllipsisText>
 									</>
 								)}
 							</Space>

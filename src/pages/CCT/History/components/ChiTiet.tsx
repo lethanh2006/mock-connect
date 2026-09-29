@@ -1,238 +1,162 @@
 import background from '@/assets/cct/background.png';
+import EmptyState from '@/components/EmptyState';
+import { Badge, Button, IconDocument, IconHumanCheck, Input, Textarea } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
+import ActivityCard from '@/pages/TrangChuV2/components/ActivityCard';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EApprovalStatus } from '@/services/CCT/constant';
+import { formatDateTime } from '@/utils/formatDate';
 import { getNameFile, getPreviewUrl, isFileUrl } from '@/utils/utils';
-import { Button, IconDocument } from '@/components/Icons';
-import EmptyState from '@/components/EmptyState';
-import { Card } from '@/components/PageCard';
-import { Col, Row } from '@/components/MyGrid';
-import Input from '@/components/MyInput';
-import { Divider, List, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import { useIntl } from 'umi';
-import CardSuKienCCT from '../../Activity/components/CardSuKien';
+import { useIntl, useModel } from 'umi';
+import { Field, Section } from '../../Activity/components/CardChiTietSuKien';
 
 const ChiTietActivityOutCome = (props: { recOutcome: ActivityOutCome.IRecord }) => {
 	const intl = useIntl();
 	const { recOutcome } = props;
+	const { danhSach: dsAttribute } = useModel('cct.attributes');
 	const [previewOpen, setPreviewOpen] = useState<boolean>(false);
 	const [previewImage, setPreviewImage] = useState<string>('');
 
+	const msg = (id: string) => intl.formatMessage({ id: `activity.outcome.detail.${id}` });
+	const workflow = recOutcome?.workflow;
+	// Giữ đúng điều kiện cũ (CardSuKienCCT isExpired): cần chỉnh sửa nhưng đã quá hạn → hiện Expired
+	const isExpired = workflow === EApprovalStatus.CHANGES_REQUIRED && dayjs().isAfter(dayjs(recOutcome?.dueDate));
+
+	const equivalencyAttributeIds = recOutcome?.activitiesType?.attributes?.map((x) => x?._id) ?? [];
+	const attributes = (dsAttribute ?? []).map((attribute: AttributesManagement.IRecord) => ({
+		id: attribute._id,
+		letter: attribute.code?.charAt(0)?.toUpperCase() ?? '',
+		active: equivalencyAttributeIds.includes(attribute._id),
+	}));
+
 	return (
 		<>
-			<Row gutter={[12, 12]}>
-				<Col span={24} md={9}>
-					<CardSuKienCCT
-						record={{
-							...recOutcome?.activities,
-							activityOutcome: recOutcome,
-						}}
+			<Row gutter={[16, 16]}>
+				<Col span={24} md={9} className='activity-detail__card'>
+					<ActivityCard
+						title={recOutcome?.activitiesOutcomeName || '--'}
 						banner={recOutcome?.banner ?? background}
-						name={recOutcome?.activitiesOutcomeName}
-						startDate={recOutcome?.startDate ? dayjs(recOutcome?.startDate).format('HH:mm DD/MM/YYYY') : '--'}
-						endDate={recOutcome?.endDate ? dayjs(recOutcome?.endDate).format('HH:mm DD/MM/YYYY') : '--'}
-						equivalencyAttributeIds={recOutcome?.activitiesType?.attributes?.map((x) => x?._id)}
-						isPersonal
-						isDetail
-						isExpired={
-							recOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED && dayjs().isAfter(dayjs(recOutcome?.dueDate))
+						attributes={attributes}
+						startDate={formatDateTime(recOutcome?.startDate) || '--'}
+						endDate={formatDateTime(recOutcome?.endDate) || '--'}
+						location={[recOutcome?.organizer, recOutcome?.location].filter(Boolean).join(', ')}
+						approvalStatus={isExpired ? EApprovalStatus.EXPIRED : workflow}
+						deadline={
+							<span>
+								{intl.formatMessage({ id: 'activity.history.approvedBy' })}{' '}
+								{recOutcome?.studentDeclarationApproverName ?? '--'}
+							</span>
+						}
+						deadlineIcon={<IconHumanCheck className='activity-figma-card__icon' />}
+						extraTags={
+							workflow === EApprovalStatus.APPROVED && recOutcome?.validation ? (
+								<span className='activity-figma-card__status activity-figma-card__status--VERIFIED'>
+									{recOutcome.validation}
+								</span>
+							) : undefined
 						}
 					/>
 				</Col>
 				<Col span={24} md={15}>
-					<Card bordered={false} size='small'>
-						<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0 }}>
-							{intl.formatMessage({ id: 'activity.outcome.detail.admin' })}
-						</Divider>
+					<Section title={msg('admin')}>
+						<div className='grid grid-cols-2 gap-4'>
+							<Field label={msg('organizer')}>{recOutcome?.organizer ?? '--'}</Field>
+							<Field label={msg('approver')}>{recOutcome?.studentDeclarationApproverName ?? '--'}</Field>
+							<Field label={msg('group')}>{recOutcome?.activitiesType?.activitiesTypeDomain?.name ?? '--'}</Field>
+							<Field label={msg('type')}>{recOutcome?.activitiesType?.name ?? '--'}</Field>
+							<Field label={msg('supervisor')}>{recOutcome?.supervisorName ?? '--'}</Field>
+							{(workflow === EApprovalStatus.CHANGES_REQUIRED || workflow === EApprovalStatus.EXPIRED) && (
+								<Field label={msg('deadline')}>{formatDateTime(recOutcome?.dueDate) || '--'}</Field>
+							)}
+							{!!workflow && workflow !== EApprovalStatus.DRAFT && workflow !== EApprovalStatus.EVIDENCE_REQUIRED && (
+								<Field label={msg('submissionTime')}>{formatDateTime(recOutcome?.submittedAt) || '--'}</Field>
+							)}
+							{workflow !== EApprovalStatus.DRAFT && workflow !== EApprovalStatus.SUBMITTED && (
+								<Field label={msg('reviewTime')}>{formatDateTime(recOutcome?.approvalTime) || '--'}</Field>
+							)}
+						</div>
+					</Section>
+				</Col>
 
-						<div className='custom-info-grid grid-2'>
-							<div className='info-row'>
-								<div className='info-item'>
-									<div className='info-label'>{intl.formatMessage({ id: 'activity.outcome.detail.organizer' })}</div>
-									<div className='info-value'>{recOutcome?.organizer ?? '--'}</div>
-								</div>
-								<div className='info-item'>
-									<div className='info-label'>{intl.formatMessage({ id: 'activity.outcome.detail.approver' })}</div>
-									<div className='info-value'>{recOutcome?.studentDeclarationApproverName ?? '--'}</div>
-								</div>
-								<div className='info-item'>
-									<div className='info-label'>{intl.formatMessage({ id: 'activity.outcome.detail.group' })}</div>
-									<div className='info-value'>{recOutcome?.activitiesType?.activitiesTypeDomain?.name ?? '--'}</div>
-								</div>
-								<div className='info-item'>
-									<div className='info-label'>{intl.formatMessage({ id: 'activity.outcome.detail.type' })}</div>
-									<div className='info-value'>{recOutcome?.activitiesType?.name ?? '--'}</div>
-								</div>
-								{/* <div className='info-item'>
-								<div className='info-label'>Track</div>
-								<div className='info-value'>{recOutcome?.trackText ?? recOutcome?.track?.name ?? '--'}</div>
-							</div> */}
-								<div className='info-item'>
-									<div className='info-label'>{intl.formatMessage({ id: 'activity.outcome.detail.supervisor' })}</div>
-									<div className='info-value'>{recOutcome?.supervisorName ?? '--'}</div>
-								</div>
-								{(recOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
-									recOutcome?.workflow === EApprovalStatus.EXPIRED) && (
-									<div className='info-item'>
-										<div className='info-label'>{intl.formatMessage({ id: 'activity.outcome.detail.deadline' })}</div>
-										<div className='info-value'>
-											{recOutcome?.dueDate ? dayjs(recOutcome?.dueDate).format('HH:mm DD/MM/YYYY') : '--'}
-										</div>
+				{(workflow === EApprovalStatus.CHANGES_REQUIRED || !!recOutcome?.revisionNote) && (
+					<Col span={24}>
+						<Section title={msg('revisionNote')}>
+							<div className='text-base text-ds-content-primary'>{recOutcome?.revisionNote || '--'}</div>
+						</Section>
+					</Col>
+				)}
+
+				{(workflow === EApprovalStatus.REJECTED || !!recOutcome?.activityRejectionNote) && (
+					<Col span={24}>
+						<Section title={msg('rejectionNote')}>
+							<div className='text-base text-ds-content-primary'>{recOutcome?.activityRejectionNote || '--'}</div>
+						</Section>
+					</Col>
+				)}
+
+				<Col span={24}>
+					<Section title={msg('evidenceInfo')}>
+						<div className='grid grid-cols-2 gap-4'>
+							<Field label={msg('role')}>
+								<Input disabled readOnly value={recOutcome?.roles?.name ?? msg('noInfo')} />
+							</Field>
+							<Field label={msg('level')}>
+								<Input disabled readOnly value={recOutcome?.levels?.name ?? msg('noInfo')} />
+							</Field>
+							<Field full label={msg('listEvidence')}>
+								{recOutcome?.evidenceFile?.length ? (
+									<div className='flex flex-col gap-2'>
+										{recOutcome.evidenceFile.map((item: any, idx: number) => (
+											<div key={idx} className='flex flex-col items-start'>
+												<div>{item.name}</div>
+												{item?.file?.map((url: string, index: number) => (
+													<Button
+														key={index}
+														variant='link'
+														size='sm'
+														icon={<IconDocument />}
+														onClick={async () => {
+															setPreviewImage(await getPreviewUrl(url));
+															setPreviewOpen(true);
+														}}
+													>
+														{isFileUrl(url) ? getNameFile(url) : `File ${index + 1}`}
+													</Button>
+												))}
+											</div>
+										))}
 									</div>
+								) : (
+									<EmptyState compact description={msg('noEvidence')} />
 								)}
-								{!!recOutcome?.workflow &&
-									recOutcome?.workflow !== EApprovalStatus.DRAFT &&
-									recOutcome?.workflow !== EApprovalStatus.EVIDENCE_REQUIRED && (
-										<div className='info-item'>
-											<div className='info-label'>
-												{intl.formatMessage({ id: 'activity.outcome.detail.submissionTime' })}
-											</div>
-											<div className='info-value'>
-												{recOutcome.submittedAt ? dayjs(recOutcome.submittedAt).format('HH:mm DD/MM/YYYY') : '--'}
-											</div>
-										</div>
-									)}
-								{recOutcome?.workflow !== EApprovalStatus.DRAFT &&
-									recOutcome?.workflow !== EApprovalStatus.SUBMITTED && (
-										<div className='info-item'>
-											<div className='info-label'>
-												{intl.formatMessage({ id: 'activity.outcome.detail.reviewTime' })}
-											</div>
-											<div className='info-value'>
-												{recOutcome?.approvalTime ? dayjs(recOutcome?.approvalTime).format('HH:mm DD/MM/YYYY') : '--'}
-											</div>
-										</div>
-									)}
-							</div>
+							</Field>
+							<Field full label={msg('reflection')}>
+								<Textarea rows={3} disabled readOnly value={recOutcome?.reflection ?? msg('noInfo')} />
+							</Field>
 						</div>
-					</Card>
-				</Col>
-
-				{(recOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED || !!recOutcome?.revisionNote) && (
-					<Col span={24}>
-						<Card variant='borderless' size='small'>
-							<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0 }}>
-								{intl.formatMessage({ id: 'activity.outcome.detail.revisionNote' })}
-							</Divider>
-							<span>{recOutcome?.revisionNote}</span>
-						</Card>
-					</Col>
-				)}
-
-				{(recOutcome?.workflow === EApprovalStatus.REJECTED || !!recOutcome?.activityRejectionNote) && (
-					<Col span={24}>
-						<Card variant='borderless' size='small'>
-							<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0 }}>
-								{intl.formatMessage({ id: 'activity.outcome.detail.rejectionNote' })}
-							</Divider>
-							<span>{recOutcome?.activityRejectionNote}</span>
-						</Card>
-					</Col>
-				)}
-
-				<Col span={24}>
-					<Card variant='borderless' size='small'>
-						<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0 }}>
-							{intl.formatMessage({ id: 'activity.outcome.detail.evidenceInfo' })}
-						</Divider>
-
-						<div className='custom-info-grid grid-2' style={{ marginTop: 16 }}>
-							<div className='info-row'>
-								<div className='info-item'>
-									<div style={{ marginBottom: 8, fontWeight: 600 }}>
-										{intl.formatMessage({ id: 'activity.outcome.detail.role' })}
-									</div>
-									<Input
-										disabled
-										value={recOutcome?.roles?.name ?? intl.formatMessage({ id: 'activity.outcome.detail.noInfo' })}
-									/>
-								</div>
-								<div className='info-item'>
-									<div style={{ marginBottom: 8, fontWeight: 600 }}>
-										{intl.formatMessage({ id: 'activity.outcome.detail.level' })}
-									</div>
-									<Input
-										disabled
-										value={recOutcome?.levels?.name ?? intl.formatMessage({ id: 'activity.outcome.detail.noInfo' })}
-									/>
-								</div>
-								<div className='info-item full-width'>
-									<div style={{ marginBottom: 8, fontWeight: 600 }}>
-										{intl.formatMessage({ id: 'activity.outcome.detail.listEvidence' })}
-									</div>
-									<List
-										size='small'
-										dataSource={recOutcome?.evidenceFile ?? []}
-										locale={{
-											emptyText: (
-												<EmptyState
-													compact
-													description={intl.formatMessage({ id: 'activity.outcome.detail.noEvidence' })}
-												/>
-											),
-										}}
-										renderItem={(item: any) => {
-											return (
-												<List.Item>
-													<div>
-														<div style={{ fontWeight: 600 }}>{item.name}</div>
-
-														{item?.file?.map((url: string, index: number) => (
-															<Typography.Link
-																key={index}
-																style={{ display: 'flex', alignItems: 'center', gap: 8 }}
-																onClick={async () => {
-																	setPreviewImage(await getPreviewUrl(url));
-																	setPreviewOpen(true);
-																}}
-															>
-																<IconDocument />
-																<span>{isFileUrl(url) ? getNameFile(url) : `File ${index + 1}`}</span>
-															</Typography.Link>
-														))}
-													</div>
-												</List.Item>
-											);
-										}}
-									/>
-								</div>
-								<div className='info-item full-width'>
-									<div style={{ marginBottom: 8, fontWeight: 600 }}>
-										{intl.formatMessage({ id: 'activity.outcome.detail.reflection' })}
-									</div>
-									<Input.TextArea
-										rows={3}
-										disabled
-										value={recOutcome?.reflection ?? intl.formatMessage({ id: 'activity.outcome.detail.noInfo' })}
-									/>
-								</div>
-							</div>
-						</div>
-					</Card>
+					</Section>
 				</Col>
 
 				<Col span={24}>
-					<Card variant='borderless' size='small'>
-						<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0 }}>
-							{intl.formatMessage({ id: 'activity.outcome.detail.competency' })}
-						</Divider>
-						<div className='competency-list'>
-							{recOutcome?.listAchievedCompetencies?.map((item) => (
-								<div className='competency-item'>
-									<span className='competency-title'>{item?.competencie?.name}</span>
-									<p className='competency-desc'>{item?.competencie?.description}</p>
+					<Section title={msg('competency')}>
+						<div className='flex flex-col gap-3'>
+							{recOutcome?.listAchievedCompetencies?.map((item, idx) => (
+								<div key={idx} className='flex flex-col items-start gap-2'>
+									<Badge variant='inprogress'>• {item?.competencie?.name}</Badge>
+									<div className='text-base text-ds-content-primary'>{item?.competencie?.description}</div>
 								</div>
 							))}
 						</div>
-					</Card>
+					</Section>
 				</Col>
 			</Row>
 
 			<ModalExpandable
-				title={intl.formatMessage({ id: 'activity.outcome.detail.preview' })}
+				title={msg('preview')}
 				width={1200}
 				open={previewOpen}
 				footer={null}

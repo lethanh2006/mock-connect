@@ -1,10 +1,59 @@
 import ExpandText from '@/components/ExpandText';
+import { Badge } from '@/components/Icons';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { IColumn } from '@/components/Table/typing';
 import { Activity } from '@/services/CCT/Activity/typing';
-import { FormInstance, Space, Tag } from 'antd';
+import type { FormInstance } from 'antd';
 import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
+
+export type RoleEquivalencyRow = {
+	_id: string;
+	roleName: string;
+	desRole: string;
+	levelName?: string;
+	attributes: { name: string; color?: string }[];
+	autoApprove: boolean;
+};
+
+export const groupEquivalencyByRole = (equivalency?: Activity.IEquivalency[]): RoleEquivalencyRow[] => {
+	const map = new Map<
+		string,
+		{
+			_id: string;
+			roleName: string;
+			desRole: string;
+			levelName?: string;
+			attributes: { name: string; color?: string }[];
+			autoApprove: boolean;
+		}
+	>();
+
+	equivalency?.forEach((item) => {
+		const roleId = item.roles?._id;
+		if (!roleId) return;
+
+		if (!map.has(roleId)) {
+			map.set(roleId, {
+				_id: roleId,
+				roleName: item.roles?.name ?? '',
+				desRole: item.roles?.description ?? '',
+				levelName: item.roles?.level?.name ?? '',
+				attributes: [],
+				autoApprove: item?.autoApprove ?? false,
+			});
+		}
+
+		if (item.attributes?.name) {
+			map.get(roleId)!.attributes.push({
+				name: item.attributes.name,
+				color: item.attributes.color,
+			});
+		}
+	});
+
+	return Array.from(map.values());
+};
 
 const FormRoleEvidence = (props: {
 	equivalency?: Activity.IEquivalency[];
@@ -16,44 +65,7 @@ const FormRoleEvidence = (props: {
 	const { equivalency, select, rolesId, form } = props;
 	const { isView } = useModel('cct.activityoutcome');
 
-	const groupedEquivalency = useMemo(() => {
-		const map = new Map<
-			string,
-			{
-				_id: string;
-				roleName: string;
-				desRole: string;
-				levelName?: string;
-				attributes: { name: string; color?: string }[];
-				autoApprove: boolean;
-			}
-		>();
-
-		equivalency?.forEach((item) => {
-			const roleId = item.roles?._id;
-			if (!roleId) return;
-
-			if (!map.has(roleId)) {
-				map.set(roleId, {
-					_id: roleId,
-					roleName: item.roles?.name ?? '',
-					desRole: item.roles?.description ?? '',
-					levelName: item.roles?.level?.name ?? '',
-					attributes: [],
-					autoApprove: item?.autoApprove ?? false,
-				});
-			}
-
-			if (item.attributes?.name) {
-				map.get(roleId)!.attributes.push({
-					name: item.attributes.name,
-					color: item.attributes.color,
-				});
-			}
-		});
-
-		return Array.from(map.values());
-	}, [equivalency]);
+	const groupedEquivalency = useMemo(() => groupEquivalencyByRole(equivalency), [equivalency]);
 
 	const columnsRoles: IColumn<any>[] = [
 		{
@@ -71,13 +83,13 @@ const FormRoleEvidence = (props: {
 			title: intl.formatMessage({ id: 'activity.detail.attributes' }),
 			width: 200,
 			render: (_, rec) => (
-				<Space size={[4, 4]} wrap>
+				<div className='flex flex-wrap gap-1'>
 					{rec.attributes?.map((attr: any, idx: number) => (
-						<Tag key={idx} color={attr.color}>
+						<Badge key={idx} style={attr.color ? { background: attr.color, color: '#fff' } : undefined}>
 							{attr.name}
-						</Tag>
+						</Badge>
 					))}
-				</Space>
+				</div>
 			),
 		},
 	];
@@ -86,9 +98,9 @@ const FormRoleEvidence = (props: {
 		<TableStaticData
 			columns={columnsRoles}
 			data={groupedEquivalency}
+			scroll={{ y: 250 }}
 			otherProps={{
 				pagination: false,
-				scroll: { y: 250 },
 				rowKey: '_id',
 				rowSelection: !!select
 					? {

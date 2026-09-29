@@ -1,37 +1,34 @@
-import { IconShieldCheck } from '@/components/Icons';
-import ModalExpandable from '@/components/Table/ModalExpandable';
-import { Space, Typography } from 'antd';
+import {
+	ConfirmDialog,
+	ConfirmDialogAction,
+	ConfirmDialogActions,
+	ConfirmDialogContent,
+	ConfirmDialogDescription,
+	ConfirmDialogHeader,
+	ConfirmDialogTitle,
+	LecxeCelebrate,
+} from '@/components/Icons';
 import { useIntl } from 'umi';
-
-const { Title } = Typography;
 
 const ModalDangKyThanhCong = (props: { visibleDangKy: boolean; setVisibleDangKy: (val: boolean) => void }) => {
 	const intl = useIntl();
 	const { visibleDangKy, setVisibleDangKy } = props;
 
 	return (
-		<ModalExpandable open={visibleDangKy} onCancel={() => setVisibleDangKy(false)} footer={null} width={400}>
-			<Space direction='vertical' size={24} align='center' style={{ width: '100%' }}>
-				<div
-					style={{
-						width: 90,
-						height: 90,
-						borderRadius: '50%',
-						display: 'flex',
-						alignItems: 'center',
-						justifyContent: 'center',
-					}}
-				>
-					<IconShieldCheck style={{ fontSize: 48, color: '#329323' }} />
-				</div>
-			</Space>
-
-			<div style={{ textAlign: 'center', marginTop: 12 }}>
-				<Title level={4} style={{ color: '#329323' }}>
-					{intl.formatMessage({ id: 'activity.chitiet.dangkythanhcong' })}
-				</Title>
-			</div>
-		</ModalExpandable>
+		<ConfirmDialog open={visibleDangKy} onOpenChange={setVisibleDangKy}>
+			<ConfirmDialogContent className='max-w-[440px]' showCloseButton>
+				<ConfirmDialogHeader>
+					<LecxeCelebrate alt='' style={{ width: 160, height: 160 }} />
+					<ConfirmDialogTitle>{intl.formatMessage({ id: 'activity.chitiet.dangkythanhcong' })}</ConfirmDialogTitle>
+					<ConfirmDialogDescription>
+						{intl.formatMessage({ id: 'activity.chitiet.dangkythanhcong.desc' })}
+					</ConfirmDialogDescription>
+				</ConfirmDialogHeader>
+				<ConfirmDialogActions>
+					<ConfirmDialogAction>{intl.formatMessage({ id: 'global.button.dong' })}</ConfirmDialogAction>
+				</ConfirmDialogActions>
+			</ConfirmDialogContent>
+		</ConfirmDialog>
 	);
 };
 

@@ -39,7 +39,7 @@ const CardNoteMyCCT = (props: { myCCT: MyCCT.IRecord }) => {
 							<div className='mycct-note__value'>{formatTime(myCCT?.approvedAt)}</div>
 						</div>
 					)}
-					{isApproved && (
+					{(isApproved || isChangesRequired) && (
 						<div className='mycct-note__item'>
 							<div className='mycct-note__label'>Approver</div>
 							<div className='mycct-note__value'>

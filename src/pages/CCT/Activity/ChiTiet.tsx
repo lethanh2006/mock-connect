@@ -2,6 +2,7 @@ import { Button } from '@/components/Icons';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { Activity } from '@/services/CCT/Activity/typing';
 import { EApprovalStatus } from '@/services/CCT/constant';
+import { formatDateTime } from '@/utils/formatDate';
 import { Popconfirm, Space } from 'antd';
 import dayjs from 'dayjs';
 import { useIntl, useModel } from 'umi';
@@ -48,13 +49,84 @@ const ChiTietActivity = (props: {
 
 	const isExpired = activeKey === '3' && editableWorkflow && now.isAfter(endDateUpdateEvidence);
 
+	const footer = (
+		<div
+			style={{
+				display: 'flex',
+				gap: 8,
+				justifyContent:
+					record?.activityOutcome?.workflow !== EApprovalStatus.EVIDENCE_REQUIRED || activeKey === '3'
+						? 'flex-end'
+						: 'space-between',
+			}}
+		>
+			{record?.activityOutcome?.workflow === EApprovalStatus.EVIDENCE_REQUIRED && activeKey !== '3' && (
+				<Popconfirm
+					title='Confirm cancellation of activity registration ?'
+					placement='topLeft'
+					onConfirm={() =>
+						deleteActivityModel(
+							record?.activityOutcome?._id ?? '',
+							getData,
+							intl.formatMessage({ id: 'global.message.xoathanhcong' }),
+						).then(() => setVisibleForm(false))
+					}
+				>
+					<Button variant='link' className='btn-unregister'>
+						{intl.formatMessage({ id: 'activity.chitiet.huydangky' })}
+					</Button>
+				</Popconfirm>
+			)}
+
+			<Space wrap>
+				<Button variant='outline' onClick={() => setVisibleForm(false)}>
+					{intl.formatMessage({ id: 'activity.chitiet.dong' })}
+				</Button>
+
+				{!record?.activityOutcome?.workflow && !isFullSlot ? (
+					<Popconfirm
+						title='Confirm activity registration ?'
+						placement='topLeft'
+						onConfirm={() =>
+							registerActivityModel(record?._id ?? '', getData).then(() => {
+								setVisibleForm(false);
+								setVisibleDangKy && setVisibleDangKy(true);
+							})
+						}
+						disabled={outTime}
+					>
+						<Button variant='default' disabled={outTime}>
+							{intl.formatMessage({ id: 'activity.chitiet.dangky' })}
+						</Button>
+					</Popconfirm>
+				) : editableWorkflow && isOngoing ? (
+					<Button
+						variant='default'
+						onClick={() => {
+							setVisibleForm(false);
+							handleEdit({
+								...record?.activityOutcome,
+								activities: record,
+							});
+						}}
+					>
+						{intl.formatMessage({ id: 'activity.chitiet.update' })}
+					</Button>
+				) : isFullSlot && !record?.activityOutcome?.workflow ? (
+					<Button disabled>{intl.formatMessage({ id: 'activity.full' })}</Button>
+				) : null}
+			</Space>
+		</div>
+	);
+
 	return (
 		<ModalExpandable
 			title='Activity Detail'
+			className='activity-detail-modal'
 			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
 			width={1000}
-			footer={null}
+			footer={footer}
 		>
 			<CardChiTietSuKien
 				record={
@@ -65,16 +137,10 @@ const ChiTietActivity = (props: {
 				}
 				evidenceDeadline={
 					record?.activityOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED
-						? record?.activityOutcome?.dueDate
-							? dayjs(record?.activityOutcome?.dueDate).format('DD/MM/YYYY, HH:mm')
-							: '--'
+						? formatDateTime(record?.activityOutcome?.dueDate) || '--'
 						: record?.allowPostEventResultsUpdate
-							? record?.dueDate
-								? dayjs(record?.dueDate).format('DD/MM/YYYY, HH:mm')
-								: '--'
-							: record?.endDate
-								? dayjs(record?.endDate).format('DD/MM/YYYY, HH:mm')
-								: '--'
+							? formatDateTime(record?.dueDate) || '--'
+							: formatDateTime(record?.endDate) || '--'
 				}
 				infoEvidence={
 					(!!record?.activityOutcome?.workflow && record?.activityOutcome?.workflow !== EApprovalStatus.EXPIRED) ||
@@ -83,77 +149,6 @@ const ChiTietActivity = (props: {
 				activeKey={activeKey}
 				isExpired={isExpired}
 			/>
-
-			<div
-				className='modal-expandable-surface'
-				style={{
-					display: 'flex',
-					gap: 8,
-					justifyContent:
-						record?.activityOutcome?.workflow !== EApprovalStatus.EVIDENCE_REQUIRED || activeKey === '3'
-							? 'flex-end'
-							: 'space-between',
-					margin: '15px -15px -15px -15px',
-					padding: 16,
-				}}
-			>
-				{record?.activityOutcome?.workflow === EApprovalStatus.EVIDENCE_REQUIRED && activeKey !== '3' && (
-					<Popconfirm
-						title='Confirm cancellation of activity registration ?'
-						placement='topLeft'
-						onConfirm={() =>
-							deleteActivityModel(
-								record?.activityOutcome?._id ?? '',
-								getData,
-								intl.formatMessage({ id: 'global.message.xoathanhcong' }),
-							).then(() => setVisibleForm(false))
-						}
-					>
-						<Button variant='link' className='btn-unregister'>
-							{intl.formatMessage({ id: 'activity.chitiet.huydangky' })}
-						</Button>
-					</Popconfirm>
-				)}
-
-				<Space wrap>
-					<Button variant='outline' onClick={() => setVisibleForm(false)}>
-						{intl.formatMessage({ id: 'activity.chitiet.dong' })}
-					</Button>
-
-					{!record?.activityOutcome?.workflow && !isFullSlot ? (
-						<Popconfirm
-							title='Confirm activity registration ?'
-							placement='topLeft'
-							onConfirm={() =>
-								registerActivityModel(record?._id ?? '', getData).then(() => {
-									setVisibleForm(false);
-									setVisibleDangKy && setVisibleDangKy(true);
-								})
-							}
-							disabled={outTime}
-						>
-							<Button variant='default' disabled={outTime}>
-								{intl.formatMessage({ id: 'activity.chitiet.dangky' })}
-							</Button>
-						</Popconfirm>
-					) : editableWorkflow && isOngoing ? (
-						<Button
-							variant='default'
-							onClick={() => {
-								setVisibleForm(false);
-								handleEdit({
-									...record?.activityOutcome,
-									activities: record,
-								});
-							}}
-						>
-							{intl.formatMessage({ id: 'activity.chitiet.update' })}
-						</Button>
-					) : isFullSlot && !record?.activityOutcome?.workflow ? (
-						<Button disabled>{intl.formatMessage({ id: 'activity.full' })}</Button>
-					) : null}
-				</Space>
-			</div>
 		</ModalExpandable>
 	);
 };

@@ -1,4 +1,4 @@
-import { Select } from 'antd';
+import VinSelect from '@/components/VinSelect';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -41,7 +41,7 @@ const SelectLevelsManagement = (props: {
 		}));
 
 	return (
-		<Select
+		<VinSelect
 			disabled={disabled}
 			mode={multiple ? 'multiple' : undefined}
 			allowClear={allowClear}
@@ -50,8 +50,9 @@ const SelectLevelsManagement = (props: {
 			options={options}
 			showSearch
 			optionFilterProp='label'
+			allowDeselect={false}
 			placeholder={intl.formatMessage({ id: 'level.select' })}
-			style={{ width: '100%', ...style }}
+			style={style}
 		/>
 	);
 };

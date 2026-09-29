@@ -7,7 +7,7 @@ import { Button, IconTrash, IconPlus, Accordion, AccordionContent, AccordionItem
 import { Col, Row } from '@/components/MyGrid';
 import Input from '@/components/MyInput';
 import { toast } from '@/utils/toast';
-import { Form, Typography } from 'antd';
+import { Form } from 'antd';
 import dayjs from 'dayjs';
 import { uniqBy } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -17,8 +17,6 @@ import SelectLevelsManagement from '../../DanhMuc/Levels/Select';
 import CardNoteActivity from './CardNote';
 import FormCompetencyEvidence from './FormCompetencyEvidence';
 import FormRoleEvidence from './FormRoleEvidence';
-
-const { Paragraph } = Typography;
 
 const getUploadedFileId = (file: any) => {
 	return file?.response?.file?._id ?? file?.response?._id ?? file?.url ?? null;
@@ -281,15 +279,15 @@ const FormActivityOutCome = (props: any) => {
 						rules={[...rules.required, ...rules.text, ...rules.length(300)]}
 						extra={
 							<div style={{ marginTop: 6 }}>
-								<Paragraph className='text-info' style={{ fontSize: 12, marginBottom: 6, color: '#595959' }}>
+								<p className='text-info' style={{ fontSize: 12, marginBottom: 6, color: '#595959' }}>
 									Format: Led / Contributed to <b>[activity/project]</b>, resulting in <b>[measurable impact]</b>,
 									demonstrating <b>[key competency]</b>.
-								</Paragraph>
+								</p>
 
-								<Paragraph className='text-info' style={{ fontSize: 12, marginBottom: 0, color: '#8c8c8c' }}>
+								<p className='text-info' style={{ fontSize: 12, marginBottom: 0, color: '#8c8c8c' }}>
 									Example: Organized a charity initiative for Ha Nau Secondary School, reaching 150+ students and
 									mobilizing X VND in resources, demonstrating strong community engagement and execution capability.
-								</Paragraph>
+								</p>
 							</div>
 						}
 					>

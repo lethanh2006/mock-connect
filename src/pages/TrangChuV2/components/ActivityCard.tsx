@@ -1,4 +1,5 @@
 import background from '@/assets/cct/background.png';
+import EllipsisText from '@/pages/CCT/components/EllipsisText';
 import { IconClock, IconHourglass, IconPinLocation } from '@/components/Icons';
 import AuthImage from '@/components/Image/AuthImage';
 import { EApprovalStatus, mapNameApprovalStatus } from '@/services/CCT/constant';
@@ -22,6 +23,9 @@ export type ActivityCardProps = {
 	location?: string;
 	registerBefore?: string;
 	approvalStatus?: EApprovalStatus;
+	deadline?: ReactNode;
+	deadlineIcon?: ReactNode;
+	extraTags?: ReactNode;
 	action?: ReactNode;
 	onClick?: () => void;
 };
@@ -44,6 +48,9 @@ const ActivityCard = ({
 	location,
 	registerBefore,
 	approvalStatus,
+	deadline,
+	deadlineIcon,
+	extraTags,
 	action,
 	onClick,
 }: ActivityCardProps) => {
@@ -64,9 +71,11 @@ const ActivityCard = ({
 
 			<div className='activity-figma-card__body'>
 				<div className='activity-figma-card__heading'>
-					<h4 className='activity-figma-card__title'>{title}</h4>
+					<EllipsisText as='h4' className='activity-figma-card__title'>
+						{title}
+					</EllipsisText>
 
-					{(attributes.length > 0 || statusLabel) && (
+					{(attributes.length > 0 || statusLabel || extraTags) && (
 						<div className='activity-figma-card__badge-row'>
 							{attributes.length > 0 && (
 								<div className='activity-figma-card__levels'>
@@ -77,10 +86,15 @@ const ActivityCard = ({
 									))}
 								</div>
 							)}
-							{statusLabel && (
-								<span className={`activity-figma-card__status activity-figma-card__status--${approvalStatus}`}>
-									{statusLabel}
-								</span>
+							{(statusLabel || extraTags) && (
+								<div className='activity-figma-card__tags'>
+									{statusLabel && (
+										<span className={`activity-figma-card__status activity-figma-card__status--${approvalStatus}`}>
+											{statusLabel}
+										</span>
+									)}
+									{extraTags}
+								</div>
 							)}
 						</div>
 					)}
@@ -89,19 +103,23 @@ const ActivityCard = ({
 				<ul className='activity-figma-card__meta'>
 					<li>
 						<IconClock className='activity-figma-card__icon' />
-						<span>
+						<EllipsisText>
 							{startDate || '--'} - {endDate || '--'}
-						</span>
+						</EllipsisText>
 					</li>
 					<li>
 						<IconPinLocation className='activity-figma-card__icon' />
-						<span>{location || '--'}</span>
+						<EllipsisText>{location || '--'}</EllipsisText>
 					</li>
 					<li>
-						<IconHourglass className='activity-figma-card__icon' />
-						<span>
-							{intl.formatMessage({ id: 'activity.card.dangky' })} {registerBefore || '--'}
-						</span>
+						{deadlineIcon ?? <IconHourglass className='activity-figma-card__icon' />}
+						<EllipsisText>
+							{deadline ?? (
+								<>
+									{intl.formatMessage({ id: 'activity.card.dangky' })} {registerBefore || '--'}
+								</>
+							)}
+						</EllipsisText>
 					</li>
 				</ul>
 

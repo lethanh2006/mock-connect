@@ -1,4 +1,4 @@
-import { Select } from 'antd';
+import VinSelect from '@/components/VinSelect';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -42,7 +42,7 @@ const SelectRolesManagement = (props: {
 		}));
 
 	return (
-		<Select
+		<VinSelect
 			size={size}
 			disabled={disabled}
 			mode={multiple ? 'multiple' : undefined}
@@ -52,8 +52,9 @@ const SelectRolesManagement = (props: {
 			options={options}
 			showSearch
 			optionFilterProp='label'
+			allowDeselect={false}
 			placeholder={intl.formatMessage({ id: 'activity.role.select' })}
-			style={{ width: '100%', ...style }}
+			style={style}
 		/>
 	);
 };

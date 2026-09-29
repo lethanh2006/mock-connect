@@ -56,9 +56,9 @@ const FormCompetencyEvidence = (props: { listAchievedCompetencies?: string[]; fo
 			loading={loading}
 			hasTotal
 			onReload={getAllAttriCompetency}
+			scroll={{ y: 450 }}
 			otherProps={{
 				pagination: false,
-				scroll: { y: 250 },
 				rowKey: '_id',
 				rowSelection: {
 					type: 'checkbox',

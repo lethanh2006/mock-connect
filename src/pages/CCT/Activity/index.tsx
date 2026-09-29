@@ -1,12 +1,14 @@
 import background from '@/assets/cct/background.png';
 import EmptyState from '@/components/EmptyState';
+import { Chip, ChipGroup } from '@/components/Icons';
 import { Col, Row } from '@/components/MyGrid';
 import PageCard from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { EApprovalStatus } from '@/services/CCT/constant';
+import { formatDateTime } from '@/utils/formatDate';
 import { Button } from '@vinuni/ui';
-import { Pagination, Popconfirm, Spin, Tabs } from 'antd';
+import { Pagination, Popconfirm, Spin } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { useEffect, useState } from 'react';
@@ -161,35 +163,35 @@ const ActivityPage = () => {
 	};
 
 	return (
-		<PageCard stickyHeader title={intl.formatMessage({ id: 'activity.list' })}>
-			<Tabs
-				activeKey={activeKey}
-				onChange={(tab) => {
-					setActiveKey(tab);
-					setPage(1);
-					setLimit(9);
-				}}
-			>
-				<Tabs.TabPane key='1' tab={intl.formatMessage({ id: 'activity.upcoming' })} />
-				<Tabs.TabPane key='2' tab={intl.formatMessage({ id: 'activity.ongoing' })} />
-				<Tabs.TabPane key='3' tab={intl.formatMessage({ id: 'activity.completed' })} />
-			</Tabs>
+		<PageCard stickyHeader className='activity-events-page' title={intl.formatMessage({ id: 'activity.list' })}>
+			<ChipGroup className='activity-tabs'>
+				{[
+					{ key: '1', label: intl.formatMessage({ id: 'activity.upcoming' }) },
+					{ key: '2', label: intl.formatMessage({ id: 'activity.ongoing' }) },
+					{ key: '3', label: intl.formatMessage({ id: 'activity.completed' }) },
+				].map((tab) => (
+					<Chip
+						key={tab.key}
+						variant='elevated'
+						selected={activeKey === tab.key}
+						onClick={() => {
+							if (tab.key === activeKey) return;
+							setActiveKey(tab.key);
+							setPage(1);
+							setLimit(9);
+						}}
+					>
+						{tab.label}
+					</Chip>
+				))}
+			</ChipGroup>
 
 			<FilterSuKien value={filter} onChange={setFilter} onReload={getData} />
-
-			<hr
-				style={{
-					marginTop: 16,
-					marginBottom: 16,
-					border: 'none',
-					borderTop: '1px solid #f0f0f0',
-				}}
-			/>
 
 			<Spin spinning={loading}>
 				{danhSach?.length ? (
 					<>
-						<Row gutter={[12, 12]}>
+						<Row gutter={[16, 16]}>
 							{danhSach?.map((item) => {
 								const equivalencyAttributeIds = item?.coCurricularActivityEquivalency?.map((x) => x.attributesId);
 								const now = dayjs();
@@ -294,7 +296,7 @@ const ActivityPage = () => {
 								};
 
 								return (
-									<Col key={item._id} xs={24} sm={12} md={8} lg={8}>
+									<Col key={item._id} xs={24} sm={12} lg={8} xl={6}>
 										<CardSuKienCCT
 											record={{
 												...item,
@@ -302,18 +304,15 @@ const ActivityPage = () => {
 											}}
 											banner={item?.banner ?? background}
 											name={item?.name}
-											startDate={item?.startDate ? dayjs(item?.startDate).format('HH:mm DD/MM/YYYY') : '--'}
-											endDate={item?.endDate ? dayjs(item?.endDate).format('HH:mm DD/MM/YYYY') : '--'}
+											startDate={formatDateTime(item?.startDate) || '--'}
+											endDate={formatDateTime(item?.endDate) || '--'}
+											timeSeparator='-'
 											equivalencyAttributeIds={equivalencyAttributeIds}
 											onClick={() => {
 												setRecord(item);
 												setVisibleForm(true);
 											}}
-											button={
-												<Row style={{ padding: '12px 4px 4px 4px' }} gutter={[6, 0]}>
-													<Col span={24}>{renderButton()}</Col>
-												</Row>
-											}
+											button={<div className='activity-card-action'>{renderButton()}</div>}
 											outTimeRegis={outTimeRegis && activeKey !== '3'}
 											activeKey={activeKey}
 											isExpired={isExpired}

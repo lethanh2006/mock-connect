@@ -1,7 +1,11 @@
 import background from '@/assets/cct/background.png';
+import { Badge, Button, Checkbox, IconPlus, IconTrash, RadioGroup, RadioGroupItem } from '@/components/Icons';
 import AuthImage from '@/components/Image/AuthImage';
-import MyDatePicker from '@/components/MyDatePicker';
+import { Col, Row } from '@/components/MyGrid';
+import Input from '@/components/MyInput';
 import UploadFile from '@/components/Upload/UploadFile';
+import VinDateTimePicker from '@/components/VinDateTimePicker';
+import VinSelect from '@/components/VinSelect';
 import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
 import { ESettingKey } from '@/services/base/constant';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
@@ -16,14 +20,9 @@ import { EFileScope, uploadFileManagerMultipart } from '@/services/uploadFile';
 import { ipCCT } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { getSafeTagColor } from '@/utils/security';
-import { buildDisabledDateTime, resetFieldsForm } from '@/utils/utils';
-import { Button, IconTrash, IconPlus } from '@/components/Icons';
-import { Col, Row } from '@/components/MyGrid';
-import Input from '@/components/MyInput';
-import VinSelect from '@/components/VinSelect';
 import { toast } from '@/utils/toast';
-import { Checkbox, RadioGroup, RadioGroupItem } from '@/components/Icons';
-import { Form, Space, Typography, Tag } from 'antd';
+import { resetFieldsForm } from '@/utils/utils';
+import { Form, theme } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -34,7 +33,13 @@ import SelectRolesManagement from '../../DanhMuc/Roles/Select';
 import CardNoteActivity from './CardNote';
 import FormCompetencyEvidence from './FormCompetencyEvidence';
 
-const { Paragraph } = Typography;
+const designToken = theme.getDesignToken() as unknown as Record<string, string>;
+
+const getAttributeColor = (color?: string) => {
+	const safe = getSafeTagColor(color);
+	if (!safe) return undefined;
+	return safe.startsWith('#') ? safe : designToken[`${safe}6`];
+};
 
 const getUploadedFileId = (file: any) => {
 	return file?.response?.file?._id ?? file?.response?._id ?? file?.url ?? null;
@@ -136,6 +141,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 	const listAchievedCompetencies: string[] = Form.useWatch('listAchievedCompetencies', form);
 	const onUni: boolean = Form.useWatch('onUni', form);
 	const activitiesTypeId: string = Form.useWatch('activitiesTypeId', form);
+	const reflection: string = Form.useWatch('reflection', form);
 
 	const [isSubmit, setIsSubmit] = useState<boolean>(false);
 
@@ -293,13 +299,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 											</Col>
 											<Col span={24} md={12}>
 												<Form.Item name='startDate' label={msg('startDate')} rules={[...rules.required]}>
-													<MyDatePicker
-														showTime={{ showHour: true, showMinute: true }}
-														format='HH:mm DD/MM/YYYY'
-														disabled={isView}
-														placeholder={msg('startDate.place')}
-														onChange={() => form.resetFields(['endDate'])}
-													/>
+													<VinDateTimePicker disabled={isView} onChange={() => form.resetFields(['endDate'])} />
 												</Form.Item>
 											</Col>
 											<Col span={24} md={12}>
@@ -308,15 +308,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 													label={msg('endDate')}
 													rules={[...rules.required, ...rules.sauThoiDiem(dayjs(startDate), msg('startDate'))]}
 												>
-													<MyDatePicker
-														showTime={{ showHour: true, showMinute: true }}
-														format='HH:mm DD/MM/YYYY'
-														disabled={isView}
-														{...buildDisabledDateTime({
-															min: startDate ? dayjs(startDate) : undefined,
-														})}
-														placeholder={msg('endDate.place')}
-													/>
+													<VinDateTimePicker disabled={isView} min={startDate ? dayjs(startDate) : undefined} />
 												</Form.Item>
 											</Col>
 										</>
@@ -341,15 +333,18 @@ const FormPerstionActivityOutCome = (props: any) => {
 											{activitiesTypeId && (
 												<Col span={24}>
 													Attributes:{' '}
-													<Space wrap>
+													<span style={{ display: 'inline-flex', flexWrap: 'wrap', gap: 8 }}>
 														{dsActivityType
 															?.find((i) => i._id === activitiesTypeId)
 															?.attributes?.map((item) => (
-																<Tag key={item?._id} color={getSafeTagColor(item?.color)}>
+																<Badge
+																	key={item?._id}
+																	style={{ backgroundColor: getAttributeColor(item?.color), color: '#fff' }}
+																>
 																	{item?.name}
-																</Tag>
+																</Badge>
 															))}
-													</Space>
+													</span>
 												</Col>
 											)}
 											{/* <Col span={24} md={24}>
@@ -364,13 +359,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 											</Col>
 											<Col span={24} md={12}>
 												<Form.Item name='startDate' label={msg('startDate')} rules={[...rules.required]}>
-													<MyDatePicker
-														showTime={{ showHour: true, showMinute: true }}
-														format='HH:mm DD/MM/YYYY'
-														disabled={isView}
-														placeholder={msg('startDate.place')}
-														onChange={() => form.resetFields(['endDate'])}
-													/>
+													<VinDateTimePicker disabled={isView} onChange={() => form.resetFields(['endDate'])} />
 												</Form.Item>
 											</Col>
 											<Col span={24} md={12}>
@@ -379,15 +368,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 													label={msg('endDate')}
 													rules={[...rules.required, ...rules.sauThoiDiem(dayjs(startDate), msg('startDate'))]}
 												>
-													<MyDatePicker
-														showTime={{ showHour: true, showMinute: true }}
-														format='HH:mm DD/MM/YYYY'
-														disabled={isView}
-														{...buildDisabledDateTime({
-															min: startDate ? dayjs(startDate) : undefined,
-														})}
-														placeholder={msg('endDate.place')}
-													/>
+													<VinDateTimePicker disabled={isView} min={startDate ? dayjs(startDate) : undefined} />
 												</Form.Item>
 											</Col>
 										</>
@@ -408,15 +389,10 @@ const FormPerstionActivityOutCome = (props: any) => {
 										...rules.truocThoiDiem(dayjs(endDate), msg('endDate')),
 									]}
 								>
-									<MyDatePicker
-										showTime={{ showHour: true, showMinute: true }}
-										format='HH:mm DD/MM/YYYY'
+									<VinDateTimePicker
 										disabled={isView}
-										placeholder={msg('chooseDateOfAchievement')}
-										{...buildDisabledDateTime({
-											min: startDate ? dayjs(startDate) : undefined,
-											max: endDate ? dayjs(endDate) : undefined,
-										})}
+										min={startDate ? dayjs(startDate) : undefined}
+										max={endDate ? dayjs(endDate) : undefined}
 										allowClear
 									/>
 								</Form.Item>
@@ -471,11 +447,15 @@ const FormPerstionActivityOutCome = (props: any) => {
 									<RadioGroup disabled={isView} style={{ display: 'flex', gap: 16 }}>
 										<div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
 											<RadioGroupItem value='true' id='onUni-true' />
-											<label htmlFor='onUni-true' style={{ cursor: 'pointer' }}>{msg('inUni')}</label>
+											<label htmlFor='onUni-true' style={{ cursor: 'pointer' }}>
+												{msg('inUni')}
+											</label>
 										</div>
 										<div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
 											<RadioGroupItem value='false' id='onUni-false' />
-											<label htmlFor='onUni-false' style={{ cursor: 'pointer' }}>{msg('outUni')}</label>
+											<label htmlFor='onUni-false' style={{ cursor: 'pointer' }}>
+												{msg('outUni')}
+											</label>
 										</div>
 									</RadioGroup>
 								</Form.Item>
@@ -591,13 +571,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 													</Row>
 												))}
 
-												<Button
-													onClick={() => add()}
-													icon={<IconPlus />}
-													variant='outline'
-													size='sm'
-													disabled={isView}
-												>
+												<Button onClick={() => add()} icon={<IconPlus />} variant='outline' size='sm' disabled={isView}>
 													{msg('addEvidence')}
 												</Button>
 											</>
@@ -617,20 +591,23 @@ const FormPerstionActivityOutCome = (props: any) => {
 									rules={[...rules.required, ...rules.text, ...rules.length(300)]}
 									extra={
 										<div style={{ marginTop: 6 }}>
-											<Paragraph className='text-info' style={{ fontSize: 12, marginBottom: 6, color: '#595959' }}>
+											<div style={{ textAlign: 'right', fontSize: 12, marginBottom: 6 }}>
+												{reflection?.length ?? 0} / 300
+											</div>
+											<p className='text-info' style={{ fontSize: 12, marginBottom: 6, color: '#595959' }}>
 												Format: Led / Contributed to <b>[activity/project]</b>, resulting in <b>[measurable impact]</b>,
 												demonstrating <b>[key competency]</b>.
-											</Paragraph>
+											</p>
 
-											<Paragraph className='text-info' style={{ fontSize: 12, marginBottom: 0, color: '#8c8c8c' }}>
+											<p className='text-info' style={{ fontSize: 12, marginBottom: 0, color: '#8c8c8c' }}>
 												Example: Organized a charity initiative for Ha Nau Secondary School, reaching 150+ students and
 												mobilizing X VND in resources, demonstrating strong community engagement and execution
 												capability.
-											</Paragraph>
+											</p>
 										</div>
 									}
 								>
-									<Input.TextArea rows={3} disabled={isView} placeholder={msg('enterReflection')} showCount />
+									<Input.TextArea rows={3} disabled={isView} placeholder={msg('enterReflection')} />
 								</Form.Item>
 							</Col>
 						</>
@@ -645,7 +622,12 @@ const FormPerstionActivityOutCome = (props: any) => {
 												checked={!!form.getFieldValue('checkbox')}
 												onCheckedChange={(checked) => form.setFieldValue('checkbox', !!checked)}
 											/>
-											<span style={{ cursor: 'pointer' }} onClick={() => form.setFieldValue('checkbox', !form.getFieldValue('checkbox'))}>{msg('declaration')}</span>
+											<span
+												style={{ cursor: 'pointer' }}
+												onClick={() => form.setFieldValue('checkbox', !form.getFieldValue('checkbox'))}
+											>
+												{msg('declaration')}
+											</span>
 										</div>
 									)}
 								</Form.Item>

@@ -256,6 +256,81 @@ button:not(:disabled),
 	}
 }
 
+[data-vinuni-theme='dark'] .search-input-custom-sm [data-slot='search-input'] {
+	border-color: rgba(255, 255, 255, 0.16) !important;
+
+	&:focus-within {
+		border-color: rgba(255, 255, 255, 0.32) !important;
+	}
+
+	[data-slot='mask-icon'] {
+		color: rgba(255, 255, 255, 0.6);
+	}
+
+	input {
+		color: #ffffff;
+
+		&::placeholder {
+			color: rgba(255, 255, 255, 0.6);
+		}
+	}
+}
+
+[data-vinuni-theme='dark'] .filter-bar {
+	.ant-picker {
+		height: 36px;
+		padding: 2px 16px;
+		background: none !important;
+		border: 1px solid rgba(255, 255, 255, 0.16) !important;
+		border-radius: 1000px !important;
+		box-shadow: none !important;
+
+		&:hover,
+		&.ant-picker-focused {
+			border-color: rgba(255, 255, 255, 0.32) !important;
+		}
+
+		input {
+			color: #ffffff;
+
+			&::placeholder {
+				color: rgba(255, 255, 255, 0.6);
+			}
+		}
+
+		.ant-picker-separator,
+		.ant-picker-suffix {
+			color: rgba(255, 255, 255, 0.9);
+		}
+
+		.ant-picker-active-bar {
+			display: none;
+		}
+	}
+
+	[data-slot='select-trigger'] {
+		background: none !important;
+		border: 1px solid rgba(255, 255, 255, 0.16) !important;
+		border-radius: 1000px !important;
+		box-shadow: none !important;
+		color: #ffffff;
+
+		&:hover,
+		&[data-state='open'] {
+			border-color: rgba(255, 255, 255, 0.32) !important;
+		}
+
+		.text-ds-content-secondary {
+			color: rgba(255, 255, 255, 0.6);
+		}
+
+		.text-ds-content-tertiary,
+		svg {
+			color: rgba(255, 255, 255, 0.9);
+		}
+	}
+}
+
 // Ô lọc 250px trên desktop; màn hẹp giãn hết chiều ngang chỗ chứa.
 .field-w-250 {
 	width: 250px;
@@ -310,19 +385,14 @@ button:not(:disabled),
 
 .history-activity-grid {
 	display: grid;
-	grid-template-rows: repeat(2, minmax(0, 1fr));
-	grid-template-columns: repeat(4, minmax(0, 1fr));
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	align-items: start;
 	row-gap: 16px;
 	column-gap: 16px;
 	padding: 16px 24px;
 
-	@media (max-width: 1600px) {
-		grid-template-rows: none;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-	}
-
 	@media (max-width: 1199px) {
-		grid-template-columns: repeat(1, minmax(0, 1fr));
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
 	@media (max-width: 767px) {

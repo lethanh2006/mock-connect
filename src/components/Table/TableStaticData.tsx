@@ -115,6 +115,19 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		}
 	}, [props.selectedIds]);
 
+	const antdRowSelection =
+		typeof props.otherProps?.rowSelection === 'object' ? props.otherProps.rowSelection : undefined;
+	const isRadioSelection = antdRowSelection?.type === 'radio';
+	const hideSelectAll = !!antdRowSelection?.hideSelectAll || isRadioSelection;
+	const isRowSelectDisabled = (record: any) => !!antdRowSelection?.getCheckboxProps?.(record)?.disabled;
+	const controlledRowKeys = antdRowSelection?.selectedRowKeys;
+
+	useEffect(() => {
+		if (controlledRowKeys !== undefined) {
+			setSelectedIds(controlledRowKeys as (string | number)[]);
+		}
+	}, [JSON.stringify(controlledRowKeys ?? null)]);
+
 	const searchInputRef = useRef<any>(null);
 	const isResizingRef = useRef<boolean>(false);
 
@@ -472,6 +485,10 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 
 	// Row Selection
 	const currentPageKeys = useMemo(() => pagedData.map((r: any) => r.key), [pagedData]);
+	const selectablePageKeys = useMemo(
+		() => pagedData.filter((r: any) => !isRowSelectDisabled(r)).map((r: any) => r.key),
+		[pagedData, antdRowSelection],
+	);
 	const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
 	const selectedOnPageCount = currentPageKeys.filter((k) => selectedSet.has(k)).length;
 	const allCurrentSelected = currentPageKeys.length > 0 && selectedOnPageCount === currentPageKeys.length;
@@ -488,11 +505,15 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 
 	const toggleSelectAll = (checked: boolean) => {
 		const next = new Set(selectedIds);
-		currentPageKeys.forEach((k) => (checked ? next.add(k) : next.delete(k)));
+		selectablePageKeys.forEach((k) => (checked ? next.add(k) : next.delete(k)));
 		triggerSelectChange(Array.from(next), 'all');
 	};
 
 	const toggleSelectRow = (key: string | number, checked: boolean) => {
+		if (isRadioSelection) {
+			if (checked) triggerSelectChange([key], 'single');
+			return;
+		}
 		const next = new Set(selectedIds);
 		if (checked) next.add(key);
 		else next.delete(key);
@@ -662,16 +683,19 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				{hasGroupedColumns ? (
 					<>
 						<TableRow>
-							{effectiveRowSelection && (
-								<TableSelectionCell
-									rowSpan={2}
-									pinned='left'
-									checked={allCurrentSelected}
-									indeterminate={someCurrentSelected}
-									onCheckedChange={toggleSelectAll}
-									label={intl.formatMessage({ id: 'global.table.index.chontatca', defaultMessage: 'Chọn tất cả' })}
-								/>
-							)}
+							{effectiveRowSelection &&
+								(hideSelectAll ? (
+									<TableHead rowSpan={2} aria-hidden />
+								) : (
+									<TableSelectionCell
+										rowSpan={2}
+										pinned='left'
+										checked={allCurrentSelected}
+										indeterminate={someCurrentSelected}
+										onCheckedChange={toggleSelectAll}
+										label={intl.formatMessage({ id: 'global.table.index.chontatca', defaultMessage: 'Chọn tất cả' })}
+									/>
+								))}
 							{actualColumns.map((col, colIdx) =>
 								col.children?.length ? (
 									<TableHead
@@ -714,15 +738,18 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					</>
 				) : (
 					<TableRow>
-						{effectiveRowSelection && (
-							<TableSelectionCell
-								pinned='left'
-								checked={allCurrentSelected}
-								indeterminate={someCurrentSelected}
-								onCheckedChange={toggleSelectAll}
-								label={intl.formatMessage({ id: 'global.table.index.chontatca', defaultMessage: 'Chọn tất cả' })}
-							/>
-						)}
+						{effectiveRowSelection &&
+							(hideSelectAll ? (
+								<TableHead aria-hidden />
+							) : (
+								<TableSelectionCell
+									pinned='left'
+									checked={allCurrentSelected}
+									indeterminate={someCurrentSelected}
+									onCheckedChange={toggleSelectAll}
+									label={intl.formatMessage({ id: 'global.table.index.chontatca', defaultMessage: 'Chọn tất cả' })}
+								/>
+							))}
 						{actualColumns.map((col) => renderHeadCell(col))}
 					</TableRow>
 				)}
@@ -759,6 +786,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 									<TableSelectionCell
 										pinned='left'
 										checked={selectedSet.has(record.key)}
+										disabled={isRowSelectDisabled(record)}
 										onCheckedChange={(checked) => toggleSelectRow(record.key, checked)}
 										label={intl.formatMessage(
 											{ id: 'global.table.index.chondong', defaultMessage: 'Chọn dòng {index}' },
