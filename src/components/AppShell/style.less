@@ -187,7 +187,9 @@
 .app-shell-sidebar-title,
 [data-slot='sidebar-title'] {
 	font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
-	color: var(--color-primary, #134d8b) !important;
+	// --ds-* khai trên [data-vinuni-ui], kế thừa cả sidebar desktop lẫn sheet mobile
+	// (sheet portal ra ngoài ConfigProvider nên --color-* của antd không có ở mobile).
+	color: var(--ds-accent-primary, #134d8b) !important;
 	padding: 0 !important;
 	margin: 0 !important;
 }
@@ -195,7 +197,7 @@
 [data-vinuni-theme='dark'] {
 	.app-shell-sidebar-title,
 	[data-slot='sidebar-title'] {
-		color: var(--color-text, #111827) !important;
+		color: var(--ds-content-primary, #ffffff) !important;
 	}
 }
 
@@ -227,7 +229,7 @@
 	font-size: 11px !important;
 	font-weight: 600 !important;
 	letter-spacing: 0.05em !important;
-	color: var(--color-text-tertiary, #6b7280) !important;
+	color: var(--ds-content-tertiary, #6b7280) !important;
 	padding: 4px 16px 2px 16px !important;
 	padding-block: 4px 2px !important;
 	padding-top: 4px !important;
@@ -236,13 +238,13 @@
 	min-height: 0 !important;
 
 	&:hover {
-		color: var(--color-text-secondary, #374151) !important;
+		color: var(--ds-content-secondary, #374151) !important;
 	}
 
 	svg {
 		width: 16px !important;
 		height: 16px !important;
-		color: var(--color-text-tertiary, #6b7280) !important;
+		color: var(--ds-content-tertiary, #6b7280) !important;
 	}
 }
 
@@ -257,7 +259,7 @@
 	border-radius: 999px !important;
 	font-size: 16px !important;
 	font-weight: 400 !important;
-	color: var(--color-text-secondary, #374151) !important;
+	color: var(--ds-content-secondary, #374151) !important;
 	gap: 12px !important;
 	transition: all 0.15s ease !important;
 
@@ -272,25 +274,25 @@
 		height: 20px !important;
 		min-width: 20px !important;
 		flex-shrink: 0 !important;
-		color: var(--color-text-tertiary, #4b5563) !important;
+		color: var(--ds-content-tertiary, #4b5563) !important;
 	}
 
 	&:hover {
 		background-color: rgba(0, 0, 0, 0.04) !important;
-		color: var(--color-text, #111827) !important;
+		color: var(--ds-content-primary, #111827) !important;
 
 		svg {
-			color: var(--color-text, #111827) !important;
+			color: var(--ds-content-primary, #111827) !important;
 		}
 	}
 
 	&[data-active='true'] {
 		font-weight: 600 !important;
-		color: var(--color-primary, #134d8b) !important;
+		color: var(--ds-accent-primary, #134d8b) !important;
 		background-color: rgba(19, 77, 139, 0.08) !important;
 
 		svg {
-			color: var(--color-primary, #134d8b) !important;
+			color: var(--ds-accent-primary, #134d8b) !important;
 		}
 	}
 }
@@ -352,11 +354,9 @@ svg.app-shell-chevron {
 }
 
 // Dark Theme Overrides
-// Chỉ còn background của hover/active — màu chữ/icon đã chuyển sang token
-// var(--color-text...) ở rule gốc bên trên, tự đổi theo theme qua ConfigProvider
-// (algorithm: darkAlgorithm) nên không cần lặp lại ở đây nữa. Active state giữ
-// nguyên #ffffff riêng cho dark mode vì var(--color-primary) không tự đổi độ
-// tương phản theo theme (primary color giữ nguyên hex bất kể light/dark).
+// Màu chữ/icon dùng --ds-content-* (đổi theo data-vinuni-theme trên [data-vinuni-ui]),
+// nên sheet mobile và sidebar desktop cùng một nguồn. Active giữ trắng vì
+// --ds-accent-primary không đổi hex giữa light/dark, navy trên nền tối không đủ tương phản.
 [data-vinuni-theme='dark'] {
 	[data-slot='sidebar-menu-button'],
 	[data-slot='sidebar-menu-sub-button'],
@@ -366,11 +366,11 @@ svg.app-shell-chevron {
 		}
 
 		&[data-active='true'] {
-			color: #ffffff !important;
+			color: var(--ds-content-primary, #ffffff) !important;
 			background-color: rgba(59, 129, 218, 0.28) !important;
 
 			svg {
-				color: #ffffff !important;
+				color: var(--ds-content-primary, #ffffff) !important;
 			}
 		}
 	}
