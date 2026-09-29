@@ -4,7 +4,6 @@ import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EGioiTinh } from '@/services/DaoTao/constant';
 import { formatDate } from '@/utils/formatDate';
 import { getPublicAssetPath } from '@/utils/path';
-import { EyeOutlined, MoreOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Descriptions, Dropdown, Input, List, Menu, Modal, Row, Typography } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { IconEyeOpen, Icon3DotVertical } from '@/components/Icons';

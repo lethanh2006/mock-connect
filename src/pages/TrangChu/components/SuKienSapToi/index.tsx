@@ -2,7 +2,6 @@ import EmptyState from '@/components/EmptyState';
 import { Badge } from '@/components/Icons';
 import Card from '@/components/PageCard';
 import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
-import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { Button, Space, Spin, Typography } from 'antd';

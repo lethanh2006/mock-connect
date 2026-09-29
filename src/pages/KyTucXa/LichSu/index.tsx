@@ -1,4 +1,4 @@
-import { IconFileMoney, IconTrash } from '@/components/Icons';
+import { IconFileMoney } from '@/components/Icons';
 import PageCard from '@/components/PageCard';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
@@ -11,7 +11,7 @@ import {
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { formatDate } from '@/utils/formatDate';
-import { Popconfirm, Tag } from 'antd';
+import { Tag } from 'antd';
 import { useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import { Button, Card, CardContent } from '@vinuni/ui';

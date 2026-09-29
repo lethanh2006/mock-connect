@@ -1,7 +1,6 @@
 import { DANH_SACH_QUOC_TICH } from '@/services/Core/QuocTich/danhSach';
 import { getLocalizedName } from '@/utils/localeName';
 import { useIntl } from 'umi';
-import Select from '@/components/MySelect';
 import VinSelect from '@/components/VinSelect';
 
 /**

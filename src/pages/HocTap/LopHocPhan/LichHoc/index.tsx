@@ -1,7 +1,6 @@
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { EHinhThucGiangDay, mapHinhThucGiangDayI18n } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
-import { CalendarOutlined, TableOutlined } from '@ant-design/icons';
 import { Card, Col, Row, Segmented, Space, Spin } from 'antd';
 import { IconCalendar, IconBoard } from '@/components/Icons';
 import { useEffect, useState } from 'react';

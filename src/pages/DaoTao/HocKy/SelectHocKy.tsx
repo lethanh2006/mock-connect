@@ -1,5 +1,4 @@
 import { getLocalizedName } from '@/utils/localeName';
-import { Select } from 'antd';
 import VinSelect from '@/components/VinSelect';
 import React, { useEffect } from 'react';
 import { useModel, useIntl } from 'umi';

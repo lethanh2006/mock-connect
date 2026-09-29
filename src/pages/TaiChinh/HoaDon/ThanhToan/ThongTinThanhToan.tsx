@@ -18,7 +18,7 @@ import {
 	PhoneOutlined,
 	UserOutlined,
 } from '@ant-design/icons';
-import { Alert, Avatar, Modal, Space, Tabs, Tag, Typography } from 'antd';
+import { Alert, Avatar, Space, Tabs, Tag, Typography } from 'antd';
 import { Card } from '@/components/PageCard';
 import { Col, Row } from '@/components/MyGrid';
 import { Button } from '@vinuni/ui';

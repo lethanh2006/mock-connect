@@ -6,8 +6,7 @@ import {
 } from '@/services/KyTucXa/PhieuDangKy/constant';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
-import { CheckCircleFilled, ColumnWidthOutlined } from '@ant-design/icons';
-import { Card, Image, Space, Tag, Typography } from 'antd';
+import { Card, Space, Tag, Typography } from 'antd';
 import { IconLeftRightBar, IconShieldCheck } from '@/components/Icons';
 import { Col, Row } from '@/components/MyGrid';
 import { useIntl, useModel } from 'umi';

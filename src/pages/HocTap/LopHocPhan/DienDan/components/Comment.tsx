@@ -3,7 +3,6 @@ import type { BinhLuan } from '@/services/HocTap/DienDan/BinhLuan/typing';
 import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import { formatDateTime } from '@/utils/formatDate';
 import { createTextLinks } from '@/utils/utils';
-import { CheckCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import DOMPurify from 'dompurify';
 import { IconShieldCheck, IconTrash, IconPencil01 } from '@/components/Icons';
 import { Form, Input, Popconfirm, Popover } from 'antd';

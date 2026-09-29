@@ -32,7 +32,6 @@ import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Descriptions, Modal, Popconfirm, Popover, Space, Tag } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { IconShieldInfo } from '@/components/Icons';
-import Select from '@/components/MySelect';
 import VinSelect from '@/components/VinSelect';
 import { useAccess, useIntl, useModel } from 'umi';
 import {

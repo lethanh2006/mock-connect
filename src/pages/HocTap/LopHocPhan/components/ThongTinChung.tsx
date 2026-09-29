@@ -1,6 +1,5 @@
 import { openSafeUrl } from '@/utils/security';
 import { Card, message, Spin } from 'antd';
-import { IconMobile, IconEarth } from '@/components/Icons';
 import { useIntl, useModel } from 'umi';
 import GioiThieuChungLopHp from './GioiThieuChung';
 import './style.less';

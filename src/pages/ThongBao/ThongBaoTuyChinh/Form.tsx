@@ -1,7 +1,6 @@
 import { Button, IconDownload } from '@/components/Icons';
 import { Col, Row } from '@/components/MyGrid';
 import Input from '@/components/MyInput';
-import Select from '@/components/MySelect';
 import { Card } from '@/components/PageCard';
 import TinyEditor from '@/components/TinyEditor';
 import UploadFile from '@/components/Upload/UploadFile';

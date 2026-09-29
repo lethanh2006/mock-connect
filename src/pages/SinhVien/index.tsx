@@ -7,7 +7,6 @@ import { Alert, Card, Space, Spin } from 'antd';
 // import fileDownload from 'js-file-download';
 import PageCard from '@/components/PageCard';
 import { useState } from 'react';
-import fileDownload from 'js-file-download';
 import { useIntl, useModel } from 'umi';
 import ModalCapNhatAnhNhanDien from './CapNhatKhuonMat/Modal';
 import FormSinhVien from './components/Form';

@@ -7,7 +7,7 @@ import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
 import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { primaryColor } from '@/services/base/constant';
-import { CheckOutlined, FileTextOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { FileTextOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Modal, Space, Tag, Typography } from 'antd';
 import { IconCheck01 } from '@/components/Icons';
 import _ from 'lodash';
