@@ -1,4 +1,4 @@
-import { Select } from 'antd';
+import VinSelect from '@/components/VinSelect';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -43,7 +43,7 @@ const SelectActivitiesTypeDomain = (props: {
 	const options = [...dynamicOptions];
 
 	return (
-		<Select
+		<VinSelect
 			disabled={disabled}
 			mode={multiple ? 'multiple' : undefined}
 			allowClear={allowClear}
@@ -52,8 +52,9 @@ const SelectActivitiesTypeDomain = (props: {
 			options={options}
 			showSearch
 			optionFilterProp='label'
+			allowDeselect={false}
 			placeholder={intl.formatMessage({ id: 'ccd.select' })}
-			style={{ width: '100%', ...style }}
+			style={style}
 		/>
 	);
 };

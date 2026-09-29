@@ -1,10 +1,10 @@
+import { Badge } from '@/components/Icons';
 import {
 	EApprovalStatus,
 	mapColorApprovalStatus,
 	mapColorTextApprovalStatus,
 	mapNameApprovalStatus,
 } from '@/services/CCT/constant';
-import { Tag } from 'antd';
 import dayjs from 'dayjs';
 import { useIntl, useModel } from 'umi';
 
@@ -28,15 +28,15 @@ const CardNoteActivity = () => {
 	return (
 		<div className='info-summary-box'>
 			<div className='info-summary-status'>
-				<Tag
-					color={mapColorApprovalStatus[workflow]}
+				<Badge
 					style={{
+						background: mapColorApprovalStatus[workflow],
 						color: mapColorTextApprovalStatus[workflow],
 						fontWeight: 600,
 					}}
 				>
 					{mapNameApprovalStatus[workflow]}
-				</Tag>
+				</Badge>
 			</div>
 
 			<div className='custom-info-grid grid-3'>

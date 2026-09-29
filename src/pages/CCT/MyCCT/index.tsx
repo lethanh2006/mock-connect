@@ -168,8 +168,9 @@ const MyCCT = () => {
 			subtitle={
 				<span className='mycct-round-time'>
 					<IconClock />
-					{[dayjs(recDot?.startDate).format('HH:mm DD/MM/YYYY'), dayjs(recDot?.endDate).format('HH:mm DD/MM/YYYY')]
+					{[recDot?.startDate, recDot?.endDate]
 						.filter(Boolean)
+						.map((date) => dayjs(date).format('DD/MM/YYYY, HH:mm'))
 						.join(' - ')}
 				</span>
 			}

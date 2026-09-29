@@ -1482,6 +1482,22 @@
 		}
 	}
 
+	&__deadline--danger {
+		color: #dc2626;
+	}
+
+	&__tags {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 4px;
+	}
+
+	&__status--VERIFIED {
+		background: rgba(0, 0, 0, 0.05);
+		color: #000000;
+	}
+
 	&__status {
 		display: flex;
 		flex-direction: row;
@@ -1511,9 +1527,11 @@
 			color: #dc2626;
 		}
 
+		// Cùng màu Tag "Expired" của CardSuKienCCT (officialColors.official500 / official300)
 		&--EXPIRED {
-			background: rgba(0, 0, 0, 0.05);
-			color: #000000;
+			background: #f4f9ff;
+			color: #134d8b;
+			font-weight: 600;
 		}
 
 		&--SUBMITTED {
@@ -1593,9 +1611,20 @@
 			font-size: 14px !important;
 			line-height: 20px !important;
 
-			&:not([data-variant='secondary']) {
+			&:not([data-variant='secondary']):not([data-variant='outline']) {
 				background: rgba(19, 77, 139, 0.9) !important;
 				color: #ffffff !important;
+			}
+
+			&.activity-figma-card__more {
+				flex: none;
+				width: 36px;
+				padding: 0 !important;
+			}
+
+			&[data-variant='outline'] {
+				background: #ffffff !important;
+				color: #000000 !important;
 			}
 		}
 	}
@@ -1624,6 +1653,16 @@
 
 		&__icon {
 			color: rgba(255, 255, 255, 0.6);
+		}
+
+		&__action [data-variant='outline'] {
+			background: rgba(255, 255, 255, 0.08) !important;
+			color: #ffffff !important;
+		}
+
+		&__status--VERIFIED {
+			background: rgba(255, 255, 255, 0.12);
+			color: rgba(255, 255, 255, 0.85);
 		}
 	}
 }

@@ -160,7 +160,7 @@ const CCTContent = (props: {
 
 						<section className='profile-section'>
 							<div className='section-title gold-text'>
-								<img src={Profile} style={{ width: 25, marginLeft: -4, marginTop: -4 }} /> Student Aspiration Statement
+								<img src={Profile} alt='' className='section-title__icon' /> Student Aspiration Statement
 							</div>
 							{edit ? (
 								<Form.Item name='selfAspiration' rules={[...rules.required, ...rules.text]}>
@@ -177,7 +177,7 @@ const CCTContent = (props: {
 
 						<section className='skills-section'>
 							<div className='section-title gold-text'>
-								<img src={Skills} style={{ width: 25, marginLeft: -4, marginTop: -7 }} /> Skills and Competency
+								<img src={Skills} alt='' className='section-title__icon' /> Skills and Competency
 								Development
 							</div>
 							<p className='italic-text'>
@@ -225,7 +225,7 @@ const CCTContent = (props: {
 
 						<section className='projects-section'>
 							<h2 className='section-title gold-text'>
-								<img src={Featured} style={{ width: 25, marginLeft: -4, marginTop: -4 }} /> Featured Projects/Experience
+								<img src={Featured} alt='' className='section-title__icon' /> Featured Projects/Experience
 							</h2>
 
 							{edit ? (
@@ -245,7 +245,7 @@ const CCTContent = (props: {
 					<div className='column right-column'>
 						<section className='awards-section'>
 							<h2 className='section-title gold-text'>
-								<img src={Awards} style={{ width: 25, marginLeft: -7 }} /> Awards, Recognization and Scholarship
+								<img src={Awards} alt='' className='section-title__icon' /> Awards, Recognization and Scholarship
 							</h2>
 
 							{edit ? (

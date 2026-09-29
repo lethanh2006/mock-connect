@@ -49,6 +49,11 @@ export type VinSelectProps = {
 	/** Server-side search — có prop này thì tự tắt filter client-side, options coi như đã được caller
 	 * tự lọc sẵn theo từ khoá. */
 	onSearch?: (value: string) => void;
+	/** Có `onSearch` vẫn lọc tại chỗ theo label trong lúc chờ server (giống antd `showSearch` + `onSearch`).
+	 * Mặc định: tắt. */
+	localFilter?: boolean;
+	/** `false`: bấm lại lựa chọn đang chọn KHÔNG bỏ chọn (giống antd Select single). Mặc định: `true`. */
+	allowDeselect?: boolean;
 	/** `sm`/`small` cao 36px, còn lại cao 44px. */
 	size?: 'sm' | 'default' | 'small' | 'middle' | 'large';
 	className?: string;
@@ -69,6 +74,7 @@ const SelectSearchPopover = ({
 	searchPlaceholder,
 	emptyLabel,
 	onSearch,
+	localFilter,
 	children,
 }: {
 	options: InternalOption[];
@@ -78,6 +84,7 @@ const SelectSearchPopover = ({
 	searchPlaceholder?: string;
 	emptyLabel?: ReactNode;
 	onSearch?: (value: string) => void;
+	localFilter?: boolean;
 	children: ReactNode;
 }) => {
 	const [search, setSearch] = useState('');
@@ -92,7 +99,11 @@ const SelectSearchPopover = ({
 				className='h-80 w-auto p-0'
 				style={{ minWidth: 'var(--radix-popover-trigger-width)' }}
 			>
-				<Command surface={false} shouldFilter={!onSearch} className='flex h-full flex-col overflow-hidden p-0'>
+				<Command
+					surface={false}
+					shouldFilter={!onSearch || !!localFilter}
+					className='flex h-full flex-col overflow-hidden p-0'
+				>
 					<PopoverBar className='pb-ds-sp-8'>
 						<CommandSearchInput
 							size='medium'
@@ -156,6 +167,8 @@ const VinSelect = ({
 	notFoundContent,
 	optionFilterProp,
 	onSearch,
+	localFilter,
+	allowDeselect = true,
 	size = 'default',
 	className,
 	style,
@@ -295,6 +308,7 @@ const VinSelect = ({
 				searchPlaceholder={placeholder}
 				emptyLabel={emptyLabel}
 				onSearch={onSearch}
+				localFilter={localFilter}
 			>
 				{trigger}
 			</SelectSearchPopover>
@@ -307,6 +321,7 @@ const VinSelect = ({
 			mode='single'
 			selectedKeys={selectedKeys}
 			onToggle={(key) => {
+				if (!allowDeselect && selectedKeys[0] === key) return;
 				const nextKey = selectedKeys[0] === key ? null : key;
 				onChange?.(
 					nextKey === null ? null : (keyToValue.get(nextKey) ?? null),
@@ -316,6 +331,7 @@ const VinSelect = ({
 			searchPlaceholder={placeholder}
 			emptyLabel={emptyLabel}
 			onSearch={onSearch}
+			localFilter={localFilter}
 		>
 			{trigger}
 		</SelectSearchPopover>

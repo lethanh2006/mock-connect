@@ -1,6 +1,6 @@
 import background from '@/assets/cct/background.png';
 import EmptyState from '@/components/EmptyState';
-import { Icon2LineHorizontal, IconSend, IconTrash } from '@/components/Icons';
+import { IconHumanCheck } from '@/components/Icons';
 import PageCard from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
@@ -11,17 +11,20 @@ import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EActivityCategory, EActivityStatus, EApprovalStatus, mapNameActivityCategory } from '@/services/CCT/constant';
 import dayjs from '@/utils/dayjs';
 import { Button } from '@vinuni/ui';
-import { Divider, Pagination, Popconfirm, Popover, Space, Spin } from 'antd';
+import { Divider, Pagination, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import { FilterSuKienValue } from '../Activity';
 import CardChiTietSuKien from '../Activity/components/CardChiTietSuKien';
 import FilterSuKien from '../Activity/components/FilterSuKien';
 import '../Activity/style.less';
+import ActionMenu from './components/ActionMenu';
 import ChiTietActivityOutCome from './components/ChiTiet';
 import FormActivityOutCome from './components/Form';
 import FormPerstionActivityOutCome from './components/FormPerstion';
 import StatActivityOutCome from './components/Stat';
+
+const PAGE_SIZE = 9;
 
 const HistoryActivityPage = () => {
 	const intl = useIntl();
@@ -108,6 +111,10 @@ const HistoryActivityPage = () => {
 	}, [tabActive]);
 
 	useEffect(() => {
+		if (limit !== PAGE_SIZE) {
+			setLimit(PAGE_SIZE);
+			return;
+		}
 		getData();
 	}, [tabActive, filter, page, limit, filters, workflowQuery]);
 
@@ -165,19 +172,39 @@ const HistoryActivityPage = () => {
 
 	const isExpired = editableWorkflow && now.isAfter(endDateUpdateEvidence);
 
+	const attributeSource = (dsAttribute ?? []) as AttributesManagement.IRecord[];
+
+	const isDetailView = isView && (tabActive === EActivityCategory.REGISTERED || !record?.isAwardRecognition);
+	const detailFooter = (
+		<div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+			<Button variant='outline' onClick={() => setVisibleForm(false)}>
+				{intl.formatMessage({ id: 'activity.history.close' })}
+			</Button>
+			{canEdit(record ?? ({} as ActivityOutCome.IRecord)) && (
+				<Button variant='default' onClick={() => handleEdit(record)}>
+					{intl.formatMessage({ id: 'activity.history.updateEvidence' })}
+				</Button>
+			)}
+		</div>
+	);
+
 	return (
-		<PageCard stickyHeader title={intl.formatMessage({ id: 'activity.history.title' })}>
+		<PageCard
+			stickyHeader
+			className='activity-history-page'
+			title={intl.formatMessage({ id: 'activity.history.title' })}
+		>
 			<div className='page-card-custom'>
 				<TabViewPage
 					hideCard
-					offsetTop={64}
+					offsetTop={0}
 					tabType='line'
 					tabStyle={{ padding: '12px 0 2px 8px' }}
 					contentStyle={{ marginTop: 0 }}
 					onChange={(tab) => {
 						setTabActive(tab as EActivityCategory);
 						setPage(1);
-						setLimit(9);
+						setLimit(PAGE_SIZE);
 					}}
 					menu={Object.values(EActivityCategory).map((item) => ({
 						title: mapNameActivityCategory[item],
@@ -230,7 +257,7 @@ const HistoryActivityPage = () => {
 													const equivalencyAttributeIds = isRegistered
 														? item?.activities?.coCurricularActivityEquivalency?.map((x) => x.attributesId)
 														: item?.activitiesType?.attributes?.map((x) => x?._id);
-													const attributes = (dsAttribute ?? []).map((attribute: AttributesManagement.IRecord) => ({
+													const attributes = attributeSource.map((attribute: AttributesManagement.IRecord) => ({
 														id: attribute._id,
 														letter: attribute.code?.charAt(0)?.toUpperCase() ?? '',
 														active: equivalencyAttributeIds?.includes(attribute._id),
@@ -301,63 +328,64 @@ const HistoryActivityPage = () => {
 															endDate={endSource ? dayjs(endSource).format(dateFormat) : '--'}
 															location={location}
 															registerBefore={registerSource ? dayjs(registerSource).format(dateFormat) : '--'}
-															approvalStatus={item?.workflow}
+															approvalStatus={
+																isRegistered && editableWorkflow && now.isAfter(endDateUpdateEvidence)
+																	? EApprovalStatus.EXPIRED
+																	: item?.workflow
+															}
+															deadline={
+																isRegistered ? (
+																	<span
+																		className={
+																			editableWorkflow && isOngoing
+																				? 'activity-figma-card__deadline--danger'
+																				: undefined
+																		}
+																	>
+																		{intl.formatMessage({ id: 'activity.history.updateBefore' })}{' '}
+																		{endDateUpdateEvidence ? endDateUpdateEvidence.format(dateFormat) : '--'}
+																	</span>
+																) : (
+																	<span>
+																		{intl.formatMessage({ id: 'activity.history.approvedBy' })}{' '}
+																		{item?.studentDeclarationApproverName ?? '--'}
+																	</span>
+																)
+															}
+															deadlineIcon={
+																isRegistered ? undefined : <IconHumanCheck className='activity-figma-card__icon' />
+															}
+															extraTags={
+																item?.workflow === EApprovalStatus.APPROVED && item?.validation ? (
+																	<span className='activity-figma-card__status activity-figma-card__status--VERIFIED'>
+																		{item.validation}
+																	</span>
+																) : undefined
+															}
 															onClick={() => handleView(item)}
 															action={
 																isRegistered ? (
 																	renderButton
 																) : (
 																	<div style={{ display: 'flex', gap: 8, width: '100%' }}>
-																		<Popover
-																			placement='bottom'
-																			content={
-																				<Space direction='vertical' size={4} className='action-popover'>
-																					<Popconfirm
-																						onConfirm={() =>
-																							putModel(
-																								`me/${item?._id}`,
-																								{ workflow: EApprovalStatus.SUBMITTED },
-																								getData,
-																							)
-																						}
-																						title={intl.formatMessage({ id: 'activity.history.confirm.duyet' })}
-																						placement='topLeft'
-																					>
-																						<Button
-																							className='btn-success'
-																							disabled={!canEdit(item)}
-																							variant='link'
-																							icon={<IconSend />}
-																							size='sm'
-																						>
-																							{intl.formatMessage({ id: 'activity.history.button.duyet' })}
-																						</Button>
-																					</Popconfirm>
-
-																					<Popconfirm
-																						onConfirm={() =>
-																							deleteActivityModel(
-																								item?._id,
-																								() => {
-																									getData();
-																									getThongKe();
-																								},
-																								intl.formatMessage({ id: 'global.message.xoathanhcong' }),
-																							)
-																						}
-																						title={intl.formatMessage({ id: 'activity.history.confirm.xoa' })}
-																						placement='topLeft'
-																					>
-																						<Button disabled={!canDelete} variant='link' icon={<IconTrash />} size='sm'>
-																							{intl.formatMessage({ id: 'activity.history.button.xoa' })}
-																						</Button>
-																					</Popconfirm>
-																				</Space>
-																			}
-																		>
-																			<Button variant='outline' icon={<Icon2LineHorizontal />} />
-																		</Popover>
 																		<div style={{ flex: 1 }}>{renderButton}</div>
+																		<ActionMenu
+																			canSubmit={canEdit(item)}
+																			canDelete={canDelete}
+																			onSubmit={() =>
+																				putModel(`me/${item?._id}`, { workflow: EApprovalStatus.SUBMITTED }, getData)
+																			}
+																			onDelete={() =>
+																				deleteActivityModel(
+																					item?._id,
+																					() => {
+																						getData();
+																						getThongKe();
+																					},
+																					intl.formatMessage({ id: 'global.message.xoathanhcong' }),
+																				)
+																			}
+																		/>
 																	</div>
 																)
 															}
@@ -405,7 +433,8 @@ const HistoryActivityPage = () => {
 				}
 				width={1000}
 				onCancel={() => setVisibleForm(false)}
-				footer={null}
+				className={isDetailView ? 'activity-detail-modal' : undefined}
+				footer={isDetailView ? detailFooter : null}
 				open={visibleForm}
 				destroyOnClose
 			>
@@ -424,26 +453,6 @@ const HistoryActivityPage = () => {
 								isExpired={isExpired}
 								isRegister
 							/>
-
-							<div
-								className='modal-expandable-surface'
-								style={{
-									display: 'flex',
-									gap: 8,
-									justifyContent: 'flex-end',
-									margin: '15px -15px -15px -15px',
-									padding: 16,
-								}}
-							>
-								<Button variant='outline' onClick={() => setVisibleForm(false)}>
-									{intl.formatMessage({ id: 'activity.history.close' })}
-								</Button>
-								{canEdit(record ?? ({} as ActivityOutCome.IRecord)) && (
-									<Button variant='default' onClick={() => handleEdit(record)}>
-										{intl.formatMessage({ id: 'activity.history.updateEvidence' })}
-									</Button>
-								)}
-							</div>
 						</>
 					) : (
 						<FormActivityOutCome
@@ -456,26 +465,6 @@ const HistoryActivityPage = () => {
 				) : isView && !record?.isAwardRecognition ? (
 					<>
 						<ChiTietActivityOutCome recOutcome={record ?? ({} as ActivityOutCome.IRecord)} />
-
-						<div
-							className='modal-expandable-surface'
-							style={{
-								display: 'flex',
-								gap: 8,
-								justifyContent: 'flex-end',
-								margin: '15px -15px -15px -15px',
-								padding: 16,
-							}}
-						>
-							<Button variant='outline' onClick={() => setVisibleForm(false)}>
-								{intl.formatMessage({ id: 'activity.history.close' })}
-							</Button>
-							{canEdit(record ?? ({} as ActivityOutCome.IRecord)) && (
-								<Button variant='default' onClick={() => handleEdit(record)}>
-									{intl.formatMessage({ id: 'activity.history.updateEvidence' })}
-								</Button>
-							)}
-						</div>
 					</>
 				) : (
 					<FormPerstionActivityOutCome

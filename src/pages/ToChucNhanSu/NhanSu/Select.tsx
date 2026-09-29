@@ -1,7 +1,7 @@
 import { EOperatorType } from '@/components/Table/constant';
+import VinSelect from '@/components/VinSelect';
 import { ETrangThaiChinhSuaNhanSu } from '@/services/ToChucNhanSu/constant';
 import type { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
-import { Empty, Select, Spin } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -84,25 +84,14 @@ const SelectNhanSuDebounce = (props: {
 			{dataView?.hoDem ?? ''} {dataView?.ten ?? ''} - {dataView?.maCanBo ?? ''}
 		</>
 	) : (
-		<Select
-			loading={loading}
+		<VinSelect
 			mode={multiple ? 'multiple' : undefined}
 			value={value}
 			allowClear={allowClear}
 			onChange={onChange}
 			disabled={disabled}
 			onSearch={(val) => searchDebounceSinhVien(val)}
-			notFoundContent={
-				loading ? (
-					<Spin
-						spinning
-						tip={intl.formatMessage({ id: 'selectNhanSu.loading' })}
-						style={{ width: '100%', margin: 10 }}
-					/>
-				) : (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={intl.formatMessage({ id: 'selectNhanSu.empty' })} />
-				)
-			}
+			notFoundContent={intl.formatMessage({ id: loading ? 'selectNhanSu.loading' : 'selectNhanSu.empty' })}
 			options={(hidePersonalInfo
 				? danhSach?.filter((val) => val?.ssoId !== initialState?.currentUser?.ssoId)
 				: danhSach
@@ -115,9 +104,10 @@ const SelectNhanSuDebounce = (props: {
 			}))}
 			showSearch
 			optionFilterProp='label'
+			localFilter
+			allowDeselect={false}
 			placeholder={placeholder || intl.formatMessage({ id: 'selectNhanSu.placeholder' })}
-			style={{ width: '100%', ...style }}
-			showArrow
+			style={style}
 		/>
 	);
 };

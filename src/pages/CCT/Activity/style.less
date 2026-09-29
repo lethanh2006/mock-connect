@@ -342,3 +342,429 @@
 .info-summary-status {
 	margin-bottom: 12px;
 }
+
+.activity-events-page {
+	.activity-tabs {
+		gap: 8px;
+	}
+
+	.activity-card {
+		padding: 0;
+		height: 100%;
+		border: 1px solid var(--color-border-secondary, rgba(0, 0, 0, 0.06));
+		border-radius: 16px;
+		background: var(--color-bg-container, #fff);
+		box-shadow: none;
+
+		&:hover {
+			transform: none;
+			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+		}
+
+		&.activity-expiring {
+			border: 1px solid var(--color-border-secondary, rgba(0, 0, 0, 0.06));
+		}
+
+		.ant-card-cover {
+			margin: 0;
+		}
+	}
+
+	.activity-cover {
+		.new {
+			top: 8px;
+			right: 8px;
+			padding: 2px 10px;
+			border: none;
+			border-radius: 999px;
+			background: #e8eef7;
+			color: @primary-dark;
+			font-size: 12px;
+			font-weight: 500;
+		}
+	}
+
+	.activity-image,
+	.activity-cover .ant-image-img {
+		border-radius: 16px 16px 0 0;
+	}
+
+	.activity-content-wrapper {
+		padding: 12px 12px 0;
+	}
+
+	.activity-header {
+		padding-top: 0;
+		margin-bottom: 10px;
+
+		.activity-title {
+			margin-bottom: 8px;
+			font-size: 15px;
+			font-weight: 600;
+		}
+
+		.card-level {
+			gap: 4px;
+
+			.level-item {
+				width: 20px;
+				height: 20px;
+				border-radius: 50%;
+				font-size: 11px;
+				font-weight: 600;
+				background: #f0f0f0;
+				color: #bfbfbf;
+
+				&.active {
+					background: @danger-color;
+					color: #fff;
+				}
+
+				// Thẻ hết hạn vẫn giữ màu thang năng lực như thiết kế
+				&.disabled {
+					background: #f0f0f0;
+					color: #bfbfbf;
+
+					&.active {
+						background: @danger-color;
+						color: #fff;
+					}
+				}
+			}
+		}
+	}
+
+	.activity-content {
+		width: 100%;
+		gap: 6px !important;
+		font-size: 13px;
+		color: var(--color-text, @text-main);
+
+		.icon-light {
+			color: var(--color-text-secondary, #595959);
+		}
+
+		.text-semibold {
+			font-weight: 400;
+		}
+	}
+
+	// Thẻ quá hạn: không làm mờ chữ, chỉ dòng hạn đăng ký chuyển đỏ
+	.activity-disabled {
+		.activity-title {
+			color: var(--color-text, @text-main) !important;
+		}
+
+		.activity-content span:not(.text-danger) {
+			color: var(--color-text, @text-main) !important;
+		}
+	}
+
+	.activity-footer {
+		padding: 12px;
+	}
+
+	.activity-card-action button {
+		width: 100%;
+		border-radius: 999px;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.activity-cover .new {
+			background: rgba(19, 77, 139, 0.35);
+			color: #cfe0f5;
+		}
+	}
+}
+
+// ===== Màn chi tiết sự kiện: phần còn lại dùng component + class của @vinuni/ui =====
+// @vinuni/ui không có tiêu đề section kiểu Figma (marker đỏ sát mép card + gạch đứt) nên tự dựng.
+.activity-detail__section-title {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--ds-brand-official-blue-main, #134d8b);
+	font-weight: 600;
+
+	&::before {
+		content: '';
+		position: absolute;
+		left: calc(-1 * var(--card-spacing, 16px));
+		top: 50%;
+		transform: translateY(-50%);
+		border-top: 6px solid transparent;
+		border-bottom: 6px solid transparent;
+		border-left: 6px solid var(--ds-brand-official-red, #c83538);
+	}
+
+	&::after {
+		content: '';
+		flex: 1;
+		border-top: 1.5px dashed var(--ds-line-primary, rgba(0, 0, 0, 0.1));
+	}
+}
+
+// Card sự kiện bên trái (ActivityCard dùng chung với TrangChuV2): trong popup bỏ nền + viền, banner bo góc riêng
+.activity-detail__card .activity-figma-card {
+	height: auto;
+	background: transparent;
+	border: none;
+	border-radius: 0;
+	overflow: visible;
+	cursor: default;
+
+	.activity-figma-card__cover {
+		height: auto;
+		aspect-ratio: 16 / 9;
+		border-radius: 12px;
+	}
+
+	.activity-figma-card__body {
+		padding: 16px 16px 0;
+	}
+
+	.activity-figma-card__title {
+		height: auto;
+		font-weight: 500;
+		font-size: 18px;
+		line-height: 28px;
+		white-space: normal;
+	}
+
+	.activity-figma-card__remain {
+		color: #ea580c;
+	}
+}
+
+// Popup chi tiết: footer nổi trên nội dung (nền trong suốt), nội dung cuộn xuống dưới nút
+.modal-expandable.activity-detail-modal {
+	> .modal-expandable-body {
+		padding-bottom: 96px;
+	}
+
+	> .modal-expandable-footer {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 2;
+		background: transparent;
+		pointer-events: none;
+
+		> * {
+			pointer-events: auto;
+		}
+
+		// Nút nổi trên nội dung → nền đặc + đổ bóng nhẹ cho tách lớp
+		button[data-variant='outline'] {
+			background: #ffffff !important;
+			border-color: transparent !important;
+			box-shadow:
+				0 0 0 0.5px rgba(0, 0, 0, 0.06),
+				0 4px 16px rgba(0, 0, 0, 0.12) !important;
+		}
+
+		button[data-variant='default']:not(:disabled) {
+			background: var(--ds-brand-official-blue-main, #134d8b) !important;
+			color: #ffffff !important;
+			box-shadow: 0 4px 16px rgba(19, 77, 139, 0.35) !important;
+
+			&:hover {
+				background: #0f3f73 !important;
+			}
+		}
+
+		// Disabled: nền trắng mờ + chữ xám + bóng nhẹ (vẫn tách lớp khỏi nội dung phía sau)
+		button[data-variant='default']:disabled {
+			background: rgba(255, 255, 255, 0.9) !important;
+			color: rgba(0, 0, 0, 0.25) !important;
+			border-color: transparent !important;
+			opacity: 1 !important;
+			backdrop-filter: blur(8px);
+			box-shadow:
+				0 0 0 0.5px rgba(0, 0, 0, 0.04),
+				0 4px 16px rgba(0, 0, 0, 0.08) !important;
+			cursor: not-allowed;
+		}
+	}
+}
+
+// ===== Dark mode: danh sách sự kiện (Events & Engagement Calendar) theo Figma =====
+[data-vinuni-theme='dark'] .activity-events-page {
+	.activity-card {
+		background: rgba(255, 255, 255, 0.08);
+		border-color: rgba(255, 255, 255, 0.12);
+
+		&:hover {
+			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+		}
+
+		&.activity-expiring {
+			border-color: rgba(255, 255, 255, 0.12);
+		}
+	}
+
+	.activity-cover .new {
+		background: rgba(29, 78, 216, 0.8);
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		color: #ffffff;
+	}
+
+	.activity-header {
+		.activity-title {
+			color: #ffffff !important;
+		}
+
+		.card-level .level-item,
+		.card-level .level-item.disabled {
+			background: rgba(255, 255, 255, 0.08);
+			color: rgba(255, 255, 255, 0.3);
+
+			&.active {
+				background: #c83538;
+				color: #ffffff;
+			}
+		}
+	}
+
+	.activity-content {
+		color: rgba(255, 255, 255, 0.9);
+
+		.icon-light {
+			color: rgba(255, 255, 255, 0.6);
+		}
+	}
+
+	.activity-disabled {
+		.activity-title {
+			color: #ffffff !important;
+		}
+
+		.activity-content span:not(.text-danger):not(.text-warning) {
+			color: rgba(255, 255, 255, 0.9) !important;
+		}
+	}
+
+	.text-danger {
+		color: #ef4444;
+	}
+
+	.text-warning {
+		color: #f59e0b;
+	}
+
+	.activity-card-action button {
+		border: none !important;
+
+		&[data-variant='default']:not(:disabled) {
+			background: rgba(19, 77, 139, 0.9) !important;
+			color: #ffffff !important;
+		}
+
+		&[data-variant='outline']:not(:disabled) {
+			background: rgba(255, 255, 255, 0.08) !important;
+			color: #ffffff !important;
+		}
+
+		&:disabled {
+			background: rgba(255, 255, 255, 0.06) !important;
+			color: rgba(255, 255, 255, 0.25) !important;
+			opacity: 1 !important;
+		}
+	}
+}
+
+// ===== Dark mode: nút footer popup chi tiết (bản sáng ở .activity-detail-modal phía trên dùng nền trắng tĩnh) =====
+[data-vinuni-theme='dark'] .modal-expandable.activity-detail-modal > .modal-expandable-footer {
+	button[data-variant='outline'] {
+		background: rgba(60, 60, 60, 0.9) !important;
+		color: #ffffff !important;
+		backdrop-filter: blur(12px);
+		box-shadow:
+			0 0 0 0.5px rgba(255, 255, 255, 0.12),
+			0 4px 16px rgba(0, 0, 0, 0.5) !important;
+
+		&:hover {
+			background: rgba(80, 80, 80, 0.95) !important;
+		}
+	}
+
+	button[data-variant='default']:not(:disabled) {
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+	}
+
+	button[data-variant='default']:disabled {
+		background: rgba(60, 60, 60, 0.9) !important;
+		color: rgba(255, 255, 255, 0.3) !important;
+		box-shadow:
+			0 0 0 0.5px rgba(255, 255, 255, 0.08),
+			0 4px 16px rgba(0, 0, 0, 0.5) !important;
+	}
+}
+
+.action-popover {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	width: auto !important;
+	min-width: 160px;
+	padding: 6px;
+
+	.action-popover__item {
+		width: 100%;
+	}
+
+	.action-popover__item {
+		justify-content: flex-start !important;
+		gap: 8px;
+		border-radius: 8px !important;
+	}
+}
+
+.activity-history-page .pagination-container {
+	padding-bottom: 16px;
+}
+
+[data-vinuni-theme='dark'] .activity-history-page {
+	.tab-view-menu {
+		background-color: transparent;
+
+		.ant-tabs-tab:not(.ant-tabs-tab-active) .ant-tabs-tab-btn {
+			color: rgba(255, 255, 255, 0.65);
+		}
+
+		.ant-tabs-tab-active .ant-tabs-tab-btn {
+			color: #8eb6ef;
+		}
+
+		.ant-tabs-ink-bar {
+			background: #8eb6ef;
+		}
+
+		> .ant-tabs-nav::before {
+			border-bottom-color: rgba(255, 255, 255, 0.12);
+		}
+	}
+
+	.ant-divider {
+		border-color: rgba(255, 255, 255, 0.12);
+	}
+}
+
+[data-vinuni-theme='dark'] {
+	.info-summary-box {
+		background-color: rgba(255, 255, 255, 0.06);
+		border-color: rgba(255, 255, 255, 0.12);
+	}
+
+	.custom-info-grid .info-item {
+		.info-label {
+			color: rgba(255, 255, 255, 0.65);
+		}
+
+		.info-value {
+			color: #ffffff;
+		}
+	}
+}

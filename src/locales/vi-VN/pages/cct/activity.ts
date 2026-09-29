@@ -140,6 +140,7 @@ export default {
 	'activity.filter.week': 'Tuần này',
 	'activity.filter.month': 'Tháng này',
 	'activity.filter.next': 'Tháng sau',
+	'activity.filter.dateRange': 'Khoảng thời gian',
 	'activity.filter.trangthai': 'Tất cả trạng thái đăng ký',
 	'activity.filter.tatca': 'Tất cả',
 	'activity.filter.dangky': 'Đã đăng ký',
@@ -182,6 +183,8 @@ export default {
 	'activity.chitiet.dangky.confirm': 'Xác nhận đăng ký hoạt động?',
 	'activity.chitiet.update': 'Cập nhật minh chứng',
 	'activity.chitiet.dangkythanhcong': 'Bạn đã đăng ký thành công',
+	'activity.chitiet.dangkythanhcong.desc':
+		'Theo dõi hoạt động trong mục Hoạt động của tôi và nhớ cập nhật minh chứng sau khi sự kiện diễn ra.',
 
 	'activity.chitiet.admin': 'Thông tin quản trị',
 	'activity.chitiet.organizer': 'Đơn vị tổ chức',
@@ -307,6 +310,8 @@ export default {
 	'activity.history.title': 'Hoạt động của tôi',
 	'activity.history.addNew': 'Thêm mới',
 	'activity.history.updateEvidence': 'Cập nhật minh chứng',
+	'activity.history.updateBefore': 'Cập nhật minh chứng trước',
+	'activity.history.approvedBy': 'Phê duyệt bởi',
 	'activity.history.seeMore': 'Xem thêm',
 	'activity.history.detailEvidence': 'Chi tiết minh chứng',
 	'activity.history.addEvidence': 'Thêm minh chứng',
