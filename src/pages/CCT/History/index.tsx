@@ -197,7 +197,7 @@ const HistoryActivityPage = () => {
 			<div className='page-card-custom'>
 				<TabViewPage
 					hideCard
-					offsetTop={0}
+					offsetTop={60}
 					tabType='line'
 					tabStyle={{ padding: '12px 0 2px 8px' }}
 					contentStyle={{ marginTop: 0 }}
