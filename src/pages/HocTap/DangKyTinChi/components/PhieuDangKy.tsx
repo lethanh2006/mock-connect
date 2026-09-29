@@ -29,6 +29,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { Descriptions, Popconfirm, Popover, Space } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import type { TDangKyTinChiMockData } from '../mockData';
 import { isDuThinhDaDuyet, isTinhTinChiDangKy, renderKhoangThoiGian } from '../utils';
 import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
 import ModalDangKy from './ModalDangKy';
@@ -73,20 +74,25 @@ type PhieuDangKyProps = {
 	soTinChiToiDa: number;
 	soTinChiToiThieu: number;
 	onReload: () => void | Promise<unknown>;
+	mockData?: TDangKyTinChiMockData;
 };
 
-const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReload }: PhieuDangKyProps) => {
+const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReload, mockData }: PhieuDangKyProps) => {
 	const intl = useIntl();
 	const {
-		dotDangKyHienTai,
-		phieuDangKy,
-		danhSachLopDangKy,
+		dotDangKyHienTai: dotDangKyHienTaiModel,
+		phieuDangKy: phieuDangKyModel,
+		danhSachLopDangKy: danhSachLopDangKyModel,
 		setDanhSachLopDangKy,
-		loading,
+		loading: loadingModel,
 		deleteDangKyTinChiModel,
 		tinhDataLichHoc,
 		setVisibleModal,
 	} = useModel('daotao.dotdangkytinchi');
+	const dotDangKyHienTai = mockData?.dotDangKyHienTai ?? dotDangKyHienTaiModel;
+	const phieuDangKy = mockData?.phieuDangKy ?? phieuDangKyModel;
+	const danhSachLopDangKy = mockData?.danhSachLopDangKy ?? danhSachLopDangKyModel;
+	const loading = mockData ? false : loadingModel;
 	const [visibleHuyLop, setVisibleHuyLop] = useState<boolean>(false);
 	const [visibleLopDaHuy, setVisibleLopDaHuy] = useState(false);
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
@@ -102,6 +108,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 		dayjs().isBefore(dayjs(dotDangKyHienTai?.thoiGianKetThuc).add(1, 'second'));
 
 	const onDeleteLop = async (rec: DangKyTinChi.ILopDangKy) => {
+		if (mockData) return;
 		try {
 			const successMsg = intl.formatMessage({ id: 'global.message.xoathanhcong' });
 

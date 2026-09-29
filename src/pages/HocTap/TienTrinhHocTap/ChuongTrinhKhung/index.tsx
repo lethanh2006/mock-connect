@@ -67,12 +67,16 @@ type TChuongTrinhHocKy = {
 	chuyenNganhList?: TChuongTrinhHocKy[];
 };
 
-const TienTrinhChuongTrinhKhung = () => {
+const TienTrinhChuongTrinhKhung = (props: {
+	data?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
+	minorData?: ChuongTrinhDaoTao.TTienTrinhKhungMinor[];
+}) => {
 	const intl = useIntl();
-	const { loading, sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
+	const { loading: loadingModel, sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
+	const loading = props.data ? false : loadingModel;
 	const { khoaNganhMe, maKhoaNganh, record: recSinhVien } = useModel('sinhvien.sinhvien');
-	const [rawData, setRawData] = useState<ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]>([]);
-	const [minorData, setMinorData] = useState<ChuongTrinhDaoTao.TTienTrinhKhungMinor[]>([]);
+	const [rawData, setRawData] = useState<ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]>(props.data ?? []);
+	const [minorData, setMinorData] = useState<ChuongTrinhDaoTao.TTienTrinhKhungMinor[]>(props.minorData ?? []);
 	const [recChuongTrinh, setChuongTrinh] = useState<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>();
 	const [viewType, setViewType] = useState<'semester' | 'block'>('semester');
 	const [searchText, setSearchText] = useState('');
@@ -105,6 +109,12 @@ const TienTrinhChuongTrinhKhung = () => {
 	};
 
 	const fetch = async () => {
+		if (props.data) {
+			setRawData(props.data);
+			setMinorData(props.minorData ?? []);
+			getColorMap(props.data);
+			return;
+		}
 		await sinhVienGetTienTrinhKhungModel(isSongNganh).then((data) => {
 			const nextData = normalizeTienTrinhKhung(data);
 			setRawData(nextData.tienTrinh);
@@ -233,7 +243,7 @@ const TienTrinhChuongTrinhKhung = () => {
 
 	useEffect(() => {
 		fetch();
-	}, [isSongNganh, maKhoaNganh]);
+	}, [isSongNganh, maKhoaNganh, props.data, props.minorData]);
 
 	const renderHocPhan = (
 		data: TChuongTrinhHocKy | { khoiHocPhan: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[] },

@@ -1,27 +1,15 @@
-import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
-import dayjs from '@/utils/dayjs';
 import { Col, Row } from '@/components/MyGrid';
+import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import { useEffect } from 'react';
-import { useIntl, useModel } from 'umi';
+import { useModel } from 'umi';
 
-const FilterDotDangKy = () => {
-	const intl = useIntl();
+const FilterDotDangKy = ({ mockMode = false }: { mockMode?: boolean }) => {
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const {
-		getDotDangKyAvailableModel: getDotDangKy,
-		dotDangKyHienTai,
-		sinhVienDot,
-	} = useModel('daotao.dotdangkytinchi');
-	// Đang trong thời gian đăng ký tín chỉ => Được phép đăng ký, xóa đăng ký
-	const dangTrongThoiGian =
-		dotDangKyHienTai?.thoiGianBatDau &&
-		dotDangKyHienTai?.thoiGianKetThuc &&
-		dayjs().isSameOrAfter(dayjs(dotDangKyHienTai?.thoiGianBatDau)) &&
-		dayjs().isSameOrBefore(dayjs(dotDangKyHienTai?.thoiGianKetThuc));
+	const { getDotDangKyAvailableModel: getDotDangKy } = useModel('daotao.dotdangkytinchi');
 
 	useEffect(() => {
-		if (recHocKy?.ma) getDotDangKy(recHocKy.ma);
-	}, [recHocKy?.ma]);
+		if (!mockMode && recHocKy?.ma) getDotDangKy(recHocKy.ma);
+	}, [mockMode, recHocKy?.ma]);
 
 	return (
 		<Row gutter={[16, 16]}>

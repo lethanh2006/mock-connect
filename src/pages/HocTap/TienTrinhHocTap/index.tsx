@@ -9,28 +9,45 @@ import { getPublicAssetPath } from '@/utils/path';
 import { CardContent, Card as VinCard } from '@vinuni/ui';
 import { Alert, Divider, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
-import { getLocale, useAccess, useIntl, useModel } from 'umi';
+import { useAccess, useIntl, useModel } from 'umi';
 import TienTrinhChuongTrinhKhung from './ChuongTrinhKhung';
 import './components/style.less';
+import {
+	ENABLE_TIEN_TRINH_HOC_TAP_MOCK,
+	MOCK_CHUONG_TRINH_HIEN_TAI,
+	MOCK_DOT_QUY_DOI,
+	MOCK_MA_KHOA_NGANH,
+	MOCK_TIEN_TRINH_KHUNG,
+	MOCK_TIEN_TRINH_THUC_TE,
+	MOCK_TIEN_TRINH_TOT_NGHIEP,
+} from './mockData';
 import TienTrinhThucTe from './TienTrinhThucTe';
 import { tinhThongKeMinor } from './utils';
 
 const TienTrinhHocTap = () => {
 	const intl = useIntl();
-	const locale = getLocale();
-	const { getAllModel, record: recDotQuyDoi, setRecord } = useModel('daotao.quydoidiem.dotquydoidiem');
+	const { getAllModel, record: recDotQuyDoiModel, setRecord } = useModel('daotao.quydoidiem.dotquydoidiem');
 	const { maKhoaNganh, setMaKhoaNganh, record: recSinhVien, khoaNganhMe } = useModel('sinhvien.sinhvien');
-	const { record: recTienTrinh, getTienTrinhTotNghiepModel, loading } = useModel('sinhvien.tientrinhtotnghiep');
 	const {
-		chuongTrinhHienTai,
+		record: recTienTrinhModel,
+		getTienTrinhTotNghiepModel,
+		loading: loadingModel,
+	} = useModel('sinhvien.tientrinhtotnghiep');
+	const {
+		chuongTrinhHienTai: chuongTrinhHienTaiModel,
 		tienTrinhKhungMinors,
-		loading: loadingChuongTrinh,
+		loading: loadingChuongTrinhModel,
 		getChuongTrinhHienTaiModel,
-		sinhVienGetTienTrinhKhungModel,
 	} = useModel('daotao.chuongtrinhdaotao');
+	const maKhoaNganhHienThi = ENABLE_TIEN_TRINH_HOC_TAP_MOCK ? MOCK_MA_KHOA_NGANH : maKhoaNganh;
+	const recTienTrinh = ENABLE_TIEN_TRINH_HOC_TAP_MOCK ? MOCK_TIEN_TRINH_TOT_NGHIEP : recTienTrinhModel;
+	const chuongTrinhHienTai = ENABLE_TIEN_TRINH_HOC_TAP_MOCK ? MOCK_CHUONG_TRINH_HIEN_TAI : chuongTrinhHienTaiModel;
+	const recDotQuyDoi = ENABLE_TIEN_TRINH_HOC_TAP_MOCK ? MOCK_DOT_QUY_DOI : recDotQuyDoiModel;
+	const loading = ENABLE_TIEN_TRINH_HOC_TAP_MOCK ? false : loadingModel;
+	const loadingChuongTrinh = ENABLE_TIEN_TRINH_HOC_TAP_MOCK ? false : loadingChuongTrinhModel;
 	const [visibleChuongTrinh, setVisibleChuongTrinh] = useState(false);
 	const access = useAccess();
-	const isSongNganh = maKhoaNganh === khoaNganhMe?.khoaNganhPhu?.ma;
+	const isSongNganh = maKhoaNganhHienThi === khoaNganhMe?.khoaNganhPhu?.ma;
 	const chuyenNganhHienTai = isSongNganh ? recSinhVien?.chuyenNganh2 : recSinhVien?.chuyenNganh;
 	const tenChuyenNganhPhu = tienTrinhKhungMinors?.[0]?.nganhMinor?.tenTiengViet;
 	const thongKeMinor = useMemo(() => tinhThongKeMinor(tienTrinhKhungMinors), [tienTrinhKhungMinors]);
@@ -39,17 +56,14 @@ const TienTrinhHocTap = () => {
 	const tongTinChiDaDat = (tongTinChiCtdtDaDat ?? 0) + thongKeMinor.daDat;
 	const tongTinChiTatCa = (tongTinChiCtdt ?? 0) + thongKeMinor.tong;
 	const phanTramTinChi = tongTinChiTatCa ? Math.min(100, (tongTinChiDaDat * 100) / tongTinChiTatCa) : 0;
-	const tenNganhHienThi =
-		locale === 'vi-VN'
-			? recTienTrinh?.ctdtKeHoach?.ten
-			: (recTienTrinh?.ctdtKeHoach?.tenTiengAnh ?? recTienTrinh?.ctdtKeHoach?.ma);
-
 	useEffect(() => {
+		if (ENABLE_TIEN_TRINH_HOC_TAP_MOCK) return;
 		//Get đợt me
 		getAllModel(undefined, undefined, undefined, undefined, 'current', false).then((res) => setRecord(res as any));
 	}, []);
 
 	useEffect(() => {
+		if (ENABLE_TIEN_TRINH_HOC_TAP_MOCK) return;
 		//Get tiến trình
 		if (!recTienTrinh && maKhoaNganh) getTienTrinhTotNghiepModel(maKhoaNganh);
 		//Get đợt lộ trình học tập
@@ -63,7 +77,9 @@ const TienTrinhHocTap = () => {
 		<PageCard
 			stickyHeader
 			title={intl.formatMessage({ id: 'menu.HocTap.DegreeAudit' })}
-			extra={<SelectSongNganh className='field-w-250' value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
+			extra={
+				<SelectSongNganh className='field-w-250' value={maKhoaNganhHienThi} onChange={(val) => setMaKhoaNganh(val)} />
+			}
 		>
 			<VinCard>
 				<CardContent>
@@ -210,13 +226,19 @@ const TienTrinhHocTap = () => {
 							{
 								title: intl.formatMessage({ id: 'tientrinhhoctap.curriculumPlanner' }),
 								menuKey: 'chuong-trinh-dao-tao',
-								content: <TienTrinhChuongTrinhKhung />,
+								content: (
+									<TienTrinhChuongTrinhKhung
+										data={ENABLE_TIEN_TRINH_HOC_TAP_MOCK ? MOCK_TIEN_TRINH_KHUNG : undefined}
+									/>
+								),
 								// icon: <IconBookOpen />,
 							},
 							{
 								title: intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte' }),
 								menuKey: 'tien-trinh-thuc-te',
-								content: <TienTrinhThucTe />,
+								content: (
+									<TienTrinhThucTe data={ENABLE_TIEN_TRINH_HOC_TAP_MOCK ? MOCK_TIEN_TRINH_THUC_TE : undefined} />
+								),
 								// icon: <IconCalendar />,
 							},
 							// {

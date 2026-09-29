@@ -1,6 +1,7 @@
-import ButtonExtend from '@/components/Table/ButtonExtend';
+import { IconCheck01 } from '@/components/Icons';
 import Select from '@/components/MySelect';
 import Tooltip from '@/components/MyTooltip';
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
@@ -9,7 +10,6 @@ import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { primaryColor } from '@/services/base/constant';
 import { FileTextOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Modal, Space, Tag, Typography } from 'antd';
-import { IconCheck01 } from '@/components/Icons';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -35,13 +35,18 @@ const filterBySemester = (rows: DataType[], maHocKy: string) => {
 	return rows.filter((row) => row.maHocKy === maHocKy);
 };
 
-const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
+const DiemThanhPhanSV = (props: {
+	maKhoaNganh?: string;
+	mockDiem?: LopHocPhan.IDiemHpSvHk[];
+	mockKetQuaHocKy?: KetQuaHocKy.IRecord[];
+}) => {
 	const intl = useIntl();
-	const { maKhoaNganh } = props;
+	const { maKhoaNganh, mockDiem, mockKetQuaHocKy } = props;
 	const { record: sinhVien } = useModel('sinhvien.sinhvien');
 	const { getKetQuaHocKy } = useModel('daotao.ketquahocky');
-	const { getDiemSvHk, loading } = useModel('daotao.diemhpsvhk');
-	const { danhSach: danhSachDauDiem, getModel: getDauDiem } = useModel('daotao.daudiemhocphan');
+	const { getDiemSvHk, loading: loadingModel } = useModel('daotao.diemhpsvhk');
+	const loading = mockDiem ? false : loadingModel;
+	const { danhSach: danhSachDauDiem } = useModel('daotao.daudiemhocphan');
 	const [maHocKyFilter, setMaHocKyFilter] = useState<string>('all');
 	const [data, setData] = useState<DataType[]>([]);
 	const [diemSvList, setDiemSvList] = useState<LopHocPhan.IDiemHpSvHk[]>([]);
@@ -81,7 +86,14 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 	const getData = useCallback(() => {
 		if (!maKhoaNganh) return;
 
-		Promise.all([getKetQuaHocKy(maKhoaNganh), getDiemSvHk(maKhoaNganh)]).then(([kqhkList, diemSv]) => {
+		const request = mockDiem
+			? Promise.resolve({ kqhkList: mockKetQuaHocKy ?? [], diemSv: mockDiem })
+			: Promise.all([getKetQuaHocKy(maKhoaNganh), getDiemSvHk(maKhoaNganh)]).then(([kqhkList, diemSv]) => ({
+					kqhkList,
+					diemSv,
+				}));
+
+		request.then(({ kqhkList, diemSv }) => {
 			const res: DataType[] = [];
 			const gHocKy = _.groupBy(diemSv, (item) => item.maHocKy); // Nhóm theo học kỳ
 			const aHocKy = Object.entries(gHocKy).sort(([a], [b]) => (a > b ? -1 : 1)); // Sắp xếp giảm dần học kỳ
@@ -110,7 +122,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			setKqhkList(kqhkList);
 			setData(res);
 		});
-	}, [buildSemesterTitle, maKhoaNganh]);
+	}, [buildSemesterTitle, maKhoaNganh, mockDiem, mockKetQuaHocKy]);
 
 	// useEffect(() => {
 	// 	if (!danhSachDauDiem.length) getDauDiem();

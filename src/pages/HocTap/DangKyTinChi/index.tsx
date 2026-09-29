@@ -16,6 +16,7 @@ import HuongDanDangKyTinChi from './components/HuongDanDangKyTinChi';
 import PhieuDangKy from './components/PhieuDangKy';
 import './components/style.less';
 import ViewGhiChuDangKyTinChi from './components/ViewGhiChuDangKyTinChi';
+import { createDangKyTinChiMockData, ENABLE_DANG_KY_TIN_CHI_MOCK } from './mockData';
 import { buildDanhSachLopHienThi, getSoTinChiToiDa, tinhTongHocPhanDangKy, tinhTongTinChi } from './utils';
 
 const RECAPTCHA_SITE_KEY =
@@ -26,8 +27,15 @@ const RECAPTCHA_SITE_KEY =
 const DangKyTinChiPage = () => {
 	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const { dotDangKyHienTai, loading, sinhVienDot, phieuDangKy, danhSachLopDangKy, getLopDangKyModel, setVisibleModal } =
-		useModel('daotao.dotdangkytinchi');
+	const {
+		dotDangKyHienTai: dotDangKyHienTaiModel,
+		loading,
+		sinhVienDot: sinhVienDotModel,
+		phieuDangKy: phieuDangKyModel,
+		danhSachLopDangKy: danhSachLopDangKyModel,
+		getLopDangKyModel,
+		setVisibleModal,
+	} = useModel('daotao.dotdangkytinchi');
 	const { loading: loadingHocKy } = useModel('daotao.hocky');
 	// const { getMeModel: getLopHc } = useModel('daotao.lophanhchinh');
 	const { setPage } = useModel('lophocphan.lophocphan');
@@ -38,6 +46,11 @@ const DangKyTinChiPage = () => {
 	const [fixedBarRect, setFixedBarRect] = useState<{ left: number; width: number }>();
 	const dangKyCardRef = useRef<HTMLDivElement>(null);
 	const phieuDangKyRef = useRef<HTMLDivElement>(null);
+	const mockData = useMemo(() => createDangKyTinChiMockData(recHocKy?.ma), [recHocKy?.ma]);
+	const dotDangKyHienTai = ENABLE_DANG_KY_TIN_CHI_MOCK ? mockData.dotDangKyHienTai : dotDangKyHienTaiModel;
+	const sinhVienDot = ENABLE_DANG_KY_TIN_CHI_MOCK ? mockData.sinhVienDot : sinhVienDotModel;
+	const phieuDangKy = ENABLE_DANG_KY_TIN_CHI_MOCK ? mockData.phieuDangKy : phieuDangKyModel;
+	const danhSachLopDangKy = ENABLE_DANG_KY_TIN_CHI_MOCK ? mockData.danhSachLopDangKy : danhSachLopDangKyModel;
 
 	const danhSachLopHienThi = useMemo(() => buildDanhSachLopHienThi(danhSachLopDangKy), [danhSachLopDangKy]);
 	const tongTinChi = useMemo(() => tinhTongTinChi(danhSachLopHienThi), [danhSachLopHienThi]);
@@ -46,7 +59,7 @@ const DangKyTinChiPage = () => {
 	const soTinChiToiThieu = phieuDangKy?.soTinChiToiThieu ?? 0;
 	const dotHocKySynced = dotDangKyHienTai?.maHocKy === recHocKy?.ma;
 	const isWaitingSinhVienDot = dotHocKySynced && !!dotDangKyHienTai?._id && sinhVienDot === undefined;
-	const isPageLoading = loading || loadingHocKy || isWaitingSinhVienDot;
+	const isPageLoading = ENABLE_DANG_KY_TIN_CHI_MOCK ? false : loading || loadingHocKy || isWaitingSinhVienDot;
 
 	// const getData = async () => {
 	// 	getModel(undefined, undefined, undefined, undefined, undefined, 'me/page');
@@ -61,13 +74,15 @@ const DangKyTinChiPage = () => {
 	// }, []);
 
 	const getLopDangKy = async () => {
-		if (recHocKy?.ma) await getLopDangKyModel(recHocKy.ma);
+		if (ENABLE_DANG_KY_TIN_CHI_MOCK) return mockData.danhSachLopDangKy;
+		if (recHocKy?.ma) return getLopDangKyModel(recHocKy.ma);
+		return undefined;
 	};
 
 	useEffect(() => {
 		if (!recHocKy?.ma) return;
 		setPage(1);
-		getLopDangKy();
+		if (!ENABLE_DANG_KY_TIN_CHI_MOCK) getLopDangKy();
 	}, [recHocKy?.ma]);
 
 	useEffect(() => {
@@ -121,7 +136,11 @@ const DangKyTinChiPage = () => {
 
 	return (
 		<GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>
-			<PageCard stickyHeader title={intl.formatMessage({ id: 'dangkytinchi.title' })} extra={<FilterDotDangKy />}>
+			<PageCard
+				stickyHeader
+				title={intl.formatMessage({ id: 'dangkytinchi.title' })}
+				extra={<FilterDotDangKy mockMode={ENABLE_DANG_KY_TIN_CHI_MOCK} />}
+			>
 				<div ref={dangKyCardRef}>
 					<VinCard>
 						<CardContent>
@@ -239,6 +258,7 @@ const DangKyTinChiPage = () => {
 											soTinChiToiDa={soTinChiToiDa}
 											danhSachLopHienThi={danhSachLopHienThi}
 											onReload={getLopDangKy}
+											mockData={ENABLE_DANG_KY_TIN_CHI_MOCK ? mockData : undefined}
 										/>
 									</>
 								) : (
@@ -269,6 +289,7 @@ const DangKyTinChiPage = () => {
 							soTinChiToiDa={soTinChiToiDa}
 							soTinChiToiThieu={soTinChiToiThieu}
 							onReload={getLopDangKy}
+							mockData={ENABLE_DANG_KY_TIN_CHI_MOCK ? mockData : undefined}
 						/>
 					</Card>
 				</div>
@@ -287,7 +308,11 @@ const DangKyTinChiPage = () => {
 
 				<HuongDanDangKyTinChi />
 
-				<ViewGhiChuDangKyTinChi visible={visibleThongTin} setVisible={setVisibleThongTin} />
+				<ViewGhiChuDangKyTinChi
+					visible={visibleThongTin}
+					setVisible={setVisibleThongTin}
+					mockDotDangKy={ENABLE_DANG_KY_TIN_CHI_MOCK ? mockData.dotDangKyHienTai : undefined}
+				/>
 			</PageCard>
 		</GoogleReCaptchaProvider>
 	);
