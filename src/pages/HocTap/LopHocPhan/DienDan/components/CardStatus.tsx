@@ -4,14 +4,7 @@ import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import { getPublicAssetPath } from '@/utils/path';
 import { copyToClipboard } from '@/utils/utils';
-import {
-	CheckCircleOutlined,
-	CopyOutlined,
-	DeleteOutlined,
-	EditOutlined,
-	PushpinFilled,
-	PushpinOutlined,
-} from '@ant-design/icons';
+import { IconPinLocation, IconShieldCheck, Icon2SquareCopy, IconTrash, IconPencil01 } from '@/components/Icons';
 import { message, Popconfirm, Popover, Tooltip } from 'antd';
 import DOMPurify from 'dompurify';
 import _ from 'lodash';
@@ -117,11 +110,11 @@ const CardStatus = (props: IProps) => {
 									{!data?.thongTinNguoiDang?.isGiaoVien ? ` (${data?.thongTinNguoiDang?.ma})` : ''}
 								</div>
 								{data?.thongTinNguoiDang?.isGiaoVien && (
-									<CheckCircleOutlined style={{ color: 'green', marginLeft: 6, marginRight: 6 }} title='Giảng viên' />
+									<IconShieldCheck style={{ color: 'green', marginLeft: 6, marginRight: 6 }} title='Giảng viên' />
 								)}
 								{/*{data?.ghimBaiViet && (*/}
 								{/*	<div className='' style={{ right: '20px', top: '4px' }}>*/}
-								{/*		<PushpinOutlined style={{ color: '#1890ff' }} />*/}
+								{/*		<IconPinLocation style={{ color: '#1890ff' }} />*/}
 								{/*	</div>*/}
 								{/*)}*/}
 							</div>
@@ -133,7 +126,7 @@ const CardStatus = (props: IProps) => {
 					<div className='flex item-center' style={{ gap: 12 }}>
 						{data?.ghimBaiViet && (
 							<div style={{ fontSize: 18, transform: 'rotate(-45deg)' }}>
-								<PushpinFilled style={{ color: 'var(--color-primary)' }} />
+								<IconPinLocation style={{ color: 'var(--color-primary)' }} />
 							</div>
 						)}
 
@@ -147,7 +140,7 @@ const CardStatus = (props: IProps) => {
 											style={{ marginBottom: 8, cursor: 'pointer' }}
 											onClick={() => handleEdit(data)}
 										>
-											<EditOutlined /> Chỉnh sửa bài viết
+											<IconPencil01 /> Chỉnh sửa bài viết
 										</div>
 										<div
 											className='option-item'
@@ -159,7 +152,7 @@ const CardStatus = (props: IProps) => {
 												});
 											}}
 										>
-											<CopyOutlined /> Sao chép liên kết
+											<Icon2SquareCopy /> Sao chép liên kết
 										</div>
 										<div
 											className='option-item'
@@ -168,14 +161,14 @@ const CardStatus = (props: IProps) => {
 												handlePin(!data?.ghimBaiViet);
 											}}
 										>
-											<PushpinOutlined /> {data?.ghimBaiViet ? 'Bỏ ghim' : 'Ghim'}
+											<IconPinLocation /> {data?.ghimBaiViet ? 'Bỏ ghim' : 'Ghim'}
 										</div>
 										<Popconfirm
 											title={'Bạn có chắc chắn muốn xoá bài viết này?'}
 											onConfirm={() => deleteModel(data?._id)}
 										>
 											<div className='option-item text-error' style={{ cursor: 'pointer' }}>
-												<DeleteOutlined /> Xoá bài viết
+												<IconTrash /> Xoá bài viết
 											</div>
 										</Popconfirm>
 									</>

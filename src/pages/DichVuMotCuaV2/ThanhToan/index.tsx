@@ -83,7 +83,7 @@ const ThanhToanPage = (props: { identityCode: string; trangThaiThanhToan?: strin
 					<TableStaticData
 						otherProps={{
 							pagination: false,
-							summary: (data: ThanhToan.Item[]) => {
+							summary: (data: readonly ThanhToan.Item[]) => {
 								let sum = 0;
 								data.forEach(({ quantity, unitAmount }) => (sum += (quantity ?? 0) * (unitAmount ?? 0)));
 								return (

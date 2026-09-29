@@ -2,7 +2,7 @@ import { colorLoaiHocLuc } from '@/services/HocTap/constant';
 import { Card, Col, Empty, Row, Spin, Tooltip } from 'antd';
 import { useModel } from 'umi';
 import '../KetQuaToanKhoa/style.less';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { IconShieldInfo } from '@/components/Icons';
 import { primaryColor } from '@/services/base/constant';
 
 const ViewKetQuaHocKy = () => {
@@ -92,7 +92,7 @@ const ViewKetQuaHocKy = () => {
 													<span className='sum-text'>{record.tongSoTinChiNoToanKhoa ?? '--'}</span>
 													STC chưa đạt toàn khóa
 													<Tooltip title='Tổng số tín chỉ các học phần sinh viên đã tham gia học tập nhưng kết quả học tập chưa đạt trong toàn khóa'>
-														<InfoCircleOutlined style={{ color: primaryColor }} />
+														<IconShieldInfo style={{ color: primaryColor }} />
 													</Tooltip>
 												</div>
 											</Col>

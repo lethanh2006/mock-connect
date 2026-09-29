@@ -1,5 +1,6 @@
 import { KenhThanhToan } from '@/services/TaiChinh/KenhThanhToan/typing';
-import { Col, Modal, Row } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { useEffect, useMemo, useState } from 'react';
 import { useModel } from 'umi';
 import PaymentDetail from './PaymentDetail';
@@ -79,12 +80,11 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({
 	}, [mode, bills, recHoaDon?.transactions]);
 
 	return (
-		<Modal
+		<ModalExpandable
 			open={visible}
 			onCancel={onClose}
 			footer={null}
 			width={1000}
-			closable
 			destroyOnClose
 			className='modal-thanh-toan'
 		>
@@ -114,7 +114,7 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({
 					)}
 				</Col>
 			</Row>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

@@ -2,7 +2,7 @@ import { exportPollData, votePoll } from '@/services/HocTap/DienDan/BaiDang/inde
 import type { BaiDang } from '@/services/HocTap/DienDan/BaiDang/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
-import { ClockCircleOutlined, ExportOutlined } from '@ant-design/icons';
+import { IconStopwatch, IconDownload } from '@/components/Icons';
 import {
 	Avatar,
 	Button,
@@ -116,7 +116,7 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 		<Button
 			type='default'
 			size='small'
-			icon={<ExportOutlined />}
+			icon={<IconDownload />}
 			onClick={async () => {
 				try {
 					const res = await exportPollData(id);
@@ -166,7 +166,7 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 			title={<Title level={5}>Bình chọn</Title>}
 			extra={
 				<Space size='small' wrap>
-					<ClockCircleOutlined style={{ fontSize: 12 }} />
+					<IconStopwatch style={{ fontSize: 12 }} />
 					<Text type='secondary'>Kết thúc: {formatDateTime(baiDang.ngayKetThucBinhChon)}</Text>
 					{pollExpired && <Tag color='error'>Đã kết thúc</Tag>}
 				</Space>

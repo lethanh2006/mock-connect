@@ -1,4 +1,5 @@
-import { Card, Flex } from 'antd';
+import { Card } from '@/components/PageCard';
+import { Flex } from 'antd';
 
 const ToDoList = ({ loading = true }) => {
 	const todoData = [
@@ -80,13 +81,6 @@ const ToDoList = ({ loading = true }) => {
 					<span className='date'>{loading ? `--` : 3} Todo</span>
 				</Flex>
 			}
-			styles={{
-				body: {
-					padding: 0,
-					position: 'relative',
-					minHeight: 460,
-				},
-			}}
 		>
 			<div className='todolist-body'>
 				{loading ? (

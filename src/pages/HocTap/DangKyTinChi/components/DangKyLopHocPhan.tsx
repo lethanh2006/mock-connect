@@ -29,8 +29,10 @@ import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Descriptions, Modal, Popconfirm, Popover, Select, Space, Tag } from 'antd';
+import { Descriptions, Modal, Popconfirm, Popover, Space, Tag } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
+import { IconShieldInfo } from '@/components/Icons';
+import VinSelect from '@/components/VinSelect';
 import { useAccess, useIntl, useModel } from 'umi';
 import {
 	buildLopDangKy,
@@ -245,7 +247,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 								</span>
 							}
 						>
-							<InfoCircleOutlined style={{ color: '#1677ff', fontSize: 12 }} />
+							<IconShieldInfo style={{ color: '#1677ff', fontSize: 12 }} />
 						</Popover>
 					)}
 				</Space>
@@ -660,7 +662,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, onRel
 						},
 					}}
 					otherButtons={[
-						<Select
+						<VinSelect
 							key='loai-dang-ky'
 							options={allLoaiDangKy.map((item) => ({
 								key: item,

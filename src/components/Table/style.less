@@ -117,23 +117,9 @@
 			background-color: var(--color-primary-bg);
 		}
 
-		// Subtle indicator line
+		// Vạch resize nằm trên chính ô header (0.5px). Handle chỉ còn vùng kéo.
 		&::after {
-			content: '';
-			position: absolute;
-			left: 6px; // Center the line
-			top: 20%;
-			bottom: 20%;
-			width: 3px;
-			background-color: var(--color-border-secondary);
-			transition: background-color 0.2s;
-		}
-
-		&:hover::after {
-			background-color: var(--color-primary);
-			height: 100%;
-			top: 0;
-			bottom: 0;
+			display: none;
 		}
 	}
 
@@ -144,8 +130,6 @@
 	[data-slot='table-header']>tr>th:last-child,
 	[data-slot='table-header']>tr>th[data-pinned='right'],
 	[data-slot='table-header']>tr>th.table-cell-pinned-right {
-		overflow: hidden;
-
 		.react-resizable-handle {
 			margin-left: -8px;
 			display: none !important;
@@ -157,17 +141,82 @@
 		overflow-y: auto;
 	}
 
+	--table-header-indicator: rgb(0 0 0 / 6%);
+	--table-header-pin-shadow: rgb(0 0 0 / 10%);
+
 	[data-slot='table-header'] {
 		th {
+			box-sizing: border-box;
+			isolation: isolate;
 			position: sticky;
 			top: 0;
 			z-index: 15;
+			height: 64px;
+			padding: 12px 10px !important;
+			border-width: 0 1px 1px 0.5px !important;
+			border-style: solid !important;
+			border-color: var(--ds-line-primary, rgba(0, 0, 0, 0.1)) !important;
 			background-color: var(--color-bg-container, var(--ds-bg-mortared, #ffffff));
+			// Resize indicator hai mép, thụt 12px trên/dưới.
+			background-image: linear-gradient(var(--table-header-indicator), var(--table-header-indicator)),
+				linear-gradient(var(--table-header-indicator), var(--table-header-indicator));
+			background-repeat: no-repeat;
+			background-position: left center, right center;
+			background-size: 0.5px calc(100% - 24px), 0.5px calc(100% - 24px);
+			font-family: Inter, sans-serif;
+			font-style: normal;
+			font-weight: 600;
+			font-size: 14px;
+			line-height: 20px;
+			color: var(--ds-content-secondary, rgba(0, 0, 0, 0.6));
+			vertical-align: middle;
+
+			&[rowspan] {
+				height: auto;
+				min-height: 64px;
+			}
 
 			&.table-cell-pinned-right,
-			&.table-cell-pinned-left {
+			&.table-cell-pinned-left,
+			&[data-pinned='left'],
+			&[data-pinned='right'] {
 				z-index: 25;
+				box-shadow: none;
 			}
+		}
+
+		// Bóng cột ghim: mặc định ẩn, chỉ mép nhóm sticky mới hiện.
+		th.table-cell-pinned-left:not(:has(~ th.table-cell-pinned-left))::after,
+		th[data-pinned='left']:not(:has(~ th[data-pinned='left']))::after {
+			content: '';
+			position: absolute;
+			z-index: 3;
+			top: 0;
+			right: -3px;
+			bottom: 0;
+			width: 4px;
+			background: linear-gradient(270deg, transparent 0%, var(--table-header-pin-shadow) 100%);
+			border-left: 1px solid var(--color-bg-container, #ffffff);
+			pointer-events: none;
+		}
+
+		th.table-cell-pinned-right::before,
+		th[data-pinned='right']::before {
+			content: '';
+			position: absolute;
+			z-index: 3;
+			top: 0;
+			bottom: 0;
+			left: -3px;
+			width: 4px;
+			background: linear-gradient(270deg, var(--table-header-pin-shadow) 0%, transparent 100%);
+			border-right: 1px solid var(--color-bg-container, #ffffff);
+			pointer-events: none;
+		}
+
+		th.table-cell-pinned-right ~ th.table-cell-pinned-right::before,
+		th[data-pinned='right'] ~ th[data-pinned='right']::before {
+			content: none;
 		}
 	}
 }
@@ -209,6 +258,11 @@ tr:hover>td.table-cell-pinned-left {
 // custom_vinuni.less) — ở đây chỉ cần chỉnh box-shadow (đen mờ vô tác dụng trên nền tối) và màu
 // literal khác (không qua token) là ô "Tổng số".
 [data-vinuni-theme='dark'] {
+	.table-base {
+		--table-header-indicator: rgb(255 255 255 / 6%);
+		--table-header-pin-shadow: rgb(255 255 255 / 10%);
+	}
+
 	.total {
 		border-color: rgba(255, 255, 255, 0.15) !important;
 	}
@@ -373,10 +427,18 @@ tr:hover>td.table-cell-pinned-left {
 
 .table-header-cell-title {
 	min-width: 0;
+	z-index: 0;
+	font-family: Inter, sans-serif;
+	font-style: normal;
+	font-weight: 600;
+	font-size: 14px;
+	line-height: 20px;
+	color: var(--ds-content-secondary, rgba(0, 0, 0, 0.6));
 }
 
 .table-header-cell-label {
 	display: flex;
+	flex-direction: row;
 	align-items: center;
 	gap: 4px;
 	min-width: 0;

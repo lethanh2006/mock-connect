@@ -1,10 +1,11 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 // import { exportLyLich } from '@/services/DaoTao/SinhVien';
+import { Button, Icon2ChervolLeftLine, IconPencil01 } from '@/components/Icons';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { EditOutlined, LeftOutlined } from '@ant-design/icons';
-import { Alert, Button, Card, Space, Spin } from 'antd';
+import { Alert, Card, Space, Spin } from 'antd';
 // import fileDownload from 'js-file-download';
+import PageCard from '@/components/PageCard';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalCapNhatAnhNhanDien from './CapNhatKhuonMat/Modal';
@@ -65,7 +66,7 @@ const ThongTinSinhVienPage = () => {
 					<ButtonExtend
 						disabled={!choPhepSua}
 						type='primary'
-						icon={<EditOutlined />}
+						icon={<IconPencil01 />}
 						onClick={() => setIsCapNhat(true)}
 						tooltip={
 							!choPhepSua
@@ -94,11 +95,7 @@ const ThongTinSinhVienPage = () => {
 	);
 
 	return (
-		<Card
-			title={intl.formatMessage({ id: 'menu.MyProfile' })}
-			variant='borderless'
-			className='card-borderless card-big-title has-indicator'
-		>
+		<PageCard stickyHeader title={intl.formatMessage({ id: 'menu.MyProfile' })}>
 			{/* <Card variant='borderless'>
 				{recordDot?._id && choPhepSua ? (
 					<Alert
@@ -118,7 +115,7 @@ const ThongTinSinhVienPage = () => {
 			{isCapNhat ? (
 				<>
 					<Space style={{ marginBottom: 12 }} wrap>
-						<Button icon={<LeftOutlined />} onClick={() => setIsCapNhat(false)}>
+						<Button variant='outline' icon={<Icon2ChervolLeftLine />} onClick={() => setIsCapNhat(false)}>
 							{intl.formatMessage({ id: 'thongtincanhan.quaylai' })}
 						</Button>
 					</Space>
@@ -134,7 +131,7 @@ const ThongTinSinhVienPage = () => {
 							<ButtonExtend
 								disabled={!choPhepSua}
 								type='primary'
-								icon={<EditOutlined />}
+								icon={<IconPencil01 />}
 								onClick={() => setIsCapNhat(true)}
 								tooltip={
 									!choPhepSua
@@ -157,7 +154,7 @@ const ThongTinSinhVienPage = () => {
 								<ButtonExtend
 									disabled={!choPhepSua}
 									type='primary'
-									icon={<EditOutlined />}
+									icon={<IconPencil01 />}
 									onClick={() => setIsCapNhat(true)}
 									tooltip={
 										!choPhepSua
@@ -179,7 +176,7 @@ const ThongTinSinhVienPage = () => {
 			{isCapNhat ? (
 				<>
 					<Space style={{ marginBottom: 12 }} wrap>
-						<Button icon={<LeftOutlined />} onClick={() => setIsCapNhat(false)}>
+						<Button icon={<Icon2ChervolLeftLine />} onClick={() => setIsCapNhat(false)}>
 							{intl.formatMessage({ id: 'thongtincanhan.quaylai' })}
 						</Button>
 					</Space>
@@ -229,7 +226,7 @@ const ThongTinSinhVienPage = () => {
 
 			<ModalCapNhatAnhNhanDien visible={visibleCapNhat} setVisible={setVisibleCapNhat} />
 			<ModalHocBaSinhVien visible={visibleHocBa} setVisible={setVisibleHocBa} />
-		</Card>
+		</PageCard>
 	);
 };
 

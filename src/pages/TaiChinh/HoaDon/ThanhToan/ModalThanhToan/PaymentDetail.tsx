@@ -1,10 +1,12 @@
-﻿import TableStaticData from '@/components/Table/TableStaticData';
+import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import { getThongTinHoaDonMe } from '@/services/TaiChinh/HoaDon';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { postTransactionMePayment } from '@/services/TaiChinh/KenhThanhToan';
 import { inputFormat } from '@/utils/utils';
-import { Button, Checkbox, Descriptions, Form, InputNumber, message } from 'antd';
+import { Button } from '@/components/Icons';
+import { toast } from '@/utils/toast';
+import { Checkbox, Descriptions, Form, InputNumber } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import InvoiceForm from './InvoiceForm';
@@ -146,7 +148,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 				} else if (data?.payUrl) {
 					window.location.href = data.payUrl;
 				} else {
-					message.error(intl.formatMessage({ id: 'taichinh.thanhtoan.modal.error.noPaymentUrl' }));
+					toast.error(intl.formatMessage({ id: 'taichinh.thanhtoan.modal.error.noPaymentUrl' }));
 				}
 			} else {
 				// Single mode
@@ -171,7 +173,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 				} else if (data?.payUrl) {
 					window.location.href = data.payUrl;
 				} else {
-					message.error(intl.formatMessage({ id: 'taichinh.thanhtoan.modal.error.noPaymentUrl' }));
+					toast.error(intl.formatMessage({ id: 'taichinh.thanhtoan.modal.error.noPaymentUrl' }));
 				}
 			}
 		} catch (er) {
@@ -187,7 +189,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 	}, []);
 
 	const handlePaymentCollectSuccess = useCallback(() => {
-		message.success(intl.formatMessage({ id: 'taichinh.thanhtoan.modal.success' }));
+		toast.success(intl.formatMessage({ id: 'taichinh.thanhtoan.modal.success' }));
 	}, [intl]);
 
 	return (
@@ -343,9 +345,9 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 
 					<div className='payment-detail__footer'>
 						<Button
-							type='primary'
-							block
-							size='large'
+							variant='default'
+							size='lg'
+							style={{ width: '100%' }}
 							onClick={handlePayment}
 							loading={loading || loadingOnePay}
 							disabled={!isAmountValid || !isInvoiceValid || !!paymentCollectData}

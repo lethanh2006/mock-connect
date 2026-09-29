@@ -5,7 +5,7 @@ import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { IconPlus, IconMinusMini } from '@/components/Icons';
 import { useModel } from '@umijs/max';
 import { Button, Checkbox, Col, Form, Input, Row } from 'antd';
 import React, { useEffect } from 'react';
@@ -183,7 +183,7 @@ const FormThemMoiBaiViet = (props: IProps) => {
 																				size='small'
 																				onClick={() => remove(field.name)}
 																				danger
-																				icon={<MinusCircleOutlined />}
+																				icon={<IconMinusMini />}
 																			/>
 																		</Col>
 																	</React.Fragment>
@@ -193,7 +193,7 @@ const FormThemMoiBaiViet = (props: IProps) => {
 																	<Button
 																		type='dashed'
 																		onClick={() => add()}
-																		icon={<PlusOutlined />}
+																		icon={<IconPlus />}
 																		size='small'
 																		block
 																	>

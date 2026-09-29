@@ -3,9 +3,9 @@ import type { BinhLuan } from '@/services/HocTap/DienDan/BinhLuan/typing';
 import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import { formatDateTime } from '@/utils/formatDate';
 import { createTextLinks } from '@/utils/utils';
-import { CheckCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Form, Input, Popconfirm, Popover } from 'antd';
 import DOMPurify from 'dompurify';
+import { IconShieldCheck, IconTrash, IconPencil01 } from '@/components/Icons';
+import { Form, Input, Popconfirm, Popover } from 'antd';
 import { nanoid } from 'nanoid';
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useModel } from 'umi';
@@ -178,7 +178,7 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 													{!val?.thongTinNguoiDang?.isGiaoVien ? ` (${val?.thongTinNguoiDang?.ma})` : ''}
 												</b>{' '}
 												{val?.thongTinNguoiDang?.isGiaoVien && (
-													<CheckCircleOutlined style={{ color: 'green', marginLeft: 6 }} title='Giảng viên' />
+													<IconShieldCheck style={{ color: 'green', marginLeft: 6 }} title='Giảng viên' />
 												)}
 											</div>
 											<span style={{ fontSize: 11, color: 'rgba(68,68,68,0.84)', marginLeft: 6 }}>
@@ -231,7 +231,7 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 													form.setFieldsValue({ ...val });
 												}}
 											>
-												<EditOutlined /> Chỉnh sửa
+												<IconPencil01 /> Chỉnh sửa
 											</div>
 
 											<Popconfirm
@@ -243,7 +243,7 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 												}}
 											>
 												<div className='option-item text-error' style={{ cursor: 'pointer' }}>
-													<DeleteOutlined /> Xóa
+													<IconTrash /> Xóa
 												</div>
 											</Popconfirm>
 										</>

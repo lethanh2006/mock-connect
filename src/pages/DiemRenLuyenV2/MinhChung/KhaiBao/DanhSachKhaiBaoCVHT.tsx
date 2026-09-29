@@ -6,14 +6,7 @@ import {
 	ETrangThaiTiepNhanMinhChung,
 	MapColorETrangThaiTiepNhanMinhChung,
 } from '@/services/DiemRenLuyenV2/MinhChung/KhaiBao/constants';
-import {
-	CheckOutlined,
-	CloseOutlined,
-	DeleteOutlined,
-	EditOutlined,
-	MenuOutlined,
-	UndoOutlined,
-} from '@ant-design/icons';
+import { IconCheck01, IconXmark, IconTrash, IconRotateArrow, IconPencil01, IconHumberger } from '@/components/Icons';
 import { Button, Divider, Popconfirm, Popover, Spin, Tag } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -132,7 +125,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 									disabled={rec?.trangThai !== ETrangThaiTiepNhanMinhChung.CHO_XU_LY}
 									tooltip={intl.formatMessage({ id: 'diemrenluyen.minhchung.duyet' })}
 									type='link'
-									icon={<CheckOutlined />}
+									icon={<IconCheck01 />}
 								/>
 							</Popconfirm>
 							<Divider type={'vertical'} />
@@ -149,7 +142,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 									tooltip={intl.formatMessage({ id: 'diemrenluyen.minhchung.tuchoi' })}
 									type='link'
 									danger
-									icon={<CloseOutlined />}
+									icon={<IconXmark />}
 								/>
 							</Popconfirm>
 							<Divider type={'vertical'} />
@@ -165,7 +158,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 									disabled={rec?.trangThai === ETrangThaiTiepNhanMinhChung.CHO_XU_LY}
 									tooltip={intl.formatMessage({ id: 'diemrenluyen.minhchung.chuyenvecho' })}
 									type='link'
-									icon={<UndoOutlined />}
+									icon={<IconRotateArrow />}
 								/>
 							</Popconfirm>
 							<Divider type={'vertical'} />
@@ -176,7 +169,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 								}
 								tooltip={intl.formatMessage({ id: 'diemrenluyen.minhchung.danhsach.chinhsua' })}
 								type='link'
-								icon={<EditOutlined />}
+								icon={<IconPencil01 />}
 								onClick={() => {
 									handleEdit(rec);
 								}}
@@ -201,13 +194,13 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 									tooltip={intl.formatMessage({ id: 'diemrenluyen.minhchung.danhsach.xoa' })}
 									type='link'
 									danger
-									icon={<DeleteOutlined />}
+									icon={<IconTrash />}
 								/>
 							</Popconfirm>
 						</>
 					}
 				>
-					<Button type='link' icon={<MenuOutlined />} />
+					<Button type='link' icon={<IconHumberger />} />
 				</Popover>
 			),
 		},
@@ -238,19 +231,19 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 					mode: 'bancansu',
 				}}
 				buttons={{ create: recLoaiMinhChung?.doiTuongNhap?.includes(EDoiTuongNhap.SINH_VIEN) }}
-				// otherButtons={[
-				// 	<>
-				// 		<SelectDotDiemRenLuyen
-				// 			style={{ width: 300 }}
-				// 			value={recordDot?._id}
-				// 			onChange={(val, option) => {
-				// 				const rawData = option?.rawData;
-				// 				setRecortdDot(rawData);
-				// 			}}
-				// 			isSetRecord={true}
-				// 		/>
-				// 	</>,
-				// ]}
+			// otherButtons={[
+			// 	<>
+			// 		<SelectDotDiemRenLuyen
+			// 			style={{ width: 300 }}
+			// 			value={recordDot?._id}
+			// 			onChange={(val, option) => {
+			// 				const rawData = option?.rawData;
+			// 				setRecortdDot(rawData);
+			// 			}}
+			// 			isSetRecord={true}
+			// 		/>
+			// 	</>,
+			// ]}
 			/>
 		</Spin>
 	);

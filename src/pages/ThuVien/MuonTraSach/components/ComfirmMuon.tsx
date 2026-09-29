@@ -2,7 +2,7 @@ import MyDatePicker from '@/components/MyDatePicker';
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { ExclamationCircleFilled } from '@ant-design/icons';
+import { IconWarningCircle } from '@/components/Icons';
 import { Button, Col, Form, Input, Modal, Row } from 'antd';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
@@ -60,7 +60,7 @@ const ConfirmMuonSach = (props: { id?: string }) => {
 							}}
 						>
 							<div style={{ color: 'orange', fontSize: 48 }}>
-								<ExclamationCircleFilled />
+								<IconWarningCircle />
 							</div>
 							<div>Bạn có chắc chắn xác nhận đăng ký mượn sách?</div>
 						</div>

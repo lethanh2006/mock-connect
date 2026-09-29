@@ -17,7 +17,7 @@ import {
 import type { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
 import { LoaiDefaultValue } from '@/services/QuyTrinh/MauDon/constants';
 import rules from '@/utils/rules';
-import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { IconTrash, IconPencil01, Icon3SquarePlusmark } from '@/components/Icons';
 import type { FormInstance } from 'antd';
 import { Button, Col, Form, Input, InputNumber, Modal, Popconfirm, Radio, Select, Space, Tooltip } from 'antd';
 import _ from 'lodash';
@@ -336,7 +336,7 @@ const FormRender = (props: {
 									setEditFormTable(true);
 								}}
 								type='link'
-								icon={<EditOutlined />}
+								icon={<IconPencil01 />}
 							/>
 						</Tooltip>
 
@@ -359,7 +359,7 @@ const FormRender = (props: {
 								title={intl.formatMessage({ id: 'diemrenluyen.maudon.xacnhanxoa.lop' })}
 								placement='topRight'
 							>
-								<Button disabled={cauHinh?.readonly} size='small' danger type='link' icon={<DeleteOutlined />} />
+								<Button disabled={cauHinh?.readonly} size='small' danger type='link' icon={<IconTrash />} />
 							</Popconfirm>
 						</Tooltip>
 					</>
@@ -386,7 +386,7 @@ const FormRender = (props: {
 							disabled={cauHinh?.readonly}
 							size='small'
 							type='primary'
-							icon={<PlusCircleOutlined />}
+							icon={<Icon3SquarePlusmark />}
 							onClick={() => {
 								setRecordTable(undefined);
 								setVisibleFormTable(true);

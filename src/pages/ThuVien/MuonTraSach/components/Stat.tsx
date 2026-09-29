@@ -1,5 +1,5 @@
 import StatisticsCard from '@/components/StatisticsCard';
-import { BookOutlined, CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { IconBookOpen, IconShieldCheck, IconStopwatch, IconWarningCircle } from '@/components/Icons';
 import { Spin } from 'antd';
 import { useEffect, useMemo } from 'react';
 import { useModel } from 'umi';
@@ -17,13 +17,13 @@ const StatMuonTraSach = () => {
 				title: 'Chờ xử lý',
 				value: dataThongKe?.choXuLy ?? 0,
 				valueColor: 'blue',
-				icon: <ClockCircleOutlined />,
+				icon: <IconStopwatch />,
 			},
 			{
 				title: 'Đang mượn',
 				value: dataThongKe?.dangThueMuon ?? 0,
 				valueColor: 'orange',
-				icon: <BookOutlined />,
+				icon: <IconBookOpen />,
 				onClick: () => {
 					console.log('Xem chi tiết Đang mượn');
 				},
@@ -32,7 +32,7 @@ const StatMuonTraSach = () => {
 				title: 'Quá hạn mượn',
 				value: dataThongKe?.quaHan ?? 0,
 				valueColor: 'red',
-				icon: <ExclamationCircleOutlined />,
+				icon: <IconWarningCircle />,
 				onClick: () => {
 					console.log('Xem chi tiết Quá hạn');
 				},
@@ -41,7 +41,7 @@ const StatMuonTraSach = () => {
 				title: 'Đã trả',
 				value: dataThongKe?.daTra ?? 0,
 				valueColor: 'green',
-				icon: <CheckCircleOutlined />,
+				icon: <IconShieldCheck />,
 			},
 		],
 		[dataThongKe],

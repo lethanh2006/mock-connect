@@ -3,7 +3,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { colorTrangThaiKqht, ETrangThaiKqht, trangThaiKqht } from '@/services/DaoTao/constant';
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
-import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { IconTrash, Icon3SquarePlusmark } from '@/components/Icons';
 import { useIntl } from '@umijs/max';
 import { FormInstance, Modal, Popconfirm, Tag } from 'antd';
 import { useState } from 'react';
@@ -130,7 +130,7 @@ const FormItemHocPhanTable = (props: FormItemHocPhanTableProps) => {
 								tooltip={intl.formatMessage({ id: 'minor.idm.action.delete' })}
 								danger
 								type='link'
-								icon={<DeleteOutlined />}
+								icon={<IconTrash />}
 							/>
 						</Popconfirm>
 					</>
@@ -161,7 +161,7 @@ const FormItemHocPhanTable = (props: FormItemHocPhanTableProps) => {
 				otherButtons={[
 					<ButtonExtend
 						disabled={disabled}
-						icon={<PlusCircleOutlined />}
+						icon={<Icon3SquarePlusmark />}
 						size='small'
 						onClick={() => {
 							setOpenModal(true);

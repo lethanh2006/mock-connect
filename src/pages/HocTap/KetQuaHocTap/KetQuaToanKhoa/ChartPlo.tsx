@@ -1,4 +1,4 @@
-import { Empty } from 'antd';
+import EmptyState from '@/components/EmptyState';
 import { useEffect } from 'react';
 import Chart from 'react-apexcharts';
 import { useMediaQuery } from 'react-responsive';
@@ -21,9 +21,8 @@ const ChartPloToanKhoa = (props: { maKhoaNganh: string }) => {
 
 	if (!ploData.length) {
 		return (
-			<Empty
+			<EmptyState
 				description={intl.formatMessage({ id: 'ketquahoctap.chart.toankhoa.empty' })}
-				image={Empty.PRESENTED_IMAGE_SIMPLE}
 			/>
 		);
 	}

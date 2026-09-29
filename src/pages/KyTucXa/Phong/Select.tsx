@@ -1,5 +1,5 @@
 import { Phong } from '@/services/KyTucXa/Phong/typing';
-import { Select } from 'antd';
+import VinSelect from '@/components/VinSelect';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -32,7 +32,7 @@ const SelectPhongKTX = (props: {
 	}));
 
 	return (
-		<Select
+		<VinSelect
 			loading={loading}
 			disabled={disabled}
 			mode={multiple ? 'multiple' : undefined}

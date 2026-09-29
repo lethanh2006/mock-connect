@@ -1,5 +1,5 @@
 import { Button, IconPlus, IconXmark } from '@/components/Icons';
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { Card } from '@/components/PageCard';
 import { Form } from 'antd';
 import classNames from 'classnames';
@@ -47,7 +47,7 @@ const FilterGroup = (props: RowFilterProps) => {
 						</FormCheckbox>
 					</Form.Item>
 					<Form.Item name={[...namePath, 'operator']} initialValue='and' className='filter-group-operator-item' noStyle>
-						<Select
+						<VinSelect
 							options={[
 								{ label: intl.formatMessage({ id: `global.table.operator.${EOperatorType.AND}` }), value: 'and' },
 								{ label: intl.formatMessage({ id: `global.table.operator.${EOperatorType.OR}` }), value: 'or' },

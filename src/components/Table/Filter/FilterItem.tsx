@@ -4,7 +4,7 @@ import rules from '@/utils/rules';
 import { Icon3SquarePlusmark, IconXmark } from '@/components/Icons';
 import { Card } from '@/components/PageCard';
 import Input, { InputNumber } from '@/components/MyInput';
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { Form } from 'antd';
 import { Col, Row } from '@/components/MyGrid';
 import { useEffect, useMemo, useState } from 'react';
@@ -109,7 +109,7 @@ const FilterItem = (props: RowFilterProps) => {
 				);
 			case 'select':
 				return (
-					<Select
+					<VinSelect
 						options={filterColumn?.filterData?.map((item: string | TDataOption) =>
 							typeof item === 'string'
 								? { key: item, value: item, label: item }
@@ -148,7 +148,7 @@ const FilterItem = (props: RowFilterProps) => {
 									</Form.Item>
 								}
 							>
-								<Select
+								<VinSelect
 									disabled={isReadOnly}
 									onChange={() => {
 										formInstance.setFieldValue([...fullPath, 'operator'], undefined);
@@ -189,7 +189,7 @@ const FilterItem = (props: RowFilterProps) => {
 								label={intl.formatMessage({ id: 'global.table.customfilter.label.dieukien' })}
 								{...restProps}
 							>
-								<Select
+								<VinSelect
 									options={operators.map((item) => ({
 										key: item,
 										value: item,

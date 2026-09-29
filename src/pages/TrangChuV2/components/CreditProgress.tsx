@@ -3,6 +3,7 @@ import { Flex, Progress, Typography } from 'antd';
 import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
 
+import { CardContent, Card as VinCard } from '@vinuni/ui';
 interface CreditProgressRowProps {
 	title: string;
 	current?: number;
@@ -23,7 +24,7 @@ const CreditProgressRow = ({ title, current, total, color }: CreditProgressRowPr
 			<Flex align='center' justify='space-between' gap={12}>
 				<Typography.Text className='credit-progress-title'>{title}</Typography.Text>
 				<Typography.Text className='credit-progress-value'>
-					<b>{total ? (current ?? 0) : '--'}</b> /{total || '--'}{' '}
+					<b>{total ? (current ?? 0) : '--'}</b> / {total || '--'}{' '}
 					{intl.formatMessage({ id: 'trangchu.v2.academicProgress.credits' })}
 				</Typography.Text>
 			</Flex>
@@ -47,23 +48,27 @@ const CreditProgress = () => {
 	const thongKeMinor = useMemo(() => tinhThongKeMinor(tienTrinhKhungMinors), [tienTrinhKhungMinors]);
 
 	return (
-		<Flex vertical gap={16}>
-			<CreditProgressRow
-				title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt' })}
-				current={recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa}
-				total={recTienTrinh?.ctdtKeHoach?.tongSoTinChi}
-				color='#134d8b'
-			/>
+		<VinCard>
+			<CardContent>
+				<Flex vertical gap={16}>
+					<CreditProgressRow
+						title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt' })}
+						current={recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa}
+						total={recTienTrinh?.ctdtKeHoach?.tongSoTinChi}
+						color='#134d8b'
+					/>
 
-			{!!thongKeMinor.tong && (
-				<CreditProgressRow
-					title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}
-					current={thongKeMinor.daDat}
-					total={thongKeMinor.tong}
-					color='#d9a45f'
-				/>
-			)}
-		</Flex>
+					{!!thongKeMinor.tong && (
+						<CreditProgressRow
+							title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}
+							current={thongKeMinor.daDat}
+							total={thongKeMinor.tong}
+							color='#d9a45f'
+						/>
+					)}
+				</Flex>
+			</CardContent>
+		</VinCard>
 	);
 };
 

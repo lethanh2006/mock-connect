@@ -9,7 +9,7 @@ import {
 import { type PhieuDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/PhieuDiemRenLuyen/typing';
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
-import { SaveOutlined, SendOutlined } from '@ant-design/icons';
+import { IconSave, IconSend } from '@/components/Icons';
 import { Alert, Button, Form, InputNumber, Modal, Select, Space } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
@@ -35,15 +35,15 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 	const ngoaiThoiGian =
 		role === EVaiTroPhieuDiem.SINH_VIEN
 			? recDot?.thoiGianSVChamDiem &&
-				(dayjs().isAfter(recDot.thoiGianSVChamDiem.thoiGianKetThuc) ||
-					dayjs().isBefore(recDot?.thoiGianSVChamDiem?.thoiGianBatDau))
+			(dayjs().isAfter(recDot.thoiGianSVChamDiem.thoiGianKetThuc) ||
+				dayjs().isBefore(recDot?.thoiGianSVChamDiem?.thoiGianBatDau))
 			: role === EVaiTroPhieuDiem.CAN_SU
 				? recDot?.thoiGianCanSuLopChamDiem &&
-					(dayjs().isAfter(recDot.thoiGianCanSuLopChamDiem.thoiGianKetThuc) ||
-						dayjs().isBefore(recDot?.thoiGianCanSuLopChamDiem?.thoiGianBatDau))
+				(dayjs().isAfter(recDot.thoiGianCanSuLopChamDiem.thoiGianKetThuc) ||
+					dayjs().isBefore(recDot?.thoiGianCanSuLopChamDiem?.thoiGianBatDau))
 				: recDot?.thoiGianCVHTChamDiem &&
-					(dayjs().isAfter(recDot.thoiGianCVHTChamDiem.thoiGianKetThuc) ||
-						dayjs().isBefore(recDot?.thoiGianCVHTChamDiem?.thoiGianBatDau));
+				(dayjs().isAfter(recDot.thoiGianCVHTChamDiem.thoiGianKetThuc) ||
+					dayjs().isBefore(recDot?.thoiGianCVHTChamDiem?.thoiGianBatDau));
 	const intl = useIntl();
 	const editable = !daNop && !ngoaiThoiGian;
 
@@ -176,9 +176,8 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 					showIcon
 					message={
 						daNop
-							? `${intl.formatMessage({ id: 'diemrenluyen.modal.alert.danop' })} ${
-									role === EVaiTroPhieuDiem.SINH_VIEN ? `${intl.formatMessage({ id: 'diemrenluyen.phieudiem.cansu' })},` : ''
-								} CVHT đánh giá`
+							? `${intl.formatMessage({ id: 'diemrenluyen.modal.alert.danop' })} ${role === EVaiTroPhieuDiem.SINH_VIEN ? `${intl.formatMessage({ id: 'diemrenluyen.phieudiem.cansu' })},` : ''
+							} CVHT đánh giá`
 							: intl.formatMessage({ id: 'diemrenluyen.modal.alert.ngoaithoigian' })
 					}
 				/>
@@ -191,10 +190,10 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 			<Space wrap>
 				{editable ? (
 					<>
-						<Button type='primary' icon={<SendOutlined />} onClick={() => handleSubmit('nop')}>
+						<Button type='primary' icon={<IconSend />} onClick={() => handleSubmit('nop')}>
 							{intl.formatMessage({ id: 'diemrenluyen.modal.button.gui' })}
 						</Button>
-						<Button onClick={() => handleSubmit('luu')} icon={<SaveOutlined />}>
+						<Button onClick={() => handleSubmit('luu')} icon={<IconSave />}>
 							{intl.formatMessage({ id: 'diemrenluyen.modal.button.luuvagui' })}
 						</Button>
 					</>
@@ -261,10 +260,10 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 							!editable || role !== vaiTro
 								? undefined
 								: [
-										...(rec.loaiNhapTay === ELoaiNhapTayPhieuDiem.PHAM_VI
-											? rules.number(rec.tapGiaTri?.[1] ?? 10, rec.tapGiaTri?.[0] ?? 0, false)
-											: []),
-									]
+									...(rec.loaiNhapTay === ELoaiNhapTayPhieuDiem.PHAM_VI
+										? rules.number(rec.tapGiaTri?.[1] ?? 10, rec.tapGiaTri?.[0] ?? 0, false)
+										: []),
+								]
 						}
 					>
 						{rec.loaiNhapTay === ELoaiNhapTayPhieuDiem.PHAM_VI ? (

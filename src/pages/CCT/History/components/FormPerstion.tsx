@@ -17,8 +17,13 @@ import { ipCCT } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { getSafeTagColor } from '@/utils/security';
 import { buildDisabledDateTime, resetFieldsForm } from '@/utils/utils';
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, Input, message, Radio, Row, Select, Space, Tag, Typography } from 'antd';
+import { Button, IconTrash, IconPlus } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import Input from '@/components/MyInput';
+import VinSelect from '@/components/VinSelect';
+import { toast } from '@/utils/toast';
+import { Checkbox, RadioGroup, RadioGroupItem } from '@/components/Icons';
+import { Form, Space, Typography, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -57,7 +62,7 @@ const uploadEvidenceRequest = async ({ file, onSuccess, onError }: any) => {
 
 		onSuccess?.({ ...response?.data?.data, _id: fileId, fileId }, file);
 	} catch (error) {
-		message.error(getUploadErrorMessage(error));
+		toast.error(getUploadErrorMessage(error));
 		onError?.(error);
 	}
 };
@@ -189,7 +194,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 
 			values.evidenceFile = evidenceFile;
 		} catch (error: any) {
-			message.error(error?.message);
+			toast.error(error?.message);
 			setFormSubmiting(false);
 			return;
 		}
@@ -270,7 +275,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 										<>
 											<Col span={24} md={12}>
 												<Form.Item name='scope' label={msg('scope')} rules={[...rules.required]}>
-													<Select
+													<VinSelect
 														placeholder={msg('selectScope')}
 														options={Object.values(EScopeAward).map((value) => ({
 															value,
@@ -463,13 +468,16 @@ const FormPerstionActivityOutCome = (props: any) => {
 						<>
 							<Col span={24} md={12}>
 								<Form.Item name='onUni' label={msg('mentor')} rules={[...rules.required]}>
-									<Radio.Group
-										disabled={isView}
-										options={[
-											{ value: true, label: msg('inUni') },
-											{ value: false, label: msg('outUni') },
-										]}
-									/>
+									<RadioGroup disabled={isView} style={{ display: 'flex', gap: 16 }}>
+										<div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+											<RadioGroupItem value='true' id='onUni-true' />
+											<label htmlFor='onUni-true' style={{ cursor: 'pointer' }}>{msg('inUni')}</label>
+										</div>
+										<div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+											<RadioGroupItem value='false' id='onUni-false' />
+											<label htmlFor='onUni-false' style={{ cursor: 'pointer' }}>{msg('outUni')}</label>
+										</div>
+									</RadioGroup>
 								</Form.Item>
 							</Col>
 							{onUni ? (
@@ -571,10 +579,9 @@ const FormPerstionActivityOutCome = (props: any) => {
 																}}
 															>
 																<Button
-																	danger
-																	type='link'
+																	variant='destructive'
 																	title='Xóa'
-																	icon={<DeleteOutlined />}
+																	icon={<IconTrash />}
 																	onClick={() => remove(field.name)}
 																	disabled={isView}
 																/>
@@ -586,9 +593,9 @@ const FormPerstionActivityOutCome = (props: any) => {
 
 												<Button
 													onClick={() => add()}
-													icon={<PlusOutlined />}
-													type='dashed'
-													size='small'
+													icon={<IconPlus />}
+													variant='outline'
+													size='sm'
 													disabled={isView}
 												>
 													{msg('addEvidence')}
@@ -630,8 +637,18 @@ const FormPerstionActivityOutCome = (props: any) => {
 					)}
 					{!isView && (
 						<Col span={24}>
-							<Form.Item name='checkbox' valuePropName='checked'>
-								<Checkbox>{msg('declaration')}</Checkbox>
+							<Form.Item name='checkbox'>
+								<Form.Item noStyle shouldUpdate={(prev, cur) => prev.checkbox !== cur.checkbox}>
+									{() => (
+										<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+											<Checkbox
+												checked={!!form.getFieldValue('checkbox')}
+												onCheckedChange={(checked) => form.setFieldValue('checkbox', !!checked)}
+											/>
+											<span style={{ cursor: 'pointer' }} onClick={() => form.setFieldValue('checkbox', !form.getFieldValue('checkbox'))}>{msg('declaration')}</span>
+										</div>
+									)}
+								</Form.Item>
 							</Form.Item>
 						</Col>
 					)}
@@ -641,8 +658,8 @@ const FormPerstionActivityOutCome = (props: any) => {
 					{!isView && (
 						<>
 							<Button
-								type='primary'
-								htmlType='submit'
+								variant='default'
+								type='submit'
 								loading={formSubmiting}
 								disabled={!checkbox || listAchievedCompetencies?.length > 3}
 								onClick={() => setIsSubmit(true)}
@@ -651,7 +668,8 @@ const FormPerstionActivityOutCome = (props: any) => {
 							</Button>
 
 							<Button
-								htmlType='submit'
+								variant='outline'
+								type='submit'
 								loading={formSubmiting}
 								disabled={listAchievedCompetencies?.length > 3}
 								onClick={() => setIsSubmit(false)}
@@ -660,7 +678,9 @@ const FormPerstionActivityOutCome = (props: any) => {
 							</Button>
 						</>
 					)}
-					<Button onClick={() => setVisibleForm(false)}>{globalMsg('button.dong')}</Button>
+					<Button variant='outline' onClick={() => setVisibleForm(false)}>
+						{globalMsg('button.dong')}
+					</Button>
 				</div>
 			</Form>
 		</>

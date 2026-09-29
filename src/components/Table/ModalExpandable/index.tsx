@@ -61,7 +61,7 @@ const ModalExpandable = (props: ModalExpandableProps) => {
 		className,
 		styles,
 		footer,
-		allowExpand = true,
+		allowExpand = false,
 		okText = 'OK',
 		cancelText = 'Đóng',
 		okButtonProps,
@@ -122,14 +122,17 @@ const ModalExpandable = (props: ModalExpandableProps) => {
 								left: 0,
 								transform: 'none',
 								translate: 'none',
-						  }
-						: { width: width ?? 600, maxWidth: 'calc(100vw - 2rem)' }
+							}
+						: {
+								width: width ?? 1028,
+								maxWidth: 'calc(100vw - 2rem)',
+							}
 				}
 				onPointerDownOutside={(e) => {
 					const target = ((e as any)?.detail?.originalEvent?.target || (e as any)?.target) as HTMLElement | null;
 					if (
 						target?.closest?.(
-							'.ant-select-dropdown, .ant-picker-dropdown, .ant-dropdown, .ant-popover, .ant-tooltip, .ant-cascader-dropdown, .ant-tree-select-dropdown, .ant-color-picker-dropdown, .ant-tour, .ant-message, .ant-notification, .ant-modal-wrap'
+							'.ant-select-dropdown, .ant-picker-dropdown, .ant-dropdown, .ant-popover, .ant-tooltip, .ant-cascader-dropdown, .ant-tree-select-dropdown, .ant-color-picker-dropdown, .ant-tour, .ant-message, .ant-notification, .ant-modal-wrap',
 						)
 					) {
 						e.preventDefault();
@@ -141,7 +144,7 @@ const ModalExpandable = (props: ModalExpandableProps) => {
 					const target = ((e as any)?.detail?.originalEvent?.target || (e as any)?.target) as HTMLElement | null;
 					if (
 						target?.closest?.(
-							'.ant-select-dropdown, .ant-picker-dropdown, .ant-dropdown, .ant-popover, .ant-tooltip, .ant-cascader-dropdown, .ant-tree-select-dropdown, .ant-color-picker-dropdown, .ant-tour, .ant-message, .ant-notification, .ant-modal-wrap'
+							'.ant-select-dropdown, .ant-picker-dropdown, .ant-dropdown, .ant-popover, .ant-tooltip, .ant-cascader-dropdown, .ant-tree-select-dropdown, .ant-color-picker-dropdown, .ant-tour, .ant-message, .ant-notification, .ant-modal-wrap',
 						)
 					) {
 						e.preventDefault();
@@ -151,28 +154,33 @@ const ModalExpandable = (props: ModalExpandableProps) => {
 				}}
 				key={destroyOnClose ? String(open) : undefined}
 			>
-				{title ? <div className='modal-expandable-title' style={styles?.header}>{title}</div> : null}
+				<div className={classNames('modal-expandable-header', { 'is-empty': !title })}>
+					{title ? (
+						<div className='modal-expandable-title' style={styles?.header}>
+							{title}
+						</div>
+					) : null}
+					<div className='modal-buttons'>
+						{!fullScreen && allowExpand && (
+							<IconButton
+								label={isExpanded ? 'Thu nhỏ' : 'Phóng to'}
+								variant='ghost'
+								onClick={() => setIsExpanded((expand) => !expand)}
+								className='button'
+							>
+								<IconArrowdownSquare />
+							</IconButton>
+						)}
+
+						<IconButton label='Đóng' variant='ghost' onClick={() => onCancel?.()} className='button'>
+							<IconXmark />
+						</IconButton>
+					</div>
+				</div>
 				<div className='modal-expandable-body' style={styles?.body}>
 					{typeof children === 'function' ? children(isExpanded) : children}
 				</div>
 				{footerContent ? <div className='modal-expandable-footer'>{footerContent}</div> : null}
-
-				<div className='modal-buttons'>
-					{!fullScreen && allowExpand && (
-						<IconButton
-							label={isExpanded ? 'Thu nhỏ' : 'Phóng to'}
-							variant='ghost'
-							onClick={() => setIsExpanded((expand) => !expand)}
-							className='button'
-						>
-							<IconArrowdownSquare />
-						</IconButton>
-					)}
-
-					<IconButton label='Đóng' variant='ghost' onClick={() => onCancel?.()} className='button'>
-						<IconXmark />
-					</IconButton>
-				</div>
 			</DialogContent>
 		</Dialog>
 	);

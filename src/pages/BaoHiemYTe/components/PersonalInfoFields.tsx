@@ -1,7 +1,10 @@
 import MyDatePicker from '@/components/MyDatePicker';
 import { bhytNationalityOptionsIntlId, EGioiTinh } from '@/services/BaoHiemYTe/constant';
 import rules from '@/utils/rules';
-import { Col, Form, Input, Select } from 'antd';
+import { Col } from '@/components/MyGrid';
+import Input from '@/components/MyInput';
+import VinSelect from '@/components/VinSelect';
+import { Form } from 'antd';
 import { useIntl } from 'umi';
 import type { IPersonalInfo } from '../hooks/usePersonalInfo';
 
@@ -50,12 +53,12 @@ const PersonalInfoFields = ({ info }: IProps) => {
 			) : null}
 			<Col span={24} md={12}>
 				<Form.Item rules={[...rules.required]} name='nationality' label={t('baohiemyte.dangky.quocTich')}>
-					<Select disabled={info.isPersonalFieldDisabled(info.studentNationality)} options={nationalityOptions} />
+					<VinSelect disabled={info.isPersonalFieldDisabled(info.studentNationality)} options={nationalityOptions} />
 				</Form.Item>
 			</Col>
 			<Col span={24} md={12}>
 				<Form.Item rules={[...rules.required]} name='gioiTinh' label={t('baohiemyte.dangky.gioiTinh')}>
-					<Select disabled={info.isPersonalFieldDisabled(info.studentGioiTinh)} options={genderOptions} />
+					<VinSelect disabled={info.isPersonalFieldDisabled(info.studentGioiTinh)} options={genderOptions} />
 				</Form.Item>
 			</Col>
 			<Col span={24} md={12}>

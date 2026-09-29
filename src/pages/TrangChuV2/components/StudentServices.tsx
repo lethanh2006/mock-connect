@@ -1,5 +1,5 @@
-import { CalendarOutlined, CaretRightOutlined } from '@ant-design/icons';
-import { Card } from 'antd';
+import { IconCalendar, IconArrowRight } from '@/components/Icons';
+import { Card } from '@/components/PageCard';
 
 const StudentServices = ({ loading = true }) => {
 	const services = [
@@ -39,12 +39,12 @@ const StudentServices = ({ loading = true }) => {
 							<div className='service-info'>
 								<h3 className='service-name'>{service.title}</h3>
 								<div className='service-meta'>
-									<CalendarOutlined className='icon-calendar' />
+									<IconCalendar className='icon-calendar' />
 									<span>{service.time}</span>
 								</div>
 							</div>
 							<button className='btn-action'>
-								<CaretRightOutlined />
+								<IconArrowRight />
 							</button>
 						</div>
 					))}

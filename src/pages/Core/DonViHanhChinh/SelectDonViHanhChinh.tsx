@@ -1,7 +1,10 @@
 import { getPhuongXa } from '@/services/Core/DonViHanhChinh';
 import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import rules from '@/utils/rules';
-import { Col, Form, Input, Row, Select, type FormInstance } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import Input from '@/components/MyInput';
+import VinSelect from '@/components/VinSelect';
+import { Form, type FormInstance } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
 
@@ -97,7 +100,7 @@ const SelectDonViHanhChinh = (props: {
 						initialValue={props.initialValue?.tinhTp}
 						rules={props.notRequiredTinh === true ? [] : [...rules.required]}
 					>
-						<Select
+						<VinSelect
 							placeholder={placeholderTinh ?? intl.formatMessage({ id: 'donvihanhchinh.tp.place' })}
 							options={listTinh?.map((item) => ({
 								key: item.ma,
@@ -122,7 +125,7 @@ const SelectDonViHanhChinh = (props: {
 						rules={props.notRequiredQuanHuyen === true ? [] : [...rules.required]}
 						label={hasLabel ? 'Quận/Huyện' : undefined}
 					>
-						<Select
+						<VinSelect
 							placeholder='Chọn quận/huyện'
 							options={(listHuyen ?? []).map((item) => ({
 								key: item.ma,
@@ -146,7 +149,7 @@ const SelectDonViHanhChinh = (props: {
 						rules={props.notRequiredXaPhuong === true ? [] : [...rules.required]}
 						label={hasLabel ? (labelXaPhuong ?? intl.formatMessage({ id: 'donvihanhchinh.xa' })) : undefined}
 					>
-						<Select
+						<VinSelect
 							placeholder={placeholderXaPhuong ?? intl.formatMessage({ id: 'donvihanhchinh.xa.place' })}
 							allowClear
 							showSearch

@@ -2,7 +2,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import { ETrangThaiDuThi, trangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
 import type { SinhVienThi } from '@/services/KhaoThi/SinhVienThi/typing';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { IconShieldInfo } from '@/components/Icons';
 import { Popover } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -70,7 +70,7 @@ const DiemThiHocKy = (props: { maHocKy: string; maHocPhan: string }) => {
 							}
 							title={intl.formatMessage({ id: 'lophocphan.id.ketqua.diemhk.chitiet' })}
 						>
-							<InfoCircleOutlined />
+							<IconShieldInfo />
 						</Popover>
 					) : null}
 				</>

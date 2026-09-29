@@ -2,7 +2,7 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import { ETrangThaiDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import dayjs from '@/utils/dayjs';
-import { SendOutlined } from '@ant-design/icons';
+import { IconSend } from '@/components/Icons';
 import { useIntl, useModel } from 'umi';
 
 type BtnDangKyTinChiProps = {
@@ -43,7 +43,7 @@ const BtnDangKyTinChi = ({ danhSachLopHienThi, tongTinChi, soTinChiToiDa, soTinC
 									})
 			}
 			type='primary'
-			icon={<SendOutlined />}
+			icon={<IconSend />}
 			onClick={() => setVisibleRegister(true)}
 			disabled={!coLopChuaDangKy || tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu || !dangTrongThoiGian}
 		>

@@ -4,7 +4,7 @@ import { colorHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { ArrowRightOutlined, CheckSquareOutlined, EyeOutlined } from '@ant-design/icons';
+import { IconArrowRight, IconEyeOpen, IconCheckSquare } from '@/components/Icons';
 import { Card, Col, Descriptions, Empty, Progress, Row, Space, Tag } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
@@ -28,12 +28,12 @@ const CardBuoiHocTiepTheo = () => {
 			// Nếu trong lớp học phần đã populate rồi thì ko get lại TKB nữa
 			const tkbList = recLopHocPhan.thoiKhoaBieuList?.length
 				? _.sortBy(
-						[
-							...recLopHocPhan.thoiKhoaBieuList,
-							...(recLopHocPhan.children?.flatMap((i) => i.thoiKhoaBieuList ?? []) ?? []),
-						],
-						(i) => i.thoiGianBatDau,
-					)
+					[
+						...recLopHocPhan.thoiKhoaBieuList,
+						...(recLopHocPhan.children?.flatMap((i) => i.thoiKhoaBieuList ?? []) ?? []),
+					],
+					(i) => i.thoiGianBatDau,
+				)
 				: await getTheoLopHocPhan(recLopHocPhan.ten);
 			setDanhSach(tkbList);
 
@@ -91,11 +91,11 @@ const CardBuoiHocTiepTheo = () => {
 					>
 						{isPass ? (
 							<>
-								<CheckSquareOutlined /> Đánh giá
+								<IconCheckSquare /> Đánh giá
 							</>
 						) : (
 							<>
-								<EyeOutlined /> Chi tiết
+								<IconEyeOpen /> Chi tiết
 							</>
 						)}
 					</a>
@@ -124,7 +124,7 @@ const CardBuoiHocTiepTheo = () => {
 								key='all'
 								onClick={() => (window.location.hash = 'buoi-hoc')}
 								type='link'
-								icon={<ArrowRightOutlined />}
+								icon={<IconArrowRight />}
 								tooltip='Xem tất cả'
 							/>,
 						]}

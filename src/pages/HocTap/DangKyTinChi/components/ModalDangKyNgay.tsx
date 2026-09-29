@@ -1,10 +1,13 @@
+import { Button, IconInfoCircle } from '@/components/Icons';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { getRecaptchaSiteKey } from '@/utils/config';
-import { Alert, Button, Col, Descriptions, Modal, Row } from 'antd';
+import { Alert } from 'antd';
 import { useState } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { useIntl, useModel } from 'umi';
 import ModalLyDoDangKy, { type LyDoModalType } from './ModalLyDoDangKy';
 import RenderLichHoc from './RenderLichHoc';
+import './style.less';
 
 type ModalDangKyNgayProps = {
 	visible: boolean;
@@ -91,86 +94,96 @@ const ModalDangKyNgayContent = ({
 
 	return (
 		<>
-			<Modal
+			<ModalExpandable
 				title={intl.formatMessage({
 					id: isVuotTin ? 'dangkytinchi.dangkyngay.modal.vuottin.title' : 'dangkytinchi.dangkyngay.modal.title',
 				})}
 				open={visible}
 				footer={null}
 				onCancel={handleClose}
-				width={1000}
+				width={1080}
 				destroyOnClose
 			>
-				<Row gutter={[12, 12]}>
-					<Col span={24}>
-						<Alert
-							type={isVuotTin ? 'warning' : 'info'}
-							showIcon
-							message={intl.formatMessage(
+				<div className='dang-ky-ngay-confirm'>
+					<div className='dang-ky-ngay-confirm__message'>
+						<IconInfoCircle size={20} />
+						<span>
+							{intl.formatMessage(
 								{
 									id: isVuotTin ? 'dangkytinchi.dangkyngay.modal.vuottin.alert' : 'dangkytinchi.dangkyngay.modal.alert',
 								},
 								{ b: (chunks) => <b>{chunks}</b> },
 							)}
-						/>
-					</Col>
+						</span>
+					</div>
 
-					{errorMessage ? (
-						<Col span={24}>
-							<Alert type='error' showIcon message={errorMessage} />
-						</Col>
-					) : null}
+					{errorMessage ? <Alert type='error' showIcon message={errorMessage} /> : null}
 
-					<Col span={24}>
-						<Descriptions
-							column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}
-							className='highlight'
-							layout='vertical'
-							colon={false}
-						>
-							<Descriptions.Item label={intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.malop' })}>
-								{record?.maLop ?? record?.ten ?? '--'}
-							</Descriptions.Item>
+					<div className='dang-ky-ngay-confirm__fields'>
+						<div className='dang-ky-ngay-confirm__card'>
+							<div className='dang-ky-ngay-confirm__grid'>
+								<div className='dang-ky-ngay-confirm__field'>
+									<span className='dang-ky-ngay-confirm__label'>
+										{intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.malop' })}
+									</span>
+									<span className='dang-ky-ngay-confirm__value'>{record?.maLop ?? record?.ten ?? '--'}</span>
+								</div>
 
-							<Descriptions.Item label={intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.tenhocphan' })}>
-								{record?.hocPhan?.ten ?? '--'}
-							</Descriptions.Item>
+								<div className='dang-ky-ngay-confirm__field'>
+									<span className='dang-ky-ngay-confirm__label'>
+										{intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.tenhocphan' })}
+									</span>
+									<span className='dang-ky-ngay-confirm__value'>{record?.hocPhan?.ten ?? '--'}</span>
+								</div>
 
-							<Descriptions.Item label={intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.giangvien' })}>
-								{record?.nhanSuList?.length
-									? record.nhanSuList
-											.map((item) =>
-												item.nhanSu?.ten ? `${item.nhanSu?.hoDem ?? ''} ${item.nhanSu?.ten ?? ''}` : item.tenNhanSu,
-											)
-											.join(', ')
-									: '--'}
-							</Descriptions.Item>
+								<div className='dang-ky-ngay-confirm__field'>
+									<span className='dang-ky-ngay-confirm__label'>
+										{intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.giangvien' })}
+									</span>
+									<span className='dang-ky-ngay-confirm__value'>
+										{record?.nhanSuList?.length
+											? record.nhanSuList
+													.map((item) =>
+														item.nhanSu?.ten ? `${item.nhanSu?.hoDem ?? ''} ${item.nhanSu?.ten ?? ''}` : item.tenNhanSu,
+													)
+													.join(', ')
+											: '--'}
+									</span>
+								</div>
 
-							<Descriptions.Item label={intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.thongtinlophoc' })}>
-								{record?._id ? <RenderLichHoc lopHocPhan={record} /> : '--'}
-							</Descriptions.Item>
-						</Descriptions>
-					</Col>
-				</Row>
+								<div className='dang-ky-ngay-confirm__field'>
+									<span className='dang-ky-ngay-confirm__label'>
+										{intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.thongtinlophoc' })}
+									</span>
+									<span className='dang-ky-ngay-confirm__value'>
+										{record?._id ? <RenderLichHoc lopHocPhan={record} /> : '--'}
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-				<div className='form-footer'>
+				<div className='form-footer dang-ky-ngay-confirm__footer'>
 					{isVuotTin ? (
-						<Button type='primary' loading={formSubmiting} onClick={() => openLyDoModal('vuot_tin')}>
+						<Button variant='default' loading={formSubmiting} onClick={() => openLyDoModal('vuot_tin')}>
 							{intl.formatMessage({ id: 'dangkytinchi.vuottin.button.dangkyvuottin' })}
 						</Button>
 					) : (
-						<Button type='primary' loading={formSubmiting} onClick={postDangKy}>
+						<Button variant='default' loading={formSubmiting} onClick={postDangKy}>
 							{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.action.dangky' })}
 						</Button>
 					)}
 
-					<Button loading={formSubmiting} onClick={() => openLyDoModal('du_thinh')}>
+					<Button variant='outline' loading={formSubmiting} onClick={() => openLyDoModal('du_thinh')}>
 						{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.action.dangkyduthinh' })}
 					</Button>
 
-					<Button onClick={handleClose}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
+					<Button variant='outline' onClick={handleClose}>
+						{intl.formatMessage({ id: 'global.button.huy' })}
+					</Button>
 				</div>
-			</Modal>
+			</ModalExpandable>
 
 			<ModalLyDoDangKy type={lyDoModalType} onClose={() => setLyDoModalType(undefined)} onSuccess={handleLyDoSuccess} />
 		</>

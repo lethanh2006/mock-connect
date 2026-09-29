@@ -3,8 +3,11 @@ import { getBankQr } from '@/services/TaiChinh/GiaoDich';
 import { ELoaiHinhThucThanhToan } from '@/services/TaiChinh/HinhThucThanhToan/constant';
 import dayjs from '@/utils/dayjs';
 import { removeVietnameseTones } from '@/utils/utils';
-import { Col, Empty, Modal, Row, Space, Spin } from 'antd';
+import EmptyState from '@/components/EmptyState';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { Space, Spin } from 'antd';
 import { useEffect, useState } from 'react';
+import { Col, Row } from '@/components/MyGrid';
 import { useIntl, useModel } from 'umi';
 
 const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) => {
@@ -79,7 +82,7 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 
 	const renderQr = () => {
 		if (qrLoading) return <Spin />;
-		if (!qrImageUrl) return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Chưa thể tạo mã QR' />;
+		if (!qrImageUrl) return <EmptyState description='Chưa thể tạo mã QR' compact />;
 		return <img style={{ maxWidth: '100%' }} src={qrImageUrl} alt='QR thanh toán' />;
 	};
 
@@ -159,19 +162,19 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 
 	if (!record?._id) return <></>;
 	return (
-		<Modal
+		<ModalExpandable
 			open={visible}
 			onCancel={() => onOk()}
 			title={intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.title' })}
-			okButtonProps={{ hidden: true }}
+			footer={null}
 			width={1000}
 		>
 			{nganHangBaoTri ? (
-				<Empty description={intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.baotri' })} />
+				<EmptyState description={intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.baotri' })} compact />
 			) : (
 				renderLopThuong()
 			)}
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

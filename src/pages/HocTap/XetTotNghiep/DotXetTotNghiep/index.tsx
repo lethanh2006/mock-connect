@@ -7,7 +7,7 @@ import {
 } from '@/services/HocTap/XetTotNghiep/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { CloseOutlined, FormOutlined } from '@ant-design/icons';
+import { IconXmark, IconFilePen } from '@/components/Icons';
 import { Alert, Button, Card, Col, Descriptions, Empty, Popconfirm, Row, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -102,7 +102,7 @@ const CardXetTotNghiep = () => {
 									) : null}
 
 									{record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.HOAN ||
-									record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.NHU_CAU ? (
+										record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.NHU_CAU ? (
 										<>
 											<Descriptions.Item>
 												{record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.HOAN
@@ -127,8 +127,8 @@ const CardXetTotNghiep = () => {
 					</Row>
 
 					{recSinhVien?.trangThaiHoc === ETrangThaiHocSv.DANG_HOC &&
-					dieuKienTotNghiep?.isDuKieuKien &&
-					!isQuaNgayChotSanhSach ? (
+						dieuKienTotNghiep?.isDuKieuKien &&
+						!isQuaNgayChotSanhSach ? (
 						<div className='form-footer'>
 							{!record?.ketQuaXetTotNghiep?._id ? (
 								<>
@@ -136,7 +136,7 @@ const CardXetTotNghiep = () => {
 										title={intl.formatMessage({ id: 'xettotnghiep.confirm.xacnhandangky' })}
 										onConfirm={handleRegister}
 									>
-										<Button loading={formSubmiting} icon={<FormOutlined />}>
+										<Button loading={formSubmiting} icon={<IconFilePen />}>
 											{intl.formatMessage({ id: 'xettotnghiep.btn.dangkyxettn' })}
 										</Button>
 									</Popconfirm>
@@ -144,12 +144,12 @@ const CardXetTotNghiep = () => {
 							) : record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.DUNG_TIEN_DO ? (
 								<>
 									{/* Trong đợt xét */}
-									<Button onClick={handlePhanHoi} icon={<FormOutlined />}>
+									<Button onClick={handlePhanHoi} icon={<IconFilePen />}>
 										{intl.formatMessage({ id: 'xettotnghiep.btn.guiphanhoi' })}
 									</Button>
 									{/* Đủ điều kiện xét tốt nghiệp */}
 									{record?.ketQuaXetTotNghiep?.ketQua === EKetQuaXetTotNghiep.DU_DK ? (
-										<Button onClick={handleHoan} danger icon={<CloseOutlined />}>
+										<Button onClick={handleHoan} danger icon={<IconXmark />}>
 											{intl.formatMessage({ id: 'xettotnghiep.btn.yeucauhoantn' })}
 										</Button>
 									) : null}

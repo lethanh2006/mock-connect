@@ -1,12 +1,15 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import Select from '@/components/MySelect';
+import Tooltip from '@/components/MyTooltip';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
 import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { primaryColor } from '@/services/base/constant';
-import { CheckOutlined, FileTextOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Modal, Select, Space, Tag, Tooltip, Typography } from 'antd';
+import { FileTextOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Modal, Space, Tag, Typography } from 'antd';
+import { IconCheck01 } from '@/components/Icons';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -236,7 +239,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				dataIndex: 'tichLuy',
 				width: 80,
 				align: 'center',
-				render: (val, rec) => isTichLuyDiem(rec) && <CheckOutlined />,
+				render: (val, rec) => isTichLuyDiem(rec) && <IconCheck01 />,
 				onCell: onCellHocPhan,
 			},
 			// {
@@ -356,7 +359,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				onReload={getData}
 				scroll={hasTableRows ? { y: 660 } : undefined}
 				otherProps={{
-					loading: loading,
+					loading,
 					pagination: false,
 					style: { width: '100%' },
 					onRow: (rec: DataType) =>
@@ -376,7 +379,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 							onClick={() => setVisibleTranscript(true)}
 						/>
 						<Select
-							style={{ minWidth: 220 }}
+							style={{ minWidth: 250, height: 36 }}
 							value={maHocKyFilter}
 							onChange={setMaHocKyFilter}
 							options={[

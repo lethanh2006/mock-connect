@@ -1,16 +1,20 @@
 import background from '@/assets/cct/background.png';
+import EmptyState from '@/components/EmptyState';
+import { Button } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import { Card } from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import ChiTietActivity from '@/pages/CCT/Activity/ChiTiet';
-import CardSuKienCCT from '@/pages/CCT/Activity/components/CardSuKien';
 import ModalDangKyThanhCong from '@/pages/CCT/Activity/components/DangKyThanhCong';
 import FormActivityOutCome from '@/pages/CCT/History/components/Form';
+import { Activity } from '@/services/CCT/Activity/typing';
 import { EApprovalStatus } from '@/services/CCT/constant';
-import { getPublicAssetPath } from '@/utils/path';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Button, Card, Carousel, Col, Empty, Flex, Popconfirm, Row, Spin } from 'antd';
+import { Flex, Popconfirm, Spin } from 'antd';
+import ActivityCard from './ActivityCard';
+
 import dayjs from 'dayjs';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import '../../CCT/Activity/style.less';
 
@@ -22,11 +26,9 @@ const Activities = () => {
 		visibleForm: visibleFormActivityOutcome,
 		handleEdit,
 	} = useModel('cct.activityoutcome');
-	const { getAllModel: getAllAtributes } = useModel('cct.attributes');
-	const [activeKey, setActiveKey] = useState<string>('2');
+	const { getAllModel: getAllAtributes, danhSach: dsAttribute } = useModel('cct.attributes');
+	const [activeKey] = useState<string>('2');
 	const [visibleDangKy, setVisibleDangKy] = useState<boolean>(false);
-
-	const carouselRef = useRef<any>(null);
 
 	const getData = () => {
 		const now = dayjs().toISOString();
@@ -93,19 +95,15 @@ const Activities = () => {
 
 	return (
 		<Card
+			className='vin-dashboard-card'
 			title={
 				<Flex justify='space-between' align='center'>
-					<span className='title'>Activities</span>
-					{danhSach && danhSach.length > 1 && (
-						<div className='pagination-controls'>
-							<button className='nav-btn' onClick={() => carouselRef.current?.prev()}>
-								<LeftOutlined />
-							</button>
-							<button className='nav-btn' onClick={() => carouselRef.current?.next()}>
-								<RightOutlined />
-							</button>
-						</div>
-					)}
+					<h3
+						className='title'
+						style={{ margin: 0, fontSize: 'inherit', fontWeight: 'inherit', color: 'var(--color-text, inherit)' }}
+					>
+						{intl.formatMessage({ id: 'trangchu.v2.academicProgress.activities' })}
+					</h3>
 				</Flex>
 			}
 			styles={{
@@ -115,16 +113,11 @@ const Activities = () => {
 			<div className='activities'>
 				<Spin spinning={loading}>
 					{danhSach?.length ? (
-						<Carousel
-							ref={carouselRef}
-							autoplay
-							autoplaySpeed={5000}
-							dots={false}
-							infinite={danhSach.length > 1}
-							effect='scrollx'
-						>
+						<Row gutter={[12, 12]}>
 							{danhSach.map((item) => {
-								const equivalencyAttributeIds = item?.coCurricularActivityEquivalency?.map((x) => x.attributesId);
+								const equivalencyAttributeIds = item?.coCurricularActivityEquivalency?.map(
+									(x: Activity.IEquivalency) => x.attributesId,
+								);
 								const now = dayjs();
 
 								const startDate = item?.startDate ? dayjs(item.startDate) : null;
@@ -152,12 +145,12 @@ const Activities = () => {
 									item?.activityOutcome?.workflow === EApprovalStatus.DRAFT ||
 									item?.activityOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
 									item?.activityOutcome?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
-								const isExpired = activeKey === '3' && editableWorkflow && now.isAfter(endDateUpdateEvidence);
+								// const isExpired = activeKey === '3' && editableWorkflow && now.isAfter(endDateUpdateEvidence);
 
 								const renderButton = () => {
 									if (isRegistered && isNotStarted) {
 										return (
-											<Button block disabled>
+											<Button className='w-full' disabled>
 												{intl.formatMessage({ id: 'activity.dangky' })}
 											</Button>
 										);
@@ -165,8 +158,8 @@ const Activities = () => {
 									if (editableWorkflow && isOngoing) {
 										return (
 											<Button
-												block
-												type='primary'
+												className='w-full'
+												variant='default'
 												onClick={() => {
 													setVisibleForm(false);
 													handleEdit({
@@ -181,7 +174,7 @@ const Activities = () => {
 									}
 									if (!isRegistered && isFullSlot) {
 										return (
-											<Button block disabled>
+											<Button className='w-full' disabled>
 												{intl.formatMessage({ id: 'activity.full' })}
 											</Button>
 										);
@@ -189,7 +182,8 @@ const Activities = () => {
 									if (isRegistered || (activeKey === '3' && !isRegistered) || outTimeRegis) {
 										return (
 											<Button
-												block
+												className='w-full'
+												variant='secondary'
 												onClick={() => {
 													setRecord(item);
 													setVisibleForm(true);
@@ -205,48 +199,49 @@ const Activities = () => {
 											placement='topLeft'
 											onConfirm={() => registerActivityModel(item._id, getData).then(() => setVisibleDangKy(true))}
 										>
-											<Button type='primary' block>
+											<Button variant='default' className='w-full'>
 												{intl.formatMessage({ id: 'activity.now' })}
 											</Button>
 										</Popconfirm>
 									);
 								};
 
+								const dateFormat = 'DD/MM/YYYY, HH:mm';
+								const registerSource = item?.dueDateRegistration ?? item?.endDate;
+								const isNew = item?.createdAt && dayjs().isBefore(dayjs(item.createdAt).add(3, 'day'));
+								const attributes = (dsAttribute ?? []).map((attribute: AttributesManagement.IRecord) => {
+									const letter = attribute.code?.charAt(0)?.toUpperCase() ?? '';
+									return {
+										id: attribute._id,
+										letter,
+										active: equivalencyAttributeIds?.includes(attribute._id),
+									};
+								});
+
 								return (
-									<div key={item._id}>
-										<CardSuKienCCT
-											record={{
-												...item,
-												activityOutcome: item?.activityOutcome,
-											}}
+									<Col xs={24} md={12} xxl={8} key={item._id}>
+										<ActivityCard
+											title={item?.name}
 											banner={item?.banner ?? background}
-											name={item?.name}
-											startDate={item?.startDate ? dayjs(item?.startDate).format('HH:mm DD/MM/YYYY') : '--'}
-											endDate={item?.endDate ? dayjs(item?.endDate).format('HH:mm DD/MM/YYYY') : '--'}
-											equivalencyAttributeIds={equivalencyAttributeIds}
+											isNew={!!isNew}
+											attributes={attributes}
+											startDate={item?.startDate ? dayjs(item.startDate).format(dateFormat) : '--'}
+											endDate={item?.endDate ? dayjs(item.endDate).format(dateFormat) : '--'}
+											location={item?.onCampus ? item?.facilityName : item?.otherAddress}
+											registerBefore={registerSource ? dayjs(registerSource).format(dateFormat) : '--'}
+											approvalStatus={item?.activityOutcome?.workflow}
 											onClick={() => {
 												setRecord(item);
 												setVisibleForm(true);
 											}}
-											button={
-												<Row style={{ padding: '12px 4px 4px 4px' }} gutter={[6, 0]}>
-													<Col span={24}>{renderButton()}</Col>
-												</Row>
-											}
-											outTimeRegis={outTimeRegis && activeKey !== '3'}
-											activeKey={activeKey}
-											isExpired={isExpired}
+											action={renderButton()}
 										/>
-									</div>
+									</Col>
 								);
 							})}
-						</Carousel>
+						</Row>
 					) : (
-						<Empty
-							style={{ marginTop: 32, marginBottom: 32 }}
-							description={intl.formatMessage({ id: 'global.table.index.empty' })}
-							image={getPublicAssetPath('images/empty.png')}
-						/>
+						<EmptyState className='my-8' compact description={intl.formatMessage({ id: 'global.table.index.empty' })} />
 					)}
 				</Spin>
 			</div>

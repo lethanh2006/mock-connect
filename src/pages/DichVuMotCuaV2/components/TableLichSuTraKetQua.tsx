@@ -1,7 +1,7 @@
-import Table from '@/components/OldTable/Table';
+import Table from '@/components/Table/TableStaticData';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
 import { formatDateTime } from '@/utils/formatDate';
-import type { IColumn } from '@/utils/interfaces';
+import type { IColumn } from '@/components/Table/typing';
 
 const TableLichSuTraKetQua = (props: { data: DichVuMotCuaV2.LichSuChinhSua[] }) => {
 	const columns: IColumn<DichVuMotCuaV2.LichSuChinhSua>[] = [

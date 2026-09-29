@@ -1,10 +1,10 @@
+import EmptyState from '@/components/EmptyState';
+import { Card } from '@/components/PageCard';
 import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
-import { colorHinhThucGiangDay, EHinhThucGiangDay, mapHinhThucGiangDayI18n } from '@/services/HocTap/constant';
-import { ColorSuKien, ELoaiSuKien, LoaiSuKienLocaleKey } from '@/services/SuKien/constant';
+import { EHinhThucGiangDay } from '@/services/HocTap/constant';
+import { ELoaiSuKien, LoaiSuKienLocaleKey } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { EnvironmentOutlined, RightOutlined } from '@ant-design/icons';
-import { Card, Empty, Flex, Space, Tag } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Link, useIntl, useModel } from 'umi';
@@ -28,6 +28,11 @@ type CalendarEvent = {
 };
 
 const getEventLocation = (event: CalendarEvent) => event.location ?? event.suffix ?? event.diaDiem;
+
+const EVENT_LINE_COLOR = '#134D8B';
+
+// ELoaiSuKien.CA_NHAN đang bị tắt trên main nên mọi loại dùng chung một màu nền
+const getEventTagBackground = (_loaiSuKien?: ELoaiSuKien) => 'rgba(19, 77, 139, 0.12)';
 
 const CardCalendar = () => {
 	const intl = useIntl();
@@ -143,19 +148,24 @@ const CardCalendar = () => {
 		return localeKey ? intl.formatMessage({ id: localeKey }) : event.loaiSuKien;
 	};
 
-	const renderListEventTime = (event: CalendarEvent) => {
+	const getEventTimes = (event: CalendarEvent) => {
 		const thoiGianBatDau = event.thoiGianBatDau ?? event.start;
 		const thoiGianKetThuc = event.thoiGianKetThuc ?? event.end;
-		const ngayHienThi = event.ngayHienThi;
 
-		if (!thoiGianBatDau) return '--';
+		if (!thoiGianBatDau) return { start: '--', end: '' };
 
 		const isMultiDay = thoiGianKetThuc && !dayjs(thoiGianBatDau).isSame(dayjs(thoiGianKetThuc), 'day');
 		if (event.allDay || event.isLichDktc || isMultiDay) {
-			return formatDate(ngayHienThi ?? thoiGianBatDau, 'DD/MM');
+			return {
+				start: formatDate(event.ngayHienThi ?? thoiGianBatDau, 'DD/MM'),
+				end: thoiGianKetThuc && isMultiDay ? formatDate(thoiGianKetThuc, 'DD/MM') : '',
+			};
 		}
 
-		return formatDate(thoiGianBatDau, 'HH:mm');
+		return {
+			start: formatDate(thoiGianBatDau, 'HH:mm'),
+			end: thoiGianKetThuc ? formatDate(thoiGianKetThuc, 'HH:mm') : '',
+		};
 	};
 
 	const renderContent = () => {
@@ -182,58 +192,43 @@ const CardCalendar = () => {
 		);
 
 		return (
-			<div className='dashboard_calendar'>
+			<div className={!loading && isEmpty(data) ? 'dashboard_calendar is-empty' : 'dashboard_calendar'}>
 				{!loading && isEmpty(data) ? (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={intl.formatMessage({ id: 'lichsukien.empty' })} />
+					<EmptyState description={intl.formatMessage({ id: 'lichsukien.empty' })} compact />
 				) : null}
-				{data.map((sukien) => {
+				{data.map((sukien, index) => {
 					const location = getEventLocation(sukien);
 					const eventTypeLabel = getEventTypeLabel(sukien);
+					const { start, end } = getEventTimes(sukien);
+					const lineColor =
+						recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === sukien.loaiSuKien)?.maMau ||
+						EVENT_LINE_COLOR;
+
 					return (
 						<div
 							key={`${sukien._id ?? sukien.title}-${sukien.ngayHienThi ?? sukien.thoiGianBatDau ?? sukien.start}`}
-							className='su_kien today'
+							className='su_kien'
 							onClick={() => handleEventClick(sukien)}
 						>
-							<div className='su_kien__left'>
-								<div className='su_kien__thoi_gian' style={{ color: '#0E50CF' }}>
-									{renderListEventTime(sukien)}
-								</div>
+							<div className='su_kien__time'>
+								<span className='su_kien__start'>{start}</span>
+								{end ? <span className='su_kien__end'>{end}</span> : null}
 							</div>
-							<div
-								className='su_kien__right'
-								style={{
-									borderColor:
-										recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === sukien.loaiSuKien)?.maMau ??
-										ColorSuKien[sukien.loaiSuKien as ELoaiSuKien],
-								}}
-							>
-								<div className='su_kien__title'>
-									{sukien.tenSuKien ?? sukien.title ?? ''}
-									{sukien.loaiSuKien === ELoaiSuKien.LICH_HOC &&
-										sukien.hinhThucGiangDay === EHinhThucGiangDay.ONLINE && (
-											<Tag
-												color={colorHinhThucGiangDay[sukien.hinhThucGiangDay as EHinhThucGiangDay]}
-												style={{ marginLeft: 8 }}
-											>
-												{intl.formatMessage({
-													id: mapHinhThucGiangDayI18n[sukien.hinhThucGiangDay as EHinhThucGiangDay],
-												})}
-											</Tag>
-										)}
-								</div>
+							<span className='su_kien__mark' style={{ background: lineColor }} aria-hidden />
+							<div className='su_kien__body'>
+								<div className='su_kien__title'>{sukien.tenSuKien ?? sukien.title ?? ''}</div>
 								{location ? (
 									<div className='su_kien__location'>
-										<EnvironmentOutlined />
 										<span>{location}</span>
 									</div>
 								) : null}
 							</div>
 							{eventTypeLabel ? (
-								<Space size={4} align='center'>
-									<Tag color={ColorSuKien[sukien.loaiSuKien as ELoaiSuKien]}>{eventTypeLabel}</Tag>
-								</Space>
+								<span className='su_kien__label' style={{ background: getEventTagBackground(sukien.loaiSuKien) }}>
+									{eventTypeLabel}
+								</span>
 							) : null}
+							{index < data.length - 1 ? <div className='su_kien__line' /> : null}
 						</div>
 					);
 				})}
@@ -244,26 +239,17 @@ const CardCalendar = () => {
 	return (
 		<>
 			<Card
+				className='vin-dashboard-card'
 				loading={loading}
 				title={
-					<Flex align='center' gap={12}>
-						<span className='title'>Calendar</span>
-						<span className='date'>{dayjs().format('DD/MM/YYYY')}</span>
-					</Flex>
+					<>
+						{intl.formatMessage({ id: 'trangchu.lich.title' })}
+						<span className='calendar-card-date'>{dayjs().format('DD/MM/YYYY')}</span>
+					</>
 				}
-				extra={
-					<Link to='/my-calendar'>
-						<Space size={4}>
-							<span style={{ fontSize: 14, fontWeight: 700 }}>See More</span> <RightOutlined />
-						</Space>
-					</Link>
-				}
-				styles={{
-					body: {
-						padding: 0,
-						position: 'relative',
-					},
-				}}
+				headerType='button-text'
+				extra={<Link to='/my-calendar'>{intl.formatMessage({ id: 'trangchu.lich.xemthem' })}</Link>}
+				styles={{ body: { paddingLeft: 0, paddingRight: 0 } }}
 			>
 				<div className='calendar-body'>{renderContent()}</div>
 			</Card>

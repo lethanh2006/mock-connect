@@ -3,8 +3,11 @@ import { Activity } from '@/services/CCT/Activity/typing';
 import { EApprovalStatus } from '@/services/CCT/constant';
 import { EFileScope, uploadFileManagerMultipart } from '@/services/uploadFile';
 import rules from '@/utils/rules';
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Collapse, Form, Input, message, Row, Typography } from 'antd';
+import { Button, IconTrash, IconPlus, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Checkbox } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import Input from '@/components/MyInput';
+import { toast } from '@/utils/toast';
+import { Form, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { uniqBy } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -42,7 +45,7 @@ const uploadEvidenceRequest = async ({ file, onSuccess, onError }: any) => {
 
 		onSuccess?.({ ...response?.data?.data, _id: fileId, fileId }, file);
 	} catch (error) {
-		message.error(getUploadErrorMessage(error));
+		toast.error(getUploadErrorMessage(error));
 		onError?.(error);
 	}
 };
@@ -118,12 +121,12 @@ const FormActivityOutCome = (props: any) => {
 				file: getUploadedFileIds(item?.file?.fileList),
 			}));
 		} catch (error: any) {
-			message.error(error?.message);
+			toast.error(error?.message);
 			return;
 		}
 
 		if (autoLevel && autoRole && !hasAtLeastOneEvidenceFile(evidenceFile)) {
-			message.warning(intl.formatMessage({ id: 'activity.outcome.warning' }));
+			toast.warning(intl.formatMessage({ id: 'activity.outcome.warning' }));
 			return;
 		}
 
@@ -246,10 +249,9 @@ const FormActivityOutCome = (props: any) => {
 												}}
 											>
 												<Button
-													danger
-													type='link'
+													variant='destructive'
 													title={intl.formatMessage({ id: 'activity.outcome.delete' })}
-													icon={<DeleteOutlined />}
+													icon={<IconTrash />}
 													onClick={() => remove(field.name)}
 												/>
 											</div>
@@ -258,7 +260,7 @@ const FormActivityOutCome = (props: any) => {
 									</Row>
 								))}
 
-								<Button onClick={() => add()} icon={<PlusOutlined />} type='dashed' size='small' disabled={isView}>
+								<Button onClick={() => add()} icon={<IconPlus />} variant='outline' size='sm' disabled={isView}>
 									{intl.formatMessage({ id: 'activity.outcome.evidence.update' })}
 								</Button>
 							</>
@@ -295,31 +297,57 @@ const FormActivityOutCome = (props: any) => {
 							rows={3}
 							disabled={isView}
 							placeholder={intl.formatMessage({ id: 'activity.outcome.reflection.placeholder' })}
-							showCount
 						/>
+					</Form.Item>
+					<Form.Item noStyle shouldUpdate={(prev, cur) => prev.reflection !== cur.reflection}>
+						{() => {
+							const val: string = form.getFieldValue('reflection') ?? '';
+							return (
+								<div style={{ textAlign: 'right', fontSize: 12, color: val.length > 300 ? 'var(--ds-negative-primary, #e20404)' : 'var(--ds-content-secondary, #8c8c8c)', marginTop: -8, marginBottom: 4 }}>
+									{val.length}/300
+								</div>
+							);
+						}}
 					</Form.Item>
 				</Col>
 
 				<Col span={24}>
-					<Collapse>
-						<Collapse.Panel key={0} header={intl.formatMessage({ id: 'activity.outcome.activity.detail' })}>
-							<CardChiTietSuKien
-								record={
-									{
-										...record?.activities,
-										activityOutcome: record,
-									} as Activity.IRecord
-								}
-								evidenceDeadline={record?.dueDate ? dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY') : '--'}
-							/>
-						</Collapse.Panel>
-					</Collapse>
+					<Accordion type='single' collapsible>
+						<AccordionItem value='activity-detail'>
+							<AccordionTrigger>
+								{intl.formatMessage({ id: 'activity.outcome.activity.detail' })}
+							</AccordionTrigger>
+							<AccordionContent>
+								<CardChiTietSuKien
+									record={
+										{
+											...record?.activities,
+											activityOutcome: record,
+										} as Activity.IRecord
+									}
+									evidenceDeadline={record?.dueDate ? dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY') : '--'}
+								/>
+							</AccordionContent>
+						</AccordionItem>
+					</Accordion>
 				</Col>
 
 				{!isView && (
 					<Col span={24}>
-						<Form.Item name='checkbox' valuePropName='checked'>
-							<Checkbox>{intl.formatMessage({ id: 'activity.outcome.confirm' })}</Checkbox>
+						<Form.Item name='checkbox'>
+							<Form.Item noStyle shouldUpdate={(prev, cur) => prev.checkbox !== cur.checkbox}>
+								{() => (
+									<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+										<Checkbox
+											checked={!!form.getFieldValue('checkbox')}
+											onCheckedChange={(checked) => form.setFieldValue('checkbox', !!checked)}
+										/>
+										<span style={{ cursor: 'pointer' }} onClick={() => form.setFieldValue('checkbox', !form.getFieldValue('checkbox'))}>
+											{intl.formatMessage({ id: 'activity.outcome.confirm' })}
+										</span>
+									</div>
+								)}
+							</Form.Item>
 						</Form.Item>
 					</Col>
 				)}
@@ -328,8 +356,8 @@ const FormActivityOutCome = (props: any) => {
 				{!isView && (
 					<>
 						<Button
-							type='primary'
-							htmlType='submit'
+							variant='default'
+							type='submit'
 							loading={formSubmiting}
 							disabled={!checkbox || listAchievedCompetencies?.length > 3}
 							onClick={() => setIsSubmit(true)}
@@ -338,7 +366,8 @@ const FormActivityOutCome = (props: any) => {
 						</Button>
 
 						<Button
-							htmlType='submit'
+							variant='outline'
+							type='submit'
 							loading={formSubmiting}
 							disabled={listAchievedCompetencies?.length > 3}
 							onClick={() => setIsSubmit(false)}
@@ -347,7 +376,9 @@ const FormActivityOutCome = (props: any) => {
 						</Button>
 					</>
 				)}
-				<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'activity.outcome.close' })}</Button>
+				<Button variant='outline' onClick={() => setVisibleForm(false)}>
+					{intl.formatMessage({ id: 'activity.outcome.close' })}
+				</Button>
 			</div>
 		</Form>
 	);

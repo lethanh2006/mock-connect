@@ -4,56 +4,55 @@ import {
 	mapColorTextStatusMyCCT,
 	mapNameStatusMyCCT,
 } from '@/services/CCT/constant';
-import { Tag } from 'antd';
 import dayjs from 'dayjs';
-import '../../Activity/style.less';
+import './CardNote.less';
+
+const formatTime = (time?: string | Date) => (time ? dayjs(time).format('HH:mm DD/MM/YYYY') : '--');
 
 const CardNoteMyCCT = (props: { myCCT: MyCCT.IRecord }) => {
 	const { myCCT } = props;
+	const status = myCCT?.status as EStatusMyCCT;
+	const isApproved = status === EStatusMyCCT.APPROVED;
+	const isChangesRequired = status === EStatusMyCCT.CHANGES_REQUIRED;
 
 	return (
-		<div className='info-summary-box'>
-			<div className='info-summary-status'>
-				<Tag
-					color={mapColorStatusMyCCT[myCCT?.status as EStatusMyCCT]}
-					style={{ color: mapColorTextStatusMyCCT[myCCT?.status as EStatusMyCCT], fontWeight: 600 }}
-				>
-					{mapNameStatusMyCCT[myCCT?.status as EStatusMyCCT]}
-				</Tag>
-			</div>
+		<div className='mycct-note'>
+			<span
+				className='mycct-note__status'
+				style={{
+					background: mapColorStatusMyCCT[status],
+					color: mapColorTextStatusMyCCT[status],
+				}}
+			>
+				{mapNameStatusMyCCT[status]}
+			</span>
 
-			{myCCT?.status !== EStatusMyCCT.DRAFT && (
-				<div className='custom-info-grid grid-3'>
-					<div className='info-row'>
-						<div className='info-item'>
-							<div className='info-label'>Submission Time</div>
-							<div className='info-value'>
-								{myCCT?.submittedAt && dayjs(myCCT?.submittedAt).format('HH:mm DD/MM/YYYY')}
+			{status !== EStatusMyCCT.DRAFT && (
+				<div className='mycct-note__fields'>
+					<div className='mycct-note__item'>
+						<div className='mycct-note__label'>Submission Time</div>
+						<div className='mycct-note__value'>{formatTime(myCCT?.submittedAt)}</div>
+					</div>
+					{(isChangesRequired || isApproved) && (
+						<div className='mycct-note__item'>
+							<div className='mycct-note__label'>Review Time</div>
+							<div className='mycct-note__value'>{formatTime(myCCT?.approvedAt)}</div>
+						</div>
+					)}
+					{isApproved && (
+						<div className='mycct-note__item'>
+							<div className='mycct-note__label'>Approver</div>
+							<div className='mycct-note__value'>
+								{[myCCT?.approvedByUsername, myCCT?.approvedByName].filter(Boolean).join(' - ') || '--'}
 							</div>
 						</div>
-						{(myCCT?.status === EStatusMyCCT.CHANGES_REQUIRED || myCCT?.status === EStatusMyCCT.APPROVED) && (
-							<div className='info-item'>
-								<div className='info-label'>Review Time</div>
-								<div className='info-value'>
-									{myCCT?.approvedAt && dayjs(myCCT?.approvedAt).format('HH:mm DD/MM/YYYY')}
-								</div>
-							</div>
-						)}
-						{myCCT?.status === EStatusMyCCT.APPROVED && (
-							<div className='info-item'>
-								<div className='info-label'>Approver</div>
-								<div className='info-value'>
-									{[myCCT?.approvedByUsername, myCCT?.approvedByName].filter(Boolean).join(' - ')}
-								</div>
-							</div>
-						)}
-						{myCCT?.status === EStatusMyCCT.CHANGES_REQUIRED && (
-							<div className='info-item'>
-								<div className='info-label'>Revision Note</div>
-								<div className='info-value'>{myCCT?.revisionNote ?? '-'}</div>
-							</div>
-						)}
-					</div>
+					)}
+					{isChangesRequired && (
+						<div className='mycct-note__item mycct-note__item--wide'>
+							<div className='mycct-note__label'>Revision Note</div>
+							<div className='mycct-note__value'>{myCCT?.revisionNote ?? '--'}</div>
+						</div>
+					)}
 				</div>
 			)}
 		</div>

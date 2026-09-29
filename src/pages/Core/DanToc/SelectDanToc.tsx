@@ -1,4 +1,4 @@
-import { Select } from 'antd';
+import VinSelect from '@/components/VinSelect';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -22,7 +22,7 @@ const SelectDanToc = (props: {
 	}, []);
 
 	return (
-		<Select
+		<VinSelect
 			mode={multiple ? 'multiple' : undefined}
 			value={value}
 			allowClear={allowClear}

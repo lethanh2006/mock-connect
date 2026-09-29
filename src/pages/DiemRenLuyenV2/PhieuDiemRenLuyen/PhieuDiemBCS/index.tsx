@@ -8,7 +8,7 @@ import {
 	MapTitleETrangThaiPhieuDiemRL,
 } from '@/services/DiemRenLuyenV2/PhieuDiemRenLuyen/constants';
 import dayjs from '@/utils/dayjs';
-import { EditOutlined, EyeOutlined } from '@ant-design/icons';
+import { IconPencil01, IconEyeOpen } from '@/components/Icons';
 import { Button, Tag, Tooltip } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -120,7 +120,7 @@ const PhieuDiemBCS = (props: { idLopHanhChinh: string }) => {
 						<Button
 							onClick={() => handleView(record)}
 							type='link'
-							icon={isTrongThoiGianChamDiem ? <EditOutlined /> : <EyeOutlined />}
+							icon={isTrongThoiGianChamDiem ? <IconPencil01 /> : <IconEyeOpen />}
 						/>
 					</Tooltip>
 				</>

@@ -1,6 +1,6 @@
 import PageCard from '@/components/PageCard';
 import { formatDateTime } from '@/utils/formatDate';
-import { ArrowRightOutlined, CheckCircleOutlined, FilterOutlined, UserOutlined } from '@ant-design/icons';
+import { IconArrowRight, IconShieldCheck, IconFilter01, IconHuman } from '@/components/Icons';
 import { Avatar, Button, Card, Dropdown, Empty, Space, Spin, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, Link, useIntl, useModel } from 'umi';
@@ -50,17 +50,17 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 		{
 			key: 'ngay-dang',
 			label: intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.ngaydang' }),
-			icon: <ArrowRightOutlined />,
+			icon: <IconArrowRight />,
 		},
 		{
 			key: 'chua-xem',
 			label: intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.chuaxem' }),
-			icon: <CheckCircleOutlined />,
+			icon: <IconShieldCheck />,
 		},
 		{
 			key: 'hoat-dong-moi-nhat',
 			label: intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.moinhat' }),
-			icon: <FilterOutlined />,
+			icon: <IconFilter01 />,
 		},
 	];
 
@@ -89,7 +89,7 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 				{/* Tên lớp học phần */}
 				<div className='card-diendan-lop'>
 					<Text className='card-diendan-lop-text'>#{item.lopHocPhan?.ten || item.lopHanhChinh?.ten}</Text>
-					<ArrowRightOutlined style={{ fontSize: '10px', color: '#1890ff' }} />
+					<IconArrowRight style={{ fontSize: '10px', color: '#1890ff' }} />
 				</div>
 
 				{/* Nội dung */}
@@ -101,7 +101,7 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 							item?.thongTinNguoiDang?.avatar ? undefined : item?.thongTinNguoiDang?.hoTen ? (
 								lastNameChar(item.thongTinNguoiDang.hoTen)
 							) : (
-								<UserOutlined />
+								<IconHuman />
 							)
 						}
 						alt='avatar'
@@ -122,7 +122,7 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 						{/* Thời gian */}
 						<Text className='card-diendan-time'>
 							{item?.thongTinNguoiDang?.isGiaoVien && (
-								<CheckCircleOutlined
+								<IconShieldCheck
 									style={{ color: '#52c41a', fontSize: '12px', marginRight: 4 }}
 									title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.giangvien' })}
 								/>
@@ -179,7 +179,7 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 						trigger={['click']}
 						placement='bottomRight'
 					>
-						<Button size='small' icon={<FilterOutlined />} type={sortMode !== 'ngay-dang' ? 'primary' : 'default'}>
+						<Button size='small' icon={<IconFilter01 />} type={sortMode !== 'ngay-dang' ? 'primary' : 'default'}>
 							{isMobile ? '' : getFilterLabel()}
 						</Button>
 					</Dropdown>

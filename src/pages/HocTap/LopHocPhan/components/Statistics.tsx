@@ -2,7 +2,7 @@ import StatisticsCard from '@/components/StatisticsCard';
 import { StatisticsItem } from '@/components/StatisticsCard/typing';
 import { ETrangThaiNopBaiTap } from '@/services/DaoTao/BaiTap/constants';
 import dayjs from '@/utils/dayjs';
-import { CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, StopOutlined } from '@ant-design/icons';
+import { IconShieldCheck, IconStopwatch, IconWarningCircle, IconXmarkCircle } from '@/components/Icons';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -85,42 +85,42 @@ const BaiTapStatistics = () => {
 		{
 			title: intl.formatMessage({ id: 'lophocphan.thongke.tongso' }),
 			value: statistics.total || 0,
-			icon: <CheckCircleOutlined />,
+			icon: <IconShieldCheck />,
 		},
 		{
 			title: intl.formatMessage({ id: 'lophocphan.thongke.dahoanthanh' }),
 			value: statistics.completed,
-			icon: <CheckCircleOutlined />,
+			icon: <IconShieldCheck />,
 			status: 'success',
 		},
 		// {
 		// 	title: 'Đến hạn',
 		// 	value: statistics.pending,
-		// 	icon: <ClockCircleOutlined />,
+		// 	icon: <IconStopwatch />,
 		// 	valueColor: '#FFAF0B',
 		// },
 		{
 			title: intl.formatMessage({ id: 'lophocphan.thongke.dangdien' }),
 			value: statistics.inprogress || 0,
-			icon: <ClockCircleOutlined />,
+			icon: <IconStopwatch />,
 			valueColor: '#FFAF0B',
 		},
 		{
 			title: intl.formatMessage({ id: 'lophocphan.thongke.dachamdiem' }),
 			value: statistics.graded || 0,
-			icon: <ClockCircleOutlined />,
+			icon: <IconStopwatch />,
 			status: 'info',
 		},
 		{
 			title: intl.formatMessage({ id: 'lophocphan.thongke.chuahoanthanh' }),
 			value: statistics.notStarted,
-			icon: <ExclamationCircleOutlined />,
+			icon: <IconWarningCircle />,
 			status: 'error',
 		},
 		{
 			title: intl.formatMessage({ id: 'lophocphan.thongke.quahannopbai' }),
 			value: statistics.overdue,
-			icon: <StopOutlined />,
+			icon: <IconXmarkCircle />,
 			valueColor: '#121212',
 		},
 	];

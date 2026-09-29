@@ -2,7 +2,8 @@ import {
 	colorXepLoaiRenLuyen,
 	xepLoaiRenLuyen,
 } from '@/services/CongTacSinhVien/DiemRenLuyenV2/PhieuDiemRenLuyen/constants';
-import { Card, Col, Row } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import { Card } from '@/components/PageCard';
 import { useModel } from 'umi';
 
 const ViewKqRenLuyenYKienHocBa = () => {
@@ -12,7 +13,7 @@ const ViewKqRenLuyenYKienHocBa = () => {
 	return (
 		<Row gutter={[12, 12]}>
 			<Col span={24} md={12}>
-				<Card className='ket-qua-card'>
+				<Card bordered={false} className='ket-qua-card'>
 					<div className='ket-qua-content'>
 						<div className='title'>Điểm rèn luyện</div>
 						<span className='sum-text'>{record.diemRenLuyen ?? '--'}</span>
@@ -21,7 +22,7 @@ const ViewKqRenLuyenYKienHocBa = () => {
 			</Col>
 
 			<Col span={24} md={12}>
-				<Card className='ket-qua-card'>
+				<Card bordered={false} className='ket-qua-card'>
 					<div className='ket-qua-content'>
 						<div className='title'>Xếp hạng rèn luyện</div>
 						<span
@@ -35,7 +36,7 @@ const ViewKqRenLuyenYKienHocBa = () => {
 			</Col>
 
 			<Col span={24}>
-				<Card className='ket-qua-card'>
+				<Card bordered={false} className='ket-qua-card'>
 					<div className='ket-qua-content'>
 						<div className='title'>Đánh giá sinh viên</div>
 						<Row gutter={[8, 8]}>

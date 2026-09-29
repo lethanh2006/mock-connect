@@ -1,4 +1,5 @@
-import { Carousel, Divider, Empty, Spin } from 'antd';
+import EmptyState from '@/components/EmptyState';
+import { Carousel, Divider, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChartDiemTrungBinh from './ChartDiemTrungBinh';
@@ -43,9 +44,8 @@ const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string; loadData?: boolea
 					</Carousel>
 				</>
 			) : (
-				<Empty
+				<EmptyState
 					description={intl.formatMessage({ id: 'ketquahoctap.empty' })}
-					image={Empty.PRESENTED_IMAGE_SIMPLE}
 					style={{ marginTop: 50, marginBottom: 32 }}
 				/>
 			)}

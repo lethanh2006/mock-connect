@@ -1,4 +1,6 @@
-import { Checkbox, Modal } from 'antd';
+import { Button } from '@/components/Icons';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { Checkbox } from 'antd';
 import React, { forwardRef, useState } from 'react';
 
 interface Props {
@@ -11,19 +13,27 @@ interface Props {
 const PreviewCCTModal = forwardRef<HTMLDivElement, Props>(({ open, onCancel, onConfirm, children }, ref) => {
 	const [confirmed, setConfirmed] = useState(false);
 
+	const handleClose = () => {
+		setConfirmed(false);
+		onCancel();
+	};
+
 	return (
-		<Modal
+		<ModalExpandable
 			open={open}
-			onCancel={() => {
-				setConfirmed(false);
-				onCancel();
-			}}
-			onOk={onConfirm}
-			okText='Submit'
-			cancelText='Close'
-			okButtonProps={{ disabled: !confirmed }}
+			onCancel={handleClose}
 			width={1300}
 			destroyOnClose
+			footer={
+				<div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
+					<Button variant='outline' onClick={handleClose}>
+						Close
+					</Button>
+					<Button variant='default' disabled={!confirmed} onClick={onConfirm}>
+						Submit
+					</Button>
+				</div>
+			}
 		>
 			<div style={{ maxHeight: '70vh', overflow: 'auto' }}>{children}</div>
 
@@ -35,7 +45,7 @@ const PreviewCCTModal = forwardRef<HTMLDivElement, Props>(({ open, onCancel, onC
 					in accordance with University regulations.
 				</Checkbox>
 			</div>
-		</Modal>
+		</ModalExpandable>
 	);
 });
 

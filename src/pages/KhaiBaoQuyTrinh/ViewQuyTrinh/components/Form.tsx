@@ -7,7 +7,7 @@ import { getDataDefaultV2 } from '@/services/QuyTrinh/MauDon/maudon';
 import { buildUpLoadMultiFileMultipart, EFileScope } from '@/services/uploadFile';
 import { formatDate } from '@/utils/formatDate';
 import rules from '@/utils/rules';
-import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
+import { IconXmark, IconSave } from '@/components/Icons';
 import { Button, Form, message, Row, Select, Spin } from 'antd';
 import { pick } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
@@ -207,12 +207,12 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 						justifyContent: 'center',
 					}}
 				>
-					<Button icon={<SaveOutlined />} style={{ marginRight: 8 }} type={'primary'} htmlType={'submit'}>
+					<Button icon={<IconSave />} style={{ marginRight: 8 }} type={'primary'} htmlType={'submit'}>
 						{intl.formatMessage({ id: 'global.button.luulai' })}
 					</Button>
 					{editFormKhaiBao && (
 						<Button
-							icon={<CloseOutlined />}
+							icon={<IconXmark />}
 							style={{ marginRight: 8 }}
 							onClick={() => {
 								setEditFormKhaiBao(false);

@@ -18,7 +18,7 @@ import { resetFieldsForm } from '@/utils/utils';
 import { Button } from '@/components/Icons';
 import Input from '@/components/MyInput';
 import MySegmented from '@/components/MySegmented';
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import { Card, Form, Tabs } from 'antd';
 import { Col, Row } from '@/components/MyGrid';
 import { toast } from '@/utils/toast';
@@ -154,7 +154,7 @@ const FormThongBao = (props: any) => {
 							label='Đối tượng nhận email'
 							rules={[...rules.required]}
 						>
-							<Select
+							<VinSelect
 								options={Object.entries(LoaiDoiTuongThongBao)
 									.filter(([value]) => value !== EReceiverType.User)
 									.map(([value, label]) => ({

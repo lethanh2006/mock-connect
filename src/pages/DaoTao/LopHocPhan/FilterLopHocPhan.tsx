@@ -1,5 +1,5 @@
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
-import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { IconPlus, IconMinusMini } from '@/components/Icons';
 import { Button, Space, Tooltip } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -30,7 +30,7 @@ const FilterLopHocPhan = (props: {
 				<Tooltip title={showFilterHocKy ? 'Ẩn bộ lọc học kỳ' : 'Hiện bộ lọc học kỳ'}>
 					<Button
 						type='dashed'
-						icon={showFilterHocKy ? <MinusOutlined /> : <PlusOutlined />}
+						icon={showFilterHocKy ? <IconMinusMini /> : <IconPlus />}
 						onClick={() => setShowFilterHocKy(!showFilterHocKy)}
 					/>
 				</Tooltip>

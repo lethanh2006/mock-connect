@@ -1,11 +1,12 @@
 import anh from '@/assets/noimg.png';
+import EmptyState from '@/components/EmptyState';
+import { IconArrowRight } from '@/components/Icons';
 import { renderParagraph } from '@/pages/TinTuc/Slink/BlockTinTuc';
 import { formatDate } from '@/utils/formatDate';
-import { ArrowRightOutlined } from '@ant-design/icons';
-import { Col, Empty, Row, Spin } from 'antd';
+import { Col, Row, Spin } from 'antd';
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
-import { Link, history, useModel } from 'umi';
+import { history, Link, useModel } from 'umi';
 import './style.less';
 
 // import '../components/styles.less';
@@ -23,7 +24,7 @@ const TinTucDashboardSlink = () => {
 			<div className='tin-tuc-container'>
 				<Spin spinning={loading}>
 					{isEmpty(danhSach) ? (
-						<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ paddingTop: 32 }} description='Chưa có tin tức' />
+						<EmptyState compact description='Chưa có tin tức' />
 					) : (
 						<Row gutter={[1, 1]} className='tin-tuc-wrapper-dashboard'>
 							{danhSach.map((tintuc, index) => (
@@ -59,7 +60,7 @@ const TinTucDashboardSlink = () => {
 			</div>
 			<div className='xem-them'>
 				<Link to='/tin-tuc'>
-					Xem thêm <ArrowRightOutlined />
+					Xem thêm <IconArrowRight />
 				</Link>
 			</div>
 		</>

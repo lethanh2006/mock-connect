@@ -1,13 +1,12 @@
+import { IconFilter01, IconRotateArrow, SearchInput } from '@/components/Icons';
 import MyDateRangePicker from '@/components/MyDatePicker/RangePicker';
-import { FilterOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Button, Flex, Input, Select, Space } from 'antd';
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import VinSelect from '@/components/VinSelect';
+import { Flex, Space } from 'antd';
 import dayjs from 'dayjs';
-import { JSX } from 'react';
+import { JSX, useEffect, useState } from 'react';
 import { useIntl } from 'umi';
 import { FilterSuKienValue } from '..';
-
-const { Search } = Input;
-
 interface FilterSuKienProps {
 	value?: FilterSuKienValue;
 	onChange?: (val: FilterSuKienValue) => void;
@@ -18,34 +17,46 @@ interface FilterSuKienProps {
 
 const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, button, hideSelect }) => {
 	const intl = useIntl();
+	const [keyword, setKeyword] = useState(value?.search ?? '');
+
+	useEffect(() => {
+		setKeyword(value?.search ?? '');
+	}, [value?.search]);
 
 	return (
-		<Flex justify='space-between' align='center' style={{ marginBottom: 8 }}>
+		<Flex className='filter-bar' justify='space-between' align='center'>
 			<Space wrap>
-				<Button className='btn-filter' icon={<FilterOutlined />} size='small' />
+				<ButtonExtend icon={<IconFilter01 />} size='small' />
 
-				<Search
-					placeholder={intl.formatMessage({ id: 'activity.filter.name' })}
-					style={{ width: 280 }}
-					allowClear
-					value={value?.search}
-					onSearch={(val) =>
-						onChange?.({
-							...value,
-							search: val,
-						})
-					}
-					onClear={() => {
-						onChange?.({
-							...value,
-							search: undefined,
-						});
-					}}
-					size='small'
-				/>
+				<div className='search-input-custom-sm'>
+					<SearchInput
+						variant='tiled'
+						size='small'
+						clearable
+						value={keyword}
+						placeholder={intl.formatMessage({ id: 'activity.filter.name' })}
+						onChange={(e) => setKeyword(e.target.value)}
+						onKeyDown={(e) => {
+							if (e.key !== 'Enter') return;
+							const next = (e.target as HTMLInputElement).value.trim();
+							onChange?.({
+								...value,
+								search: next || undefined,
+							});
+						}}
+						onClear={() => {
+							setKeyword('');
+							onChange?.({
+								...value,
+								search: undefined,
+							});
+						}}
+					/>
+				</div>
 
 				<MyDateRangePicker
-					style={{ width: 250 }}
+					className='field-w-250'
+					style={{ height: 36, background: 'none' }}
 					value={value?.dateRange?.length === 2 ? [dayjs(value.dateRange[0]), dayjs(value.dateRange[1])] : null}
 					onChange={(val) =>
 						onChange?.({
@@ -67,9 +78,10 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 				/>
 
 				{!hideSelect && (
-					<Select
+					<VinSelect
 						value={value?.regiStatus}
-						style={{ width: 200 }}
+						className='field-w-250'
+						size='sm'
 						placeholder={intl.formatMessage({ id: 'activity.filter.trangthai' })}
 						options={[
 							{
@@ -85,12 +97,10 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 								label: intl.formatMessage({ id: 'activity.filter.chuadangky' }),
 							},
 						]}
-						allowClear
-						size='small'
 						onChange={(val) =>
 							onChange?.({
 								...value,
-								regiStatus: val,
+								regiStatus: val as FilterSuKienValue['regiStatus'],
 							})
 						}
 					/>
@@ -98,7 +108,7 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 			</Space>
 
 			<Space wrap>
-				<Button icon={<ReloadOutlined />} onClick={onReload} />
+				<ButtonExtend icon={<IconRotateArrow />} onClick={onReload} />
 				{button}
 			</Space>
 		</Flex>

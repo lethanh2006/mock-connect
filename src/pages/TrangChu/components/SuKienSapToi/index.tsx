@@ -1,8 +1,10 @@
+import EmptyState from '@/components/EmptyState';
+import { Badge } from '@/components/Icons';
+import Card from '@/components/PageCard';
 import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
-import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { Button, Card, Empty, Space, Spin, Tag, Typography } from 'antd';
+import { Button, Space, Spin, Typography } from 'antd';
 import { isEmpty } from 'lodash';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -57,10 +59,9 @@ const CardSuKienSapToi = () => {
 
 		if (isEmpty(suKienSapToi)) {
 			return (
-				<Empty
-					image={Empty.PRESENTED_IMAGE_SIMPLE}
+				<EmptyState
 					description={intl.formatMessage({ id: 'global.table.index.empty' })}
-					className='empty'
+					compact
 				/>
 			);
 		}
@@ -83,15 +84,12 @@ const CardSuKienSapToi = () => {
 								<div className='date'>{formatDate(currentEvent.thoiGianBatDau)}</div>
 								<div className='tags'>
 									<Space size={4} wrap>
-										<Tag
-											color={
-												recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === currentEvent.loaiSuKien)
-													?.maMau ?? ColorSuKien[currentEvent.loaiSuKien as ELoaiSuKien]
-											}
+										<Badge
+											variant='neutral'
 											style={{ fontSize: 11 }}
 										>
 											{currentEvent.loaiSuKien}
-										</Tag>
+										</Badge>
 
 									</Space>
 								</div>
@@ -105,7 +103,7 @@ const CardSuKienSapToi = () => {
 
 	return (
 		<>
-			<Card className='tb-sk-wrapper' variant='borderless' styles={{ body: { padding: 0 } }}>
+			<Card className='tb-sk-wrapper' bordered={false} hideInnerCard>
 				<div className='header-tb-sk'>
 					<Title level={5} className='title'>
 						{intl.formatMessage({ id: 'trangchu.sukien.title' })}

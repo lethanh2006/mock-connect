@@ -10,7 +10,7 @@ import {
 } from '@/services/DaoTao/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { IconTrash, Icon3SquarePlusmark } from '@/components/Icons';
 import { Alert, Popconfirm, Tag } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -115,7 +115,7 @@ const NhuCauHocPhanPage = () =>
 							tooltip={intl.formatMessage({ id: 'dangkyhoctap.table.xoa' })}
 							danger
 							type='link'
-							icon={<DeleteOutlined />}
+							icon={<IconTrash />}
 						/>
 					</Popconfirm>
 				),
@@ -161,7 +161,7 @@ const NhuCauHocPhanPage = () =>
 							setIsView(false);
 							setVisibleForm(true);
 						}}
-						icon={<PlusCircleOutlined />}
+						icon={<Icon3SquarePlusmark />}
 					>
 						{intl.formatMessage({ id: 'dangkyhoctap.button.themMoi' })}
 					</ButtonExtend>

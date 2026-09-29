@@ -1,3 +1,5 @@
+import { Button, IconEyeOpen, IconFilePen, IconShieldInfo, IconStopwatch } from '@/components/Icons';
+import PageCard from '@/components/PageCard';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import ModalExpandable from '@/components/Table/ModalExpandable';
@@ -16,8 +18,7 @@ import { ETagColor } from '@/services/base/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { chuanHoaTen } from '@/utils/utils';
-import { ClockCircleOutlined, EyeOutlined, FormOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Button, Popover, Space, Tag } from 'antd';
+import { Popover, Space, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChoiceModal from './components/ChoiceModal';
@@ -321,7 +322,7 @@ const SinhVienDangKyBHYT = () => {
 								</div>
 							}
 						>
-							<Button type='text' size='small' icon={<InfoCircleOutlined />} style={{ paddingInline: 4 }} />
+							<Button variant='ghost' size='sm' icon={<IconShieldInfo />} style={{ paddingInline: 4 }} />
 						</Popover>
 					)}
 				</Space>
@@ -350,14 +351,14 @@ const SinhVienDangKyBHYT = () => {
 								if (type) openForm(type, toDotDangKyRecordFromHistory(rec), { isView: true });
 							}}
 							type='link'
-							icon={<EyeOutlined />}
+							icon={<IconEyeOpen />}
 						/>
 						{canEdit && type === 'mien' && (
 							<ButtonExtend
 								tooltip={t('global.button.chinhsua')}
 								onClick={() => openForm(type, toDotDangKyRecordFromHistory(rec), { edit: true })}
 								type='link'
-								icon={<FormOutlined />}
+								icon={<IconFilePen />}
 							/>
 						)}
 					</>
@@ -391,7 +392,7 @@ const SinhVienDangKyBHYT = () => {
 				}}
 			>
 				<Space size={8}>
-					<ClockCircleOutlined style={{ color: '#0E50CF', fontSize: 16 }} />
+					<IconStopwatch style={{ color: '#0E50CF', fontSize: 16 }} />
 					<span>
 						{hasPeriod
 							? renderThoiGianDangKy(currentInfo.period?.registrationStartAt, currentInfo.period?.registrationEndAt)
@@ -401,7 +402,7 @@ const SinhVienDangKyBHYT = () => {
 
 				{hasPeriod ? (
 					canRegister ? (
-						<Button type='primary' onClick={onViewFull}>
+						<Button variant='default' onClick={onViewFull}>
 							{t('baohiemyte.dangky.banner.xemDayDu')}
 						</Button>
 					) : (
@@ -439,52 +440,56 @@ const SinhVienDangKyBHYT = () => {
 		: undefined;
 
 	return (
-		<TableBase<BaoHiemYTe.IHistoryItem>
-			getData={refreshAll}
-			columns={columns}
-			dependencies={[page, limit]}
-			modelName='baohiemyte.dotdangky'
-			title={t('baohiemyte.dangky.title')}
-			buttons={{ create: false }}
-			addStt
-		>
-			{renderBanner()}
+		<PageCard title={t('baohiemyte.dangky.title')}>
+			<div className='page-card-custom'>
+				<TableBase<BaoHiemYTe.IHistoryItem>
+					cardProps={{ stickyHeader: true }}
+					getData={refreshAll}
+					columns={columns}
+					dependencies={[page, limit]}
+					modelName='baohiemyte.dotdangky'
+					buttons={{ create: false }}
+					addStt
+				>
+					{renderBanner()}
 
-			<ChoiceModal
-				open={choiceModalOpen}
-				onClose={() => setChoiceModalOpen(false)}
-				onSelectDangKy={onSelectDangKy}
-				onSelectMien={onSelectMien}
-			/>
+					<ChoiceModal
+						open={choiceModalOpen}
+						onClose={() => setChoiceModalOpen(false)}
+						onSelectDangKy={onSelectDangKy}
+						onSelectMien={onSelectMien}
+					/>
 
-			<ModalExpandable
-				title={formModalTitle}
-				width={1000}
-				open={!!formModal}
-				onCancel={closeFormModal}
-				footer={null}
-				destroyOnClose
-			>
-				{formModal?.type === 'dangKy' ? (
-					<FormDangKy
-						record={formModal.record}
-						isView={formModal.isView}
-						edit={formModal.edit}
+					<ModalExpandable
+						title={formModalTitle}
+						width={1000}
+						open={!!formModal}
 						onCancel={closeFormModal}
-						getData={refreshAll}
-					/>
-				) : null}
-				{formModal?.type === 'mien' ? (
-					<FormMien
-						record={formModal.record}
-						isView={formModal.isView}
-						edit={formModal.edit}
-						onCancel={closeFormModal}
-						getData={refreshAll}
-					/>
-				) : null}
-			</ModalExpandable>
-		</TableBase>
+						footer={null}
+						destroyOnClose
+					>
+						{formModal?.type === 'dangKy' ? (
+							<FormDangKy
+								record={formModal.record}
+								isView={formModal.isView}
+								edit={formModal.edit}
+								onCancel={closeFormModal}
+								getData={refreshAll}
+							/>
+						) : null}
+						{formModal?.type === 'mien' ? (
+							<FormMien
+								record={formModal.record}
+								isView={formModal.isView}
+								edit={formModal.edit}
+								onCancel={closeFormModal}
+								getData={refreshAll}
+							/>
+						) : null}
+					</ModalExpandable>
+				</TableBase>
+			</div>
+		</PageCard>
 	);
 };
 

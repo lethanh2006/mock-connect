@@ -2,7 +2,10 @@ import { getPhuongXa } from '@/services/Core/DonViHanhChinh';
 import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import rules from '@/utils/rules';
-import { Col, Form, Input, Row, Select } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import Input from '@/components/MyInput';
+import VinSelect from '@/components/VinSelect';
+import { Form } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
 
@@ -75,7 +78,7 @@ const SelectDiaChiHoSoFormItem = (props: {
 					label={labelTinh ?? intl.formatMessage({ id: 'donvihanhchinh.tp' })}
 					rules={required ? [...rules.required] : []}
 				>
-					<Select
+					<VinSelect
 						placeholder={placeholderTinh ?? intl.formatMessage({ id: 'donvihanhchinh.tp.place' })}
 						options={listTinh?.map((item) => ({
 							key: item.ma,
@@ -92,7 +95,7 @@ const SelectDiaChiHoSoFormItem = (props: {
 			</Col>
 			{/* <Col span={12} md={hasSoNha ? 6 : 8}>
 				<Form.Item label='Quận/Huyện' rules={required ? [...rules.required] : []}>
-					<Select
+					<VinSelect
 						placeholder='Chọn quận/huyện'
 						options={(listHuyen ?? []).map((item) => ({
 							key: item.ma,
@@ -113,7 +116,7 @@ const SelectDiaChiHoSoFormItem = (props: {
 					label={labelXaPhuong ?? intl.formatMessage({ id: 'donvihanhchinh.xa' })}
 					rules={required ? [...rules.required] : []}
 				>
-					<Select
+					<VinSelect
 						placeholder={placeholderXaPhuong ?? intl.formatMessage({ id: 'donvihanhchinh.xa.place' })}
 						allowClear
 						showSearch

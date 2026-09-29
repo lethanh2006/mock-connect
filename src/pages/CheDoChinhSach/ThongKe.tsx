@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, ExportOutlined, PlusOutlined } from '@ant-design/icons';
+import { IconTrash, IconPencil01, IconPlus, IconDownload } from '@/components/Icons';
 import { Button, Card, Collapse, Empty, Modal, Popconfirm, Spin, Tooltip } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -39,7 +39,7 @@ const ThongKeBaoCao = () => {
 					}}
 					style={{ marginLeft: 8 }}
 					type='primary'
-					icon={<PlusOutlined />}
+					icon={<IconPlus />}
 				>
 					Thêm mới
 				</Button>
@@ -62,7 +62,7 @@ const ThongKeBaoCao = () => {
 														else getDataThongKeExcelModel(item.ten, item._id, { filters: [] });
 													}}
 													size='small'
-													icon={<ExportOutlined />}
+													icon={<IconDownload />}
 													type='link'
 												/>
 											</Tooltip>
@@ -73,7 +73,7 @@ const ThongKeBaoCao = () => {
 														handleEdit(item);
 													}}
 													size='small'
-													icon={<EditOutlined />}
+													icon={<IconPencil01 />}
 													type='link'
 												/>
 											</Tooltip>
@@ -89,7 +89,7 @@ const ThongKeBaoCao = () => {
 															e.stopPropagation();
 														}}
 														size='small'
-														icon={<DeleteOutlined />}
+														icon={<IconTrash />}
 														danger
 														type='link'
 													/>

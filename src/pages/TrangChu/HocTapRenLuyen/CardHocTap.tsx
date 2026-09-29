@@ -1,6 +1,6 @@
 import DonutChart from '@/components/Chart/DonutChart';
 import { colorLoaiHocLuc, ELoaiHocLuc } from '@/services/HocTap/constant';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { IconArrowRight } from '@/components/Icons';
 import { Card, Carousel, Col, Row, Space, Tooltip } from 'antd';
 import { history, Link, useIntl, useModel } from 'umi';
 
@@ -31,7 +31,7 @@ const CardKetQuaHocTapDashboard = () => {
 					</div>
 					<Tooltip title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.ketquahoctap.xemchitiet' })}>
 						<Link to={`/hoc-tap/ket-qua-hoc-tap`}>
-							<ArrowRightOutlined />
+							<IconArrowRight />
 						</Link>
 					</Tooltip>
 				</div>
@@ -152,7 +152,7 @@ const CardKetQuaHocTapDashboard = () => {
 							to='/hoc-tap/ket-qua-hoc-tap#may-tinh'
 							title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.ketquahoctap.xemchitiet' })}
 						>
-							<ArrowRightOutlined />
+							<IconArrowRight />
 						</Link>
 					</div>
 				</div>

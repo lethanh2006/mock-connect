@@ -1,6 +1,7 @@
 import { EOperatorType } from '@/components/Table/constant';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
+import { EDoiTuongNhap } from '@/services/DiemRenLuyenV2/MinhChung/MauDon/constants';
 import type { MinhChungDrl } from '@/services/DiemRenLuyenV2/MinhChung/typing';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -11,7 +12,7 @@ const DanhSachMinhChung = () => {
 
 	useEffect(() => {
 		getAllModel(true, undefined, { dungChoSuKien: false }, [
-			{ field: 'doiTuongNhap', operator: EOperatorType.CONTAIN, values: ['SINH_VIEN'] },
+			{ field: 'doiTuongNhap', operator: EOperatorType.CONTAIN, values: [EDoiTuongNhap.SINH_VIEN] },
 		]);
 
 		return () => {};
@@ -43,9 +44,9 @@ const DanhSachMinhChung = () => {
 			<TableStaticData
 				columns={columns}
 				data={danhSach?.filter((item) => {
-					return item?.doiTuongNhap?.includes('SINH_VIEN');
+					return item?.doiTuongNhap?.includes(EDoiTuongNhap.SINH_VIEN);
 				})}
-				otherProps={{ scrol: { x: 350 }, pagination: false }}
+				otherProps={{ scroll: { x: 350 }, pagination: false }}
 			/>
 		</div>
 	);

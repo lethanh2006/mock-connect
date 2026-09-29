@@ -6,7 +6,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type VanBanHuongDan } from '@/services/TienIch/VanBanHuongDan/typing';
 import { ELoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
-import { FileExcelOutlined, PaperClipOutlined, SaveOutlined } from '@ant-design/icons';
+import { IconFile, IconPaperClip45Degree, IconSave } from '@/components/Icons';
 import { Button } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -74,7 +74,7 @@ const FileList = () => {
 			render: (val, rec) =>
 				val ? (
 					<>
-						<PaperClipOutlined />{' '}
+						<IconPaperClip45Degree />{' '}
 						<a
 							onClick={() => {
 								setUrl(val);
@@ -98,7 +98,7 @@ const FileList = () => {
 							loading={loadingXemSau}
 							type='link'
 							danger
-							icon={<FileExcelOutlined />}
+							icon={<IconFile />}
 							tooltip={intl.formatMessage({ id: 'vanbanhuongdan.form.unsave' })}
 							onClick={() => handleBoXemSau(danhSachXemSau?.find((items) => items?.sourceId === rec?._id))}
 						/>
@@ -107,7 +107,7 @@ const FileList = () => {
 							className='text-success'
 							loading={loadingXemSau}
 							type='link'
-							icon={<SaveOutlined />}
+							icon={<IconSave />}
 							tooltip={intl.formatMessage({ id: 'vanbanhuongdan.form.save' })}
 							onClick={() => handleXemSau(rec)}
 						/>

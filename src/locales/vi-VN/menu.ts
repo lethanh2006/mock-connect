@@ -196,4 +196,13 @@ export default {
 	'menu.Finance.PaymentTracking': 'Theo dõi thanh toán',
 	'menu.Finance.Scholarship': 'Học bổng / Hỗ trợ tài chính',
 	'menu.Finance.FinancialPlanning': 'Lập kế hoạch tài chính',
+	'menu.StudentSupportGroup': 'HỖ TRỢ & PHÚC LỢI SINH VIÊN',
+	'menu.HealthClinic': 'Y tế & Chăm sóc sức khỏe',
+	'menu.HealthClinic.HealthInsurance': 'Bảo hiểm y tế',
+	'menu.HealthClinic.HealthCheckup': 'Kiểm tra sức khỏe',
+	'menu.CampusLifeGroup': 'ĐỜI SỐNG HỌC ĐƯỜNG',
+	'menu.StudentHousing': 'Ký túc xá',
+	'menu.StudentHousing.DangKy': 'Đăng ký',
+	'menu.StudentHousing.LichSu': 'Lịch sử',
+	'menu.FinanceGroup': 'TÀI CHÍNH',
 };

@@ -1,3 +1,7 @@
+import EmptyState from '@/components/EmptyState';
+import { Button, IconRotateArrow, IconShieldInfo } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import VinSelect from '@/components/VinSelect';
 import PageCard from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
 import { ETrangThaiMinhChung } from '@/services/KyTucXa/MienKyTucXa/constants';
@@ -5,9 +9,8 @@ import { ETrangThaiThanhToanKTX } from '@/services/KyTucXa/PhieuDangKy/constant'
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import { Phong } from '@/services/KyTucXa/Phong/typing';
 import { formatDateTime } from '@/utils/formatDate';
-import { getPublicAssetPath } from '@/utils/path';
-import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Alert, Button, Col, Empty, Flex, Input, message, Row, Select, Space, Spin } from 'antd';
+import { toast } from '@/utils/toast';
+import { Alert, Flex, Input, Space, Spin } from 'antd';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -242,7 +245,7 @@ const DangKyKyTucXa = () => {
 		if (dangMienKtx) return;
 
 		if (coFormDonDangKy(recLichSu)) {
-			message.warning(intl.formatMessage({ id: 'kytucxa.dangky.message.daCoLichSu' }));
+			toast.warning(intl.formatMessage({ id: 'kytucxa.dangky.message.daCoLichSu' }));
 			return;
 		}
 
@@ -282,161 +285,164 @@ const DangKyKyTucXa = () => {
 
 	if (!recDot?._id) {
 		return (
-			<PageCard title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}>
-				<Empty description={intl.formatMessage({ id: 'kytucxa.dangky.empty.noDotDangKy' })} />
+			<PageCard stickyHeader title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}>
+				<div className='page-card-custom'>
+					<EmptyState description={intl.formatMessage({ id: 'kytucxa.dangky.empty.noDotDangKy' })} />
+				</div>
 			</PageCard>
 		);
 	}
 
 	return (
-		<PageCard title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}>
-			{recDot?.isMienKyTucXa && <ExemptionBanner recDot={recDot} coThongTinPheDuyet={coThongTinPheDuyet} />}
+		<PageCard stickyHeader title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}>
+			<div className='page-card-custom'>
+				{recDot?.isMienKyTucXa && <ExemptionBanner recDot={recDot} coThongTinPheDuyet={coThongTinPheDuyet} />}
 
-			<Flex justify='space-between' align='center' style={{ marginBottom: 8 }}>
-				<Space wrap>
-					<Search
-						placeholder={intl.formatMessage({ id: 'kytucxa.dangky.filter.searchPlaceholder' })}
-						style={{ width: 250 }}
-						allowClear
-						onChange={(e) => searchTenPhong(e.target.value)}
-						onSearch={(value) => {
-							searchTenPhong.cancel();
-							searchTenPhong(value);
-							searchTenPhong.flush();
-						}}
-					/>
-					<SelectToaNhaKTX
-						style={{ width: 250 }}
-						allowClear
-						onChange={(val) => handleFilterChange(['room', 'toaNha', '_id'], val, EOperatorType.INCLUDE)}
-					/>
-					<SelectDanhMucChungKTX
-						condition={{ maLoai: 'LOAI_PHONG_KTX' }}
-						style={{ width: 250 }}
-						allowClear
-						onChange={(val) => handleFilterChange(['maLoaiPhongKtx'], val, EOperatorType.INCLUDE)}
-					/>
-					<Select
-						style={{ width: 250 }}
-						placeholder={intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.placeholder' })}
-						onChange={(val) => {
-							if (val) {
-								const [min, max] = val.split('-').map(Number);
-								handleFilterChange(['sucChua'], [min, max], EOperatorType.BETWEEN);
-							} else {
-								handleFilterChange(['sucChua'], undefined, EOperatorType.BETWEEN);
-							}
-						}}
-						options={[
-							{
-								value: '3-6',
-								label: intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.option1' }),
-							},
-							{
-								value: '6-12',
-								label: intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.option2' }),
-							},
-							{
-								value: '12-50',
-								label: intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.option3' }),
-							},
-						]}
-						allowClear
-					/>
-				</Space>
+				<Flex justify='space-between' align='center' style={{ marginBottom: 8 }}>
+					<Space wrap>
+						<Search
+							placeholder={intl.formatMessage({ id: 'kytucxa.dangky.filter.searchPlaceholder' })}
+							style={{ width: 250 }}
+							allowClear
+							onChange={(e) => searchTenPhong(e.target.value)}
+							onSearch={(value) => {
+								searchTenPhong.cancel();
+								searchTenPhong(value);
+								searchTenPhong.flush();
+							}}
+						/>
+						<SelectToaNhaKTX
+							style={{ width: 250 }}
+							allowClear
+							onChange={(val) => handleFilterChange(['room', 'toaNha', '_id'], val, EOperatorType.INCLUDE)}
+						/>
+						<SelectDanhMucChungKTX
+							condition={{ maLoai: 'LOAI_PHONG_KTX' }}
+							style={{ width: 250 }}
+							allowClear
+							onChange={(val) => handleFilterChange(['maLoaiPhongKtx'], val, EOperatorType.INCLUDE)}
+						/>
+						<VinSelect
+							style={{ width: 250 }}
+							placeholder={intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.placeholder' })}
+							onChange={(val) => {
+								if (val) {
+									const [min, max] = val.split('-').map(Number);
+									handleFilterChange(['sucChua'], [min, max], EOperatorType.BETWEEN);
+								} else {
+									handleFilterChange(['sucChua'], undefined, EOperatorType.BETWEEN);
+								}
+							}}
+							options={[
+								{
+									value: '3-6',
+									label: intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.option1' }),
+								},
+								{
+									value: '6-12',
+									label: intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.option2' }),
+								},
+								{
+									value: '12-50',
+									label: intl.formatMessage({ id: 'kytucxa.dangky.filter.sucChua.option3' }),
+								},
+							]}
+							allowClear
+						/>
+					</Space>
 
-				<Button icon={<ReloadOutlined />} loading={loading} onClick={getData} />
-			</Flex>
+					<Button variant='outline' icon={<IconRotateArrow />} loading={loading} onClick={getData} />
+				</Flex>
 
-			<Alert
-				type='info'
-				showIcon
-				icon={<InfoCircleOutlined />}
-				style={{ marginBottom: 12, marginTop: 12 }}
-				message={
-					<span>
-						{intl.formatMessage(
-							{ id: 'kytucxa.dangky.alert.thoiGianDangKy' },
-							{
-								tenDot: <b style={{ color: '#0E50CF' }}>{recDot?.tenDot}</b>,
-								tuNgay: (
-									<b style={{ color: '#0E50CF' }}>
-										{recDot?.thoiGianBatDau ? formatDateTime(recDot.thoiGianBatDau) : '--'}
-									</b>
-								),
-								denNgay: (
-									<b style={{ color: '#0E50CF' }}>
-										{recDot?.thoiGianKetThuc ? formatDateTime(recDot.thoiGianKetThuc) : '--'}
-									</b>
-								),
-							},
-						)}
-					</span>
-				}
-			/>
-
-			{daCoLichSuDangKy ? (
 				<Alert
-					type='warning'
+					type='info'
 					showIcon
-					style={{ marginBottom: 12 }}
-					message={intl.formatMessage({ id: 'kytucxa.dangky.alert.daCoLichSu' })}
+					icon={<IconShieldInfo />}
+					style={{ marginBottom: 12, marginTop: 12 }}
+					message={
+						<span>
+							{intl.formatMessage(
+								{ id: 'kytucxa.dangky.alert.thoiGianDangKy' },
+								{
+									tenDot: <b style={{ color: '#0E50CF' }}>{recDot?.tenDot}</b>,
+									tuNgay: (
+										<b style={{ color: '#0E50CF' }}>
+											{recDot?.thoiGianBatDau ? formatDateTime(recDot.thoiGianBatDau) : '--'}
+										</b>
+									),
+									denNgay: (
+										<b style={{ color: '#0E50CF' }}>
+											{recDot?.thoiGianKetThuc ? formatDateTime(recDot.thoiGianKetThuc) : '--'}
+										</b>
+									),
+								},
+							)}
+						</span>
+					}
 				/>
-			) : null}
 
-			<hr
-				style={{
-					marginTop: 16,
-					marginBottom: 16,
-					border: 'none',
-					borderTop: '1px solid #f0f0f0',
-				}}
-			/>
-
-			<Spin spinning={loading || loadingLichSu}>
-				{danhSachHienThi?.length ? (
-					<>
-						<Row gutter={[12, 12]}>
-							{danhSachPhongDangHienThi.map((phong, index) => {
-								const lichSuDangKy = getLichSuDangKyTheoPhong(phong);
-
-								return (
-									<Col
-										key={phong._id}
-										xs={24}
-										md={12}
-										xl={8}
-										className='room-list-col room-list-col--enter'
-										style={{ animationDelay: `${(index % SO_PHONG_MOI_LAN_HIEN_THI) * 35}ms` }}
-									>
-										<CardPhong
-											phong={phong}
-											lichSuDangKy={lichSuDangKy}
-											daCoLichSuDangKy={daCoLichSuDangKy}
-											laPhongDaDangKy={isPhongDaDangKy(phong)}
-											onOpenLichSuDangKy={handleOpenLichSuDangKy}
-											onXemChiTiet={handleXemChiTiet}
-											onDangKy={handleDangKy}
-											khoaDangKy={dangMienKtx}
-										/>
-									</Col>
-								);
-							})}
-						</Row>
-						{soPhongHienThi < danhSachHienThi.length ? (
-							<div ref={loadMoreRef} className='room-list-load-more'>
-								<Spin size='small' spinning={dangTaiThemPhong} />
-							</div>
-						) : null}
-					</>
-				) : (
-					<Empty
-						style={{ marginTop: 32, marginBottom: 32 }}
-						description={intl.formatMessage({ id: 'kytucxa.dangky.empty.noData' })}
-						image={getPublicAssetPath('images/empty.png')}
+				{daCoLichSuDangKy ? (
+					<Alert
+						type='warning'
+						showIcon
+						style={{ marginBottom: 12 }}
+						message={intl.formatMessage({ id: 'kytucxa.dangky.alert.daCoLichSu' })}
 					/>
-				)}
-			</Spin>
+				) : null}
+
+				<hr
+					style={{
+						marginTop: 16,
+						marginBottom: 16,
+						border: 'none',
+						borderTop: '1px solid #f0f0f0',
+					}}
+				/>
+
+				<Spin spinning={loading || loadingLichSu}>
+					{danhSachHienThi?.length ? (
+						<>
+							<Row gutter={[12, 12]}>
+								{danhSachPhongDangHienThi.map((phong, index) => {
+									const lichSuDangKy = getLichSuDangKyTheoPhong(phong);
+
+									return (
+										<Col
+											key={phong._id}
+											xs={24}
+											md={12}
+											xl={8}
+											className='room-list-col room-list-col--enter'
+											style={{ animationDelay: `${(index % SO_PHONG_MOI_LAN_HIEN_THI) * 35}ms` }}
+										>
+											<CardPhong
+												phong={phong}
+												lichSuDangKy={lichSuDangKy}
+												daCoLichSuDangKy={daCoLichSuDangKy}
+												laPhongDaDangKy={isPhongDaDangKy(phong)}
+												onOpenLichSuDangKy={handleOpenLichSuDangKy}
+												onXemChiTiet={handleXemChiTiet}
+												onDangKy={handleDangKy}
+												khoaDangKy={dangMienKtx}
+											/>
+										</Col>
+									);
+								})}
+							</Row>
+							{soPhongHienThi < danhSachHienThi.length ? (
+								<div ref={loadMoreRef} className='room-list-load-more'>
+									<Spin size='small' spinning={dangTaiThemPhong} />
+								</div>
+							) : null}
+						</>
+					) : (
+						<EmptyState
+							style={{ marginTop: 32, marginBottom: 32 }}
+							description={intl.formatMessage({ id: 'kytucxa.dangky.empty.noData' })}
+						/>
+					)}
+				</Spin>
+			</div>
 
 			<ChiTietPhong
 				daCoLichSuDangKy={daCoLichSuDangKy}

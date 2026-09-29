@@ -1,7 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { colorXepLoaiTheChat, EChiSoSoSanh } from '@/services/TienIch/TheChat/constant';
 import type { TheChat } from '@/services/TienIch/TheChat/typing';
-import { CaretRightOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { IconArrowRight, IconShieldInfo } from '@/components/Icons';
 import { Collapse, Descriptions, Space, Tag } from 'antd';
 import { formatDateTime } from '@/utils/formatDate';
 import React, { useState } from 'react';
@@ -51,7 +51,7 @@ const ChiTietKetQuaDanhGia: React.FC<KetQuaDanhGiaCollapseProps> = ({ danhSachKe
 
 	return (
 		<>
-			<Collapse expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}>
+			<Collapse expandIcon={({ isActive }) => <IconArrowRight rotate={isActive ? 90 : 0} />}>
 				{Object.keys(ketQuaTheoDanhMuc).map((maDanhMuc) => {
 					const ketQuaDanhMuc = ketQuaTheoDanhMuc[maDanhMuc];
 					const ketQuaTotNhat = ketQuaTotNhatTheoDanhMuc[maDanhMuc];
@@ -96,7 +96,7 @@ const ChiTietKetQuaDanhGia: React.FC<KetQuaDanhGiaCollapseProps> = ({ danhSachKe
 													{danhMuc?.suDungThietBiNgoaiVi && (
 														<ButtonExtend
 															type='link'
-															icon={<InfoCircleOutlined />}
+															icon={<IconShieldInfo />}
 															onClick={() => {
 																setData(item?.metadata);
 																setVisibleModal(true);

@@ -1,6 +1,6 @@
 import NoticeList from '@/components/RightContent/NoticeIcon/NoticeList';
 import ViewThongBao from '@/pages/ThongBao/components/ViewThongBao';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { IconArrowRight } from '@/components/Icons';
 import { Card, Modal, Tabs } from 'antd';
 import { useState } from 'react';
 import { Link, useIntl, useModel } from 'umi';
@@ -25,7 +25,7 @@ const TinTucDashboardWrapper = () => {
 
 				<div style={{ textAlign: 'right', marginTop: 12 }}>
 					<Link to='/thong-bao'>
-						{intl.formatMessage({ id: 'tintuc.dashboard.action.viewMore' })} <ArrowRightOutlined />
+						{intl.formatMessage({ id: 'tintuc.dashboard.action.viewMore' })} <IconArrowRight />
 					</Link>
 				</div>
 

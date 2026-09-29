@@ -1,5 +1,5 @@
 import { EOperatorType } from '@/components/Table/constant';
-import { SearchOutlined } from '@ant-design/icons';
+import { IconMagnifyingGlass } from '@/components/Icons';
 import { Button, Card, Collapse, Form, Input, Space } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -31,7 +31,7 @@ const CauHoiThuongGap = () => {
 						<Form.Item name='cauHoi'>
 							<Input placeholder={intl.formatMessage({ id: 'cauhoithuonggap.timkiem.place' })} allowClear />
 						</Form.Item>
-						<Button icon={<SearchOutlined />} htmlType='submit' type='primary'>
+						<Button icon={<IconMagnifyingGlass />} htmlType='submit' type='primary'>
 							{intl.formatMessage({ id: 'cauhoithuonggap.timkiem' })}
 						</Button>
 					</Form>

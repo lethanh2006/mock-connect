@@ -1,9 +1,11 @@
 import { getTransactionMePage } from '@/services/TaiChinh/KenhThanhToan';
 import { inputFormat } from '@/utils/utils';
-import { Button, Image, message } from 'antd';
+import { Button } from '@/components/Icons';
+import { Image } from 'antd';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useIntl } from 'umi';
 import type { IPaymentCollect } from './typing';
+import { toast } from '@/utils/toast';
 
 interface PaymentCollectViewProps {
 	data: IPaymentCollect;
@@ -61,11 +63,11 @@ const PaymentCollectView: React.FC<PaymentCollectViewProps> = ({
 				const res = await getTransactionMePage();
 				const transactions: any[] = res?.data?.data ?? [];
 				if (Array.isArray(transactions) && transactionIdentityCodes.length > 0) {
-				const hasSuccess = transactions.some(
-					(t: any) =>
-						t.status === 'success' &&
-						transactionIdentityCodes.includes(t.identityCode ?? t.billIdentityCode ?? ''),
-				);
+					const hasSuccess = transactions.some(
+						(t: any) =>
+							t.status === 'success' &&
+							transactionIdentityCodes.includes(t.identityCode ?? t.billIdentityCode ?? ''),
+					);
 					if (hasSuccess) {
 						setViewStatus('success');
 						if (pollingRef.current) clearInterval(pollingRef.current);
@@ -100,7 +102,7 @@ const PaymentCollectView: React.FC<PaymentCollectViewProps> = ({
 
 	const handleCopyAccount = useCallback(() => {
 		navigator.clipboard.writeText(data.accountNumber ?? '');
-		message.success(intl.formatMessage({ id: 'taichinh.thanhtoan.paycollect.copied' }));
+		toast.success(intl.formatMessage({ id: 'taichinh.thanhtoan.paycollect.copied' }));
 	}, [data.accountNumber, intl]);
 
 	const formatTime = (seconds: number) => {
@@ -121,7 +123,7 @@ const PaymentCollectView: React.FC<PaymentCollectViewProps> = ({
 					<div className='payment-collect-view__expired-desc'>
 						{intl.formatMessage({ id: 'taichinh.thanhtoan.paycollect.expired.desc' })}
 					</div>
-					<Button type='primary' size='large' onClick={handleRetry} style={{ marginTop: 16 }}>
+					<Button variant='default' size='lg' onClick={handleRetry} style={{ marginTop: 16 }}>
 						{intl.formatMessage({ id: 'taichinh.thanhtoan.paycollect.retry' })}
 					</Button>
 				</div>
@@ -179,7 +181,7 @@ const PaymentCollectView: React.FC<PaymentCollectViewProps> = ({
 					</span>
 					<span className='payment-collect-view__info-value payment-collect-view__info-value--copyable'>
 						{data.accountNumber}
-						<Button type='link' size='small' onClick={handleCopyAccount} style={{ padding: '0 4px', marginLeft: 8 }}>
+						<Button variant='link' size='sm' onClick={handleCopyAccount} style={{ padding: '0 4px', marginLeft: 8 }}>
 							📋
 						</Button>
 					</span>
@@ -215,7 +217,7 @@ const PaymentCollectView: React.FC<PaymentCollectViewProps> = ({
 			</div>
 
 			<div className='payment-collect-view__footer'>
-				<Button block size='large' onClick={handleCancel}>
+				<Button variant='outline' size='lg' style={{ width: '100%' }} onClick={handleCancel}>
 					{intl.formatMessage({ id: 'taichinh.thanhtoan.paycollect.cancel' })}
 				</Button>
 			</div>

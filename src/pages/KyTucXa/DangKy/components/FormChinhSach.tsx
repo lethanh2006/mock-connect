@@ -1,4 +1,5 @@
-import { Checkbox, Col, Divider, Form, FormInstance, Row } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import { Checkbox, Divider, Form, FormInstance } from 'antd';
 import { useIntl } from 'umi';
 
 const commitmentItems = [

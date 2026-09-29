@@ -1,7 +1,7 @@
 import { DANH_SACH_QUOC_TICH } from '@/services/Core/QuocTich/danhSach';
 import { getLocalizedName } from '@/utils/localeName';
-import { Select } from 'antd';
 import { useIntl } from 'umi';
+import VinSelect from '@/components/VinSelect';
 
 /**
  * Secect Căn cứ pháp lý để cho vào FormItem
@@ -20,7 +20,7 @@ const SelectQuocTich = (props: {
 	const { value, onChange, multiple, allowClear, placeholder, selectTen, disabled } = props;
 
 	return (
-		<Select
+		<VinSelect
 			mode={multiple ? 'multiple' : undefined}
 			value={value}
 			allowClear={allowClear}

@@ -97,6 +97,7 @@ export default () => {
 			trangThaiNopBCS?: string;
 			trangThaiPhongCTSV?: string;
 			idDotChamDiemRenLuyen?: string;
+			ssoIdSinhVien?: string;
 		},
 		messageSuccess = 'Gửi câu trả lời thành công',
 	): Promise<any> => {

@@ -1,5 +1,5 @@
 import FormVanBan from '@/pages/KhaiBaoQuyTrinh/VanBan/components/Form';
-import { PlusOutlined } from '@ant-design/icons';
+import { IconPlus } from '@/components/Icons';
 import { Button, Modal, Select, Spin } from 'antd';
 import { CSSProperties, useEffect } from 'react';
 import { useModel } from 'umi';
@@ -54,7 +54,7 @@ const SelectVanBan = (props: {
 				/>
 				{hasCreate ? (
 					<>
-						<Button icon={<PlusOutlined />} onClick={onAddNew} />
+						<Button icon={<IconPlus />} onClick={onAddNew} />
 						<Modal
 							destroyOnClose
 							open={visibleForm}

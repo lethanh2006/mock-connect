@@ -1,7 +1,9 @@
 import MyDatePicker from '@/components/MyDatePicker';
 import type { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
 import rules from '@/utils/rules';
-import { Checkbox, Col, Divider, Form, FormInstance, Input, Radio, Row, Space } from 'antd';
+import { Checkbox, Divider, Form, FormInstance, Radio, Space } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import Input from '@/components/MyInput';
 import { useIntl } from 'umi';
 import FormItemNguoiThanKTX, {
 	chuanHoaDanhSachLienHeKhanCap,

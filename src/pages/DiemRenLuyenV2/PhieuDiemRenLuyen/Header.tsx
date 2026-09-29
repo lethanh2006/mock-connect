@@ -1,4 +1,4 @@
-import { SaveOutlined, SendOutlined } from '@ant-design/icons';
+import { IconSave, IconSend } from '@/components/Icons';
 import { Button, Col, Row, Space } from 'antd';
 import { ENguoiTraLoiDrl, ETrangThaiDanhGia } from '@/services/DiemRenLuyenV2/PhieuDiemRenLuyen/constants';
 
@@ -52,7 +52,7 @@ export const Header = ({
 				disabled={(formSubmiting && !dangGuiNgay) || disabled}
 				type='primary'
 			>
-				{intl.formatMessage({ id: 'diemrenluyen.header.button.guiphongtchc' })} <SendOutlined style={{ transform: 'translate(1px, -1px) rotate(-45deg)' }} />
+				{intl.formatMessage({ id: 'diemrenluyen.header.button.guiphongtchc' })} <IconSend style={{ transform: 'translate(1px, -1px) rotate(-45deg)' }} />
 			</Button>
 		);
 	};
@@ -71,7 +71,7 @@ export const Header = ({
 				loading={formSubmiting && !dangGuiNgay}
 				disabled={(formSubmiting && dangGuiNgay) || disabled}
 			>
-				{intl.formatMessage({ id: 'diemrenluyen.modal.button.luuvagui' })} <SaveOutlined />
+				{intl.formatMessage({ id: 'diemrenluyen.modal.button.luuvagui' })} <IconSave />
 			</Button>
 		);
 	};

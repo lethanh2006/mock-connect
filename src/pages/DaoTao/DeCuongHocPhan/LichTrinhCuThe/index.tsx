@@ -1,5 +1,5 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { MenuOutlined } from '@ant-design/icons';
+import { IconHumberger } from '@/components/Icons';
 import { Col, Collapse, Empty, Row, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -26,7 +26,7 @@ const LichTrinhCuTheList = () => {
 		<Row gutter={[12, 12]}>
 			<Col span={24}>
 				<Space wrap>
-					<ButtonExtend icon={<MenuOutlined />} disabled={!danhSach.length} onClick={onExpandAll}>
+					<ButtonExtend icon={<IconHumberger />} disabled={!danhSach.length} onClick={onExpandAll}>
 						{intl.formatMessage({ id: 'lophocphan.id.decuong.lichthi.xemdaydu' })}
 					</ButtonExtend>
 				</Space>

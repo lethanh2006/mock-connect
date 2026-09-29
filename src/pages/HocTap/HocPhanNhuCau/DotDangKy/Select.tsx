@@ -10,11 +10,12 @@ const SelectDotDangKyHocPhanNhuCau = (props: {
 	onChange?: (val?: string) => void;
 	multiple?: boolean;
 	allowClear?: boolean;
+	className?: string;
 	style?: React.CSSProperties;
 	condition?: { maHocKy?: string };
 	isSetRecord?: boolean;
 }) => {
-	const { value, onChange, multiple, allowClear, style, condition, isSetRecord } = props;
+	const { value, onChange, multiple, allowClear, className, style, condition, isSetRecord } = props;
 	const { danhSach, getAllModel, loading } = useModel('sinhvien.nhucauhocphan.dotdangky');
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
@@ -39,7 +40,8 @@ const SelectDotDangKyHocPhanNhuCau = (props: {
 			showSearch
 			optionFilterProp='label'
 			placeholder='Chọn đợt đăng ký nhu cầu học phần'
-			style={{ width: '100%', ...style }}
+			className={className ?? (style?.width == null ? 'field-fill' : undefined)}
+			style={style}
 		/>
 	);
 };

@@ -102,7 +102,7 @@ const HoiDongThamGia = (props: { viewTheoBuoc?: boolean }) => {
 				hideTotal={props.viewTheoBuoc}
 				hideCard={props.viewTheoBuoc}
 				buttons={{ create: false, reload: !props.viewTheoBuoc, filter: !props.viewTheoBuoc }}
-				otherProps={{ pagination: !props.viewTheoBuoc, size: 'small' }}
+				otherProps={{ pagination: props.viewTheoBuoc ? false : undefined, size: 'small' }}
 				title={'Danh sách hội đồng'}
 				modelName={'quytrinh.hoidong'}
 				columns={columns}

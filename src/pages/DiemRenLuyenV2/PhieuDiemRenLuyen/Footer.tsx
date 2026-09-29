@@ -1,6 +1,6 @@
 import { ETrangThaiDuyetBienBanHopDiemRenLuyen } from '@/services/DiemRenLuyenV2/BienBanHop/constant';
 import type { ENguoiTraLoi, ETrangThaiDanhGia } from '@/services/DiemRenLuyenV2/PhieuDiemRenLuyen/constants';
-import { QuestionCircleOutlined, SaveOutlined, SendOutlined } from '@ant-design/icons';
+import { IconSave, IconQuestionCircle, IconSend } from '@/components/Icons';
 import { Button } from 'antd';
 import { useIntl, useModel } from 'umi';
 
@@ -31,7 +31,7 @@ export const Footer = ({ onGuiNgay, onLuuVaGuiSau, formSubmiting, dangGuiNgay, d
 				loading={formSubmiting && dangGuiNgay}
 				type='primary'
 			>
-				{intl.formatMessage({ id: 'diemrenluyen.footer.button.gui' })} <SendOutlined style={{ transform: 'translate(1px, -1px) rotate(-45deg)' }} />
+				{intl.formatMessage({ id: 'diemrenluyen.footer.button.gui' })} <IconSend style={{ transform: 'translate(1px, -1px) rotate(-45deg)' }} />
 			</Button>
 		);
 	};
@@ -43,7 +43,7 @@ export const Footer = ({ onGuiNgay, onLuuVaGuiSau, formSubmiting, dangGuiNgay, d
 				loading={formSubmiting && !dangGuiNgay}
 				disabled={(formSubmiting && dangGuiNgay) || disabled}
 			>
-				{intl.formatMessage({ id: 'diemrenluyen.footer.button.luuvaguisau' })} <SaveOutlined />
+				{intl.formatMessage({ id: 'diemrenluyen.footer.button.luuvaguisau' })} <IconSave />
 			</Button>
 		);
 	};
@@ -63,7 +63,7 @@ export const Footer = ({ onGuiNgay, onLuuVaGuiSau, formSubmiting, dangGuiNgay, d
 						type='primary'
 					>
 						{intl.formatMessage({ id: 'diemrenluyen.form.button.guikhieunai' })}
-						<QuestionCircleOutlined />
+						<IconQuestionCircle />
 					</Button>
 				)
 			}

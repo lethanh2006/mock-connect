@@ -1,9 +1,11 @@
-import FormWaiting from '@/components/Loading/FormWaiting';
-import PageCard from '@/components/PageCard';
+import EmptyState from '@/components/EmptyState';
+import { Button, IconQuestionCircle, IconShieldInfo, IconShorttext } from '@/components/Icons';
+import FormWaiting, { hideFormWaiting } from '@/components/Loading/FormWaiting';
+import PageCard, { Card } from '@/components/PageCard';
 import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { formatDateTime } from '@/utils/formatDate';
-import { FileTextOutlined, InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Alert, Button, Card, Empty, Modal } from 'antd';
+import { CardContent, Card as VinCard } from '@vinuni/ui';
+import { Alert } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import { history, useIntl, useModel } from 'umi';
@@ -70,14 +72,14 @@ const DangKyTinChiPage = () => {
 
 	useEffect(() => {
 		if (!isPageLoading) {
-			Modal.destroyAll();
+			hideFormWaiting();
 			return undefined;
 		}
 
-		FormWaiting(intl.formatMessage({ id: 'dangkytinchi.loading.message' }), intl);
+		FormWaiting(intl.formatMessage({ id: 'dangkytinchi.loading.message' }));
 
 		return () => {
-			Modal.destroyAll();
+			hideFormWaiting();
 		};
 	}, [isPageLoading]);
 
@@ -102,7 +104,9 @@ const DangKyTinChiPage = () => {
 			if (!node) return;
 
 			const rect = node.getBoundingClientRect();
-			setFixedBarRect({ left: rect.left, width: rect.width });
+			const left = rect.left;
+			const width = rect.width;
+			setFixedBarRect((prev) => (prev?.left === left && prev?.width === width ? prev : { left, width }));
 		};
 
 		updateFixedBarRect();
@@ -117,168 +121,174 @@ const DangKyTinChiPage = () => {
 
 	return (
 		<GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>
-			<div ref={dangKyCardRef}>
-				<PageCard title={intl.formatMessage({ id: 'dangkytinchi.title' })} extra={<FilterDotDangKy />}>
-					{!!phieuDangKy?.soTinChiToiDa &&
-					dotDangKyHienTai &&
-					sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
-						<Alert
-							type='info'
-							showIcon
-							icon={<InfoCircleOutlined />}
-							style={{ marginBottom: 12 }}
-							message={
-								<span>
-									{intl.formatMessage(
-										{ id: 'dangkytinchi.filter.thoigiandangky.title' },
-										{
-											thoigianbatdau: formatDateTime(dotDangKyHienTai?.thoiGianBatDau),
-											thoigianketthuc: formatDateTime(dotDangKyHienTai?.thoiGianKetThuc),
-											b: (chunks) => <b>{chunks}</b>,
-										},
-									)}
+			<PageCard stickyHeader title={intl.formatMessage({ id: 'dangkytinchi.title' })} extra={<FilterDotDangKy />}>
+				<div ref={dangKyCardRef}>
+					<VinCard>
+						<CardContent>
+							{!!phieuDangKy?.soTinChiToiDa &&
+							dotDangKyHienTai &&
+							sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
+								<Alert
+									type='info'
+									showIcon
+									icon={<IconShieldInfo />}
+									style={{ marginBottom: 12 }}
+									message={
+										<span>
+											{intl.formatMessage(
+												{ id: 'dangkytinchi.filter.thoigiandangky.title' },
+												{
+													thoigianbatdau: formatDateTime(dotDangKyHienTai?.thoiGianBatDau),
+													thoigianketthuc: formatDateTime(dotDangKyHienTai?.thoiGianKetThuc),
+													b: (chunks) => <b>{chunks}</b>,
+												},
+											)}
 
-									{phieuDangKy ? (
-										<>
-											.{' '}
-											<span>
-												{intl.formatMessage({ id: 'dangkytinchi.phieudangky.alert.khoangtinchi' })}{' '}
-												<b>
-													{[soTinChiToiThieu, soTinChiToiDa].join('-')}{' '}
-													{intl.formatMessage({ id: 'dangkytinchi.phieudangky.tinchi.title' })}.
-												</b>
-											</span>
-										</>
-									) : null}
-								</span>
-							}
-							action={
-								<Button type='link' size='small' icon={<FileTextOutlined />} onClick={() => setVisibleThongTin(true)} />
-							}
-						/>
-					) : null}
-
-					{dotDangKyHienTai && sinhVienDot ? (
-						sinhVienDot.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.KHONG_DUOC_DK ? (
-							<Empty
-								description={
-									<>
-										<span className='text-error'>
-											{intl.formatMessage({ id: 'dangkytinchi.empty.khongduocphepdangky' })}
+											{phieuDangKy ? (
+												<>
+													.{' '}
+													<span>
+														{intl.formatMessage({ id: 'dangkytinchi.phieudangky.alert.khoangtinchi' })}{' '}
+														<b>
+															{[soTinChiToiThieu, soTinChiToiDa].join('-')}{' '}
+															{intl.formatMessage({ id: 'dangkytinchi.phieudangky.tinchi.title' })}.
+														</b>
+													</span>
+												</>
+											) : null}
 										</span>
-										<br />
-										{intl.formatMessage({ id: 'dangkytinchi.empty.ghichu' })}: {sinhVienDot.ghiChu ?? '--'}
-									</>
-								}
-							/>
-						) : dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
-							<Empty
-								description={
-									<i style={{ color: '#999' }}>
-										{intl.formatMessage(
-											{ id: 'dangkytinchi.empty.alert' },
-											{
-												b: (chunks) => <b>{chunks}</b>,
-											},
-										)}{' '}
-									</i>
-								}
-							/>
-						) : !!phieuDangKy?.soTinChiToiDa ? (
-							<>
-								{sinhVienDot?.ghiChu && (
-									<div>
-										{<QuestionCircleOutlined />} {intl.formatMessage({ id: 'dangkytinchi.empty.ghichu' })}:{' '}
-										<i style={{ color: 'gray' }}>{sinhVienDot.ghiChu}.</i>
-									</div>
-								)}
-								<div style={{ marginBottom: 12 }}>
-									{intl.formatMessage(
-										{ id: 'dangkytinchi.thongtindangky.alert' },
-										{
-											link_tien_trinh: (chunks: any) => (
-												<a
-													href='/hoc-tap/tien-trinh-hoc-tap'
-													onClick={(e) => {
-														e.preventDefault();
-														history.push('/hoc-tap/tien-trinh-hoc-tap');
-													}}
-												>
-													{chunks}
-												</a>
-											),
-
-											link_ket_qua: (chunks: any) => (
-												<a
-													href='/hoc-tap/ket-qua-hoc-tap'
-													onClick={(e) => {
-														e.preventDefault();
-														history.push('/hoc-tap/ket-qua-hoc-tap');
-													}}
-												>
-													{chunks}
-												</a>
-											),
-										},
-									)}
-								</div>
-
-								<DangKyLopHocPhan
-									tongTinChi={tongTinChi}
-									soTinChiToiDa={soTinChiToiDa}
-									danhSachLopHienThi={danhSachLopHienThi}
-									onReload={getLopDangKy}
+									}
+									action={
+										<Button
+											variant='link'
+											size='sm'
+											icon={<IconShorttext />}
+											onClick={() => setVisibleThongTin(true)}
+										/>
+									}
 								/>
-							</>
-						) : (
-							<Empty
-								description={
-									<i style={{ color: '#999' }}>{intl.formatMessage({ id: 'global.formWaiting.dangxuly' })}</i>
-								}
-							/>
-						)
-					) : (
-						<Empty
-							description={
-								<i style={{ color: '#999' }}>
-									{intl.formatMessage({ id: 'dangkytinchi.thongtindangky.empty.khongcodotdangky' })}
-								</i>
-							}
+							) : null}
+
+							{dotDangKyHienTai && sinhVienDot ? (
+								sinhVienDot.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.KHONG_DUOC_DK ? (
+									<EmptyState
+										description={
+											<>
+												<span className='text-error'>
+													{intl.formatMessage({ id: 'dangkytinchi.empty.khongduocphepdangky' })}
+												</span>
+												<br />
+												{intl.formatMessage({ id: 'dangkytinchi.empty.ghichu' })}: {sinhVienDot.ghiChu ?? '--'}
+											</>
+										}
+									/>
+								) : dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
+									<EmptyState
+										description={
+											<i style={{ color: '#999' }}>
+												{intl.formatMessage(
+													{ id: 'dangkytinchi.empty.alert' },
+													{
+														b: (chunks) => <b>{chunks}</b>,
+													},
+												)}{' '}
+											</i>
+										}
+									/>
+								) : !!phieuDangKy?.soTinChiToiDa ? (
+									<>
+										{sinhVienDot?.ghiChu && (
+											<div>
+												{<IconQuestionCircle />} {intl.formatMessage({ id: 'dangkytinchi.empty.ghichu' })}:{' '}
+												<i style={{ color: 'gray' }}>{sinhVienDot.ghiChu}.</i>
+											</div>
+										)}
+										<div style={{ marginBottom: 12 }}>
+											{intl.formatMessage(
+												{ id: 'dangkytinchi.thongtindangky.alert' },
+												{
+													link_tien_trinh: (chunks: any) => (
+														<a
+															href='/hoc-tap/tien-trinh-hoc-tap'
+															onClick={(e) => {
+																e.preventDefault();
+																history.push('/hoc-tap/tien-trinh-hoc-tap');
+															}}
+														>
+															{chunks}
+														</a>
+													),
+
+													link_ket_qua: (chunks: any) => (
+														<a
+															href='/hoc-tap/ket-qua-hoc-tap'
+															onClick={(e) => {
+																e.preventDefault();
+																history.push('/hoc-tap/ket-qua-hoc-tap');
+															}}
+														>
+															{chunks}
+														</a>
+													),
+												},
+											)}
+										</div>
+
+										<DangKyLopHocPhan
+											tongTinChi={tongTinChi}
+											soTinChiToiDa={soTinChiToiDa}
+											danhSachLopHienThi={danhSachLopHienThi}
+											onReload={getLopDangKy}
+										/>
+									</>
+								) : (
+									<EmptyState
+										description={
+											<i style={{ color: '#999' }}>{intl.formatMessage({ id: 'global.formWaiting.dangxuly' })}</i>
+										}
+									/>
+								)
+							) : (
+								<EmptyState
+									description={
+										<i style={{ color: '#999' }}>
+											{intl.formatMessage({ id: 'dangkytinchi.thongtindangky.empty.khongcodotdangky' })}
+										</i>
+									}
+								/>
+							)}
+						</CardContent>
+					</VinCard>
+				</div>
+
+				<div ref={phieuDangKyRef}>
+					<Card title={intl.formatMessage({ id: 'dangkytinchi.phieudangky.danhsachdadangky.title' })}>
+						<PhieuDangKy
+							danhSachLopHienThi={danhSachLopHienThi}
+							tongTinChi={tongTinChi}
+							soTinChiToiDa={soTinChiToiDa}
+							soTinChiToiThieu={soTinChiToiThieu}
+							onReload={getLopDangKy}
 						/>
-					)}
-				</PageCard>
-			</div>
+					</Card>
+				</div>
 
-			<div ref={phieuDangKyRef}>
-				<Card
-					title={intl.formatMessage({ id: 'dangkytinchi.phieudangky.danhsachdadangky.title' })}
-					style={{ marginTop: 12, marginBottom: 84 }}
-				>
-					<PhieuDangKy
-						danhSachLopHienThi={danhSachLopHienThi}
-						tongTinChi={tongTinChi}
-						soTinChiToiDa={soTinChiToiDa}
-						soTinChiToiThieu={soTinChiToiThieu}
-						onReload={getLopDangKy}
-					/>
-				</Card>
-			</div>
+				<CreditRegistrationBar
+					showFixedBar={showFixedBar}
+					fixedBarRect={fixedBarRect}
+					danhSachLopHienThi={danhSachLopHienThi}
+					soTinChiToiThieu={soTinChiToiThieu}
+					soTinChiToiDa={soTinChiToiDa}
+					tongHocPhanDangKy={tongHocPhanDangKy}
+					tongTinChi={tongTinChi}
+					onViewSchedule={() => setVisibleModal(true)}
+					disabledViewSchedule={!danhSachLopHienThi.length}
+				/>
 
-			<CreditRegistrationBar
-				showFixedBar={showFixedBar}
-				fixedBarRect={fixedBarRect}
-				danhSachLopHienThi={danhSachLopHienThi}
-				soTinChiToiThieu={soTinChiToiThieu}
-				soTinChiToiDa={soTinChiToiDa}
-				tongHocPhanDangKy={tongHocPhanDangKy}
-				tongTinChi={tongTinChi}
-				onViewSchedule={() => setVisibleModal(true)}
-				disabledViewSchedule={!danhSachLopHienThi.length}
-			/>
+				<HuongDanDangKyTinChi />
 
-			<HuongDanDangKyTinChi />
-
-			<ViewGhiChuDangKyTinChi visible={visibleThongTin} setVisible={setVisibleThongTin} />
+				<ViewGhiChuDangKyTinChi visible={visibleThongTin} setVisible={setVisibleThongTin} />
+			</PageCard>
 		</GoogleReCaptchaProvider>
 	);
 };

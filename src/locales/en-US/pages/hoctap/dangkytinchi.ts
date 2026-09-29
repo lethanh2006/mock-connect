@@ -208,6 +208,7 @@ export default {
 	'dangkytinchi.vuottin.modal.col.tacdong': 'Action',
 	'dangkytinchi.vuottin.modal.col.nguoixuly': 'Approver',
 	'dangkytinchi.vuottin.modal.col.ghichu': 'Note',
+	'dangkytinchi.vuottin.modal.col.thoigian': 'Time',
 
 	'dangkytinchi.vuottin.status.text.CHO_DUYET': 'Pending',
 	'dangkytinchi.vuottin.status.text.DA_DUYET': 'Approved',

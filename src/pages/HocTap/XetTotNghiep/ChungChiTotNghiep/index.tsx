@@ -12,7 +12,7 @@ import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EPhuongThucTinhDiem } from '@/services/DaoTao/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { CheckCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { IconShieldCheck, IconTrash, IconPencil01 } from '@/components/Icons';
 import { Popconfirm, Tag } from 'antd';
 import { useIntl, useModel } from 'umi';
 import Form from './components/Form';
@@ -57,7 +57,7 @@ const ChungChiTotNghiepPage = () => {
 					const findBac = rec.chungChi.bac?.find((item: any) => item.order === val);
 					return <span>{findBac?.ten}</span>;
 				}
-				return <CheckCircleOutlined className='text-success' />;
+				return <IconShieldCheck className='text-success' />;
 			},
 			onCell,
 		},
@@ -136,7 +136,7 @@ const ChungChiTotNghiepPage = () => {
 						tooltip={intl.formatMessage({ id: 'chungchitotnghiep.columntable.thaotac.tooltip.edit' })}
 						onClick={() => handleEdit(record)}
 						type='link'
-						icon={<EditOutlined />}
+						icon={<IconPencil01 />}
 					/>
 					<Popconfirm
 						onConfirm={() => deleteModel(record._id, getModel)}
@@ -152,7 +152,7 @@ const ChungChiTotNghiepPage = () => {
 							tooltip={intl.formatMessage({ id: 'chungchitotnghiep.columntable.thaotac.tooltip.delete' })}
 							danger
 							type='link'
-							icon={<DeleteOutlined />}
+							icon={<IconTrash />}
 						/>
 					</Popconfirm>
 				</>

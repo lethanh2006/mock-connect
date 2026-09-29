@@ -1,5 +1,6 @@
 import { ColorSuKien, ELoaiSuKienKhac, type ELoaiSuKien } from '@/services/SuKien/constant';
-import { Button, ColorPicker, Form } from 'antd';
+import { Button } from '@/components/Icons';
+import { ColorPicker, Form } from 'antd';
 import type { Color } from 'antd/es/color-picker';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -62,11 +63,12 @@ const PickColorLich = (props: { loaiLich: ELoaiSuKien | ELoaiSuKienKhac }) => {
 			</Form.Item>
 
 			<div className='form-footer'>
-				<Button size='small' loading={formSubmiting} htmlType='submit' type='primary'>
+				<Button size='sm' loading={formSubmiting} type='submit' variant='default'>
 					Xác nhận
 				</Button>
 				<Button
-					size='small'
+					size='sm'
+					variant='outline'
 					onClick={() =>
 						onFinish({
 							maMau: ColorSuKien[loaiLich],

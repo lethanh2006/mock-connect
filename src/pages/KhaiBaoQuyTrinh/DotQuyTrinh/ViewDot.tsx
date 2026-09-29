@@ -3,7 +3,7 @@ import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { primaryColor } from '@/services/base/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
-import { SyncOutlined } from '@ant-design/icons';
+import { IconRotateArrow } from '@/components/Icons';
 import { Card, Timeline } from 'antd';
 
 const ViewDot = (props: { recDot: DotQuyTrinh.IRecord; recQuyTrinh: QuyTrinh.IRecord }) => {
@@ -23,7 +23,7 @@ const ViewDot = (props: { recDot: DotQuyTrinh.IRecord; recQuyTrinh: QuyTrinh.IRe
 				{recDot.danhSachCauHinhThoiGianDot.map((item, index) => (
 					<Timeline.Item
 						key={item.maBuoc}
-						dot={index === indexCurrent ? <SyncOutlined spin /> : undefined}
+						dot={index === indexCurrent ? <IconRotateArrow className='anticon-spin' /> : undefined}
 						color={index <= indexCurrent ? undefined : 'gray'}
 					>
 						<div style={{ color: index === indexCurrent ? primaryColor : undefined }}>

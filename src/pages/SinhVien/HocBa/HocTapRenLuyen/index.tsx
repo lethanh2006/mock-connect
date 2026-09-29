@@ -1,6 +1,7 @@
 import ViewKetQuaHocKy from '@/pages/HocTap/KetQuaHocTap/KetQuaHocKy/ViewKetQua';
 import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
-import { Empty, Spin, Tabs } from 'antd';
+import EmptyState from '@/components/EmptyState';
+import { Spin, Tabs } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import TableDiemHocKyHocBa from './TableDiemHocKy';
@@ -69,7 +70,7 @@ const TabHocTapRenLuyenSinhVien = () => {
 						) : null}
 					</>
 				) : (
-					<Empty description='Không có dữ liệu' />
+					<EmptyState description='Không có dữ liệu' />
 				)}
 			</Spin>
 		</>

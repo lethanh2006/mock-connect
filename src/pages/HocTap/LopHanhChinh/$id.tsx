@@ -2,7 +2,7 @@ import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/DienDan';
 import { AppModules } from '@/services/base/constant';
 import { currentRole } from '@/utils/ip';
-import { TeamOutlined } from '@ant-design/icons';
+import { IconPeople } from '@/components/Icons';
 import { Breadcrumb, Card, Col, Row, Tabs } from 'antd';
 import { useEffect } from 'react';
 import { history, useIntl, useModel, useParams } from 'umi';
@@ -31,7 +31,7 @@ const DetailLopHanhChinh = () => {
 			title={
 				<Breadcrumb style={{ cursor: 'pointer' }}>
 					<Breadcrumb.Item onClick={() => history.push('/lop-hanh-chinh')}>
-						<TeamOutlined /> Lớp hành chính
+						<IconPeople /> Lớp hành chính
 					</Breadcrumb.Item>
 					<Breadcrumb.Item>{record?.ten ?? ''}</Breadcrumb.Item>
 				</Breadcrumb>

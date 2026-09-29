@@ -1,5 +1,7 @@
 import { EOperatorType } from '@/components/Table/constant';
-import { Empty, Select, Spin } from 'antd';
+import EmptyState from '@/components/EmptyState';
+import VinSelect from '@/components/VinSelect';
+import { Spin } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useModel, useIntl } from 'umi';
@@ -52,13 +54,13 @@ const SelectSinhVienDebounce = (props: {
 					undefined,
 					value && !gotData
 						? [
-								{
-									active: true,
-									field: selectMa ? 'ma' : 'ssoId',
-									values: Array.isArray(value) ? value : [value],
-									operator: EOperatorType.INCLUDE,
-								},
-						  ]
+							{
+								active: true,
+								field: selectMa ? 'ma' : 'ssoId',
+								values: Array.isArray(value) ? value : [value],
+								operator: EOperatorType.INCLUDE,
+							},
+						]
 						: undefined,
 					undefined,
 					1,
@@ -81,17 +83,17 @@ const SelectSinhVienDebounce = (props: {
 	return props.isView ? (
 		`${dataView?.ten ?? ''} - ${dataView?.ma ?? ''}`
 	) : (
-		<Select
+		<VinSelect
 			mode={multiple ? 'multiple' : undefined}
 			value={value}
 			onChange={onChange}
 			disabled={disabled}
-			onSearch={(val) => searchDebounceSinhVien(val)}
+			onSearch={(val: string) => searchDebounceSinhVien(val)}
 			notFoundContent={
 				loading ? (
 					<Spin spinning={true} tip={intl.formatMessage({ id: 'diemrenluyen.dot.timkiem' })} style={{ width: '100%', margin: 10 }} />
 				) : (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={intl.formatMessage({ id: 'diemrenluyen.minhchung.khongcodulieu' })} />
+					<EmptyState compact description={intl.formatMessage({ id: 'diemrenluyen.minhchung.khongcodulieu' })} />
 				)
 			}
 			options={danhSach.map((item) => ({

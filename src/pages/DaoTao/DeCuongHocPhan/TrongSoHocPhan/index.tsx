@@ -1,5 +1,5 @@
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { IconQuestionCircle } from '@/components/Icons';
 import { Descriptions, Tooltip } from 'antd';
 import _ from 'lodash';
 import { useEffect } from 'react';
@@ -53,7 +53,7 @@ const TrongSoHocPhanPage = () => {
 				<>
 					Trọng số đánh giá học phần{' '}
 					<Tooltip title='Sinh viên phải đạt điểm từ điểm tối thiểu (ngưỡng điểm) trở lên mới đủ điều kiện đạt học phần'>
-						<QuestionCircleOutlined />
+						<IconQuestionCircle />
 					</Tooltip>
 				</>
 			}

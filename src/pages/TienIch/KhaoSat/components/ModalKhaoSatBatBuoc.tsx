@@ -1,4 +1,4 @@
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { IconShieldCheck } from '@/components/Icons';
 import { Button, Modal, Select } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -31,7 +31,7 @@ const ModalKhaoSatBatBuoc = () => {
 				<>
 					<div style={{ marginTop: 12, textAlign: 'center' }}>
 						<div>
-							<CheckCircleOutlined
+							<IconShieldCheck
 								style={{ color: 'var(--ant-success-color)', fontSize: 100, marginBottom: 12 }}
 								type='primary'
 							/>

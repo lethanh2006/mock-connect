@@ -10,7 +10,7 @@ import {
 import { BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { IconArrowRight } from '@/components/Icons';
 import { Button, Card, Carousel, Empty, Segmented, Space, Tag, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
@@ -109,7 +109,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 							#{item.assignment.tenLopHocPhan}
 						</Link>
 						<Link to={`/hoc-tap/lop-tin-chi/${item.assignment.lopHocPhanId}#bai-tap`}>
-							<ArrowRightOutlined className='arrow-icon' />
+							<IconArrowRight className='arrow-icon' />
 						</Link>
 					</div>
 

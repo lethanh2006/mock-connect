@@ -9,13 +9,7 @@ import { EPhanHe } from '@/services/QuyTrinh/constant';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { formatDate } from '@/utils/formatDate';
-import {
-	ArrowRightOutlined,
-	DeleteOutlined,
-	DollarCircleOutlined,
-	DownloadOutlined,
-	EyeOutlined,
-} from '@ant-design/icons';
+import { IconArrowRight, IconTrash, IconFileMoney, IconDownload, IconEyeOpen } from '@/components/Icons';
 import { Button, Card, Dropdown, Menu, Modal, Popconfirm, Tag, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -273,7 +267,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 									history.push(`/khai-bao-quy-trinh/${recordVal?._id}`);
 								}}
 								type='link'
-								icon={<EyeOutlined />}
+								icon={<IconEyeOpen />}
 							/>
 						</Tooltip>
 						{recordVal.identityCode && (
@@ -290,7 +284,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 										setVisibleModal(true);
 									}}
 									type='link'
-									icon={<DollarCircleOutlined style={{ color: '#FFAF0B' }} />}
+									icon={<IconFileMoney style={{ color: '#FFAF0B' }} />}
 								/>
 							</Tooltip>
 						)}
@@ -319,7 +313,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 									}
 									placement='bottomLeft'
 								>
-									<Button loading={loading} type='link' icon={<DownloadOutlined style={{ color: '#007AFF' }} />} />
+									<Button loading={loading} type='link' icon={<IconDownload style={{ color: '#007AFF' }} />} />
 								</Dropdown>
 							</Tooltip>
 						)}
@@ -336,7 +330,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 									disabled={!allowDelete}
 									danger
 									type='link'
-									icon={<DeleteOutlined />}
+									icon={<IconTrash />}
 								/>
 							</Popconfirm>
 						</Tooltip>
@@ -416,7 +410,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 				footer={
 					<>
 						<Button
-							icon={<ArrowRightOutlined />}
+							icon={<IconArrowRight />}
 							type={'primary'}
 							onClick={() => {
 								handleRedirect(recordQuyTrinh?._id ?? '');

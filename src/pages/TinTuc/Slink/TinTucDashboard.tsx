@@ -1,6 +1,6 @@
 import anh from '@/assets/noimg.png';
 import { formatDate } from '@/utils/formatDate';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { IconArrowRight } from '@/components/Icons';
 import { Col, Empty, Row, Spin, Tooltip } from 'antd';
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
@@ -73,7 +73,7 @@ const TinTucDashboardSlink = () => {
 
 			<div style={{ textAlign: 'right', marginTop: 12 }}>
 				<Link to='/tin-tuc'>
-					{intl.formatMessage({ id: 'tintuc.viewMore' })} <ArrowRightOutlined />
+					{intl.formatMessage({ id: 'tintuc.viewMore' })} <IconArrowRight />
 				</Link>
 			</div>
 		</>

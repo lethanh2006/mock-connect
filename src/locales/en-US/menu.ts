@@ -197,4 +197,13 @@ export default {
 	'menu.Finance.PaymentTracking': 'Payment Tracking',
 	'menu.Finance.Scholarship': 'Scholarship/FA Status',
 	'menu.Finance.FinancialPlanning': 'Financial Planning',
+	'menu.StudentSupportGroup': 'STUDENT SUPPORT & WELL-BEING',
+	'menu.HealthClinic': 'Health & Clinic',
+	'menu.HealthClinic.HealthInsurance': 'Health Insurance',
+	'menu.HealthClinic.HealthCheckup': 'Health Checkup',
+	'menu.CampusLifeGroup': 'CAMPUS LIFE',
+	'menu.StudentHousing': 'Student Housing',
+	'menu.StudentHousing.DangKy': 'Registration',
+	'menu.StudentHousing.LichSu': 'History',
+	'menu.FinanceGroup': 'FINANCE',
 };

@@ -1,6 +1,6 @@
 import { type DotXetTotNghiep } from '@/services/HocTap/XetTotNghiep/typing';
 import rules from '@/utils/rules';
-import { WarningFilled } from '@ant-design/icons';
+import { IconWarningTriangle } from '@/components/Icons';
 import { Alert, Button, Col, Form, Input, Modal, Row } from 'antd';
 import { useIntl, useModel } from 'umi';
 
@@ -31,7 +31,7 @@ const ModalYKien = (props: { type: 'phan-hoi' | 'hoan' }) => {
 					description={intl.formatMessage({ id: 'xettotnghiep.modal.ykien.hoan.error' })}
 					style={{ marginBottom: 10 }}
 					showIcon
-					icon={<WarningFilled />}
+					icon={<IconWarningTriangle />}
 				/>
 			) : null}
 

@@ -11,12 +11,16 @@ import { BaoHiemYTe } from '@/services/BaoHiemYTe/typing';
 import { buildUpLoadFileMultipart, EFileScope } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
-import { resetFieldsForm } from '@/utils/utils';
-import { Button, Col, Divider, Form, Input, Row, Select } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import Input from '@/components/MyInput';
+import VinSelect from '@/components/VinSelect';
+import { Button } from '@/components/Icons';
+import { Divider, Form } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import { usePersonalInfo } from '../hooks/usePersonalInfo';
 import PersonalInfoFields from './PersonalInfoFields';
+import { resetFieldsForm } from '@/utils/utils';
 
 interface IProps {
 	record?: BaoHiemYTe.IDotDangKy;
@@ -206,7 +210,7 @@ const FormMienBHYT = ({ record, isView, edit, onCancel, getData }: IProps) => {
 								label={t('baohiemyte.mien.doiTuongThamGiaBHYT')}
 								rules={[...rules.required]}
 							>
-								<Select
+								<VinSelect
 									disabled={readOnly}
 									options={doiTuongThamGiaBHYTOptions}
 									placeholder={t('baohiemyte.mien.placeholder.select')}
@@ -313,11 +317,11 @@ const FormMienBHYT = ({ record, isView, edit, onCancel, getData }: IProps) => {
 			</Row>
 			<div className='form-footer'>
 				{!readOnly ? (
-					<Button loading={formSubmiting} htmlType='submit' type='primary'>
+					<Button loading={formSubmiting} type='submit' variant='default'>
 						{t(edit ? 'baohiemyte.dangky.button.capNhat' : 'baohiemyte.dangky.button.dangKy')}
 					</Button>
 				) : null}
-				<Button htmlType='button' onClick={onCancel}>
+				<Button variant='outline' onClick={onCancel}>
 					{t('global.button.huy')}
 				</Button>
 			</div>

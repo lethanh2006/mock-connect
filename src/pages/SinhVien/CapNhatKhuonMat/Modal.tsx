@@ -2,7 +2,10 @@ import UploadFile from '@/components/Upload/UploadFile';
 import { buildUpLoadFileMultipart, EFileScope } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Form, Modal, Segmented } from 'antd';
+import { Button } from '@/components/Icons';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import Segmented from '@/components/MySegmented';
+import { Form } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import WebcamNhanDienKhuonMat from './Webcam';
@@ -41,7 +44,7 @@ const ModalCapNhatAnhNhanDien = (props: { visible: boolean; setVisible: (val: bo
 	};
 
 	return (
-		<Modal
+		<ModalExpandable
 			title={intl.formatMessage({ id: 'thongtincanhan.khuonmat.title' })}
 			open={visible}
 			onCancel={() => setVisible(false)}
@@ -95,13 +98,15 @@ const ModalCapNhatAnhNhanDien = (props: { visible: boolean; setVisible: (val: bo
 				</Form.Item>
 
 				<div className='form-footer'>
-					<Button htmlType='submit' type='primary' loading={formSubmiting}>
+					<Button type='submit' variant='default' loading={formSubmiting}>
 						{intl.formatMessage({ id: 'global.button.luulai' })}
 					</Button>
-					<Button onClick={() => setVisible(false)}> {intl.formatMessage({ id: 'global.button.huy' })}</Button>
+					<Button variant='outline' onClick={() => setVisible(false)}>
+						{intl.formatMessage({ id: 'global.button.huy' })}
+					</Button>
 				</div>
 			</Form>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

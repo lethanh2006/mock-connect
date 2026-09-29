@@ -2,7 +2,7 @@ import PageCard from '@/components/PageCard';
 import { ETrangThaiDangKyChuyenNganh } from '@/services/DaoTao/DangKyChuyenNganh/constant';
 import { ELoaiPhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/constant';
 import type { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
-import { EditOutlined } from '@ant-design/icons';
+import { IconPencil01 } from '@/components/Icons';
 import { Breadcrumb, Button, Card, Col, Descriptions, Divider, Row, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useLocation, useModel, useNavigate, useParams } from 'umi';
@@ -171,7 +171,7 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 										phieuDkCtdtMe?.trangThaiDuyetQldt !== ETrangThaiDangKyChuyenNganh.DA_DUYET)) &&
 									phieuDkCtdtMe?.loai !== ELoaiPhieuDkCtdt.DEFAULT && (
 										<div className='form-footer'>
-											<Button icon={<EditOutlined />} type='primary' onClick={handleEdit}>
+											<Button icon={<IconPencil01 />} type='primary' onClick={handleEdit}>
 												{intl.formatMessage({ id: 'global.button.chinhsua' })}
 											</Button>
 										</div>

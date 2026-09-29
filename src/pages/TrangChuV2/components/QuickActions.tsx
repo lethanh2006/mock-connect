@@ -1,31 +1,19 @@
-import {
-	ApartmentOutlined,
-	BankOutlined,
-	CalendarOutlined,
-	DesktopOutlined,
-	PlusOutlined,
-	TeamOutlined,
-} from '@ant-design/icons';
-import { Card } from 'antd';
+import { IconBoard, IconRoofedHouse, IconCalendar, IconMobile, IconPlus, IconPeople } from '@/components/Icons';
+import { Card } from '@/components/PageCard';
 import { history } from 'umi';
 
 const QuickActions = () => {
 	const actions = [
-		{ id: 1, title: 'Course Section', icon: <DesktopOutlined /> },
-		{ id: 2, title: 'Co-Curricular', icon: <CalendarOutlined /> },
-		{ id: 3, title: 'Dormitory', icon: <BankOutlined /> },
-		{ id: 4, title: 'Advisory Board', icon: <ApartmentOutlined /> },
-		{ id: 5, title: 'Club', icon: <TeamOutlined /> },
+		{ id: 1, title: 'Course Section', icon: <IconMobile /> },
+		{ id: 2, title: 'Co-Curricular', icon: <IconCalendar /> },
+		{ id: 3, title: 'Dormitory', icon: <IconRoofedHouse /> },
+		{ id: 4, title: 'Advisory Board', icon: <IconBoard /> },
+		{ id: 5, title: 'Club', icon: <IconPeople /> },
 	];
 
 	return (
 		<Card
 			title={<span className='title'>Quick Actions</span>}
-			styles={{
-				body: {
-					padding: 0,
-				},
-			}}
 		>
 			<div className='actions-grid'>
 				{actions.map((item) => (
@@ -45,7 +33,7 @@ const QuickActions = () => {
 
 				<div className='action-item add-new'>
 					<div className='icon-wrapper'>
-						<PlusOutlined />
+						<IconPlus />
 					</div>
 					<span className='action-title'>Add New</span>
 				</div>

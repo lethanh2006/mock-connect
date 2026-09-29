@@ -4,7 +4,9 @@ import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { EMaTrangThaiThanhToan, ETransactionPaymentType } from '@/services/TaiChinh/constant';
 import { inputFormat, inputParse } from '@/utils/utils';
-import { Button, Col, Form, InputNumber, Row, Table } from 'antd';
+import { Button } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import { Form, InputNumber, Table } from 'antd';
 import _ from 'lodash';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -176,7 +178,7 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 							size='small'
 							otherProps={{
 								pagination: false,
-								summary: (pageData: HoaDon.IBillItem[]) => {
+								summary: (pageData: readonly HoaDon.IBillItem[]) => {
 									const totalDue = _.sumBy(pageData, (item) => item.amountDue);
 									const totalPaid = _.sumBy(pageData, (item) => item.amountPaid);
 									const totalRemain = _.sumBy(pageData, (item) => item.amountRemaining);
@@ -229,10 +231,12 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 				</Row>
 
 				<div className='form-footer' style={{ marginTop: 18 }}>
-					<Button loading={formSubmiting} type='primary' htmlType='submit'>
+					<Button loading={formSubmiting} variant='default' type='submit'>
 						{intl.formatMessage({ id: 'taichinh.thanhtoan.form.thanhtoan' })}
 					</Button>
-					<Button onClick={() => setVisibleThanhToan(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
+					<Button variant='outline' onClick={() => setVisibleThanhToan(false)}>
+						{intl.formatMessage({ id: 'global.button.dong' })}
+					</Button>
 				</div>
 			</Form>
 		</>

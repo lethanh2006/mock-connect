@@ -1,7 +1,9 @@
 import type { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { resetFieldsForm } from '@/utils/utils';
-import { ExclamationCircleFilled } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, Modal, Row } from 'antd';
+import { Button, IconWarningCircle } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { Checkbox, Form } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import { isDuThinhDaDuyet } from '../utils';
@@ -52,13 +54,12 @@ const ConfirmKetHuyLopDKTC = (props: {
 	};
 
 	return (
-		<Modal
+		<ModalExpandable
 			title={intl.formatMessage({ id: 'dangkytinchi.modalconfimhuylop.title' })}
 			open={visible}
 			onCancel={() => setVisible(false)}
 			footer={null}
 			width={500}
-			maskClosable={false}
 		>
 			<Form form={form} layout='vertical'>
 				<Row gutter={[8, 8]}>
@@ -72,7 +73,7 @@ const ConfirmKetHuyLopDKTC = (props: {
 							}}
 						>
 							<div style={{ color: 'orange', fontSize: 48 }}>
-								<ExclamationCircleFilled />
+								<IconWarningCircle />
 							</div>
 							<div style={{ textAlign: 'center' }}>
 								{intl.formatMessage({ id: 'dangkytinchi.modalconfimhuylop.confirm.cochacmuonhuy' })}
@@ -102,20 +103,19 @@ const ConfirmKetHuyLopDKTC = (props: {
 
 				<div className='form-footer'>
 					<Button
-						type='primary'
-						danger
+						variant='destructive'
 						disabled={!commit}
 						loading={formSubmiting}
 						onClick={() => handleXoaDangKyTinChi()}
 					>
 						{intl.formatMessage({ id: 'dangkytinchi.action.xacnhan' })}
 					</Button>
-					<Button onClick={() => setVisible(false)}>
-						{intl.formatMessage({ id: 'dangkytinchi.modalconfimhuylop.check.dahieuvaxacnhan' })}
+					<Button variant='outline' onClick={() => setVisible(false)}>
+						{intl.formatMessage({ id: 'global.button.huy' })}
 					</Button>
 				</div>
 			</Form>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

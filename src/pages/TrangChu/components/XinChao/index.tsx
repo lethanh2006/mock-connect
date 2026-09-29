@@ -1,5 +1,5 @@
+import Card from '@/components/PageCard';
 import { getPublicAssetPath } from '@/utils/path';
-import { Card } from 'antd';
 import { useIntl, useModel } from 'umi';
 import './style.less';
 
@@ -11,7 +11,7 @@ const WelcomeCard = () => {
 	const gif = getPublicAssetPath('images/welcome.gif');
 
 	return (
-		<Card variant='borderless' className='welcome-card' loading={loading}>
+		<Card bordered={false} hideInnerCard className='welcome-card' loading={loading}>
 			{/* Background geometric shapes */}
 			<img className='background-frame' src={frame} alt='Background frame' />
 

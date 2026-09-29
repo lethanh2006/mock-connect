@@ -4,7 +4,7 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import type { IColumn } from '@/components/Table/typing';
 import type { ThongBao } from '@/services/ThongBao/typing';
 import { formatDateTime } from '@/utils/formatDate';
-import { EyeOutlined } from '@ant-design/icons';
+import { IconEyeOpen } from '@/components/Icons';
 import { Modal } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -57,7 +57,7 @@ const ThongBaoLopPage = (props: { idLop: string; loai: 'lop-hanh-chinh' | 'lop-h
 						if (!rec.read) readNotificationModel('ONE', rec?._id);
 					}}
 					type='link'
-					icon={<EyeOutlined />}
+					icon={<IconEyeOpen />}
 				/>
 			),
 		},

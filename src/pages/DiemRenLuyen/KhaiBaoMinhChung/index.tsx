@@ -13,7 +13,7 @@ import {
 } from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/constants';
 import { type MinhChungDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/typing';
 import { formatDate } from '@/utils/formatDate';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { IconTrash, IconPencil01 } from '@/components/Icons';
 import { Button, Carousel, Popconfirm, Tag, Tooltip } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -236,7 +236,7 @@ export default () => {
 				return (
 					<>
 						<Tooltip title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.chinhsua' })}>
-							<Button onClick={() => handleEdit(rec)} type='link' icon={<EditOutlined />} />
+							<Button onClick={() => handleEdit(rec)} type='link' icon={<IconPencil01 />} />
 						</Tooltip>
 
 						<Tooltip title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.xoa' })}>
@@ -245,7 +245,7 @@ export default () => {
 								onConfirm={() => deleteModel(val._id, getModel)}
 								title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.xacnhanxoa' })}
 							>
-								<Button danger type='link' icon={<DeleteOutlined />} />
+								<Button danger type='link' icon={<IconTrash />} />
 							</Popconfirm>
 						</Tooltip>
 					</>

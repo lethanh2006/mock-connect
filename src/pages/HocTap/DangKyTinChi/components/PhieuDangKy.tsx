@@ -1,10 +1,10 @@
 import ExpandText from '@/components/ExpandText';
+import { Badge, IconTrash } from '@/components/Icons';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
 import {
-	ColorTrangThaiDangKyTinChi,
 	ETinhChatDangKyTC,
 	ETrangThaiDangKyTinChi,
 	mapTrangThaiDangKyTinChiI18n,
@@ -25,8 +25,8 @@ import {
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
-import { CalendarOutlined, DeleteOutlined, HistoryOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Descriptions, Popconfirm, Popover, Space, Tag } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Descriptions, Popconfirm, Popover, Space } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import { isDuThinhDaDuyet, isTinhTinChiDangKy, renderKhoangThoiGian } from '../utils';
@@ -35,6 +35,34 @@ import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
 import ModalLopDaHuy from './ModalLopDaHuy';
 import RenderLichHoc from './RenderLichHoc';
+
+const mapTrangThaiDKTCBadgeVariant = (
+	val: ETrangThaiDangKyTinChi,
+): 'complete' | 'inprogress' | 'negative' | 'secondary' => {
+	switch (val) {
+		case ETrangThaiDangKyTinChi.DA_DANG_KY:
+			return 'complete';
+		case ETrangThaiDangKyTinChi.CHUA_DANG_KY:
+			return 'inprogress';
+		case ETrangThaiDangKyTinChi.LOI:
+			return 'negative';
+		default:
+			return 'secondary';
+	}
+};
+
+const mapStatusColorBadgeVariant = (color?: string): 'complete' | 'inprogress' | 'negative' | 'warning' => {
+	switch (color) {
+		case 'green':
+			return 'complete';
+		case 'blue':
+			return 'inprogress';
+		case 'red':
+			return 'negative';
+		default:
+			return 'warning';
+	}
+};
 
 /** Hiển thị danh sách các lớp đã đăng ký và đã chọn
  * Học phí dự kiến, số tín chỉ được phép đăng ký, lịch học dự kiến
@@ -257,11 +285,11 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 						{trangThaiDacBiet && (isVuotTin || isDuThinh) ? (
 							<>
 								<Space size={4} align='center'>
-									<Tag color={isApproved ? 'green' : (statusColor ?? 'gold')} style={{ marginInlineEnd: 0 }}>
+									<Badge variant={mapStatusColorBadgeVariant(isApproved ? 'green' : statusColor)}>
 										{statusI18nId
 											? intl.formatMessage({ id: statusI18nId, defaultMessage: String(trangThaiDacBiet) })
 											: trangThaiDacBiet}
-									</Tag>
+									</Badge>
 									{hasThongTinDuyet ? (
 										<Popover
 											trigger='hover'
@@ -297,12 +325,14 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 								) : null}
 							</>
 						) : (
-							<Tag color={ColorTrangThaiDangKyTinChi[val as ETrangThaiDangKyTinChi]}>
+							<Badge variant={mapTrangThaiDKTCBadgeVariant(val as ETrangThaiDangKyTinChi)}>
 								{trangThaiThuongI18nId ? intl.formatMessage({ id: trangThaiThuongI18nId }) : (val ?? '--')}
-							</Tag>
+							</Badge>
 						)}
 						{rec?.isWaitlist && (
-							<Tag color={'orange'}>{intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.hangcho' })}</Tag>
+							<Badge variant='warning'>
+								{intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.hangcho' })}
+							</Badge>
 						)}
 					</div>
 				);
@@ -318,7 +348,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 			render: (val, rec) =>
 				dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 					<ButtonExtend
-						icon={<DeleteOutlined />}
+						icon={<IconTrash />}
 						danger
 						otherTooltipProps={{
 							placement: 'bottom',
@@ -366,7 +396,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 						}
 					>
 						<ButtonExtend
-							icon={<DeleteOutlined />}
+							icon={<IconTrash />}
 							danger
 							type='link'
 							otherTooltipProps={{
@@ -402,23 +432,25 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 					},
 				}}
 				otherButtons={[
-					<Space wrap>
-						<ButtonExtend
-							icon={<HistoryOutlined />}
-							onClick={() => setVisibleLopDaHuy(true)}
-							tooltip={intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.title' })}
-						/>
-						{danhSachLopDangKy.length ? (
-							<ButtonExtend icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
-								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
-							</ButtonExtend>
-						) : null}
-					</Space>,
+					...(danhSachLopDangKy.length
+						? [
+								<ButtonExtend key='lich-hoc' onClick={() => setVisibleModal(true)}>
+									{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
+								</ButtonExtend>,
+							]
+						: []),
+					<ButtonExtend
+						key='lich-su'
+						onClick={() => setVisibleLopDaHuy(true)}
+						tooltip={intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.title' })}
+					>
+						{intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.title' })}
+					</ButtonExtend>,
 				]}
 				otherExtra={[
 					<span>
 						{intl.formatMessage({ id: 'dangkytinchi.tcdangky' })}:{' '}
-						<b style={{ color: '#c80f1f', fontSize: 15 }}>{tongTinChi ?? 0}</b>
+						<b style={{ fontSize: 15, fontWeight: 600 }}>{tongTinChi ?? 0}</b>
 					</span>,
 				]}
 			/>

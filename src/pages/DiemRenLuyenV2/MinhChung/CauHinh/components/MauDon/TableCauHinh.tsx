@@ -2,7 +2,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
 import type { QuyTrinh } from '@/services/FormDong/QuyTrinh/typing';
-import { DeleteOutlined, EditOutlined, EyeOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { IconTrash, IconPencil01, IconEyeOpen, Icon3SquarePlusmark } from '@/components/Icons';
 import { Button, Modal, Popconfirm, Space, Tooltip } from 'antd';
 import type { FormInstance } from 'antd/es/form/Form';
 import { useEffect, useState } from 'react';
@@ -70,7 +70,7 @@ const TableCauHinh = (props: { form: FormInstance; formValues: any; dataState?: 
 								setEditCauHinh(true);
 							}}
 							type='link'
-							icon={<EditOutlined />}
+							icon={<IconPencil01 />}
 						/>
 					</Tooltip>
 
@@ -90,7 +90,7 @@ const TableCauHinh = (props: { form: FormInstance; formValues: any; dataState?: 
 							title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.xacnhanxoa' })}
 							placement='topRight'
 						>
-							<Button danger type='link' icon={<DeleteOutlined />} />
+							<Button danger type='link' icon={<IconTrash />} />
 						</Popconfirm>
 					</Tooltip>
 				</>
@@ -127,7 +127,7 @@ const TableCauHinh = (props: { form: FormInstance; formValues: any; dataState?: 
 					<Button
 						size='small'
 						type='primary'
-						icon={<PlusCircleOutlined />}
+						icon={<Icon3SquarePlusmark />}
 						onClick={() => {
 							setRecordCauHinh(undefined);
 							setEditCauHinh(false);
@@ -137,7 +137,7 @@ const TableCauHinh = (props: { form: FormInstance; formValues: any; dataState?: 
 						{intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.themmoi' })}
 					</Button>
 					<Button
-						icon={<EyeOutlined />}
+						icon={<IconEyeOpen />}
 						size='small'
 						onClick={() => {
 							const record: any = recordMauDon;

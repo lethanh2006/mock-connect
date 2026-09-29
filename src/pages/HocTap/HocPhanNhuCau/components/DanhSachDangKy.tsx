@@ -11,7 +11,7 @@ import {
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
 import { formatDateTime } from '@/utils/formatDate';
 import { getFilenameHeader } from '@/utils/utils';
-import { ExportOutlined, ReloadOutlined } from '@ant-design/icons';
+import { IconRotateArrow, IconDownload } from '@/components/Icons';
 import { Button, Descriptions, Modal, Space, Tag } from 'antd';
 import fileDownload from 'js-file-download';
 import _ from 'lodash';
@@ -65,12 +65,12 @@ const DanhSachDangKyLop = (props: { visible: boolean; setVisible: (val: boolean)
 				dataIndex: 'hoTen',
 				filterType: 'string',
 			},
-		// {
-		// 	title: 'Lớp hành chính',
-		// 	dataIndex: 'tenLopHanhChinh',
-		// 	align: 'center',
-		// 	width: 130,
-		// },
+			// {
+			// 	title: 'Lớp hành chính',
+			// 	dataIndex: 'tenLopHanhChinh',
+			// 	align: 'center',
+			// 	width: 130,
+			// },
 			{
 				title: intl.formatMessage({ id: 'hocphannhucau.dsdk.table.soHocPhan' }),
 				align: 'center',
@@ -82,12 +82,12 @@ const DanhSachDangKyLop = (props: { visible: boolean; setVisible: (val: boolean)
 						align: 'center',
 						width: 100,
 					},
-				// {
-				// 	title: 'Trong CTĐT',
-				// 	dataIndex: 'soTinChiTrongCtdt',
-				// 	align: 'center',
-				// 	width: 80,
-				// },
+					// {
+					// 	title: 'Trong CTĐT',
+					// 	dataIndex: 'soTinChiTrongCtdt',
+					// 	align: 'center',
+					// 	width: 80,
+					// },
 					{
 						title: intl.formatMessage({ id: 'hocphannhucau.dsdk.table.ngoaiTienTrinh' }),
 						dataIndex: 'soTinChiNgoaiCtdt',
@@ -135,23 +135,23 @@ const DanhSachDangKyLop = (props: { visible: boolean; setVisible: (val: boolean)
 				width: 200,
 				render: (val, rec) => <ExpandText>{val}</ExpandText>,
 			},
-		// {
-		// 	title: 'Khóa ngành',
-		// 	dataIndex: 'maKhoaNganh',
-		// 	width: 180,
-		// 	render: (val, rec) => rec?.khoaNganh?.ten ?? val,
-		// },
-		// {
-		// 	title: 'Thao tác',
-		// 	align: 'center',
-		// 	width: 90,
-		// 	fixed: 'right',
-		// 	render: (val, rec) => (
-		// 		<>
-		// 			<ButtonExtend tooltip='Chi tiết' type='link' icon={<EyeOutlined />} onClick={() => handleView(rec)} />
-		// 		</>
-		// 	),
-		// },
+			// {
+			// 	title: 'Khóa ngành',
+			// 	dataIndex: 'maKhoaNganh',
+			// 	width: 180,
+			// 	render: (val, rec) => rec?.khoaNganh?.ten ?? val,
+			// },
+			// {
+			// 	title: 'Thao tác',
+			// 	align: 'center',
+			// 	width: 90,
+			// 	fixed: 'right',
+			// 	render: (val, rec) => (
+			// 		<>
+			// 			<ButtonExtend tooltip='Chi tiết' type='link' icon={<EyeOutlined />} onClick={() => handleView(rec)} />
+			// 		</>
+			// 	),
+			// },
 		],
 		[intl],
 	);
@@ -184,13 +184,13 @@ const DanhSachDangKyLop = (props: { visible: boolean; setVisible: (val: boolean)
 				<Space wrap>
 					<ButtonExtend
 						loading={loadingExport}
-						icon={<ExportOutlined />}
+						icon={<IconDownload />}
 						onClick={() => hanldeExport()}
 						disabled={!recLHC?._id}
 					>
 						{intl.formatMessage({ id: 'hocphannhucau.dsdk.button.xuatDs' })}
 					</ButtonExtend>
-					<ButtonExtend onClick={() => getData()} icon={<ReloadOutlined />} notHideText>
+					<ButtonExtend onClick={() => getData()} icon={<IconRotateArrow />} notHideText>
 						{intl.formatMessage({ id: 'hocphannhucau.button.taiLai' })}
 					</ButtonExtend>
 				</Space>

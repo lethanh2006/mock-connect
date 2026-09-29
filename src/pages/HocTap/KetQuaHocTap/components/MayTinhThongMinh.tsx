@@ -5,23 +5,22 @@ import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
 import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import rules from '@/utils/rules';
 import { convertNumberScoreToAlphabet } from '@/utils/utils';
+import { Button } from '@vinuni/ui';
+import { Col, Row } from '@/components/MyGrid';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import {
-	Button,
-	Card,
 	Checkbox,
-	Col,
 	Descriptions,
 	Form,
 	InputNumber,
-	Modal,
 	Popover,
-	Row,
 	Segmented,
 	Tag,
 } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import { Card } from '@/components/PageCard';
 
 const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 	const intl = useIntl();
@@ -75,10 +74,10 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 		const data = danhSach?.map((item) =>
 			item.ma === record?.ma
 				? {
-						...record,
-						diemDuKien: parseFloat(values.diemDuKien) || undefined,
-						diemDuKienThang4: parseFloat(convertNumberScoreToAlphabet(values.diemDuKien)[1]) || undefined,
-					}
+					...record,
+					diemDuKien: parseFloat(values.diemDuKien) || undefined,
+					diemDuKienThang4: parseFloat(convertNumberScoreToAlphabet(values.diemDuKien)[1]) || undefined,
+				}
 				: item,
 		);
 		tinhDiemTongKet(data ?? []);
@@ -241,12 +240,12 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 				</Col>
 			</Row>
 
-			<Modal
+			<ModalExpandable
 				open={modalVisible}
 				onCancel={() => setModalVisible(false)}
 				width={600}
 				footer={null}
-				styles={{ body: { padding: 0 } }}
+				title={intl.formatMessage({ id: 'ketquahoctap.maytinh.modal.title' })}
 			>
 				<Card title={intl.formatMessage({ id: 'ketquahoctap.maytinh.modal.title' })}>
 					<Descriptions column={1}>
@@ -288,14 +287,14 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 						</Form.Item>
 
 						<div className='form-footer' style={{ width: '100%' }}>
-							<Button htmlType='submit' type='primary'>
+							<Button type='submit' variant='default'>
 								{intl.formatMessage({ id: 'ketquahoctap.maytinh.common.ok' })}
 							</Button>
-							<Button onClick={() => setModalVisible(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
+							<Button variant='outline' onClick={() => setModalVisible(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 						</div>
 					</Form>
 				</Card>
-			</Modal>
+			</ModalExpandable>
 		</>
 	);
 };

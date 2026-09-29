@@ -4,7 +4,7 @@ import type { IColumn } from '@/components/Table/typing';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { formatDateTime } from '@/utils/formatDate';
 import { openSafeUrl } from '@/utils/security';
-import { ApiOutlined } from '@ant-design/icons';
+import { IconWrenchGear01 } from '@/components/Icons';
 import { Card, Checkbox, Col, Descriptions, message, Progress, Row, Spin, Tabs, Tag } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -161,7 +161,7 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 			<ButtonExtend
 				style={{ marginBottom: 16 }}
 				type='primary'
-				icon={<ApiOutlined />}
+				icon={<IconWrenchGear01 />}
 				onClick={() => {
 					if (idLopHocPhan) {
 						getByIdModel(`lop-hoc-phan/${idLopHocPhan}/url/sv`, false).then((res: unknown) => {

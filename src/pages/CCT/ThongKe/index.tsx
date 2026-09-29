@@ -1,5 +1,5 @@
 import { highlightColor, primaryColor } from '@/services/base/constant';
-import { RiseOutlined, ThunderboltOutlined, TrophyOutlined } from '@ant-design/icons';
+import { IconChartRing, IconLightBulbOn, IconMedal01 } from '@/components/Icons';
 import { Card, Col, Divider, Flex, Row, Space, Spin, Tag, Typography } from 'antd';
 import { useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
@@ -184,7 +184,7 @@ const ThongKeCCT = () => {
 						<Card
 							title={
 								<Space>
-									<RiseOutlined style={{ color: primaryColor, fontSize: 20 }} />
+									<IconChartRing style={{ color: primaryColor, fontSize: 20 }} />
 									<span style={{ color: primaryColor, fontWeight: 600 }}>
 										{intl.formatMessage({ id: 'cct.thongke.level' })}
 									</span>
@@ -213,7 +213,7 @@ const ThongKeCCT = () => {
 						<Card
 							title={
 								<Space>
-									<ThunderboltOutlined style={{ color: highlightColor, fontSize: 20 }} />
+									<IconLightBulbOn style={{ color: highlightColor, fontSize: 20 }} />
 									<span style={{ color: primaryColor, fontWeight: 600 }}>
 										{intl.formatMessage({ id: 'cct.thongke.core' })}
 									</span>
@@ -248,7 +248,7 @@ const ThongKeCCT = () => {
 						<Card
 							title={
 								<Space>
-									<TrophyOutlined style={{ color: primaryColor, fontSize: 20 }} />
+									<IconMedal01 style={{ color: primaryColor, fontSize: 20 }} />
 									<span style={{ color: primaryColor, fontWeight: 600 }}>
 										{intl.formatMessage({ id: 'cct.thongke.type' })}
 									</span>

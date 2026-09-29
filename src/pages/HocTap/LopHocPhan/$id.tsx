@@ -2,8 +2,8 @@ import { TabViewPage } from '@/components/TabViewPage';
 import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
 import { AppModules, ESettingKey } from '@/services/base/constant';
 import { currentRole, ipDaoTao } from '@/utils/ip';
-import { CalendarOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Col, Row, Tabs } from 'antd';
+import { IconCalendar, IconShieldInfo } from '@/components/Icons';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'react-oidc-context';
 import { history, useAccess, useIntl, useModel, useParams } from 'umi';
@@ -192,7 +192,7 @@ const DetailLopTinChi = () => {
 					</Col>
 				</Row>
 			),
-			icon: <InfoCircleOutlined />,
+			icon: <IconShieldInfo />,
 		},
 
 		// {
@@ -207,7 +207,7 @@ const DetailLopTinChi = () => {
 			title: titles[1],
 			menuKey: paths[1],
 			content: <DanhSachBuoiHoc />,
-			icon: <CalendarOutlined />,
+			icon: <IconCalendar />,
 		},
 		// {
 		// 	title: titles[2],

@@ -5,7 +5,7 @@ import {
 	mapTrangThaiNopBaiTap,
 } from '@/services/DaoTao/BaiTap/constants';
 import { formatDateTime } from '@/utils/formatDate';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { IconArrowRight } from '@/components/Icons';
 import { Card, Empty, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { Link, useIntl, useModel } from 'umi';
@@ -58,7 +58,7 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 					<ButtonExtend
 						key='all'
 						type='link'
-						icon={<ArrowRightOutlined />}
+						icon={<IconArrowRight />}
 						tooltip={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.baitap.xemtatca' })}
 					/>
 				</Link>

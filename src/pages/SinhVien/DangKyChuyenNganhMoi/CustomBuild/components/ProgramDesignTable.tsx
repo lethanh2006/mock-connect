@@ -2,7 +2,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import { colorTrangThaiKqht, trangThaiKqht, type ETrangThaiKqht } from '@/services/DaoTao/constant';
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { IconTrash, IconPencil01 } from '@/components/Icons';
 import { Button, Modal, Tag, Tooltip } from 'antd';
 import type { ReactElement, ReactNode } from 'react';
 import { useState } from 'react';
@@ -99,7 +99,7 @@ const ProgramDesignTable = ({
 								<Tooltip title={intl.formatMessage({ id: 'global.button.chinhsua' })}>
 									<Button
 										type='link'
-										icon={<EditOutlined />}
+										icon={<IconPencil01 />}
 										onClick={(e) => {
 											e.stopPropagation();
 											onEdit?.(record, index);
@@ -110,7 +110,7 @@ const ProgramDesignTable = ({
 									<Button
 										type='link'
 										danger
-										icon={<DeleteOutlined />}
+										icon={<IconTrash />}
 										onClick={(e) => {
 											e.stopPropagation();
 											onDelete?.(index);

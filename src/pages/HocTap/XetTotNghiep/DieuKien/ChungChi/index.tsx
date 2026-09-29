@@ -1,5 +1,5 @@
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { IconShieldCheck, IconXmarkCircle } from '@/components/Icons';
 import { Card, Col, Empty, Row } from 'antd';
 import { history, useIntl, useModel } from 'umi';
 import ModalChungChiCTDT from './ModalChungChi';
@@ -43,11 +43,11 @@ const DieuKienChungChiSection = () => {
 						<Card className='card-stat-small' style={{ cursor: 'pointer' }} onClick={() => handleView(cc)}>
 							{cc.datChuanDauRa ? (
 								<span className='num text-success'>
-									<CheckCircleOutlined />
+									<IconShieldCheck />
 								</span>
 							) : (
 								<span className='num text-error'>
-									<CloseCircleOutlined />
+									<IconXmarkCircle />
 								</span>
 							)}
 							<span>{cc.loaiChungChi?.ten ?? cc.maLoaiChungChi}</span>

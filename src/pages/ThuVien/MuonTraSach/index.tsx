@@ -1,7 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import dayjs from '@/utils/dayjs';
 import { inputFormat } from '@/utils/utils';
-import { EyeOutlined, FieldTimeOutlined, ReloadOutlined } from '@ant-design/icons';
+import { IconClockArrowDashRotate, IconEyeOpen, IconRotateArrow } from '@/components/Icons';
 import {
 	Badge,
 	Card,
@@ -147,7 +147,7 @@ const MuonTraSachPage = () => {
 				<Row gutter={[12, 12]}>
 					<Col xs={24}>
 						<Space wrap>
-							<ButtonExtend size='small' icon={<FieldTimeOutlined />} onClick={() => setVisibleSetting(true)}>
+							<ButtonExtend size='small' icon={<IconClockArrowDashRotate />} onClick={() => setVisibleSetting(true)}>
 								Thời gian ra vào thư viện
 							</ButtonExtend>
 						</Space>
@@ -261,7 +261,7 @@ const MuonTraSachPage = () => {
 										/>
 
 										<Space wrap>
-											<ButtonExtend icon={<ReloadOutlined />} onClick={() => getData()}>
+											<ButtonExtend icon={<IconRotateArrow />} onClick={() => getData()}>
 												Tải lại
 											</ButtonExtend>
 											<Tooltip title='Tổng số dữ liệu'>
@@ -333,23 +333,23 @@ const MuonTraSachPage = () => {
 																actions={
 																	item?.online
 																		? [
-																				<ButtonExtend
-																					disabled={!item?.thongTinAnPhamTrucTuyen?.length}
-																					type='link'
-																					tooltip={
-																						!item?.thongTinAnPhamTrucTuyen?.length
-																							? 'Không có tập tin'
-																							: 'Xem trước tập tin'
-																					}
-																					icon={<EyeOutlined />}
-																					key='xem'
-																					onClick={(event) => {
-																						event.stopPropagation();
-																						setRecord(item);
-																						setVisibleFile(true);
-																					}}
-																				/>,
-																			]
+																			<ButtonExtend
+																				disabled={!item?.thongTinAnPhamTrucTuyen?.length}
+																				type='link'
+																				tooltip={
+																					!item?.thongTinAnPhamTrucTuyen?.length
+																						? 'Không có tập tin'
+																						: 'Xem trước tập tin'
+																				}
+																				icon={<IconEyeOpen />}
+																				key='xem'
+																				onClick={(event) => {
+																					event.stopPropagation();
+																					setRecord(item);
+																					setVisibleFile(true);
+																				}}
+																			/>,
+																		]
 																		: []
 																}
 															>

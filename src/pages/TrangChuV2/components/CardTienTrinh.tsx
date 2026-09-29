@@ -1,4 +1,6 @@
-import { Card, Col, Flex, Row, Typography } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import { CardContent, CardHeader, CardTitle, Card as VinCard } from '@vinuni/ui';
+import { Flex, Typography } from 'antd';
 import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -11,23 +13,23 @@ interface StatCardProps {
 }
 
 const StatCard = ({ title, value, subValue, periodText, disabled }: StatCardProps) => (
-	<Card size='small'>
+	<div className='vin-stat-card' style={{ padding: '16px 18px' }}>
 		<Flex vertical gap={4}>
-			<Typography.Text type='secondary' style={{ fontSize: 14 }}>
+			<Typography.Text type='secondary' style={{ fontSize: 13, fontWeight: 500 }}>
 				{title}
 			</Typography.Text>
 
 			<Typography.Text
 				style={{
-					fontSize: 18,
-					lineHeight: 1.2,
+					fontSize: 20,
+					lineHeight: 1.25,
 					fontWeight: 700,
-					color: disabled ? '#cfcfcf' : '#2e2e2e',
+					color: disabled ? 'var(--color-text-quaternary, #cfcfcf)' : 'var(--color-text, #2e2e2e)',
 				}}
 			>
 				{disabled ? '--' : value}
 				{!disabled && subValue && (
-					<Typography.Text type='secondary' style={{ fontSize: 12, fontWeight: 600 }}>
+					<Typography.Text type='secondary' style={{ fontSize: 13, fontWeight: 600 }}>
 						{' '}
 						{subValue}
 					</Typography.Text>
@@ -40,7 +42,7 @@ const StatCard = ({ title, value, subValue, periodText, disabled }: StatCardProp
 				</Typography.Text>
 			)}
 		</Flex>
-	</Card>
+	</div>
 );
 
 const CardTienTrinh = () => {
@@ -83,24 +85,20 @@ const CardTienTrinh = () => {
 	}, [intl, recTienTrinh, danhSachActivity]);
 
 	return (
-		<Card
-			title={
-				<span className='title' style={{ color: '#000' }}>
-					{intl.formatMessage({ id: 'trangchu.v2.academicProgress.title' })}
-				</span>
-			}
-			className='card-big-title card-borderless'
-			variant='borderless'
-			loading={loadingTienTrinh}
-		>
-			<Row gutter={[12, 12]}>
-				{stats.map((item) => (
-					<Col xs={24} sm={12} key={item.title}>
-						<StatCard {...item} />
-					</Col>
-				))}
-			</Row>
-		</Card>
+		<VinCard>
+			<CardHeader>
+				<CardTitle>{intl.formatMessage({ id: 'trangchu.v2.academicProgress.title' })}</CardTitle>
+			</CardHeader>
+			<CardContent>
+				<Row gutter={[12, 12]}>
+					{stats.map((item) => (
+						<Col xs={24} sm={12} key={item.title}>
+							<StatCard {...item} />
+						</Col>
+					))}
+				</Row>
+			</CardContent>
+		</VinCard>
 	);
 };
 

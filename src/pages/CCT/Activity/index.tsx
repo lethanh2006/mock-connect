@@ -1,10 +1,12 @@
 import background from '@/assets/cct/background.png';
+import EmptyState from '@/components/EmptyState';
+import { Col, Row } from '@/components/MyGrid';
 import PageCard from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { EApprovalStatus } from '@/services/CCT/constant';
-import { getPublicAssetPath } from '@/utils/path';
-import { Button, Col, Empty, Pagination, Popconfirm, Row, Spin, Tabs } from 'antd';
+import { Button } from '@vinuni/ui';
+import { Pagination, Popconfirm, Spin, Tabs } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { useEffect, useState } from 'react';
@@ -159,7 +161,7 @@ const ActivityPage = () => {
 	};
 
 	return (
-		<PageCard title={intl.formatMessage({ id: 'activity.list' })}>
+		<PageCard stickyHeader title={intl.formatMessage({ id: 'activity.list' })}>
 			<Tabs
 				activeKey={activeKey}
 				onChange={(tab) => {
@@ -228,7 +230,7 @@ const ActivityPage = () => {
 									//Chưa đăng ký
 									if (isRegistered && isNotStarted) {
 										return (
-											<Button block disabled>
+											<Button style={{ width: '100%' }} disabled>
 												{intl.formatMessage({ id: 'activity.dangky' })}
 											</Button>
 										);
@@ -238,8 +240,8 @@ const ActivityPage = () => {
 									if (editableWorkflow && isOngoing) {
 										return (
 											<Button
-												block
-												type='primary'
+												style={{ width: '100%' }}
+												variant='default'
 												onClick={() => {
 													setVisibleForm(false);
 													handleEdit({
@@ -256,7 +258,7 @@ const ActivityPage = () => {
 									//Hết số lượng đăng ký
 									if (!isRegistered && isFullSlot) {
 										return (
-											<Button block disabled>
+											<Button style={{ width: '100%' }} disabled>
 												{intl.formatMessage({ id: 'activity.full' })}
 											</Button>
 										);
@@ -266,7 +268,8 @@ const ActivityPage = () => {
 									if (isRegistered || (activeKey === '3' && !isRegistered) || outTimeRegis) {
 										return (
 											<Button
-												block
+												style={{ width: '100%' }}
+												variant='outline'
 												onClick={() => {
 													setRecord(item);
 													setVisibleForm(true);
@@ -283,7 +286,7 @@ const ActivityPage = () => {
 											placement='topLeft'
 											onConfirm={() => registerActivityModel(item._id, getData).then(() => setVisibleDangKy(true))}
 										>
-											<Button type='primary' block>
+											<Button variant='default' style={{ width: '100%' }}>
 												{intl.formatMessage({ id: 'activity.now' })}
 											</Button>
 										</Popconfirm>
@@ -338,10 +341,9 @@ const ActivityPage = () => {
 						)}
 					</>
 				) : (
-					<Empty
+					<EmptyState
 						style={{ marginTop: 32, marginBottom: 32 }}
 						description={intl.formatMessage({ id: 'global.table.index.empty' })}
-						image={getPublicAssetPath('images/empty.png')}
 					/>
 				)}
 			</Spin>

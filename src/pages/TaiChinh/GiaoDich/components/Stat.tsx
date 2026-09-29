@@ -1,7 +1,8 @@
 import StatisticsCard from '@/components/StatisticsCard';
 import { StatisticsItem } from '@/components/StatisticsCard/typing';
 import { tienVietNam } from '@/utils/utils';
-import { DollarCircleOutlined, ImportOutlined } from '@ant-design/icons';
+import { IconFileMoney } from '@/components/Icons';
+import { IconUpload } from '@/components/Icons';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -17,13 +18,13 @@ const StatGiaoDich = () => {
 		{
 			title: intl.formatMessage({ id: 'lichsugiaodich.stat.tongtien' }),
 			value: tienVietNam(tongGiaoDich?.totalIn ?? 0),
-			icon: <ImportOutlined />,
+			icon: <IconUpload />,
 			status: 'success',
 		},
 		{
 			title: intl.formatMessage({ id: 'lichsugiaodich.stat.sodu' }),
 			value: tienVietNam(tongGiaoDich?.totalRemain ?? 0),
-			icon: <DollarCircleOutlined />,
+			icon: <IconFileMoney />,
 		},
 	];
 

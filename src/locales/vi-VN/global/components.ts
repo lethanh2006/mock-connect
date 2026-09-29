@@ -765,6 +765,7 @@ export default {
 	'global.table.columnSetting.apply': 'Áp dụng',
 	'global.table.columnSetting.cancel': 'Hủy',
 	'global.table.columnSetting.tooltip': 'Cấu hình ẩn/hiện và thứ tự cột',
+	'global.table.columnfilter.label': 'Lọc cột',
 
 	'global.table.customfilter.title': 'Bộ lọc dữ liệu',
 	'global.table.customfilter.dieukien': 'Các điều kiện lọc hiện tại',

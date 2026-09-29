@@ -13,7 +13,7 @@ import type { QuanLyThuVien } from '@/services/QuanLyThuVien/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { getSafeHref } from '@/utils/security';
-import { CloudUploadOutlined, DeleteOutlined, EditOutlined, EyeOutlined, MenuOutlined } from '@ant-design/icons';
+import { IconUpload, IconTrash, IconPencil01, IconEyeOpen, IconHumberger } from '@/components/Icons';
 import { Button, Card, Popconfirm, Popover, Space, Tabs, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -187,14 +187,14 @@ const QuanLyThuVienPage = () => {
 					placement='top'
 					content={
 						<>
-							<ButtonExtend tooltip='Xem chi tiết' onClick={() => handleView(rec)} type='link' icon={<EyeOutlined />} />
+							<ButtonExtend tooltip='Xem chi tiết' onClick={() => handleView(rec)} type='link' icon={<IconEyeOpen />} />
 
 							{tabActive === ELoaiDotQuanLyThuvien.LUAN_AN ? (
 								<>
 									<ButtonExtend
 										disabled={rec?.trangThai !== ETrangThaiNopThuVien.CHO_XY_LY}
 										type='link'
-										icon={<EditOutlined />}
+										icon={<IconPencil01 />}
 										onClick={() => handleEdit(rec)}
 									/>
 									<Popconfirm title='Bạn có chắc muốn xóa?' onConfirm={() => deleteModel(rec._id)}>
@@ -203,7 +203,7 @@ const QuanLyThuVienPage = () => {
 											type='link'
 											tooltip='Xóa'
 											danger
-											icon={<DeleteOutlined />}
+											icon={<IconTrash />}
 										/>
 									</Popconfirm>
 								</>
@@ -222,7 +222,7 @@ const QuanLyThuVienPage = () => {
 										dayjs().isAfter(dayjs(rec?.dot?.thoiGianKetThuc))
 									}
 									type='link'
-									icon={<CloudUploadOutlined />}
+									icon={<IconUpload />}
 									onClick={() => {
 										setRecord(rec);
 										setVisibleNopBao(true);
@@ -232,7 +232,7 @@ const QuanLyThuVienPage = () => {
 						</>
 					}
 				>
-					<Button type='link' icon={<MenuOutlined />} />
+					<Button type='link' icon={<IconHumberger />} />
 				</Popover>
 			),
 		},

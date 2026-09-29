@@ -4,8 +4,12 @@ import ModalExpandable from '@/components/Table/ModalExpandable';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EApprovalStatus } from '@/services/CCT/constant';
 import { getNameFile, getPreviewUrl, isFileUrl } from '@/utils/utils';
-import { FileOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Divider, Empty, Input, List, Row, Typography } from 'antd';
+import { Button, IconDocument } from '@/components/Icons';
+import EmptyState from '@/components/EmptyState';
+import { Card } from '@/components/PageCard';
+import { Col, Row } from '@/components/MyGrid';
+import Input from '@/components/MyInput';
+import { Divider, List, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useIntl } from 'umi';
@@ -39,7 +43,7 @@ const ChiTietActivityOutCome = (props: { recOutcome: ActivityOutCome.IRecord }) 
 					/>
 				</Col>
 				<Col span={24} md={15}>
-					<Card variant='borderless' size='small'>
+					<Card bordered={false} size='small'>
 						<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0 }}>
 							{intl.formatMessage({ id: 'activity.outcome.detail.admin' })}
 						</Divider>
@@ -164,8 +168,8 @@ const ChiTietActivityOutCome = (props: { recOutcome: ActivityOutCome.IRecord }) 
 										dataSource={recOutcome?.evidenceFile ?? []}
 										locale={{
 											emptyText: (
-												<Empty
-													image={Empty.PRESENTED_IMAGE_SIMPLE}
+												<EmptyState
+													compact
 													description={intl.formatMessage({ id: 'activity.outcome.detail.noEvidence' })}
 												/>
 											),
@@ -185,7 +189,7 @@ const ChiTietActivityOutCome = (props: { recOutcome: ActivityOutCome.IRecord }) 
 																	setPreviewOpen(true);
 																}}
 															>
-																<FileOutlined />
+																<IconDocument />
 																<span>{isFileUrl(url) ? getNameFile(url) : `File ${index + 1}`}</span>
 															</Typography.Link>
 														))}
@@ -237,7 +241,9 @@ const ChiTietActivityOutCome = (props: { recOutcome: ActivityOutCome.IRecord }) 
 				<PreviewFile file={previewImage} isPrivate />
 
 				<div className='form-footer'>
-					<Button onClick={() => setPreviewOpen(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
+					<Button variant='outline' onClick={() => setPreviewOpen(false)}>
+						{intl.formatMessage({ id: 'global.button.dong' })}
+					</Button>
 				</div>
 			</ModalExpandable>
 		</>

@@ -1,6 +1,8 @@
+import { Button } from '@/components/Icons';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { Activity } from '@/services/CCT/Activity/typing';
 import { EApprovalStatus } from '@/services/CCT/constant';
-import { Button, Modal, Popconfirm, Space } from 'antd';
+import { Popconfirm, Space } from 'antd';
 import dayjs from 'dayjs';
 import { useIntl, useModel } from 'umi';
 import CardChiTietSuKien from './components/CardChiTietSuKien';
@@ -47,50 +49,44 @@ const ChiTietActivity = (props: {
 	const isExpired = activeKey === '3' && editableWorkflow && now.isAfter(endDateUpdateEvidence);
 
 	return (
-		<Modal
+		<ModalExpandable
 			title='Activity Detail'
 			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
 			width={1000}
 			footer={null}
-			styles={{
-				body: { backgroundColor: '#F8F8F8', borderRadius: 2 },
-				header: { backgroundColor: '#F8F8F8' },
-			}}
 		>
-			<div style={{ marginTop: -12 }}>
-				<CardChiTietSuKien
-					record={
-						{
-							...record,
-							activityOutcome: record?.activityOutcome,
-						} as Activity.IRecord
-					}
-					evidenceDeadline={
-						record?.activityOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED
-							? record?.activityOutcome?.dueDate
-								? dayjs(record?.activityOutcome?.dueDate).format('HH:mm DD/MM/YYYY')
+			<CardChiTietSuKien
+				record={
+					{
+						...record,
+						activityOutcome: record?.activityOutcome,
+					} as Activity.IRecord
+				}
+				evidenceDeadline={
+					record?.activityOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED
+						? record?.activityOutcome?.dueDate
+							? dayjs(record?.activityOutcome?.dueDate).format('DD/MM/YYYY, HH:mm')
+							: '--'
+						: record?.allowPostEventResultsUpdate
+							? record?.dueDate
+								? dayjs(record?.dueDate).format('DD/MM/YYYY, HH:mm')
 								: '--'
-							: record?.allowPostEventResultsUpdate
-								? record?.dueDate
-									? dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY')
-									: '--'
-								: record?.endDate
-									? dayjs(record?.endDate).format('HH:mm DD/MM/YYYY')
-									: '--'
-					}
-					infoEvidence={
-						(!!record?.activityOutcome?.workflow && record?.activityOutcome?.workflow !== EApprovalStatus.EXPIRED) ||
-						(record?.activityOutcome?.workflow === EApprovalStatus.EXPIRED && !!record?.activityOutcome?._id)
-					}
-					activeKey={activeKey}
-					isExpired={isExpired}
-				/>
-			</div>
+							: record?.endDate
+								? dayjs(record?.endDate).format('DD/MM/YYYY, HH:mm')
+								: '--'
+				}
+				infoEvidence={
+					(!!record?.activityOutcome?.workflow && record?.activityOutcome?.workflow !== EApprovalStatus.EXPIRED) ||
+					(record?.activityOutcome?.workflow === EApprovalStatus.EXPIRED && !!record?.activityOutcome?._id)
+				}
+				activeKey={activeKey}
+				isExpired={isExpired}
+			/>
 
 			<div
+				className='modal-expandable-surface'
 				style={{
-					backgroundColor: '#fff',
 					display: 'flex',
 					gap: 8,
 					justifyContent:
@@ -113,14 +109,16 @@ const ChiTietActivity = (props: {
 							).then(() => setVisibleForm(false))
 						}
 					>
-						<Button type='link' className='btn-unregister'>
+						<Button variant='link' className='btn-unregister'>
 							{intl.formatMessage({ id: 'activity.chitiet.huydangky' })}
 						</Button>
 					</Popconfirm>
 				)}
 
 				<Space wrap>
-					<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'activity.chitiet.dong' })}</Button>
+					<Button variant='outline' onClick={() => setVisibleForm(false)}>
+						{intl.formatMessage({ id: 'activity.chitiet.dong' })}
+					</Button>
 
 					{!record?.activityOutcome?.workflow && !isFullSlot ? (
 						<Popconfirm
@@ -134,13 +132,13 @@ const ChiTietActivity = (props: {
 							}
 							disabled={outTime}
 						>
-							<Button type='primary' disabled={outTime}>
+							<Button variant='default' disabled={outTime}>
 								{intl.formatMessage({ id: 'activity.chitiet.dangky' })}
 							</Button>
 						</Popconfirm>
 					) : editableWorkflow && isOngoing ? (
 						<Button
-							type='primary'
+							variant='default'
 							onClick={() => {
 								setVisibleForm(false);
 								handleEdit({
@@ -156,7 +154,7 @@ const ChiTietActivity = (props: {
 					) : null}
 				</Space>
 			</div>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

@@ -2,8 +2,10 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { ColorTrangThaiDangKyTinChi, ETrangThaiDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
-import { SyncOutlined } from '@ant-design/icons';
-import { Button, Card, message, Modal, Space, Tag } from 'antd';
+import { Button, IconRotateArrow } from '@/components/Icons';
+import { Card } from '@/components/PageCard';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { message, Space, Tag, Modal } from 'antd';
 import pLimit from 'p-limit';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -149,7 +151,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 			align: 'center',
 			render: (val, rec) =>
 				formSubmiting && val === ETrangThaiDangKyTinChi.CHUA_DANG_KY ? (
-					<SyncOutlined spin className='text-info' />
+					<IconRotateArrow className='anticon-spin text-info' />
 				) : (
 					<>
 						<Space wrap>
@@ -169,15 +171,14 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 	];
 
 	return (
-		<Modal
+		<ModalExpandable
 			open={visibleRegister}
 			closable={false}
 			footer={null}
 			width={1000}
 			styles={{ body: { padding: 0 } }}
-			maskClosable={false}
 		>
-			<Card title={intl.formatMessage({ id: 'dangkytinchi.modaldangky.title' })}>
+			<Card bordered={false} title={intl.formatMessage({ id: 'dangkytinchi.modaldangky.title' })}>
 				<TableStaticData
 					columns={columns}
 					data={danhSachDangKy}
@@ -188,15 +189,15 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 				/>
 
 				<div className='form-footer'>
-					<Button onClick={onRegister} type='primary' loading={formSubmiting} disabled={!canRegister}>
+					<Button onClick={onRegister} variant='default' loading={formSubmiting} disabled={!canRegister}>
 						{intl.formatMessage({ id: 'dangkytinchi.action.xacnhan' })}
 					</Button>
-					<Button onClick={() => setVisibleRegister(false)} disabled={formSubmiting}>
+					<Button variant='outline' onClick={() => setVisibleRegister(false)} disabled={formSubmiting}>
 						{intl.formatMessage({ id: 'dangkytinchi.action.dong' })}
 					</Button>
 				</div>
 			</Card>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

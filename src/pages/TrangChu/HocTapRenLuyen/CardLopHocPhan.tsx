@@ -1,7 +1,7 @@
 import PageCard from '@/components/PageCard';
 import { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { getPublicAssetPath } from '@/utils/path';
-import { DownOutlined } from '@ant-design/icons';
+import { IconArrowDown } from '@/components/Icons';
 import { Button, Card, Carousel, Dropdown, Empty, Menu, Space } from 'antd';
 import { CarouselRef } from 'antd/es/carousel';
 import dayjs from 'dayjs';
@@ -166,7 +166,7 @@ const CardLopHocPhan = () => {
 										HK{recHocKy?.soThuTu} {(recHocKy?.namHoc?.namBatDau?.toString() ?? '')?.slice(-2)}-
 										{(recHocKy?.namHoc?.namKetThuc?.toString() ?? '')?.slice(-2)}
 									</div>
-									<DownOutlined />
+									<IconArrowDown />
 								</Space>
 							</span>
 						</Dropdown>

@@ -11,16 +11,7 @@ import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
 import axios from '@/utils/axios';
 import { formatDateTime } from '@/utils/formatDate';
 import { ip3 } from '@/utils/ip';
-import {
-	DeleteOutlined,
-	EditOutlined,
-	EyeOutlined,
-	MenuOutlined,
-	PaperClipOutlined,
-	PlusOutlined,
-	PrinterOutlined,
-	QuestionOutlined,
-} from '@ant-design/icons';
+import { IconTrash, IconPencil01, IconEyeOpen, IconQuestionCircle, IconHumberger, IconPaperClip45Degree, IconPlus, IconPrinter } from '@/components/Icons';
 import { Button, Carousel, Divider, Modal, Popconfirm, Popover, Tabs, Tag, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
@@ -172,7 +163,7 @@ const LichSuGuiDon = () => {
 			render: (val: string[], rec) =>
 				val?.length ? (
 					<>
-						<PaperClipOutlined />{' '}
+						<IconPaperClip45Degree />{' '}
 						<a
 							onClick={() => {
 								setRecordView(rec);
@@ -238,7 +229,7 @@ const LichSuGuiDon = () => {
 											}
 											handleInDon(recordTemp.maDon);
 										}}
-										icon={<PrinterOutlined />}
+										icon={<IconPrinter />}
 									/>
 								</Tooltip>
 
@@ -250,7 +241,7 @@ const LichSuGuiDon = () => {
 										onClick={() => {
 											handlePreviewDon(recordTemp);
 										}}
-										icon={<EyeOutlined />}
+										icon={<IconEyeOpen />}
 									/>
 								</Tooltip>
 
@@ -265,7 +256,7 @@ const LichSuGuiDon = () => {
 											setVisibleForm(true);
 											setRecordView(recordTemp);
 										}}
-										icon={<QuestionOutlined />}
+										icon={<IconQuestionCircle />}
 									/>
 								</Tooltip>
 
@@ -280,7 +271,7 @@ const LichSuGuiDon = () => {
 											setRecordView(recordTemp);
 											setType('edit');
 										}}
-										icon={<EditOutlined />}
+										icon={<IconPencil01 />}
 									/>
 								</Tooltip>
 
@@ -298,14 +289,14 @@ const LichSuGuiDon = () => {
 											shape='circle'
 											danger
 											disabled={recordTemp?.trangThai !== 'PROCESSING'}
-											icon={<DeleteOutlined />}
+											icon={<IconTrash />}
 										/>
 									</Popconfirm>
 								</Tooltip>
 							</>
 						}
 					>
-						<Button icon={<MenuOutlined />} type='link' />
+						<Button icon={<IconHumberger />} type='link' />
 					</Popover>
 				);
 			},
@@ -327,7 +318,7 @@ const LichSuGuiDon = () => {
 				otherButtons={[
 					<Button
 						type='primary'
-						icon={<PlusOutlined />}
+						icon={<IconPlus />}
 						onClick={() => history.push('/dich-vu-hanh-chinh/tao-don')}
 						key='1'
 					>

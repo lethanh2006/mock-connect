@@ -1,7 +1,8 @@
 import { ETransactionPaymentType } from '@/services/TaiChinh/constant';
 import { getPublicAssetPath } from '@/utils/path';
 import { inputFormat } from '@/utils/utils';
-import { Col, Descriptions, Radio, Row, Spin } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import { Descriptions, Radio, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import './style.less';

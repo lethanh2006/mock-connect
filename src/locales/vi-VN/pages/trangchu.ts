@@ -1,4 +1,5 @@
 export default {
+	'trangchu.title': 'Trang chủ',
 	'trangchu.title.xinchao': 'Xin chào {ten}',
 	'trangchu.title.quaylai': 'Mừng bạn quay lại',
 	'trangchu.v2.welcome.semester.spring': 'Học kỳ Xuân',
@@ -50,6 +51,7 @@ export default {
 	'trangchu.lich.lichthi': 'Lịch thi',
 	'trangchu.lich.thang': 'Tháng',
 	'trangchu.lich.xemtatca': 'Xem tất cả',
+	'trangchu.lich.xemthem': 'Xem thêm',
 	'trangchu.lich.modal.title': 'Sự kiện ngày',
 	'trangchu.lich.modal.phong': 'Phòng',
 	'trangchu.lich.modal.themmoi': 'Thêm mới sự kiện',

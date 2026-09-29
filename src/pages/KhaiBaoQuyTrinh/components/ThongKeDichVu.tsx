@@ -2,13 +2,7 @@ import StatisticsCard from '@/components/StatisticsCard';
 import { StatisticsItem } from '@/components/StatisticsCard/typing';
 import { tienVietNam } from '@/utils/utils';
 
-import {
-	CheckCircleOutlined,
-	DollarCircleOutlined,
-	ExclamationCircleOutlined,
-	FileTextOutlined,
-	StopOutlined,
-} from '@ant-design/icons';
+import { IconXmarkCircle, IconShieldCheck, IconFileMoney, IconWarningCircle, IconShorttext } from '@/components/Icons';
 import { Col, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -87,19 +81,19 @@ const ThongKeDichVu = ({ data, tenQuyTrinh }: ThongKeProps) => {
 		{
 			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.thongke.tongdon' }),
 			value: thongKe.tongSoDon,
-			icon: <FileTextOutlined />,
+			icon: <IconShorttext />,
 			valueColor: '#FFAF0B',
 		},
 		{
 			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.thongke.dahoanthanh' }),
 			value: thongKe.daHoanThanh,
-			icon: <CheckCircleOutlined />,
+			icon: <IconShieldCheck />,
 			valueColor: '#17C229',
 		},
 		{
 			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.thongke.chuahoanthanh' }),
 			value: thongKe.chuaThanhToan,
-			icon: <ExclamationCircleOutlined />,
+			icon: <IconWarningCircle />,
 			valueColor: '#DA2128',
 		},
 	];
@@ -108,13 +102,13 @@ const ThongKeDichVu = ({ data, tenQuyTrinh }: ThongKeProps) => {
 		{
 			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.thongke.tongtien' }),
 			value: thongKe.tongSoTienFormatted,
-			icon: <DollarCircleOutlined />,
+			icon: <IconFileMoney />,
 			valueColor: '#17C229',
 		},
 		{
 			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.thongke.chuathanhtoan' }),
 			value: thongKe.tongTienChuaThanhToanFormatted,
-			icon: <StopOutlined />,
+			icon: <IconXmarkCircle />,
 			valueColor: '#DA2128',
 		},
 	];

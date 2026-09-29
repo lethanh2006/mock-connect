@@ -2,23 +2,17 @@ import { TrangThaiBuoc, TrangThaiThaoTac } from '@/services/DVMC/DichVuMotCuaV2/
 import type { DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
 import { primaryColor } from '@/services/base/constant';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
-import {
-	CheckCircleOutlined,
-	ClockCircleOutlined,
-	CloseCircleOutlined,
-	LoadingOutlined,
-	PauseCircleOutlined,
-} from '@ant-design/icons';
+import { IconRotateArrow, IconShieldCheck, IconStopwatch, IconXmarkCircle } from '@/components/Icons';
 import { Button, Card, Spin, Timeline } from 'antd';
 import { useEffect, useState } from 'react';
 import { useAccess, useModel } from 'umi';
 
 const IconTrangThai = {
-	PENDING: <PauseCircleOutlined style={{ fontSize: '16px', color: 'gray' }} />,
-	OK: <CheckCircleOutlined style={{ fontSize: '16px', color: '#73d13d' }} />,
-	NOT_OK: <CloseCircleOutlined style={{ fontSize: '16px', color: '#d9363e' }} />,
-	PROCESSING: <LoadingOutlined style={{ fontSize: '16px', color: '#1890ff' }} />,
-	ANY: <ClockCircleOutlined style={{ fontSize: '16px', color: 'gray' }} />,
+	PENDING: <IconStopwatch style={{ fontSize: '16px', color: 'gray' }} />,
+	OK: <IconShieldCheck style={{ fontSize: '16px', color: '#73d13d' }} />,
+	NOT_OK: <IconXmarkCircle style={{ fontSize: '16px', color: '#d9363e' }} />,
+	PROCESSING: <IconRotateArrow style={{ fontSize: '16px', color: '#1890ff' }} />,
+	ANY: <IconStopwatch style={{ fontSize: '16px', color: 'gray' }} />,
 };
 
 const FormQuyTrinh = (props: {
@@ -46,7 +40,7 @@ const FormQuyTrinh = (props: {
 	const arrPathName = pathname?.split('/') ?? [];
 	const [checkLastStep, setCheckLastStep] = useState<boolean>(false);
 	const [checkDuocPhepXuLy, setCheckDuocPhepXuLy] = useState<boolean>(false);
-	const lastStep = props?.record?.danhSachBuoc?.[props?.record?.danhSachBuoc?.length - 1 ?? 0];
+	const lastStep = props?.record?.danhSachBuoc?.[(props?.record?.danhSachBuoc?.length ?? 1) - 1];
 	const [type, setType] = useState<string>('handle');
 	const [trangThaiDon, setTrangThaiDon] = useState<string>();
 
@@ -137,7 +131,7 @@ const FormQuyTrinh = (props: {
 											<div style={{ width: 200, float: 'right' }}>
 												<b>{buoc?.ten ?? ''}</b>
 												<br />
-												<div>Trạng thái: {TrangThaiBuoc?.[recordBuoc?.trangThai ?? ''] ?? 'Đang chờ'}</div>
+												<div>Trạng thái: {TrangThaiBuoc?.[recordBuoc?.trangThai as keyof typeof TrangThaiBuoc] ?? 'Đang chờ'}</div>
 											</div>
 										}
 									>
@@ -150,7 +144,7 @@ const FormQuyTrinh = (props: {
 											(item) => item.idThaoTac === thaoTac._id,
 										);
 										const isDuocPhepXuLy = recordDonThaoTac?.phanQuyen ?? false;
-										const IconThaoTac = IconTrangThai?.[recordThaoTac?.trangThai ?? 'ANY'];
+										const IconThaoTac = IconTrangThai?.[(recordThaoTac?.trangThai as keyof typeof IconTrangThai) ?? 'ANY'];
 										return (
 											<Timeline.Item key={recordThaoTac?._id} dot={IconThaoTac}>
 												<b

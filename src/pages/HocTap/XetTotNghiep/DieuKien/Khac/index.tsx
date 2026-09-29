@@ -1,4 +1,4 @@
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { IconShieldCheck, IconXmarkCircle } from '@/components/Icons';
 import { Card, Col, Row } from 'antd';
 import { useModel } from 'umi';
 
@@ -14,11 +14,11 @@ const DieuKienKhacSection = () => {
 				<Card className='card-stat-small'>
 					{dieuKienTotNghiep?.noTaiChinh ? (
 						<span className='num text-error'>
-							<CloseCircleOutlined />
+							<IconXmarkCircle />
 						</span>
 					) : (
 						<span className='num text-success'>
-							<CheckCircleOutlined />
+							<IconShieldCheck />
 						</span>
 					)}
 					<span>Công nợ: {dieuKienTotNghiep?.noTaiChinh ? 'Chưa thanh toán đủ' : 'Đã thanh toán đủ'}</span>
@@ -28,11 +28,11 @@ const DieuKienKhacSection = () => {
 				<Card className='card-stat-small'>
 					{dieuKienTotNghiep?.noThuVien ? (
 						<span className='num text-error'>
-							<CloseCircleOutlined />
+							<IconXmarkCircle />
 						</span>
 					) : (
 						<span className='num text-success'>
-							<CheckCircleOutlined />
+							<IconShieldCheck />
 						</span>
 					)}
 					<span>Thư viện: {dieuKienTotNghiep?.noThuVien ? 'Chưa hoàn trả học liệu' : 'Đã hoàn trả học liệu'}</span>

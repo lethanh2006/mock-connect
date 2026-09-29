@@ -67,7 +67,7 @@
     "@umijs/max": "^4.6.65",
     "@umijs/plugin-model": "^2.6.2",
     "@umijs/route-utils": "^4.0.1",
-    "@vinuni/ui": "./vinuni-ui-1.5.2.tgz",
+    "@vinuni/ui": "./vinuni-ui-1.5.3.tgz",
     "antd": "^5.24.2",
     "apexcharts": "^4.5.0",
     "axios": "^1.18.0",

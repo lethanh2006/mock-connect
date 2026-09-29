@@ -1,5 +1,6 @@
 import ModalExpandable from '@/components/Table/ModalExpandable';
-import { Button, Col, Row } from 'antd';
+import { Button } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
 import { useIntl } from 'umi';
 
 interface IProps {
@@ -34,7 +35,7 @@ const ChoiceModalBHYT = ({ open, onClose, onSelectDangKy, onSelectMien }: IProps
 			onCancel={onClose}
 			width={900}
 			footer={[
-				<Button key='close' onClick={onClose}>
+				<Button variant='outline' key='close' onClick={onClose}>
 					{t('global.button.dong')}
 				</Button>,
 			]}
@@ -49,7 +50,7 @@ const ChoiceModalBHYT = ({ open, onClose, onSelectDangKy, onSelectMien }: IProps
 							{intl.formatMessage({ id: 'baohiemyte.dangky.choiceModal.khongCoBHYT.desc' })}
 						</div>
 						<div style={{ textAlign: 'right' }}>
-							<Button type='primary' onClick={onSelectDangKy}>
+							<Button variant='default' onClick={onSelectDangKy}>
 								{t('baohiemyte.dangky.choiceModal.khongCoBHYT.button')}
 							</Button>
 						</div>
@@ -64,7 +65,7 @@ const ChoiceModalBHYT = ({ open, onClose, onSelectDangKy, onSelectMien }: IProps
 							{t('baohiemyte.dangky.choiceModal.daCoBHYT.desc')}
 						</div>
 						<div style={{ textAlign: 'right' }}>
-							<Button onClick={onSelectMien}>{t('baohiemyte.dangky.choiceModal.daCoBHYT.button')}</Button>
+							<Button variant='outline' onClick={onSelectMien}>{t('baohiemyte.dangky.choiceModal.daCoBHYT.button')}</Button>
 						</div>
 					</div>
 				</Col>

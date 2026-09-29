@@ -1,4 +1,4 @@
-import Select from '@/components/MySelect';
+import VinSelect from '@/components/VinSelect';
 import type { CSSProperties } from 'react';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -24,7 +24,7 @@ const SelectTag = (props: {
 	}, []);
 
 	return (
-		<Select
+		<VinSelect
 			loading={loading}
 			mode={multiple ? 'multiple' : undefined}
 			value={value}

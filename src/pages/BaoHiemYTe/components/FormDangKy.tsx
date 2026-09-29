@@ -5,12 +5,16 @@ import { getPhuongXa, getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
 import type { DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
-import { resetFieldsForm } from '@/utils/utils';
-import { Button, Col, Divider, Form, Input, Row, Select } from 'antd';
+import { Col, Row } from '@/components/MyGrid';
+import Input from '@/components/MyInput';
+import VinSelect from '@/components/VinSelect';
+import { Button } from '@/components/Icons';
+import { Divider, Form } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import { usePersonalInfo } from '../hooks/usePersonalInfo';
 import PersonalInfoFields from './PersonalInfoFields';
+import { resetFieldsForm } from '@/utils/utils';
 
 interface IProps {
 	record?: BaoHiemYTe.IDotDangKy;
@@ -151,7 +155,7 @@ const FormDangKyBHYT = ({ record, isView, onCancel, getData }: IProps) => {
 				</Col>
 				<Col span={24} md={8}>
 					<Form.Item name={['diaChiThuongTru', 'maTinh']} label={t('donvihanhchinh.tp')} rules={[...rules.required]}>
-						<Select
+						<VinSelect
 							disabled={readOnly}
 							placeholder={t('donvihanhchinh.tp.place')}
 							allowClear
@@ -168,7 +172,7 @@ const FormDangKyBHYT = ({ record, isView, onCancel, getData }: IProps) => {
 						label={t('donvihanhchinh.xa')}
 						rules={[...rules.required]}
 					>
-						<Select
+						<VinSelect
 							disabled={readOnly}
 							placeholder={t('donvihanhchinh.xa.place')}
 							allowClear
@@ -191,11 +195,11 @@ const FormDangKyBHYT = ({ record, isView, onCancel, getData }: IProps) => {
 			</Row>
 			<div className='form-footer'>
 				{!readOnly ? (
-					<Button loading={formSubmiting} htmlType='submit' type='primary'>
+					<Button loading={formSubmiting} type='submit' variant='default'>
 						{t('baohiemyte.dangky.button.dangKy')}
 					</Button>
 				) : null}
-				<Button htmlType='button' onClick={onCancel}>
+				<Button variant='outline' onClick={onCancel}>
 					{t('global.button.huy')}
 				</Button>
 			</div>

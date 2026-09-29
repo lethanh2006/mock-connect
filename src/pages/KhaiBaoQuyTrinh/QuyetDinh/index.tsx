@@ -2,7 +2,7 @@ import PreviewFile from '@/components/PreviewFile';
 import TableBase from '@/components/Table';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import type { IColumn } from '@/components/Table/typing';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { IconTrash, IconPencil01 } from '@/components/Icons';
 import { Button, Carousel, Popconfirm, Tooltip } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -56,7 +56,7 @@ const QuanLyQuyetDinhGiao = (props: { viewTheoBuoc?: boolean }) => {
 								setVisibleForm(true);
 							}}
 							type='link'
-							icon={<EditOutlined />}
+							icon={<IconPencil01 />}
 						/>
 					</Tooltip>
 					<Tooltip title='Xóa'>
@@ -65,7 +65,7 @@ const QuanLyQuyetDinhGiao = (props: { viewTheoBuoc?: boolean }) => {
 							title='Bạn có chắc chắn muốn xóa?'
 							placement='topLeft'
 						>
-							<Button danger type='link' icon={<DeleteOutlined />} />
+							<Button danger type='link' icon={<IconTrash />} />
 						</Popconfirm>
 					</Tooltip>
 				</>

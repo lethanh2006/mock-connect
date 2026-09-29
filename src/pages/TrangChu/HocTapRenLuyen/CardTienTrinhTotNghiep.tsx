@@ -1,4 +1,4 @@
-import { ArrowRightOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { IconArrowRight, IconShieldCheck } from '@/components/Icons';
 import { Card, Col, Empty, Row } from 'antd';
 import { Link, useModel } from 'umi';
 
@@ -11,7 +11,7 @@ const CardTienTrinhTotNghiep = () => {
 				<div className='header'>
 					<div className='title'>Chứng chỉ cần đạt</div>
 					<Link to='/hoc-tap/xet-tot-nghiep/xet-tot-nghiep' title='Xem chi tiết'>
-						<ArrowRightOutlined />
+						<IconArrowRight />
 					</Link>
 				</div>
 
@@ -23,7 +23,7 @@ const CardTienTrinhTotNghiep = () => {
 									<div className='row highlight' style={{ padding: '1px 8px' }}>
 										<span className='text'>{cdr.loaiChungChi?.ten ?? cdr.maLoaiChungChi}</span>
 										{cdr.datChuanDauRa ? (
-											<CheckCircleOutlined className='text-success' />
+											<IconShieldCheck className='text-success' />
 										) : (
 											<span style={{ color: '#CCC' }}>-</span>
 										)}

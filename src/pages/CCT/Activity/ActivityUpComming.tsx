@@ -3,7 +3,9 @@ import ModalExpandable from '@/components/Table/ModalExpandable';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { IColumn } from '@/components/Table/typing';
 import { Activity } from '@/services/CCT/Activity/typing';
-import { Alert, Button, Col, Descriptions, Image, Row, Space, Tag, Typography } from 'antd';
+import { Button } from '@/components/Icons';
+import { Col, Row } from '@/components/MyGrid';
+import { Alert, Descriptions, Image, Space, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -211,7 +213,7 @@ const ActivityUpComming = (props: { visible: boolean; setVisible: (val: boolean)
 				</div>
 				<div className='form-footer'>
 					<Button
-						type='primary'
+						variant='default'
 						onClick={() => {
 							setVisible(false);
 							setVisibleModal(true);
@@ -221,7 +223,9 @@ const ActivityUpComming = (props: { visible: boolean; setVisible: (val: boolean)
 					>
 						{intl.formatMessage({ id: 'activity.registered.title' })}
 					</Button>
-					<Button onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
+					<Button variant='outline' onClick={() => setVisible(false)}>
+						{intl.formatMessage({ id: 'global.button.dong' })}
+					</Button>
 				</div>
 			</ModalExpandable>
 

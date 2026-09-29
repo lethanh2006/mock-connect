@@ -1,7 +1,7 @@
+import { IconArrowRight } from '@/components/Icons';
 import DiemThiHocKy from '@/pages/KhaoThi/KyThi/DiemThiHocKy';
 import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Empty, Spin, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -372,7 +372,7 @@ const DetailKetQuaHocTap = (props: {
 								{toDanhGiaGiangVien ? (
 									<div style={{ marginTop: 12 }}>
 										<Button type='link' onClick={() => toDanhGiaGiangVien()}>
-											{intl.formatMessage({ id: 'lophocphan.id.ketqua.danhgiangay' })} <ArrowRightOutlined />
+											{intl.formatMessage({ id: 'lophocphan.id.ketqua.danhgiangay' })} <IconArrowRight />
 										</Button>
 									</div>
 								) : null}

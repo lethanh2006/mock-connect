@@ -2,8 +2,8 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { PhieuDangKyKTX } from '@/services/KyTucXa/PhieuDangKy/typing';
-import { EditOutlined } from '@ant-design/icons';
-import { Modal } from 'antd';
+import { IconPencil01 } from '@/components/Icons';
+import { Modal } from '@/components/Table/ModalExpandable';
 import { useIntl, useModel } from 'umi';
 import Form from './Form';
 
@@ -182,7 +182,7 @@ const FormItemNguoiThanKTX = (props: {
 						disabled={disabled}
 						// || isFilledColumn(rec)}
 						onClick={() => onEdit(rec)}
-						icon={<EditOutlined />}
+						icon={<IconPencil01 />}
 					/>
 					{/* <Popconfirm
 						onConfirm={() => onDelete(rec.index - 1)}
