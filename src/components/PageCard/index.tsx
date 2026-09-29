@@ -250,42 +250,27 @@ const PageCard: React.FC<PageCardProps> = ({
 			<Spin spinning={loading} style={{ width: '100%' }}>
 				{hasHeader && (
 					<>
-						{stickyHeader ? (
-							// 1 khối fixed duy nhất trải từ y=0 xuống hết header — không tách cap/header
-							// riêng, dễ hở mí do sai số vài pixel giữa 2 phép đo độc lập. Spacer đẩy header
-							// xuống đúng container.top (khớp layout không sticky); header giữ margin: 0 để
-							// margin gốc không tự đẩy thêm.
+						<div
+							className={`page-card-header-shell ${stickyHeader ? 'page-card-header-shell-sticky' : ''}`}
+							style={{
+								backgroundColor: bgColor || undefined,
+							}}
+						>
 							<div
-								className='page-card-header-shell'
-								style={{
-									backgroundColor: bgColor || undefined,
-								}}
+								ref={headerRef}
+								className='page-card-header page-card-header-fixed'
+								data-slot='page-card-header'
+								data-scrolled={scrolled}
 							>
-								<div
-									ref={headerRef}
-									className='page-card-header page-card-header-fixed'
-									data-slot='page-card-header'
-									data-scrolled={scrolled}
-								>
-									{outerTitleBlock}
-									{extraContent && (
-										<div className='page-card-action' data-slot='card-action'>
-											{extraContent}
-										</div>
-									)}
-									<ScrollEdgeEffect edge='top' theme='grounded' className='page-card-scroll-edge' />
-								</div>
-							</div>
-						) : (
-							<div className='page-card-header' data-slot='page-card-header'>
 								{outerTitleBlock}
 								{extraContent && (
 									<div className='page-card-action' data-slot='card-action'>
 										{extraContent}
 									</div>
 								)}
+								<ScrollEdgeEffect edge='top' theme='grounded' className='page-card-scroll-edge' />
 							</div>
-						)}
+						</div>
 						{/* {stickyHeader && (
 							<div
 								ref={placeholderRef}
@@ -296,7 +281,7 @@ const PageCard: React.FC<PageCardProps> = ({
 						)} */}
 					</>
 				)}
-				<div className='page-card-body'>{children}</div>
+				<div className={`page-card-body ${stickyHeader ? 'page-card-body-sticky' : ''}`}>{children}</div>
 			</Spin>
 		</div>
 	);
