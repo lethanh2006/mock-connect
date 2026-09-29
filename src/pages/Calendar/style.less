@@ -28,7 +28,7 @@
 	}
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
 	.calendar-layout {
 		flex-direction: column;
 
@@ -83,6 +83,7 @@
 	gap: 16px;
 	padding: 16px 0;
 	min-height: 68px;
+	flex-wrap: wrap;
 }
 
 .calendar-toolbar__nav {
@@ -584,6 +585,7 @@
 	.calendar-toolbar__actions {
 		width: 100%;
 		justify-content: space-between;
+		flex-wrap: wrap-reverse;
 	}
 }
 
