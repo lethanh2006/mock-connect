@@ -1,6 +1,6 @@
 import EmptyState from '@/components/EmptyState';
 import { Carousel, Divider, Spin } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChartDiemTrungBinh from './ChartDiemTrungBinh';
 import ChartSoTinChi from './ChartSoTinChi';
@@ -15,6 +15,7 @@ const KetQuaToanKhoaSinhVien = (props: {
 	const intl = useIntl();
 	const { maKhoaNganh, loadData, data, tongSoTinChiChuongTrinh } = props;
 	const { getKetQuaHocKy, danhSach: danhSachModel, loading: loadingModel } = useModel('daotao.ketquahocky');
+	const [activeChart, setActiveChart] = useState(0);
 	const danhSach = data ?? danhSachModel;
 	const loading = data ? false : loadingModel;
 
@@ -33,17 +34,25 @@ const KetQuaToanKhoaSinhVien = (props: {
 						record={data?.at(-1)}
 						tongSoTinChiChuongTrinh={tongSoTinChiChuongTrinh}
 					/>
-					<Divider orientation='left' dashed className='divider-big-title'>
-						{intl.formatMessage({ id: 'ketquahoctap.chart.creditStatistics' })}
+					<Divider orientation='left' dashed className='divider-big-title credit-chart-heading'>
+						{intl.formatMessage({
+							id: activeChart === 0 ? 'ketquahoctap.chart.creditStatistics' : 'ketquahoctap.chart.gpaStatistics',
+						})}
 					</Divider>
-					<Carousel pauseOnDotsHover style={{ marginTop: 12 }} autoplay>
+					<Carousel
+						className='academic-credit-carousel'
+						pauseOnDotsHover
+						style={{ marginTop: 12 }}
+						autoplay
+						beforeChange={(_, next) => setActiveChart(next)}
+					>
 						<div>
-							<div style={{ marginBottom: 8 }}>
+							<div className='credit-statistics-chart' style={{ marginBottom: 8 }}>
 								<ChartSoTinChi data={data} />
 							</div>
 						</div>
 						<div>
-							<div style={{ marginBottom: 8 }}>
+							<div className='gpa-statistics-chart' style={{ marginBottom: 8 }}>
 								<ChartDiemTrungBinh data={data} />
 							</div>
 						</div>

@@ -2,11 +2,12 @@ export default {
 	'dangkytinchi.title': 'Course Registration',
 	'dangkytinchi.loading.message': 'The system is loading data. Please do not reload the page (F5) to avoid data loss.',
 	'dangkytinchi.filter.btn.xemchitiet': 'View details',
+	'dangkytinchi.alert.seefull': 'See full',
 	'dangkytinchi.filter.thoigiandangky.title':
 		'Course registration is open from <b>{thoigianbatdau}</b> to <b>{thoigianketthuc}</b>',
 	'dangkytinchi.filter.step.thoigianbatdaudk.title': 'Registration start time',
 	'dangkytinchi.filter.step.thoigianketthucdk.title': 'Registration closing time',
-	'dangkytinchi.filter.hocphan.total.prefix': 'courses',
+	'dangkytinchi.filter.hocphan.total.prefix': 'Courses',
 	'dangkytinchi.filter.lop.total.prefix': 'sections',
 
 	'dangkytinchi.loaidangky.lop-hanh-chinh': 'Planned Courses',

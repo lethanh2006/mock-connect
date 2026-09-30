@@ -1,5 +1,5 @@
 import EmptyState from '@/components/EmptyState';
-import { Button, IconQuestionCircle, IconShieldInfo, IconShorttext } from '@/components/Icons';
+import { IconQuestionCircle } from '@/components/Icons';
 import FormWaiting, { hideFormWaiting } from '@/components/Loading/FormWaiting';
 import PageCard, { Card } from '@/components/PageCard';
 import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
@@ -138,20 +138,29 @@ const DangKyTinChiPage = () => {
 		<GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>
 			<PageCard
 				stickyHeader
+				className='course-registration-page'
 				title={intl.formatMessage({ id: 'dangkytinchi.title' })}
 				extra={<FilterDotDangKy mockMode={ENABLE_DANG_KY_TIN_CHI_MOCK} />}
 			>
-				<div ref={dangKyCardRef}>
-					<VinCard>
+				<div ref={dangKyCardRef} className='course-registration-section course-registration-section--available'>
+					<VinCard className='course-registration-card course-registration-card--available'>
 						<CardContent>
 							{!!phieuDangKy?.soTinChiToiDa &&
 							dotDangKyHienTai &&
 							sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
 								<Alert
+									className='course-registration-period-alert'
 									type='info'
 									showIcon
-									icon={<IconShieldInfo />}
-									style={{ marginBottom: 12 }}
+									icon={
+										<svg width='20' height='20' viewBox='0 0 20 20' fill='none' aria-hidden='true'>
+											<path
+												d='M9.08301 0C14.0993 0.000175944 18.1668 4.06668 18.167 9.08301C18.1668 14.0993 14.0993 18.1668 9.08301 18.167C4.06668 18.1668 0.000175948 14.0993 0 9.08301C0.000175748 4.06668 4.06668 0.000175744 9.08301 0ZM9.08301 1.5C4.89511 1.50018 1.50018 4.89511 1.5 9.08301C1.50018 13.2709 4.89511 16.6668 9.08301 16.667C13.2709 16.6668 16.6668 13.2709 16.667 9.08301C16.6668 4.89511 13.2709 1.50018 9.08301 1.5ZM9.83301 12.083H10.749C11.1631 12.083 11.4988 12.4189 11.499 12.833C11.4988 13.2471 11.1631 13.583 10.749 13.583H8.33301V8.16602H7.41602C7.00195 8.16584 6.66602 7.83012 6.66602 7.41602C6.66619 7.00206 7.00206 6.66619 7.41602 6.66602H9.83301V12.083ZM9.08301 3.66602C9.77326 3.66602 10.3328 4.22581 10.333 4.91602V4.9209C10.333 5.61125 9.77336 6.1709 9.08301 6.1709C8.39265 6.1709 7.83301 5.61125 7.83301 4.9209V4.91602C7.83318 4.22581 8.39276 3.66602 9.08301 3.66602Z'
+												fill='#1D4ED8'
+												transform='translate(0.916 0.916)'
+											/>
+										</svg>
+									}
 									message={
 										<span>
 											{intl.formatMessage(
@@ -159,10 +168,9 @@ const DangKyTinChiPage = () => {
 												{
 													thoigianbatdau: formatDateTime(dotDangKyHienTai?.thoiGianBatDau),
 													thoigianketthuc: formatDateTime(dotDangKyHienTai?.thoiGianKetThuc),
-													b: (chunks) => <b>{chunks}</b>,
+													b: (chunks) => <b className='course-registration-period-time'>{chunks}</b>,
 												},
 											)}
-
 											{phieuDangKy ? (
 												<>
 													.{' '}
@@ -174,16 +182,15 @@ const DangKyTinChiPage = () => {
 														</b>
 													</span>
 												</>
-											) : null}
+											) : null}{' '}
+											<button
+												className='course-registration-period-link'
+												type='button'
+												onClick={() => setVisibleThongTin(true)}
+											>
+												{intl.formatMessage({ id: 'dangkytinchi.alert.seefull' })}
+											</button>
 										</span>
-									}
-									action={
-										<Button
-											variant='link'
-											size='sm'
-											icon={<IconShorttext />}
-											onClick={() => setVisibleThongTin(true)}
-										/>
 									}
 								/>
 							) : null}
@@ -217,12 +224,12 @@ const DangKyTinChiPage = () => {
 								) : !!phieuDangKy?.soTinChiToiDa ? (
 									<>
 										{sinhVienDot?.ghiChu && (
-											<div>
+											<div className='course-registration-note'>
 												{<IconQuestionCircle />} {intl.formatMessage({ id: 'dangkytinchi.empty.ghichu' })}:{' '}
 												<i style={{ color: 'gray' }}>{sinhVienDot.ghiChu}.</i>
 											</div>
 										)}
-										<div style={{ marginBottom: 12 }}>
+										<div className='course-registration-description'>
 											{intl.formatMessage(
 												{ id: 'dangkytinchi.thongtindangky.alert' },
 												{
@@ -281,8 +288,11 @@ const DangKyTinChiPage = () => {
 					</VinCard>
 				</div>
 
-				<div ref={phieuDangKyRef}>
-					<Card title={intl.formatMessage({ id: 'dangkytinchi.phieudangky.danhsachdadangky.title' })}>
+				<div ref={phieuDangKyRef} className='course-registration-section course-registration-section--registered'>
+					<Card
+						className='course-registration-card course-registration-card--registered'
+						title={intl.formatMessage({ id: 'dangkytinchi.phieudangky.danhsachdadangky.title' })}
+					>
 						<PhieuDangKy
 							danhSachLopHienThi={danhSachLopHienThi}
 							tongTinChi={tongTinChi}

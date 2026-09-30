@@ -1,13 +1,27 @@
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { ETrangThaiHocTap } from '@/services/DaoTao/constant';
-import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
+import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { accentColors, tenTruongVietTatTiengAnh } from '@/services/base/constant';
 import { Card } from 'antd';
-// import { Card, Tag } from 'antd';
 import type { ReactNode } from 'react';
 import { useIntl } from 'umi';
 import './CardStyles.less';
+
+const courseGradeColors: Partial<Record<ELoaiDiemChu, string>> = {
+	[ELoaiDiemChu.A_PLUS]: '#16A34A',
+	[ELoaiDiemChu.A]: '#16A34A',
+	[ELoaiDiemChu.A_MINUS]: '#16A34A',
+	[ELoaiDiemChu.B_PLUS]: 'var(--course-grade-neutral, #000000)',
+	[ELoaiDiemChu.B]: 'var(--course-grade-neutral, #000000)',
+	[ELoaiDiemChu.B_MINUS]: 'var(--course-grade-neutral, #000000)',
+	[ELoaiDiemChu.C_PLUS]: 'var(--course-grade-neutral, #000000)',
+	[ELoaiDiemChu.C]: 'var(--course-grade-neutral, #000000)',
+	[ELoaiDiemChu.C_MINUS]: 'var(--course-grade-neutral, #000000)',
+	[ELoaiDiemChu.D_PLUS]: '#FA580C',
+	[ELoaiDiemChu.D]: '#FA580C',
+	[ELoaiDiemChu.D_MINUS]: '#FA580C',
+	[ELoaiDiemChu.F]: '#DC2626',
+};
 
 const CardHocPhan = (props: {
 	hocPhan?: Partial<HocPhan.IRecord>;
@@ -20,42 +34,34 @@ const CardHocPhan = (props: {
 	const intl = useIntl();
 	const { hocPhan, listDiem, trangThaiHoc, onClick, label } = props;
 	const soTinChi = hocPhan?.soTinChi ?? 0;
-	const listDiemChu = listDiem?.map((item) => item.diemChu || '');
-
 	const isNotStudied = trangThaiHoc === ETrangThaiHocTap.CHUA_HOC;
-	const isCurrentlyStudying = trangThaiHoc === ETrangThaiHocTap.DANG_HOC || undefined;
-	const isVinUni = tenTruongVietTatTiengAnh === 'VINUNI';
-	// Chỉ hiển thị điểm đầu tiên
-	const diemHienThi = listDiemChu?.[0];
+	const isCurrentlyStudying = trangThaiHoc === ETrangThaiHocTap.DANG_HOC;
+	const diemHienThi = listDiem?.[0]?.diemChu;
 
 	return (
-		<div className='base-card'>
-			<Card hoverable onClick={onClick} style={{ backgroundColor: accentColors.accent800 ?? '#f8f8f8' }}>
-				{/* Background Image - Dùng ảnh điểm làm background */}
-
-				{/* Content */}
+		<div className='base-card base-card--course'>
+			<Card hoverable onClick={onClick}>
 				<div className='card-content'>
-					{/* Course name */}
-					{label && <span className='card-label'>{label}</span>}
+					<div className='card-main'>
+						{label && <span className='card-label'>{label}</span>}
+						<h4 className='card-title' title={[hocPhan?.ma, hocPhan?.ten].filter(Boolean).join(' - ')}>
+							{hocPhan?.ten}
+						</h4>
+					</div>
 
-					{hocPhan?.ma && (
-						<div className={`card-course-code ${isNotStudied ? 'not-studied' : 'default'}`}>{hocPhan.ma}</div>
-					)}
-					<h4 className={`card-title ${isNotStudied ? 'not-studied' : 'default'}`} title={hocPhan?.ten}>
-						{hocPhan?.ten}
-					</h4>
-
-					{/* Credits & Grade */}
 					<div className='card-footer'>
 						<span className='card-credits-text'>
-							{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
+							{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.courseCard.credits' })}
 						</span>
 						<div className='card-footer-right'>
 							{isCurrentlyStudying && !diemHienThi && (
 								<span className='card-registered-text'>{intl.formatMessage({ id: 'tientrinhhoctap.registered' })}</span>
 							)}
 							{diemHienThi && !isNotStudied && (
-								<span className='card-grade-text' style={{ color: ColorDiemChu[diemHienThi] }}>
+								<span
+									className='card-grade-text'
+									style={{ color: courseGradeColors[diemHienThi] ?? ColorDiemChu[diemHienThi] }}
+								>
 									{diemHienThi}
 								</span>
 							)}

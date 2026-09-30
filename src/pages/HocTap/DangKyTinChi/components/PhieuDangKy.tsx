@@ -1,5 +1,5 @@
 import ExpandText from '@/components/ExpandText';
-import { Badge, IconTrash } from '@/components/Icons';
+import { Badge } from '@/components/Icons';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
@@ -25,7 +25,6 @@ import {
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
-import { InfoCircleOutlined } from '@ant-design/icons';
 import { Descriptions, Popconfirm, Popover, Space } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -35,6 +34,8 @@ import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
 import ModalLopDaHuy from './ModalLopDaHuy';
+import RegistrationStatusInfoIcon from './RegistrationStatusInfoIcon';
+import RegistrationTrashIcon from './RegistrationTrashIcon';
 import RenderLichHoc from './RenderLichHoc';
 
 const mapTrangThaiDKTCBadgeVariant = (
@@ -256,7 +257,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.trangthai' }),
 			dataIndex: 'trangThai',
 			width: 120,
-			align: 'center',
+			align: 'left',
 			render: (val, rec) => {
 				const trangThaiVuotTin = rec?.dkVuotTinChiLop?.trangThai;
 				const trangThaiDuThinh = rec?.dangKyHocDuThinh?.trangThai;
@@ -288,11 +289,14 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 				const trangThaiThuongI18nId = mapTrangThaiDangKyTinChiI18n[val as ETrangThaiDangKyTinChi];
 
 				return (
-					<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+					<div className='course-registration-status-stack'>
 						{trangThaiDacBiet && (isVuotTin || isDuThinh) ? (
 							<>
 								<Space size={4} align='center'>
-									<Badge variant={mapStatusColorBadgeVariant(isApproved ? 'green' : statusColor)}>
+									<Badge
+										className='course-registration-status-badge'
+										variant={mapStatusColorBadgeVariant(isApproved ? 'green' : statusColor)}
+									>
 										{statusI18nId
 											? intl.formatMessage({ id: statusI18nId, defaultMessage: String(trangThaiDacBiet) })
 											: trangThaiDacBiet}
@@ -321,23 +325,24 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 												</Descriptions>
 											}
 										>
-											<InfoCircleOutlined style={{ color: '#1677ff', cursor: 'pointer' }} />
+											<RegistrationStatusInfoIcon />
 										</Popover>
 									) : null}
 								</Space>
 								{!(isApproved && isDuThinh) && loaiI18nId ? (
-									<span style={{ color: 'rgba(0, 0, 0, 0.45)', fontSize: 12 }}>
-										{intl.formatMessage({ id: loaiI18nId })}
-									</span>
+									<span className='course-registration-status-help'>{intl.formatMessage({ id: loaiI18nId })}</span>
 								) : null}
 							</>
 						) : (
-							<Badge variant={mapTrangThaiDKTCBadgeVariant(val as ETrangThaiDangKyTinChi)}>
+							<Badge
+								className='course-registration-status-badge'
+								variant={mapTrangThaiDKTCBadgeVariant(val as ETrangThaiDangKyTinChi)}
+							>
 								{trangThaiThuongI18nId ? intl.formatMessage({ id: trangThaiThuongI18nId }) : (val ?? '--')}
 							</Badge>
 						)}
 						{rec?.isWaitlist && (
-							<Badge variant='warning'>
+							<Badge className='course-registration-status-badge' variant='warning'>
 								{intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.hangcho' })}
 							</Badge>
 						)}
@@ -355,8 +360,8 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 			render: (val, rec) =>
 				dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 					<ButtonExtend
-						icon={<IconTrash />}
-						danger
+						className='course-registration-trash-button'
+						icon={<RegistrationTrashIcon />}
 						otherTooltipProps={{
 							placement: 'bottom',
 						}}
@@ -403,8 +408,8 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 						}
 					>
 						<ButtonExtend
-							icon={<IconTrash />}
-							danger
+							className='course-registration-trash-button'
+							icon={<RegistrationTrashIcon />}
 							type='link'
 							otherTooltipProps={{
 								placement: 'bottom',

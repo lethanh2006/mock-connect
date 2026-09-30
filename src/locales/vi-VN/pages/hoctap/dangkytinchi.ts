@@ -3,6 +3,7 @@ export default {
 	'dangkytinchi.loading.message': 'Hệ thống đang tải dữ liệu, vui lòng không tải lại trang (F5) để tránh mất dữ liệu',
 
 	'dangkytinchi.filter.btn.xemchitiet': 'Xem chi tiết',
+	'dangkytinchi.alert.seefull': 'Xem đầy đủ',
 	'dangkytinchi.filter.thoigiandangky.title':
 		'Đợt đăng ký tín chỉ từ <b>{thoigianbatdau}</b> đến <b>{thoigianketthuc}</b>',
 	'dangkytinchi.filter.step.thoigianbatdaudk.title': 'Thời gian bắt đầu đăng ký',

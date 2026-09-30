@@ -289,10 +289,29 @@ const TienTrinhChuongTrinhKhung = (props: {
 
 	const hasMinorData = minorData.some((minor) => (minor.khoiHpCtList?.length ?? 0) > 0);
 
+	const totalCourses = useMemo(() => {
+		const mainCount = filteredDanhSachHienThi.reduce((sum, group) => {
+			const cnCount = (group.chuyenNganhList ?? []).reduce((cSum, cn) => cSum + (cn.khoiHocPhan?.length ?? 0), 0);
+			return sum + (group.khoiHocPhan?.length ?? 0) + cnCount;
+		}, 0);
+		const minorCount = minorData.reduce((sum, minor) => sum + (minor.khoiHpCtList?.length ?? 0), 0);
+		return mainCount + minorCount;
+	}, [filteredDanhSachHienThi, minorData]);
+
 	return (
-		<div>
+		<div className='tien-trinh-tab-content'>
 			<div className='view-switch-container'>
-				<SearchTienTrinh storageKey={GLOBAL_SEARCH_KEY} value={searchText} onChange={setSearchText} />
+				<div className='view-switch-left'>
+					<ButtonExtend
+						className='btn-setting'
+						tooltip={intl.formatMessage({ id: 'global.setting', defaultMessage: 'Cài đặt' })}
+					/>
+					<SearchTienTrinh storageKey={GLOBAL_SEARCH_KEY} value={searchText} onChange={setSearchText} />
+					<div className='total tien-trinh-total'>
+						{intl.formatMessage({ id: 'global.tablestatic.button.tongso', defaultMessage: 'Total' })}:
+						<span>{totalCourses}</span>
+					</div>
+				</div>
 				<Space>
 					<ButtonExtend
 						icon={<IconRotateArrow />}

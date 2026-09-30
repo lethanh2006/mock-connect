@@ -3,7 +3,8 @@ export default {
 	'tientrinhhoctap.scttichluy': 'Number of Accumulated Credits / Total Program Credits',
 	'tientrinhhoctap.tin': 'credit',
 	'tientrinhhoctap.tinchi': 'credits',
-	'tientrinhhoctap.progress.tongtinchi': 'Total Credit(s)',
+	'tientrinhhoctap.courseCard.credits': 'credit(s)',
+	'tientrinhhoctap.progress.tongtinchi': 'Credits',
 	'tientrinhhoctap.message':
 		'Credit Recognition Period {tenDot} is ongoing from {tuNgay} to {denNgay}. You may register for grade conversion of courses within the academic program',
 	'daotao.loaichuongtrinh.chuan': 'Standard',
@@ -98,6 +99,7 @@ export default {
 	'tientrinhhoctap.tientrinhthucte.congnhan.form.ghichu': 'Notes',
 	'tientrinhhoctap.tientrinhthucte.congnhan.form.ghichu.place': 'Enter notes',
 	'tientrinhhoctap.ctdt.chuongtrinh': 'Program / Study plan',
+	'tientrinhhoctap.ctdt.programName': 'Program Name',
 	'tientrinhhoctap.ctdt.cohortMajor': 'Cohort - Major',
 	'tientrinhhoctap.ctdt.college': 'College',
 	'tientrinhhoctap.ctdt.loai': 'Program type',

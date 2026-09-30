@@ -3,7 +3,8 @@ export default {
 	'tientrinhhoctap.scttichluy': 'Số tín chỉ đã tích lũy/Tổng số tín chỉ của chương trình đào tạo',
 	'tientrinhhoctap.tin': 'tín',
 	'tientrinhhoctap.tinchi': 'tín chỉ',
-	'tientrinhhoctap.progress.tongtinchi': 'Tổng tín chỉ',
+	'tientrinhhoctap.courseCard.credits': 'tín chỉ',
+	'tientrinhhoctap.progress.tongtinchi': 'Tín chỉ',
 	'tientrinhhoctap.message':
 		'Đợt công nhận kết quả học tập {tenDot} đang diễn ra từ {tuNgay} đến {denNgay}. Bạn có thể đăng ký quy đổi điểm các học phần trong chương trình đào tạo',
 
@@ -104,6 +105,7 @@ export default {
 	'tientrinhhoctap.tientrinhthucte.congnhan.form.ghichu.place': 'Nhập ghi chú',
 
 	'tientrinhhoctap.ctdt.chuongtrinh': 'Chương trình/Kế hoạch',
+	'tientrinhhoctap.ctdt.programName': 'Tên chương trình',
 	'tientrinhhoctap.ctdt.cohortMajor': 'Khóa - Ngành',
 	'tientrinhhoctap.ctdt.college': 'Đơn vị phụ trách',
 	'tientrinhhoctap.ctdt.loai': 'Loại chương trình',

@@ -102,10 +102,24 @@ const TienTrinhThucTeV2 = (props: { data?: ChuongTrinhDaoTao.TTienTrinhThucTe[] 
 		);
 	};
 
+	const totalCourses = useMemo(() => {
+		return (displayedTienTrinhHocKy ?? []).reduce((sum, data) => sum + data.length, 0);
+	}, [displayedTienTrinhHocKy]);
+
 	return (
-		<div>
-			<div className='view-switch-container' style={{ marginBottom: 16 }}>
-				<SearchTienTrinh storageKey={GLOBAL_SEARCH_KEY} value={searchText} onChange={setSearchText} />
+		<div className='tien-trinh-tab-content'>
+			<div className='view-switch-container'>
+				<div className='view-switch-left'>
+					<ButtonExtend
+						className='btn-setting'
+						tooltip={intl.formatMessage({ id: 'global.setting', defaultMessage: 'Cài đặt' })}
+					/>
+					<SearchTienTrinh storageKey={GLOBAL_SEARCH_KEY} value={searchText} onChange={setSearchText} />
+					<div className='total tien-trinh-total'>
+						{intl.formatMessage({ id: 'global.tablestatic.button.tongso', defaultMessage: 'Total' })}:
+						<span>{totalCourses}</span>
+					</div>
+				</div>
 				<Space>
 					<ButtonExtend
 						icon={<IconRotateArrow />}

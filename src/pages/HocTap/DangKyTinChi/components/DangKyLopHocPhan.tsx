@@ -1,5 +1,5 @@
 import ExpandText from '@/components/ExpandText';
-import { IconShieldInfo } from '@/components/Icons';
+import { IconRotateArrow } from '@/components/Icons';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
@@ -31,9 +31,8 @@ import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
-import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Descriptions, Modal, Popconfirm, Popover, Space, Tag } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAccess, useIntl, useModel } from 'umi';
 import type { TDangKyTinChiMockData } from '../mockData';
 import {
@@ -50,6 +49,8 @@ import {
 	renderKhoangThoiGian,
 } from '../utils';
 import ModalDangKyNgay from './ModalDangKyNgay';
+import RegistrationStatusInfoIcon from './RegistrationStatusInfoIcon';
+import RegistrationTrashIcon from './RegistrationTrashIcon';
 import RenderLichHoc from './RenderLichHoc';
 
 type DangKyLopHocPhanProps = {
@@ -63,13 +64,7 @@ type DangKyLopHocPhanProps = {
 const isLopThucHanhCon = (rec: LopHocPhan.IRecord) =>
 	!!rec.tenCha || rec.loai === ELoaiLopHocPhan.THUC_HANH || !!rec.soThuTuNhom;
 
-const DangKyLopHocPhan = ({
-	tongTinChi,
-	soTinChiToiDa,
-	danhSachLopHienThi,
-	onReload,
-	mockData,
-}: DangKyLopHocPhanProps) => {
+const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, mockData }: DangKyLopHocPhanProps) => {
 	const intl = useIntl();
 	const { cctFilter } = useAccess();
 	const { record: recHocKy } = useModel('daotao.hocky');
@@ -98,6 +93,7 @@ const DangKyLopHocPhan = ({
 	const { settings } = useModel('tienich.caidat');
 	// const { danhSach: danhSachLopHanhChinh } = useModel('daotao.lophanhchinh');
 	const [expandedLopHocPhan, setExpandedLopHocPhan] = useState<string[]>([]);
+	const initializedMockFilter = useRef(false);
 
 	const allLoaiDangKy = useMemo(() => {
 		const { boLocTatCa, boLocKhoaNganh, boLocLopHanhChinh } = dotDangKyHienTai ?? {};
@@ -119,6 +115,13 @@ const DangKyLopHocPhan = ({
 		if (!allLoaiDangKy.length) return;
 		if (!loaiDangKy || !allLoaiDangKy.includes(loaiDangKy)) setLoaiDangKy(allLoaiDangKy[0]);
 	}, [allLoaiDangKy, loaiDangKy, setLoaiDangKy]);
+
+	useEffect(() => {
+		if (!mockData || initializedMockFilter.current || !allLoaiDangKy.includes(ELoaiDangKyTheoLop.LOP_HANH_CHINH))
+			return;
+		initializedMockFilter.current = true;
+		setLoaiDangKy(ELoaiDangKyTheoLop.LOP_HANH_CHINH);
+	}, [allLoaiDangKy, mockData, setLoaiDangKy]);
 
 	const [visibleDangKyNgay, setVisibleDangKyNgay] = useState<boolean>(false);
 	const [isVuotTin, setIsVuotTin] = useState<boolean>(false);
@@ -188,11 +191,14 @@ const DangKyLopHocPhan = ({
 		const trangThaiThuongI18nId = mapTrangThaiDangKyTinChiI18n[val as ETrangThaiDangKyTinChi];
 
 		return (
-			<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+			<div className='course-registration-status-stack'>
 				{trangThaiDacBiet && (isVuotTin || isDuThinh) ? (
 					<>
 						<Space size={4} align='center'>
-							<Tag color={isApproved ? 'green' : (statusColor ?? 'gold')} style={{ marginInlineEnd: 0 }}>
+							<Tag
+								className={`course-registration-status-tag${isApproved ? ' course-registration-status-tag--success' : ''}`}
+								color={isApproved ? 'green' : (statusColor ?? 'gold')}
+							>
 								{statusI18nId
 									? intl.formatMessage({ id: statusI18nId, defaultMessage: String(trangThaiDacBiet) })
 									: trangThaiDacBiet}
@@ -217,23 +223,26 @@ const DangKyLopHocPhan = ({
 										</Descriptions>
 									}
 								>
-									<InfoCircleOutlined style={{ color: '#1677ff', cursor: 'pointer' }} />
+									<RegistrationStatusInfoIcon />
 								</Popover>
 							) : null}
 						</Space>
 						{!(isApproved && isDuThinh) && loaiI18nId ? (
-							<span style={{ color: 'rgba(0, 0, 0, 0.45)', fontSize: 12 }}>
-								{intl.formatMessage({ id: loaiI18nId })}
-							</span>
+							<span className='course-registration-status-help'>{intl.formatMessage({ id: loaiI18nId })}</span>
 						) : null}
 					</>
 				) : (
-					<Tag color={ColorTrangThaiDangKyTinChi[val as ETrangThaiDangKyTinChi]}>
+					<Tag
+						className={`course-registration-status-tag${val === ETrangThaiDangKyTinChi.DA_DANG_KY ? ' course-registration-status-tag--success' : ''}`}
+						color={ColorTrangThaiDangKyTinChi[val as ETrangThaiDangKyTinChi]}
+					>
 						{trangThaiThuongI18nId ? intl.formatMessage({ id: trangThaiThuongI18nId }) : (val ?? '--')}
 					</Tag>
 				)}
 				{rec?.isWaitlist && (
-					<Tag color='orange'>{intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.hangcho' })}</Tag>
+					<Tag className='course-registration-status-tag course-registration-status-tag--warning' color='orange'>
+						{intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.hangcho' })}
+					</Tag>
 				)}
 			</div>
 		);
@@ -247,7 +256,10 @@ const DangKyLopHocPhan = ({
 
 		if (rec.siSoToiDa - (rec.siSo ?? 0) <= 0) {
 			return (
-				<Tag color={EColorLopDangKy.FULL_LOP}>
+				<Tag
+					className='course-registration-status-tag course-registration-status-tag--warning'
+					color={EColorLopDangKy.FULL_LOP}
+				>
 					{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.trangthai.lopday' })}
 				</Tag>
 			);
@@ -257,7 +269,10 @@ const DangKyLopHocPhan = ({
 		if (lopTrungLich.length || checkTrungLich(rec.thoiKhoaBieuList ?? [])) {
 			return (
 				<Space size={4}>
-					<Tag color={EColorLopDangKy.TRUNG_LICH} style={{ marginInlineEnd: 0 }}>
+					<Tag
+						className='course-registration-status-tag course-registration-status-tag--warning'
+						color={EColorLopDangKy.TRUNG_LICH}
+					>
 						{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.trangthai.trunglich' })}
 					</Tag>
 					{!!lopTrungLich.length && (
@@ -269,7 +284,7 @@ const DangKyLopHocPhan = ({
 								</span>
 							}
 						>
-							<IconShieldInfo style={{ color: '#1677ff', fontSize: 12 }} />
+							<RegistrationStatusInfoIcon />
 						</Popover>
 					)}
 				</Space>
@@ -404,6 +419,14 @@ const DangKyLopHocPhan = ({
 
 	const columns: IColumn<LopHocPhan.IRecord>[] = [
 		{
+			title: intl.formatMessage({ id: 'global.table.column.tt' }),
+			dataIndex: 'index',
+			key: 'index',
+			width: 45,
+			align: 'center',
+			resizable: false,
+		},
+		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.thutulop' }),
 			dataIndex: 'soThuTuLop',
 			width: 100,
@@ -414,7 +437,7 @@ const DangKyLopHocPhan = ({
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.mahp' }),
 			dataIndex: 'maHocPhan',
-			width: 120,
+			width: 140,
 			align: 'center',
 			filterType: 'string',
 			sortable: true,
@@ -432,19 +455,20 @@ const DangKyLopHocPhan = ({
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.tenhocphan' }),
 			dataIndex: ['hocPhan', 'ten'],
-			width: 220,
+			width: 295,
+			resizable: !mockData,
 			filterType: 'string',
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.sotinchi' }),
 			dataIndex: ['hocPhan', 'soTinChi'],
-			width: 50,
+			width: 70,
 			align: 'center',
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.malop' }),
 			dataIndex: 'ten',
-			width: 150,
+			width: 130,
 			align: 'center',
 			filterType: 'string',
 			render: (val, rec) => (
@@ -456,7 +480,7 @@ const DangKyLopHocPhan = ({
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.giangvien' }),
-			width: 140,
+			width: 150,
 			render: (val, rec) => (
 				<ExpandText>
 					{rec.nhanSuList
@@ -469,25 +493,25 @@ const DangKyLopHocPhan = ({
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.columntable.date' }),
-			width: 110,
+			width: 120,
 			align: 'center',
 			render: (val, rec) => renderKhoangThoiGian(rec),
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.thongtinchitiet' }),
-			width: 220,
+			width: 170,
 			render: (val, rec) => <RenderLichHoc lopHocPhan={rec} />,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.sisotoida' }),
 			dataIndex: 'siSoToiDa',
 			align: 'center',
-			width: 60,
+			width: 87,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.controng' }),
 			align: 'center',
-			width: 60,
+			width: 87,
 			render: (val, rec) => (rec.siSo !== undefined && rec.siSoToiDa >= rec.siSo ? rec.siSoToiDa - rec.siSo : 0),
 		},
 		// {
@@ -532,8 +556,8 @@ const DangKyLopHocPhan = ({
 		// },
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.trangthai' }),
-			align: 'center',
-			width: 120,
+			align: 'left',
+			width: 110,
 			fixed: 'right',
 			render: (val, rec) => {
 				const daChon = isDaChonLop(rec, danhSachLopDangKy);
@@ -549,7 +573,7 @@ const DangKyLopHocPhan = ({
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.thaotac' }),
 			align: 'center',
-			width: 120,
+			width: 100,
 			fixed: 'right',
 			render: (val, rec) => {
 				const daChon = isDaChonLop(rec, danhSachLopDangKy);
@@ -612,8 +636,8 @@ const DangKyLopHocPhan = ({
 							disabled={disabledDelete}
 						>
 							<ButtonExtend
-								icon={<DeleteOutlined />}
-								danger
+								className='course-registration-trash-button'
+								icon={<RegistrationTrashIcon />}
 								otherTooltipProps={{
 									placement: 'bottom',
 								}}
@@ -631,6 +655,7 @@ const DangKyLopHocPhan = ({
 				return (
 					<div>
 						<ButtonExtend
+							className='course-registration-register-button'
 							type='primary'
 							disabled={disabled}
 							tooltip={
@@ -659,17 +684,50 @@ const DangKyLopHocPhan = ({
 		},
 	];
 
+	const toolbarButtons = [
+		<ButtonExtend
+			key='reload'
+			className='btn-reload'
+			icon={<IconRotateArrow />}
+			tooltip={intl.formatMessage({ id: 'global.tablestatic.button.tailai.tooltip' })}
+			onClick={() => getData()}
+		/>,
+		<VinSelect
+			className='course-registration-type-select'
+			key='loai-dang-ky'
+			options={allLoaiDangKy.map((item) => ({
+				key: item,
+				value: item,
+				label: intl.formatMessage({ id: `dangkytinchi.loaidangky.${item}` }),
+			}))}
+			value={loaiDangKy}
+			onChange={(val) => setLoaiDangKy(val)}
+			size='small'
+			style={{ width: 250 }}
+		/>,
+	];
+
 	return (
 		<>
 			{/* {recHocPhan?.ma ? ( */}
 			{/* recHocPhan.trangThai === ETrangThaiHocPhanDangKyTinChi.DUOC_DK ? ( */}
-			<div className='table-dang-ky'>
+			<div className={mockData ? 'table-dang-ky table-dang-ky--preview' : 'table-dang-ky'}>
 				{mockData ? (
 					<TableStaticData
+						configKey='course-registration-figma-preview-1504'
+						addStt={false}
 						columns={columns}
 						data={danhSachLopDktc}
-						scroll={{ y: 600 }}
-						onReload={getData}
+						hasTotal
+						totalComponent={
+							<div className='total course-registration-total'>
+								{intl.formatMessage({ id: 'global.tablestatic.button.tongso' })}:
+								<span>
+									{danhSachLopDktc.length} {intl.formatMessage({ id: 'dangkytinchi.filter.hocphan.total.prefix' })}
+								</span>
+							</div>
+						}
+						scroll={{ x: 1504, y: 600 }}
 						otherProps={{
 							rowKey: 'ten',
 							rowClassName: (rec: LopHocPhan.IRecord) => (isLopThucHanhCon(rec) ? 'row-lop-lab' : ''),
@@ -680,30 +738,20 @@ const DangKyLopHocPhan = ({
 								onExpand,
 							},
 						}}
-						otherButtons={[
-							<VinSelect
-								key='loai-dang-ky'
-								options={allLoaiDangKy.map((item) => ({
-									key: item,
-									value: item,
-									label: intl.formatMessage({ id: `dangkytinchi.loaidangky.${item}` }),
-								}))}
-								value={loaiDangKy}
-								onChange={(val) => setLoaiDangKy(val)}
-								style={{ width: 260 }}
-							/>,
-						]}
+						otherButtons={toolbarButtons}
 						emptyText={intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.table.empty.khongcolop' })}
 					/>
 				) : (
 					<TableBase
+						addStt={false}
 						columns={columns}
+						header={{ total: { prefix: intl.formatMessage({ id: 'dangkytinchi.filter.hocphan.total.prefix' }) } }}
 						dependencies={tableDependencies}
 						getData={getData}
 						dataState='danhSachLopDktc'
 						modelName='lophocphan.lophocphan'
 						hideCard
-						buttons={{ create: false }}
+						buttons={{ create: false, reload: false }}
 						scroll={{ y: 600 }}
 						otherProps={{
 							rowKey: 'ten',
@@ -715,21 +763,7 @@ const DangKyLopHocPhan = ({
 								onExpand,
 							},
 						}}
-						otherButtons={[
-							<VinSelect
-								key='loai-dang-ky'
-								options={allLoaiDangKy.map((item) => ({
-									key: item,
-									value: item,
-									label: intl.formatMessage({
-										id: `dangkytinchi.loaidangky.${item}`,
-									}),
-								}))}
-								value={loaiDangKy}
-								onChange={(val) => setLoaiDangKy(val)}
-								style={{ width: 260 }}
-							/>,
-						]}
+						otherButtons={toolbarButtons}
 						emptyText={intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.table.empty.khongcolop' })}
 						tableFooterExtra={
 							<div className='lop-legend'>

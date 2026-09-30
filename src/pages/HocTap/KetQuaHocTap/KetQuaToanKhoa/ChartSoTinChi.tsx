@@ -51,7 +51,7 @@ const ChartSoTinChi = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 		chart: {
 			defaultLocale,
 			locales: [vi, en],
-			stacked: true,
+			stacked: false,
 		},
 		title: {
 			// text: intl.formatMessage({ id: 'ketquahoctap.chart.stc' }),
@@ -64,8 +64,11 @@ const ChartSoTinChi = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 		dataLabels: {
 			enabled: false,
 		},
+		grid: {
+			xaxis: { lines: { show: true } },
+		},
 		stroke: {
-			width: [1, 1, 1, 1],
+			width: 0,
 		},
 		xaxis: {
 			categories: danhSach.map((item) => item.hocKy || item.maHocKy),
@@ -87,7 +90,7 @@ const ChartSoTinChi = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 					legend: { horizontalAlign: 'center', position: 'right', offsetY: 100 },
 					plotOptions: {
 						bar: {
-							columnWidth: '70%',
+							columnWidth: '40px',
 						},
 					},
 				},
@@ -109,6 +112,7 @@ const ChartSoTinChi = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 				breakpoint: 576,
 				options: {
 					legend: { show: false },
+					plotOptions: { bar: { columnWidth: '70%' } },
 				},
 			},
 			{
@@ -130,17 +134,19 @@ const ChartSoTinChi = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 		plotOptions: {
 			bar: {
 				horizontal: false,
-				columnWidth: '60%',
+				columnWidth: '40px',
+				borderRadius: 8,
+				borderRadiusApplication: 'end',
 			},
 		},
 		legend: {
 			position: 'right',
 			offsetY: 100,
 		},
-		colors: ['#f3de2c', '#86c4ee'],
+		colors: ['#dc2626', '#16a34a'],
 	};
 
-	return <Chart options={options} series={series} type='bar' height={300} />;
+	return <Chart options={options} series={series} type='bar' height={222} />;
 };
 
 export default ChartSoTinChi;

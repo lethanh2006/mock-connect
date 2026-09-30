@@ -1,7 +1,6 @@
 import PageCard from '@/components/PageCard';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
-import { CardContent, Card as VinCard } from '@vinuni/ui';
-import { Divider } from 'antd';
+import { CardContent, CardHeader, CardTitle, Card as VinCard } from '@vinuni/ui';
 import { useIntl, useModel } from 'umi';
 import KetQuaToanKhoaSinhVien from './KetQuaToanKhoa';
 import DiemThanhPhanSV from './components/DiemThanhPhanSV';
@@ -12,6 +11,7 @@ import {
 	MOCK_MA_KHOA_NGANH,
 	MOCK_TONG_TIN_CHI_CHUONG_TRINH,
 } from './mockData';
+import './style.less';
 
 const KetQuaHocTap = () => {
 	const intl = useIntl();
@@ -26,7 +26,7 @@ const KetQuaHocTap = () => {
 				<SelectSongNganh className='field-w-250' value={maKhoaNganhHienThi} onChange={(val) => setMaKhoaNganh(val)} />
 			}
 		>
-			<VinCard>
+			<VinCard className='academic-result-summary'>
 				<CardContent>
 					<KetQuaToanKhoaSinhVien
 						maKhoaNganh={maKhoaNganhHienThi}
@@ -36,11 +36,11 @@ const KetQuaHocTap = () => {
 					/>
 				</CardContent>
 			</VinCard>
-			<VinCard>
+			<VinCard className='academic-final-grade-card'>
+				<CardHeader>
+					<CardTitle>{intl.formatMessage({ id: 'ketquahoctap.diemtongket' })}</CardTitle>
+				</CardHeader>
 				<CardContent>
-					<Divider className='divider-big-title' dashed orientation='left'>
-						{intl.formatMessage({ id: 'ketquahoctap.diemtongket' })}
-					</Divider>
 					<DiemThanhPhanSV
 						maKhoaNganh={maKhoaNganhHienThi}
 						mockDiem={ENABLE_KET_QUA_HOC_TAP_MOCK ? MOCK_DIEM_HOC_PHAN : undefined}
