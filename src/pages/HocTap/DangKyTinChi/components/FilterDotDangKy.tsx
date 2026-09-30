@@ -3,13 +3,13 @@ import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
-const FilterDotDangKy = ({ mockMode = false }: { mockMode?: boolean }) => {
+const FilterDotDangKy = () => {
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { getDotDangKyAvailableModel: getDotDangKy } = useModel('daotao.dotdangkytinchi');
 
 	useEffect(() => {
-		if (!mockMode && recHocKy?.ma) getDotDangKy(recHocKy.ma);
-	}, [mockMode, recHocKy?.ma]);
+		if (recHocKy?.ma) getDotDangKy(recHocKy.ma);
+	}, [recHocKy?.ma]);
 
 	return (
 		<Row gutter={[16, 16]}>

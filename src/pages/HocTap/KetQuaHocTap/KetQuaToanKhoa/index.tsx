@@ -1,59 +1,39 @@
 import EmptyState from '@/components/EmptyState';
 import { Carousel, Divider, Spin } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChartDiemTrungBinh from './ChartDiemTrungBinh';
 import ChartSoTinChi from './ChartSoTinChi';
 import StatKetQuaTichLuySinhVien from './StatKetQuaTichLuy';
 
-const KetQuaToanKhoaSinhVien = (props: {
-	maKhoaNganh?: string;
-	loadData?: boolean;
-	data?: import('@/services/HocTap/KetQuaHocKy/typing').KetQuaHocKy.IRecord[];
-	tongSoTinChiChuongTrinh?: number;
-}) => {
+const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string; loadData?: boolean }) => {
 	const intl = useIntl();
-	const { maKhoaNganh, loadData, data, tongSoTinChiChuongTrinh } = props;
-	const { getKetQuaHocKy, danhSach: danhSachModel, loading: loadingModel } = useModel('daotao.ketquahocky');
-	const [activeChart, setActiveChart] = useState(0);
-	const danhSach = data ?? danhSachModel;
-	const loading = data ? false : loadingModel;
+	const { maKhoaNganh, loadData } = props;
+	const { getKetQuaHocKy, danhSach, loading } = useModel('daotao.ketquahocky');
 
 	const getData = () => maKhoaNganh && getKetQuaHocKy(maKhoaNganh);
 
 	useEffect(() => {
-		if (!data && loadData !== false) getData();
-	}, [data, maKhoaNganh]);
+		if (loadData !== false) getData();
+	}, [maKhoaNganh]);
 
 	return (
 		<Spin spinning={loading}>
 			{danhSach.length ? (
 				<>
-					<StatKetQuaTichLuySinhVien
-						maKhoaNganh={maKhoaNganh}
-						record={data?.at(-1)}
-						tongSoTinChiChuongTrinh={tongSoTinChiChuongTrinh}
-					/>
-					<Divider orientation='left' dashed className='divider-big-title credit-chart-heading'>
-						{intl.formatMessage({
-							id: activeChart === 0 ? 'ketquahoctap.chart.creditStatistics' : 'ketquahoctap.chart.gpaStatistics',
-						})}
+					<StatKetQuaTichLuySinhVien maKhoaNganh={maKhoaNganh} />
+					<Divider orientation='left' dashed className='divider-big-title'>
+						{intl.formatMessage({ id: 'ketquahoctap.chart.creditStatistics' })}
 					</Divider>
-					<Carousel
-						className='academic-credit-carousel'
-						pauseOnDotsHover
-						style={{ marginTop: 12 }}
-						autoplay
-						beforeChange={(_, next) => setActiveChart(next)}
-					>
+					<Carousel pauseOnDotsHover style={{ marginTop: 12 }} autoplay>
 						<div>
-							<div className='credit-statistics-chart' style={{ marginBottom: 8 }}>
-								<ChartSoTinChi data={data} />
+							<div style={{ marginBottom: 8 }}>
+								<ChartSoTinChi />
 							</div>
 						</div>
 						<div>
-							<div className='gpa-statistics-chart' style={{ marginBottom: 8 }}>
-								<ChartDiemTrungBinh data={data} />
+							<div style={{ marginBottom: 8 }}>
+								<ChartDiemTrungBinh />
 							</div>
 						</div>
 						{/* <div>

@@ -2,7 +2,6 @@ import ExpandText from '@/components/ExpandText';
 import { IconRotateArrow } from '@/components/Icons';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import VinSelect from '@/components/VinSelect';
 import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
@@ -32,9 +31,8 @@ import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import { Descriptions, Modal, Popconfirm, Popover, Space, Tag } from 'antd';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAccess, useIntl, useModel } from 'umi';
-import type { TDangKyTinChiMockData } from '../mockData';
 import {
 	buildLopDangKy,
 	filterBoChonLop,
@@ -58,42 +56,31 @@ type DangKyLopHocPhanProps = {
 	soTinChiToiDa: number;
 	danhSachLopHienThi: DangKyTinChi.ILopDangKy[];
 	onReload?: () => void | Promise<unknown>;
-	mockData?: TDangKyTinChiMockData;
 };
 
 const isLopThucHanhCon = (rec: LopHocPhan.IRecord) =>
 	!!rec.tenCha || rec.loai === ELoaiLopHocPhan.THUC_HANH || !!rec.soThuTuNhom;
 
-const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, mockData }: DangKyLopHocPhanProps) => {
+const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: DangKyLopHocPhanProps) => {
 	const intl = useIntl();
 	const { cctFilter } = useAccess();
 	const { record: recHocKy } = useModel('daotao.hocky');
+	const { filters, sort, danhSachLopDktc, sinhVienGetLopDangKyTheoHocPhanModel, setRecord } =
+		useModel('lophocphan.lophocphan');
 	const {
-		filters,
-		sort,
-		danhSachLopDktc: danhSachLopDktcModel,
-		sinhVienGetLopDangKyTheoHocPhanModel,
-		setRecord,
-	} = useModel('lophocphan.lophocphan');
-	const {
-		dotDangKyHienTai: dotDangKyHienTaiModel,
-		danhSachLopDangKy: danhSachLopDangKyModel,
+		dotDangKyHienTai,
+		danhSachLopDangKy,
 		setDanhSachLopDangKy,
 		tinhDataLichHoc,
 		checkTrungLich,
-		phieuDangKy: phieuDangKyModel,
+		phieuDangKy,
 		deleteDangKyTinChiModel,
 	} = useModel('daotao.dotdangkytinchi');
-	const dotDangKyHienTai = mockData?.dotDangKyHienTai ?? dotDangKyHienTaiModel;
-	const danhSachLopDangKy = mockData?.danhSachLopDangKy ?? danhSachLopDangKyModel;
-	const danhSachLopDktc = mockData?.danhSachLopDktc ?? danhSachLopDktcModel;
-	const phieuDangKy = mockData?.phieuDangKy ?? phieuDangKyModel;
 	const { loaiDangKy, setLoaiDangKy } = useModel('hocphan.hocphan');
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
 	const { settings } = useModel('tienich.caidat');
 	// const { danhSach: danhSachLopHanhChinh } = useModel('daotao.lophanhchinh');
 	const [expandedLopHocPhan, setExpandedLopHocPhan] = useState<string[]>([]);
-	const initializedMockFilter = useRef(false);
 
 	const allLoaiDangKy = useMemo(() => {
 		const { boLocTatCa, boLocKhoaNganh, boLocLopHanhChinh } = dotDangKyHienTai ?? {};
@@ -116,19 +103,12 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, mockD
 		if (!loaiDangKy || !allLoaiDangKy.includes(loaiDangKy)) setLoaiDangKy(allLoaiDangKy[0]);
 	}, [allLoaiDangKy, loaiDangKy, setLoaiDangKy]);
 
-	useEffect(() => {
-		if (!mockData || initializedMockFilter.current || !allLoaiDangKy.includes(ELoaiDangKyTheoLop.LOP_HANH_CHINH))
-			return;
-		initializedMockFilter.current = true;
-		setLoaiDangKy(ELoaiDangKyTheoLop.LOP_HANH_CHINH);
-	}, [allLoaiDangKy, mockData, setLoaiDangKy]);
-
 	const [visibleDangKyNgay, setVisibleDangKyNgay] = useState<boolean>(false);
 	const [isVuotTin, setIsVuotTin] = useState<boolean>(false);
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
 	const dangKyNgay: boolean = true;
-	const coDotDangKyTinChi = mockData ? true : !!dotDangKyHienTai?._id && dotDangKyHienTai.maHocKy === recHocKy?.ma;
+	const coDotDangKyTinChi = !!dotDangKyHienTai?._id && dotDangKyHienTai.maHocKy === recHocKy?.ma;
 	const dangTrongThoiGian =
 		dotDangKyHienTai?.thoiGianBatDau &&
 		dotDangKyHienTai?.thoiGianKetThuc &&
@@ -140,10 +120,6 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, mockD
 	);
 
 	const getData = () => {
-		if (mockData) {
-			setExpandedLopHocPhan(mockData.danhSachLopDktc.filter((item) => !!item.children?.length).map((item) => item.ten));
-			return Promise.resolve(mockData.danhSachLopDktc);
-		}
 		if (!coDotDangKyTinChi || !recHocKy?.ma || !dotDangKyHienTai?._id) return;
 		if (!loaiDangKy || !allLoaiDangKy.includes(loaiDangKy)) return;
 
@@ -456,7 +432,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, mockD
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.tenhocphan' }),
 			dataIndex: ['hocPhan', 'ten'],
 			width: 295,
-			resizable: !mockData,
+			resizable: true,
 			filterType: 'string',
 		},
 		{
@@ -711,86 +687,43 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi, mockD
 		<>
 			{/* {recHocPhan?.ma ? ( */}
 			{/* recHocPhan.trangThai === ETrangThaiHocPhanDangKyTinChi.DUOC_DK ? ( */}
-			<div className={mockData ? 'table-dang-ky table-dang-ky--preview' : 'table-dang-ky'}>
-				{mockData ? (
-					<TableStaticData
-						configKey='course-registration-figma-preview-1504'
-						addStt={false}
-						columns={columns}
-						data={danhSachLopDktc}
-						hasTotal
-						totalComponent={
-							<div className='total course-registration-total'>
-								{intl.formatMessage({ id: 'global.tablestatic.button.tongso' })}:
-								<span>
-									{danhSachLopDktc.length} {intl.formatMessage({ id: 'dangkytinchi.filter.hocphan.total.prefix' })}
-								</span>
-							</div>
-						}
-						scroll={{ x: 1504, y: 600 }}
-						otherProps={{
-							rowKey: 'ten',
-							rowClassName: (rec: LopHocPhan.IRecord) => (isLopThucHanhCon(rec) ? 'row-lop-lab' : ''),
-							expandable: {
-								expandRowByClick: true,
-								indentSize: 0,
-								expandedRowKeys: expandedLopHocPhan,
-								onExpand,
-							},
-						}}
-						otherButtons={toolbarButtons}
-						emptyText={intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.table.empty.khongcolop' })}
-					/>
-				) : (
-					<TableBase
-						addStt={false}
-						columns={columns}
-						header={{ total: { prefix: intl.formatMessage({ id: 'dangkytinchi.filter.hocphan.total.prefix' }) } }}
-						dependencies={tableDependencies}
-						getData={getData}
-						dataState='danhSachLopDktc'
-						modelName='lophocphan.lophocphan'
-						hideCard
-						buttons={{ create: false, reload: false }}
-						scroll={{ y: 600 }}
-						otherProps={{
-							rowKey: 'ten',
-							rowClassName: (rec: LopHocPhan.IRecord) => (isLopThucHanhCon(rec) ? 'row-lop-lab' : ''),
-							expandable: {
-								expandRowByClick: true,
-								indentSize: 0,
-								expandedRowKeys: expandedLopHocPhan,
-								onExpand,
-							},
-						}}
-						otherButtons={toolbarButtons}
-						emptyText={intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.table.empty.khongcolop' })}
-						tableFooterExtra={
-							<div className='lop-legend'>
-								<span className='lop-legend__item'>
-									<span className='lop-legend__box' />
-									{intl.formatMessage({ id: 'lophocphan.loaihinhhoctap.lythuyet' })}
-								</span>
-								<span className='lop-legend__item'>
-									<Tag className='tag-lop-lab'>Lab</Tag>
-									{intl.formatMessage({ id: 'lophocphan.loaihinhhoctap.thuchanh' })}
-								</span>
-							</div>
-						}
-					/>
-				)}
-				{mockData ? (
-					<div className='lop-legend'>
-						<span className='lop-legend__item'>
-							<span className='lop-legend__box' />
-							{intl.formatMessage({ id: 'lophocphan.loaihinhhoctap.lythuyet' })}
-						</span>
-						<span className='lop-legend__item'>
-							<Tag className='tag-lop-lab'>Lab</Tag>
-							{intl.formatMessage({ id: 'lophocphan.loaihinhhoctap.thuchanh' })}
-						</span>
-					</div>
-				) : null}
+			<div className='table-dang-ky'>
+				<TableBase
+					addStt={false}
+					columns={columns}
+					header={{ total: { prefix: intl.formatMessage({ id: 'dangkytinchi.filter.hocphan.total.prefix' }) } }}
+					dependencies={tableDependencies}
+					getData={getData}
+					dataState='danhSachLopDktc'
+					modelName='lophocphan.lophocphan'
+					hideCard
+					buttons={{ create: false, reload: false }}
+					scroll={{ y: 600 }}
+					otherProps={{
+						rowKey: 'ten',
+						rowClassName: (rec: LopHocPhan.IRecord) => (isLopThucHanhCon(rec) ? 'row-lop-lab' : ''),
+						expandable: {
+							expandRowByClick: true,
+							indentSize: 0,
+							expandedRowKeys: expandedLopHocPhan,
+							onExpand,
+						},
+					}}
+					otherButtons={toolbarButtons}
+					emptyText={intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.table.empty.khongcolop' })}
+					tableFooterExtra={
+						<div className='lop-legend'>
+							<span className='lop-legend__item'>
+								<span className='lop-legend__box' />
+								{intl.formatMessage({ id: 'lophocphan.loaihinhhoctap.lythuyet' })}
+							</span>
+							<span className='lop-legend__item'>
+								<Tag className='tag-lop-lab'>Lab</Tag>
+								{intl.formatMessage({ id: 'lophocphan.loaihinhhoctap.thuchanh' })}
+							</span>
+						</div>
+					}
+				/>
 			</div>
 
 			<ModalDangKyNgay

@@ -4,22 +4,16 @@ import step2ENImage from '@/assets/dktc/step2-en.png';
 import step2VNImage from '@/assets/dktc/step2-vn.png';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { tinhChatDangKyTC } from '@/services/DaoTao/DangKyTinChi/constant';
-import type { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { Divider, Space } from 'antd';
 import { getLocale, useIntl, useModel } from 'umi';
 
-const ViewGhiChuDangKyTinChi = (props: {
-	visible: boolean;
-	setVisible: (val: boolean) => void;
-	mockDotDangKy?: DangKyTinChi.IDotDangKy;
-}) => {
-	const { visible, setVisible, mockDotDangKy } = props;
+const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
+	const { visible, setVisible } = props;
 	const locale = getLocale();
 	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const { dotDangKyHienTai: dotDangKyHienTaiModel } = useModel('daotao.dotdangkytinchi');
-	const dotDangKyHienTai = mockDotDangKy ?? dotDangKyHienTaiModel;
+	const { dotDangKyHienTai } = useModel('daotao.dotdangkytinchi');
 	const stepImageStyle = { width: '100%', maxWidth: 800, borderRadius: 4 };
 
 	const step1Image = locale === 'vi-VN' ? step1VNImage : step1ENImage;

@@ -4,7 +4,7 @@ import { getLocalizedName } from '@/utils/localeName';
 import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
 
-const CHART_COLORS = ['#6155f5', '#00c3d0'];
+const CHART_COLORS = ['#5B8FF9', '#68DDB5'];
 
 const getHocKySortValue = (item: KetQuaHocKy.IRecord) => {
 	return Number(item.maHocKy ?? item.hocKy?.ma ?? 0);
@@ -34,7 +34,7 @@ const ChartDiemTrungBinh = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 			colors={CHART_COLORS}
 			type='line'
 			formatY={formatY}
-			height={222}
+			height={300}
 			otherOptions={{
 				colors: CHART_COLORS,
 				title: { text: undefined },
@@ -44,7 +44,6 @@ const ChartDiemTrungBinh = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 				},
 				xaxis: {
 					categories: danhSach.map((item) => item.hocKy || item.maHocKy),
-					axisBorder: { show: true, color: 'rgba(0, 0, 0, 0.1)', strokeWidth: 1 },
 					labels: {
 						rotate: danhSach.length < 13 ? 0 : -25,
 						rotateAlways: danhSach.length >= 13,
@@ -56,21 +55,7 @@ const ChartDiemTrungBinh = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 						},
 					},
 				},
-				stroke: { curve: 'smooth', width: 2 },
-				markers: {
-					size: 3,
-					colors: ['#fff', '#fff'],
-					strokeColors: CHART_COLORS,
-					strokeWidth: 2,
-					shape: 'circle',
-					hover: { size: 4 },
-				},
-				grid: {
-					borderColor: 'rgba(0, 0, 0, 0.06)',
-					strokeDashArray: 2,
-					xaxis: { lines: { show: true } },
-					yaxis: { lines: { show: true } },
-				},
+				stroke: { curve: 'smooth', width: 3 },
 				legend: {
 					position: 'right',
 					horizontalAlign: 'center',
@@ -101,7 +86,7 @@ const ChartDiemTrungBinh = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 					min: 0,
 					max: 4,
 					tickAmount: 4,
-					labels: { formatter: (val: number) => val.toFixed(1) },
+					labels: { formatter: formatY },
 				},
 			}}
 		/>

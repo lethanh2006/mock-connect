@@ -25,10 +25,9 @@ const matchTienTrinhItem = (item: ChuongTrinhDaoTao.TTienTrinhThucTe, keyword: s
 	return searchableValues.some((value) => value?.toLowerCase().includes(normalizedKeyword));
 };
 
-const TienTrinhThucTeV2 = (props: { data?: ChuongTrinhDaoTao.TTienTrinhThucTe[] }) => {
+const TienTrinhThucTeV2 = () => {
 	const intl = useIntl();
-	const { loading: loadingModel, sinhVienGetTienTrinhThucTeModel } = useModel('daotao.chuongtrinhdaotao');
-	const loading = props.data ? false : loadingModel;
+	const { loading, sinhVienGetTienTrinhThucTeModel } = useModel('daotao.chuongtrinhdaotao');
 	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
 	const [tienTrinhHocKy, setTienTrinhHocKy] = useState<ChuongTrinhDaoTao.TTienTrinhThucTe[][]>();
 	const [maHocKyFilter, setMaHocKyFilter] = useState<string>();
@@ -37,12 +36,6 @@ const TienTrinhThucTeV2 = (props: { data?: ChuongTrinhDaoTao.TTienTrinhThucTe[] 
 	const [visibleDiem, setVisibleDiem] = useState(false);
 
 	const fetch = async () => {
-		if (props.data) {
-			const gHocKy = Object.entries(_.groupBy(props.data, (item) => item.kyHoc?.ma));
-			const dataHocKy = _.sortBy(gHocKy, ([ma]) => ma).reverse();
-			setTienTrinhHocKy(dataHocKy.map(([, ds]) => ds));
-			return;
-		}
 		if (maKhoaNganh)
 			sinhVienGetTienTrinhThucTeModel(maKhoaNganh).then((data) => {
 				const gHocKy = Object.entries(_.groupBy(data, (item) => item.kyHoc?.ma));
@@ -54,7 +47,7 @@ const TienTrinhThucTeV2 = (props: { data?: ChuongTrinhDaoTao.TTienTrinhThucTe[] 
 	useEffect(() => {
 		setMaHocKyFilter(undefined);
 		fetch();
-	}, [maKhoaNganh, props.data]);
+	}, [maKhoaNganh]);
 
 	const hocKyOptions = useMemo(
 		() =>

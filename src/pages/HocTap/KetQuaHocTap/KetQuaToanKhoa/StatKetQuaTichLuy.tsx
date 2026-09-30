@@ -1,32 +1,26 @@
 import StatisticsCard from '@/components/StatisticsCard';
 import { StatisticsItem } from '@/components/StatisticsCard/typing';
 import { mapLoaiHocLuc, mapTrinhDoKqhtHocKy } from '@/services/HocTap/constant';
-import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
 import { Typography } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
-const StatKetQuaTichLuySinhVien = (props: {
-	maKhoaNganh?: string;
-	record?: KetQuaHocKy.IRecord;
-	tongSoTinChiChuongTrinh?: number;
-}) => {
+const StatKetQuaTichLuySinhVien = (props: { maKhoaNganh?: string }) => {
 	const intl = useIntl();
-	const { maKhoaNganh, record: recordProp, tongSoTinChiChuongTrinh } = props;
-	const { record: recordModel } = useModel('daotao.ketquahocky');
-	const record = recordProp ?? recordModel;
+	const { maKhoaNganh } = props;
+	const { record } = useModel('daotao.ketquahocky');
 	const { record: recTienTrinh, getTienTrinhTotNghiepModel } = useModel('sinhvien.tientrinhtotnghiep');
 
 	useEffect(() => {
-		if (!recordProp && maKhoaNganh && !recTienTrinh?.ctdtKeHoach?.tongSoTinChi) {
+		if (maKhoaNganh && !recTienTrinh?.ctdtKeHoach?.tongSoTinChi) {
 			getTienTrinhTotNghiepModel(maKhoaNganh);
 		}
-	}, [maKhoaNganh, recordProp]);
+	}, [maKhoaNganh]);
 
 	if (!record?._id) return null;
 
 	const tongTinChi = record.tongSoTinChiTichLuyToanKhoa ?? '--';
-	const tongTinChiToanKhoa = tongSoTinChiChuongTrinh ?? recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? '--';
+	const tongTinChiToanKhoa = recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? '--';
 	const trinhDo =
 		record.trinhDo && mapTrinhDoKqhtHocKy[record.trinhDo]
 			? intl.formatMessage({ id: mapTrinhDoKqhtHocKy[record.trinhDo] })

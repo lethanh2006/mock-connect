@@ -54,17 +54,12 @@ const filterBySemester = (rows: DataType[], maHocKy: string) => {
 	return rows.filter((row) => row.maHocKy === maHocKy);
 };
 
-const DiemThanhPhanSV = (props: {
-	maKhoaNganh?: string;
-	mockDiem?: LopHocPhan.IDiemHpSvHk[];
-	mockKetQuaHocKy?: KetQuaHocKy.IRecord[];
-}) => {
+const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 	const intl = useIntl();
-	const { maKhoaNganh, mockDiem, mockKetQuaHocKy } = props;
+	const { maKhoaNganh } = props;
 	const { record: sinhVien } = useModel('sinhvien.sinhvien');
 	const { getKetQuaHocKy } = useModel('daotao.ketquahocky');
-	const { getDiemSvHk, loading: loadingModel } = useModel('daotao.diemhpsvhk');
-	const loading = mockDiem ? false : loadingModel;
+	const { getDiemSvHk, loading } = useModel('daotao.diemhpsvhk');
 	const { danhSach: danhSachDauDiem } = useModel('daotao.daudiemhocphan');
 	const [maHocKyFilter, setMaHocKyFilter] = useState<string>('all');
 	const [data, setData] = useState<DataType[]>([]);
@@ -105,14 +100,7 @@ const DiemThanhPhanSV = (props: {
 	const getData = useCallback(() => {
 		if (!maKhoaNganh) return;
 
-		const request = mockDiem
-			? Promise.resolve({ kqhkList: mockKetQuaHocKy ?? [], diemSv: mockDiem })
-			: Promise.all([getKetQuaHocKy(maKhoaNganh), getDiemSvHk(maKhoaNganh)]).then(([kqhkList, diemSv]) => ({
-					kqhkList,
-					diemSv,
-				}));
-
-		request.then(({ kqhkList, diemSv }) => {
+		Promise.all([getKetQuaHocKy(maKhoaNganh), getDiemSvHk(maKhoaNganh)]).then(([kqhkList, diemSv]) => {
 			const res: DataType[] = [];
 			const gHocKy = _.groupBy(diemSv, (item) => item.maHocKy); // Nhóm theo học kỳ
 			const aHocKy = Object.entries(gHocKy).sort(([a], [b]) => (a > b ? -1 : 1)); // Sắp xếp giảm dần học kỳ
@@ -141,7 +129,7 @@ const DiemThanhPhanSV = (props: {
 			setKqhkList(kqhkList);
 			setData(res);
 		});
-	}, [buildSemesterTitle, maKhoaNganh, mockDiem, mockKetQuaHocKy]);
+	}, [buildSemesterTitle, maKhoaNganh]);
 
 	// useEffect(() => {
 	// 	if (!danhSachDauDiem.length) getDauDiem();
