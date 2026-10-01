@@ -1,4 +1,3 @@
-import { Button } from '@/components/Icons';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { ETrangThaiHocTap } from '@/services/DaoTao/constant';
@@ -107,6 +106,8 @@ const ModalChiTietDiem = (
 		return null;
 	};
 
+	if (!visible) return null;
+
 	const trangThaiContent = renderTrangThai();
 
 	const renderHocPhanCt = (dsHocPhan?: ChuongTrinhDaoTao.THocPhanTuongQuan[] | null, label?: string) => {
@@ -132,32 +133,14 @@ const ModalChiTietDiem = (
 	return (
 		<>
 			<ModalExpandable
-				title={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.title' })}
+				title={
+					<span className='kqht-detail-modal-title'>
+						{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.title' })}
+					</span>
+				}
 				open={visible}
 				onCancel={() => setVisible(false)}
-				footer={
-					<>
-						{/* <ButtonExtend icon={<StarOutlined />} title='Quan tâm học phần'>
-							Quan tâm
-						</ButtonExtend> */}
-						{/* {trangThaiHoc === ETrangThaiHocTap.CHUA_HOC ? (
-							<ButtonExtend
-								tooltip={
-									ngoaiQuyDoiDiem ? intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.khongcodot' }) : null
-								}
-								disabled={ngoaiQuyDoiDiem}
-								onClick={() => setVisibleCongNhan(true)}
-								icon={<Icon3SquarePlusmark />}
-							>
-								{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan' })}
-							</ButtonExtend>
-						) : null} */}
-
-						<Button variant='outline' onClick={() => setVisible(false)}>
-							{intl.formatMessage({ id: 'global.button.dong' })}
-						</Button>
-					</>
-				}
+				footer={null}
 				width={1080}
 			>
 				<div className='kqht-detail'>

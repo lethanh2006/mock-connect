@@ -2,7 +2,7 @@ import { IconArrowRight } from '@/components/Icons';
 import DiemThiHocKy from '@/pages/KhaoThi/KyThi/DiemThiHocKy';
 import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Button, Descriptions, Empty, Spin, Tag, Tooltip } from 'antd';
+import { Button, Descriptions, Empty, Grid, Spin, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -12,6 +12,7 @@ const DetailKetQuaHocTap = (props: {
 	toDanhGiaGiangVien?: () => void;
 }) => {
 	const intl = useIntl();
+	const { md } = Grid.useBreakpoint();
 	const { lopHocPhanId, diemHpSvHk, toDanhGiaGiangVien } = props;
 	const { danhSach: danhSachDauDiem, getModel } = useModel('daotao.daudiemhocphan');
 	const { sinhVienGetDiemLHPModel, record: recSinhVienLhp, loading } = useModel('lophocphan.sinhvienlophocphan');
@@ -307,7 +308,7 @@ const DetailKetQuaHocTap = (props: {
 						)}
 
 						{/* <Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtongket' })}</Divider> */}
-						<Descriptions bordered column={2}>
+						<Descriptions bordered column={{ xs: 1, sm: 1, md: 2 }} layout={md ? 'horizontal' : 'vertical'}>
 							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.kyhoc' })}>
 								{recDiem?.hocKy?.ten ?? recDiem?.maHocKy ?? '--'}
 							</Descriptions.Item>
@@ -329,7 +330,7 @@ const DetailKetQuaHocTap = (props: {
 									</Tooltip>
 								)}
 							</Descriptions.Item>
-							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.baitap.ghichu' })} span={2}>
+							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.baitap.ghichu' })} span='filled'>
 								{recDiem?.ghiChuDiem ?? '--'}
 							</Descriptions.Item>
 						</Descriptions>

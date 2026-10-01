@@ -1,339 +1,107 @@
-// CardStyles.less - Shared styles for CardHocPhan and CardKhoiHocPhan
-
-// Base card styles
-.base-card {
-	position: relative;
-	margin-bottom: 4px;
+.degree-audit-card {
 	height: 100%;
 	min-height: 156px;
-
-	.ant-card {
-		border-radius: 8px;
-		position: relative;
-		overflow: hidden;
-		background: #fff;
-		height: 100%;
-		min-height: 156px;
-		box-shadow: 0px 0px 12px 0px #0000000a;
-		cursor: pointer;
-		transition: all 0.3s ease;
-
-		&:hover {
-			transform: scale(1.005) translateY(-3px);
-		}
-
-		.ant-card-body {
-			padding: 16px;
-			position: relative;
-			height: 100%;
-			display: flex;
-			flex-direction: column;
-		}
-	}
-}
-
-.base-card--course {
-	height: 179px;
-	min-height: 179px;
-	margin-bottom: 0;
-
-	> .ant-card {
-		min-height: 179px;
-		border: 0;
-		background: rgba(0, 0, 0, 0.03);
-		box-shadow: none;
-
-		> .ant-card-body {
-			box-sizing: border-box;
-			padding: 16px;
-		}
+	transition: transform 0.2s ease;
+	&:hover {
+		transform: translateY(-3px);
 	}
 
 	.card-content {
-		gap: 12px;
-	}
-
-	.card-main {
 		display: flex;
-		flex: none;
 		flex-direction: column;
-		align-items: flex-start;
-		min-width: 0;
-		height: 98px;
-		gap: 6px;
+		height: 100%;
+		gap: 8px;
 	}
-
-	.card-label {
-		flex: none;
-		align-items: center;
-		max-width: 100%;
-		height: 20px;
-		margin: 0;
-		font-family: 'Inter', sans-serif;
-		font-size: 14px;
-		font-weight: 400;
-		line-height: 20px;
-		color: #0087c3;
-		gap: 0;
-	}
-
-	.card-label-dot {
-		display: none;
-	}
-
 	.card-title {
-		flex: none;
-		width: 100%;
-		height: 72px;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		flex: 1;
 		margin: 0;
-		font-family: 'Inter', sans-serif;
-		font-size: 16px;
-		font-weight: 500;
-		line-height: 24px;
-		color: #000;
-	}
-
-	.card-footer {
-		box-sizing: border-box;
-		flex: none;
-		align-items: center;
-		height: 37px;
-		padding-top: 12px;
-		border-top: 1px dashed rgba(0, 0, 0, 0.06);
-		gap: 16px;
-	}
-
-	.card-credits-text {
-		font-family: 'Inter', sans-serif;
-		font-size: 14px;
-		font-weight: 400;
-		line-height: 20px;
-		color: #000;
-		text-transform: none;
-	}
-
-	.card-grade-text {
-		font-family: 'Inter', sans-serif;
-		font-size: 32px;
+		overflow: hidden;
+		color: var(--ds-content-primary);
+		font-size: 15px;
 		font-weight: 600;
 		line-height: 24px;
 	}
-}
-
-[data-vinuni-theme='dark'] .base-card--course {
-	--course-grade-neutral: #fff;
-
-	> .ant-card {
-		background: rgba(255, 255, 255, 0.06);
+	.card-label {
+		display: flex;
+		align-items: center;
+		min-width: 0;
+		gap: 6px;
+		overflow: hidden;
+		color: var(--ds-brand-accent-blue-vivid);
+		font-size: 14px;
+		line-height: 20px;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		> :last-child {
+			min-width: 0;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 	}
-
-	.card-title,
-	.card-credits-text {
-		color: #fff;
+	.card-label-dot {
+		flex: 0 0 4.5px;
+		height: 4.5px;
+		border-radius: 50%;
+		background: var(--ds-function-link);
 	}
-
 	.card-footer {
-		border-top-color: rgba(255, 255, 255, 0.12);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		margin-top: auto;
+		padding-top: 12px;
+		border-top: 1px dashed var(--ds-line-secondary);
+	}
+	.card-credits-text {
+		color: var(--ds-content-primary);
+		font-size: 14px;
+		line-height: 20px;
+	}
+	.card-grade-text {
+		font-size: 32px;
+		font-weight: 600;
+		line-height: 1;
+	}
+	.card-registered-text {
+		color: var(--ds-function-link);
+		font-size: 13px;
+		font-weight: 600;
+	}
+
+	&--course {
+		height: 179px;
+		min-height: 179px;
+		.card-content {
+			gap: 12px;
+		}
+		.card-main {
+			display: flex;
+			flex-direction: column;
+			height: 98px;
+			gap: 6px;
+		}
+		.card-title {
+			font-size: 16px;
+			font-weight: 500;
+		}
+		.card-label-dot {
+			display: none;
+		}
 	}
 }
 
-// Background image styles
-.card-background-image {
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	width: 40%;
-	height: 40%;
-	background-size: contain;
-	background-repeat: no-repeat;
-	background-position: bottom right;
-	z-index: 1;
-}
-
-// Content wrapper
-.card-content {
-	position: relative;
-	z-index: 2;
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-}
-
-// Title styles
-.card-title {
-	display: -webkit-box;
-	line-clamp: 3;
-	-webkit-line-clamp: 3;
-	-webkit-box-orient: vertical;
-	font-size: 15px;
-	font-weight: 600;
-	margin-bottom: 12px;
-	margin-top: 0;
-	line-height: 1.4;
-	flex: 1;
-	overflow: hidden;
-
-	&.not-studied {
-		color: #8c8c8c;
-	}
-
-	&.default {
-		color: #262626;
-	}
-}
-
-// Label styles (Specialization)
-.card-label {
-	display: flex;
-	align-items: center;
-	gap: 6px;
-	font-size: 12px;
-	color: var(--color-primary);
-	font-weight: 600;
-	margin-top: 4px;
-	line-height: 1.4;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
-
-.card-label > *:last-child {
-	min-width: 0;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-.card-label-dot {
-	flex-shrink: 0;
-	width: 4.5px;
-	height: 4.5px;
-	border-radius: 50%;
-	background-color: var(--color-primary);
-}
-
-// Footer: credits & grade
-.card-footer {
-	display: flex;
-	align-items: flex-end;
-	justify-content: space-between;
-	gap: 8px;
-	margin-top: auto;
-	padding-top: 12px;
-	border-top: 1px dashed #d9d9d9;
-}
-
-.card-credits-text {
-	font-size: 13px;
-	color: #8c8c8c;
-	text-transform: lowercase;
-}
-
-.card-footer-right {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-}
-
-.card-grade-text {
-	font-size: 24px;
-	font-weight: 600;
-	color: #52c41a;
-	line-height: 1;
-}
-
-.card-electives-text {
-	font-size: 13px;
-	font-weight: 600;
-	color: #8c8c8c;
-	line-height: 1.2;
-	text-align: right;
-}
-
-.card-registered-text {
-	font-size: 13px;
-	font-weight: 600;
-	color: var(--color-primary);
-	line-height: 1.2;
-}
-
-// Credits tag styles
-.credits-tag {
-	background: #fff2f0;
-	color: #ff4d4f;
-	border: 1px solid #ffccc7;
-	padding: 1px 6px;
-	font-weight: 500;
-}
-
-// Currently studying indicator (Standard)
-.studying-indicator {
-	position: absolute;
-	top: 12px;
-	right: 12px;
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	background-color: #52c41a;
-	border: 2px solid #fff;
-	box-shadow: 0 0 0 0 rgba(82, 196, 26, 0.4);
-	z-index: 10;
-	animation: pulse-green 2s infinite;
-}
-
-// Currently studying text (VinUni)
-.studying-text {
-	display: inline-block;
-	font-size: 11px;
-	font-weight: 600;
-	color: #52c41a;
-	background: #f6ffed;
-	padding: 1px 8px;
-	border-radius: 4px;
-	border: 1px solid #b7eb8f;
-	line-height: 20px;
-	text-transform: uppercase;
-}
-
-@keyframes pulse-green {
-	0% {
-		box-shadow: 0 0 0 0 rgba(82, 196, 26, 0.7);
-	}
-	70% {
-		box-shadow: 0 0 0 10px rgba(82, 196, 26, 0);
-	}
-	100% {
-		box-shadow: 0 0 0 0 rgba(82, 196, 26, 0);
-	}
-}
-
-// Color indicator (for khoi hoc phan)
-.color-indicator {
-	position: absolute;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	width: 4px;
-	border-radius: 8px 0 0 8px;
-}
-
-// Modal styles
 .khoi-modal {
 	.modal-description {
 		font-weight: 500;
 	}
-
 	.modal-grid {
-		margin-top: 16px;
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(min(230px, 100%), 1fr));
 		gap: 12px;
-	}
-}
-
-.khoi-confirm-modal {
-	.ant-modal-content {
-		padding: 0 !important;
+		margin-top: 16px;
 	}
 }

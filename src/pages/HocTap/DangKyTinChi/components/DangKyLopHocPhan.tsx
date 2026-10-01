@@ -1,5 +1,5 @@
 import ExpandText from '@/components/ExpandText';
-import { IconRotateArrow } from '@/components/Icons';
+import { IconInfoCircle, IconRotateArrow, IconTrash } from '@/components/Icons';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
@@ -47,8 +47,6 @@ import {
 	renderKhoangThoiGian,
 } from '../utils';
 import ModalDangKyNgay from './ModalDangKyNgay';
-import RegistrationStatusInfoIcon from './RegistrationStatusInfoIcon';
-import RegistrationTrashIcon from './RegistrationTrashIcon';
 import RenderLichHoc from './RenderLichHoc';
 
 type DangKyLopHocPhanProps = {
@@ -171,10 +169,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 				{trangThaiDacBiet && (isVuotTin || isDuThinh) ? (
 					<>
 						<Space size={4} align='center'>
-							<Tag
-								className={`course-registration-status-tag${isApproved ? ' course-registration-status-tag--success' : ''}`}
-								color={isApproved ? 'green' : (statusColor ?? 'gold')}
-							>
+							<Tag color={isApproved ? 'green' : (statusColor ?? 'gold')}>
 								{statusI18nId
 									? intl.formatMessage({ id: statusI18nId, defaultMessage: String(trangThaiDacBiet) })
 									: trangThaiDacBiet}
@@ -199,7 +194,9 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 										</Descriptions>
 									}
 								>
-									<RegistrationStatusInfoIcon />
+									<span className='course-registration-status-info'>
+										<IconInfoCircle size={20} />
+									</span>
 								</Popover>
 							) : null}
 						</Space>
@@ -208,17 +205,12 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 						) : null}
 					</>
 				) : (
-					<Tag
-						className={`course-registration-status-tag${val === ETrangThaiDangKyTinChi.DA_DANG_KY ? ' course-registration-status-tag--success' : ''}`}
-						color={ColorTrangThaiDangKyTinChi[val as ETrangThaiDangKyTinChi]}
-					>
+					<Tag color={ColorTrangThaiDangKyTinChi[val as ETrangThaiDangKyTinChi]}>
 						{trangThaiThuongI18nId ? intl.formatMessage({ id: trangThaiThuongI18nId }) : (val ?? '--')}
 					</Tag>
 				)}
 				{rec?.isWaitlist && (
-					<Tag className='course-registration-status-tag course-registration-status-tag--warning' color='orange'>
-						{intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.hangcho' })}
-					</Tag>
+					<Tag color='orange'>{intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.hangcho' })}</Tag>
 				)}
 			</div>
 		);
@@ -232,10 +224,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 
 		if (rec.siSoToiDa - (rec.siSo ?? 0) <= 0) {
 			return (
-				<Tag
-					className='course-registration-status-tag course-registration-status-tag--warning'
-					color={EColorLopDangKy.FULL_LOP}
-				>
+				<Tag color={EColorLopDangKy.FULL_LOP}>
 					{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.trangthai.lopday' })}
 				</Tag>
 			);
@@ -245,10 +234,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 		if (lopTrungLich.length || checkTrungLich(rec.thoiKhoaBieuList ?? [])) {
 			return (
 				<Space size={4}>
-					<Tag
-						className='course-registration-status-tag course-registration-status-tag--warning'
-						color={EColorLopDangKy.TRUNG_LICH}
-					>
+					<Tag color={EColorLopDangKy.TRUNG_LICH}>
 						{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.trangthai.trunglich' })}
 					</Tag>
 					{!!lopTrungLich.length && (
@@ -260,7 +246,9 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 								</span>
 							}
 						>
-							<RegistrationStatusInfoIcon />
+							<span className='course-registration-status-info'>
+								<IconInfoCircle size={20} />
+							</span>
 						</Popover>
 					)}
 				</Space>
@@ -419,6 +407,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 			sortable: true,
 			render: (val, rec) => (
 				<a
+					className='course-registration-course-link not-underline'
 					onClick={(e) => {
 						e.stopPropagation();
 						handleXemDeCuong(rec);
@@ -450,7 +439,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 			render: (val, rec) => (
 				<Space size={4}>
 					<span>{val ?? rec?.ten}</span>
-					{isLopThucHanhCon(rec) ? <Tag className='tag-lop-lab'>Lab</Tag> : null}
+					{isLopThucHanhCon(rec) ? <Tag color='cyan'>Lab</Tag> : null}
 				</Space>
 			),
 		},
@@ -612,12 +601,11 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 							disabled={disabledDelete}
 						>
 							<ButtonExtend
-								className='course-registration-trash-button'
-								icon={<RegistrationTrashIcon />}
+								icon={<IconTrash size={20} />}
 								otherTooltipProps={{
 									placement: 'bottom',
 								}}
-								type='link'
+								type='default'
 								disabled={disabledDelete}
 								tooltip={intl.formatMessage({
 									id: 'dangkytinchi.phieudangky.columntable.huy.tooltip',
@@ -631,7 +619,6 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 				return (
 					<div>
 						<ButtonExtend
-							className='course-registration-register-button'
 							type='primary'
 							disabled={disabled}
 							tooltip={
@@ -668,19 +655,18 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 			tooltip={intl.formatMessage({ id: 'global.tablestatic.button.tailai.tooltip' })}
 			onClick={() => getData()}
 		/>,
-		<VinSelect
-			className='course-registration-type-select'
-			key='loai-dang-ky'
-			options={allLoaiDangKy.map((item) => ({
-				key: item,
-				value: item,
-				label: intl.formatMessage({ id: `dangkytinchi.loaidangky.${item}` }),
-			}))}
-			value={loaiDangKy}
-			onChange={(val) => setLoaiDangKy(val)}
-			size='small'
-			style={{ width: 250 }}
-		/>,
+		<div className='course-registration-type-filter' key='loai-dang-ky'>
+			<VinSelect
+				options={allLoaiDangKy.map((item) => ({
+					key: item,
+					value: item,
+					label: intl.formatMessage({ id: `dangkytinchi.loaidangky.${item}` }),
+				}))}
+				value={loaiDangKy}
+				onChange={(val) => setLoaiDangKy(val)}
+				size='small'
+			/>
+		</div>,
 	];
 
 	return (
@@ -718,7 +704,7 @@ const DangKyLopHocPhan = ({ tongTinChi, soTinChiToiDa, danhSachLopHienThi }: Dan
 								{intl.formatMessage({ id: 'lophocphan.loaihinhhoctap.lythuyet' })}
 							</span>
 							<span className='lop-legend__item'>
-								<Tag className='tag-lop-lab'>Lab</Tag>
+								<Tag color='cyan'>Lab</Tag>
 								{intl.formatMessage({ id: 'lophocphan.loaihinhhoctap.thuchanh' })}
 							</span>
 						</div>

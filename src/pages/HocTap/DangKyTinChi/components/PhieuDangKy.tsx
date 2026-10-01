@@ -1,5 +1,5 @@
 import ExpandText from '@/components/ExpandText';
-import { Badge } from '@/components/Icons';
+import { Badge, IconInfoCircle, IconTrash } from '@/components/Icons';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
@@ -33,8 +33,6 @@ import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
 import ModalLopDaHuy from './ModalLopDaHuy';
-import RegistrationStatusInfoIcon from './RegistrationStatusInfoIcon';
-import RegistrationTrashIcon from './RegistrationTrashIcon';
 import RenderLichHoc from './RenderLichHoc';
 
 const mapTrangThaiDKTCBadgeVariant = (
@@ -149,6 +147,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 			width: 140,
 			render: (val, rec) => (
 				<a
+					className='course-registration-course-link not-underline'
 					onClick={(e) => {
 						e.stopPropagation();
 						handleXemDeCuong(rec);
@@ -286,10 +285,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 						{trangThaiDacBiet && (isVuotTin || isDuThinh) ? (
 							<>
 								<Space size={4} align='center'>
-									<Badge
-										className='course-registration-status-badge'
-										variant={mapStatusColorBadgeVariant(isApproved ? 'green' : statusColor)}
-									>
+									<Badge variant={mapStatusColorBadgeVariant(isApproved ? 'green' : statusColor)}>
 										{statusI18nId
 											? intl.formatMessage({ id: statusI18nId, defaultMessage: String(trangThaiDacBiet) })
 											: trangThaiDacBiet}
@@ -318,7 +314,9 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 												</Descriptions>
 											}
 										>
-											<RegistrationStatusInfoIcon />
+											<span className='course-registration-status-info'>
+												<IconInfoCircle size={20} />
+											</span>
 										</Popover>
 									) : null}
 								</Space>
@@ -327,15 +325,12 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 								) : null}
 							</>
 						) : (
-							<Badge
-								className='course-registration-status-badge'
-								variant={mapTrangThaiDKTCBadgeVariant(val as ETrangThaiDangKyTinChi)}
-							>
+							<Badge variant={mapTrangThaiDKTCBadgeVariant(val as ETrangThaiDangKyTinChi)}>
 								{trangThaiThuongI18nId ? intl.formatMessage({ id: trangThaiThuongI18nId }) : (val ?? '--')}
 							</Badge>
 						)}
 						{rec?.isWaitlist && (
-							<Badge className='course-registration-status-badge' variant='warning'>
+							<Badge variant='warning'>
 								{intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.hangcho' })}
 							</Badge>
 						)}
@@ -353,12 +348,11 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 			render: (val, rec) =>
 				dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 					<ButtonExtend
-						className='course-registration-trash-button'
-						icon={<RegistrationTrashIcon />}
+						icon={<IconTrash size={20} />}
 						otherTooltipProps={{
 							placement: 'bottom',
 						}}
-						type='link'
+						type='default'
 						disabled={rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY && !canHuyLop(rec)}
 						tooltip={intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy.tooltip' })}
 						onClick={() => {
@@ -401,9 +395,8 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 						}
 					>
 						<ButtonExtend
-							className='course-registration-trash-button'
-							icon={<RegistrationTrashIcon />}
-							type='link'
+							icon={<IconTrash size={20} />}
+							type='default'
 							otherTooltipProps={{
 								placement: 'bottom',
 							}}

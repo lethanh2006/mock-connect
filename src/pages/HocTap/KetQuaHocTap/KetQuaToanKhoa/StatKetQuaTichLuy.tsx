@@ -1,12 +1,15 @@
 import StatisticsCard from '@/components/StatisticsCard';
 import { StatisticsItem } from '@/components/StatisticsCard/typing';
 import { mapLoaiHocLuc, mapTrinhDoKqhtHocKy } from '@/services/HocTap/constant';
-import { Typography } from 'antd';
+import { useResolvedTheme } from '@vinuni/ui';
+import { theme, Typography } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
 const StatKetQuaTichLuySinhVien = (props: { maKhoaNganh?: string }) => {
 	const intl = useIntl();
+	const { token } = theme.useToken();
+	const valueColor = useResolvedTheme() === 'dark' ? 'var(--ds-brand-accent-blue-pale)' : 'var(--ds-function-link)';
 	const { maKhoaNganh } = props;
 	const { record } = useModel('daotao.ketquahocky');
 	const { record: recTienTrinh, getTienTrinhTotNghiepModel } = useModel('sinhvien.tientrinhtotnghiep');
@@ -41,8 +44,8 @@ const StatKetQuaTichLuySinhVien = (props: { maKhoaNganh?: string }) => {
 				</div>
 			),
 			value: record.trungBinhTichLuyToanKhoaThang4 ?? '--',
-			valueColor: 'var(--color-primary)',
-			backgroundColor: '#f3f7fb',
+			valueColor,
+			backgroundColor: token.colorFillQuaternary,
 		},
 		{
 			title: intl.formatMessage({ id: 'ketquahoctap.summary.totalCredits' }),
@@ -55,20 +58,20 @@ const StatKetQuaTichLuySinhVien = (props: { maKhoaNganh?: string }) => {
 					</Typography.Text>
 				</span>
 			),
-			valueColor: 'var(--color-primary)',
-			backgroundColor: '#f3f7fb',
+			valueColor,
+			backgroundColor: token.colorFillQuaternary,
 		},
 		{
 			title: intl.formatMessage({ id: 'ketquahoctap.summary.classification' }),
-			value: trinhDo,
-			valueColor: 'var(--color-primary)',
-			backgroundColor: '#f3f7fb',
+			value: <span className='academic-summary-text-value'>{trinhDo}</span>,
+			valueColor,
+			backgroundColor: token.colorFillQuaternary,
 		},
 		{
 			title: intl.formatMessage({ id: 'ketquahoctap.summary.academicStanding' }),
-			value: hocLuc,
-			valueColor: 'var(--color-primary)',
-			backgroundColor: '#f3f7fb',
+			value: <span className='academic-summary-text-value'>{hocLuc}</span>,
+			valueColor,
+			backgroundColor: token.colorFillQuaternary,
 		},
 	];
 
@@ -77,9 +80,10 @@ const StatKetQuaTichLuySinhVien = (props: { maKhoaNganh?: string }) => {
 			hideCard
 			data={items}
 			rowGutter={12}
-			colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 6 }}
+			colSpan={{ xs: 24, sm: 12, xxl: 6 }}
 			autoBackground={{ enabled: false }}
-			cardStyle={{ height: '100%', borderRadius: 10, alignItems: 'center' }}
+			statShadow={false}
+			cardStyle={{ minHeight: 68, alignItems: 'center', flexWrap: 'wrap', gap: 12 }}
 		/>
 	);
 };

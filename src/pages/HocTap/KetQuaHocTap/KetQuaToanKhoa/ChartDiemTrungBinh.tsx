@@ -1,6 +1,8 @@
 import LineChart from '@/components/Chart/LineChart';
 import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
 import { getLocalizedName } from '@/utils/localeName';
+import { useResolvedTheme } from '@vinuni/ui';
+import { theme } from 'antd';
 import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -12,6 +14,8 @@ const getHocKySortValue = (item: KetQuaHocKy.IRecord) => {
 
 const ChartDiemTrungBinh = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 	const intl = useIntl();
+	const resolvedTheme = useResolvedTheme();
+	const { token } = theme.useToken();
 	const { data } = props;
 	const { danhSach: danhSachModel } = useModel('daotao.ketquahocky');
 	const danhSach = useMemo(
@@ -39,6 +43,7 @@ const ChartDiemTrungBinh = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 				colors: CHART_COLORS,
 				title: { text: undefined },
 				chart: {
+					foreColor: token.colorTextSecondary,
 					toolbar: { show: false },
 					zoom: { enabled: false },
 				},
@@ -87,6 +92,17 @@ const ChartDiemTrungBinh = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 					max: 4,
 					tickAmount: 4,
 					labels: { formatter: formatY },
+				},
+				grid: {
+					borderColor: token.colorSplit,
+					strokeDashArray: 2,
+					xaxis: { lines: { show: false } },
+				},
+				tooltip: {
+					theme: resolvedTheme,
+					shared: true,
+					intersect: false,
+					y: { formatter: formatY },
 				},
 			}}
 		/>

@@ -1,3 +1,4 @@
+import { IconCheckCircle } from '@/components/Icons';
 import Select from '@/components/MySelect';
 import Tooltip from '@/components/MyTooltip';
 import ButtonExtend from '@/components/Table/ButtonExtend';
@@ -8,7 +9,7 @@ import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constan
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { primaryColor } from '@/services/base/constant';
 import { FileTextOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Modal, Space, Tag, Typography } from 'antd';
+import { Modal, Space, Tag, theme, Typography } from 'antd';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -37,15 +38,6 @@ const LETTER_GRADE_COLORS: Partial<Record<ELoaiDiemChu, string>> = {
 	[ELoaiDiemChu.NCR]: '#DC2626',
 };
 
-const AccumulatedCheckIcon = () => (
-	<svg className='academic-accum-check' width='20' height='20' viewBox='0 0 20 20' fill='none' aria-hidden='true'>
-		<path
-			d='M10.001 0.916992C15.0173 0.917168 19.0848 4.98367 19.085 10C19.0848 15.0163 15.0173 19.0838 10.001 19.084C4.98465 19.0838 0.918145 15.0163 0.917969 10C0.918144 4.98367 4.98465 0.917168 10.001 0.916992ZM10.001 2.41699C5.81308 2.41717 2.41814 5.8121 2.41797 10C2.41814 14.1879 5.81308 17.5838 10.001 17.584C14.1889 17.5838 17.5848 14.1879 17.585 10C17.5848 5.8121 14.1889 2.41717 10.001 2.41699ZM13.9326 6.15918C14.2131 5.85436 14.6874 5.83482 14.9922 6.11523C15.2967 6.39572 15.3165 6.87008 15.0361 7.1748L8.90332 13.8418C8.76512 13.9919 8.57118 14.0796 8.36719 14.084C8.16319 14.0882 7.96572 14.0083 7.82129 13.8643L4.8877 10.9307C4.59481 10.6378 4.59483 10.163 4.8877 9.87012C5.18059 9.57722 5.65535 9.57722 5.94824 9.87012L8.32812 12.25L13.9326 6.15918Z'
-			fill='#16A34A'
-		/>
-	</svg>
-);
-
 const isSemesterRow = (rec: DataType) => rec.isSemesterHeader === true;
 
 const filterBySemester = (rows: DataType[], maHocKy: string) => {
@@ -56,6 +48,7 @@ const filterBySemester = (rows: DataType[], maHocKy: string) => {
 
 const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 	const intl = useIntl();
+	const { token } = theme.useToken();
 	const { maKhoaNganh } = props;
 	const { record: sinhVien } = useModel('sinhvien.sinhvien');
 	const { getKetQuaHocKy } = useModel('daotao.ketquahocky');
@@ -165,7 +158,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 
 	const semesterRowStyle = {
 		fontWeight: 600,
-		backgroundColor: '#e8fafdbf',
+		backgroundColor: token.colorInfoBg,
 	};
 
 	const onCell = (rec: DataType) => ({
@@ -254,7 +247,8 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				dataIndex: 'tichLuy',
 				width: 80,
 				align: 'center',
-				render: (val, rec) => isTichLuyDiem(rec) && <AccumulatedCheckIcon />,
+				render: (val, rec) =>
+					isTichLuyDiem(rec) && <IconCheckCircle size={20} style={{ color: token.colorSuccess }} aria-hidden='true' />,
 				onCell: onCellHocPhan,
 			},
 			// {
@@ -301,10 +295,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				filterData: Object.values(ELoaiDiemChu),
 				render: (val, rec) => (
 					<>
-						<Tag
-							className='academic-letter-grade-tag'
-							color={LETTER_GRADE_COLORS[val as ELoaiDiemChu] ?? ColorDiemChu?.[val as ELoaiDiemChu]}
-						>
+						<Tag color={LETTER_GRADE_COLORS[val as ELoaiDiemChu] ?? ColorDiemChu?.[val as ELoaiDiemChu]}>
 							{val === ELoaiDiemChu.CHUA_DU_DU_LIEU ? '--' : val}
 						</Tag>
 						{!isSemesterRow(rec) && (
@@ -353,7 +344,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 		};
 
 		return cols;
-	}, [danhSachDauDiem, handleShowHocPhan, intl, maKhoaNganh]);
+	}, [danhSachDauDiem, handleShowHocPhan, intl, maKhoaNganh, token.colorInfoBg, token.colorSuccess]);
 
 	return (
 		<>
@@ -397,7 +388,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 							onClick={() => setVisibleTranscript(true)}
 						/>
 						<Select
-							style={{ minWidth: 250, height: 36 }}
+							style={{ width: 'clamp(140px, 45vw, 250px)', height: 36 }}
 							value={maHocKyFilter}
 							onChange={setMaHocKyFilter}
 							options={[

@@ -1,11 +1,10 @@
 import EmptyState from '@/components/EmptyState';
-import { IconRotateArrow } from '@/components/Icons';
+import { IconGear, IconRotateArrow } from '@/components/Icons';
 import Segmented from '@/components/MySegmented';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { ELoaiHocPhanCTDT, ETrangThaiHocTap } from '@/services/DaoTao/constant';
-import { accentColors } from '@/services/base/constant';
 import { Collapse, Divider, Space, Spin, Tag, Typography } from 'antd';
 import _ from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -293,7 +292,7 @@ const TienTrinhChuongTrinhKhung = () => {
 			<div className='view-switch-container'>
 				<div className='view-switch-left'>
 					<ButtonExtend
-						className='btn-setting'
+						icon={<IconGear />}
 						tooltip={intl.formatMessage({ id: 'global.setting', defaultMessage: 'Cài đặt' })}
 					/>
 					<SearchTienTrinh storageKey={GLOBAL_SEARCH_KEY} value={searchText} onChange={setSearchText} />
@@ -302,7 +301,7 @@ const TienTrinhChuongTrinhKhung = () => {
 						<span>{totalCourses}</span>
 					</div>
 				</div>
-				<Space>
+				<Space wrap className='view-switch-actions'>
 					<ButtonExtend
 						icon={<IconRotateArrow />}
 						onClick={fetch}
@@ -338,7 +337,7 @@ const TienTrinhChuongTrinhKhung = () => {
 						{/* Header học kỳ/Khối */}
 						<Divider orientation='left' className='divider-big-title' dashed>
 							<div className='header-content'>
-								<Title level={5} style={{ margin: 0, color: APP_CONFIG_PRIMARY_COLOR }}>
+								<Title level={5} style={{ margin: 0, color: 'var(--ds-function-link)' }}>
 									{viewType === 'semester'
 										? `${intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hocky' })} ${data.soThuTuKy}`
 										: data.tenKhoiKienThuc || intl.formatMessage({ id: 'tientrinhhoctap.ctdt.khongten' })}
@@ -406,7 +405,7 @@ const TienTrinhChuongTrinhKhung = () => {
 								>
 									<Collapse.Panel
 										key={panelKey}
-										style={{ backgroundColor: accentColors.accent800 ?? '#f8f8f8' }}
+										style={{ backgroundColor: 'var(--ds-bg-tiled-sm)' }}
 										header={
 											<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
 												<span style={{ fontWeight: 500 }}>
@@ -461,7 +460,7 @@ const TienTrinhChuongTrinhKhung = () => {
 					<>
 						<Divider orientation='left' className='divider-big-title' dashed>
 							<div className='header-content'>
-								<Title level={5} style={{ margin: 0, color: APP_CONFIG_PRIMARY_COLOR }}>
+								<Title level={5} style={{ margin: 0, color: 'var(--ds-function-link)' }}>
 									{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}
 								</Title>
 								<Tag color='blue'>

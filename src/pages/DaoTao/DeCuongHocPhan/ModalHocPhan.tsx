@@ -31,6 +31,8 @@ const ModalHocPhan = (props: {
 		}
 	}, [deCuongId, recSinhVien?.maKhoaNganh, visible, activeKey]);
 
+	if (!visible) return null;
+
 	return (
 		<ModalExpandable
 			title={DOMPurify.sanitize(title ?? '', { ALLOWED_TAGS: [], ALLOWED_ATTR: [] }).trim()}

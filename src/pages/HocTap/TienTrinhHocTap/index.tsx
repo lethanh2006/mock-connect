@@ -58,6 +58,7 @@ const TienTrinhHocTap = () => {
 
 	return (
 		<PageCard
+			className='degree-audit-page'
 			stickyHeader
 			title={intl.formatMessage({ id: 'menu.HocTap.DegreeAudit' })}
 			extra={<SelectSongNganh className='field-w-250' value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
@@ -141,8 +142,10 @@ const TienTrinhHocTap = () => {
 
 					<Spin spinning={loading}>
 						<div className='tien-trinh-progress'>
-							<Divider dashed orientation='left' className='divider-big-title tien-trinh-progress__title'>
-								{intl.formatMessage({ id: 'tientrinhhoctap.scttichluy' })}
+							<Divider dashed orientation='left' className='divider-big-title'>
+								<span className='tien-trinh-progress__title'>
+									{intl.formatMessage({ id: 'tientrinhhoctap.scttichluy' })}
+								</span>
 							</Divider>
 							<div className='progress-section'>
 								<div className='progress-row'>
@@ -206,6 +209,7 @@ const TienTrinhHocTap = () => {
 							offsetTop={64}
 							hideCard
 							tabType='line'
+							tabStyle={{ backgroundColor: 'var(--ds-bg-mortared)' }}
 							contentStyle={{ marginTop: 0 }}
 							menu={[
 								{

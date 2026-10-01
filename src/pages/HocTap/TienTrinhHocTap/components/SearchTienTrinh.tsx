@@ -56,7 +56,6 @@ const SearchTienTrinh = ({ storageKey, value, onChange }: SearchTienTrinhProps) 
 					<SearchInput
 						ref={searchInputRef}
 						variant='tiled'
-						className='global-search'
 						clearable
 						value={value}
 						placeholder={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.search.placeholder' })}

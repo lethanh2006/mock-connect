@@ -14,7 +14,11 @@ const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord; showAll?: boolea
 	);
 
 	if (!maHoaLichHoc?.length)
-		return <i style={{ color: '#999' }}>{intl.formatMessage({ id: 'dangkytinchi.renderlichhoc.khongcothongtin' })}</i>;
+		return (
+			<i className='course-registration-muted'>
+				{intl.formatMessage({ id: 'dangkytinchi.renderlichhoc.khongcothongtin' })}
+			</i>
+		);
 
 	const getThuLabel = (thu: number) =>
 		intl.formatMessage({ id: thu < 7 ? `dangkytinchi.thu.${thu + 1}` : 'dangkytinchi.thu.cn' });

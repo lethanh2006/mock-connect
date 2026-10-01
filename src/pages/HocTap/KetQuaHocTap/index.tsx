@@ -16,19 +16,21 @@ const KetQuaHocTap = () => {
 			title={intl.formatMessage({ id: 'menu.HocTap.GradesTranscript' })}
 			extra={<SelectSongNganh className='field-w-250' value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
 		>
-			<VinCard className='academic-result-summary'>
-				<CardContent>
-					<KetQuaToanKhoaSinhVien maKhoaNganh={maKhoaNganh} />
-				</CardContent>
-			</VinCard>
-			<VinCard className='academic-final-grade-card'>
-				<CardHeader>
-					<CardTitle>{intl.formatMessage({ id: 'ketquahoctap.diemtongket' })}</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<DiemThanhPhanSV maKhoaNganh={maKhoaNganh} />
-				</CardContent>
-			</VinCard>
+			<div className='academic-result-content'>
+				<VinCard>
+					<CardContent>
+						<KetQuaToanKhoaSinhVien maKhoaNganh={maKhoaNganh} />
+					</CardContent>
+				</VinCard>
+				<VinCard>
+					<CardHeader>
+						<CardTitle>{intl.formatMessage({ id: 'ketquahoctap.diemtongket' })}</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<DiemThanhPhanSV maKhoaNganh={maKhoaNganh} />
+					</CardContent>
+				</VinCard>
+			</div>
 		</PageCard>
 	);
 };

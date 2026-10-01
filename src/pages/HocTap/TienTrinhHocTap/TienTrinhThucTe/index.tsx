@@ -1,5 +1,5 @@
 import EmptyState from '@/components/EmptyState';
-import { IconRotateArrow } from '@/components/Icons';
+import { IconGear, IconRotateArrow } from '@/components/Icons';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import VinSelect from '@/components/VinSelect';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
@@ -104,7 +104,7 @@ const TienTrinhThucTeV2 = () => {
 			<div className='view-switch-container'>
 				<div className='view-switch-left'>
 					<ButtonExtend
-						className='btn-setting'
+						icon={<IconGear />}
 						tooltip={intl.formatMessage({ id: 'global.setting', defaultMessage: 'Cài đặt' })}
 					/>
 					<SearchTienTrinh storageKey={GLOBAL_SEARCH_KEY} value={searchText} onChange={setSearchText} />
@@ -113,7 +113,7 @@ const TienTrinhThucTeV2 = () => {
 						<span>{totalCourses}</span>
 					</div>
 				</div>
-				<Space>
+				<Space wrap className='view-switch-actions'>
 					<ButtonExtend
 						icon={<IconRotateArrow />}
 						onClick={fetch}
@@ -126,7 +126,7 @@ const TienTrinhThucTeV2 = () => {
 						showSearch
 						optionFilterProp='label'
 						size='small'
-						style={{ minWidth: 250, height: 36, fontWeight: 600 }}
+						style={{ width: 250, maxWidth: '100%' }}
 						placeholder={intl.formatMessage({ id: 'tientrinhhoctap.filter.hocKy' })}
 						value={maHocKyFilter ?? ''}
 						onChange={(val) => setMaHocKyFilter(val || undefined)}
@@ -147,7 +147,7 @@ const TienTrinhThucTeV2 = () => {
 						<Fragment key={data[0]?.kyHoc?.ma ?? data[0]?.diemHpSvHk?._id}>
 							<Divider orientation='left' className='divider-big-title' dashed>
 								<div className='header-content'>
-									<Title level={5} style={{ margin: 0, color: APP_CONFIG_PRIMARY_COLOR }}>
+									<Title level={5} style={{ margin: 0, color: 'var(--ds-function-link)' }}>
 										{data[0].kyHoc?.ten}
 									</Title>
 									<Tag color='blue'>
@@ -174,17 +174,7 @@ const TienTrinhThucTeV2 = () => {
 						</Fragment>
 					))
 				) : (
-					<EmptyState
-						description={intl.formatMessage({ id: 'tientrinhhoctap.empty' })}
-						style={{
-							marginTop: '100px',
-							marginBottom: '32px',
-							backgroundColor: '#fff',
-							padding: '40px',
-							borderRadius: '8px',
-							boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-						}}
-					/>
+					<EmptyState description={intl.formatMessage({ id: 'tientrinhhoctap.empty' })} className='my-8' />
 				)}
 			</Spin>
 

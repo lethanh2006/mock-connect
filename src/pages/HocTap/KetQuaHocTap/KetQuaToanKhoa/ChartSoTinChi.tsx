@@ -1,6 +1,8 @@
 import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
 import { getLocalizedName } from '@/utils/localeName';
 import { getLocale } from '@umijs/max';
+import { useResolvedTheme } from '@vinuni/ui';
+import { theme } from 'antd';
 import { type ApexOptions } from 'apexcharts';
 import en from 'apexcharts/dist/locales/en.json';
 import vi from 'apexcharts/dist/locales/vi.json';
@@ -14,6 +16,8 @@ const getHocKySortValue = (item: KetQuaHocKy.IRecord) => {
 
 const ChartSoTinChi = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 	const intl = useIntl();
+	const resolvedTheme = useResolvedTheme();
+	const { token } = theme.useToken();
 	const { data } = props;
 	const { danhSach: danhSachModel } = useModel('daotao.ketquahocky');
 	const danhSach = useMemo(
@@ -49,6 +53,7 @@ const ChartSoTinChi = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 
 	const options: ApexOptions = {
 		chart: {
+			foreColor: token.colorTextSecondary,
 			defaultLocale,
 			locales: [vi, en],
 			stacked: true,
@@ -124,6 +129,7 @@ const ChartSoTinChi = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 			},
 		],
 		tooltip: {
+			theme: resolvedTheme,
 			shared: true,
 			intersect: false,
 		},
@@ -138,6 +144,7 @@ const ChartSoTinChi = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 			offsetY: 100,
 		},
 		colors: ['#f3de2c', '#86c4ee'],
+		grid: { borderColor: token.colorSplit },
 	};
 
 	return <Chart options={options} series={series} type='bar' height={300} />;

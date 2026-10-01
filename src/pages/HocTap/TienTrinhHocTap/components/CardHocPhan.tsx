@@ -11,12 +11,12 @@ const courseGradeColors: Partial<Record<ELoaiDiemChu, string>> = {
 	[ELoaiDiemChu.A_PLUS]: '#16A34A',
 	[ELoaiDiemChu.A]: '#16A34A',
 	[ELoaiDiemChu.A_MINUS]: '#16A34A',
-	[ELoaiDiemChu.B_PLUS]: 'var(--course-grade-neutral, #000000)',
-	[ELoaiDiemChu.B]: 'var(--course-grade-neutral, #000000)',
-	[ELoaiDiemChu.B_MINUS]: 'var(--course-grade-neutral, #000000)',
-	[ELoaiDiemChu.C_PLUS]: 'var(--course-grade-neutral, #000000)',
-	[ELoaiDiemChu.C]: 'var(--course-grade-neutral, #000000)',
-	[ELoaiDiemChu.C_MINUS]: 'var(--course-grade-neutral, #000000)',
+	[ELoaiDiemChu.B_PLUS]: 'var(--ds-content-primary)',
+	[ELoaiDiemChu.B]: 'var(--ds-content-primary)',
+	[ELoaiDiemChu.B_MINUS]: 'var(--ds-content-primary)',
+	[ELoaiDiemChu.C_PLUS]: 'var(--ds-content-primary)',
+	[ELoaiDiemChu.C]: 'var(--ds-content-primary)',
+	[ELoaiDiemChu.C_MINUS]: 'var(--ds-content-primary)',
 	[ELoaiDiemChu.D_PLUS]: '#FA580C',
 	[ELoaiDiemChu.D]: '#FA580C',
 	[ELoaiDiemChu.D_MINUS]: '#FA580C',
@@ -39,8 +39,13 @@ const CardHocPhan = (props: {
 	const diemHienThi = listDiem?.[0]?.diemChu;
 
 	return (
-		<div className='base-card base-card--course'>
-			<Card hoverable onClick={onClick}>
+		<div className='degree-audit-card degree-audit-card--course'>
+			<Card
+				hoverable
+				onClick={onClick}
+				style={{ height: '100%', background: 'var(--ds-bg-tiled-sm)', border: 0 }}
+				styles={{ body: { height: '100%', padding: 16 } }}
+			>
 				<div className='card-content'>
 					<div className='card-main'>
 						{label && <span className='card-label'>{label}</span>}

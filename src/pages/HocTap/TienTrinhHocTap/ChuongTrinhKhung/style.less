@@ -1,195 +1,44 @@
-.view-switch-container {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 16px;
-	margin-bottom: 16px;
-
+.degree-audit-page {
+	.view-switch-container {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		margin-block: 16px;
+	}
 	.view-switch-left {
 		display: flex;
+		flex: 1 1 320px;
+		flex-wrap: wrap;
 		align-items: center;
+		min-width: 0;
 		gap: 12px;
 	}
-
-	.btn-setting,
-	.btn-reload {
-		display: inline-flex !important;
-		flex: 0 0 36px;
-		align-items: center;
-		justify-content: center;
-		width: 36px !important;
-		min-width: 36px !important;
-		height: 36px !important;
-		padding: 0 !important;
-		background: rgba(0, 0, 0, 0.05) !important;
-		border: 0 !important;
-		border-radius: 1000px !important;
-		backdrop-filter: blur(12px);
-		cursor: pointer;
-		transition: all 0.2s ease;
-
-		&:hover {
-			background: rgba(0, 0, 0, 0.08) !important;
-		}
-
-		svg {
-			width: 20px;
-			height: 20px;
-		}
+	.view-switch-actions {
+		max-width: 100%;
 	}
-
-	.btn-setting {
-		position: relative;
-
-		&::after {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			width: 20px;
-			height: 20px;
-			background: #000;
-			-webkit-mask: url('../components/gear-figma.svg') center / contain no-repeat;
-			mask: url('../components/gear-figma.svg') center / contain no-repeat;
-			content: '';
-			pointer-events: none;
-			transform: translate(-50%, -50%);
-		}
-	}
-
-	.total {
+	.tien-trinh-total {
 		display: inline-flex;
 		align-items: center;
 		gap: 4px;
-		height: 20px;
-		padding: 0;
-		font-family: 'Inter', sans-serif;
-		font-size: 14px;
-		line-height: 20px;
-		color: #000;
+		color: var(--ds-content-primary);
 		white-space: nowrap;
-
 		span {
-			margin-left: 0;
-			color: #c83538;
+			color: var(--ds-negative-primary);
 			font-weight: 600;
-			font-size: 14px !important;
 		}
 	}
-}
-
-[data-vinuni-theme='dark'] {
-	.view-switch-container {
-		.btn-setting,
-		.btn-reload {
-			background: rgba(255, 255, 255, 0.08) !important;
-
-			&:hover {
-				background: rgba(255, 255, 255, 0.12) !important;
-			}
-		}
-
-		.btn-setting::after {
-			background: #fff;
-		}
-
-		.total {
-			color: #fff;
-		}
-	}
-}
-
-.view-switch-segmented.my-segmented {
-	box-sizing: border-box;
-	display: flex !important;
-	flex: none;
-	flex-direction: row;
-	align-items: flex-start;
-	width: 200px !important;
-	height: 36px !important;
-	padding: 0;
-	background: rgba(0, 0, 0, 0.05) !important;
-	border-radius: 1000px !important;
-
-	[data-slot='segmented-control-track'] {
-		flex: 1 1 auto !important;
-		align-items: stretch;
-		width: 100% !important;
-		height: 100%;
-		padding: 4px !important;
-	}
-
-	[data-slot='segmented-control-indicator'] {
-		top: 4px !important;
-		bottom: 4px !important;
-		height: 28px;
-		background: #ffffff !important;
-		border: none !important;
-		border-radius: 1000px !important;
-	}
-
-	[data-slot='segmented-control-item'] {
-		flex: 1 1 0 !important;
-		align-self: stretch;
-		justify-content: center;
-		width: auto !important;
-		height: 28px !important;
-		padding: 0 12px !important;
+	.header-content {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
 		gap: 8px;
-		border-radius: 1000px;
-		color: #000000 !important;
-		font-family: 'Inter', sans-serif;
-		font-size: 14px !important;
-		line-height: 20px !important;
-		text-align: center;
-
-		&[data-state='on'] {
-			font-weight: 500;
-		}
-
-		&[data-state='off'] {
-			font-weight: 400;
-		}
 	}
-}
-
-.header-content {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-}
-
-.red-dot {
-	width: 8px;
-	height: 8px;
-	background-color: #ff4d4f;
-	border-radius: 50%;
-}
-
-.credits-text {
-	margin: 0;
-	font-weight: 500;
-	background-color: #fff1f0 !important;
-	border-color: #ffa39e !important;
-	color: #cf1322 !important;
-}
-
-.stats-tag {
-	background-color: #e6f7ff !important;
-	border-color: #91d5ff !important;
-	color: #096dd9 !important;
-}
-
-.grid-container {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-	gap: 16px;
-	align-items: stretch;
-
-	> .base-card {
-		height: 100%;
-	}
-
-	> .base-card--course {
-		height: 179px;
+	.grid-container {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+		gap: 16px;
+		align-items: stretch;
 	}
 }

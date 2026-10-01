@@ -106,8 +106,10 @@ const ModalDangKyNgayContent = ({
 			>
 				<div className='dang-ky-ngay-confirm'>
 					<div className='dang-ky-ngay-confirm__message'>
-						<IconInfoCircle size={20} />
-						<span>
+						<span className='dang-ky-ngay-confirm__info'>
+							<IconInfoCircle size={20} />
+						</span>
+						<span className='dang-ky-ngay-confirm__message-text'>
 							{intl.formatMessage(
 								{
 									id: isVuotTin ? 'dangkytinchi.dangkyngay.modal.vuottin.alert' : 'dangkytinchi.dangkyngay.modal.alert',
@@ -164,7 +166,7 @@ const ModalDangKyNgayContent = ({
 					</div>
 				</div>
 
-				<div className='form-footer dang-ky-ngay-confirm__footer'>
+				<div className='form-footer'>
 					{isVuotTin ? (
 						<Button variant='default' loading={formSubmiting} onClick={() => openLyDoModal('vuot_tin')}>
 							{intl.formatMessage({ id: 'dangkytinchi.vuottin.button.dangkyvuottin' })}
