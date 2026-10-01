@@ -1,21 +1,31 @@
 import { Col, Row } from '@/components/MyGrid';
+import VinSelect from '@/components/VinSelect';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
+import type { TDangKyTinChiPreviewData } from '../localPreviewData';
 
-const FilterDotDangKy = () => {
+const FilterDotDangKy = ({ previewData }: { previewData?: TDangKyTinChiPreviewData }) => {
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { getDotDangKyAvailableModel: getDotDangKy } = useModel('daotao.dotdangkytinchi');
 
 	useEffect(() => {
-		if (recHocKy?.ma) getDotDangKy(recHocKy.ma);
-	}, [recHocKy?.ma]);
+		if (!previewData && recHocKy?.ma) getDotDangKy(recHocKy.ma);
+	}, [previewData, recHocKy?.ma]);
 
 	return (
 		<Row gutter={[16, 16]}>
 			<Col span={24}>
 				<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-					<FilterHocKy isSetHocKy />
+					{previewData ? (
+						<VinSelect
+							style={{ width: 'clamp(150px, 40vw, 250px)' }}
+							value={previewData.hocKy.ma}
+							options={[{ value: previewData.hocKy.ma, label: previewData.hocKy.ten }]}
+						/>
+					) : (
+						<FilterHocKy isSetHocKy />
+					)}
 
 					{/* <Popover content={<ViewDetailHocKy />} placement='right'>
 						<Button type='link' icon={<InfoCircleOutlined />}>

@@ -1,5 +1,6 @@
 import PageCard from '@/components/PageCard';
 import { TabViewPage } from '@/components/TabViewPage';
+import VinSelect from '@/components/VinSelect';
 import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { formatDate } from '@/utils/formatDate';
@@ -9,26 +10,51 @@ import { CardContent, Card as VinCard } from '@vinuni/ui';
 import { Alert, Divider, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useAccess, useIntl, useModel } from 'umi';
+import { isHocTapPreview } from '../localPreview';
 import TienTrinhChuongTrinhKhung from './ChuongTrinhKhung';
 import './components/style.less';
+import {
+	PREVIEW_CHUONG_TRINH_HIEN_TAI,
+	PREVIEW_DOT_QUY_DOI,
+	PREVIEW_MA_KHOA_NGANH,
+	PREVIEW_MINORS,
+	PREVIEW_TIEN_TRINH,
+	PREVIEW_TIEN_TRINH_THUC_TE,
+	PREVIEW_TIEN_TRINH_TOT_NGHIEP,
+} from './localPreviewData';
 import TienTrinhThucTe from './TienTrinhThucTe';
 import { tinhThongKeMinor } from './utils';
 
 const TienTrinhHocTap = () => {
 	const intl = useIntl();
-	const { getAllModel, record: recDotQuyDoi, setRecord } = useModel('daotao.quydoidiem.dotquydoidiem');
+	const preview = isHocTapPreview();
+	const { getAllModel, record: recDotQuyDoiModel, setRecord } = useModel('daotao.quydoidiem.dotquydoidiem');
 	const { maKhoaNganh, setMaKhoaNganh, record: recSinhVien, khoaNganhMe } = useModel('sinhvien.sinhvien');
-	const { record: recTienTrinh, getTienTrinhTotNghiepModel, loading } = useModel('sinhvien.tientrinhtotnghiep');
 	const {
-		chuongTrinhHienTai,
-		tienTrinhKhungMinors,
-		loading: loadingChuongTrinh,
+		record: recTienTrinhModel,
+		getTienTrinhTotNghiepModel,
+		loading: loadingModel,
+	} = useModel('sinhvien.tientrinhtotnghiep');
+	const {
+		chuongTrinhHienTai: chuongTrinhHienTaiModel,
+		tienTrinhKhungMinors: tienTrinhKhungMinorsModel,
+		loading: loadingChuongTrinhModel,
 		getChuongTrinhHienTaiModel,
 	} = useModel('daotao.chuongtrinhdaotao');
+	const recTienTrinh = preview ? PREVIEW_TIEN_TRINH_TOT_NGHIEP : recTienTrinhModel;
+	const chuongTrinhHienTai = preview ? PREVIEW_CHUONG_TRINH_HIEN_TAI : chuongTrinhHienTaiModel;
+	const recDotQuyDoi = preview ? PREVIEW_DOT_QUY_DOI : recDotQuyDoiModel;
+	const tienTrinhKhungMinors = preview ? PREVIEW_MINORS : tienTrinhKhungMinorsModel;
+	const loading = !preview && loadingModel;
+	const loadingChuongTrinh = !preview && loadingChuongTrinhModel;
 	const [visibleChuongTrinh, setVisibleChuongTrinh] = useState(false);
 	const access = useAccess();
 	const isSongNganh = maKhoaNganh === khoaNganhMe?.khoaNganhPhu?.ma;
-	const chuyenNganhHienTai = isSongNganh ? recSinhVien?.chuyenNganh2 : recSinhVien?.chuyenNganh;
+	const chuyenNganhHienTai = preview
+		? { ten: 'Artificial Intelligence and Data Science' }
+		: isSongNganh
+			? recSinhVien?.chuyenNganh2
+			: recSinhVien?.chuyenNganh;
 	const tenChuyenNganhPhu = tienTrinhKhungMinors?.[0]?.nganhMinor?.tenTiengViet;
 	const thongKeMinor = useMemo(() => tinhThongKeMinor(tienTrinhKhungMinors), [tienTrinhKhungMinors]);
 	const tongTinChiCtdtDaDat = recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa;
@@ -42,11 +68,13 @@ const TienTrinhHocTap = () => {
 		? Math.min(100 - phanTramTinChiChinh, Math.max(0, (thongKeMinor.daDat * 100) / tongTinChiTatCa))
 		: 0;
 	useEffect(() => {
+		if (preview) return;
 		//Get đợt me
 		getAllModel(undefined, undefined, undefined, undefined, 'current', false).then((res) => setRecord(res as any));
 	}, []);
 
 	useEffect(() => {
+		if (preview) return;
 		//Get tiến trình
 		if (!recTienTrinh && maKhoaNganh) getTienTrinhTotNghiepModel(maKhoaNganh);
 		//Get đợt lộ trình học tập
@@ -61,7 +89,18 @@ const TienTrinhHocTap = () => {
 			className='degree-audit-page'
 			stickyHeader
 			title={intl.formatMessage({ id: 'menu.HocTap.DegreeAudit' })}
-			extra={<SelectSongNganh className='field-w-250' value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
+			extra={
+				preview ? (
+					<VinSelect
+						className='field-w-250'
+						value={PREVIEW_MA_KHOA_NGANH}
+						options={[{ value: PREVIEW_MA_KHOA_NGANH, label: 'Computer Science' }]}
+						allowDeselect={false}
+					/>
+				) : (
+					<SelectSongNganh className='field-w-250' value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
+				)
+			}
 		>
 			<VinCard>
 				<CardContent>
@@ -76,6 +115,7 @@ const TienTrinhHocTap = () => {
 										<button
 											type='button'
 											className='ctdt-summary__value ctdt-summary__value--action'
+											disabled={preview}
 											onClick={() => setVisibleChuongTrinh(true)}
 										>
 											{getLocalizedName(recTienTrinh?.ctdtKeHoach) || '-'}
@@ -215,13 +255,13 @@ const TienTrinhHocTap = () => {
 								{
 									title: intl.formatMessage({ id: 'tientrinhhoctap.curriculumPlanner' }),
 									menuKey: 'chuong-trinh-dao-tao',
-									content: <TienTrinhChuongTrinhKhung />,
+									content: <TienTrinhChuongTrinhKhung data={preview ? PREVIEW_TIEN_TRINH : undefined} />,
 									// icon: <IconBookOpen />,
 								},
 								{
 									title: intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte' }),
 									menuKey: 'tien-trinh-thuc-te',
-									content: <TienTrinhThucTe />,
+									content: <TienTrinhThucTe data={preview ? PREVIEW_TIEN_TRINH_THUC_TE : undefined} />,
 									// icon: <IconCalendar />,
 								},
 								// {
@@ -244,7 +284,7 @@ const TienTrinhHocTap = () => {
 						/>
 					</div>
 
-					<ChuongTrinhDaoTaoModalView visible={visibleChuongTrinh} setVisible={setVisibleChuongTrinh} />
+					{!preview && <ChuongTrinhDaoTaoModalView visible={visibleChuongTrinh} setVisible={setVisibleChuongTrinh} />}
 				</CardContent>
 			</VinCard>
 		</PageCard>

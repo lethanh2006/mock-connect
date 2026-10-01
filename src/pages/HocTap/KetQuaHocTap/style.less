@@ -10,3 +10,56 @@
 	line-height: 24px;
 	overflow-wrap: anywhere;
 }
+
+.academic-result-course-code {
+	color: #134d8b;
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 20px;
+	text-decoration: underline;
+}
+
+.academic-result-page,
+.academic-result-content {
+	[data-slot='table-container'] [data-slot='table-header'] th,
+	[data-slot='table-container'] [data-slot='table-head'],
+	.table-base [data-slot='table-header'] th,
+	.table-base [data-slot='table-head'],
+	th.react-resizable {
+		position: sticky !important;
+		top: 0 !important;
+		z-index: 15 !important;
+		background-color: var(--color-bg-container, var(--ds-bg-mortared, #ffffff)) !important;
+
+		&.table-cell-pinned-right,
+		&[data-pinned='right'],
+		&.table-cell-pinned-left,
+		&[data-pinned='left'] {
+			z-index: 25 !important;
+		}
+	}
+
+	td.table-cell-pinned-right,
+	td.table-cell-pinned-left,
+	td[data-pinned='right'],
+	td[data-pinned='left'] {
+		position: sticky !important;
+		z-index: 5 !important;
+		background-color: var(--color-bg-container, var(--ds-bg-mortared, #ffffff)) !important;
+	}
+
+	tr:hover > td.table-cell-pinned-right,
+	tr:hover > td.table-cell-pinned-left,
+	tr:hover > td[data-pinned='right'],
+	tr:hover > td[data-pinned='left'] {
+		background-color: var(--color-bg-container, var(--ds-bg-mortared, #ffffff)) !important;
+		background-image: linear-gradient(
+			var(--table-row-overlay, var(--color-fill-quaternary, rgba(0, 0, 0, 0.02))),
+			var(--table-row-overlay, var(--color-fill-quaternary, rgba(0, 0, 0, 0.02)))
+		) !important;
+	}
+}
+
+

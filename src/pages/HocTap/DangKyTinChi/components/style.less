@@ -32,9 +32,73 @@
 
 .course-registration-status-stack {
 	display: flex;
+	flex: none;
 	flex-direction: column;
+	justify-content: center;
 	align-items: flex-start;
+	min-height: 24px;
 	gap: 4px;
+}
+
+.course-registration-status-row {
+	display: inline-flex;
+	flex: none;
+	align-items: center;
+	min-height: 24px;
+	gap: 4px;
+}
+
+.course-registration-status-tag {
+	box-sizing: border-box;
+	display: inline-flex;
+	flex: none;
+	align-items: center;
+	gap: 4px;
+	width: fit-content;
+	height: 24px;
+	padding: 4px 8px;
+	border: 0;
+	border-radius: 1000px;
+	font-family: 'Inter', sans-serif;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 16px;
+	white-space: nowrap;
+	vertical-align: middle;
+	-webkit-backdrop-filter: blur(8px);
+	backdrop-filter: blur(8px);
+
+	&--success {
+		color: #16a34a;
+		background: rgba(22, 163, 74, 0.15);
+	}
+
+	&--pending {
+		color: #1d4ed8;
+		background: rgba(29, 78, 216, 0.15);
+	}
+
+	&--warning {
+		color: #ea580c;
+		background: rgba(234, 88, 12, 0.15);
+	}
+
+	&--negative {
+		color: #dc2626;
+		background: rgba(220, 38, 38, 0.15);
+	}
+
+	&--default {
+		color: #525252;
+		background: rgba(82, 82, 82, 0.15);
+	}
+}
+
+.course-registration-status-tag-label {
+	display: block;
+	flex: none;
+	line-height: 16px;
 }
 
 .course-registration-status-help {
@@ -44,17 +108,46 @@
 
 .course-registration-status-info {
 	display: inline-flex;
-	color: var(--ds-informative-primary);
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	color: #1d4ed8;
 	cursor: help;
 }
 
 .course-registration-course-link {
-	color: var(--ds-function-link);
-	text-decoration: none;
+	display: inline-block;
+	max-width: 100%;
+	height: 20px;
+	color: #134d8b;
+	font-weight: 400;
+	font-size: 14px;
+	font-family: 'Inter', sans-serif;
+	font-style: normal;
+	line-height: 20px;
+	text-decoration: underline;
+	text-decoration-line: underline;
 
 	&:hover,
 	&:focus {
-		text-decoration: none;
+		color: #134d8b;
+		text-decoration: underline;
+		text-decoration-line: underline;
+	}
+
+	&::after {
+		display: none;
+	}
+}
+
+[data-vinuni-theme='dark'] .course-registration-course-link {
+	color: var(--ds-function-link, #3b81da);
+
+	&:hover,
+	&:focus {
+		color: var(--ds-function-link, #3b81da);
 	}
 }
 
@@ -294,3 +387,46 @@
 		transition: none;
 	}
 }
+
+.course-registration-page,
+.table-dang-ky,
+.course-registration-section {
+	[data-slot='table-container'] [data-slot='table-header'] th,
+	[data-slot='table-container'] [data-slot='table-head'],
+	.table-base [data-slot='table-header'] th,
+	.table-base [data-slot='table-head'],
+	th.react-resizable {
+		position: sticky !important;
+		top: 0 !important;
+		z-index: 15 !important;
+		background-color: var(--color-bg-container, var(--ds-bg-mortared, #ffffff)) !important;
+
+		&.table-cell-pinned-right,
+		&[data-pinned='right'],
+		&.table-cell-pinned-left,
+		&[data-pinned='left'] {
+			z-index: 25 !important;
+		}
+	}
+
+	td.table-cell-pinned-right,
+	td.table-cell-pinned-left,
+	td[data-pinned='right'],
+	td[data-pinned='left'] {
+		position: sticky !important;
+		z-index: 5 !important;
+		background-color: var(--color-bg-container, var(--ds-bg-mortared, #ffffff)) !important;
+	}
+
+	tr:hover > td.table-cell-pinned-right,
+	tr:hover > td.table-cell-pinned-left,
+	tr:hover > td[data-pinned='right'],
+	tr:hover > td[data-pinned='left'] {
+		background-color: var(--color-bg-container, var(--ds-bg-mortared, #ffffff)) !important;
+		background-image: linear-gradient(
+			var(--table-row-overlay, var(--color-fill-quaternary, rgba(0, 0, 0, 0.02))),
+			var(--table-row-overlay, var(--color-fill-quaternary, rgba(0, 0, 0, 0.02)))
+		) !important;
+	}
+}
+

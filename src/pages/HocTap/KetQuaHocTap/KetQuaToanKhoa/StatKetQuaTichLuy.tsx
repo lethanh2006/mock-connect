@@ -1,29 +1,35 @@
 import StatisticsCard from '@/components/StatisticsCard';
 import { StatisticsItem } from '@/components/StatisticsCard/typing';
 import { mapLoaiHocLuc, mapTrinhDoKqhtHocKy } from '@/services/HocTap/constant';
+import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
 import { useResolvedTheme } from '@vinuni/ui';
 import { theme, Typography } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
-const StatKetQuaTichLuySinhVien = (props: { maKhoaNganh?: string }) => {
+const StatKetQuaTichLuySinhVien = (props: {
+	maKhoaNganh?: string;
+	record?: KetQuaHocKy.IRecord;
+	tongSoTinChiChuongTrinh?: number;
+}) => {
 	const intl = useIntl();
 	const { token } = theme.useToken();
 	const valueColor = useResolvedTheme() === 'dark' ? 'var(--ds-brand-accent-blue-pale)' : 'var(--ds-function-link)';
-	const { maKhoaNganh } = props;
-	const { record } = useModel('daotao.ketquahocky');
+	const { maKhoaNganh, tongSoTinChiChuongTrinh } = props;
+	const { record: recordModel } = useModel('daotao.ketquahocky');
+	const record = props.record ?? recordModel;
 	const { record: recTienTrinh, getTienTrinhTotNghiepModel } = useModel('sinhvien.tientrinhtotnghiep');
 
 	useEffect(() => {
-		if (maKhoaNganh && !recTienTrinh?.ctdtKeHoach?.tongSoTinChi) {
+		if (tongSoTinChiChuongTrinh === undefined && maKhoaNganh && !recTienTrinh?.ctdtKeHoach?.tongSoTinChi) {
 			getTienTrinhTotNghiepModel(maKhoaNganh);
 		}
-	}, [maKhoaNganh]);
+	}, [maKhoaNganh, tongSoTinChiChuongTrinh]);
 
 	if (!record?._id) return null;
 
 	const tongTinChi = record.tongSoTinChiTichLuyToanKhoa ?? '--';
-	const tongTinChiToanKhoa = recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? '--';
+	const tongTinChiToanKhoa = tongSoTinChiChuongTrinh ?? recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? '--';
 	const trinhDo =
 		record.trinhDo && mapTrinhDoKqhtHocKy[record.trinhDo]
 			? intl.formatMessage({ id: mapTrinhDoKqhtHocKy[record.trinhDo] })

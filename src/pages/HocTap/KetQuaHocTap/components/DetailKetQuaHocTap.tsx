@@ -8,14 +8,20 @@ import { useIntl, useModel } from 'umi';
 
 const DetailKetQuaHocTap = (props: {
 	lopHocPhanId?: string;
+	preview?: boolean;
 	diemHpSvHk?: LopHocPhan.IDiemHpSvHk;
 	toDanhGiaGiangVien?: () => void;
 }) => {
 	const intl = useIntl();
 	const { md } = Grid.useBreakpoint();
-	const { lopHocPhanId, diemHpSvHk, toDanhGiaGiangVien } = props;
+	const { lopHocPhanId, diemHpSvHk, toDanhGiaGiangVien, preview = false } = props;
 	const { danhSach: danhSachDauDiem, getModel } = useModel('daotao.daudiemhocphan');
-	const { sinhVienGetDiemLHPModel, record: recSinhVienLhp, loading } = useModel('lophocphan.sinhvienlophocphan');
+	const {
+		sinhVienGetDiemLHPModel,
+		record: recSinhVienLhp,
+		loading: loadingModel,
+	} = useModel('lophocphan.sinhvienlophocphan');
+	const loading = preview ? false : loadingModel;
 	const [hienThiDiemThi, setHienThiDiemThi] = useState<boolean>(false);
 	const recDiem = diemHpSvHk ?? recSinhVienLhp?.diemHpSvHk;
 
@@ -43,12 +49,12 @@ const DetailKetQuaHocTap = (props: {
 	}, [recDiem?._id]);
 
 	useEffect(() => {
-		if (!danhSachDauDiem.length) getModel();
-	}, []);
+		if (!preview && !danhSachDauDiem.length) getModel();
+	}, [preview]);
 
 	useEffect(() => {
-		if (lopHocPhanId && !diemHpSvHk) sinhVienGetDiemLHPModel(lopHocPhanId);
-	}, [lopHocPhanId]);
+		if (!preview && lopHocPhanId && !diemHpSvHk) sinhVienGetDiemLHPModel(lopHocPhanId);
+	}, [lopHocPhanId, preview]);
 
 	const renderDiem = (diem?: any) => (
 		<div>

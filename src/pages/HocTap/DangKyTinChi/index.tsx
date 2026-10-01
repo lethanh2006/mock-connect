@@ -6,9 +6,10 @@ import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao
 import { formatDateTime } from '@/utils/formatDate';
 import { CardContent, Card as VinCard } from '@vinuni/ui';
 import { Alert } from 'antd';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import { history, useIntl, useModel } from 'umi';
+import { isHocTapPreview } from '../localPreview';
 import CreditRegistrationBar from './components/CreditRegistrationBar';
 import DangKyLopHocPhan from './components/DangKyLopHocPhan';
 import FilterDotDangKy from './components/FilterDotDangKy';
@@ -16,6 +17,7 @@ import HuongDanDangKyTinChi from './components/HuongDanDangKyTinChi';
 import PhieuDangKy from './components/PhieuDangKy';
 import './components/style.less';
 import ViewGhiChuDangKyTinChi from './components/ViewGhiChuDangKyTinChi';
+import { createDangKyTinChiPreviewData } from './localPreviewData';
 import { buildDanhSachLopHienThi, getSoTinChiToiDa, tinhTongHocPhanDangKy, tinhTongTinChi } from './utils';
 
 const RECAPTCHA_SITE_KEY =
@@ -23,11 +25,32 @@ const RECAPTCHA_SITE_KEY =
 		? APP_CONFIG_RECAPTCHA_SITE_KEY
 		: '';
 
+const RegistrationProvider = ({ preview, children }: { preview: boolean; children: ReactNode }) =>
+	preview ? (
+		<>{children}</>
+	) : (
+		<GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>{children}</GoogleReCaptchaProvider>
+	);
+
 const DangKyTinChiPage = () => {
 	const intl = useIntl();
-	const { record: recHocKy } = useModel('daotao.hocky');
-	const { dotDangKyHienTai, loading, sinhVienDot, phieuDangKy, danhSachLopDangKy, getLopDangKyModel, setVisibleModal } =
-		useModel('daotao.dotdangkytinchi');
+	const preview = isHocTapPreview();
+	const { record: recHocKyModel } = useModel('daotao.hocky');
+	const {
+		dotDangKyHienTai: dotDangKyHienTaiModel,
+		loading,
+		sinhVienDot: sinhVienDotModel,
+		phieuDangKy: phieuDangKyModel,
+		danhSachLopDangKy: danhSachLopDangKyModel,
+		getLopDangKyModel,
+		setVisibleModal,
+	} = useModel('daotao.dotdangkytinchi');
+	const previewData = useMemo(() => (preview ? createDangKyTinChiPreviewData() : undefined), [preview]);
+	const recHocKy = previewData?.hocKy ?? recHocKyModel;
+	const dotDangKyHienTai = previewData?.dotDangKyHienTai ?? dotDangKyHienTaiModel;
+	const sinhVienDot = previewData?.sinhVienDot ?? sinhVienDotModel;
+	const phieuDangKy = previewData?.phieuDangKy ?? phieuDangKyModel;
+	const danhSachLopDangKy = previewData?.danhSachLopDangKy ?? danhSachLopDangKyModel;
 	const { loading: loadingHocKy } = useModel('daotao.hocky');
 	// const { getMeModel: getLopHc } = useModel('daotao.lophanhchinh');
 	const { setPage } = useModel('lophocphan.lophocphan');
@@ -45,7 +68,7 @@ const DangKyTinChiPage = () => {
 	const soTinChiToiThieu = phieuDangKy?.soTinChiToiThieu ?? 0;
 	const dotHocKySynced = dotDangKyHienTai?.maHocKy === recHocKy?.ma;
 	const isWaitingSinhVienDot = dotHocKySynced && !!dotDangKyHienTai?._id && sinhVienDot === undefined;
-	const isPageLoading = loading || loadingHocKy || isWaitingSinhVienDot;
+	const isPageLoading = !preview && (loading || loadingHocKy || isWaitingSinhVienDot);
 
 	// const getData = async () => {
 	// 	getModel(undefined, undefined, undefined, undefined, undefined, 'me/page');
@@ -60,15 +83,16 @@ const DangKyTinChiPage = () => {
 	// }, []);
 
 	const getLopDangKy = async () => {
+		if (previewData) return previewData.danhSachLopDangKy;
 		if (recHocKy?.ma) return getLopDangKyModel(recHocKy.ma);
 		return undefined;
 	};
 
 	useEffect(() => {
-		if (!recHocKy?.ma) return;
+		if (preview || !recHocKy?.ma) return;
 		setPage(1);
 		getLopDangKy();
-	}, [recHocKy?.ma]);
+	}, [preview, recHocKy?.ma]);
 
 	useEffect(() => {
 		if (!isPageLoading) {
@@ -120,12 +144,12 @@ const DangKyTinChiPage = () => {
 	}, []);
 
 	return (
-		<GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>
+		<RegistrationProvider preview={preview}>
 			<PageCard
 				stickyHeader
 				className='course-registration-page'
 				title={intl.formatMessage({ id: 'dangkytinchi.title' })}
-				extra={<FilterDotDangKy />}
+				extra={<FilterDotDangKy previewData={previewData} />}
 			>
 				<div ref={dangKyCardRef} className='course-registration-section course-registration-section--available'>
 					<VinCard className='course-registration-card course-registration-card--available'>
@@ -211,10 +235,10 @@ const DangKyTinChiPage = () => {
 												{
 													link_tien_trinh: (chunks: any) => (
 														<a
-															href='/hoc-tap/tien-trinh-hoc-tap'
+															href={`/hoc-tap/tien-trinh-hoc-tap${preview ? '?preview=1' : ''}`}
 															onClick={(e) => {
 																e.preventDefault();
-																history.push('/hoc-tap/tien-trinh-hoc-tap');
+																history.push(`/hoc-tap/tien-trinh-hoc-tap${preview ? '?preview=1' : ''}`);
 															}}
 														>
 															{chunks}
@@ -223,10 +247,10 @@ const DangKyTinChiPage = () => {
 
 													link_ket_qua: (chunks: any) => (
 														<a
-															href='/hoc-tap/ket-qua-hoc-tap'
+															href={`/hoc-tap/ket-qua-hoc-tap${preview ? '?preview=1' : ''}`}
 															onClick={(e) => {
 																e.preventDefault();
-																history.push('/hoc-tap/ket-qua-hoc-tap');
+																history.push(`/hoc-tap/ket-qua-hoc-tap${preview ? '?preview=1' : ''}`);
 															}}
 														>
 															{chunks}
@@ -241,6 +265,7 @@ const DangKyTinChiPage = () => {
 											soTinChiToiDa={soTinChiToiDa}
 											danhSachLopHienThi={danhSachLopHienThi}
 											onReload={getLopDangKy}
+											previewData={previewData}
 										/>
 									</>
 								) : (
@@ -276,6 +301,7 @@ const DangKyTinChiPage = () => {
 							soTinChiToiDa={soTinChiToiDa}
 							soTinChiToiThieu={soTinChiToiThieu}
 							onReload={getLopDangKy}
+							previewData={previewData}
 						/>
 					</Card>
 				</div>
@@ -288,15 +314,15 @@ const DangKyTinChiPage = () => {
 					soTinChiToiDa={soTinChiToiDa}
 					tongHocPhanDangKy={tongHocPhanDangKy}
 					tongTinChi={tongTinChi}
-					onViewSchedule={() => setVisibleModal(true)}
-					disabledViewSchedule={!danhSachLopHienThi.length}
+					onViewSchedule={() => !preview && setVisibleModal(true)}
+					disabledViewSchedule={preview || !danhSachLopHienThi.length}
 				/>
 
 				<HuongDanDangKyTinChi />
 
-				<ViewGhiChuDangKyTinChi visible={visibleThongTin} setVisible={setVisibleThongTin} />
+				<ViewGhiChuDangKyTinChi visible={visibleThongTin} setVisible={setVisibleThongTin} previewData={previewData} />
 			</PageCard>
-		</GoogleReCaptchaProvider>
+		</RegistrationProvider>
 	);
 };
 

@@ -66,9 +66,10 @@ type TChuongTrinhHocKy = {
 	chuyenNganhList?: TChuongTrinhHocKy[];
 };
 
-const TienTrinhChuongTrinhKhung = () => {
+const TienTrinhChuongTrinhKhung = (props: { data?: ChuongTrinhDaoTao.TTienTrinhKhung }) => {
 	const intl = useIntl();
-	const { loading, sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
+	const { loading: loadingModel, sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
+	const loading = !props.data && loadingModel;
 	const { khoaNganhMe, maKhoaNganh, record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [rawData, setRawData] = useState<ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]>([]);
 	const [minorData, setMinorData] = useState<ChuongTrinhDaoTao.TTienTrinhKhungMinor[]>([]);
@@ -104,12 +105,11 @@ const TienTrinhChuongTrinhKhung = () => {
 	};
 
 	const fetch = async () => {
-		await sinhVienGetTienTrinhKhungModel(isSongNganh).then((data) => {
-			const nextData = normalizeTienTrinhKhung(data);
-			setRawData(nextData.tienTrinh);
-			setMinorData(nextData.minors);
-			getColorMap(nextData.tienTrinh);
-		});
+		const data = props.data ?? (await sinhVienGetTienTrinhKhungModel(isSongNganh));
+		const nextData = normalizeTienTrinhKhung(data);
+		setRawData(nextData.tienTrinh);
+		setMinorData(nextData.minors);
+		getColorMap(nextData.tienTrinh);
 	};
 
 	const danhSachHienThi = useMemo(() => {
@@ -232,7 +232,7 @@ const TienTrinhChuongTrinhKhung = () => {
 
 	useEffect(() => {
 		fetch();
-	}, [isSongNganh, maKhoaNganh]);
+	}, [isSongNganh, maKhoaNganh, props.data]);
 
 	const renderHocPhan = (
 		data: TChuongTrinhHocKy | { khoiHocPhan: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[] },
@@ -496,6 +496,7 @@ const TienTrinhChuongTrinhKhung = () => {
 			</Spin>
 
 			<ModalChiTietDiem
+				preview={!!props.data}
 				setVisible={setVisibleDiem}
 				visible={visibleDiem}
 				hocPhan={recChuongTrinh?.hocPhan ?? undefined}
@@ -505,7 +506,7 @@ const TienTrinhChuongTrinhKhung = () => {
 				trangThaiHoc={recChuongTrinh?.hoc}
 			/>
 
-			<ChuongTrinhDaoTaoModalView visible={visibleChuongTrinh} setVisible={setVisibleChuongTrinh} />
+			{!props.data && <ChuongTrinhDaoTaoModalView visible={visibleChuongTrinh} setVisible={setVisibleChuongTrinh} />}
 		</div>
 	);
 };

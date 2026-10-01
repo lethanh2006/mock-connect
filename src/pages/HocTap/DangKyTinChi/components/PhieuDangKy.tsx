@@ -1,5 +1,5 @@
 import ExpandText from '@/components/ExpandText';
-import { Badge, IconInfoCircle, IconTrash } from '@/components/Icons';
+import { IconInfoCircle, IconTrash } from '@/components/Icons';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
@@ -28,40 +28,16 @@ import { formatDateTime } from '@/utils/formatDate';
 import { Descriptions, Popconfirm, Popover, Space } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import type { TDangKyTinChiPreviewData } from '../localPreviewData';
+import './style.less';
+import CourseRegistrationStatusTag, { type TCourseRegistrationStatusVariant } from './CourseRegistrationStatusTag';
 import { isDuThinhDaDuyet, isTinhTinChiDangKy, renderKhoangThoiGian } from '../utils';
 import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
 import ModalLopDaHuy from './ModalLopDaHuy';
+import PreviewCourseOutline from './PreviewCourseOutline';
 import RenderLichHoc from './RenderLichHoc';
-
-const mapTrangThaiDKTCBadgeVariant = (
-	val: ETrangThaiDangKyTinChi,
-): 'complete' | 'inprogress' | 'negative' | 'secondary' => {
-	switch (val) {
-		case ETrangThaiDangKyTinChi.DA_DANG_KY:
-			return 'complete';
-		case ETrangThaiDangKyTinChi.CHUA_DANG_KY:
-			return 'inprogress';
-		case ETrangThaiDangKyTinChi.LOI:
-			return 'negative';
-		default:
-			return 'secondary';
-	}
-};
-
-const mapStatusColorBadgeVariant = (color?: string): 'complete' | 'inprogress' | 'negative' | 'warning' => {
-	switch (color) {
-		case 'green':
-			return 'complete';
-		case 'blue':
-			return 'inprogress';
-		case 'red':
-			return 'negative';
-		default:
-			return 'warning';
-	}
-};
 
 /** Hiển thị danh sách các lớp đã đăng ký và đã chọn
  * Học phí dự kiến, số tín chỉ được phép đăng ký, lịch học dự kiến
@@ -72,20 +48,26 @@ type PhieuDangKyProps = {
 	soTinChiToiDa: number;
 	soTinChiToiThieu: number;
 	onReload: () => void | Promise<unknown>;
+	previewData?: TDangKyTinChiPreviewData;
 };
 
-const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReload }: PhieuDangKyProps) => {
+const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReload, previewData }: PhieuDangKyProps) => {
 	const intl = useIntl();
 	const {
-		dotDangKyHienTai,
-		phieuDangKy,
-		danhSachLopDangKy,
+		dotDangKyHienTai: dotDangKyHienTaiModel,
+		phieuDangKy: phieuDangKyModel,
+		danhSachLopDangKy: danhSachLopDangKyModel,
 		setDanhSachLopDangKy,
-		loading,
+		loading: loadingModel,
 		deleteDangKyTinChiModel,
 		tinhDataLichHoc,
 		setVisibleModal,
 	} = useModel('daotao.dotdangkytinchi');
+	const dotDangKyHienTai = previewData?.dotDangKyHienTai ?? dotDangKyHienTaiModel;
+	const phieuDangKy = previewData?.phieuDangKy ?? phieuDangKyModel;
+	const danhSachLopDangKy = previewData?.danhSachLopDangKy ?? danhSachLopDangKyModel;
+	const loading = !previewData && loadingModel;
+	const [previewCourse, setPreviewCourse] = useState<DangKyTinChi.ILopDangKy>();
 	const [visibleHuyLop, setVisibleHuyLop] = useState<boolean>(false);
 	const [visibleLopDaHuy, setVisibleLopDaHuy] = useState(false);
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
@@ -101,6 +83,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 		dayjs().isBefore(dayjs(dotDangKyHienTai?.thoiGianKetThuc).add(1, 'second'));
 
 	const onDeleteLop = async (rec: DangKyTinChi.ILopDangKy) => {
+		if (previewData) return;
 		try {
 			const successMsg = intl.formatMessage({ id: 'global.message.xoathanhcong' });
 
@@ -129,6 +112,10 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 		!!(rec.dangKyTinChi || rec.dkVuotTinChiLop?._id || rec.dangKyHocDuThinh?._id);
 
 	const handleXemDeCuong = (rec: DangKyTinChi.ILopDangKy) => {
+		if (previewData) {
+			setPreviewCourse(rec);
+			return;
+		}
 		const deCuongId = rec.hocPhan?.ma ?? rec.maHocPhan;
 		if (!deCuongId) return;
 
@@ -143,17 +130,17 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.mahocphan' }),
 			dataIndex: 'maHocPhan',
-			align: 'center',
-			width: 140,
+			align: 'left',
+			width: 120,
 			render: (val, rec) => (
 				<a
-					className='course-registration-course-link not-underline'
+					className='not-underline'
 					onClick={(e) => {
 						e.stopPropagation();
 						handleXemDeCuong(rec);
 					}}
 				>
-					{val ?? rec.hocPhan?.ma}
+					<span className='course-registration-course-link'>{val ?? rec.hocPhan?.ma}</span>
 				</a>
 			),
 			filterType: 'string',
@@ -279,17 +266,33 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 						: 'gold';
 				const loaiI18nId = isVuotTin ? loaiDangKyVuotTinI18n : isDuThinh ? loaiDangKyDuThinhI18n : undefined;
 				const trangThaiThuongI18nId = mapTrangThaiDangKyTinChiI18n[val as ETrangThaiDangKyTinChi];
+				const specialTagVariant: TCourseRegistrationStatusVariant = isApproved
+					? 'success'
+					: statusColor === 'blue'
+						? 'pending'
+						: statusColor === 'red'
+							? 'negative'
+							: 'warning';
+
+				const normalTagVariant: TCourseRegistrationStatusVariant =
+					val === ETrangThaiDangKyTinChi.DA_DANG_KY
+						? 'success'
+						: val === ETrangThaiDangKyTinChi.CHUA_DANG_KY
+							? 'pending'
+							: val === ETrangThaiDangKyTinChi.LOI
+								? 'negative'
+								: 'default';
 
 				return (
 					<div className='course-registration-status-stack'>
 						{trangThaiDacBiet && (isVuotTin || isDuThinh) ? (
 							<>
-								<Space size={4} align='center'>
-									<Badge variant={mapStatusColorBadgeVariant(isApproved ? 'green' : statusColor)}>
+								<div className='course-registration-status-row'>
+									<CourseRegistrationStatusTag variant={specialTagVariant}>
 										{statusI18nId
 											? intl.formatMessage({ id: statusI18nId, defaultMessage: String(trangThaiDacBiet) })
 											: trangThaiDacBiet}
-									</Badge>
+									</CourseRegistrationStatusTag>
 									{hasThongTinDuyet ? (
 										<Popover
 											trigger='hover'
@@ -319,20 +322,20 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 											</span>
 										</Popover>
 									) : null}
-								</Space>
+								</div>
 								{!(isApproved && isDuThinh) && loaiI18nId ? (
 									<span className='course-registration-status-help'>{intl.formatMessage({ id: loaiI18nId })}</span>
 								) : null}
 							</>
 						) : (
-							<Badge variant={mapTrangThaiDKTCBadgeVariant(val as ETrangThaiDangKyTinChi)}>
+							<CourseRegistrationStatusTag variant={normalTagVariant}>
 								{trangThaiThuongI18nId ? intl.formatMessage({ id: trangThaiThuongI18nId }) : (val ?? '--')}
-							</Badge>
+							</CourseRegistrationStatusTag>
 						)}
 						{rec?.isWaitlist && (
-							<Badge variant='warning'>
+							<CourseRegistrationStatusTag variant='warning'>
 								{intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.hangcho' })}
-							</Badge>
+							</CourseRegistrationStatusTag>
 						)}
 					</div>
 				);
@@ -353,7 +356,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 							placement: 'bottom',
 						}}
 						type='default'
-						disabled={rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY && !canHuyLop(rec)}
+						disabled={!!previewData || (rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY && !canHuyLop(rec))}
 						tooltip={intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy.tooltip' })}
 						onClick={() => {
 							setRecLopDangKy(rec);
@@ -387,6 +390,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 						onConfirm={() => onDeleteLop(rec)}
 						// Đợt chỉ cho đk mới thì ko cho xóa những lớp đã đăng ký
 						disabled={
+							!!previewData ||
 							(rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
 								dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY &&
 								!rec.dkVuotTinChiLop?._id &&
@@ -401,6 +405,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 								placement: 'bottom',
 							}}
 							disabled={
+								!!previewData ||
 								(rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
 									dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY &&
 									!rec.dkVuotTinChiLop?._id &&
@@ -418,6 +423,7 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 	return (
 		<>
 			<TableStaticData
+				configKey={previewData ? 'course-registration-confirmation-local-preview' : undefined}
 				columns={columns}
 				data={danhSachLopHienThi}
 				addStt
@@ -432,13 +438,18 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 				otherButtons={[
 					...(danhSachLopDangKy.length
 						? [
-								<ButtonExtend key='lich-hoc' onClick={() => setVisibleModal(true)}>
+								<ButtonExtend
+									key='lich-hoc'
+									disabled={!!previewData}
+									onClick={() => !previewData && setVisibleModal(true)}
+								>
 									{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
 								</ButtonExtend>,
 							]
 						: []),
 					<ButtonExtend
 						key='lich-su'
+						disabled={!!previewData}
 						onClick={() => setVisibleLopDaHuy(true)}
 						tooltip={intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.title' })}
 					>
@@ -453,24 +464,32 @@ const PhieuDangKy = ({ danhSachLopHienThi, tongTinChi, soTinChiToiThieu, onReloa
 				]}
 			/>
 
-			<ModalLichHoc soLopHienThi={danhSachLopHienThi.length} />
-			<ModalLopDaHuy visible={visibleLopDaHuy} setVisible={setVisibleLopDaHuy} />
+			{!previewData && (
+				<>
+					<ModalLichHoc soLopHienThi={danhSachLopHienThi.length} />
+					<ModalLopDaHuy visible={visibleLopDaHuy} setVisible={setVisibleLopDaHuy} />
 
-			<ModalDangKy tongTinChi={tongTinChi} danhSachDangKy={danhSachLopHienThi} />
+					<ModalDangKy tongTinChi={tongTinChi} danhSachDangKy={danhSachLopHienThi} />
 
-			<ConfirmKetHuyLopDKTC
-				visible={visibleHuyLop}
-				setVisible={setVisibleHuyLop}
-				recLopDangKy={recLopDangKy}
-				onReload={onReload}
-			/>
-			<ModalHocPhan
-				visible={visibleDeCuong}
-				setVisible={setVisibleDeCuong}
-				deCuongId={deCuongModal?.deCuongId}
-				title={deCuongModal?.title}
-				isChiTiet
-			/>
+					<ConfirmKetHuyLopDKTC
+						visible={visibleHuyLop}
+						setVisible={setVisibleHuyLop}
+						recLopDangKy={recLopDangKy}
+						onReload={onReload}
+					/>
+				</>
+			)}
+			{previewData ? (
+				<PreviewCourseOutline course={previewCourse} onClose={() => setPreviewCourse(undefined)} />
+			) : (
+				<ModalHocPhan
+					visible={visibleDeCuong}
+					setVisible={setVisibleDeCuong}
+					deCuongId={deCuongModal?.deCuongId}
+					title={deCuongModal?.title}
+					isChiTiet
+				/>
+			)}
 		</>
 	);
 };

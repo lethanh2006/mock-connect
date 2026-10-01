@@ -46,13 +46,19 @@ const filterBySemester = (rows: DataType[], maHocKy: string) => {
 	return rows.filter((row) => row.maHocKy === maHocKy);
 };
 
-const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
+const DiemThanhPhanSV = (props: {
+	maKhoaNganh?: string;
+	previewDiem?: LopHocPhan.IDiemHpSvHk[];
+	previewKetQuaHocKy?: KetQuaHocKy.IRecord[];
+}) => {
 	const intl = useIntl();
 	const { token } = theme.useToken();
-	const { maKhoaNganh } = props;
+	const { maKhoaNganh, previewDiem, previewKetQuaHocKy } = props;
 	const { record: sinhVien } = useModel('sinhvien.sinhvien');
 	const { getKetQuaHocKy } = useModel('daotao.ketquahocky');
-	const { getDiemSvHk, loading } = useModel('daotao.diemhpsvhk');
+	const { getDiemSvHk, loading: loadingModel } = useModel('daotao.diemhpsvhk');
+	const preview = previewDiem !== undefined;
+	const loading = preview ? false : loadingModel;
 	const { danhSach: danhSachDauDiem } = useModel('daotao.daudiemhocphan');
 	const [maHocKyFilter, setMaHocKyFilter] = useState<string>('all');
 	const [data, setData] = useState<DataType[]>([]);
@@ -93,7 +99,10 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 	const getData = useCallback(() => {
 		if (!maKhoaNganh) return;
 
-		Promise.all([getKetQuaHocKy(maKhoaNganh), getDiemSvHk(maKhoaNganh)]).then(([kqhkList, diemSv]) => {
+		const request = previewDiem
+			? Promise.resolve([previewKetQuaHocKy ?? [], previewDiem] as const)
+			: Promise.all([getKetQuaHocKy(maKhoaNganh), getDiemSvHk(maKhoaNganh)]);
+		request.then(([kqhkList, diemSv]) => {
 			const res: DataType[] = [];
 			const gHocKy = _.groupBy(diemSv, (item) => item.maHocKy); // Nhóm theo học kỳ
 			const aHocKy = Object.entries(gHocKy).sort(([a], [b]) => (a > b ? -1 : 1)); // Sắp xếp giảm dần học kỳ
@@ -122,7 +131,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			setKqhkList(kqhkList);
 			setData(res);
 		});
-	}, [buildSemesterTitle, maKhoaNganh]);
+	}, [buildSemesterTitle, maKhoaNganh, previewDiem, previewKetQuaHocKy]);
 
 	// useEffect(() => {
 	// 	if (!danhSachDauDiem.length) getDauDiem();
@@ -208,7 +217,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				render: (val, rec) => {
 					if (isSemesterRow(rec) || !val) return val;
 
-					const content = rec.trongChuongTrinh ? val : <u className='text-warning'>{val}</u>;
+					const content = <span className='academic-result-course-code'>{val}</span>;
 
 					return rec.trongChuongTrinh ? (
 						content
@@ -383,7 +392,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 					<Space wrap>
 						<ButtonExtend
 							icon={<FileTextOutlined />}
-							disabled={!maKhoaNganh || !sinhVien?.ssoId}
+							disabled={preview || !maKhoaNganh || !sinhVien?.ssoId}
 							tooltip={intl.formatMessage({ id: 'ketquahoctap.ketquahocky.xuatbangdiemv2' })}
 							onClick={() => setVisibleTranscript(true)}
 						/>
@@ -443,6 +452,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				</Typography.Text>
 			</Modal>
 			<ModalChiTietDiem
+				preview={preview}
 				visible={visibleDiem}
 				setVisible={setVisibleDiem}
 				hocPhan={recDiem?.hocPhan}
@@ -450,7 +460,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				maKhoaNganh={maKhoaNganh}
 				khoiChuongTrinh={recDiem?.khoiHpCt}
 			/>
-			{maKhoaNganh && sinhVien?.ssoId && (
+			{!preview && maKhoaNganh && sinhVien?.ssoId && (
 				<ModalBangDiemTranscript
 					open={visibleTranscript}
 					onFinish={() => setVisibleTranscript(false)}

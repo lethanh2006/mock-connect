@@ -31,6 +31,7 @@ const DetailField = ({ label, children, full }: { label: string; children?: Reac
 const ModalChiTietDiem = (
 	props: {
 		visible: boolean;
+		preview?: boolean;
 		setVisible: (val: boolean) => void;
 		listDiem: LopHocPhan.IDiemHpSvHk[];
 		/** Đề cương của đề cương học phần học kỳ */
@@ -213,7 +214,7 @@ const ModalChiTietDiem = (
 												</span>
 											) : null}
 										</div>
-										<DetailKetQuaHocTap diemHpSvHk={diem} />
+										<DetailKetQuaHocTap diemHpSvHk={diem} preview={props.preview} />
 									</div>
 								))
 						) : (
@@ -231,7 +232,7 @@ const ModalChiTietDiem = (
 				khoiChuongTrinh={khoiChuongTrinh}
 			/>
 
-			{trangThaiHoc === ETrangThaiHocTap.CHUA_HOC ? (
+			{!props.preview && trangThaiHoc === ETrangThaiHocTap.CHUA_HOC ? (
 				<ModalQuyDoiDiem
 					visible={visibleCongNhan}
 					setVisible={setVisibleCongNhan}

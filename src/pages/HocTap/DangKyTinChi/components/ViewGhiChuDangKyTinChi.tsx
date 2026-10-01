@@ -7,13 +7,20 @@ import { tinhChatDangKyTC } from '@/services/DaoTao/DangKyTinChi/constant';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { Divider, Space } from 'antd';
 import { getLocale, useIntl, useModel } from 'umi';
+import type { TDangKyTinChiPreviewData } from '../localPreviewData';
 
-const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
-	const { visible, setVisible } = props;
+const ViewGhiChuDangKyTinChi = (props: {
+	visible: boolean;
+	setVisible: (val: boolean) => void;
+	previewData?: TDangKyTinChiPreviewData;
+}) => {
+	const { visible, setVisible, previewData } = props;
 	const locale = getLocale();
 	const intl = useIntl();
-	const { record: recHocKy } = useModel('daotao.hocky');
-	const { dotDangKyHienTai } = useModel('daotao.dotdangkytinchi');
+	const { record: recHocKyModel } = useModel('daotao.hocky');
+	const { dotDangKyHienTai: dotDangKyHienTaiModel } = useModel('daotao.dotdangkytinchi');
+	const recHocKy = previewData?.hocKy ?? recHocKyModel;
+	const dotDangKyHienTai = previewData?.dotDangKyHienTai ?? dotDangKyHienTaiModel;
 	const stepImageStyle = { width: '100%', maxWidth: 800, borderRadius: 4 };
 
 	const step1Image = locale === 'vi-VN' ? step1VNImage : step1ENImage;
